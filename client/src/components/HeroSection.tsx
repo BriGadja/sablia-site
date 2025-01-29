@@ -1,3 +1,4 @@
+
 import { Button } from "./ui/button";
 
 export default function HeroSection() {
@@ -12,7 +13,8 @@ export default function HeroSection() {
             Libérez votre temps des tâches répétitives. Laissez l'IA & nos automatisations booster votre impact
           </h1>
           <p className="text-lg md:text-xl text-gray-300 mb-8">
-            Workflows intelligents clé en main pour freelances, entrepreneurs et entreprises<br />0 code, 100% de temps réinvesti
+            Workflows intelligents clé en main pour freelances, entrepreneurs et entreprises<br />
+            0 code, 100% de temps réinvesti
           </p>
           <Button
             size="lg"
