@@ -63,7 +63,6 @@ export default function ServicesSection() {
           </div>
         </div>
       </div>
-      <div className="section-divider" />
     </section>
   );
 }
