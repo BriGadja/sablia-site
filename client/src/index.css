@@ -14,7 +14,7 @@
   }
 
   .section-divider {
-    @apply w-full border-t border-gray-200 my-16;
+    @apply w-full border-t border-gray-800 my-16;
   }
 
   .container {
@@ -22,6 +22,6 @@
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center;
+    @apply text-3xl md:text-4xl font-bold text-gray-100 mb-8 text-center;
   }
 }

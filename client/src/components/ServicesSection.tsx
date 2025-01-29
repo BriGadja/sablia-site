@@ -33,21 +33,21 @@ export default function ServicesSection() {
                 service.primary 
                   ? 'border-primary shadow-lg transform hover:-translate-y-1'
                   : 'hover:shadow-md'
-              } transition-all duration-300`}
+              } transition-all duration-300 bg-gray-800 border-gray-700`}
             >
               <CardContent className="p-6">
                 <div className={`
                   w-12 h-12 rounded-lg flex items-center justify-center mb-4
-                  ${service.primary ? 'bg-primary text-white' : 'bg-gray-100'}
+                  ${service.primary ? 'bg-primary text-white' : 'bg-gray-700'}
                 `}>
                   <service.icon className="h-6 w-6" />
                 </div>
                 <h3 className={`text-xl font-semibold mb-2 ${
-                  service.primary ? 'text-primary' : 'text-gray-900'
+                  service.primary ? 'text-primary' : 'text-gray-100'
                 }`}>
                   {service.title}
                 </h3>
-                <p className="text-gray-600">{service.description}</p>
+                <p className="text-gray-300">{service.description}</p>
               </CardContent>
             </Card>
           ))}

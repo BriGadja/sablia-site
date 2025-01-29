@@ -36,15 +36,15 @@ export default function FaqSection() {
   return (
     <section id="faq" className="py-16">
       <div className="container">
-        <h2 className="section-title">Questions Fréquentes</h2>
+        <h2 className="section-title text-gray-100">Questions Fréquentes</h2>
         <div className="max-w-3xl mx-auto">
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-left">
+              <AccordionItem key={index} value={`item-${index}`} className="border-gray-700">
+                <AccordionTrigger className="text-left text-gray-100">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent>
+                <AccordionContent className="text-gray-300">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
@@ -52,7 +52,7 @@ export default function FaqSection() {
           </Accordion>
         </div>
       </div>
-      <div className="section-divider" />
+      <div className="section-divider border-gray-700" />
     </section>
   );
 }

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white relative">
+    <div className="min-h-screen bg-gray-900 text-gray-100 relative">
       <ParticlesBackground />
       <Navbar />
       <main>
@@ -17,11 +17,11 @@ export default function Home() {
         <ProcessSection />
         <ServicesSection />
         <FaqSection />
-        
+
         {/* Final CTA Section */}
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-gray-800">
           <div className="container text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-100 mb-6">
               Prêt à transformer votre entreprise ?
             </h2>
             <Button
