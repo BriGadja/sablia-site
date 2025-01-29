@@ -35,7 +35,7 @@ export default function ServicesSection() {
               <div className="bg-primary text-white w-12 h-12 rounded-lg flex items-center justify-center mb-4">
                 <Workflow className="h-6 w-6" />
               </div>
-              <h3 className="text-2xl font-semibold mb-2 text-primary">
+              <h3 className="text-2xl font-semibold mb-2 text-white">
                 Automatisation de workflows
               </h3>
               <p className="text-gray-300">Optimisez vos processus métier et gagnez un temps précieux</p>
