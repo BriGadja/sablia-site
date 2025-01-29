@@ -43,28 +43,30 @@ const examples = [
 
 export const AutomationExamplesSection = () => {
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-gray-900">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">
+        <h2 className="text-4xl font-bold text-center text-white mb-12">
           Exemples d'Automatisations
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {examples.map((example) => {
             const Icon = example.icon;
             return (
               <motion.div
                 key={example.id}
                 whileHover={{ 
-                  scale: 1.05,
+                  scale: 1.02,
                   transition: { duration: 0.2 }
                 }}
               >
-                <Card className="p-6 h-full flex flex-col hover:shadow-lg transition-shadow duration-200">
-                  <div className="rounded-full bg-primary/10 p-3 w-12 h-12 flex items-center justify-center mb-4">
-                    <Icon className="w-6 h-6 text-primary" />
+                <Card className="p-6 h-full bg-gray-800/50 border-gray-700 hover:bg-gray-800 transition-colors duration-200">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="rounded-full bg-gray-700 p-3 w-12 h-12 flex items-center justify-center">
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white">{example.title}</h3>
                   </div>
-                  <h3 className="text-2xl font-bold mb-4">{example.title}</h3>
-                  <p className="text-gray-600 text-lg flex-grow">{example.description}</p>
+                  <p className="text-gray-300 leading-relaxed">{example.description}</p>
                 </Card>
               </motion.div>
             );
