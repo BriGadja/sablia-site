@@ -32,10 +32,10 @@ export default function ProcessSection() {
           {steps.map((step, index) => (
             <div key={index} className="flex flex-col items-center text-center p-6">
               <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <step.icon className="h-8 w-8 text-primary" />
+                <step.icon className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-              <p className="text-gray-600">{step.description}</p>
+              <h3 className="text-xl font-semibold mb-2 text-white">{step.title}</h3>
+              <p className="text-gray-300">{step.description}</p>
             </div>
           ))}
         </div>

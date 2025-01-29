@@ -16,8 +16,9 @@ export default function Navbar() {
     <nav className="bg-gray-900/80 backdrop-blur-sm fixed w-full z-50 top-0 left-0 border-b border-gray-800">
       <div className="container">
         <div className="flex items-center justify-between h-16">
-          <div className="flex-shrink-0">
-            <span className="text-xl font-semibold text-gray-100">AutomatePro</span>
+          <div className="flex items-center space-x-2">
+            <img src="/logo.svg" alt="Sablia" className="h-8 w-8" />
+            <span className="text-xl font-semibold text-gray-100">Sablia</span>
           </div>
 
           {/* Desktop menu */}
