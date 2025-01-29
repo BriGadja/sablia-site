@@ -21,10 +21,10 @@ export default function Footer() {
               Prendre rendez-vous
             </a>
             <a
-              href="mailto:contact@automatepro.com"
+              href="mailto:sablia.expertise@gmail.com"
               className="text-gray-300 hover:text-white block"
             >
-              contact@automatepro.com
+              sablia.expertise@gmail.com
             </a>
           </div>
           <div>
