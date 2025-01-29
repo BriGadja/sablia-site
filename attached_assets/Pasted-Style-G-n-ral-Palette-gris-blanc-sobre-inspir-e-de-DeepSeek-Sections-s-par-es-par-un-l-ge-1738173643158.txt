@@ -1,0 +1,65 @@
+Style Général :
+
+Palette gris/blanc sobre (inspirée de DeepSeek).
+
+Sections séparées par un léger trait horizontal (exemple : leftclick.ai).
+
+Animations discrètes en arrière-plan : points lumineux se déplaçant doucement, laissant une traîne qui s’estompe (effet "particules élégantes", sans surcharger).
+
+Sections :
+
+Bandeau : Logo + Menu minimaliste (accueil, processus, services, FAQ).
+
+Accueil :
+
+Sous-titre en petit : "AUTOMATE YOUR BUSINESS".
+
+Titre principal : "Libérez votre temps des tâches répétitives. Laissez l'IA & nos automatisations booster votre impact".
+
+Texte : "Workflows intelligents clé en main pour freelances, entrepreneurs et entreprises - 0 code, 100% de temps réinvesti".
+
+Bouton Calendly (lien : https://calendly.com/brice-gachadoat/30min) avec effet hover léger.
+
+Notre Processus :
+
+4 étapes présentées visuellement (icônes + texte court), ex :
+• Appel découverte gratuit
+• Développement sur mesure
+• Tests et ajustements
+• Intégration finale
+
+Nos Services :
+
+Mise en avant des automatisations (n8n/Make.com) en grand, puis chatbots (VoiceFlow) et voice-agents (Vapi) en secondaire (taille de texte plus petite).
+
+FAQ :
+
+6 questions/réponses (format accordéon). Exemple répété :
+Question : "J’ai zéro compétence en tech, est-ce que je vais comprendre comment utiliser vos solutions ?"
+Réponse : "Absolument ! Nos outils sont conçus pour être intuitifs..."
+
+Un seul élément ouvert à la fois.
+
+CTA Final :
+
+Phrase percutante + Bouton Calendly répété.
+
+Footer :
+
+Mentions légales, lien Calendly, email de contact.
+
+Responsive :
+
+Adapté mobile : texte redimensionné, menu hamburger, colonnes passant en vertical.
+
+Images/icons redimensionnés automatiquement.
+
+Techniques :
+
+Framework CSS type Tailwind pour le responsive.
+
+Librairie JavaScript légère pour les animations de fond (ex : Particles.js) et les accordéons.
+
+Polices sans-serif modernes (ex : Inter ou Roboto).
+
+Note : Priorité à la clarté et à la conversion (boutons Calendly visibles à chaque section clé)."
