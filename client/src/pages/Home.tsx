@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import ProcessSection from "@/components/ProcessSection";
 import ServicesSection from "@/components/ServicesSection";
+import { AutomationExamplesSection } from "@/components/AutomationExamplesSection";
 import FaqSection from "@/components/FaqSection";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ export default function Home() {
         <HeroSection />
         <ProcessSection />
         <ServicesSection />
+        <AutomationExamplesSection />
         <FaqSection />
 
         {/* Final CTA Section */}
