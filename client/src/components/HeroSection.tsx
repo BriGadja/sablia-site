@@ -16,13 +16,14 @@ export default function HeroSection() {
             Workflows intelligents clé en main pour freelances, entrepreneurs et entreprises<br />
             0 code, 100% de temps réinvesti
           </p>
-          <Button
-            size="lg"
-            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
-            onClick={() => window.open('https://calendly.com/brice-gachadoat/30min', '_blank')}
+          <a
+            href="https://calendly.com/brice-gachadoat/30min"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-3 rounded-md inline-block shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-medium"
           >
             Réserver un appel découverte gratuit
-          </Button>
+          </a>
         </div>
       </div>
     </div>
