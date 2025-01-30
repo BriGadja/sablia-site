@@ -28,7 +28,7 @@ export default function Home() {
             </h2>
             <Button
               size="lg"
-              className="bg-primary text-white hover:bg-primary/90"
+              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-4 py-2 rounded-md inline-block mb-2 transition-all duration-300"
               onClick={() => window.open('https://calendly.com/brice-gachadoat/30min', '_blank')}
             >
               Réserver votre consultation gratuite

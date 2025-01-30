@@ -21,28 +21,22 @@ export default function ParticlesBackground() {
         fpsLimit: 60,
         particles: {
           color: {
-            value: "#ffffff",
+            value: "#e5e7eb", // Couleur gris clair subtile
           },
           links: {
-            color: "#ffffff",
-            distance: 150,
-            enable: true,
-            opacity: 0.2,
-            width: 1,
+            enable: false // Désactivé pour plus de sobriété
           },
           move: {
             enable: true,
-            speed: 0.8,
+            speed: 1, // Ralenti le mouvement
             direction: "none",
-            random: true,
-            straight: false,
             outModes: {
-              default: "bounce",
+              default: "out",
             },
             trail: {
               enable: true,
-              length: 3,
-              fillColor: "#000000",
+              length: 10, // Longueur de la traînée
+              fillColor: "rgba(229, 231, 235, 0.2)", // Même couleur que les particules avec opacité réduite
             },
           },
           number: {
@@ -50,28 +44,29 @@ export default function ParticlesBackground() {
               enable: true,
               area: 800,
             },
-            value: 30,
+            value: 20, // Réduit le nombre de particules
           },
           opacity: {
-            value: 0.5,
+            value: {
+              min: 0.1,
+              max: 0.5 // Variation d'opacité pour effet de scintillement
+            },
             animation: {
               enable: true,
               speed: 0.5,
-              minimumValue: 0.1,
-              sync: false,
-            },
+              sync: false
+            }
           },
           size: {
-            value: { min: 1, max: 3 },
+            value: { min: 1, max: 2 }, // Taille plus petite
           },
-          glow: {
-            enable: true,
-            color: "#ffffff",
-            radius: 2,
-          },
+          shape: {
+            type: "circle" // Forme simple
+          }
         },
+        detectRetina: true,
       }}
-      className="absolute inset-0 -z-10"
+      className="absolute inset-0 -z-10 opacity-30"
     />
   );
 }
