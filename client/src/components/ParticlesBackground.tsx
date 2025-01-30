@@ -22,14 +22,14 @@ export default function ParticlesBackground() {
         fpsLimit: 120,
         particles: {
           color: {
-            value: "#6366f1",
+            value: "#4f46e5",
           },
           links: { 
             enable: false 
           },
           move: {
             enable: true,
-            speed: 1,
+            speed: 0.8,
             direction: "none",
             random: false,
             straight: false,
@@ -38,34 +38,34 @@ export default function ParticlesBackground() {
             },
             trail: {
               enable: true,
-              length: 15,
+              length: 20,
               fill: {
-                color: "#6366f1",
+                color: "#4f46e5",
               },
             },
           },
           number: {
             density: { 
               enable: true, 
-              area: 800 
+              area: 1200 
             },
-            value: 30,
+            value: 20,
           },
           opacity: {
-            value: 0.3,
+            value: 0.15,
             animation: {
               enable: true,
-              speed: 0.3,
-              minimumValue: 0.1,
+              speed: 0.2,
+              minimumValue: 0.05,
               sync: false,
             },
           },
           size: {
-            value: { min: 0.5, max: 1 },
+            value: { min: 0.5, max: 1.5 },
             animation: {
               enable: true,
-              speed: 1,
-              minimumValue: 0.1,
+              speed: 0.8,
+              minimumValue: 0.3,
               sync: false,
             },
           },
@@ -75,7 +75,7 @@ export default function ParticlesBackground() {
           life: {
             duration: {
               sync: false,
-              value: 3
+              value: 4
             },
             count: 1,
           }
@@ -88,7 +88,7 @@ export default function ParticlesBackground() {
         left: 0,
         width: '100%',
         height: '100%',
-        zIndex: 0,
+        zIndex: -1,
         pointerEvents: 'none',
       }}
     />
