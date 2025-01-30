@@ -1,4 +1,3 @@
-
 import { useCallback } from "react";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
@@ -22,7 +21,7 @@ export default function ParticlesBackground() {
         fpsLimit: 60,
         particles: {
           color: {
-            value: "#e5e7eb",
+            value: "#ff0000",
           },
           links: { enable: false },
           move: {
@@ -33,11 +32,9 @@ export default function ParticlesBackground() {
               default: "bounce",
             },
             trail: {
-              enable: true,
-              length: 50,
               fill: { 
                 color: {
-                  value: "rgba(229, 231, 235, 0.05)"
+                  value: "rgba(229, 231, 235, 0.02)" // Opacité très faible
                 }
               }
             },
@@ -47,7 +44,7 @@ export default function ParticlesBackground() {
             value: 15,
           },
           opacity: {
-            value: { min: 0.1, max: 0.4 },
+            value: { min: 0.2, max: 0.4 },
             animation: {
               enable: true,
               speed: 0.2,
@@ -67,7 +64,7 @@ export default function ParticlesBackground() {
         },
         detectRetina: true,
       }}
-      className="absolute inset-0 -z-10 opacity-20"
+      className="fixed inset-0 z-0" // Changement crucial ici
       style={{
         pointerEvents: 'none',
         mixBlendMode: 'screen'
