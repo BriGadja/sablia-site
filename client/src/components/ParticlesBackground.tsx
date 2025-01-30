@@ -66,7 +66,7 @@ export default function ParticlesBackground() {
         },
         detectRetina: true,
       }}
-      className="fixed inset-0 z-0" // Changement crucial ici
+      className="fixed inset-0 z-[2]" // Changement crucial ici
       style={{
         pointerEvents: 'none',
         mixBlendMode: 'screen'

@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
       <ParticlesBackground />
-      <div className="relative z-10">        
+      <div className="relative z-[1]">        
         <Navbar />
         <main className="bg-gray-900">
           <HeroSection />
