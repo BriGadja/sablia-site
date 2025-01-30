@@ -66,10 +66,11 @@ export default function ParticlesBackground() {
         },
         detectRetina: true,
       }}
-      className="fixed inset-0 z-[1]" // Changement crucial ici
+      className="fixed inset-0 z-[1]"
       style={{
         pointerEvents: 'none',
-        mixBlendMode: 'screen'
+        backgroundColor: 'transparent',
+        position: 'absolute'
       }}
     />
   );
