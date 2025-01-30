@@ -27,27 +27,30 @@ export default function ParticlesBackground() {
           links: { enable: false },
           move: {
             enable: true,
-            speed: 0.5,
+            speed: 0.3,
             direction: "none",
-            outModes: "bounce",
+            outModes: {
+              default: "bounce",
+            },
             trail: {
               enable: true,
-              length: 30,
+              length: 50,
               fill: { 
-                color: "rgba(229, 231, 235, 0.1)"
+                color: {
+                  value: "rgba(229, 231, 235, 0.05)"
+                }
               }
             },
           },
           number: {
             density: { enable: true, area: 800 },
-            value: 12,
+            value: 15,
           },
           opacity: {
-            value: { min: 0.3, max: 0.6 },
+            value: { min: 0.1, max: 0.4 },
             animation: {
               enable: true,
-              speed: 0.4,
-              decay: 0.2,
+              speed: 0.2,
               sync: false
             }
           },
@@ -57,17 +60,17 @@ export default function ParticlesBackground() {
           shape: { type: "circle" },
           life: {
             duration: {
-              value: 3,
-              sync: false
+              sync: false,
+              value: 5
             }
           }
         },
         detectRetina: true,
       }}
-      className="absolute inset-0 z-0"
+      className="absolute inset-0 -z-10 opacity-20"
       style={{
         pointerEvents: 'none',
-        mixBlendMode: 'plus-lighter'
+        mixBlendMode: 'screen'
       }}
     />
   );
