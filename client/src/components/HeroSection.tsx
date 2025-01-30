@@ -10,7 +10,10 @@ export default function HeroSection() {
             AUTOMATE YOUR BUSINESS
           </p>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Libérez votre temps des tâches répétitives. Laissez l'IA & nos <span className="rainbow-text">automatisations</span> booster votre impact
+            Libérez votre temps des tâches répétitives. Laissez l'IA & nos <span className="rainbow-text" onMouseMove={(e) => {
+              const x = (e.clientX / window.innerWidth) * 100;
+              (e.target as HTMLElement).style.setProperty('--x', x.toString());
+            }}>automatisations</span> booster votre impact
           </h1>
           <p className="text-lg md:text-xl text-gray-300 mb-8">
             Workflows intelligents clé en main pour freelances, entrepreneurs et entreprises<br />

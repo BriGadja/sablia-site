@@ -35,19 +35,20 @@
   }
 
   .rainbow-text {
-    background-size: 200% auto;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    transition: 0.5s;
-  }
-
-  .rainbow-text:hover {
     background-image: linear-gradient(to right, 
       #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, 
       #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080, #ff0000
     );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     animation: rainbow 5s linear infinite;
+  }
+
+  .rainbow-text:hover {
+    animation-play-state: paused;
+    background-position: calc((100 - var(--x, 0)) * 1%) 50%;
   }
 
   @keyframes rainbow {
