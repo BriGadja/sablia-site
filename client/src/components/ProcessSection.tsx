@@ -91,7 +91,6 @@ export default function ProcessSection() {
           </Accordion>
         </div>
       </div>
-      <div className="section-divider" />
     </section>
   );
 }

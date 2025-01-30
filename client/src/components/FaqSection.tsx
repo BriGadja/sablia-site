@@ -52,7 +52,6 @@ export default function FaqSection() {
           </Accordion>
         </div>
       </div>
-      <div className="section-divider border-gray-700" />
     </section>
   );
 }
