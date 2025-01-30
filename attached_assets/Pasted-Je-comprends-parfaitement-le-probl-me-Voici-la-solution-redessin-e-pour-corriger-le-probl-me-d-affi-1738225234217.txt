@@ -1,0 +1,125 @@
+Je comprends parfaitement le problème. Voici la solution redessinée pour corriger le problème d'affichage tout en conservant votre style actuel :
+
+```jsx
+import { useCallback } from "react";
+import Particles from "react-tsparticles";
+import { loadSlim } from "tsparticles-slim";
+import type { Engine } from "tsparticles-engine";
+
+export default function ParticlesBackground() {
+  const particlesInit = useCallback(async (engine: Engine) => {
+    await loadSlim(engine);
+  }, []);
+
+  return (
+    <Particles
+      id="tsparticles"
+      init={particlesInit}
+      options={{
+        background: {
+          color: {
+            value: "transparent",
+          },
+        },
+        fpsLimit: 60,
+        particles: {
+          color: {
+            value: "#e5e7eb",
+          },
+          links: { enable: false },
+          move: {
+            enable: true,
+            speed: 0.3, // Ralenti davantage
+            direction: "none",
+            outModes: {
+              default: "bounce", // Garde les particules à l'écran
+            },
+            trail: {
+              enable: true,
+              length: 50, // Allonge considérablement la traînée
+              fill: { 
+                color: {
+                  value: "rgba(229, 231, 235, 0.05)" // Opacité réduite pour estompage
+                }
+              }
+            },
+          },
+          number: {
+            density: { enable: true, area: 800 },
+            value: 15, // Réduction supplémentaire
+          },
+          opacity: {
+            value: { min: 0.1, max: 0.4 },
+            animation: {
+              enable: true,
+              speed: 0.2,
+              sync: false
+            }
+          },
+          size: {
+            value: { min: 1, max: 1 }, // Taille uniforme
+          },
+          shape: { type: "circle" },
+          life: {
+            duration: {
+              sync: false,
+              value: 5 // Augmente la durée de vie des particules
+            }
+          }
+        },
+        detectRetina: true,
+      }}
+      className="absolute inset-0 -z-10 opacity-20"
+      style={{
+        pointerEvents: 'none', // Évite les interférences avec le contenu
+        mixBlendMode: 'screen' // Meilleure intégration avec le fond
+      }}
+    />
+  );
+}
+```
+
+Modifications clés et solution au problème de visibilité :
+
+1. **Fix du z-index** :
+- Ajout de `position: relative` sur le conteneur parent immédiat
+- Ajout de ce CSS global :
+```css
+#tsparticles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+```
+
+2. **Durée de la traînée** :
+- `trail.length` augmenté à 50
+- Ajout de la propriété `life.duration` à 5 secondes
+- Opacité de la traînée réduite à 5% pour un estompage progressif
+
+3. **Optimisations visuelles** :
+- `mixBlendMode: 'screen'` pour une meilleure intégration lumineuse
+- `pointer-events: none` pour interagir avec le contenu
+- Vitesse réduite à 0.3 pour un mouvement plus fluide
+
+4. **Test de debug** :
+Ajoutez temporairement ceci pour vérifier la position :
+```jsx
+<div style={{ 
+  position: 'fixed', 
+  top: 20, 
+  right: 20, 
+  zIndex: 1000, 
+  background: 'rgba(255,0,0,0.5)', 
+  padding: 10 
+}}>
+  Debug Particles Layer
+</div>
+```
+
+Si le problème persiste, vérifiez que :
+- Aucun parent n'a `overflow: hidden`
+- Le contenu principal n'a pas de `background-color` opaque
+- Les versions des packages sont bien à jour (tsparticles@2.12.0)

@@ -21,52 +21,56 @@ export default function ParticlesBackground() {
         fpsLimit: 60,
         particles: {
           color: {
-            value: "#e5e7eb", // Couleur gris clair subtile
+            value: "#e5e7eb",
           },
-          links: {
-            enable: false // Désactivé pour plus de sobriété
-          },
+          links: { enable: false },
           move: {
             enable: true,
-            speed: 1, // Ralenti le mouvement
+            speed: 0.3, // Ralenti davantage
             direction: "none",
             outModes: {
-              default: "out",
+              default: "bounce", // Garde les particules à l'écran
             },
             trail: {
               enable: true,
-              length: 10, // Longueur de la traînée
-              fillColor: "rgba(229, 231, 235, 0.2)", // Même couleur que les particules avec opacité réduite
+              length: 50, // Allonge considérablement la traînée
+              fill: { 
+                color: {
+                  value: "rgba(229, 231, 235, 0.05)" // Opacité réduite pour estompage
+                }
+              }
             },
           },
           number: {
-            density: {
-              enable: true,
-              area: 800,
-            },
-            value: 20, // Réduit le nombre de particules
+            density: { enable: true, area: 800 },
+            value: 15, // Réduction supplémentaire
           },
           opacity: {
-            value: {
-              min: 0.1,
-              max: 0.5 // Variation d'opacité pour effet de scintillement
-            },
+            value: { min: 0.1, max: 0.4 },
             animation: {
               enable: true,
-              speed: 0.5,
+              speed: 0.2,
               sync: false
             }
           },
           size: {
-            value: { min: 1, max: 2 }, // Taille plus petite
+            value: { min: 1, max: 1 }, // Taille uniforme
           },
-          shape: {
-            type: "circle" // Forme simple
+          shape: { type: "circle" },
+          life: {
+            duration: {
+              sync: false,
+              value: 5 // Augmente la durée de vie des particules
+            }
           }
         },
         detectRetina: true,
       }}
-      className="absolute inset-0 -z-10 opacity-30"
+      className="absolute inset-0 -z-10 opacity-20"
+      style={{
+        pointerEvents: 'none', // Évite les interférences avec le contenu
+        mixBlendMode: 'screen' // Meilleure intégration avec le fond
+      }}
     />
   );
 }
