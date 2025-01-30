@@ -36,7 +36,7 @@ const examples = [
   },
   {
     id: 3,
-    title: "📩 Campagnes emails "zéro spam"",
+    title: "📩 Campagnes emails \"zéro spam\"",
     subtitle: "Envoi massif garanti dès le 1er jour",
     features: [
       "Domaines "chauds" certifiés (pas de blocage Gmail/Outlook)",
