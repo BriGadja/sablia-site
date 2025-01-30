@@ -1,3 +1,4 @@
+
 import { useCallback } from "react";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
@@ -15,13 +16,13 @@ export default function ParticlesBackground() {
       options={{
         background: {
           color: {
-            value: "transparent",
+            value: "rgba(255,0,0,0.1)", // Fond rouge semi-transparent pour debug
           },
         },
         fpsLimit: 60,
         particles: {
           color: {
-            value: "#ffffff",
+            value: "#4a5568", // Couleur des particules changée
           },
           links: {
             color: "#4a5568",
@@ -40,9 +41,7 @@ export default function ParticlesBackground() {
               default: "bounce",
             },
             trail: {
-              enable: true,
-              length: 3,
-              fillColor: "#000000",
+              enable: false, // Trail désactivé
             },
           },
           number: {
@@ -71,7 +70,8 @@ export default function ParticlesBackground() {
           },
         },
       }}
-      className="absolute inset-0 -z-10"
+      className="absolute inset-0 z-0"
+      style={{ width: '100%', height: '100%' }}
     />
   );
 }
