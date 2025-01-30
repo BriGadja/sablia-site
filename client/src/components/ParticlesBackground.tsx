@@ -24,10 +24,10 @@ export default function ParticlesBackground() {
             value: "#ffffff",
           },
           links: {
-            color: "#4a5568",
+            color: "#ffffff",
             distance: 150,
             enable: true,
-            opacity: 0.1,
+            opacity: 0.2,
             width: 1,
           },
           move: {
