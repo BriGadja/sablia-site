@@ -18,50 +18,65 @@ export default function ParticlesBackground() {
             value: "transparent",
           },
         },
-        fpsLimit: 60,
+        fpsLimit: 120,
         particles: {
           color: {
             value: "#ff6b6b",
           },
-          links: { enable: false },
+          links: { 
+            enable: false 
+          },
           move: {
             enable: true,
-            speed: 1,
+            speed: 2,
             direction: "none",
+            random: true,
+            straight: false,
             outModes: {
-              default: "bounce",
+              default: "out",
             },
             trail: {
               enable: true,
-              length: 3,
-              fill: { 
-                color: {
-                  value: "#ff6b6b"
-                }
-              }
+              length: 20,
+              fill: {
+                color: "#ff6b6b",
+              },
             },
           },
           number: {
-            density: { enable: true, area: 800 },
-            value: 30,
+            density: { 
+              enable: true, 
+              area: 800 
+            },
+            value: 40,
           },
           opacity: {
-            value: { min: 0.4, max: 0.8 },
+            value: 0.8,
             animation: {
               enable: true,
-              speed: 0.3,
-              sync: false
-            }
+              speed: 0.5,
+              minimumValue: 0.1,
+              sync: false,
+            },
           },
           size: {
-            value: { min: 2, max: 3 },
+            value: { min: 1, max: 2 },
+            animation: {
+              enable: true,
+              speed: 1,
+              minimumValue: 0.1,
+              sync: false,
+            },
           },
-          shape: { type: "circle" },
+          shape: { 
+            type: "circle" 
+          },
           life: {
             duration: {
               sync: false,
-              value: 5
-            }
+              value: 3
+            },
+            count: 1,
           }
         },
         detectRetina: true,
