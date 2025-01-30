@@ -9,7 +9,7 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased bg-background text-foreground relative z-[0];
     font-family: 'Inter', sans-serif;
   }
 
