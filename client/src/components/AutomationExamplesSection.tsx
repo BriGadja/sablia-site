@@ -39,7 +39,7 @@ const examples = [
     title: "📩 Campagnes emails \"zéro spam\"",
     subtitle: "Envoi massif garanti dès le 1er jour",
     features: [
-      "Domaines "chauds" certifiés (pas de blocage Gmail/Outlook)",
+      "Domaines \"chauds\" certifiés (pas de blocage Gmail/Outlook)",
       "Messages hyper-personnalisés (IA analyse LinkedIn + site web)",
       "Alerte Slack/Teams dès qu'un prospect répond"
     ],
