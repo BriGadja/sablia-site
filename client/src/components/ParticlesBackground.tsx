@@ -1,3 +1,4 @@
+
 import { useCallback } from "react";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
@@ -26,50 +27,47 @@ export default function ParticlesBackground() {
           links: { enable: false },
           move: {
             enable: true,
-            speed: 0.3, // Ralenti davantage
+            speed: 0.5,
             direction: "none",
-            outModes: {
-              default: "bounce", // Garde les particules à l'écran
-            },
+            outModes: "bounce",
             trail: {
               enable: true,
-              length: 50, // Allonge considérablement la traînée
+              length: 30,
               fill: { 
-                color: {
-                  value: "rgba(229, 231, 235, 0.05)" // Opacité réduite pour estompage
-                }
+                color: "rgba(229, 231, 235, 0.1)"
               }
             },
           },
           number: {
             density: { enable: true, area: 800 },
-            value: 15, // Réduction supplémentaire
+            value: 12,
           },
           opacity: {
-            value: { min: 0.1, max: 0.4 },
+            value: { min: 0.3, max: 0.6 },
             animation: {
               enable: true,
-              speed: 0.2,
+              speed: 0.4,
+              decay: 0.2,
               sync: false
             }
           },
           size: {
-            value: { min: 1, max: 1 }, // Taille uniforme
+            value: { min: 1, max: 1 },
           },
           shape: { type: "circle" },
           life: {
             duration: {
-              sync: false,
-              value: 5 // Augmente la durée de vie des particules
+              value: 3,
+              sync: false
             }
           }
         },
         detectRetina: true,
       }}
-      className="absolute inset-0 -z-10 opacity-20"
+      className="absolute inset-0 z-0"
       style={{
-        pointerEvents: 'none', // Évite les interférences avec le contenu
-        mixBlendMode: 'screen' // Meilleure intégration avec le fond
+        pointerEvents: 'none',
+        mixBlendMode: 'plus-lighter'
       }}
     />
   );

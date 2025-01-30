@@ -12,8 +12,9 @@ import { Button } from "@/components/ui/button";
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 relative">
-      <div className="relative">
-        <ParticlesBackground />
+      <ParticlesBackground />
+      
+      <div className="relative z-10">
         <Navbar />
         <main>
           <HeroSection />
@@ -22,7 +23,6 @@ export default function Home() {
           <AutomationExamplesSection />
           <FaqSection />
 
-          {/* Final CTA Section */}
           <section className="py-16 bg-gray-800">
             <div className="container text-center">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-100 mb-6">
