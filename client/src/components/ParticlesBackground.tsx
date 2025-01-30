@@ -1,3 +1,4 @@
+
 import { useCallback } from "react";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
@@ -26,24 +27,24 @@ export default function ParticlesBackground() {
           links: { enable: false },
           move: {
             enable: true,
-            speed: 0.3, // Ralenti davantage
+            speed: 0.3,
             direction: "none",
             outModes: {
-              default: "bounce", // Garde les particules à l'écran
+              default: "bounce",
             },
             trail: {
               enable: true,
-              length: 50, // Allonge considérablement la traînée
+              length: 50,
               fill: { 
                 color: {
-                  value: "rgba(229, 231, 235, 0.05)" // Opacité réduite pour estompage
+                  value: "rgba(229, 231, 235, 0.05)"
                 }
               }
             },
           },
           number: {
             density: { enable: true, area: 800 },
-            value: 15, // Réduction supplémentaire
+            value: 15,
           },
           opacity: {
             value: { min: 0.1, max: 0.4 },
@@ -54,22 +55,28 @@ export default function ParticlesBackground() {
             }
           },
           size: {
-            value: { min: 1, max: 1 }, // Taille uniforme
+            value: { min: 1, max: 1 },
           },
           shape: { type: "circle" },
           life: {
             duration: {
               sync: false,
-              value: 5 // Augmente la durée de vie des particules
+              value: 5
             }
           }
         },
         detectRetina: true,
       }}
-      className="absolute inset-0 -z-10 opacity-20"
       style={{
-        pointerEvents: 'none', // Évite les interférences avec le contenu
-        mixBlendMode: 'screen' // Meilleure intégration avec le fond
+        position: 'fixed',
+        width: '100%',
+        height: '100%',
+        top: 0,
+        left: 0,
+        pointerEvents: 'none',
+        mixBlendMode: 'screen',
+        opacity: 0.2,
+        zIndex: -1
       }}
     />
   );
