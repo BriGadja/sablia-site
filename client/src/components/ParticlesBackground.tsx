@@ -18,17 +18,18 @@ export default function ParticlesBackground() {
             value: "transparent",
           },
         },
+        fullScreen: false,
         fpsLimit: 120,
         particles: {
           color: {
-            value: "#ffffff",
+            value: "#6366f1",
           },
           links: { 
             enable: false 
           },
           move: {
             enable: true,
-            speed: 1.5,
+            speed: 1,
             direction: "none",
             random: false,
             straight: false,
@@ -37,30 +38,30 @@ export default function ParticlesBackground() {
             },
             trail: {
               enable: true,
-              length: 10,
+              length: 15,
               fill: {
-                color: "#ffffff",
+                color: "#6366f1",
               },
             },
           },
           number: {
             density: { 
               enable: true, 
-              area: 1000 
+              area: 800 
             },
-            value: 50,
+            value: 30,
           },
           opacity: {
-            value: 1,
+            value: 0.3,
             animation: {
               enable: true,
               speed: 0.3,
-              minimumValue: 0.2,
+              minimumValue: 0.1,
               sync: false,
             },
           },
           size: {
-            value: { min: 0.5, max: 1.5 },
+            value: { min: 0.5, max: 1 },
             animation: {
               enable: true,
               speed: 1,
@@ -81,15 +82,14 @@ export default function ParticlesBackground() {
         },
         detectRetina: true,
       }}
-      className="fixed inset-0 z-[999]"
       style={{
         position: 'fixed',
-        width: '100%',
-        height: '100%',
         top: 0,
         left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 0,
         pointerEvents: 'none',
-        backgroundColor: 'transparent',
       }}
     />
   );
