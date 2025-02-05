@@ -69,6 +69,18 @@ const examples = [
     ],
     quote: "L'organisation d'une entreprise structurée… sans embaucher un assistant.",
     icon: FolderGit2
+  },
+  {
+    id: 6,
+    title: "🤖 Chatbot FAQ & Support Client Automatisé",
+    subtitle: "Assistance instantanée 24/7 pour une expérience client fluide",
+    features: [
+      "Réponses automatisées aux questions fréquentes grâce à l'IA",
+      "Intégration multi-canaux (site web, Messenger, WhatsApp)",
+      "Escalade intelligente vers un conseiller pour les cas complexes"
+    ],
+    quote: "Le compagnon digital qui répond à vos clients, même quand vous dormez.",
+    icon: ChatBubble
   }
 ];
 
