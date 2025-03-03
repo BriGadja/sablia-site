@@ -11,7 +11,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
-import ParticlesBackground from "@/components/ParticlesBackground";
 
 const formSchema = z.object({
   // Section 1: Informations personnelles
@@ -254,9 +253,6 @@ export default function GapForm() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
-      <div className="fixed inset-0 z-[1]">
-        <ParticlesBackground />
-      </div>
       <div className="relative z-[2] container mx-auto px-4 py-8 min-h-screen flex flex-col justify-center">
         <Link href="/" className="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors">
           ← Retour

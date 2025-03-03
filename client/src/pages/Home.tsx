@@ -1,4 +1,3 @@
-import ParticlesBackground from "@/components/ParticlesBackground";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import ProcessSection from "@/components/ProcessSection";
@@ -12,7 +11,6 @@ import { Link } from "wouter";
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 relative">
-      <ParticlesBackground />
       <div className="relative z-[2]">        
         <Navbar />
         <main className="bg-gray-900">
