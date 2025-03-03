@@ -154,22 +154,27 @@ export default function GapForm() {
         }
       });
 
-      const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || '';
+      // URL du webhook externe ou du webhook de test interne si non définie
+      const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || 
+                         window.location.origin + '/api/webhook-test';
 
       console.log('Tentative d\'envoi vers webhook:', webhookUrl);
       console.log('Statut de la variable d\'environnement:', 
-                  webhookUrl ? 'Variable définie' : 'Variable non définie');
+                  import.meta.env.VITE_N8N_WEBHOOK_URL ? 'Variable externe définie' : 'Utilisation du webhook de test interne');
       console.log('URL complète:', `${webhookUrl}?${params.toString()}`);
       console.log('Environnement:', import.meta.env.MODE);
       console.log('Paramètres envoyés:', Object.fromEntries(params.entries()));
       
       try {
+        console.log('Début de la requête fetch...');
         const response = await fetch(`${webhookUrl}?${params.toString()}`, {
           method: 'GET',
           mode: 'cors',
           headers: {
             'Content-Type': 'application/json',
-          }
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          credentials: 'same-origin'
         }).then(async response => {
           const text = await response.text();
           console.log('Réponse webhook:', response.status, text);
