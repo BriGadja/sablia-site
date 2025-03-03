@@ -155,31 +155,20 @@ export default function GapForm() {
       });
 
       const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || '';
-      const webhookTestUrl = 'https://n8n.sablia.io/webhook-test/d5e674ba-a064-45fb-b469-1d17db89d2f6';
 
-      console.log('Tentative d\'envoi vers webhooks:', webhookUrl, webhookTestUrl);
+      console.log('Tentative d\'envoi vers webhook:', webhookUrl);
       
       try {
-        const responses = await Promise.all([
-          fetch(`${webhookUrl}?${params.toString()}`, {
-            method: 'GET',
-          }).then(async response => {
-            const text = await response.text();
-            console.log('Réponse webhook principal:', response.status, text);
-            return { response, text };
-          }),
-          fetch(`${webhookTestUrl}?${params.toString()}`, {
-            method: 'GET',
-          }).then(async response => {
-            const text = await response.text();
-            console.log('Réponse webhook test:', response.status, text);
-            return { response, text };
-          })
-        ]);
+        const response = await fetch(`${webhookUrl}?${params.toString()}`, {
+          method: 'GET',
+        }).then(async response => {
+          const text = await response.text();
+          console.log('Réponse webhook:', response.status, text);
+          return { response, text };
+        });
 
-        if (!responses.every(res => res.response.ok)) {
-          throw new Error('Erreur lors de l\'envoi du formulaire: ' + 
-            responses.map(res => `${res.response.status}: ${res.text}`).join(' | '));
+        if (!response.response.ok) {
+          throw new Error(`Erreur lors de l\'envoi du formulaire: ${response.response.status}: ${response.text}`);
         }
       } catch (fetchError) {
         console.error('Erreur de fetch:', fetchError);
