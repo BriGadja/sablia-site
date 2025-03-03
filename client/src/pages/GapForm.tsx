@@ -239,7 +239,7 @@ export default function GapForm() {
 
       <Card className="p-6 max-w-2xl mx-auto">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form className="space-y-6">
             <div className="space-y-4">
               {sections[currentSection].fields.map(renderField)}
             </div>
@@ -265,8 +265,9 @@ export default function GapForm() {
                 </Button>
               ) : (
                 <Button
-                  type="submit"
+                  type="button"
                   className="ml-auto bg-primary hover:bg-primary/90"
+                  onClick={form.handleSubmit(onSubmit)}
                 >
                   Recevoir mes automatisations personnalisées
                 </Button>
