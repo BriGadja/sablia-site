@@ -6,7 +6,8 @@ import {
   Mail, 
   FileCheck, 
   FolderGit2,
-  MessageCircle
+  MessageCircle,
+  TrendingUp
 } from "lucide-react";
 
 const examples = [
@@ -118,6 +119,14 @@ export const AutomationExamplesSection = () => {
                       <p className="text-gray-400 text-sm">{example.subtitle}</p>
                     </div>
                   </div>
+
+                  {example.gain && (
+                    <div className="flex items-center gap-2 mb-4 p-2 bg-gray-700/50 rounded-md border border-gray-700">
+                      <TrendingUp className="w-5 h-5 text-green-500 flex-shrink-0" />
+                      <p className="text-green-400 font-medium text-sm">{example.gain}</p>
+                    </div>
+                  )}
+
                   <ul className="space-y-2 mb-4">
                     {example.features.map((feature, index) => (
                       <li key={index} className="text-gray-300 flex items-center gap-2">
@@ -129,7 +138,6 @@ export const AutomationExamplesSection = () => {
                   <p className="text-gray-400 italic border-l-2 border-orange-500 pl-4">
                     {example.quote}
                   </p>
-                  {example.gain && <p className="text-gray-400 mt-2">{example.gain}</p>}
                 </Card>
               </motion.div>
             );
