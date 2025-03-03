@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Card } from "./ui/card";
 import { 
@@ -61,15 +60,16 @@ const examples = [
   },
   {
     id: 5,
-    title: "🛠️ CRM clé en main adapté à votre secteur",
-    subtitle: "Compatible avec HubSpot et autres outils pros – Démarrez en 5 minutes !",
+    title: "📄 Génération de documents templatés",
+    subtitle: "Automatisation intelligente de vos documents",
     features: [
-      "Centralisation automatique des clients et prospects",
-      "Suivi intelligent des opportunités (stages adaptés à votre métier)",
-      "Tableaux de bord prêts à l'emploi pour piloter vos ventes"
+      "Création de documents à partir de formulaires ou conversations chatbot",
+      "Transformation automatique de CV au format de votre entreprise",
+      "Templates personnalisables pour tout type de document professionnel"
     ],
-    quote: "Comme un HubSpot pré-configuré pour votre activité, sans l'usine à gaz.",
-    icon: Users
+    quote: "Votre usine à documents professionnels qui fonctionne pendant que vous vous concentrez sur l'essentiel.",
+    gain: "Économisez 90% du temps de production documentaire en 1 mois",
+    icon: FileText
   },
   {
     id: 6,
@@ -81,6 +81,7 @@ const examples = [
       "Programmation sur tous vos canaux en 1 clic"
     ],
     quote: "Votre usine à contenu personnalisé, même sans rédacteur.",
+    gain: "Produisez 5x plus de contenu avec le même budget en 30 jours",
     icon: FileText
   }
 ];
@@ -124,6 +125,7 @@ export const AutomationExamplesSection = () => {
                   <p className="text-gray-400 italic border-l-2 border-orange-500 pl-4">
                     {example.quote}
                   </p>
+                  {example.gain && <p className="text-gray-400 mt-2">{example.gain}</p>}
                 </Card>
               </motion.div>
             );
