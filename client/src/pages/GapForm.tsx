@@ -124,6 +124,30 @@ export default function GapForm() {
     },
   });
 
+  // Fonction pour vérifier si tous les champs requis de la section courante sont remplis
+  const isCurrentSectionValid = () => {
+    const currentFields = sections[currentSection].fields;
+    const requiredFields = currentFields.filter(field => field.required);
+
+    return requiredFields.every(field => {
+      const value = form.getValues(field.name);
+      return value && value.trim() !== "";
+    });
+  };
+
+  // Gestionnaire pour le passage à la section suivante
+  const handleNext = () => {
+    if (isCurrentSectionValid()) {
+      setCurrentSection(prev => prev + 1);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Champs requis",
+        description: "Veuillez remplir tous les champs obligatoires avant de continuer.",
+      });
+    }
+  };
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       // Convertir les données en paramètres de requête
@@ -275,7 +299,7 @@ export default function GapForm() {
                   <Button
                     type="button"
                     className={`${currentSection === 0 ? "w-full" : "ml-auto"} bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white`}
-                    onClick={() => setCurrentSection(prev => prev + 1)}
+                    onClick={handleNext}
                   >
                     Suivant
                   </Button>
@@ -284,6 +308,7 @@ export default function GapForm() {
                     type="button"
                     className="ml-auto bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white"
                     onClick={form.handleSubmit(onSubmit)}
+                    disabled={!isCurrentSectionValid()}
                   >
                     Recevoir mes automatisations personnalisées
                   </Button>
