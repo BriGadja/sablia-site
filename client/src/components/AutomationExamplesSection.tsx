@@ -20,18 +20,20 @@ const examples = [
       "Escalade intelligente vers un conseiller pour les cas complexes"
     ],
     quote: "Le compagnon digital qui répond à vos clients, même quand vous dormez.",
+    gain: "Réduisez vos coûts de support de 60% en 3 mois",
     icon: MessageCircle
   },
   {
     id: 2,
-    title: "📩 Campagnes emails \"zéro spam\"",
-    subtitle: "Envoi massif garanti dès le 1er jour",
-    features: [
-      "Domaines \"chauds\" certifiés (pas de blocage Gmail/Outlook)",
-      "Messages hyper-personnalisés (IA analyse LinkedIn + site web)",
-      "Alerte Slack/Teams dès qu'un prospect répond"
-    ],
-    quote: "L'alternative B2B aux outils type Mailchimp, pour les pros sérieux.",
+    title: "🧠 Votre propre assistant personnel",
+      subtitle: "Un collaborateur virtuel disponible 24/7",
+      features: [
+        "Envoi et gestion automatisés de vos emails professionnels",
+        "Organisation et planification intelligente de vos réunions",
+        "Multitâche avancé pour libérer votre temps et votre esprit"
+      ],
+      quote: "L'assistant qui ne prend jamais de congés et s'adapte parfaitement à vos besoins.",
+      gain: "Récupérez 15h de productivité par semaine dès le premier mois",
     icon: Mail
   },
   {
@@ -44,6 +46,7 @@ const examples = [
       "Email de bienvenue avec accès client"
     ],
     quote: "L'organisation d'une entreprise structurée… sans embaucher un assistant.",
+    gain: "Diminuez de 80% le temps d'intégration client en 2 semaines",
     icon: FolderGit2
   },
   {
@@ -56,6 +59,7 @@ const examples = [
       "Envoi tracker avec signature électronique"
     ],
     quote: "Vos propositions commerciales passent du 'brouillon' à 'signé' en un clic.",
+    gain: "Automatisez la phase de rédaction de devis et de contrats et gagnez jusqu'à 2 heures d'admin par client",
     icon: FileCheck
   },
   {
