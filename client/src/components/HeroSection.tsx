@@ -1,5 +1,6 @@
 
 import { Button } from "./ui/button";
+import { RainbowText } from "./RainbowText";
 
 export default function HeroSection() {
   return (
@@ -10,7 +11,7 @@ export default function HeroSection() {
             AUTOMATE YOUR BUSINESS
           </p>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Libérez votre temps des tâches répétitives. Laissez l'IA & vos automatisations booster votre Business
+            Libérez votre temps des tâches répétitives. Laissez l'<RainbowText>IA</RainbowText> & vos <RainbowText>automatisations</RainbowText> booster votre Business
           </h1>
           <p className="text-lg md:text-xl text-gray-300 mb-8">
             Workflows intelligents clé en main pour freelances, entrepreneurs et entreprises<br />
