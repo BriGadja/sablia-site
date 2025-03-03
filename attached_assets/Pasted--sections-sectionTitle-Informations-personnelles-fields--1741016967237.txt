@@ -1,0 +1,161 @@
+{
+  "sections": [
+    {
+      "sectionTitle": "Informations personnelles",
+      "fields": [
+        {
+          "fieldLabel": "Prénom",
+          "placeholder": "Votre prénom",
+          "required": true
+        },
+        {
+          "fieldLabel": "Nom",
+          "placeholder": "Votre nom",
+          "required": true
+        },
+        {
+          "fieldLabel": "Adresse email",
+          "placeholder": "ex: prenom.nom@example.com",
+          "fieldType": "email",
+          "required": true
+        },
+        {
+          "fieldLabel": "Téléphone",
+          "placeholder": "ex: +33 6 12 34 56 78",
+          "required": false
+        }
+      ]
+    },
+    {
+      "sectionTitle": "Informations sur l'entreprise",
+      "fields": [
+        {
+          "fieldLabel": "Nom de l'entreprise",
+          "placeholder": "Nom de votre entreprise",
+          "required": true
+        },
+        {
+          "fieldLabel": "URL du site ou profil LinkedIn",
+          "placeholder": "ex: https://www.votreentreprise.fr",
+          "required": false
+        },
+        {
+          "fieldLabel": "Secteur d'activité",
+          "placeholder": "ex: E-commerce, Marketing, Distribution...",
+          "required": true
+        },
+        {
+          "fieldLabel": "Taille de l'entreprise",
+          "placeholder": "Nombre d'employés (ex: 1-10, 11-50, etc.)",
+          "required": true
+        },
+        {
+          "fieldLabel": "Chiffre d'affaires annuel",
+          "fieldType": "dropdown",
+          "options": [
+            "0 - 100k€",
+            "100k - 1M€",
+            "1M - 10M€",
+            "+10M€"
+          ],
+          "required": false
+        }
+      ]
+    },
+    {
+      "sectionTitle": "Outils et infrastructure existants",
+      "fields": [
+        {
+          "fieldLabel": "Outil CRM utilisé",
+          "placeholder": "ex: Hubspot, Salesforce, etc.",
+          "required": false
+        },
+        {
+          "fieldLabel": "Outil de facturation/comptabilité",
+          "placeholder": "ex: Henrii, Indy, Facture.net, etc.",
+          "required": false
+        },
+        {
+          "fieldLabel": "ERP ou outils de gestion commerciale",
+          "placeholder": "ex: Axonaut, noCRM, etc.",
+          "required": false
+        },
+        {
+          "fieldLabel": "Suite bureautique",
+          "placeholder": "ex: Google Workspace, Office 365, etc.",
+          "required": false
+        },
+        {
+          "fieldLabel": "Outils de reporting et d’analyse",
+          "placeholder": "ex: Power BI, Tableau, Google Sheets, etc.",
+          "required": false
+        },
+        {
+          "fieldLabel": "Autres outils métiers",
+          "placeholder": "Précisez, si applicable",
+          "required": false
+        }
+      ]
+    },
+    {
+      "sectionTitle": "Processus à automatiser",
+      "fields": [
+        {
+          "fieldLabel": "Quel processus manuel vous coûte le plus de temps ?",
+          "placeholder": "ex: Résolution manuelle des tickets de support",
+          "required": true
+        },
+        {
+          "fieldLabel": "Fréquence / Volume de ce processus",
+          "placeholder": "ex: quotidien, hebdomadaire, mensuel",
+          "required": false
+        },
+        {
+          "fieldLabel": "Temps moyen consacré à ce processus par semaine (en heures)",
+          "placeholder": "ex: 10",
+          "required": false
+        },
+        {
+          "fieldLabel": "Avez-vous déjà envisagé des solutions d'automatisation ?",
+          "placeholder": "ex: Oui, j'ai pensé à utiliser un chatbot…",
+          "required": false
+        }
+      ]
+    },
+    {
+      "sectionTitle": "Objectifs et attentes",
+      "fields": [
+        {
+          "fieldLabel": "Quel serait l'impact attendu sur votre productivité ?",
+          "placeholder": "ex: Gain de temps, réduction des erreurs, amélioration de la réactivité",
+          "required": true
+        },
+        {
+          "fieldLabel": "Quels gains attendez-vous (en temps, coûts, qualité) ?",
+          "placeholder": "ex: Réduction de 50% du temps de traitement",
+          "required": false
+        },
+        {
+          "fieldLabel": "Priorités en matière d'automatisation",
+          "placeholder": "ex: ROI rapide, facilité d'implémentation, scalabilité",
+          "required": false
+        }
+      ]
+    },
+    {
+      "sectionTitle": "Informations complémentaires",
+      "fields": [
+        {
+          "fieldLabel": "Commentaires ou contraintes spécifiques",
+          "placeholder": "Exemple : contraintes techniques, budget, etc.",
+          "required": false
+        },
+        {
+          "fieldLabel": "Disponibilité pour un rendez-vous",
+          "placeholder": "Ex: Après-midi, matinée, jours précis, etc.",
+          "required": false
+        }
+      ]
+    }
+  ]
+}
