@@ -159,13 +159,22 @@ export default function GapForm() {
       console.log('Tentative d\'envoi vers webhook:', webhookUrl);
       console.log('Statut de la variable d\'environnement:', 
                   webhookUrl ? 'Variable définie' : 'Variable non définie');
+      console.log('URL complète:', `${webhookUrl}?${params.toString()}`);
+      console.log('Environnement:', import.meta.env.MODE);
+      console.log('Paramètres envoyés:', Object.fromEntries(params.entries()));
       
       try {
         const response = await fetch(`${webhookUrl}?${params.toString()}`, {
           method: 'GET',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          }
         }).then(async response => {
           const text = await response.text();
           console.log('Réponse webhook:', response.status, text);
+          console.log('Headers:', Object.fromEntries([...response.headers.entries()]));
+          console.log('URL de la réponse:', response.url);
           return { response, text };
         });
 
