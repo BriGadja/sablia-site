@@ -124,12 +124,17 @@ export default function GapForm() {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      const response = await fetch(import.meta.env.VITE_N8N_WEBHOOK_URL || '', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+      // Convertir les données en paramètres de requête
+      const params = new URLSearchParams();
+      Object.entries(data).forEach(([key, value]) => {
+        if (value) {
+          params.append(key, value.toString());
+        }
+      });
+
+      const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || '';
+      const response = await fetch(`${webhookUrl}?${params.toString()}`, {
+        method: 'GET', // Utiliser GET au lieu de POST
       });
 
       if (!response.ok) {
