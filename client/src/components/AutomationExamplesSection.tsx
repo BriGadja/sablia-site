@@ -6,36 +6,25 @@ import {
   FileText, 
   Mail, 
   FileCheck, 
-  FolderGit2 
+  FolderGit2,
+  MessageCircle
 } from "lucide-react";
 
 const examples = [
   {
     id: 1,
-    title: "🛠️ CRM clé en main adapté à votre secteur",
-    subtitle: "Compatible avec HubSpot et autres outils pros – Démarrez en 5 minutes !",
+    title: "🤖 Chatbot FAQ & Support Client Automatisé",
+    subtitle: "Assistance instantanée 24/7 pour une expérience client fluide",
     features: [
-      "Centralisation automatique des clients et prospects",
-      "Suivi intelligent des opportunités (stages adaptés à votre métier)",
-      "Tableaux de bord prêts à l'emploi pour piloter vos ventes"
+      "Réponses automatisées aux questions fréquentes grâce à l'IA",
+      "Intégration multi-canaux (site web, Messenger, WhatsApp)",
+      "Escalade intelligente vers un conseiller pour les cas complexes"
     ],
-    quote: "Comme un HubSpot pré-configuré pour votre activité, sans l'usine à gaz.",
-    icon: Users
+    quote: "Le compagnon digital qui répond à vos clients, même quand vous dormez.",
+    icon: MessageCircle
   },
   {
     id: 2,
-    title: "🎥 Générateur de contenu 2.0",
-    subtitle: "Pour agences marketing et créateurs pressés",
-    features: [
-      "Scan automatique des tendances YouTube/Instagram",
-      "Réécriture sur-mesure (ton, longueur, mots-clés)",
-      "Programmation sur tous vos canaux en 1 clic"
-    ],
-    quote: "Votre usine à contenu personnalisé, même sans rédacteur.",
-    icon: FileText
-  },
-  {
-    id: 3,
     title: "📩 Campagnes emails \"zéro spam\"",
     subtitle: "Envoi massif garanti dès le 1er jour",
     features: [
@@ -45,6 +34,18 @@ const examples = [
     ],
     quote: "L'alternative B2B aux outils type Mailchimp, pour les pros sérieux.",
     icon: Mail
+  },
+  {
+    id: 3,
+    title: "🎯 Onboarding client automatisé",
+    subtitle: "Pour freelances/agences qui scalent",
+    features: [
+      "Dossier Google Drive/Notion généré automatiquement",
+      "Checklist tâches (Asana, ClickUp, Trello)",
+      "Email de bienvenue avec accès client"
+    ],
+    quote: "L'organisation d'une entreprise structurée… sans embaucher un assistant.",
+    icon: FolderGit2
   },
   {
     id: 4,
@@ -60,27 +61,27 @@ const examples = [
   },
   {
     id: 5,
-    title: "🎯 Onboarding client automatisé",
-    subtitle: "Pour freelances/agences qui scalent",
+    title: "🛠️ CRM clé en main adapté à votre secteur",
+    subtitle: "Compatible avec HubSpot et autres outils pros – Démarrez en 5 minutes !",
     features: [
-      "Dossier Google Drive/Notion généré automatiquement",
-      "Checklist tâches (Asana, ClickUp, Trello)",
-      "Email de bienvenue avec accès client"
+      "Centralisation automatique des clients et prospects",
+      "Suivi intelligent des opportunités (stages adaptés à votre métier)",
+      "Tableaux de bord prêts à l'emploi pour piloter vos ventes"
     ],
-    quote: "L'organisation d'une entreprise structurée… sans embaucher un assistant.",
-    icon: FolderGit2
+    quote: "Comme un HubSpot pré-configuré pour votre activité, sans l'usine à gaz.",
+    icon: Users
   },
   {
     id: 6,
-    title: "🤖 Chatbot FAQ & Support Client Automatisé",
-    subtitle: "Assistance instantanée 24/7 pour une expérience client fluide",
+    title: "🎥 Générateur de contenu 2.0",
+    subtitle: "Pour agences marketing et créateurs pressés",
     features: [
-      "Réponses automatisées aux questions fréquentes grâce à l'IA",
-      "Intégration multi-canaux (site web, Messenger, WhatsApp)",
-      "Escalade intelligente vers un conseiller pour les cas complexes"
+      "Scan automatique des tendances YouTube/Instagram",
+      "Réécriture sur-mesure (ton, longueur, mots-clés)",
+      "Programmation sur tous vos canaux en 1 clic"
     ],
-    quote: "Le compagnon digital qui répond à vos clients, même quand vous dormez.",
-    icon: ChatBubble
+    quote: "Votre usine à contenu personnalisé, même sans rédacteur.",
+    icon: FileText
   }
 ];
 
