@@ -157,6 +157,8 @@ export default function GapForm() {
       const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || '';
 
       console.log('Tentative d\'envoi vers webhook:', webhookUrl);
+      console.log('Statut de la variable d\'environnement:', 
+                  webhookUrl ? 'Variable définie' : 'Variable non définie');
       
       try {
         const response = await fetch(`${webhookUrl}?${params.toString()}`, {
