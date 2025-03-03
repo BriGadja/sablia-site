@@ -181,22 +181,25 @@ export default function GapForm() {
           name={field.name}
           render={({ field: formField }) => (
             <FormItem>
-              <FormLabel>{field.label}</FormLabel>
+              <FormLabel className="text-gray-200">
+                {field.label}
+                {field.required && <span className="text-red-500 ml-1">*</span>}
+              </FormLabel>
               <FormControl>
                 <Select onValueChange={formField.onChange} value={formField.value}>
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-gray-800 border-gray-700 text-gray-200">
                     <SelectValue placeholder={field.placeholder} />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-gray-800 border-gray-700">
                     {field.options.map((option: string) => (
-                      <SelectItem key={option} value={option}>
+                      <SelectItem key={option} value={option} className="text-gray-200 hover:bg-gray-700">
                         {option}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-red-400" />
             </FormItem>
           )}
         />
@@ -210,16 +213,20 @@ export default function GapForm() {
         name={field.name}
         render={({ field: formField }) => (
           <FormItem>
-            <FormLabel>{field.label}</FormLabel>
+            <FormLabel className="text-gray-200">
+              {field.label}
+              {field.required && <span className="text-red-500 ml-1">*</span>}
+            </FormLabel>
             <FormControl>
               <Input
                 {...formField}
                 type={field.type}
                 placeholder={field.placeholder}
                 required={field.required}
+                className="bg-gray-800/50 border-gray-700 text-gray-200 placeholder:text-gray-500"
               />
             </FormControl>
-            <FormMessage />
+            <FormMessage className="text-red-400" />
           </FormItem>
         )}
       />
@@ -267,7 +274,7 @@ export default function GapForm() {
                 {currentSection < sections.length - 1 ? (
                   <Button
                     type="button"
-                    className={`${currentSection === 0 ? "w-full" : "ml-auto"} bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700`}
+                    className={`${currentSection === 0 ? "w-full" : "ml-auto"} bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white`}
                     onClick={() => setCurrentSection(prev => prev + 1)}
                   >
                     Suivant
@@ -275,7 +282,7 @@ export default function GapForm() {
                 ) : (
                   <Button
                     type="button"
-                    className="ml-auto bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                    className="ml-auto bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white"
                     onClick={form.handleSubmit(onSubmit)}
                   >
                     Recevoir mes automatisations personnalisées
