@@ -1,6 +1,6 @@
-
 import { Button } from "./ui/button";
 import { RainbowText } from "./RainbowText";
+import { Link } from "wouter";
 
 export default function HeroSection() {
   return (
@@ -17,14 +17,19 @@ export default function HeroSection() {
             Workflows intelligents clé en main pour freelances, entrepreneurs et entreprises<br />
             0 code, 100% de temps réinvesti
           </p>
-          <a
-            href="https://calendly.com/brice-gachadoat/30min"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-3 rounded-md inline-block shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-medium"
-          >
-            Réserver un appel découverte gratuit
-          </a>
+          <div className="flex gap-4 justify-center flex-wrap">
+            <a
+              href="https://calendly.com/brice-gachadoat/30min"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-3 rounded-md inline-block shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-medium"
+            >
+              Réserver un appel découverte gratuit
+            </a>
+            <Link href="/gap" className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-3 rounded-md inline-block shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-medium">
+              Découvrir mes automatisations
+            </Link>
+          </div>
         </div>
       </div>
     </div>

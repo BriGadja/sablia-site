@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "wouter";
+import ParticlesBackground from "@/components/ParticlesBackground";
 
 const formSchema = z.object({
   // Section 1: Informations personnelles
@@ -225,57 +227,65 @@ export default function GapForm() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 min-h-screen flex flex-col justify-center">
-      <h1 className="text-4xl font-bold text-center mb-8">
-        Générateur d'Automatisations Personnalisées
-      </h1>
+    <div className="min-h-screen bg-gray-900 text-gray-100 relative">
+      <ParticlesBackground />
+      <div className="relative z-[2] container mx-auto px-4 py-8 min-h-screen flex flex-col justify-center">
+        <Link href="/" className="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors">
+          ← Retour
+        </Link>
 
-      <div className="mb-8">
-        <Progress value={progress} className="w-full" />
-        <p className="text-center mt-2 text-sm text-muted-foreground">
-          Section {currentSection + 1} sur {sections.length} : {sections[currentSection].title}
-        </p>
+        <h1 className="text-4xl sm:text-5xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-orange-600">
+          Générateur d'Automatisations Personnalisées
+        </h1>
+
+        <div className="mb-8">
+          <Progress value={progress} className="w-full h-2 bg-gray-700" />
+          <p className="text-center mt-2 text-sm text-gray-400">
+            Section {currentSection + 1} sur {sections.length} : {sections[currentSection].title}
+          </p>
+        </div>
+
+        <Card className="p-6 max-w-2xl mx-auto bg-gray-800/50 border-gray-700">
+          <Form {...form}>
+            <form className="space-y-6">
+              <div className="space-y-4">
+                {sections[currentSection].fields.map(renderField)}
+              </div>
+
+              <div className="flex justify-between mt-6">
+                {currentSection > 0 && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setCurrentSection(prev => prev - 1)}
+                    className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                  >
+                    Précédent
+                  </Button>
+                )}
+
+                {currentSection < sections.length - 1 ? (
+                  <Button
+                    type="button"
+                    className={`${currentSection === 0 ? "w-full" : "ml-auto"} bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700`}
+                    onClick={() => setCurrentSection(prev => prev + 1)}
+                  >
+                    Suivant
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    className="ml-auto bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                    onClick={form.handleSubmit(onSubmit)}
+                  >
+                    Recevoir mes automatisations personnalisées
+                  </Button>
+                )}
+              </div>
+            </form>
+          </Form>
+        </Card>
       </div>
-
-      <Card className="p-6 max-w-2xl mx-auto">
-        <Form {...form}>
-          <form className="space-y-6">
-            <div className="space-y-4">
-              {sections[currentSection].fields.map(renderField)}
-            </div>
-
-            <div className="flex justify-between mt-6">
-              {currentSection > 0 && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setCurrentSection(prev => prev - 1)}
-                >
-                  Précédent
-                </Button>
-              )}
-
-              {currentSection < sections.length - 1 ? (
-                <Button
-                  type="button"
-                  className={currentSection === 0 ? "w-full" : "ml-auto"}
-                  onClick={() => setCurrentSection(prev => prev + 1)}
-                >
-                  Suivant
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  className="ml-auto bg-primary hover:bg-primary/90"
-                  onClick={form.handleSubmit(onSubmit)}
-                >
-                  Recevoir mes automatisations personnalisées
-                </Button>
-              )}
-            </div>
-          </form>
-        </Form>
-      </Card>
     </div>
   );
 }
