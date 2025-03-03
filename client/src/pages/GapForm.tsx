@@ -133,11 +133,20 @@ export default function GapForm() {
       });
 
       const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || '';
-      const response = await fetch(`${webhookUrl}?${params.toString()}`, {
-        method: 'GET', // Utiliser GET au lieu de POST
-      });
+      const webhookTestUrl = 'https://n8n.sablia.io/webhook-test/d5e674ba-a064-45fb-b469-1d17db89d2f6';
 
-      if (!response.ok) {
+      // Envoyer les données aux deux webhooks en parallèle
+      const responses = await Promise.all([
+        fetch(`${webhookUrl}?${params.toString()}`, {
+          method: 'GET', // Utiliser GET au lieu de POST
+        }),
+        fetch(`${webhookTestUrl}?${params.toString()}`, {
+          method: 'GET',
+        })
+      ]);
+
+      // Vérifier si les deux requêtes ont réussi
+      if (!responses.every(response => response.ok)) {
         throw new Error('Erreur lors de l\'envoi du formulaire');
       }
 
