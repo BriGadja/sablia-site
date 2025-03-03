@@ -124,7 +124,6 @@ export default function GapForm() {
     },
   });
 
-  // Fonction pour vérifier si tous les champs requis de la section courante sont remplis
   const isCurrentSectionValid = () => {
     const currentFields = sections[currentSection].fields;
     const requiredFields = currentFields.filter(field => field.required);
@@ -135,7 +134,6 @@ export default function GapForm() {
     });
   };
 
-  // Gestionnaire pour le passage à la section suivante
   const handleNext = () => {
     if (isCurrentSectionValid()) {
       setCurrentSection(prev => prev + 1);
@@ -150,7 +148,6 @@ export default function GapForm() {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      // Convertir les données en paramètres de requête
       const params = new URLSearchParams();
       Object.entries(data).forEach(([key, value]) => {
         if (value) {
@@ -161,17 +158,15 @@ export default function GapForm() {
       const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || '';
       const webhookTestUrl = 'https://n8n.sablia.io/webhook-test/d5e674ba-a064-45fb-b469-1d17db89d2f6';
 
-      // Envoyer les données aux deux webhooks en parallèle
       const responses = await Promise.all([
         fetch(`${webhookUrl}?${params.toString()}`, {
-          method: 'GET', // Utiliser GET au lieu de POST
+          method: 'GET',
         }),
         fetch(`${webhookTestUrl}?${params.toString()}`, {
           method: 'GET',
         })
       ]);
 
-      // Vérifier si les deux requêtes ont réussi
       if (!responses.every(response => response.ok)) {
         throw new Error('Erreur lors de l\'envoi du formulaire');
       }
@@ -258,8 +253,10 @@ export default function GapForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 relative">
-      <ParticlesBackground />
+    <div className="min-h-screen bg-gray-900 text-gray-100">
+      <div className="fixed inset-0 z-[1]">
+        <ParticlesBackground />
+      </div>
       <div className="relative z-[2] container mx-auto px-4 py-8 min-h-screen flex flex-col justify-center">
         <Link href="/" className="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors">
           ← Retour
