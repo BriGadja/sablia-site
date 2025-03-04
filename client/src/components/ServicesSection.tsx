@@ -16,7 +16,7 @@ const services = [
     ],
     details: "Transformez les processus manuels en flux automatisés.",
     primary: true,
-    pattern: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff8a4c' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+    pattern: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff8a4c' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
   },
   {
     icon: Bot,
@@ -29,11 +29,10 @@ const services = [
     ],
     details: "Des chatbots qui comprennent vraiment vos clients, assurant un dialogue interactif.",
     primary: false,
-    pattern: `url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234299e1' fill-opacity='0.07'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+    pattern: `url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234299e1' fill-opacity='0.15'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
   }
 ];
 
-// Component
 export default function ServicesSection() {
   return (
     <section 
@@ -66,19 +65,22 @@ export default function ServicesSection() {
             >
               <Card 
                 className={`h-full border-2 shadow-2xl transition-all duration-300 bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-sm ${
-                  service.primary ? 'hover:border-orange-500' : 'hover:border-blue-500'
+                  service.primary ? 'hover:border-orange-500 hover:shadow-orange-500/20' : 'hover:border-blue-500 hover:shadow-blue-500/20'
                 } relative group overflow-hidden rounded-xl`}
                 style={{
                   backgroundImage: service.pattern,
-                  backgroundSize: 'cover',
+                  backgroundSize: '200%',
                   backgroundPosition: 'center',
+                  boxShadow: service.primary 
+                    ? '0 0 40px -10px rgba(255, 138, 76, 0.2)' 
+                    : '0 0 40px -10px rgba(66, 153, 225, 0.2)'
                 }}
               >
                 <motion.div 
                   className={`absolute inset-0 ${
                     service.primary 
-                      ? 'bg-gradient-to-r from-orange-500/10 to-orange-600/10' 
-                      : 'bg-gradient-to-r from-blue-500/10 to-blue-600/10'
+                      ? 'bg-gradient-to-r from-orange-500/20 to-orange-600/20' 
+                      : 'bg-gradient-to-r from-blue-500/20 to-blue-600/20'
                   } opacity-0 group-hover:opacity-100 transition-all duration-500`}
                   whileHover={{ scale: 1.1 }}
                 />
@@ -88,7 +90,9 @@ export default function ServicesSection() {
                       service.primary 
                         ? 'bg-gradient-to-r from-orange-500 to-orange-600' 
                         : 'bg-gradient-to-r from-blue-500 to-blue-600'
-                    } shadow-lg`}
+                    } shadow-lg ring-2 ring-offset-2 ring-offset-gray-900 ${
+                      service.primary ? 'ring-orange-500/50' : 'ring-blue-500/50'
+                    }`}
                     whileHover={{ 
                       scale: 1.1,
                       rotate: 5
