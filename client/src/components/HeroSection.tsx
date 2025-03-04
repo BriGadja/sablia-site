@@ -4,8 +4,8 @@ import { Link } from "wouter";
 
 export default function HeroSection() {
   return (
-    <div className="pt-24 pb-16 relative overflow-hidden">
-      <div className="container">
+    <div className="min-h-screen flex items-center bg-gray-900 text-gray-100 relative overflow-hidden">
+      <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-sm font-semibold tracking-widest text-gray-400 uppercase mb-4">
             AUTOMATE YOUR BUSINESS
