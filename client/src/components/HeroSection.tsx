@@ -28,6 +28,10 @@ export default function HeroSection() {
             <Link href="/gap" className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-10 py-4 rounded-md inline-block shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-medium">
               Découvrez vos automatisations sur-mesure !
             </Link>
+            </a>
+            <Link href="/gap" className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-10 py-4 rounded-md inline-block shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-medium">
+              Découvrez vos automatisations sur-mesure !
+            </Link>
           </div>
         </div>
       </div>

@@ -134,7 +134,7 @@ export const AutomationExamplesSection = () => {
     <section className="py-16 bg-gray-900">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="section-title">
+          <h2 className="section-title text-center">
             Exemples d'Automatisations
           </h2>
           <div className="flex items-center space-x-3">
