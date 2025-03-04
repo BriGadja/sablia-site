@@ -7,8 +7,8 @@ export default function Navbar() {
 
   const menuItems = [
     { label: "Accueil", href: "#" },
-    { label: "Processus", href: "#process" },
     { label: "Services", href: "#services" },
+    { label: "Processus", href: "#process" },
     { label: "FAQ", href: "#faq" },
   ];
 

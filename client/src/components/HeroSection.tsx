@@ -10,12 +10,11 @@ export default function HeroSection() {
           <p className="text-sm font-semibold tracking-widest text-gray-400 uppercase mb-4">
             AUTOMATE YOUR BUSINESS
           </p>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Libérez votre temps des tâches répétitives. Laissez l'<RainbowText>IA</RainbowText> & vos <RainbowText>automatisations</RainbowText> booster votre Business
+          <h1 className="text-6xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+            Laissez l'<RainbowText>IA</RainbowText> & vos <RainbowText>automatisations</RainbowText> booster votre Business.
           </h1>
-          <p className="text-lg md:text-xl text-gray-300 mb-8">
-            Workflows intelligents clé en main pour freelances, entrepreneurs et entreprises<br />
-            0 code, 100% de temps réinvesti
+          <p className="text-lg md:text-3xl text-gray-300 mb-8">
+            Libérez votre temps des tâches répétitives. 
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <a
@@ -24,10 +23,10 @@ export default function HeroSection() {
               rel="noopener noreferrer"
               className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-3 rounded-md inline-block shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-medium"
             >
-              Réserver un appel découverte gratuit
+              Réservez un call gratuit !
             </a>
             <Link href="/gap" className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-3 rounded-md inline-block shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-medium">
-              Découvrir mes automatisations
+              Découvrez vos automatisations sur-mesure !
             </Link>
           </div>
         </div>

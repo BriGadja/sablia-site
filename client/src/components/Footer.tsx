@@ -13,18 +13,10 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-100">Contact</h3>
             <a
-              href="https://calendly.com/brice-gachadoat/30min"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-4 py-2 rounded-md inline-block mb-2 transition-all duration-300"
-            >
-              Prendre rendez-vous
-            </a>
-            <a
               href="mailto:sablia.expertise@gmail.com"
               className="text-gray-300 hover:text-white block"
             >
-              sablia.expertise@gmail.com
+              brice@sablia.io
             </a>
           </div>
           <div>
