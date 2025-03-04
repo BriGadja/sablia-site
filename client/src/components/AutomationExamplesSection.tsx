@@ -1,4 +1,3 @@
-
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Card } from "./ui/card";
@@ -11,7 +10,8 @@ import {
   MessageCircle,
   TrendingUp,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Video
 } from "lucide-react";
 
 const examples = [
@@ -66,6 +66,32 @@ const examples = [
     quote: "Vos propositions commerciales passent du 'brouillon' à 'signé' en un clic.",
     gain: "Automatisez la phase de rédaction de devis et de contrats et gagnez jusqu'à 2 heures d'admin par client",
     icon: FileCheck
+  },
+  {
+    id: 5,
+    title: "📄 Génération de documents templatés",
+    subtitle: "Automatisation intelligente de vos documents",
+    features: [
+      "Création de documents à partir de formulaires ou conversations chatbot",
+      "Transformation automatique de CV au format de votre entreprise",
+      "Templates personnalisables pour tout type de document professionnel"
+    ],
+    quote: "Votre usine à documents professionnels qui fonctionne pendant que vous vous concentrez sur l'essentiel.",
+    gain: "Économisez 90% du temps de production documentaire en 1 mois",
+    icon: FileText
+  },
+  {
+    id: 6,
+    title: "🎥 Générateur de contenu 2.0",
+    subtitle: "Pour agences marketing et créateurs pressés",
+    features: [
+      "Scan automatique des tendances YouTube/Instagram",
+      "Réécriture sur-mesure (ton, longueur, mots-clés)",
+      "Programmation sur tous vos canaux en 1 clic"
+    ],
+    quote: "Votre usine à contenu personnalisé, même sans rédacteur.",
+    gain: "Produisez 5x plus de contenu avec le même budget en 30 jours",
+    icon: Video
   }
 ];
 
@@ -126,7 +152,7 @@ export const AutomationExamplesSection = () => {
             ))}
           </div>
         </div>
-        
+
         <div className="relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
             <AnimatePresence mode="wait">
@@ -176,7 +202,7 @@ export const AutomationExamplesSection = () => {
               ))}
             </AnimatePresence>
           </div>
-          
+
           {/* Navigation arrows */}
           <button 
             onClick={handlePrevious}
@@ -185,7 +211,7 @@ export const AutomationExamplesSection = () => {
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
-          
+
           <button 
             onClick={handleNext}
             className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 lg:translate-x-8 bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full z-10"
