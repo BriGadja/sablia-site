@@ -16,7 +16,7 @@ const services = [
     ],
     details: "Transformez les processus manuels en flux automatisés.",
     primary: true,
-    bgImage: "/workflow-automation-bg.jpg"
+    pattern: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff8a4c' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
   },
   {
     icon: Bot,
@@ -29,7 +29,7 @@ const services = [
     ],
     details: "Des chatbots qui comprennent vraiment vos clients, assurant un dialogue interactif.",
     primary: false,
-    bgImage: "/chatbot-ai-bg.jpg"
+    pattern: `url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234299e1' fill-opacity='0.07'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
   }
 ];
 
@@ -38,7 +38,7 @@ export default function ServicesSection() {
   return (
     <section 
       id="services" 
-      className="py-16 bg-gradient-to-b from-gray-900 to-gray-800 relative"
+      className="py-16 bg-gradient-to-b from-gray-900 to-gray-800 relative overflow-hidden"
     >
       <div className="container">
         <h2 className="section-title text-center text-4xl font-bold text-white mb-12">
@@ -69,7 +69,7 @@ export default function ServicesSection() {
                   service.primary ? 'hover:border-orange-500' : 'hover:border-blue-500'
                 } relative group overflow-hidden rounded-xl`}
                 style={{
-                  backgroundImage: `linear-gradient(rgba(17, 24, 39, 0.85), rgba(17, 24, 39, 0.95)), url(${service.bgImage})`,
+                  backgroundImage: service.pattern,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                 }}
@@ -88,7 +88,7 @@ export default function ServicesSection() {
                       service.primary 
                         ? 'bg-gradient-to-r from-orange-500 to-orange-600' 
                         : 'bg-gradient-to-r from-blue-500 to-blue-600'
-                    }`}
+                    } shadow-lg`}
                     whileHover={{ 
                       scale: 1.1,
                       rotate: 5
