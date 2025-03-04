@@ -206,7 +206,7 @@ export const AutomationExamplesSection = () => {
           {/* Navigation arrows */}
           <button 
             onClick={handlePrevious}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 lg:-translate-x-8 bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full z-10"
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-8 lg:-translate-x-12 bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full z-10"
             aria-label="Exemple précédent"
           >
             <ChevronLeft className="w-6 h-6" />
@@ -214,7 +214,7 @@ export const AutomationExamplesSection = () => {
 
           <button 
             onClick={handleNext}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 lg:translate-x-8 bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full z-10"
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-8 lg:translate-x-12 bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full z-10"
             aria-label="Exemple suivant"
           >
             <ChevronRight className="w-6 h-6" />
