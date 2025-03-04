@@ -1,3 +1,4 @@
+
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Card } from "./ui/card";
@@ -8,7 +9,9 @@ import {
   FileCheck, 
   FolderGit2,
   MessageCircle,
-  TrendingUp
+  TrendingUp,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 
 const examples = [
@@ -89,69 +92,107 @@ export const AutomationExamplesSection = () => {
     examples[(currentIndex + 1) % examples.length]
   ];
 
+  const handlePrevious = () => {
+    setCurrentIndex((prevIndex) => 
+      prevIndex === 0 ? examples.length - 2 : (prevIndex - 2 + examples.length) % examples.length
+    );
+    setTimeLeft(10);
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 2) % examples.length);
+    setTimeLeft(10);
+  };
+
   return (
     <section className="py-16 bg-gray-900">
       <div className="container mx-auto px-4">
-        <h2 className="section-title">
-          Exemples d'Automatisations
-        </h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
-          <AnimatePresence mode="wait">
-            {currentExamples.map((example, index) => (
-              <motion.div
-                key={example.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-                whileHover={{ 
-                  scale: 1.02,
-                  transition: { duration: 0.2 }
-                }}
-              >
-                <Card className="p-6 h-full bg-gray-800/50 border-gray-700 hover:bg-gray-800 transition-colors duration-200">
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="rounded-full bg-gray-700 p-3 flex-shrink-0">
-                      <example.icon className="w-6 h-6 text-orange-500" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-white mb-1">{example.title}</h3>
-                      <p className="text-gray-400 text-sm">{example.subtitle}</p>
-                    </div>
-                  </div>
-
-                  {example.gain && (
-                    <div className="flex items-center gap-2 mb-4 p-2 bg-gray-700/50 rounded-md border border-gray-700">
-                      <TrendingUp className="w-5 h-5 text-green-500 flex-shrink-0" />
-                      <p className="text-green-400 font-medium text-sm">{example.gain}</p>
-                    </div>
-                  )}
-
-                  <ul className="space-y-2 mb-4">
-                    {example.features.map((feature, index) => (
-                      <li key={index} className="text-gray-300 flex items-center gap-2">
-                        <span className="text-orange-500">•</span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="text-gray-400 italic border-l-2 border-orange-500 pl-4">
-                    {example.quote}
-                  </p>
-                </Card>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="section-title">
+            Exemples d'Automatisations
+          </h2>
+          <div className="flex items-center space-x-3">
             {examples.map((_, idx) => idx % 2 === 0 && (
               <div
                 key={idx}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${
                   currentIndex === idx ? 'bg-orange-500 scale-125' : 'bg-gray-600'
                 }`}
+                onClick={() => {
+                  setCurrentIndex(idx);
+                  setTimeLeft(10);
+                }}
               />
             ))}
           </div>
+        </div>
+        
+        <div className="relative">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
+            <AnimatePresence mode="wait">
+              {currentExamples.map((example, index) => (
+                <motion.div
+                  key={example.id}
+                  initial={{ opacity: 0, x: 100 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -100 }}
+                  transition={{ duration: 0.5, delay: index * 0.2 }}
+                  whileHover={{ 
+                    scale: 1.02,
+                    transition: { duration: 0.2 }
+                  }}
+                >
+                  <Card className="p-6 h-full bg-gray-800/50 border-gray-700 hover:bg-gray-800 transition-colors duration-200">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="rounded-full bg-gray-700 p-3 flex-shrink-0">
+                        <example.icon className="w-6 h-6 text-orange-500" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-white mb-1">{example.title}</h3>
+                        <p className="text-gray-400 text-sm">{example.subtitle}</p>
+                      </div>
+                    </div>
+
+                    {example.gain && (
+                      <div className="flex items-center gap-2 mb-4 p-2 bg-gray-700/50 rounded-md border border-gray-700">
+                        <TrendingUp className="w-5 h-5 text-green-500 flex-shrink-0" />
+                        <p className="text-green-400 font-medium text-sm">{example.gain}</p>
+                      </div>
+                    )}
+
+                    <ul className="space-y-2 mb-4">
+                      {example.features.map((feature, index) => (
+                        <li key={index} className="text-gray-300 flex items-center gap-2">
+                          <span className="text-orange-500">•</span>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="text-gray-400 italic border-l-2 border-orange-500 pl-4">
+                      {example.quote}
+                    </p>
+                  </Card>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+          
+          {/* Navigation arrows */}
+          <button 
+            onClick={handlePrevious}
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 lg:-translate-x-8 bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full z-10"
+            aria-label="Exemple précédent"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          
+          <button 
+            onClick={handleNext}
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 lg:translate-x-8 bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full z-10"
+            aria-label="Exemple suivant"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
         </div>
       </div>
     </section>
