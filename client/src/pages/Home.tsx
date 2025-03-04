@@ -49,8 +49,8 @@ export default function Home() {
           <FaqSection />
           <section className="py-16 bg-gray-800">
             <div className="container text-center">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-100 mb-6">
-                Prêt à transformer votre entreprise ?
+              <h2 className="text-4xl md:text-4xl font-bold text-gray-100 mb-6">
+                Prêt à <RainbowText>transformer</RainbowText> votre entreprise ?
               </h2>
               <div className="flex gap-4 justify-center flex-wrap">
                 <Button
@@ -60,14 +60,6 @@ export default function Home() {
                 >
                   Réserver votre consultation gratuite
                 </Button>
-                <Link href="/gap">
-                  <Button
-                    size="lg"
-                    className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-3"
-                  >
-                    Générer mes automatisations
-                  </Button>
-                </Link>
               </div>
             </div>
           </section>
