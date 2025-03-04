@@ -8,44 +8,37 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
+import { RainbowText } from "@/components/RainbowText";
+import { motion } from "framer-motion";
 
 const formSchema = z.object({
-  // Section 1: Informations personnelles
+  // Section 1: Informations personnelles et entreprise (tous obligatoires)
   firstName: z.string().min(1, "Le prénom est requis"),
   lastName: z.string().min(1, "Le nom est requis"),
   email: z.string().email("Email invalide").min(1, "L'email est requis"),
   phone: z.string().optional(),
-
-  // Section 2: Informations sur l'entreprise
   companyName: z.string().min(1, "Le nom de l'entreprise est requis"),
-  website: z.string().optional(),
-  sector: z.string().min(1, "Le secteur d'activité est requis"),
-  companySize: z.string().min(1, "La taille de l'entreprise est requise"),
-  revenue: z.string().optional(),
+  website: z.string().min(1, "L'URL de l'entreprise est requise"),
 
-  // Section 3: Outils et infrastructure
+  // Les sections suivantes sont optionnelles
+  sector: z.string().optional(),
+  companySize: z.string().optional(),
+  revenue: z.string().optional(),
   crm: z.string().optional(),
   billing: z.string().optional(),
   erp: z.string().optional(),
   office: z.string().optional(),
   reporting: z.string().optional(),
   otherTools: z.string().optional(),
-
-  // Section 4: Processus à automatiser
-  mainProcess: z.string().min(1, "Ce champ est requis"),
+  mainProcess: z.string().optional(),
   frequency: z.string().optional(),
   timeSpent: z.string().optional(),
   existingSolutions: z.string().optional(),
-
-  // Section 5: Objectifs et attentes
-  expectedImpact: z.string().min(1, "Ce champ est requis"),
+  expectedImpact: z.string().optional(),
   expectedGains: z.string().optional(),
   priorities: z.string().optional(),
-
-  // Section 6: Informations complémentaires
   comments: z.string().optional(),
   availability: z.string().optional(),
 });
@@ -56,26 +49,29 @@ export default function GapForm() {
 
   const sections = [
     {
-      title: "Informations personnelles",
+      title: "Informations essentielles",
+      subtitle: "Ces informations nous permettront de vous contacter avec vos automatisations personnalisées",
       fields: [
         { name: "firstName", label: "Prénom", placeholder: "Votre prénom", type: "text", required: true },
         { name: "lastName", label: "Nom", placeholder: "Votre nom", type: "text", required: true },
         { name: "email", label: "Adresse email", placeholder: "ex: prenom.nom@example.com", type: "email", required: true },
-        { name: "phone", label: "Téléphone", placeholder: "ex: +33 6 12 34 56 78", type: "tel" }
+        { name: "phone", label: "Téléphone", placeholder: "ex: +33 6 12 34 56 78", type: "tel" },
+        { name: "companyName", label: "Nom de l'entreprise", placeholder: "Nom de votre entreprise", type: "text", required: true },
+        { name: "website", label: "URL du site ou profil LinkedIn", placeholder: "ex: https://www.votreentreprise.fr", type: "url", required: true }
       ]
     },
     {
       title: "Informations sur l'entreprise",
+      subtitle: "Ces détails nous aideront à mieux comprendre votre contexte",
       fields: [
-        { name: "companyName", label: "Nom de l'entreprise", placeholder: "Nom de votre entreprise", type: "text", required: true },
-        { name: "website", label: "URL du site ou profil LinkedIn", placeholder: "ex: https://www.votreentreprise.fr", type: "url" },
-        { name: "sector", label: "Secteur d'activité", placeholder: "ex: E-commerce, Marketing, Distribution...", type: "text", required: true },
-        { name: "companySize", label: "Taille de l'entreprise", placeholder: "Nombre d'employés (ex: 1-10, 11-50, etc.)", type: "text", required: true },
+        { name: "sector", label: "Secteur d'activité", placeholder: "ex: E-commerce, Marketing, Distribution..." },
+        { name: "companySize", label: "Taille de l'entreprise", placeholder: "Nombre d'employés (ex: 1-10, 11-50, etc.)" },
         { name: "revenue", label: "Chiffre d'affaires annuel", type: "select", options: ["0 - 100k€", "100k - 1M€", "1M - 10M€", "+10M€"] }
       ]
     },
     {
       title: "Outils et infrastructure existants",
+      subtitle: "Ces informations nous permettront de proposer des automatisations compatibles avec vos outils",
       fields: [
         { name: "crm", label: "Outil CRM utilisé", placeholder: "ex: Hubspot, Salesforce, etc." },
         { name: "billing", label: "Outil de facturation/comptabilité", placeholder: "ex: Henrii, Indy, Facture.net, etc." },
@@ -87,8 +83,9 @@ export default function GapForm() {
     },
     {
       title: "Processus à automatiser",
+      subtitle: "Plus vous nous en direz, plus nos recommandations seront pertinentes",
       fields: [
-        { name: "mainProcess", label: "Quel processus manuel vous coûte le plus de temps ?", placeholder: "ex: Résolution manuelle des tickets de support", required: true },
+        { name: "mainProcess", label: "Quel processus manuel vous coûte le plus de temps ?", placeholder: "ex: Résolution manuelle des tickets de support" },
         { name: "frequency", label: "Fréquence / Volume de ce processus", placeholder: "ex: quotidien, hebdomadaire, mensuel" },
         { name: "timeSpent", label: "Temps moyen consacré à ce processus par semaine (en heures)", placeholder: "ex: 10" },
         { name: "existingSolutions", label: "Avez-vous déjà envisagé des solutions d'automatisation ?", placeholder: "ex: Oui, j'ai pensé à utiliser un chatbot…" }
@@ -96,14 +93,16 @@ export default function GapForm() {
     },
     {
       title: "Objectifs et attentes",
+      subtitle: "Aidez-nous à comprendre vos priorités",
       fields: [
-        { name: "expectedImpact", label: "Quel serait l'impact attendu sur votre productivité ?", placeholder: "ex: Gain de temps, réduction des erreurs, amélioration de la réactivité", required: true },
+        { name: "expectedImpact", label: "Quel serait l'impact attendu sur votre productivité ?", placeholder: "ex: Gain de temps, réduction des erreurs, amélioration de la réactivité" },
         { name: "expectedGains", label: "Quels gains attendez-vous (en temps, coûts, qualité) ?", placeholder: "ex: Réduction de 50% du temps de traitement" },
         { name: "priorities", label: "Priorités en matière d'automatisation", placeholder: "ex: ROI rapide, facilité d'implémentation, scalabilité" }
       ]
     },
     {
       title: "Informations complémentaires",
+      subtitle: "Des précisions qui nous aideront à affiner nos recommandations",
       fields: [
         { name: "comments", label: "Commentaires ou contraintes spécifiques", placeholder: "Exemple : contraintes techniques, budget, etc." },
         { name: "availability", label: "Disponibilité pour un rendez-vous", placeholder: "Ex: Après-midi, matinée, jours précis, etc." }
@@ -123,29 +122,37 @@ export default function GapForm() {
     },
   });
 
-  const isCurrentSectionValid = () => {
-    const currentFields = sections[currentSection].fields;
-    const requiredFields = currentFields.filter(field => field.required);
-
+  const isFirstSectionValid = () => {
+    const requiredFields = ["firstName", "lastName", "email", "companyName", "website"];
     return requiredFields.every(field => {
-      const value = form.getValues(field.name);
+      const value = form.getValues(field as keyof z.infer<typeof formSchema>);
       return value && value.trim() !== "";
     });
   };
 
   const handleNext = () => {
-    if (isCurrentSectionValid()) {
-      setCurrentSection(prev => prev + 1);
-    } else {
+    if (currentSection === 0 && !isFirstSectionValid()) {
       toast({
         variant: "destructive",
         title: "Champs requis",
         description: "Veuillez remplir tous les champs obligatoires avant de continuer.",
       });
+      return;
     }
+    setCurrentSection(prev => prev + 1);
   };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    if (!isFirstSectionValid()) {
+      toast({
+        variant: "destructive",
+        title: "Champs requis",
+        description: "Veuillez remplir tous les champs obligatoires avant d'envoyer le formulaire.",
+      });
+      setCurrentSection(0);
+      return;
+    }
+
     try {
       const params = new URLSearchParams();
       Object.entries(data).forEach(([key, value]) => {
@@ -154,41 +161,19 @@ export default function GapForm() {
         }
       });
 
-      // URL du webhook externe ou du webhook de test interne si non définie
       const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || 
-                         window.location.origin + '/api/webhook-test';
+                        window.location.origin + '/api/webhook-test';
 
-      console.log('Tentative d\'envoi vers webhook:', webhookUrl);
-      console.log('Statut de la variable d\'environnement:', 
-                  import.meta.env.VITE_N8N_WEBHOOK_URL ? 'Variable externe définie' : 'Utilisation du webhook de test interne');
-      console.log('URL complète:', `${webhookUrl}?${params.toString()}`);
-      console.log('Environnement:', import.meta.env.MODE);
-      console.log('Paramètres envoyés:', Object.fromEntries(params.entries()));
-      
-      try {
-        console.log('Début de la requête fetch...');
-        const response = await fetch(`${webhookUrl}?${params.toString()}`, {
-          method: 'GET',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-          },
-          credentials: 'same-origin'
-        }).then(async response => {
-          const text = await response.text();
-          console.log('Réponse webhook:', response.status, text);
-          console.log('Headers:', Object.fromEntries([...response.headers.entries()]));
-          console.log('URL de la réponse:', response.url);
-          return { response, text };
-        });
-
-        if (!response.response.ok) {
-          throw new Error(`Erreur lors de l\'envoi du formulaire: ${response.response.status}: ${response.text}`);
+      const response = await fetch(`${webhookUrl}?${params.toString()}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
         }
-      } catch (fetchError) {
-        console.error('Erreur de fetch:', fetchError);
-        throw fetchError;
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur lors de l'envoi du formulaire: ${response.status}`);
       }
 
       toast({
@@ -196,25 +181,15 @@ export default function GapForm() {
         description: "Nous vous contacterons rapidement avec des solutions personnalisées.",
       });
 
-      form.reset();
-      setCurrentSection(0);
+      // Redirection vers la page d'accueil
+      window.location.href = '/';
 
     } catch (error) {
-      console.error('Erreur détaillée:', error);
-      // Afficher plus de détails pour le débogage
-      if (error instanceof Error) {
-        console.error('Message d\'erreur:', error.message);
-        console.error('Stack trace:', error.stack);
-      }
-      
-      // Loguer les données qui auraient dû être envoyées
-      console.log('Données du formulaire:', data);
-      console.log('URL webhook:', import.meta.env.VITE_N8N_WEBHOOK_URL || 'Non définie');
-      
+      console.error('Erreur:', error);
       toast({
         variant: "destructive",
         title: "Erreur",
-        description: "Une erreur est survenue lors de l'envoi du formulaire. Consultez la console pour plus de détails.",
+        description: "Une erreur est survenue lors de l'envoi du formulaire.",
       });
     }
   };
@@ -289,54 +264,73 @@ export default function GapForm() {
           ← Retour
         </Link>
 
-        <h1 className="text-4xl sm:text-5xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-orange-600">
-          Générateur d'Automatisations Personnalisées
+        <h1 className="text-4xl sm:text-5xl font-bold text-center mb-4">
+          Générateur d'<RainbowText>Automatisations</RainbowText> Personnalisées
         </h1>
 
+        <p className="text-xl text-center text-gray-300 mb-8 max-w-2xl mx-auto">
+          Remplissez vos informations et recevez par email des automatisations qui vont faire exploser votre productivité
+        </p>
+
         <div className="mb-8">
-          <Progress value={progress} className="w-full h-2 bg-gray-700" />
-          <p className="text-center mt-2 text-sm text-gray-400">
-            Section {currentSection + 1} sur {sections.length} : {sections[currentSection].title}
-          </p>
+          <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-orange-500 to-orange-600"
+              initial={{ width: "0%" }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.5 }}
+            />
+          </div>
         </div>
 
         <Card className="p-6 max-w-2xl mx-auto bg-gray-800/50 border-gray-700">
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold mb-2">{sections[currentSection].title}</h2>
+            <p className="text-gray-400">{sections[currentSection].subtitle}</p>
+            {currentSection === 0 && (
+              <p className="text-sm text-orange-500 mt-2">* Ces champs sont obligatoires pour recevoir vos automatisations personnalisées</p>
+            )}
+          </div>
+
           <Form {...form}>
             <form className="space-y-6">
               <div className="space-y-4">
                 {sections[currentSection].fields.map(renderField)}
               </div>
 
-              <div className="flex justify-between mt-6">
-                {currentSection > 0 && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setCurrentSection(prev => prev - 1)}
-                    className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                  >
-                    Précédent
-                  </Button>
-                )}
+              <div className="flex items-center justify-between mt-6 gap-4">
+                <div className="flex gap-4">
+                  {currentSection > 0 && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setCurrentSection(prev => prev - 1)}
+                      className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                    >
+                      Précédent
+                    </Button>
+                  )}
+                  {currentSection < sections.length - 1 && (
+                    <Button
+                      type="button"
+                      onClick={handleNext}
+                      className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
+                    >
+                      Suivant
+                    </Button>
+                  )}
+                </div>
 
-                {currentSection < sections.length - 1 ? (
-                  <Button
-                    type="button"
-                    className={`${currentSection === 0 ? "w-full" : "ml-auto"} bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white`}
-                    onClick={handleNext}
-                  >
-                    Suivant
-                  </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    className="ml-auto bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white"
-                    onClick={form.handleSubmit(onSubmit)}
-                    disabled={!isCurrentSectionValid()}
-                  >
-                    Recevoir mes automatisations personnalisées
-                  </Button>
-                )}
+                <Button
+                  type="button"
+                  onClick={form.handleSubmit(onSubmit)}
+                  disabled={!isFirstSectionValid()}
+                  className={`bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white ${
+                    !isFirstSectionValid() ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                >
+                  Recevoir mes automatisations
+                </Button>
               </div>
             </form>
           </Form>

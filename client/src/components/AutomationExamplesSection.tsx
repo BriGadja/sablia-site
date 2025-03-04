@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 import { Card } from "./ui/card";
 import { 
   Users, 
@@ -27,14 +28,14 @@ const examples = [
   {
     id: 2,
     title: "🧠 Votre propre assistant personnel",
-      subtitle: "Un collaborateur virtuel disponible 24/7",
-      features: [
-        "Envoi et gestion automatisés de vos emails professionnels",
-        "Organisation et planification intelligente de vos réunions",
-        "Multitâche avancé pour libérer votre temps et votre esprit"
-      ],
-      quote: "L'assistant qui ne prend jamais de congés et s'adapte parfaitement à vos besoins.",
-      gain: "Récupérez 15h de productivité par semaine dès le premier mois",
+    subtitle: "Un collaborateur virtuel disponible 24/7",
+    features: [
+      "Envoi et gestion automatisés de vos emails professionnels",
+      "Organisation et planification intelligente de vos réunions",
+      "Multitâche avancé pour libérer votre temps et votre esprit"
+    ],
+    quote: "L'assistant qui ne prend jamais de congés et s'adapte parfaitement à vos besoins.",
+    gain: "Récupérez 15h de productivité par semaine dès le premier mois",
     icon: Mail
   },
   {
@@ -62,48 +63,47 @@ const examples = [
     quote: "Vos propositions commerciales passent du 'brouillon' à 'signé' en un clic.",
     gain: "Automatisez la phase de rédaction de devis et de contrats et gagnez jusqu'à 2 heures d'admin par client",
     icon: FileCheck
-  },
-  {
-    id: 5,
-    title: "📄 Génération de documents templatés",
-    subtitle: "Automatisation intelligente de vos documents",
-    features: [
-      "Création de documents à partir de formulaires ou conversations chatbot",
-      "Transformation automatique de CV au format de votre entreprise",
-      "Templates personnalisables pour tout type de document professionnel"
-    ],
-    quote: "Votre usine à documents professionnels qui fonctionne pendant que vous vous concentrez sur l'essentiel.",
-    gain: "Économisez 90% du temps de production documentaire en 1 mois",
-    icon: FileText
-  },
-  {
-    id: 6,
-    title: "🎥 Générateur de contenu 2.0",
-    subtitle: "Pour agences marketing et créateurs pressés",
-    features: [
-      "Scan automatique des tendances YouTube/Instagram",
-      "Réécriture sur-mesure (ton, longueur, mots-clés)",
-      "Programmation sur tous vos canaux en 1 clic"
-    ],
-    quote: "Votre usine à contenu personnalisé, même sans rédacteur.",
-    gain: "Produisez 5x plus de contenu avec le même budget en 30 jours",
-    icon: FileText
   }
 ];
 
 export const AutomationExamplesSection = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(10);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 0) {
+          setCurrentIndex((prevIndex) => (prevIndex + 2) % examples.length);
+          return 10;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const currentExamples = [
+    examples[currentIndex],
+    examples[(currentIndex + 1) % examples.length]
+  ];
+
   return (
     <section className="py-16 bg-gray-900">
       <div className="container mx-auto px-4">
         <h2 className="section-title">
           Exemples d'Automatisations
         </h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {examples.map((example) => {
-            const Icon = example.icon;
-            return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
+          <AnimatePresence mode="wait">
+            {currentExamples.map((example, index) => (
               <motion.div
                 key={example.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
                 whileHover={{ 
                   scale: 1.02,
                   transition: { duration: 0.2 }
@@ -112,7 +112,7 @@ export const AutomationExamplesSection = () => {
                 <Card className="p-6 h-full bg-gray-800/50 border-gray-700 hover:bg-gray-800 transition-colors duration-200">
                   <div className="flex items-start gap-4 mb-4">
                     <div className="rounded-full bg-gray-700 p-3 flex-shrink-0">
-                      <Icon className="w-6 h-6 text-orange-500" />
+                      <example.icon className="w-6 h-6 text-orange-500" />
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-white mb-1">{example.title}</h3>
@@ -140,8 +140,16 @@ export const AutomationExamplesSection = () => {
                   </p>
                 </Card>
               </motion.div>
-            );
-          })}
+            ))}
+          </AnimatePresence>
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-gray-800">
+            <motion.div 
+              className="h-full bg-orange-500"
+              initial={{ width: "100%" }}
+              animate={{ width: "0%" }}
+              transition={{ duration: 10, ease: "linear", repeat: Infinity }}
+            />
+          </div>
         </div>
       </div>
     </section>
