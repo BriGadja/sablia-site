@@ -1,16 +1,8 @@
 
-import { RainbowText } from "./RainbowText";
-
 export default function Footer() {
   return (
     <footer className="bg-gray-800">
       <div className="container py-12">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-100">
-            Prêt à <RainbowText>transformer</RainbowText> votre entreprise ?
-          </h2>
-        </div>
-        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-100">Sablia</h3>
