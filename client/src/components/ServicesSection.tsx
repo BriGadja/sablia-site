@@ -47,7 +47,7 @@ export default function ServicesSection() {
               <Card 
                 className={`h-full border-primary/20 shadow-lg transform transition-all duration-300 bg-gray-800/50 backdrop-blur-sm hover:bg-gray-800/80 ${
                   service.primary ? 'hover:border-orange-500/50' : 'hover:border-blue-500/50'
-                }`}
+                } relative group`}
               >
                 <CardContent className="p-8">
                   <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${
@@ -68,7 +68,7 @@ export default function ServicesSection() {
                   <p className="text-gray-300 mb-6">
                     {service.details}
                   </p>
-                  <div className="space-y-3">
+                  <div className="space-y-3 transform transition-all duration-300 opacity-0 group-hover:opacity-100">
                     {service.benefits.map((benefit, index) => (
                       <div key={index} className="flex items-center gap-2 text-gray-200">
                         <CheckCircle2 className={`h-5 w-5 ${

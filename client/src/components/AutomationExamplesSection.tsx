@@ -142,13 +142,15 @@ export const AutomationExamplesSection = () => {
               </motion.div>
             ))}
           </AnimatePresence>
-          <div className="absolute bottom-0 left-0 w-full h-1 bg-gray-800">
-            <motion.div 
-              className="h-full bg-orange-500"
-              initial={{ width: "100%" }}
-              animate={{ width: "0%" }}
-              transition={{ duration: 10, ease: "linear", repeat: Infinity }}
-            />
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+            {examples.map((_, idx) => idx % 2 === 0 && (
+              <div
+                key={idx}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  currentIndex === idx ? 'bg-orange-500 scale-125' : 'bg-gray-600'
+                }`}
+              />
+            ))}
           </div>
         </div>
       </div>

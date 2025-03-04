@@ -50,7 +50,7 @@ export default function GapForm() {
   const sections = [
     {
       title: "Informations essentielles",
-      subtitle: "Ces informations nous permettront de vous contacter avec vos automatisations personnalisées",
+      subtitle: "",
       fields: [
         { name: "firstName", label: "Prénom", placeholder: "Votre prénom", type: "text", required: true },
         { name: "lastName", label: "Nom", placeholder: "Votre nom", type: "text", required: true },
@@ -65,8 +65,18 @@ export default function GapForm() {
       subtitle: "Ces détails nous aideront à mieux comprendre votre contexte",
       fields: [
         { name: "sector", label: "Secteur d'activité", placeholder: "ex: E-commerce, Marketing, Distribution..." },
-        { name: "companySize", label: "Taille de l'entreprise", placeholder: "Nombre d'employés (ex: 1-10, 11-50, etc.)" },
-        { name: "revenue", label: "Chiffre d'affaires annuel", type: "select", options: ["0 - 100k€", "100k - 1M€", "1M - 10M€", "+10M€"] }
+        {
+          name: "companySize",
+          label: "Taille de l'entreprise",
+          type: "select",
+          options: ["1", "2 à 9", "10 à 50", "50 à 150", "150+"]
+        },
+        {
+          name: "revenue",
+          label: "Chiffre d'affaires annuel",
+          type: "select",
+          options: ["0 - 100k€", "100k - 1M€", "1M - 10M€", "+10M€", "Donnée confidentielle"]
+        }
       ]
     },
     {
@@ -161,7 +171,7 @@ export default function GapForm() {
         }
       });
 
-      const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || 
+      const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL ||
                         window.location.origin + '/api/webhook-test';
 
       const response = await fetch(`${webhookUrl}?${params.toString()}`, {
@@ -286,9 +296,14 @@ export default function GapForm() {
         <Card className="p-6 max-w-2xl mx-auto bg-gray-800/50 border-gray-700">
           <div className="mb-6">
             <h2 className="text-xl font-semibold mb-2">{sections[currentSection].title}</h2>
-            <p className="text-gray-400">{sections[currentSection].subtitle}</p>
+            {sections[currentSection].subtitle && (
+              <p className="text-gray-400">{sections[currentSection].subtitle}</p>
+            )}
             {currentSection === 0 && (
               <p className="text-sm text-orange-500 mt-2">* Ces champs sont obligatoires pour recevoir vos automatisations personnalisées</p>
+            )}
+            {currentSection !== 0 && (
+              <p className="text-sm text-blue-400 mt-2">Plus vous nous donnez d'informations, plus les automatisations proposées seront précises et adaptées à vos besoins</p>
             )}
           </div>
 
@@ -299,6 +314,17 @@ export default function GapForm() {
               </div>
 
               <div className="flex items-center justify-between mt-6 gap-4">
+                <Button
+                  type="button"
+                  onClick={form.handleSubmit(onSubmit)}
+                  disabled={!isFirstSectionValid()}
+                  className={`bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white ${
+                    !isFirstSectionValid() ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                >
+                  Recevoir mes automatisations
+                </Button>
+
                 <div className="flex gap-4">
                   {currentSection > 0 && (
                     <Button
@@ -320,17 +346,6 @@ export default function GapForm() {
                     </Button>
                   )}
                 </div>
-
-                <Button
-                  type="button"
-                  onClick={form.handleSubmit(onSubmit)}
-                  disabled={!isFirstSectionValid()}
-                  className={`bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white ${
-                    !isFirstSectionValid() ? 'opacity-50 cursor-not-allowed' : ''
-                  }`}
-                >
-                  Recevoir mes automatisations
-                </Button>
               </div>
             </form>
           </Form>
