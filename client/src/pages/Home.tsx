@@ -21,8 +21,9 @@ export default function Home() {
           <AutomationExamplesSection />
           <section className="py-20 bg-gray-800/50">
             <div className="container text-center">
-              <h2 className="text-4xl font-bold mb-6">
-                Découvrez les <RainbowText>automatisations</RainbowText> idéales pour votre business
+              <h2 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                Découvrez les <RainbowText>automatisations</RainbowText><br />
+                <span className="text-4xl md:text-5xl">idéales pour votre business</span>
               </h2>
               <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
                 Utilisez notre générateur d'automatisations personnalisées et recevez des recommandations sur-mesure qui vont faire exploser votre productivité
