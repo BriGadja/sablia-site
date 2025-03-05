@@ -49,8 +49,9 @@ export default function Home() {
           <FaqSection />
           <section className="py-16 bg-gray-800">
             <div className="container text-center">
-              <h2 className="text-4xl md:text-4xl font-bold text-gray-100 mb-6">
-                Prêt à <RainbowText>transformer</RainbowText><br /> votre entreprise ?
+              <h2 className="text-5xl md:text-6xl font-bold text-gray-100 mb-6 leading-tight">
+                Prêt à <RainbowText>transformer</RainbowText><br /> 
+                <span className="text-4xl md:text-5xl">votre entreprise ?</span>
               </h2>
               <div className="flex gap-4 justify-center flex-wrap">
                 <Button
