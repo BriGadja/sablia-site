@@ -6,11 +6,12 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
-    { label: "Accueil", href: "#" },
+    { label: "Accueil", href: "/" },
     { label: "Services", href: "#services" },
     { label: "Processus", href: "#process" },
-    { label: "FAQ", href: "#faq" },
-    { label: "À propos", href: "/about" }, // Added "À propos" link
+    { label: "Exemples", href: "#examples" },
+    { label: "À propos", href: "/about" },
+    { label: "Contact", href: "#contact" },
   ];
 
   return (
