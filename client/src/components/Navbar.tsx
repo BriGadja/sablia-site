@@ -23,7 +23,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-gray-900/80 backdrop-blur-sm fixed w-full z-50 top-0 left-0 border-b border-gray-800">
-      <div className="container mx-auto px-4">
+      <div className="container">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
             <img src="/logo.svg" alt="Sablia" className="h-8 w-8" />
