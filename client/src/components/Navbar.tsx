@@ -11,7 +11,6 @@ export default function Navbar() {
     { label: "Processus", href: "#process" },
     { label: "Exemples", href: "#examples" },
     { label: "À propos", href: "/about" },
-    { label: "Contact", href: "#contact" },
   ];
 
   return (
