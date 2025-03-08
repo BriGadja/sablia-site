@@ -1,53 +1,33 @@
 import { Button } from "./ui/button";
 import { RainbowText } from "./RainbowText";
 import { Link } from "wouter";
-import { Calendar, Sparkles } from "lucide-react";
-import { motion } from "framer-motion";
 
 export default function HeroSection() {
   return (
     <div className="min-h-screen flex items-center bg-gray-900 text-gray-100 relative overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <p className="text-sm font-semibold tracking-widest text-gray-400 uppercase mb-6 sm:mb-8">
+          <p className="text-sm font-semibold tracking-widest text-gray-400 uppercase mb-8">
             AUTOMATE YOUR BUSINESS
           </p>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-8 sm:mb-10 leading-tight px-2">
+          <h1 className="text-6xl sm:text-5xl md:text-6xl font-bold text-white mb-10 leading-tight">
             Laissez l'<RainbowText>IA</RainbowText> & vos <RainbowText>automatisations</RainbowText> booster votre Business.
           </h1>
-          <p className="text-lg sm:text-xl md:text-3xl text-gray-300 mb-8 sm:mb-12 px-2">
+          <p className="text-lg md:text-3xl text-gray-300 mb-12">
             Libérez votre temps des tâches répétitives. 
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-4">
-            <motion.a
+          <div className="flex gap-6 justify-center flex-wrap mt-6">
+            <a
               href="https://calendly.com/brice-gachadoat/30min"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-10 py-4 rounded-md inline-block shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-medium"
             >
-              <button className="w-full px-8 py-4 rounded-full bg-gradient-to-r from-[#d14b79] via-[#22c4d6] to-[#d14b79] text-white font-medium text-base sm:text-lg hover:opacity-90 transition-opacity duration-200 flex items-center justify-center gap-2 animate-gradient-x-fast bg-200%">
-                <Calendar className="w-5 h-5" />
-                <span>Réservez un call gratuit !</span>
-              </button>
-            </motion.a>
-
-            <motion.div
-              className="w-full sm:w-auto"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Link href="/gap">
-                <div className="relative group">
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-[#d14b79] via-[#22c4d6] to-[#d14b79] rounded-lg blur opacity-60 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-gradient-x bg-200%"></div>
-                  <button className="relative w-full px-8 py-4 bg-gray-900 rounded-lg leading-none flex items-center justify-center">
-                    <Sparkles className="w-5 h-5" />
-                    <span className="bg-gradient-to-r from-[#d14b79] via-[#22c4d6] to-[#d14b79] bg-clip-text text-transparent animate-gradient-x bg-200%">Découvrez vos automatisations sur-mesure !</span>
-                  </button>
-                </div>
-              </Link>
-            </motion.div>
+              Réservez un call gratuit !
+            </a>
+            <Link href="/gap" className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-10 py-4 rounded-md inline-block shadow-lg hover:shadow-xl transition-all duration-300 text-lg font-medium">
+              Découvrez vos automatisations sur-mesure !
+            </Link>
           </div>
         </div>
       </div>
