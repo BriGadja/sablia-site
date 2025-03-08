@@ -28,13 +28,13 @@ export default function HeroSection() {
               whileTap={{ scale: 0.98 }}
             >
               <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 via-blue-500 to-orange-500 rounded-lg blur opacity-60 group-hover:opacity-100 transition duration-1000 group-hover:duration 200 animate-tilt"></div>
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-orange-600 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-                <div className="flex items-center justify-center gap-2 text-base sm:text-lg font-medium">
+              <button className="relative w-full px-6 sm:px-10 py-4 bg-gradient-to-br from-orange-500/20 to-orange-600/20 rounded-xl backdrop-blur-sm leading-none flex items-center justify-center">
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-orange-600 opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-xl"></div>
+                <div className="flex items-center justify-center gap-2 text-base sm:text-lg font-medium relative">
                   <Calendar className="w-5 h-5 group-hover:text-orange-400 transition-colors" />
                   <span className="group-hover:text-orange-200 transition-colors">Réservez un call gratuit !</span>
                 </div>
-              </div>
+              </button>
             </motion.a>
 
             <motion.div
