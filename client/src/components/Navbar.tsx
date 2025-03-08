@@ -13,6 +13,14 @@ export default function Navbar() {
     { label: "À propos", href: "/about" },
   ];
 
+  const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // Si c'est un lien d'ancrage et nous sommes sur une page autre que l'accueil
+    if (href.startsWith('#') && window.location.pathname !== '/') {
+      e.preventDefault();
+      window.location.href = '/' + href;
+    }
+  };
+
   return (
     <nav className="bg-gray-900/80 backdrop-blur-sm fixed w-full z-50 top-0 left-0 border-b border-gray-800">
       <div className="container">
@@ -30,6 +38,7 @@ export default function Navbar() {
                   key={item.label}
                   href={item.href}
                   className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium"
+                  onClick={(e) => handleNavigation(e, item.href)}
                 >
                   {item.label}
                 </a>
@@ -60,7 +69,10 @@ export default function Navbar() {
                   key={item.label}
                   href={item.href}
                   className="text-gray-300 hover:text-white block px-3 py-2 text-base font-medium"
-                  onClick={() => setIsOpen(false)}
+                  onClick={(e) => {
+                    setIsOpen(false);
+                    handleNavigation(e, item.href);
+                  }}
                 >
                   {item.label}
                 </a>
