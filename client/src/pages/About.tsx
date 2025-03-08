@@ -14,7 +14,7 @@ export default function About() {
     <div className="min-h-screen bg-gray-900 text-gray-100">
       <Navbar />
       <main className="container mx-auto px-4 py-16">
-        <div className="flex flex-col items-center mb-10">
+        <div className="flex flex-col items-center mb-10 mt-12">
           <h1 className="text-4xl font-bold text-center">À propos</h1>
         </div>
 
