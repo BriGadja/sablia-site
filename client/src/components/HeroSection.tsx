@@ -27,7 +27,7 @@ export default function HeroSection() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <button className="w-full px-8 py-4 rounded-full bg-gradient-to-r from-[#d14b79] via-[#22c4d6] to-[#22c4d6] text-white font-medium text-base sm:text-lg hover:opacity-90 transition-opacity duration-200 flex items-center justify-center gap-2">
+              <button className="w-full px-8 py-4 rounded-full bg-gradient-to-r from-[#d14b79] via-[#22c4d6] to-[#22c4d6] text-white font-medium text-base sm:text-lg hover:opacity-90 transition-opacity duration-200 flex items-center justify-center gap-2 animate-gradient-x">
                 <Calendar className="w-5 h-5" />
                 <span>Réservez un call gratuit !</span>
               </button>
@@ -40,9 +40,9 @@ export default function HeroSection() {
             >
               <Link href="/gap">
                 <div className="relative p-[2px] rounded-full bg-gradient-to-r from-[#d14b79] via-[#22c4d6] to-[#22c4d6]">
-                  <button className="w-full px-8 py-4 rounded-full bg-gray-900 text-white font-medium text-base sm:text-lg hover:bg-opacity-95 transition-colors duration-200 flex items-center justify-center gap-2">
+                  <button className="w-full px-8 py-4 rounded-full bg-gray-900 text-white font-medium text-base sm:text-lg hover:bg-opacity-95 transition-colors duration-200 flex items-center justify-center gap-2 group">
                     <Sparkles className="w-5 h-5" />
-                    <span>Découvrez vos automatisations sur-mesure !</span>
+                    <span className="bg-gradient-to-r from-[#d14b79] via-[#22c4d6] to-[#22c4d6] bg-clip-text text-transparent animate-gradient-x">Découvrez vos automatisations sur-mesure !</span>
                   </button>
                 </div>
               </Link>
