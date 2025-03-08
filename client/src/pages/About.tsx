@@ -15,11 +15,6 @@ export default function About() {
       <Navbar />
       <main className="container mx-auto px-4 py-16">
         <div className="flex flex-col items-center mb-10">
-          <img 
-            src="/attached_assets/upwork_profile_pic_carré.PNG" 
-            alt="Brice Gachadoat" 
-            className="w-48 h-48 rounded-full mb-8 object-cover"
-          />
           <h1 className="text-4xl font-bold text-center">À propos</h1>
         </div>
 
