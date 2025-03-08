@@ -40,7 +40,7 @@ export default function HeroSection() {
             >
               <Link href="/gap">
                 <div className="relative p-[2px] rounded-full bg-gradient-to-r from-[#d14b79] via-[#22c4d6] to-[#d14b79] animate-gradient-x bg-200%">
-                  <button className="w-full px-8 py-4 rounded-full bg-gray-900 text-white font-medium text-base sm:text-lg hover:bg-opacity-95 transition-colors duration-200 flex items-center justify-center gap-2 group">
+                  <button className="relative w-full px-8 py-4 bg-gray-900 rounded-full text-white font-medium text-base sm:text-lg hover:bg-opacity-95 transition-colors duration-200 flex items-center justify-center gap-2 group">
                     <Sparkles className="w-5 h-5" />
                     <span className="bg-gradient-to-r from-[#d14b79] via-[#22c4d6] to-[#d14b79] bg-clip-text text-transparent animate-gradient-x bg-200%">Découvrez vos automatisations sur-mesure !</span>
                   </button>
