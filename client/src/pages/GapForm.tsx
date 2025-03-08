@@ -269,87 +269,89 @@ export default function GapForm() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
-      <div className="relative z-[2] container mx-auto px-4 py-8 min-h-screen flex flex-col justify-center">
+      <div className="relative z-[2] container mx-auto px-4 py-8 min-h-screen">
         <Link href="/" className="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors">
           ← Retour
         </Link>
 
-        <h1 className="text-4xl sm:text-5xl font-bold text-center mb-4">
-          Générateur d'<RainbowText>Automatisations</RainbowText> Personnalisées
-        </h1>
+        <div className="pt-16 md:pt-0">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 px-2">
+            Générateur d'<RainbowText>Automatisations</RainbowText> Personnalisées
+          </h1>
 
-        <p className="text-xl text-center text-gray-300 mb-8 max-w-2xl mx-auto">
-          Remplissez vos informations et recevez par email des automatisations qui vont faire exploser votre productivité
-        </p>
+          <p className="text-lg sm:text-xl text-center text-gray-300 mb-8 max-w-2xl mx-auto px-2">
+            Remplissez vos informations et recevez par email des automatisations qui vont faire exploser votre productivité
+          </p>
 
-        <div className="mb-8">
-          <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
-            <motion.div
-              className="h-full bg-gradient-to-r from-orange-500 to-orange-600"
-              initial={{ width: "0%" }}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.5 }}
-            />
-          </div>
-        </div>
-
-        <Card className="p-6 max-w-2xl mx-auto bg-gray-800/50 border-gray-700">
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-2">{sections[currentSection].title}</h2>
-            {sections[currentSection].subtitle && (
-              <p className="text-gray-400">{sections[currentSection].subtitle}</p>
-            )}
-            {currentSection === 0 && (
-              <p className="text-sm text-orange-500 mt-2">* Ces champs sont obligatoires pour recevoir vos automatisations personnalisées</p>
-            )}
-            {currentSection !== 0 && (
-              <p className="text-sm text-blue-400 mt-2">Plus vous nous donnez d'informations, plus les automatisations proposées seront précises et adaptées à vos besoins</p>
-            )}
+          <div className="mb-8">
+            <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-gradient-to-r from-orange-500 to-orange-600"
+                initial={{ width: "0%" }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.5 }}
+              />
+            </div>
           </div>
 
-          <Form {...form}>
-            <form className="space-y-6">
-              <div className="space-y-4">
-                {sections[currentSection].fields.map(renderField)}
-              </div>
+          <Card className="p-4 sm:p-6 max-w-2xl mx-auto bg-gray-800/50 border-gray-700">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold mb-2">{sections[currentSection].title}</h2>
+              {sections[currentSection].subtitle && (
+                <p className="text-gray-400 text-sm sm:text-base">{sections[currentSection].subtitle}</p>
+              )}
+              {currentSection === 0 && (
+                <p className="text-sm text-orange-500 mt-2">* Ces champs sont obligatoires pour recevoir vos automatisations personnalisées</p>
+              )}
+              {currentSection !== 0 && (
+                <p className="text-sm text-blue-400 mt-2">Plus vous nous donnez d'informations, plus les automatisations proposées seront précises et adaptées à vos besoins</p>
+              )}
+            </div>
 
-              <div className="flex items-center justify-between mt-6 gap-4">
-                <Button
-                  type="button"
-                  onClick={form.handleSubmit(onSubmit)}
-                  disabled={!isFirstSectionValid()}
-                  className={`bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white ${
-                    !isFirstSectionValid() ? 'opacity-50 cursor-not-allowed' : ''
-                  }`}
-                >
-                  Recevoir mes automatisations
-                </Button>
-
-                <div className="flex gap-4">
-                  {currentSection > 0 && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setCurrentSection(prev => prev - 1)}
-                      className="border-gray-600 text-gray-300 hover:bg-gray-700"
-                    >
-                      Précédent
-                    </Button>
-                  )}
-                  {currentSection < sections.length - 1 && (
-                    <Button
-                      type="button"
-                      onClick={handleNext}
-                      className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
-                    >
-                      Suivant
-                    </Button>
-                  )}
+            <Form {...form}>
+              <form className="space-y-4">
+                <div className="space-y-4">
+                  {sections[currentSection].fields.map(renderField)}
                 </div>
-              </div>
-            </form>
-          </Form>
-        </Card>
+
+                <div className="flex flex-col-reverse sm:flex-row items-center justify-between mt-6 gap-4">
+                  <Button
+                    type="button"
+                    onClick={form.handleSubmit(onSubmit)}
+                    disabled={!isFirstSectionValid()}
+                    className={`w-full sm:w-auto bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white ${
+                      !isFirstSectionValid() ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                  >
+                    Recevoir mes automatisations
+                  </Button>
+
+                  <div className="flex w-full sm:w-auto gap-4">
+                    {currentSection > 0 && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setCurrentSection(prev => prev - 1)}
+                        className="flex-1 sm:flex-initial border-gray-600 text-gray-300 hover:bg-gray-700"
+                      >
+                        Précédent
+                      </Button>
+                    )}
+                    {currentSection < sections.length - 1 && (
+                      <Button
+                        type="button"
+                        onClick={handleNext}
+                        className="flex-1 sm:flex-initial bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
+                      >
+                        Suivant
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </form>
+            </Form>
+          </Card>
+        </div>
       </div>
     </div>
   );
