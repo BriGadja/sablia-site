@@ -23,17 +23,13 @@ export default function HeroSection() {
               href="https://calendly.com/brice-gachadoat/30min"
               target="_blank"
               rel="noopener noreferrer"
-              className="group w-full sm:w-auto relative overflow-hidden rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/20 px-6 sm:px-10 py-4 backdrop-blur-sm border-2 border-transparent transition-all duration-300"
+              className="w-full sm:w-auto"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 via-blue-500 to-orange-500 rounded-lg blur opacity-60 group-hover:opacity-100 transition duration-1000 group-hover:duration 200 animate-tilt"></div>
-              <button className="relative w-full px-6 sm:px-10 py-4 bg-gradient-to-br from-orange-500/20 to-orange-600/20 rounded-xl backdrop-blur-sm leading-none flex items-center justify-center">
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-orange-600 opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-xl"></div>
-                <div className="flex items-center justify-center gap-2 text-base sm:text-lg font-medium relative">
-                  <Calendar className="w-5 h-5 group-hover:text-orange-400 transition-colors" />
-                  <span className="group-hover:text-orange-200 transition-colors">Réservez un call gratuit !</span>
-                </div>
+              <button className="w-full px-8 py-4 rounded-full bg-gradient-to-r from-[#d14b79] via-[#22c4d6] to-[#22c4d6] text-white font-medium text-base sm:text-lg hover:opacity-90 transition-opacity duration-200 flex items-center justify-center gap-2">
+                <Calendar className="w-5 h-5" />
+                <span>Réservez un call gratuit !</span>
               </button>
             </motion.a>
 
@@ -43,14 +39,10 @@ export default function HeroSection() {
               whileTap={{ scale: 0.98 }}
             >
               <Link href="/gap">
-                <div className="relative group">
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 via-orange-500 to-blue-500 rounded-lg blur opacity-60 group-hover:opacity-100 transition duration-1000 group-hover:duration 200 animate-tilt"></div>
-                  <button className="relative w-full px-6 sm:px-10 py-4 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-xl backdrop-blur-sm leading-none flex items-center justify-center">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-blue-600 opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-xl"></div>
-                    <div className="flex items-center justify-center gap-2 text-base sm:text-lg font-medium relative">
-                      <Sparkles className="w-5 h-5 group-hover:text-blue-400 transition-colors" />
-                      <span className="group-hover:text-blue-200 transition-colors">Découvrez vos automatisations sur-mesure !</span>
-                    </div>
+                <div className="relative p-[2px] rounded-full bg-gradient-to-r from-[#d14b79] via-[#22c4d6] to-[#22c4d6]">
+                  <button className="w-full px-8 py-4 rounded-full bg-gray-900 text-white font-medium text-base sm:text-lg hover:bg-opacity-95 transition-colors duration-200 flex items-center justify-center gap-2">
+                    <Sparkles className="w-5 h-5" />
+                    <span>Découvrez vos automatisations sur-mesure !</span>
                   </button>
                 </div>
               </Link>
