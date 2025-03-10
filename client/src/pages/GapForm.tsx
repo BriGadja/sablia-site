@@ -132,37 +132,12 @@ export default function GapForm() {
     },
   });
 
-  const isFirstSectionValid = () => {
-    const requiredFields = ["firstName", "lastName", "email", "companyName", "website"];
-    return requiredFields.every(field => {
-      const value = form.getValues(field as keyof z.infer<typeof formSchema>);
-      return value && value.trim() !== "";
-    });
-  };
-
-  const handleNext = () => {
-    if (currentSection === 0 && !isFirstSectionValid()) {
-      toast({
-        variant: "destructive",
-        title: "Champs requis",
-        description: "Veuillez remplir tous les champs obligatoires avant de continuer.",
-      });
-      return;
-    }
-    setCurrentSection(prev => prev + 1);
+  const isFormValid = () => {
+    const isValid = form.formState.isValid;
+    return isValid;
   };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    if (!isFirstSectionValid()) {
-      toast({
-        variant: "destructive",
-        title: "Champs requis",
-        description: "Veuillez remplir tous les champs obligatoires avant d'envoyer le formulaire.",
-      });
-      setCurrentSection(0);
-      return;
-    }
-
     try {
       const params = new URLSearchParams();
       Object.entries(data).forEach(([key, value]) => {
@@ -203,6 +178,7 @@ export default function GapForm() {
       });
     }
   };
+
 
   const progress = ((currentSection + 1) / sections.length) * 100;
 
@@ -317,18 +293,16 @@ export default function GapForm() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row justify-center sm:justify-between gap-4 mt-6">
-                  {currentSection === sections.length - 1 && (
-                    <Button
-                      type="submit"
-                      onClick={form.handleSubmit(onSubmit)}
-                      disabled={!isFirstSectionValid()}
-                      className={`w-full sm:w-auto bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white ${
-                        !isFirstSectionValid() ? 'opacity-50 cursor-not-allowed' : ''
-                      }`}
-                    >
-                      Recevoir mes automatisations
-                    </Button>
-                  )}
+                  <Button
+                    type="submit"
+                    onClick={form.handleSubmit(onSubmit)}
+                    disabled={!isFormValid()}
+                    className={`w-full sm:w-auto bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white ${
+                      !isFormValid() ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                  >
+                    Recevoir mes automatisations
+                  </Button>
 
                   <div className="flex w-full justify-center sm:justify-start sm:w-auto gap-4">
                     {currentSection > 0 && (
@@ -344,7 +318,7 @@ export default function GapForm() {
                     {currentSection < sections.length - 1 && (
                       <Button
                         type="button"
-                        onClick={handleNext}
+                        onClick={() => setCurrentSection(currentSection + 1)}
                         className="flex-1 max-w-[45%] sm:max-w-none sm:flex-none bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
                       >
                         Suivant
