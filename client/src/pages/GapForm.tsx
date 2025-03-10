@@ -271,7 +271,7 @@ export default function GapForm() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 relative pt-16">
-      <div className="container mx-auto px-4 max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl">
+      <div className="container mx-auto px-4 max-w-2xl"> {/* Harmonisé à max-w-2xl partout */}
         <Link href="/" className="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors">
           ← Retour
         </Link>
@@ -285,7 +285,7 @@ export default function GapForm() {
             Remplissez vos informations et recevez par email des automatisations qui vont faire exploser votre productivité
           </p>
 
-          <div className="mb-8 px-4">
+          <div className="mb-8">
             <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
               <motion.div
                 className="h-full bg-gradient-to-r from-orange-500 to-orange-600"
@@ -296,7 +296,7 @@ export default function GapForm() {
             </div>
           </div>
 
-          <Card className="p-4 sm:p-6 mx-4 sm:mx-auto w-full max-w-2xl bg-gray-800/50 border-gray-700">
+          <Card className="p-4 sm:p-6 w-full bg-gray-800/50 border-gray-700">
             <div className="mb-6">
               <h2 className="text-xl font-semibold mb-2">{sections[currentSection].title}</h2>
               {sections[currentSection].subtitle && (
