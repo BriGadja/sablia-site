@@ -137,6 +137,18 @@ export default function GapForm() {
     return isValid;
   };
 
+  const isCurrentSectionValid = () => {
+    const currentFields = sections[currentSection].fields;
+    const requiredFields = currentFields
+      .filter(field => field.required)
+      .map(field => field.name);
+    
+    return requiredFields.every(fieldName => {
+      const value = form.getValues(fieldName as keyof z.infer<typeof formSchema>);
+      return value && value.toString().trim() !== "";
+    });
+  };
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       const params = new URLSearchParams();
@@ -319,7 +331,10 @@ export default function GapForm() {
                       <Button
                         type="button"
                         onClick={() => setCurrentSection(currentSection + 1)}
-                        className="flex-1 max-w-[45%] sm:max-w-none sm:flex-none bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
+                        disabled={!isCurrentSectionValid()}
+                        className={`flex-1 max-w-[45%] sm:max-w-none sm:flex-none bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white ${
+                          !isCurrentSectionValid() ? 'opacity-50 cursor-not-allowed' : ''
+                        }`}
                       >
                         Suivant
                       </Button>
