@@ -207,6 +207,8 @@ export default function GapForm() {
   const progress = ((currentSection + 1) / sections.length) * 100;
 
   const renderField = (field: any) => {
+    const fieldClasses = "w-full text-center sm:text-left"; // Added for centering
+
     if (field.type === "select" && field.options) {
       return (
         <FormField
@@ -214,7 +216,7 @@ export default function GapForm() {
           control={form.control}
           name={field.name}
           render={({ field: formField }) => (
-            <FormItem>
+            <FormItem className={fieldClasses}> {/* Applied class here */}
               <FormLabel className="text-gray-200">
                 {field.label}
                 {field.required && <span className="text-red-500 ml-1">*</span>}
@@ -246,7 +248,7 @@ export default function GapForm() {
         control={form.control}
         name={field.name}
         render={({ field: formField }) => (
-          <FormItem>
+          <FormItem className={fieldClasses}> {/* Applied class here */}
             <FormLabel className="text-gray-200">
               {field.label}
               {field.required && <span className="text-red-500 ml-1">*</span>}
