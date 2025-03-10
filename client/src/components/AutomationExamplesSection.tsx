@@ -98,12 +98,32 @@ const examples = [
 export const AutomationExamplesSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 0) {
-          setCurrentIndex((prevIndex) => (prevIndex + 2) % examples.length);
+          setCurrentIndex((prevIndex) => {
+            if (isMobile) {
+              return (prevIndex + 1) % examples.length;
+            }
+            return (prevIndex + 2) % examples.length;
+          });
           return 10;
         }
         return prev - 1;
@@ -111,23 +131,57 @@ export const AutomationExamplesSection = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [isMobile]);
 
-  const currentExamples = [
-    examples[currentIndex],
-    examples[(currentIndex + 1) % examples.length]
-  ];
+  // Calculate examples to display based on device
+  const currentExamples = isMobile
+    ? [examples[currentIndex]]
+    : [
+        examples[currentIndex],
+        examples[(currentIndex + 1) % examples.length]
+      ];
 
   const handlePrevious = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === 0 ? examples.length - 2 : (prevIndex - 2 + examples.length) % examples.length
-    );
+    if (isMobile) {
+      setCurrentIndex((prevIndex) => 
+        prevIndex === 0 ? examples.length - 1 : prevIndex - 1
+      );
+    } else {
+      setCurrentIndex((prevIndex) => 
+        prevIndex === 0 ? examples.length - 2 : (prevIndex - 2 + examples.length) % examples.length
+      );
+    }
     setTimeLeft(10);
   };
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 2) % examples.length);
+    if (isMobile) {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % examples.length);
+    } else {
+      setCurrentIndex((prevIndex) => (prevIndex + 2) % examples.length);
+    }
     setTimeLeft(10);
+  };
+
+  // Handle touch events for swipe
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 100) {
+      // Swipe left
+      handleNext();
+    }
+    
+    if (touchEnd - touchStart > 100) {
+      // Swipe right
+      handlePrevious();
+    }
   };
 
   return (
@@ -137,15 +191,24 @@ export const AutomationExamplesSection = () => {
           <h2 className="section-title text-center">
             Exemples d'Automatisations
           </h2>
+          <span className="md:hidden text-xs text-gray-400 ml-2">
+            ← glisser →
+          </span>
           <div className="flex items-center space-x-3">
-            {examples.map((_, idx) => idx % 2 === 0 && (
+            {examples.map((_, idx) => (
               <div
                 key={idx}
                 className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                  currentIndex === idx ? 'bg-orange-500 scale-125' : 'bg-gray-600'
+                  isMobile 
+                    ? (currentIndex === idx ? 'bg-orange-500 scale-125' : 'bg-gray-600')
+                    : (idx % 2 === 0 && currentIndex === idx ? 'bg-orange-500 scale-125' : 'bg-gray-600')
                 }`}
                 onClick={() => {
-                  setCurrentIndex(idx);
+                  if (isMobile) {
+                    setCurrentIndex(idx);
+                  } else if (idx % 2 === 0) {
+                    setCurrentIndex(idx);
+                  }
                   setTimeLeft(10);
                 }}
               />
@@ -153,7 +216,10 @@ export const AutomationExamplesSection = () => {
           </div>
         </div>
 
-        <div className="relative">
+        <div className="relative"
+           onTouchStart={handleTouchStart}
+           onTouchMove={handleTouchMove}
+           onTouchEnd={handleTouchEnd}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
             <AnimatePresence mode="wait">
               {currentExamples.map((example, index) => (
@@ -203,10 +269,10 @@ export const AutomationExamplesSection = () => {
             </AnimatePresence>
           </div>
 
-          {/* Navigation arrows */}
+          {/* Navigation arrows - hidden on mobile */}
           <button 
             onClick={handlePrevious}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-8 lg:-translate-x-12 bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full z-10"
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-8 lg:-translate-x-12 bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full z-10 hidden md:block"
             aria-label="Exemple précédent"
           >
             <ChevronLeft className="w-6 h-6" />
@@ -214,7 +280,7 @@ export const AutomationExamplesSection = () => {
 
           <button 
             onClick={handleNext}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-8 lg:translate-x-12 bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full z-10"
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-8 lg:translate-x-12 bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full z-10 hidden md:block"
             aria-label="Exemple suivant"
           >
             <ChevronRight className="w-6 h-6" />
