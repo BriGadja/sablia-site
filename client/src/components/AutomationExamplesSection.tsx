@@ -187,11 +187,14 @@ export const AutomationExamplesSection = () => {
   return (
     <section id="examples" className="py-16 bg-gray-900">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center mb-8">
+        <div className="mb-4">
           <h2 className="section-title text-center">
             Exemples d'Automatisations
           </h2>
-          <span className="md:hidden text-xs text-gray-400 ml-2">
+        </div>
+        
+        <div className="flex justify-center items-center mb-4">
+          <span className="md:hidden text-xs text-gray-400 mr-2">
             ← glisser →
           </span>
           <div className="flex items-center space-x-3">
