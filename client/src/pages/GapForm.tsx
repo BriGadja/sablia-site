@@ -207,9 +207,7 @@ export default function GapForm() {
   const progress = ((currentSection + 1) / sections.length) * 100;
 
   const renderField = (field: any) => {
-    // Classes pour centrer sur mobile
-    const containerClasses = "w-full text-center sm:text-left mx-auto";
-    const labelClasses = "flex justify-center sm:justify-start text-gray-200";
+    const fieldClasses = "w-full text-center sm:text-left"; // Added for centering
 
     if (field.type === "select" && field.options) {
       return (
@@ -218,8 +216,8 @@ export default function GapForm() {
           control={form.control}
           name={field.name}
           render={({ field: formField }) => (
-            <FormItem className={containerClasses}>
-              <FormLabel className={labelClasses}>
+            <FormItem className={fieldClasses}> {/* Applied class here */}
+              <FormLabel className="text-gray-200">
                 {field.label}
                 {field.required && <span className="text-red-500 ml-1">*</span>}
               </FormLabel>
@@ -250,8 +248,8 @@ export default function GapForm() {
         control={form.control}
         name={field.name}
         render={({ field: formField }) => (
-          <FormItem className={containerClasses}>
-            <FormLabel className={labelClasses}>
+          <FormItem className={fieldClasses}> {/* Applied class here */}
+            <FormLabel className="text-gray-200">
               {field.label}
               {field.required && <span className="text-red-500 ml-1">*</span>}
             </FormLabel>
@@ -299,7 +297,7 @@ export default function GapForm() {
           </div>
 
           <Card className="p-4 sm:p-6 mx-4 sm:mx-auto w-full max-w-2xl bg-gray-800/50 border-gray-700">
-            <div className="mb-6 text-center sm:text-left">
+            <div className="mb-6">
               <h2 className="text-xl font-semibold mb-2">{sections[currentSection].title}</h2>
               {sections[currentSection].subtitle && (
                 <p className="text-gray-400">{sections[currentSection].subtitle}</p>
