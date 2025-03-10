@@ -207,7 +207,7 @@ export default function GapForm() {
   const progress = ((currentSection + 1) / sections.length) * 100;
 
   const renderField = (field: any) => {
-    const fieldClasses = "w-full text-center sm:text-left"; // Added for centering
+    const fieldClasses = "w-full text-center sm:text-left";
 
     if (field.type === "select" && field.options) {
       return (
@@ -216,7 +216,7 @@ export default function GapForm() {
           control={form.control}
           name={field.name}
           render={({ field: formField }) => (
-            <FormItem className={fieldClasses}> {/* Applied class here */}
+            <FormItem className={fieldClasses}>
               <FormLabel className="text-gray-200">
                 {field.label}
                 {field.required && <span className="text-red-500 ml-1">*</span>}
@@ -248,7 +248,7 @@ export default function GapForm() {
         control={form.control}
         name={field.name}
         render={({ field: formField }) => (
-          <FormItem className={fieldClasses}> {/* Applied class here */}
+          <FormItem className={fieldClasses}>
             <FormLabel className="text-gray-200">
               {field.label}
               {field.required && <span className="text-red-500 ml-1">*</span>}
@@ -270,8 +270,8 @@ export default function GapForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
-      <div className="relative z-[2] container mx-auto px-4 py-8 min-h-screen flex flex-col">
+    <div className="min-h-screen bg-gray-900 text-gray-100 relative pt-16">
+      <div className="container mx-auto px-4 max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl">
         <Link href="/" className="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors">
           ← Retour
         </Link>
