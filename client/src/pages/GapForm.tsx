@@ -275,7 +275,7 @@ export default function GapForm() {
         </Link>
 
         <div className="flex-grow flex flex-col justify-center mt-12 sm:mt-0">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 px-4">
             Générateur d'<RainbowText>Automatisations</RainbowText> Personnalisées
           </h1>
 
@@ -314,25 +314,27 @@ export default function GapForm() {
                   {sections[currentSection].fields.map(renderField)}
                 </div>
 
-                <div className="flex flex-col-reverse sm:flex-row items-center justify-between mt-6 gap-4">
-                  <Button
-                    type="button"
-                    onClick={form.handleSubmit(onSubmit)}
-                    disabled={!isFirstSectionValid()}
-                    className={`w-full sm:w-auto bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white ${
-                      !isFirstSectionValid() ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
-                  >
-                    Recevoir mes automatisations
-                  </Button>
+                <div className="flex flex-col sm:flex-row justify-center sm:justify-between gap-4 mt-6">
+                  {currentSection === sections.length - 1 && (
+                    <Button
+                      type="submit"
+                      onClick={form.handleSubmit(onSubmit)}
+                      disabled={!isFirstSectionValid()}
+                      className={`w-full sm:w-auto bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white ${
+                        !isFirstSectionValid() ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
+                    >
+                      Recevoir mes automatisations
+                    </Button>
+                  )}
 
-                  <div className="flex w-full sm:w-auto gap-4">
+                  <div className="flex w-full justify-center sm:justify-start sm:w-auto gap-4">
                     {currentSection > 0 && (
                       <Button
                         type="button"
                         variant="outline"
                         onClick={() => setCurrentSection(prev => prev - 1)}
-                        className="flex-1 sm:flex-none border-gray-600 text-gray-300 hover:bg-gray-700"
+                        className="flex-1 max-w-[45%] sm:max-w-none sm:flex-none border-gray-600 text-gray-300 hover:bg-gray-700"
                       >
                         Précédent
                       </Button>
@@ -341,7 +343,7 @@ export default function GapForm() {
                       <Button
                         type="button"
                         onClick={handleNext}
-                        className="flex-1 sm:flex-none bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
+                        className="flex-1 max-w-[45%] sm:max-w-none sm:flex-none bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
                       >
                         Suivant
                       </Button>
