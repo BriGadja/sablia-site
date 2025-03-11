@@ -133,20 +133,37 @@ export default function GapForm() {
   });
 
   const isFormValid = () => {
-    const isValid = form.formState.isValid;
-    return isValid;
+    const values = form.getValues();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    // Vérifier que les champs obligatoires sont remplis et que l'email est valide
+    return (
+      !!values.firstName &&
+      !!values.lastName &&
+      !!values.email &&
+      emailRegex.test(values.email) &&
+      !!values.companyName &&
+      !!values.website
+    );
   };
 
   const isCurrentSectionValid = () => {
-    const currentFields = sections[currentSection].fields;
-    const requiredFields = currentFields
-      .filter(field => field.required)
-      .map(field => field.name);
-    
-    return requiredFields.every(fieldName => {
-      const value = form.getValues(fieldName as keyof z.infer<typeof formSchema>);
-      return value && value.toString().trim() !== "";
-    });
+    if (currentSection === 0) {
+      // Pour la première section, tous les champs sont obligatoires et l'email doit être valide
+      const values = form.getValues();
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+      return (
+        !!values.firstName &&
+        !!values.lastName &&
+        !!values.email &&
+        emailRegex.test(values.email) &&
+        !!values.companyName &&
+        !!values.website
+      );
+    }
+    // Pour les autres sections, on permet d'avancer même si les champs sont vides
+    return true;
   };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
