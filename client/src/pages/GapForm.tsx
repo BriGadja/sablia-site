@@ -198,9 +198,6 @@ export default function GapForm() {
         description: "Nous vous contacterons rapidement avec des solutions personnalisées.",
       });
       
-      // Naviguer vers la page d'accueil après avoir défini le toast
-      window.location.href = "/";
-
       // Redirection vers la page d'accueil
       window.location.href = '/';
 
