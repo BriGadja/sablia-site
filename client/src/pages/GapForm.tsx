@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { usePersistentToast } from "@/hooks/use-persistent-toast";
 import { Link } from "wouter";
 import { RainbowText } from "@/components/RainbowText";
 import { motion } from "framer-motion";
@@ -46,7 +47,7 @@ const formSchema = z.object({
 export default function GapForm() {
   const [currentSection, setCurrentSection] = useState(0);
   const { toast } = useToast();
-  const [pendingToast, setPendingToast] = useState<any>(null); // Add pendingToast state
+  const { setPendingToast } = usePersistentToast();
 
   const sections = [
     {
@@ -196,6 +197,9 @@ export default function GapForm() {
         title: "Formulaire envoyé avec succès !",
         description: "Nous vous contacterons rapidement avec des solutions personnalisées.",
       });
+      
+      // Naviguer vers la page d'accueil après avoir défini le toast
+      window.location.href = "/";
 
       // Redirection vers la page d'accueil
       window.location.href = '/';

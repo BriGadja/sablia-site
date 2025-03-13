@@ -27,4 +27,5 @@ export function usePersistentToast() {
   };
 
   return { setPendingToast };
+};
 }
