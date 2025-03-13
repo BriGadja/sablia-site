@@ -46,6 +46,7 @@ const formSchema = z.object({
 export default function GapForm() {
   const [currentSection, setCurrentSection] = useState(0);
   const { toast } = useToast();
+  const [pendingToast, setPendingToast] = useState<any>(null); // Add pendingToast state
 
   const sections = [
     {
@@ -190,7 +191,8 @@ export default function GapForm() {
         throw new Error(`Erreur lors de l'envoi du formulaire: ${response.status}`);
       }
 
-      toast({
+      // Stocker le toast pour qu'il soit affiché après redirection
+      setPendingToast({
         title: "Formulaire envoyé avec succès !",
         description: "Nous vous contacterons rapidement avec des solutions personnalisées.",
       });
