@@ -285,8 +285,8 @@ export default function GapForm() {
         </Link>
 
         <div className="flex-grow flex flex-col justify-center mt-12 sm:mt-0">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4 px-4 whitespace-normal"> {/* Modified for responsiveness */}
-            Générateur d'<RainbowText>Automatisations</RainbowText> Personnalisées
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-center mb-4 px-4 whitespace-nowrap"> {/* Modified for responsiveness and no-break */}
+            Générateur d'<RainbowText>Automatisation</RainbowText> Personnalisées
           </h1>
 
           <p className="text-lg sm:text-xl text-center text-gray-300 mb-8 max-w-2xl mx-auto px-4">
