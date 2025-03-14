@@ -197,7 +197,7 @@ export default function GapForm() {
         title: "Formulaire envoyé avec succès !",
         description: "Nous vous contacterons rapidement avec des solutions personnalisées.",
       });
-      
+
       // Redirection vers la page d'accueil
       window.location.href = '/';
 
@@ -285,7 +285,7 @@ export default function GapForm() {
         </Link>
 
         <div className="flex-grow flex flex-col justify-center mt-12 sm:mt-0">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4 px-4 whitespace-nowrap sm:whitespace-normal"> {/* Modified for responsiveness */}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4 px-4 whitespace-normal"> {/* Modified for responsiveness */}
             Générateur d'<RainbowText>Automatisations</RainbowText> Personnalisées
           </h1>
 
