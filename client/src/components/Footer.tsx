@@ -13,7 +13,7 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-100">Contact</h3>
             <a
-              href="mailto:sablia.expertise@gmail.com"
+              href="mailto:brice@sablia.io"
               className="text-gray-300 hover:text-white block"
             >
               brice@sablia.io
