@@ -278,14 +278,20 @@ export default function GapForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 relative pt-16">
-      <div className="container mx-auto px-4 max-w-2xl"> {/* Harmonisé à max-w-2xl partout */}
+    <motion.div 
+      className="min-h-screen bg-gray-900 text-gray-100 relative pt-16"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      <div className="container mx-auto px-4 max-w-2xl">
         <Link href="/" className="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors">
           ← Retour
         </Link>
 
         <div className="flex-grow flex flex-col justify-center mt-12 sm:mt-0">
-          <h1 className="text-4xl sm:text-4xl md:text-4xl font-bold text-center mb-4 px-4 whitespace-normal"> {/* Modified for responsiveness */}
+          <h1 className="text-4xl sm:text-4xl md:text-4xl font-bold text-center mb-4 px-4 whitespace-normal">
             Générateur d'<RainbowText>Automatisations</RainbowText> Personnalisées
           </h1>
 
@@ -366,6 +372,6 @@ export default function GapForm() {
           </Card>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

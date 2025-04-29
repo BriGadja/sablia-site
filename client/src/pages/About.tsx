@@ -12,7 +12,13 @@ export default function About() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
+    <motion.div 
+      className="min-h-screen bg-gray-900 text-gray-100"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
+    >
       <Navbar />
       <main className="container mx-auto px-4 py-16">
         <div className="flex flex-col items-center mb-10 mt-12">
@@ -111,6 +117,6 @@ export default function About() {
         </div>
       </main>
       <Footer />
-    </div>
+    </motion.div>
   );
 }
