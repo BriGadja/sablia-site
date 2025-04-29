@@ -11,7 +11,9 @@ export default function Roi() {
       <div className="pt-20">
         <RoiCalculator />
       </div>
-      <Footer />
+      <div className="bg-gray-900">
+        <Footer />
+      </div>
     </div>
   );
 }

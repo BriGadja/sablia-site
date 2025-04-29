@@ -47,6 +47,15 @@ const formatCurrency = (value: number) => {
   }).format(value);
 };
 
+// Formate les valeurs monétaires avec 2 décimales max
+const formatCurrencyWithDecimals = (value: number) => {
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency: 'EUR',
+    maximumFractionDigits: 2
+  }).format(value);
+};
+
 // Formate les pourcentages
 const formatPercentage = (value: number) => {
   return new Intl.NumberFormat('fr-FR', {
@@ -250,19 +259,19 @@ const RoiCalculator: React.FC = () => {
                   <RadioGroup
                     value={frequency}
                     onValueChange={(value) => setFrequency(value as Frequency)}
-                    className="flex flex-wrap gap-2"
+                    className="grid grid-cols-3 gap-3"
                   >
-                    <div className="flex items-center space-x-2 bg-gray-700/50 rounded-lg px-4 py-2 cursor-pointer hover:bg-gray-700 transition">
+                    <div className="flex items-center justify-center space-x-2 bg-gray-700/50 rounded-lg px-4 py-2 cursor-pointer hover:bg-gray-700 transition">
                       <RadioGroupItem value="daily" id="daily" />
                       <Label htmlFor="daily" className="text-gray-200 cursor-pointer">Quotidienne</Label>
                     </div>
                     
-                    <div className="flex items-center space-x-2 bg-gray-700/50 rounded-lg px-4 py-2 cursor-pointer hover:bg-gray-700 transition">
+                    <div className="flex items-center justify-center space-x-2 bg-gray-700/50 rounded-lg px-4 py-2 cursor-pointer hover:bg-gray-700 transition">
                       <RadioGroupItem value="weekly" id="weekly" />
                       <Label htmlFor="weekly" className="text-gray-200 cursor-pointer">Hebdomadaire</Label>
                     </div>
                     
-                    <div className="flex items-center space-x-2 bg-gray-700/50 rounded-lg px-4 py-2 cursor-pointer hover:bg-gray-700 transition">
+                    <div className="flex items-center justify-center space-x-2 bg-gray-700/50 rounded-lg px-4 py-2 cursor-pointer hover:bg-gray-700 transition">
                       <RadioGroupItem value="monthly" id="monthly" />
                       <Label htmlFor="monthly" className="text-gray-200 cursor-pointer">Mensuelle</Label>
                     </div>
@@ -363,13 +372,13 @@ const RoiCalculator: React.FC = () => {
                   
                   <div className="text-xs text-gray-400 italic">
                     {salaryMode !== 'hourly' && (
-                      <p>Salaire horaire équivalent: <span className="text-blue-400">{formatCurrency(hourlyNet || 0)}/h</span></p>
+                      <p>Salaire horaire équivalent: <span className="text-blue-400">{formatCurrencyWithDecimals(hourlyNet || 0)}/h</span></p>
                     )}
                     {salaryMode !== 'monthly' && (
-                      <p>Salaire mensuel équivalent: <span className="text-blue-400">{formatCurrency(monthlyNet || 0)}/mois</span></p>
+                      <p>Salaire mensuel équivalent: <span className="text-blue-400">{formatCurrencyWithDecimals(monthlyNet || 0)}/mois</span></p>
                     )}
                     {salaryMode !== 'annual' && (
-                      <p>Salaire annuel équivalent: <span className="text-blue-400">{formatCurrency(annualBrut || 0)}/an</span></p>
+                      <p>Salaire annuel équivalent: <span className="text-blue-400">{formatCurrencyWithDecimals(annualBrut || 0)}/an</span></p>
                     )}
                   </div>
                 </div>
