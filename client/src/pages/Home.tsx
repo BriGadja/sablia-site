@@ -5,6 +5,7 @@ import ServicesSection from "@/components/ServicesSection";
 import { AutomationExamplesSection } from "@/components/AutomationExamplesSection";
 import FaqSection from "@/components/FaqSection";
 import Footer from "@/components/Footer";
+import RoiBanner, { RoiCta } from "@/components/RoiBanner";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { RainbowText } from "@/components/RainbowText";
@@ -25,6 +26,7 @@ export default function Home() {
           <HeroSection />
           <ServicesSection />
           <AutomationExamplesSection />
+          <RoiBanner />
           <section className="py-20 bg-gray-800/50">
             <div className="container mx-auto px-4 text-center">
               <h2 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
@@ -54,6 +56,7 @@ export default function Home() {
           </section>
           <ProcessSection />
           <FaqSection />
+          <RoiCta />
           <section className="py-16 bg-gray-800">
             <div className="container mx-auto px-4 text-center">
               <h2 className="text-5xl md:text-6xl font-bold text-gray-100 mb-6 leading-tight">

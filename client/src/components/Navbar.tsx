@@ -7,10 +7,8 @@ export default function Navbar() {
 
   const menuItems = [
     { label: "Accueil", href: "/" },
-    { label: "Services", href: "#services" },
-    { label: "Processus", href: "#process" },
-    { label: "Exemples", href: "#examples" },
     { label: "ROI Calculator", href: "/roi" },
+    { label: "GAP", href: "/gap" },
     { label: "À propos", href: "/about" },
   ];
 
