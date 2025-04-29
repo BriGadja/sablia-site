@@ -1,3 +1,4 @@
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RoiCalculator from "@/components/RoiCalculator";
@@ -13,7 +14,7 @@ export default function Roi() {
 
   return (
     <motion.div 
-      className="min-h-screen bg-gray-900 text-gray-100 relative"
+      className="min-h-screen flex flex-col bg-gray-900 text-gray-100 relative"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -21,12 +22,10 @@ export default function Roi() {
     >
       <ParticlesBackground />
       <Navbar />
-      <div className="pt-20">
+      <div className="flex-grow pt-20">
         <RoiCalculator />
       </div>
-      <div className="bg-gray-900 w-full" style={{ backgroundColor: '#1a202c' }}>
-        <Footer />
-      </div>
+      <Footer />
     </motion.div>
   );
 }
