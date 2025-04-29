@@ -12,7 +12,13 @@ import { motion } from "framer-motion";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 relative">
+    <motion.div 
+      className="min-h-screen bg-gray-900 text-gray-100 relative"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
+    >
       <div className="relative z-[2]">        
         <Navbar />
         <main className="bg-gray-900">
@@ -68,6 +74,6 @@ export default function Home() {
         </main>
         <Footer />
       </div>
-    </div>
+    </motion.div>
   );
 }
