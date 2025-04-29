@@ -203,7 +203,7 @@ const RoiCalculator: React.FC = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="py-16 bg-gradient-to-b from-gray-900 to-gray-800 relative overflow-hidden"
+      className="py-8 bg-gradient-to-b from-gray-900 to-gray-800 relative overflow-hidden"
     >
       <div className="absolute inset-0 opacity-60 bg-pattern"></div>
       
@@ -212,7 +212,7 @@ const RoiCalculator: React.FC = () => {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-8"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
             Calculez votre <span className="bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent">retour sur investissement</span>
