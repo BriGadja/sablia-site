@@ -3,8 +3,14 @@ import Footer from "@/components/Footer";
 import RoiCalculator from "@/components/RoiCalculator";
 import ParticlesBackground from "@/components/ParticlesBackground";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
 export default function Roi() {
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <motion.div 
       className="min-h-screen bg-gray-900 text-gray-100 relative"
