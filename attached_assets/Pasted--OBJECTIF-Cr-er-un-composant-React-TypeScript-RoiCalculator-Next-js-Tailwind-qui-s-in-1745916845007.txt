@@ -1,0 +1,82 @@
+📌 OBJECTIF  
+Créer un composant React/TypeScript `<RoiCalculator />` (Next.js + Tailwind) qui s’intègre parfaitement au site existant Sablia.io et calcule le ROI d’une automatisation n8n.
+
+📐 DESIGN & UX  
+• Utilise les variables/utility-classes du design-system déjà présent (couleurs, typo Poppins, breakpoints).  
+• Tendances 2024 à adopter :  
+  – cartes glassmorphism (backdrop-blur & translucide)  
+  – gradients “tech/IA” turquoise→violet pour les accents interactifs  
+  – coins arrondis XL + ombres à 3 couches (y = 1/4/8)  
+  – micro-animations Framer Motion (hover glow, fade-in blur)  
+  – dark-first avec respect de `prefers-color-scheme`  
+• Icônes : lucide-react.  
+• Replit peut proposer d’autres ajustements UI / UX s’ils harmonisent encore mieux avec le reste du site.
+
+🎛 INPUTS UTILISATEUR  
+| Champ | UI | Valeur par défaut |
+|-------|----|-------------------|
+| Durée actuelle de la tâche | Slider 5 min → 8 h – **pas = 30 min** | 1 h |
+| Fréquence | Radio : quotidienne / hebdo / mensuelle | hebdo |
+| Salaire | Segmented control auto-synchro :<br>• Horaire **net** (€)<br>• Mensuel **net** (€)<br>• Annuel **brut** (€) | Moyenne FR pré-remplie |
+| Nombre d’employés | NumericStepper (min 1) | 1 |
+| Coût d’automatisation | Input € | **5 000 €** (ancrage médian premium) |
+
+💶 CONVERSIONS SALAIRE  
+Constantes : 2 735 € net/mois, ratio net→brut = 0,757, 151,67 h/mois.  
+Mettre à jour les trois champs en temps réel (debounce 300 ms) selon :
+
+```ts
+const monthlyNet = mode==='hourly' ? hourlyNet*151.67
+                 : mode==='monthly' ? value
+                 : annualBrut*0.757/12;
+
+const hourlyNet  = monthlyNet / 151.67;
+const annualBrut = monthlyNet / 0.757 * 12;
+🔧 CONSTANTES PROJET (non visibles)
+
+ts
+Copier
+Modifier
+export const DEV_DAYS = 20; // temps de développement moyen
+Mentionnée uniquement dans l’infobulle de date de rentabilité.
+
+🧮 CALCULS (utils/roi.ts)
+
+ts
+Copier
+Modifier
+const freqPerYear = { daily: 252, weekly: 52, monthly: 12 }[frequency];
+const hoursYear   = taskHours * freqPerYear * employees;
+const savingsYear = hoursYear * hourlyNet;
+
+const roiPct      = (savingsYear - cost) / cost;
+const monthsToBE  = cost / (savingsYear / 12);
+const daysToBE    = monthsToBE * 30.44;
+
+const profitable  = addDays(new Date(), DEV_DAYS + Math.round(daysToBE));
+📊 OUTPUTS
+• Cartes “Par an / Par mois” (heures & € gagnés)
+• Bloc Rentabilité : ROI %, mois avant break-even, Date estimée (format DD MMM YYYY)
+• Infobulle : “Estimation basée sur 20 j de développement moyen et vos données.”
+• Couleurs succès/alerte via classes Tailwind existantes.
+
+🚀 CTA
+Texte : « Déployer mon automatisation et commencer à économiser ! »
+Action : ouvre la modale / URL Calendly /book-a-call.
+
+⚙️ TECH & TESTS
+• Stack : React + TypeScript + Tailwind + Framer Motion.
+• Composant export par défaut <RoiCalculator />; importé dans pages/roi.tsx.
+• Tests Jest couvrant :
+– conversions salaire ;
+– calcul ROI / date de rentabilité (mock de Date).
+
+📂 LIVRABLES
+
+bash
+Copier
+Modifier
+components/RoiCalculator.tsx
+utils/roi.ts
+__tests__/roi.test.ts
+README.md
