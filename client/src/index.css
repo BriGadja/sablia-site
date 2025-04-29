@@ -83,3 +83,19 @@
 .bg-dots-pattern {
   background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(50,100,150,0.07)'%3E%3C/path%3E%3C/svg%3E");
 }
+
+/* Rainbow Text Effect */
+.rainbow-text {
+  @apply bg-gradient-to-r from-orange-500 via-blue-500 to-orange-500 bg-clip-text text-transparent;
+  background-size: 200% auto;
+  animation: rainbow-text-animation 4s linear infinite;
+}
+
+@keyframes rainbow-text-animation {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}

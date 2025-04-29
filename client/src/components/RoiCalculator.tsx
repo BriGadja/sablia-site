@@ -64,42 +64,43 @@ const formatPercentage = (value: number) => {
   }).format(value / 100);
 };
 
-// Échelle linéaire avec des paliers de 30 minutes (0.5 heures), de 0.5h à 8h
-// 0 -> 0.5h, 1 -> 1h, 2 -> 1.5h, 3 -> 2h, ..., 15 -> 8h
+// Échelle linéaire avec des paliers de 30 minutes (0.5 heures), de 0h à 8h
+// 0 -> 0h, 1 -> 0.5h, 2 -> 1h, 3 -> 1.5h, ..., 16 -> 8h
 const sliderToHours = (value: number) => {
-  // Convertir de 0-15 à 0.5-8h par paliers de 0.5h
-  return 0.5 + (value * 0.5);
+  // Convertir de 0-16 à 0-8h par paliers de 0.5h
+  return value * 0.5;
 };
 
 // Convertit les heures en valeur du slider
 const hoursToSlider = (hours: number) => {
   // Arrondir à un multiple de 0.5 le plus proche
   const roundedHours = Math.round(hours * 2) / 2;
-  // Convertir de 0.5-8h à 0-15 par paliers de 0.5h
-  const value = Math.round((roundedHours - 0.5) / 0.5);
+  // Convertir de 0-8h à 0-16 par paliers de 0.5h
+  const value = Math.round(roundedHours / 0.5);
   // S'assurer que la valeur est dans la plage valide
-  return Math.max(0, Math.min(15, value));
+  return Math.max(0, Math.min(16, value));
 };
 
 // Étiquettes pour le slider
 const sliderMarks = [
-  { value: 0, label: '30min' },
-  { value: 3, label: '2h' },
-  { value: 7, label: '4h' },
-  { value: 11, label: '6h' },
-  { value: 15, label: '8h' }
+  { value: 0, label: '0h' },
+  { value: 1, label: '30min' },
+  { value: 4, label: '2h' },
+  { value: 8, label: '4h' },
+  { value: 12, label: '6h' },
+  { value: 16, label: '8h' }
 ];
 
 const RoiCalculator: React.FC = () => {
   // États du formulaire
   const [sliderValue, setSliderValue] = useState(hoursToSlider(2)); // 2h par défaut
   const [taskHours, setTaskHours] = useState(2);
-  const [frequency, setFrequency] = useState<Frequency>('weekly');
+  const [frequency, setFrequency] = useState<Frequency>('daily'); // Quotidienne par défaut
   const [salaryMode, setSalaryMode] = useState<SalaryMode>('monthly');
   const [hourlyNet, setHourlyNet] = useState<number | undefined>(undefined);
   const [monthlyNet, setMonthlyNet] = useState<number>(DEFAULT_MONTHLY_NET_SALARY);
   const [annualBrut, setAnnualBrut] = useState<number | undefined>(undefined);
-  const [employees, setEmployees] = useState(1);
+  const [employees, setEmployees] = useState(2); // 2 employés par défaut
   const [cost, setCost] = useState(5000);
   
   // État pour les résultats du calcul
@@ -252,7 +253,7 @@ const RoiCalculator: React.FC = () => {
                     <Slider
                       value={[sliderValue]}
                       min={0}
-                      max={15}
+                      max={16}
                       step={1}
                       onValueChange={handleSliderChange}
                       className="mb-2"

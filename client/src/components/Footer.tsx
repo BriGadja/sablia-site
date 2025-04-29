@@ -1,8 +1,8 @@
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-800">
-      <div className="container py-12">
+    <footer className="bg-gray-800" style={{ backgroundColor: '#1a202c' }}>
+      <div className="container py-12 mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-100">Sablia</h3>
