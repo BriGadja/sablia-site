@@ -10,6 +10,7 @@ export default function Navbar() {
     { label: "Services", href: "#services" },
     { label: "Processus", href: "#process" },
     { label: "Exemples", href: "#examples" },
+    { label: "ROI Calculator", href: "/roi" },
     { label: "À propos", href: "/about" },
   ];
 
