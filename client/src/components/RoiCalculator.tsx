@@ -65,33 +65,27 @@ const formatPercentage = (value: number) => {
 };
 
 // Échelle linéaire avec des paliers de 30 minutes, de 0h à 8h
-// 0 -> 0h, 1 -> 0.5h, 2 -> 1h, etc.
+// La plage va de 0 à 480 minutes (0 à 8h)
 const sliderToHours = (value: number) => {
-  // Convertir de 0-16 à 0-8h par paliers de 0.5h
-  return value * 0.5;
+  // Convertir de minutes (0-480) en heures (0-8)
+  return value / 60;
 };
 
-// Convertit les heures en valeur du slider
+// Convertit les heures en valeur du slider (minutes)
 const hoursToSlider = (hours: number) => {
-  // Arrondir à un multiple de 0.5 le plus proche
-  const roundedHours = Math.round(hours * 2) / 2;
-  // Convertir de 0-8h à 0-16 par paliers de 0.5h
-  const value = Math.round(roundedHours / 0.5);
-  // S'assurer que la valeur est dans la plage valide
-  return Math.max(0, Math.min(16, value));
+  // Convertir les heures en minutes et arrondir à un multiple de 30 le plus proche
+  const minutes = Math.round(hours * 60 / 30) * 30;
+  // S'assurer que la valeur est dans la plage valide (0-480 minutes)
+  return Math.max(0, Math.min(480, minutes));
 };
 
-// Étiquettes pour le slider
+// Étiquettes pour le slider - affichage uniquement aux points spécifiés
 const sliderMarks = [
-  { value: 0, label: '0h' },
-  { value: 1, label: '30min' },
-  { value: 2, label: '1h' },
-  { value: 3, label: '1h30' },
-  { value: 4, label: '2h' },
-  { value: 6, label: '3h' },
-  { value: 8, label: '4h' },
-  { value: 12, label: '6h' },
-  { value: 16, label: '8h' }
+  { value: 0, label: '0h' },    // 0 minutes
+  { value: 120, label: '2h' },  // 120 minutes
+  { value: 240, label: '4h' },  // 240 minutes
+  { value: 360, label: '6h' },  // 360 minutes
+  { value: 480, label: '8h' }   // 480 minutes
 ];
 
 const RoiCalculator: React.FC = () => {
@@ -256,8 +250,8 @@ const RoiCalculator: React.FC = () => {
                     <Slider
                       value={[sliderValue]}
                       min={0}
-                      max={16}
-                      step={1}
+                      max={480}
+                      step={30}
                       onValueChange={handleSliderChange}
                       className="mb-2"
                     />
