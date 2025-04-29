@@ -124,7 +124,7 @@ export const AutomationExamplesSection = () => {
             }
             return (prevIndex + 2) % examples.length;
           });
-          return 10;
+          return 5; // Accélérer la rotation des exemples (5 secondes au lieu de 10)
         }
         return prev - 1;
       });
@@ -164,11 +164,11 @@ export const AutomationExamplesSection = () => {
   };
 
   // Handle touch events for swipe
-  const handleTouchStart = (e) => {
+  const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
   };
   
-  const handleTouchMove = (e) => {
+  const handleTouchMove = (e: React.TouchEvent) => {
     setTouchEnd(e.targetTouches[0].clientX);
   };
   
@@ -187,10 +187,13 @@ export const AutomationExamplesSection = () => {
   return (
     <section id="examples" className="py-16 bg-gray-900">
       <div className="container mx-auto px-4">
-        <div className="mb-4">
-          <h2 className="section-title text-center">
+        <div className="mb-12">
+          <h2 className="section-title text-center text-3xl font-bold text-white mb-4">
             Exemples d'Automatisations
           </h2>
+          <p className="text-gray-400 text-center max-w-2xl mx-auto">
+            Découvrez comment nos solutions peuvent transformer votre quotidien professionnel
+          </p>
         </div>
         
         <div className="flex justify-center items-center mb-4">

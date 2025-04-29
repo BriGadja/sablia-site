@@ -86,9 +86,25 @@
 
 /* Rainbow Text Effect */
 .rainbow-text {
-  @apply bg-gradient-to-r from-red-500 via-orange-500 via-yellow-400 via-green-500 via-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent;
-  background-size: 300% auto;
-  animation: rainbow-text-animation 5s linear infinite;
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(
+    to right,
+    #ff0000, /* Rouge */
+    #ff8000, /* Orange */
+    #ffff00, /* Jaune */
+    #80ff00, /* Jaune-vert */
+    #00ff00, /* Vert */
+    #00ff80, /* Vert-cyan */
+    #00ffff, /* Cyan */
+    #0080ff, /* Bleu clair */
+    #0000ff, /* Bleu */
+    #8000ff, /* Indigo */
+    #ff00ff, /* Magenta */
+    #ff0080, /* Rose */
+    #ff0000  /* Rouge (retour au début) */
+  );
+  background-size: 400% auto;
+  animation: rainbow-text-animation 8s linear infinite;
 }
 
 @keyframes rainbow-text-animation {
@@ -96,6 +112,6 @@
     background-position: 0% center;
   }
   100% {
-    background-position: 300% center;
+    background-position: 400% center;
   }
 }

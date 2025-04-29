@@ -10,7 +10,7 @@ export default function HeroSection() {
           <p className="text-sm font-semibold tracking-widest text-gray-400 uppercase mb-10">
             AUTOMATE YOUR BUSINESS
           </p>
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white mb-16 leading-tight max-w-full overflow-hidden">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white mb-16 leading-tight max-w-full overflow-hidden bg-gray-800/70 bg-opacity-70 backdrop-blur-sm inline-block mx-auto px-8 py-6 rounded-2xl shadow-lg">
             Laissez l'<span className="rainbow-text">IA</span> & vos<br className="hidden sm:block" /> <span className="rainbow-text">automatisations</span><br /> booster votre Business.
           </h1>
           <p className="text-base sm:text-lg md:text-2xl text-gray-300 mb-20 max-w-full px-4">

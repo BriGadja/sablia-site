@@ -64,30 +64,34 @@ const formatPercentage = (value: number) => {
   }).format(value / 100);
 };
 
-// Échelle linéaire avec des paliers de 2 heures, de 0h à 8h
-// 0 -> 0h, 1 -> 2h, 2 -> 4h, 3 -> 6h, 4 -> 8h
+// Échelle linéaire avec des paliers de 30 minutes, de 0h à 8h
+// 0 -> 0h, 1 -> 0.5h, 2 -> 1h, etc.
 const sliderToHours = (value: number) => {
-  // Convertir de 0-4 à 0-8h par paliers de 2h
-  return value * 2;
+  // Convertir de 0-16 à 0-8h par paliers de 0.5h
+  return value * 0.5;
 };
 
 // Convertit les heures en valeur du slider
 const hoursToSlider = (hours: number) => {
-  // Arrondir à un multiple de 2 le plus proche
-  const roundedHours = Math.round(hours / 2) * 2;
-  // Convertir de 0-8h à 0-4 par paliers de 2h
-  const value = Math.round(roundedHours / 2);
+  // Arrondir à un multiple de 0.5 le plus proche
+  const roundedHours = Math.round(hours * 2) / 2;
+  // Convertir de 0-8h à 0-16 par paliers de 0.5h
+  const value = Math.round(roundedHours / 0.5);
   // S'assurer que la valeur est dans la plage valide
-  return Math.max(0, Math.min(4, value));
+  return Math.max(0, Math.min(16, value));
 };
 
 // Étiquettes pour le slider
 const sliderMarks = [
   { value: 0, label: '0h' },
-  { value: 1, label: '2h' },
-  { value: 2, label: '4h' },
-  { value: 3, label: '6h' },
-  { value: 4, label: '8h' }
+  { value: 1, label: '30min' },
+  { value: 2, label: '1h' },
+  { value: 3, label: '1h30' },
+  { value: 4, label: '2h' },
+  { value: 6, label: '3h' },
+  { value: 8, label: '4h' },
+  { value: 12, label: '6h' },
+  { value: 16, label: '8h' }
 ];
 
 const RoiCalculator: React.FC = () => {
@@ -252,7 +256,7 @@ const RoiCalculator: React.FC = () => {
                     <Slider
                       value={[sliderValue]}
                       min={0}
-                      max={4}
+                      max={16}
                       step={1}
                       onValueChange={handleSliderChange}
                       className="mb-2"
@@ -416,18 +420,9 @@ const RoiCalculator: React.FC = () => {
                     >
                       -
                     </Button>
-                    <Input
-                      type="number"
-                      min="1"
-                      value={employees}
-                      onChange={(e) => {
-                        const value = parseInt(e.target.value);
-                        if (!isNaN(value) && value >= 1) {
-                          setEmployees(value);
-                        }
-                      }}
-                      className="w-20 text-center rounded-none bg-gray-700/50 border-gray-600 text-white h-10"
-                    />
+                    <div className="w-20 text-center rounded-none bg-gray-700/50 border border-gray-600 text-white h-10 flex items-center justify-center">
+                      <span className="text-white font-medium">{employees}</span>
+                    </div>
                     <Button
                       variant="outline"
                       size="icon"
