@@ -86,9 +86,9 @@
 
 /* Rainbow Text Effect */
 .rainbow-text {
-  @apply bg-gradient-to-r from-orange-500 via-blue-500 to-orange-500 bg-clip-text text-transparent;
-  background-size: 200% auto;
-  animation: rainbow-text-animation 4s linear infinite;
+  @apply bg-gradient-to-r from-red-500 via-orange-500 via-yellow-400 via-green-500 via-blue-500 via-indigo-500 to-purple-500 bg-clip-text text-transparent;
+  background-size: 300% auto;
+  animation: rainbow-text-animation 5s linear infinite;
 }
 
 @keyframes rainbow-text-animation {
@@ -96,6 +96,6 @@
     background-position: 0% center;
   }
   100% {
-    background-position: 200% center;
+    background-position: 300% center;
   }
 }

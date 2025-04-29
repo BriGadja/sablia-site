@@ -64,8 +64,8 @@ export default function ServicesSection() {
               className="h-full perspective-1000"
             >
               <Card 
-                className={`h-full border-2 shadow-2xl transition-all duration-300 bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-sm ${
-                  service.primary ? 'hover:border-orange-500 hover:shadow-orange-500/20' : 'hover:border-blue-500 hover:shadow-blue-500/20'
+                className={`h-full border-0 shadow-2xl transition-all duration-300 bg-gray-900 ${
+                  service.primary ? 'hover:shadow-orange-500/20' : 'hover:shadow-blue-500/20'
                 } relative group overflow-hidden rounded-xl`}
                 style={{
                   backgroundImage: service.pattern,

@@ -64,31 +64,30 @@ const formatPercentage = (value: number) => {
   }).format(value / 100);
 };
 
-// Échelle linéaire avec des paliers de 30 minutes (0.5 heures), de 0h à 8h
-// 0 -> 0h, 1 -> 0.5h, 2 -> 1h, 3 -> 1.5h, ..., 16 -> 8h
+// Échelle linéaire avec des paliers de 2 heures, de 0h à 8h
+// 0 -> 0h, 1 -> 2h, 2 -> 4h, 3 -> 6h, 4 -> 8h
 const sliderToHours = (value: number) => {
-  // Convertir de 0-16 à 0-8h par paliers de 0.5h
-  return value * 0.5;
+  // Convertir de 0-4 à 0-8h par paliers de 2h
+  return value * 2;
 };
 
 // Convertit les heures en valeur du slider
 const hoursToSlider = (hours: number) => {
-  // Arrondir à un multiple de 0.5 le plus proche
-  const roundedHours = Math.round(hours * 2) / 2;
-  // Convertir de 0-8h à 0-16 par paliers de 0.5h
-  const value = Math.round(roundedHours / 0.5);
+  // Arrondir à un multiple de 2 le plus proche
+  const roundedHours = Math.round(hours / 2) * 2;
+  // Convertir de 0-8h à 0-4 par paliers de 2h
+  const value = Math.round(roundedHours / 2);
   // S'assurer que la valeur est dans la plage valide
-  return Math.max(0, Math.min(16, value));
+  return Math.max(0, Math.min(4, value));
 };
 
 // Étiquettes pour le slider
 const sliderMarks = [
   { value: 0, label: '0h' },
-  { value: 1, label: '30min' },
-  { value: 4, label: '2h' },
-  { value: 8, label: '4h' },
-  { value: 12, label: '6h' },
-  { value: 16, label: '8h' }
+  { value: 1, label: '2h' },
+  { value: 2, label: '4h' },
+  { value: 3, label: '6h' },
+  { value: 4, label: '8h' }
 ];
 
 const RoiCalculator: React.FC = () => {
@@ -253,7 +252,7 @@ const RoiCalculator: React.FC = () => {
                     <Slider
                       value={[sliderValue]}
                       min={0}
-                      max={16}
+                      max={4}
                       step={1}
                       onValueChange={handleSliderChange}
                       className="mb-2"
@@ -401,13 +400,13 @@ const RoiCalculator: React.FC = () => {
                 </div>
                 
                 {/* Nombre d'employés */}
-                <div className="mb-8">
-                  <Label className="text-white flex items-center gap-2 mb-3">
+                <div className="mb-8 text-center">
+                  <Label className="text-white flex items-center justify-center gap-2 mb-3">
                     <Users className="h-4 w-4 text-blue-400" />
                     Nombre d'employés effectuant cette tâche
                   </Label>
                   
-                  <div className="flex items-center">
+                  <div className="flex items-center justify-center">
                     <Button
                       variant="outline"
                       size="icon"
