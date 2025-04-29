@@ -61,8 +61,8 @@ const steps = [
 export default function ProcessSection() {
   return (
     <section id="process" className="py-16">
-      <div className="container max-w-4xl">
-        <h2 className="section-title">Notre Processus</h2>
+      <div className="container mx-auto px-4 max-w-4xl">
+        <h2 className="section-title text-center mb-12 text-3xl font-bold text-white">Notre Processus</h2>
         <div className="relative">
           <div className="absolute left-8 top-0 h-full w-px bg-gradient-to-b from-orange-500/30 to-orange-600/30" />
           <Accordion type="single" collapsible className="space-y-6">
