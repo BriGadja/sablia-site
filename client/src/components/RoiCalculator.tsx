@@ -66,27 +66,29 @@ const formatPercentage = (value: number) => {
 
 // Convertit les valeurs du slider en heures
 const sliderToHours = (value: number) => {
-  // Échelle non linéaire pour permettre de sélectionner de 5min à 8h
-  if (value <= 10) return value * 0.5 / 10; // 0-10 → 0-0.5h (0-30min)
-  if (value <= 25) return 0.5 + (value - 10) * 0.5 / 15; // 10-25 → 0.5-1h
-  if (value <= 50) return 1 + (value - 25) * 2 / 25; // 25-50 → 1-3h
-  return 3 + (value - 50) * 5 / 50; // 50-100 → 3-8h
+  // Échelle non linéaire pour permettre de sélectionner de 30min à 8h
+  if (value <= 10) return 0.5 + (value * 0.5 / 10); // 0-10 → 0.5-1h (30-60min)
+  if (value <= 25) return 1 + (value - 10) * 1 / 15; // 10-25 → 1-2h
+  if (value <= 50) return 2 + (value - 25) * 2 / 25; // 25-50 → 2-4h
+  return 4 + (value - 50) * 4 / 50; // 50-100 → 4-8h
 };
 
 // Convertit les heures en valeur du slider
 const hoursToSlider = (hours: number) => {
   // Conversion inverse de sliderToHours
-  if (hours <= 0.5) return hours * 10 / 0.5;
-  if (hours <= 1) return 10 + (hours - 0.5) * 15 / 0.5;
-  if (hours <= 3) return 25 + (hours - 1) * 25 / 2;
-  return 50 + (hours - 3) * 50 / 5;
+  if (hours < 0.5) return 0; // Minimum est 30 minutes
+  if (hours <= 1) return (hours - 0.5) * 10 / 0.5;
+  if (hours <= 2) return 10 + (hours - 1) * 15 / 1;
+  if (hours <= 4) return 25 + (hours - 2) * 25 / 2;
+  if (hours > 8) return 100; // Maximum est 8 heures
+  return 50 + (hours - 4) * 50 / 4;
 };
 
 // Étiquettes pour le slider
 const sliderMarks = [
-  { value: 0, label: '5min' },
-  { value: 20, label: '1h' },
-  { value: 50, label: '3h' },
+  { value: 0, label: '30min' },
+  { value: 20, label: '1h30' },
+  { value: 50, label: '4h' },
   { value: 100, label: '8h' }
 ];
 
@@ -569,7 +571,9 @@ const RoiCalculator: React.FC = () => {
                         <div className="flex items-center gap-2">
                           <CalendarDays className="h-5 w-5 text-blue-400" />
                           <p className="text-xl font-bold text-white">
-                            {format(results.profitableDate, 'dd MMM yyyy', { locale: fr })}
+                            {results.profitableDate instanceof Date && !isNaN(results.profitableDate.getTime()) 
+                              ? format(results.profitableDate, 'dd MMM yyyy', { locale: fr })
+                              : "Calcul en cours..."}
                           </p>
                         </div>
                       </div>
