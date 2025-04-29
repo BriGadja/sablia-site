@@ -14,22 +14,19 @@ export default function Roi() {
 
   return (
     <motion.div 
-      className="min-h-screen bg-gray-900 text-gray-100 relative"
+      className="min-h-screen bg-gray-900 text-gray-100"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <div className="relative z-[2]">
-        <ParticlesBackground />
-        <Navbar />
-        <main className="bg-gray-900">
-          <div className="pt-20">
-            <RoiCalculator />
-          </div>
-        </main>
-        <Footer />
-      </div>
+      <Navbar />
+      <main className="bg-gray-900">
+        <div className="pt-20">
+          <RoiCalculator />
+        </div>
+      </main>
+      <Footer />
     </motion.div>
   );
 }
