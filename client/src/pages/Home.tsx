@@ -20,9 +20,9 @@ export default function Home() {
           <ServicesSection />
           <AutomationExamplesSection />
           <section className="py-20 bg-gray-800/50">
-            <div className="container text-center">
+            <div className="container mx-auto px-4 text-center">
               <h2 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                Découvrez les <RainbowText>automatisations</RainbowText><br />
+                Découvrez les <span className="rainbow-text">automatisations</span><br />
                 <span className="text-4xl md:text-5xl">idéales pour votre business</span>
               </h2>
               <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
@@ -49,9 +49,9 @@ export default function Home() {
           <ProcessSection />
           <FaqSection />
           <section className="py-16 bg-gray-800">
-            <div className="container text-center">
+            <div className="container mx-auto px-4 text-center">
               <h2 className="text-5xl md:text-6xl font-bold text-gray-100 mb-6 leading-tight">
-                Prêt à <RainbowText>transformer</RainbowText><br /> 
+                Prêt à <span className="rainbow-text">transformer</span><br /> 
                 <span className="text-4xl md:text-5xl">votre entreprise ?</span>
               </h2>
               <div className="flex gap-4 justify-center flex-wrap">

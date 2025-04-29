@@ -39,7 +39,7 @@ export default function ServicesSection() {
       id="services" 
       className="py-16 bg-gradient-to-b from-gray-900 to-gray-800 relative overflow-hidden"
     >
-      <div className="container">
+      <div className="container mx-auto px-4">
         <h2 className="section-title text-center text-4xl font-bold text-white mb-12">
           <motion.span
             initial={{ opacity: 0, y: 20 }}

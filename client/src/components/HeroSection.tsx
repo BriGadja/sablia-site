@@ -11,7 +11,7 @@ export default function HeroSection() {
             AUTOMATE YOUR BUSINESS
           </p>
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white mb-16 leading-tight max-w-full overflow-hidden">
-            Laissez l'<RainbowText>IA</RainbowText> & vos<br className="hidden sm:block" /> <RainbowText>automatisations</RainbowText><br /> booster votre Business.
+            Laissez l'<span className="rainbow-text">IA</span> & vos<br className="hidden sm:block" /> <span className="rainbow-text">automatisations</span><br /> booster votre Business.
           </h1>
           <p className="text-base sm:text-lg md:text-2xl text-gray-300 mb-20 max-w-full px-4">
             Libérez votre temps des tâches répétitives. 
