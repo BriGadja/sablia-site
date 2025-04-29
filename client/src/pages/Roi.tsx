@@ -11,7 +11,7 @@ export default function Roi() {
       <div className="pt-20">
         <RoiCalculator />
       </div>
-      <div className="bg-gray-900">
+      <div className="bg-gray-900 w-full" style={{ backgroundColor: '#1a202c' }}>
         <Footer />
       </div>
     </div>

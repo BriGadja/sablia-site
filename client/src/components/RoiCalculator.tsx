@@ -64,38 +64,36 @@ const formatPercentage = (value: number) => {
   }).format(value / 100);
 };
 
-// Convertit les valeurs du slider en heures
+// Échelle linéaire avec des paliers de 30 minutes (0.5 heures), de 0.5h à 8h
+// 0 -> 0.5h, 1 -> 1h, 2 -> 1.5h, 3 -> 2h, ..., 15 -> 8h
 const sliderToHours = (value: number) => {
-  // Échelle non linéaire pour permettre de sélectionner de 30min à 8h
-  if (value <= 10) return 0.5 + (value * 0.5 / 10); // 0-10 → 0.5-1h (30-60min)
-  if (value <= 25) return 1 + (value - 10) * 1 / 15; // 10-25 → 1-2h
-  if (value <= 50) return 2 + (value - 25) * 2 / 25; // 25-50 → 2-4h
-  return 4 + (value - 50) * 4 / 50; // 50-100 → 4-8h
+  // Convertir de 0-15 à 0.5-8h par paliers de 0.5h
+  return 0.5 + (value * 0.5);
 };
 
 // Convertit les heures en valeur du slider
 const hoursToSlider = (hours: number) => {
-  // Conversion inverse de sliderToHours
-  if (hours < 0.5) return 0; // Minimum est 30 minutes
-  if (hours <= 1) return (hours - 0.5) * 10 / 0.5;
-  if (hours <= 2) return 10 + (hours - 1) * 15 / 1;
-  if (hours <= 4) return 25 + (hours - 2) * 25 / 2;
-  if (hours > 8) return 100; // Maximum est 8 heures
-  return 50 + (hours - 4) * 50 / 4;
+  // Arrondir à un multiple de 0.5 le plus proche
+  const roundedHours = Math.round(hours * 2) / 2;
+  // Convertir de 0.5-8h à 0-15 par paliers de 0.5h
+  const value = Math.round((roundedHours - 0.5) / 0.5);
+  // S'assurer que la valeur est dans la plage valide
+  return Math.max(0, Math.min(15, value));
 };
 
 // Étiquettes pour le slider
 const sliderMarks = [
   { value: 0, label: '30min' },
-  { value: 20, label: '1h30' },
-  { value: 50, label: '4h' },
-  { value: 100, label: '8h' }
+  { value: 3, label: '2h' },
+  { value: 7, label: '4h' },
+  { value: 11, label: '6h' },
+  { value: 15, label: '8h' }
 ];
 
 const RoiCalculator: React.FC = () => {
   // États du formulaire
-  const [sliderValue, setSliderValue] = useState(hoursToSlider(1)); // 1h par défaut
-  const [taskHours, setTaskHours] = useState(1);
+  const [sliderValue, setSliderValue] = useState(hoursToSlider(2)); // 2h par défaut
+  const [taskHours, setTaskHours] = useState(2);
   const [frequency, setFrequency] = useState<Frequency>('weekly');
   const [salaryMode, setSalaryMode] = useState<SalaryMode>('monthly');
   const [hourlyNet, setHourlyNet] = useState<number | undefined>(undefined);
@@ -116,6 +114,11 @@ const RoiCalculator: React.FC = () => {
     };
   };
   
+  // Fonction pour arrondir à 2 décimales
+  const roundToTwoDecimals = (value: number): number => {
+    return Math.round(value * 100) / 100;
+  };
+
   // Synchronise les différents formats de salaire
   const syncSalary = useCallback((
     mode: SalaryMode, 
@@ -124,18 +127,29 @@ const RoiCalculator: React.FC = () => {
     annual?: number
   ) => {
     if (mode === 'hourly' && hourly !== undefined) {
-      setHourlyNet(hourly);
-      setMonthlyNet(hourly * 151.67);
-      setAnnualBrut((hourly * 151.67 / 0.757) * 12);
+      const hourlyRounded = roundToTwoDecimals(hourly);
+      const monthlyCalculated = roundToTwoDecimals(hourlyRounded * 151.67);
+      const annualCalculated = roundToTwoDecimals((hourlyRounded * 151.67 / 0.757) * 12);
+      
+      setHourlyNet(hourlyRounded);
+      setMonthlyNet(monthlyCalculated);
+      setAnnualBrut(annualCalculated);
     } else if (mode === 'monthly' && monthly !== undefined) {
-      setHourlyNet(monthly / 151.67);
-      setMonthlyNet(monthly);
-      setAnnualBrut((monthly / 0.757) * 12);
+      const monthlyRounded = roundToTwoDecimals(monthly);
+      const hourlyCalculated = roundToTwoDecimals(monthlyRounded / 151.67);
+      const annualCalculated = roundToTwoDecimals((monthlyRounded / 0.757) * 12);
+      
+      setHourlyNet(hourlyCalculated);
+      setMonthlyNet(monthlyRounded);
+      setAnnualBrut(annualCalculated);
     } else if (mode === 'annual' && annual !== undefined) {
-      const monthlyValue = (annual * 0.757) / 12;
-      setHourlyNet(monthlyValue / 151.67);
-      setMonthlyNet(monthlyValue);
-      setAnnualBrut(annual);
+      const annualRounded = roundToTwoDecimals(annual);
+      const monthlyCalculated = roundToTwoDecimals((annualRounded * 0.757) / 12);
+      const hourlyCalculated = roundToTwoDecimals(monthlyCalculated / 151.67);
+      
+      setHourlyNet(hourlyCalculated);
+      setMonthlyNet(monthlyCalculated);
+      setAnnualBrut(annualRounded);
     }
   }, []);
   
@@ -238,7 +252,7 @@ const RoiCalculator: React.FC = () => {
                     <Slider
                       value={[sliderValue]}
                       min={0}
-                      max={100}
+                      max={15}
                       step={1}
                       onValueChange={handleSliderChange}
                       className="mb-2"
