@@ -46,6 +46,7 @@ const formSchema = z.object({
 
 export default function GapForm() {
   const [currentSection, setCurrentSection] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const { setPendingToast } = usePersistentToast();
 
@@ -169,6 +170,9 @@ export default function GapForm() {
   };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
     try {
       const params = new URLSearchParams();
       Object.entries(data).forEach(([key, value]) => {
@@ -203,6 +207,7 @@ export default function GapForm() {
 
     } catch (error) {
       console.error('Erreur:', error);
+      setIsSubmitting(false);
       toast({
         variant: "destructive",
         title: "Erreur",
@@ -334,12 +339,19 @@ export default function GapForm() {
                   <Button
                     type="submit"
                     onClick={form.handleSubmit(onSubmit)}
-                    disabled={!isFormValid()}
+                    disabled={!isFormValid() || isSubmitting}
                     className={`w-full sm:w-auto bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white ${
-                      !isFormValid() ? 'opacity-50 cursor-not-allowed' : ''
+                      (!isFormValid() || isSubmitting) ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   >
-                    Recevoir mes automatisations
+                    {isSubmitting ? (
+                      <div className="flex items-center gap-2">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                        Envoi en cours...
+                      </div>
+                    ) : (
+                      'Recevoir mes automatisations'
+                    )}
                   </Button>
 
                   <div className="flex w-full justify-center sm:justify-start sm:w-auto gap-4">
