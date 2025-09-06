@@ -109,3 +109,6 @@ Site web moderne de conseil en automatisation d'entreprise avec calculateur ROI,
 ## 📝 Licence
 
 MIT
+
+---
+*Dernière mise à jour : Migration vers Vercel*
