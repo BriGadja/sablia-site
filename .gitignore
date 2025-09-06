@@ -1,6 +1,55 @@
-node_modules
-dist
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Production builds
+dist/
+build/
+server/public/
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.test
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
 .DS_Store
-server/public
-vite.config.ts.*
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Temporary files
+tmp/
+temp/
 *.tar.gz
+
+# Vercel
+.vercel
+
+# Vite specific
+vite.config.ts.*
+
+# Coverage
+coverage/
+*.lcov
+.nyc_output
