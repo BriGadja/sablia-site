@@ -1,11 +1,6 @@
 {
-  "buildCommand": "bash build.sh",
+  "buildCommand": "vite build",
   "installCommand": "npm install",
   "outputDirectory": "dist/public",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/$1"
-    }
-  ]
+  "framework": "vite"
 }
