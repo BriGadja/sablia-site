@@ -1,0 +1,29 @@
+# Development files
+node_modules
+.env.local
+.env.development
+.env.test
+
+# Source files (only deploy built files)
+client/src
+server/vite.ts
+
+# Build cache
+.vite
+.cache
+
+# IDE files
+.vscode
+.idea
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
