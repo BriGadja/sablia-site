@@ -1,29 +1,36 @@
 # Development files
-node_modules
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Build (ne pas ignorer car Vercel en a besoin)
+# dist/
+
+# Environment variables
 .env.local
-.env.development
-.env.test
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Source files (only deploy built files)
-client/src
-server/vite.ts
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 
-# Build cache
-.vite
-.cache
-
-# IDE files
-.vscode
-.idea
-
-# OS files
+# OS
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
-logs/
-
-# Temporary files
-tmp/
-temp/
+# Git (garder seulement les logs)
+.git/logs/
+.git/refs/logs/
