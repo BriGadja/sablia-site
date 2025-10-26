@@ -82,6 +82,80 @@ Required in `.env`:
 - All TypeScript with strict mode enabled
 - ESM modules throughout (type: "module" in package.json)
 
+## Visual Validation with Playwright MCP
+
+When making design changes to LandingV2 or other visual components, **ALWAYS** use Playwright MCP integration to validate changes before committing:
+
+### Workflow for Visual Changes
+
+1. **Start dev server:**
+   ```bash
+   npm run dev  # Runs on http://localhost:5000
+   ```
+
+2. **Navigate to the page:**
+   ```javascript
+   mcp__playwright__browser_navigate({ url: "http://localhost:5000/landingv2" })
+   ```
+
+3. **Capture visual state:**
+   - **Screenshot**: `mcp__playwright__browser_take_screenshot({ filename: "feature-name.png" })`
+   - **Accessibility snapshot**: `mcp__playwright__browser_snapshot()` (better for structure analysis)
+
+4. **Review against design requirements:**
+   - Compare against `refonte_graphique/Design professionnel pour Sablia _ Guide complet pour une landing page primée.md`
+   - Verify emoji usage (max 0-2 for B2B sites, NEVER on CTAs)
+   - Check professional credibility vs visual excitement balance
+   - Validate typography, spacing, and hierarchy
+
+5. **Iterate based on evidence:**
+   - Make corrections based on visual validation
+   - Re-capture to verify fixes
+   - Ensure compliance before committing
+
+### Why This Matters
+
+Visual validation prevents:
+- ❌ Emoji overuse that damages B2B credibility (74% of professionals 45+ see it as unprofessional)
+- ❌ Positioning conflicts (e.g., scroll indicators over CTAs)
+- ❌ Animations too subtle to notice
+- ❌ Violations of professional design guidelines
+
+Always validate visually **before** pushing, not after deployment.
+
+## Git Workflow for Landing Page
+
+### Landing Page Changes (LandingV2)
+
+When working on the landing page (`client/src/pages/LandingV2.tsx` and `client/src/components/v2/*`), you can **push directly to main** after validation:
+
+```bash
+# 1. Validate visually with Playwright (see above)
+# 2. Build to ensure no errors
+npm run build
+
+# 3. Commit and push directly
+git add [files]
+git commit -m "Your descriptive message
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+git push
+```
+
+### Other Changes
+
+For features outside the landing page (backend, database, forms, etc.), follow standard git workflow with branches and PRs as needed.
+
+### Commit Message Template
+
+Use descriptive commit messages that explain the "why" and include:
+- Clear summary of changes
+- Reference to design guide compliance when relevant
+- Metrics (bundle size, emoji count, performance)
+- Design violations fixed
+
 ---
 
 ## Context Engineering Methodology
