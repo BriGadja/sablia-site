@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { usePersistentToast } from "@/hooks/use-persistent-toast";
 import { AnimatePresence } from "framer-motion";
 import Home from "@/pages/Home";
+import LandingV2 from "@/pages/LandingV2";
 import GapForm from "@/pages/GapForm";
 import About from "@/pages/About";
 import Roi from "@/pages/Roi";
@@ -15,6 +16,7 @@ function Router() {
     <AnimatePresence mode="wait">
       <Switch>
         <Route path="/" component={Home} />
+        <Route path="/landingv2" component={LandingV2} />
         <Route path="/gap" component={GapForm} />
         <Route path="/about" component={About} />
         <Route path="/roi" component={Roi} />

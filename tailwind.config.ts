@@ -61,6 +61,13 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // v2 Landing Page Colors
+        "v2-navy": "#0A2463",
+        "v2-electric": "#3E92CC",
+        "v2-cyan": "#52D1DC",
+        "v2-white": "#FFFFFF",
+        "v2-off-white": "#F8F9FA",
+        "v2-charcoal": "#2D3142",
       },
       keyframes: {
         "accordion-down": {
