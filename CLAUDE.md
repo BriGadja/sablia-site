@@ -81,3 +81,187 @@ Required in `.env`:
 - Form validation uses Zod schemas with React Hook Form
 - All TypeScript with strict mode enabled
 - ESM modules throughout (type: "module" in package.json)
+
+---
+
+## Context Engineering Methodology
+
+This project uses **Context Engineering** - a systematic approach to working with AI coding assistants that ensures consistent, high-quality implementations.
+
+### Philosophy
+
+**Context Engineering > Prompt Engineering > Vibe Coding**
+
+Context Engineering is not about clever prompts - it's about providing comprehensive context through:
+- Structured documentation
+- Real code examples
+- Validation loops
+- Detailed requirements
+
+### Workflow Overview
+
+```
+INITIAL.md → /generate-prp → PRP → /execute-prp → Implementation
+```
+
+### Step-by-Step Process
+
+#### 1. Define Your Feature (INITIAL.md)
+
+When you want to build a new feature, create or edit `INITIAL.md` with four key sections:
+
+**FEATURE**: Specific description of what to build
+- Be detailed about functionality and requirements
+- Include user-facing behavior and technical requirements
+
+**EXAMPLES**: Reference examples from `examples/` folder
+- Point to specific files that demonstrate patterns to follow
+- Explain what aspects should be mimicked
+- Examples are CRITICAL for success
+
+**DOCUMENTATION**: Include all relevant resources
+- API documentation URLs with specific sections
+- Library guides and best practices
+- Database schema references
+- MCP server documentation
+
+**OTHER CONSIDERATIONS**: Capture important details
+- Common pitfalls and gotchas
+- Performance requirements
+- Authentication/security needs
+- Edge cases often missed
+
+**Example INITIAL.md**:
+```markdown
+## FEATURE:
+Build a contact form component with Calendly integration. The form should
+collect name, email, phone, and allow users to schedule a consultation.
+
+## EXAMPLES:
+- `examples/components/FormExample.tsx` - Follow this pattern for form
+  structure with React Hook Form and Zod validation
+- `examples/api/useDataHook.ts` - Use this pattern for API integration
+
+## DOCUMENTATION:
+- React Hook Form: https://react-hook-form.com/docs
+- Calendly API: https://developer.calendly.com/
+- Zod validation: https://zod.dev/
+
+## OTHER CONSIDERATIONS:
+- Must work on mobile devices
+- Include GDPR-compliant consent checkbox
+- Show loading state during submission
+- Handle API errors gracefully
+```
+
+#### 2. Generate a PRP (Product Requirements Prompt)
+
+Run the slash command:
+```bash
+/generate-prp INITIAL.md
+```
+
+This command will:
+1. **Research Phase**: Analyze your codebase for similar patterns
+2. **Documentation Gathering**: Fetch relevant docs and examples
+3. **Blueprint Creation**: Create a step-by-step implementation plan
+4. **Quality Check**: Ensure confidence score of 8+ (out of 10)
+
+Output: `PRPs/{feature-name}.md` - a comprehensive implementation blueprint
+
+#### 3. Execute the PRP
+
+Run the slash command:
+```bash
+/execute-prp PRPs/{feature-name}.md
+```
+
+The AI will:
+1. **Load**: Read all context from the PRP
+2. **Plan**: Create detailed task list with TodoWrite
+3. **Implement**: Execute each component
+4. **Validate**: Run tests and checks
+5. **Iterate**: Fix any issues
+6. **Complete**: Verify all requirements met
+
+#### 4. Validation Gates
+
+Every PRP includes validation commands that MUST pass:
+
+**Level 1 - Syntax & Style**:
+```bash
+npm run check    # TypeScript type checking
+npm run lint     # Code style
+```
+
+**Level 2 - Build**:
+```bash
+npm run build    # Production build
+```
+
+**Level 3 - Testing** (when applicable):
+```bash
+npm test         # Unit/integration tests
+```
+
+The AI will iterate until ALL validation gates pass.
+
+### The examples/ Folder is Critical
+
+AI coding assistants perform 10x better with concrete examples. Populate `examples/` with:
+
+- **Component Patterns**: React components showing your preferred structure
+- **API Patterns**: How you make API calls and handle responses
+- **Form Patterns**: Complete form implementations with validation
+- **Testing Patterns**: How you structure and write tests
+- **Error Handling**: How you handle and display errors
+
+See `examples/README.md` for detailed guidance.
+
+### Key Principles
+
+1. **Be Explicit**: Don't assume the AI knows your preferences
+2. **Provide Examples**: More examples = better implementations
+3. **Use Validation**: PRPs include test commands that must pass
+4. **Follow Patterns**: Reference existing code patterns liberally
+5. **Iterate on PRPs**: If a PRP doesn't work well, improve it for next time
+
+### Why This Works
+
+Traditional approaches fail because they lack context. Context Engineering succeeds by:
+
+- **Comprehensive Context**: All needed information in one place
+- **Validation Loops**: AI can self-correct using tests
+- **Pattern Following**: Examples show the "right way"
+- **Progressive Success**: Build simple, validate, then enhance
+
+### Advanced: Reusing PRPs
+
+Well-crafted PRPs can be reused for similar features:
+1. Copy a similar PRP from `PRPs/` folder
+2. Modify for your specific needs
+3. Execute with `/execute-prp`
+
+This makes implementing similar features extremely fast.
+
+### Project-Specific Patterns
+
+When creating PRPs for Sablia, ensure they reference:
+
+- **React Patterns**: Functional components with TypeScript
+- **Form Patterns**: React Hook Form + Zod validation
+- **API Patterns**: React Query for data fetching
+- **Routing**: Wouter for navigation
+- **Styling**: Tailwind CSS with shadcn/ui components
+- **State**: React Query for server state, React hooks for local state
+
+### Getting Started with Context Engineering
+
+1. **First Time**: Create a comprehensive `INITIAL.md` for your first feature
+2. **Generate PRP**: Run `/generate-prp INITIAL.md`
+3. **Review PRP**: Check the generated PRP - does it have enough context?
+4. **Execute**: Run `/execute-prp PRPs/your-feature.md`
+5. **Learn**: Note what worked and what didn't
+6. **Improve**: Update examples and PRP templates based on learnings
+
+The first PRP might take extra time, but subsequent features will be dramatically faster and more consistent.

@@ -37,6 +37,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
+        style={{
+          transition: 'all 0.2s ease',
+          cursor: 'pointer'
+        }}
         {...props}
       />
     );

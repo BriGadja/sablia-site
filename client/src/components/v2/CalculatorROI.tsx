@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { motion, animate } from "framer-motion";
+import { useState, useEffect } from "react";
 import Container from "./Container";
 import Section from "./Section";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "./Card";
@@ -10,6 +10,11 @@ export default function CalculatorROI() {
   const [hoursPerWeek, setHoursPerWeek] = useState(5);
   const [hourlyRate, setHourlyRate] = useState(35);
 
+  // Display state for animated counters
+  const [displayAnnual, setDisplayAnnual] = useState(0);
+  const [displaySavings, setDisplaySavings] = useState(0);
+  const [displayROI, setDisplayROI] = useState(0);
+
   // Calculations
   const weeklyTimeCost = employees * hoursPerWeek * hourlyRate;
   const annualTimeCost = weeklyTimeCost * 52;
@@ -18,6 +23,33 @@ export default function CalculatorROI() {
   const netGain = potentialSavings - automationCost;
   const roiPercentage = ((netGain / automationCost) * 100).toFixed(0);
   const paybackMonths = ((automationCost / potentialSavings) * 12).toFixed(1);
+
+  // Counter animations
+  useEffect(() => {
+    const controls1 = animate(displayAnnual, annualTimeCost, {
+      duration: 2,
+      ease: "easeOut",
+      onUpdate: (v) => setDisplayAnnual(Math.round(v))
+    });
+
+    const controls2 = animate(displaySavings, potentialSavings, {
+      duration: 2,
+      ease: "easeOut",
+      onUpdate: (v) => setDisplaySavings(Math.round(v))
+    });
+
+    const controls3 = animate(displayROI, parseInt(roiPercentage), {
+      duration: 2,
+      ease: "easeOut",
+      onUpdate: (v) => setDisplayROI(Math.round(v))
+    });
+
+    return () => {
+      controls1.stop();
+      controls2.stop();
+      controls3.stop();
+    };
+  }, [annualTimeCost, potentialSavings, roiPercentage, displayAnnual, displaySavings, displayROI]);
 
   return (
     <Section background="white" spacing="default" id="calculator-roi">
@@ -134,7 +166,7 @@ export default function CalculatorROI() {
                     Coût annuel actuel
                   </p>
                   <p className="text-5xl font-bold mb-1">
-                    {annualTimeCost.toLocaleString('fr-FR')}€
+                    {displayAnnual.toLocaleString('fr-FR')}€
                   </p>
                   <p className="text-xs text-v2-white/60">
                     {weeklyTimeCost.toLocaleString('fr-FR')}€/semaine sur tâches manuelles
@@ -150,7 +182,7 @@ export default function CalculatorROI() {
                     Économies potentielles (70% automatisable)
                   </p>
                   <p className="text-5xl font-bold mb-1">
-                    {potentialSavings.toLocaleString('fr-FR')}€
+                    {displaySavings.toLocaleString('fr-FR')}€
                   </p>
                   <p className="text-xs text-v2-white/60">
                     par an après automation
@@ -164,7 +196,7 @@ export default function CalculatorROI() {
             <Card>
               <CardContent className="pt-6 text-center">
                 <p className="text-sm text-v2-charcoal/60 mb-1">ROI Première Année</p>
-                <p className="text-3xl font-bold text-v2-cyan">{roiPercentage}%</p>
+                <p className="text-3xl font-bold text-v2-cyan">{displayROI}%</p>
               </CardContent>
             </Card>
 
