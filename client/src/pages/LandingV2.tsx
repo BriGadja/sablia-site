@@ -8,7 +8,7 @@ import ThreeStepProcess from "@/components/v2/ThreeStepProcess";
 import PricingPathways from "@/components/v2/PricingPathways";
 import PricingGrid from "@/components/v2/PricingGrid";
 import CalculatorROI from "@/components/v2/CalculatorROI";
-import TestimonialGrid from "@/components/v2/TestimonialGrid";
+import TestimonialCarousel from "@/components/v2/TestimonialCarousel";
 import FaqSection from "@/components/v2/FaqSection";
 import Footer from "@/components/Footer"; // Reuse existing footer for now
 
@@ -31,7 +31,7 @@ export default function LandingV2() {
         <CalculatorROI />
         <PricingPathways />
         <PricingGrid />
-        <TestimonialGrid />
+        <TestimonialCarousel />
         <FaqSection />
       </main>
       <Footer />
