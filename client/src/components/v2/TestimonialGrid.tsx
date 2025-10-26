@@ -106,7 +106,6 @@ export default function TestimonialGrid() {
                 <CardContent>
                   <div className="pt-4 border-t border-gray-200">
                     <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-v2-cyan/10 rounded-full">
-                      <span className="text-v2-cyan">📊</span>
                       <span className="text-sm font-semibold text-v2-navy">{testimonial.metric}</span>
                     </div>
                   </div>

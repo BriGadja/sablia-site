@@ -5,21 +5,18 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "./Car
 
 const solutions = [
   {
-    icon: "🎓",
     title: "Formation-First",
     headline: "Votre équipe POSSÈDE le système",
     description: "Pas de dépendance. Nous formons vos talents pour qu'ils maîtrisent et fassent évoluer leurs automatisations.",
     metrics: ["95% d'autonomie à J+30", "0 ticket de support récurrent"]
   },
   {
-    icon: "🏰",
     title: "Stack Souverain",
     headline: "100% self-hosted possible",
     description: "n8n open-source sur votre infrastructure. Vos données restent chez vous. Pas de vendor lock-in.",
     metrics: ["RGPD compliant", "Coûts prévisibles"]
   },
   {
-    icon: "📈",
     title: "ROI Mesurable",
     headline: "Impact visible en semaines",
     description: "Métriques claires : temps gagné, erreurs évitées, coûts réduits. Transparence totale sur la valeur créée.",
@@ -63,7 +60,6 @@ export default function SolutionSection() {
             >
               <Card className="h-full border-2 hover:border-v2-electric transition-colors">
                 <CardHeader>
-                  <div className="text-5xl mb-4">{solution.icon}</div>
                   <div className="text-xs font-bold text-v2-electric uppercase tracking-wider mb-2">
                     {solution.title}
                   </div>

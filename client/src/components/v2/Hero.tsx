@@ -1,11 +1,8 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Button } from "./Button";
 import Container from "./Container";
 
 export default function Hero() {
-  // Parallax effect: hero content moves slower than scroll
-  const { scrollY } = useScroll();
-  const yParallax = useTransform(scrollY, [0, 500], [0, 100]);
 
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
@@ -16,7 +13,7 @@ export default function Hero() {
           backgroundPosition: ["0% 0%", "100% 100%"]
         }}
         transition={{
-          duration: 20,
+          duration: 10,
           repeat: Infinity,
           repeatType: "reverse",
           ease: "linear"
@@ -28,10 +25,7 @@ export default function Hero() {
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-v2-navy/20" />
 
       <Container className="relative z-10">
-        <motion.div
-          className="max-w-4xl mx-auto text-center"
-          style={{ y: yParallax }}
-        >
+        <motion.div className="max-w-4xl mx-auto text-center">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -69,7 +63,7 @@ export default function Hero() {
                 onClick={() => window.open('https://calendly.com/brice-gachadoat/30min', '_blank')}
                 className="w-full sm:w-auto"
               >
-                🎯 Diagnostic gratuit 30 min
+                Diagnostic gratuit 30 min
               </Button>
             </motion.div>
 
@@ -87,35 +81,9 @@ export default function Hero() {
                   calculator?.scrollIntoView({ behavior: 'smooth' });
                 }}
               >
-                📊 Calculer mon ROI automation
+                Calculer mon ROI automation
               </Button>
             </motion.div>
-          </motion.div>
-
-          {/* Animated scroll indicator */}
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 text-v2-white/60 text-sm font-medium flex flex-col items-center gap-2"
-          >
-            <span>Découvrir</span>
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 14l-7 7m0 0l-7-7m7 7V3"
-              />
-            </svg>
           </motion.div>
         </motion.div>
       </Container>

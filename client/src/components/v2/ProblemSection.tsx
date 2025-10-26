@@ -5,21 +5,18 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "./Car
 
 const problems = [
   {
-    icon: "⏱️",
     title: "Collaborateurs surchargés",
     description: "Vos talents passent 40% de leur temps sur des tâches répétitives au lieu d'innover",
     before: "15h/semaine perdues en copier-coller",
     after: "Focus sur stratégie et relation client"
   },
   {
-    icon: "📊",
     title: "Données éparpillées",
     description: "8 outils différents, 0 vision d'ensemble. Les informations critiques se perdent",
     before: "Erreurs de saisie, doublons, incohérences",
     after: "Source unique de vérité, synchro temps réel"
   },
   {
-    icon: "🔥",
     title: "Burnout silencieux",
     description: "Votre équipe accomplit des tâches qu'un robot ferait mieux, plus vite et sans fatigue",
     before: "Démotivation, turnover élevé",
@@ -64,18 +61,17 @@ export default function ProblemSection() {
             >
               <Card className="h-full">
                 <CardHeader>
-                  <div className="text-5xl mb-4">{problem.icon}</div>
                   <CardTitle className="text-xl">{problem.title}</CardTitle>
                   <CardDescription>{problem.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex items-start gap-2">
-                      <span className="text-red-500 font-bold">❌</span>
+                      <span className="text-red-500 font-bold">▸</span>
                       <span className="text-sm text-v2-charcoal/70">{problem.before}</span>
                     </div>
                     <div className="flex items-start gap-2">
-                      <span className="text-green-500 font-bold">✅</span>
+                      <span className="text-green-500 font-bold">▸</span>
                       <span className="text-sm text-v2-charcoal/70">{problem.after}</span>
                     </div>
                   </div>
