@@ -68,6 +68,10 @@ export default {
         "v2-white": "#FFFFFF",
         "v2-off-white": "#F8F9FA",
         "v2-charcoal": "#2D3142",
+        // v3 Sunrise gradient colors (for continuous sky → night → dawn gradient)
+        "v3-orange": "#FF8C42",
+        "v3-amber": "#FFA559",
+        "v3-gold": "#FFB347",
       },
       keyframes: {
         "accordion-down": {
@@ -91,7 +95,11 @@ export default {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
+      },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  plugins: [require("tailwindcss-animate")],
 } satisfies Config;

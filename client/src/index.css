@@ -116,6 +116,39 @@
   }
 }
 
+/* Animated gradient for hero background */
+@keyframes gradient-xy {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-xy {
+  background-size: 400% 400%;
+  animation: gradient-xy 15s ease infinite;
+}
+
+/* Testimonials carousel infinite scroll */
+@keyframes scroll-testimonials {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-2020px); /* 5 cards × 404px (380px + 24px gap) */
+  }
+}
+
+.animate-scroll-testimonials {
+  animation: scroll-testimonials 40s linear infinite;
+}
+
+.animate-scroll-testimonials:hover {
+  animation-play-state: paused;
+}
+
 /* Page transitions */
 .page-transition-enter {
   opacity: 0;
@@ -137,4 +170,21 @@
   opacity: 0;
   transform: translateY(-20px);
   transition: opacity 300ms, transform 300ms;
+}
+
+/* Accessibility: Respect user's reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Specific handling for testimonials carousel */
+  .animate-scroll-testimonials {
+    animation: none !important;
+  }
 }

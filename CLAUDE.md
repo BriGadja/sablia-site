@@ -84,14 +84,13 @@ Required in `.env`:
 
 ## Current Landing Page Architecture
 
-The site now uses **LandingV3** as the homepage (`/` route):
-- **Main Page**: `client/src/pages/LandingV3.tsx` - Complete landing page with all sections
-- **Components**: All components are in `client/src/components/v3/`
+The site uses **Landing** as the homepage (`/` route):
+- **Main Page**: `client/src/pages/Landing.tsx` - Complete landing page with all sections
+- **Components**: All landing page components are in `client/src/components/landing/`
 - **Navigation**: Includes both anchor links to sections AND route links to `/gap` and `/about` pages
-- **Previous versions**: LandingV2 has been deprecated and removed
 
 ### Available Routes
-- `/` - LandingV3 (homepage with all sections)
+- `/` - Landing (homepage with all sections)
 - `/gap` - GAP analysis form
 - `/about` - About page
 - `/tarifs` - Pricing page
@@ -99,7 +98,7 @@ The site now uses **LandingV3** as the homepage (`/` route):
 
 ## Visual Validation with Playwright MCP
 
-When making design changes to LandingV3 or other visual components, **ALWAYS** use Playwright MCP integration to validate changes before committing:
+When making design changes to the Landing page or other visual components, **ALWAYS** use Playwright MCP integration to validate changes before committing:
 
 ### Workflow for Visual Changes
 
@@ -182,9 +181,9 @@ Always validate visually **before** pushing, not after deployment.
 
 ## Git Workflow for Landing Page
 
-### Landing Page Changes (LandingV3)
+### Landing Page Changes
 
-When working on the landing page (`client/src/pages/LandingV3.tsx` and `client/src/components/v3/*`), you can **push directly to main** after validation:
+When working on the landing page (`client/src/pages/Landing.tsx` and `client/src/components/landing/*`), you can **push directly to main** after validation:
 
 ```bash
 # 1. Validate visually with Playwright (see above)
