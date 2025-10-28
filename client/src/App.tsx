@@ -10,6 +10,10 @@ import Tarifs from "@/pages/Tarifs";
 import GapForm from "@/pages/GapForm";
 import About from "@/pages/About";
 import Roi from "@/pages/Roi";
+import TestStackValue from "@/pages/TestStackValue";
+import MentionsLegales from "@/pages/MentionsLegales";
+import PolitiqueConfidentialite from "@/pages/PolitiqueConfidentialite";
+import CGV from "@/pages/CGV";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -22,6 +26,10 @@ function Router() {
         <Route path="/gap" component={GapForm} />
         <Route path="/about" component={About} />
         <Route path="/roi" component={Roi} />
+        <Route path="/test-stack-value" component={TestStackValue} />
+        <Route path="/mentions-legales" component={MentionsLegales} />
+        <Route path="/politique-confidentialite" component={PolitiqueConfidentialite} />
+        <Route path="/cgv" component={CGV} />
         <Route component={NotFound} />
       </Switch>
     </AnimatePresence>

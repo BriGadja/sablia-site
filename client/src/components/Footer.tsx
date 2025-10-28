@@ -1,3 +1,4 @@
+import { Link } from "wouter";
 
 export default function Footer() {
   return (
@@ -21,15 +22,15 @@ export default function Footer() {
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-100">Légal</h3>
-            <a href="#" className="text-gray-300 hover:text-white block mb-2">
+            <Link href="/mentions-legales" className="text-gray-300 hover:text-white block mb-2">
               Mentions légales
-            </a>
-            <a href="#" className="text-gray-300 hover:text-white block mb-2">
+            </Link>
+            <Link href="/politique-confidentialite" className="text-gray-300 hover:text-white block mb-2">
               Politique de confidentialité
-            </a>
-            <a href="#" className="text-gray-300 hover:text-white block">
+            </Link>
+            <Link href="/cgv" className="text-gray-300 hover:text-white block">
               CGV
-            </a>
+            </Link>
           </div>
         </div>
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
