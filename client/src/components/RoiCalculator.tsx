@@ -104,9 +104,9 @@ const RoiCalculator: React.FC = () => {
   const [results, setResults] = useState<any>(null);
   
   // Fonction debounce pour limiter les calculs
-  const debounce = (func: Function, wait: number) => {
+  const debounce = <T extends (...args: unknown[]) => void>(func: T, wait: number) => {
     let timeout: NodeJS.Timeout;
-    return (...args: any[]) => {
+    return (...args: Parameters<T>) => {
       clearTimeout(timeout);
       timeout = setTimeout(() => func(...args), wait);
     };
