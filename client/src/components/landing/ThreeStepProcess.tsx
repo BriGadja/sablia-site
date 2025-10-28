@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Search, GraduationCap, Rocket, Zap } from "lucide-react";
+import { Search, Rocket, Zap } from "lucide-react";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
@@ -134,7 +134,7 @@ export default function ThreeStepProcess() {
         <div ref={containerRef} className="relative max-w-6xl mx-auto">
           {/* Desktop: Horizontal Timeline */}
           <div className="hidden lg:flex items-start justify-between gap-8 relative">
-            {steps.map((step, index) => (
+            {steps.map((step, _index) => (
               <div key={step.id} className="step-card flex-1 relative">
                 {/* Step Card */}
                 <div className="step-card-border bg-v2-charcoal/20 backdrop-blur-md rounded-2xl p-8 border border-v2-cyan/20 relative">

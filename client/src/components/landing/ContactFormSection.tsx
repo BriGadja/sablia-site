@@ -233,7 +233,6 @@ export default function ContactFormSection() {
                 <MagneticButton
                   strength={0.2}
                   className="w-full bg-v2-cyan text-v2-navy px-8 py-4 rounded-lg font-bold text-lg hover:bg-v2-cyan/90 transition-colors flex items-center justify-center gap-2"
-                  onClick={() => {}} // handleSubmit will call onSubmit
                 >
                   <Send size={20} />
                   <span>Envoyer le message</span>

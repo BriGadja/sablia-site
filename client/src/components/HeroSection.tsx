@@ -1,5 +1,3 @@
-import { Button } from "./ui/button";
-import { RainbowText } from "./RainbowText";
 import { Link } from "wouter";
 
 export default function HeroSection() {

@@ -1,11 +1,10 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Card } from "./ui/card";
-import { 
-  Users, 
-  FileText, 
-  Mail, 
-  FileCheck, 
+import {
+  FileText,
+  Mail,
+  FileCheck,
   FolderGit2,
   MessageCircle,
   TrendingUp,
@@ -97,7 +96,7 @@ const examples = [
 
 export const AutomationExamplesSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [_timeLeft, setTimeLeft] = useState(10);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const [isMobile, setIsMobile] = useState(false);

@@ -2,7 +2,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RoiCalculator from "@/components/RoiCalculator";
-import ParticlesBackground from "@/components/ParticlesBackground";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 

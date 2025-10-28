@@ -8,7 +8,6 @@ import Footer from "@/components/Footer";
 import RoiBanner, { RoiCta } from "@/components/RoiBanner";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { RainbowText } from "@/components/RainbowText";
 import { motion } from "framer-motion";
 
 export default function Home() {
