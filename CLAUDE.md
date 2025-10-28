@@ -82,9 +82,24 @@ Required in `.env`:
 - All TypeScript with strict mode enabled
 - ESM modules throughout (type: "module" in package.json)
 
+## Current Landing Page Architecture
+
+The site now uses **LandingV3** as the homepage (`/` route):
+- **Main Page**: `client/src/pages/LandingV3.tsx` - Complete landing page with all sections
+- **Components**: All components are in `client/src/components/v3/`
+- **Navigation**: Includes both anchor links to sections AND route links to `/gap` and `/about` pages
+- **Previous versions**: LandingV2 has been deprecated and removed
+
+### Available Routes
+- `/` - LandingV3 (homepage with all sections)
+- `/gap` - GAP analysis form
+- `/about` - About page
+- `/tarifs` - Pricing page
+- `/roi` - ROI calculator
+
 ## Visual Validation with Playwright MCP
 
-When making design changes to LandingV2 or other visual components, **ALWAYS** use Playwright MCP integration to validate changes before committing:
+When making design changes to LandingV3 or other visual components, **ALWAYS** use Playwright MCP integration to validate changes before committing:
 
 ### Workflow for Visual Changes
 
@@ -95,12 +110,54 @@ When making design changes to LandingV2 or other visual components, **ALWAYS** u
 
 2. **Navigate to the page:**
    ```javascript
-   mcp__playwright__browser_navigate({ url: "http://localhost:5000/landingv2" })
+   mcp__playwright__browser_navigate({ url: "http://localhost:5000" })
    ```
 
 3. **Capture visual state:**
-   - **Screenshot**: `mcp__playwright__browser_take_screenshot({ filename: "feature-name.png" })`
-   - **Accessibility snapshot**: `mcp__playwright__browser_snapshot()` (better for structure analysis)
+
+   **PREFERRED METHOD - Accessibility Snapshot:**
+   ```javascript
+   mcp__playwright__browser_snapshot()
+   ```
+   Use this for structure analysis, layout verification, and identifying elements. Best for most validation tasks.
+
+   **ALTERNATIVE - Partial Screenshots ONLY:**
+
+   **NEVER use `fullPage: true`** - it exceeds the 8000 pixel limit and will fail.
+
+   Instead, take partial screenshots of:
+
+   a) **Viewport only** (visible area):
+   ```javascript
+   mcp__playwright__browser_take_screenshot({
+     filename: "hero-viewport.png"
+   })
+   ```
+
+   b) **Specific elements** (after getting element ref from snapshot):
+   ```javascript
+   // First get snapshot to find element refs
+   mcp__playwright__browser_snapshot()
+
+   // Then screenshot specific element
+   mcp__playwright__browser_take_screenshot({
+     element: "Hero section",
+     ref: "[element-ref-from-snapshot]",
+     filename: "hero-section.png"
+   })
+   ```
+
+   c) **Multiple sections** (take separate screenshots):
+   ```javascript
+   // Hero section
+   mcp__playwright__browser_take_screenshot({ filename: "section-hero.png" })
+
+   // Scroll down
+   mcp__playwright__browser_evaluate({ function: "() => window.scrollBy(0, 800)" })
+
+   // Problem section
+   mcp__playwright__browser_take_screenshot({ filename: "section-problem.png" })
+   ```
 
 4. **Review against design requirements:**
    - Compare against `refonte_graphique/Design professionnel pour Sablia _ Guide complet pour une landing page primée.md`
@@ -125,9 +182,9 @@ Always validate visually **before** pushing, not after deployment.
 
 ## Git Workflow for Landing Page
 
-### Landing Page Changes (LandingV2)
+### Landing Page Changes (LandingV3)
 
-When working on the landing page (`client/src/pages/LandingV2.tsx` and `client/src/components/v2/*`), you can **push directly to main** after validation:
+When working on the landing page (`client/src/pages/LandingV3.tsx` and `client/src/components/v3/*`), you can **push directly to main** after validation:
 
 ```bash
 # 1. Validate visually with Playwright (see above)
