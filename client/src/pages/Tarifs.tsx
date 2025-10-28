@@ -2,6 +2,9 @@ import { motion } from "framer-motion";
 import Navigation from "@/components/landing/Navigation";
 import PricingSection from "@/components/landing/PricingSection";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
+import AnimatedParticles from "@/components/animations/AnimatedParticles";
+import CustomCursor from "@/components/animations/CustomCursor";
 
 /**
  * Page Tarifs - Grille tarifaire détaillée complète
@@ -19,11 +22,21 @@ export default function Tarifs() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <Navigation />
-      <main className="pt-20">
-        <PricingSection />
-      </main>
-      <Footer />
+      {/* Animated particles background */}
+      <AnimatedParticles />
+
+      {/* Content layer */}
+      <div className="relative z-10">
+        <Navigation />
+        <main className="pt-20">
+          <PricingSection />
+        </main>
+        <Footer />
+        <ScrollToTop />
+      </div>
+
+      {/* Custom cursor layer */}
+      <CustomCursor />
     </motion.div>
   );
 }

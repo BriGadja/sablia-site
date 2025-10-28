@@ -1,7 +1,9 @@
-
 import { useEffect } from "react";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+import Navigation from "@/components/landing/Navigation";
+import ScrollToTop from "@/components/ScrollToTop";
+import AnimatedParticles from "@/components/animations/AnimatedParticles";
+import CustomCursor from "@/components/animations/CustomCursor";
 import { motion } from "framer-motion";
 
 export default function About() {
@@ -11,14 +13,22 @@ export default function About() {
   }, []);
 
   return (
-    <motion.div 
-      className="min-h-screen bg-gray-900 text-gray-100"
+    <motion.div
+      className="min-h-screen"
+      style={{
+        background: "linear-gradient(to bottom, #2B9AB8 0%, #3E92CC 15%, #0A2463 35%, #0A2463 50%, #2D3142 65%, #3d2f1f 80%, #4a3621 95%, #3d2f1f 100%)"
+      }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <Navbar />
+      {/* Animated particles background */}
+      <AnimatedParticles />
+
+      {/* Content layer */}
+      <div className="relative z-10">
+        <Navigation />
       <main className="container mx-auto px-4 py-16">
         <div className="flex flex-col items-center mb-10 mt-12">
           <h1 className="text-4xl font-bold text-center">À propos</h1>
@@ -115,7 +125,12 @@ export default function About() {
           </div>
         </div>
       </main>
-      <Footer />
+        <Footer />
+        <ScrollToTop />
+      </div>
+
+      {/* Custom cursor layer */}
+      <CustomCursor />
     </motion.div>
   );
 }
