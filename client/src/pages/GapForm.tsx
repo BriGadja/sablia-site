@@ -4,133 +4,45 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { usePersistentToast } from "@/hooks/use-persistent-toast";
 import { Link } from "wouter";
 import { RainbowText } from "@/components/RainbowText";
 import { motion } from "framer-motion";
+import AnimatedParticles from "@/components/animations/AnimatedParticles";
+import CustomCursor from "@/components/animations/CustomCursor";
 
 const formSchema = z.object({
-  // Section 1: Informations personnelles et entreprise (tous obligatoires)
+  // Contact (obligatoires)
   firstName: z.string().min(1, "Le prénom est requis"),
   lastName: z.string().min(1, "Le nom est requis"),
   email: z.string().email("Email invalide").min(1, "L'email est requis"),
-  phone: z.string().optional(),
   companyName: z.string().min(1, "Le nom de l'entreprise est requis"),
-  website: z.string().min(1, "L'URL de l'entreprise est requise"),
 
-  // Les sections suivantes sont optionnelles
+  // Contexte (optionnels mais recommandés)
   sector: z.string().optional(),
-  companySize: z.string().optional(),
-  revenue: z.string().optional(),
-  crm: z.string().optional(),
-  billing: z.string().optional(),
-  erp: z.string().optional(),
-  office: z.string().optional(),
-  reporting: z.string().optional(),
-  otherTools: z.string().optional(),
-  mainProcess: z.string().optional(),
-  frequency: z.string().optional(),
-  timeSpent: z.string().optional(),
-  existingSolutions: z.string().optional(),
-  expectedImpact: z.string().optional(),
-  expectedGains: z.string().optional(),
-  priorities: z.string().optional(),
-  comments: z.string().optional(),
+  challenge: z.string().optional(),
   availability: z.string().optional(),
 });
 
 export default function GapForm() {
-  const [currentSection, setCurrentSection] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const { setPendingToast } = usePersistentToast();
 
-  const sections = [
-    {
-      title: "Informations essentielles",
-      subtitle: "",
-      fields: [
-        { name: "firstName", label: "Prénom", placeholder: "Votre prénom", type: "text", required: true },
-        { name: "lastName", label: "Nom", placeholder: "Votre nom", type: "text", required: true },
-        { name: "email", label: "Adresse email", placeholder: "ex: prenom.nom@example.com", type: "email", required: true },
-        { name: "phone", label: "Téléphone", placeholder: "ex: +33 6 12 34 56 78", type: "tel" },
-        { name: "companyName", label: "Nom de l'entreprise", placeholder: "Nom de votre entreprise", type: "text", required: true },
-        { name: "website", label: "URL du site ou profil LinkedIn", placeholder: "ex: https://www.votreentreprise.fr", type: "url", required: true }
-      ]
-    },
-    {
-      title: "Informations sur l'entreprise",
-      subtitle: "Ces détails nous aideront à mieux comprendre votre contexte",
-      fields: [
-        { name: "sector", label: "Secteur d'activité", placeholder: "ex: E-commerce, Marketing, Distribution..." },
-        {
-          name: "companySize",
-          label: "Taille de l'entreprise",
-          type: "select",
-          options: ["1", "2 à 9", "10 à 50", "50 à 150", "150+"]
-        },
-        {
-          name: "revenue",
-          label: "Chiffre d'affaires annuel",
-          type: "select",
-          options: ["0 - 100k€", "100k - 1M€", "1M - 10M€", "+10M€", "Donnée confidentielle"]
-        }
-      ]
-    },
-    {
-      title: "Outils et infrastructure existants",
-      subtitle: "Ces informations nous permettront de proposer des automatisations compatibles avec vos outils",
-      fields: [
-        { name: "crm", label: "Outil CRM utilisé", placeholder: "ex: Hubspot, Salesforce, etc." },
-        { name: "billing", label: "Outil de facturation/comptabilité", placeholder: "ex: Henrii, Indy, Facture.net, etc." },
-        { name: "erp", label: "ERP ou outils de gestion commerciale", placeholder: "ex: Axonaut, noCRM, etc." },
-        { name: "office", label: "Suite bureautique", placeholder: "ex: Google Workspace, Office 365, etc." },
-        { name: "reporting", label: "Outils de reporting et d'analyse", placeholder: "ex: Power BI, Tableau, Google Sheets, etc." },
-        { name: "otherTools", label: "Autres outils métiers", placeholder: "Précisez, si applicable" }
-      ]
-    },
-    {
-      title: "Processus à automatiser",
-      subtitle: "Plus vous nous en direz, plus nos recommandations seront pertinentes",
-      fields: [
-        { name: "mainProcess", label: "Quel processus manuel vous coûte le plus de temps ?", placeholder: "ex: Résolution manuelle des tickets de support" },
-        { name: "frequency", label: "Fréquence / Volume de ce processus", placeholder: "ex: quotidien, hebdomadaire, mensuel" },
-        { name: "timeSpent", label: "Temps moyen consacré à ce processus par semaine (en heures)", placeholder: "ex: 10" },
-        { name: "existingSolutions", label: "Avez-vous déjà envisagé des solutions d'automatisation ?", placeholder: "ex: Oui, j'ai pensé à utiliser un chatbot…" }
-      ]
-    },
-    {
-      title: "Objectifs et attentes",
-      subtitle: "Aidez-nous à comprendre vos priorités",
-      fields: [
-        { name: "expectedImpact", label: "Quel serait l'impact attendu sur votre productivité ?", placeholder: "ex: Gain de temps, réduction des erreurs, amélioration de la réactivité" },
-        { name: "expectedGains", label: "Quels gains attendez-vous (en temps, coûts, qualité) ?", placeholder: "ex: Réduction de 50% du temps de traitement" },
-        { name: "priorities", label: "Priorités en matière d'automatisation", placeholder: "ex: ROI rapide, facilité d'implémentation, scalabilité" }
-      ]
-    },
-    {
-      title: "Informations complémentaires",
-      subtitle: "Des précisions qui nous aideront à affiner nos recommandations",
-      fields: [
-        { name: "comments", label: "Commentaires ou contraintes spécifiques", placeholder: "Exemple : contraintes techniques, budget, etc." },
-        { name: "availability", label: "Disponibilité pour un rendez-vous", placeholder: "Ex: Après-midi, matinée, jours précis, etc." }
-      ]
-    }
-  ];
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: "", lastName: "", email: "", phone: "",
-      companyName: "", website: "", sector: "", companySize: "", revenue: "",
-      crm: "", billing: "", erp: "", office: "", reporting: "", otherTools: "",
-      mainProcess: "", frequency: "", timeSpent: "", existingSolutions: "",
-      expectedImpact: "", expectedGains: "", priorities: "",
-      comments: "", availability: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      companyName: "",
+      sector: "",
+      challenge: "",
+      availability: "",
     },
   });
 
@@ -144,28 +56,8 @@ export default function GapForm() {
       !!values.lastName &&
       !!values.email &&
       emailRegex.test(values.email) &&
-      !!values.companyName &&
-      !!values.website
+      !!values.companyName
     );
-  };
-
-  const isCurrentSectionValid = () => {
-    if (currentSection === 0) {
-      // Pour la première section, tous les champs sont obligatoires et l'email doit être valide
-      const values = form.getValues();
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-      return (
-        !!values.firstName &&
-        !!values.lastName &&
-        !!values.email &&
-        emailRegex.test(values.email) &&
-        !!values.companyName &&
-        !!values.website
-      );
-    }
-    // Pour les autres sections, on permet d'avancer même si les champs sont vides
-    return true;
   };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -216,173 +108,284 @@ export default function GapForm() {
   };
 
 
-  const progress = ((currentSection + 1) / sections.length) * 100;
+  const sectorOptions = [
+    "E-commerce",
+    "Marketing & Communication",
+    "Services B2B",
+    "Industrie & Manufacturing",
+    "Tech & Software",
+    "Santé & Bien-être",
+    "Finance & Assurance",
+    "Autre"
+  ];
 
-  const renderField = (field: any) => {
-    const fieldClasses = "w-full text-center sm:text-left";
-
-    if (field.type === "select" && field.options) {
-      return (
-        <FormField
-          key={field.name}
-          control={form.control}
-          name={field.name}
-          render={({ field: formField }) => (
-            <FormItem className={fieldClasses}>
-              <FormLabel className="text-gray-200">
-                {field.label}
-                {field.required && <span className="text-red-500 ml-1">*</span>}
-              </FormLabel>
-              <FormControl>
-                <Select onValueChange={formField.onChange} value={formField.value}>
-                  <SelectTrigger className="bg-gray-800 border-gray-700 text-gray-200">
-                    <SelectValue placeholder={field.placeholder} />
-                  </SelectTrigger>
-                  <SelectContent className="bg-gray-800 border-gray-700">
-                    {field.options.map((option: string) => (
-                      <SelectItem key={option} value={option} className="text-gray-200 hover:bg-gray-700">
-                        {option}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage className="text-red-400" />
-            </FormItem>
-          )}
-        />
-      );
-    }
-
-    return (
-      <FormField
-        key={field.name}
-        control={form.control}
-        name={field.name}
-        render={({ field: formField }) => (
-          <FormItem className={fieldClasses}>
-            <FormLabel className="text-gray-200">
-              {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
-            </FormLabel>
-            <FormControl>
-              <Input
-                {...formField}
-                type={field.type}
-                placeholder={field.placeholder}
-                required={field.required}
-                className="bg-gray-800/50 border-gray-700 text-gray-200 placeholder:text-gray-500 w-full"
-              />
-            </FormControl>
-            <FormMessage className="text-red-400" />
-          </FormItem>
-        )}
-      />
-    );
-  };
+  const availabilityOptions = [
+    "Cette semaine",
+    "Semaine prochaine",
+    "Dans 2 semaines",
+    "Flexible"
+  ];
 
   return (
-    <motion.div 
-      className="min-h-screen bg-gray-900 text-gray-100 relative pt-16"
+    <motion.div
+      className="min-h-screen relative"
+      style={{
+        background: "linear-gradient(to bottom, #2B9AB8 0%, #3E92CC 15%, #0A2463 35%, #0A2463 50%, #2D3142 65%, #3d2f1f 80%, #4a3621 95%, #3d2f1f 100%)"
+      }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <div className="container mx-auto px-4 max-w-2xl">
-        <Link href="/" className="absolute top-4 left-4 text-gray-400 hover:text-white transition-colors">
-          ← Retour
-        </Link>
+      {/* Animated particles background */}
+      <AnimatedParticles />
 
-        <div className="flex-grow flex flex-col justify-center mt-12 sm:mt-0">
-          <h1 className="text-4xl sm:text-4xl md:text-4xl font-bold text-center mb-4 px-4 whitespace-normal">
-            Générateur d'<RainbowText>Automatisations</RainbowText> Personnalisées
-          </h1>
+      {/* Content layer */}
+      <div className="relative z-10 min-h-screen flex flex-col">
+        {/* Back link */}
+        <div className="container mx-auto px-4 pt-8">
+          <Link href="/" className="inline-flex items-center text-white/80 hover:text-white transition-colors">
+            ← Retour à l'accueil
+          </Link>
+        </div>
 
-          <p className="text-lg sm:text-xl text-center text-gray-300 mb-8 max-w-2xl mx-auto px-4">
-            Remplissez vos informations et recevez par email des automatisations qui vont faire exploser votre productivité
-          </p>
+        {/* Main content */}
+        <div className="flex-grow flex flex-col justify-center py-6 px-4">
+          <div className="container mx-auto max-w-5xl">
+            {/* Header */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-center mb-6"
+            >
+              <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3">
+                Générateur d'<RainbowText>Automatisations</RainbowText> Personnalisées
+              </h1>
+              <p className="text-base sm:text-lg text-white/80 max-w-2xl mx-auto">
+                En 2 minutes, obtenez des recommandations d'automatisations sur mesure pour votre entreprise
+              </p>
+            </motion.div>
 
-          <div className="mb-8">
-            <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
-              <motion.div
-                className="h-full bg-gradient-to-r from-orange-500 to-orange-600"
-                initial={{ width: "0%" }}
-                animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.5 }}
-              />
-            </div>
-          </div>
-
-          <Card className="p-4 sm:p-6 w-full bg-gray-800/50 border-gray-700">
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-2">{sections[currentSection].title}</h2>
-              {sections[currentSection].subtitle && (
-                <p className="text-gray-400">{sections[currentSection].subtitle}</p>
-              )}
-              {currentSection === 0 && (
-                <p className="text-sm text-orange-500 mt-2">* Ces champs sont obligatoires pour recevoir vos automatisations personnalisées</p>
-              )}
-              {currentSection !== 0 && (
-                <p className="text-sm text-blue-400 mt-2">Plus vous nous donnez d'informations, plus les automatisations proposées seront précises et adaptées à vos besoins</p>
-              )}
-            </div>
-
-            <Form {...form}>
-              <form className="space-y-6">
-                <div className="space-y-4">
-                  {sections[currentSection].fields.map(renderField)}
-                </div>
-
-                <div className="flex flex-col sm:flex-row justify-center sm:justify-between gap-4 mt-6">
-                  <Button
-                    type="submit"
-                    onClick={form.handleSubmit(onSubmit)}
-                    disabled={!isFormValid() || isSubmitting}
-                    className={`w-full sm:w-auto bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white ${
-                      (!isFormValid() || isSubmitting) ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
-                  >
-                    {isSubmitting ? (
-                      <div className="flex items-center gap-2">
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                        Envoi en cours...
+            {/* Form card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="backdrop-blur-lg bg-white/10 rounded-2xl border border-white/20 p-5 sm:p-6 shadow-2xl"
+            >
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  {/* Grid 2 colonnes sur desktop, empilé sur mobile */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-6">
+                    {/* Section 1: Contact - Gauche */}
+                    <div className="space-y-4">
+                      <div className="border-b border-white/20 pb-3">
+                        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+                          <span className="flex items-center justify-center w-7 h-7 rounded-full bg-orange-500 text-white text-sm font-bold">1</span>
+                          Vos coordonnées
+                        </h2>
+                        <p className="text-white/60 text-xs mt-1">Requis pour recevoir vos automatisations</p>
                       </div>
-                    ) : (
-                      'Recevoir mes automatisations'
-                    )}
-                  </Button>
 
-                  <div className="flex w-full justify-center sm:justify-start sm:w-auto gap-4">
-                    {currentSection > 0 && (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setCurrentSection(prev => prev - 1)}
-                        className="flex-1 max-w-[45%] sm:max-w-none sm:flex-none border-gray-600 text-gray-300 hover:bg-gray-700"
-                      >
-                        Précédent
-                      </Button>
-                    )}
-                    {currentSection < sections.length - 1 && (
-                      <Button
-                        type="button"
-                        onClick={() => setCurrentSection(currentSection + 1)}
-                        disabled={!isCurrentSectionValid()}
-                        className={`flex-1 max-w-[45%] sm:max-w-none sm:flex-none bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white ${
-                          !isCurrentSectionValid() ? 'opacity-50 cursor-not-allowed' : ''
-                        }`}
-                      >
-                        Suivant
-                      </Button>
-                    )}
+                      <FormField
+                        control={form.control}
+                        name="firstName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-white text-sm">Prénom <span className="text-orange-400">*</span></FormLabel>
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder="Jean"
+                                className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-orange-400 focus:ring-orange-400"
+                              />
+                            </FormControl>
+                            <FormMessage className="text-orange-300" />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="lastName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-white text-sm">Nom <span className="text-orange-400">*</span></FormLabel>
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder="Dupont"
+                                className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-orange-400 focus:ring-orange-400"
+                              />
+                            </FormControl>
+                            <FormMessage className="text-orange-300" />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-white text-sm">Email professionnel <span className="text-orange-400">*</span></FormLabel>
+                            <FormControl>
+                              <Input
+                                {...field}
+                                type="email"
+                                placeholder="jean.dupont@entreprise.fr"
+                                className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-orange-400 focus:ring-orange-400"
+                              />
+                            </FormControl>
+                            <FormMessage className="text-orange-300" />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="companyName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-white text-sm">Entreprise <span className="text-orange-400">*</span></FormLabel>
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder="Nom de votre entreprise"
+                                className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-orange-400 focus:ring-orange-400"
+                              />
+                            </FormControl>
+                            <FormMessage className="text-orange-300" />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    {/* Section 2: Contexte - Droite */}
+                    <div className="space-y-4">
+                      <div className="border-b border-white/20 pb-3">
+                        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+                          <span className="flex items-center justify-center w-7 h-7 rounded-full bg-blue-500 text-white text-sm font-bold">2</span>
+                          Votre contexte
+                        </h2>
+                        <p className="text-white/60 text-xs mt-1">
+                          Optionnel - Améliore la qualité de nos recommandations
+                        </p>
+                      </div>
+
+                      <FormField
+                        control={form.control}
+                        name="sector"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-white text-sm">Secteur d'activité</FormLabel>
+                            <FormControl>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <SelectTrigger className="bg-white/10 border-white/20 text-white">
+                                  <SelectValue placeholder="Sélectionnez votre secteur" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-gray-900 border-white/20">
+                                  {sectorOptions.map((option) => (
+                                    <SelectItem key={option} value={option} className="text-white hover:bg-white/10">
+                                      {option}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage className="text-orange-300" />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="challenge"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-white text-sm">
+                              Principal défi business
+                            </FormLabel>
+                            <FormControl>
+                              <Textarea
+                                {...field}
+                                placeholder="Ex: Trop de temps perdu sur la gestion des emails clients..."
+                                rows={3}
+                                className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-blue-400 focus:ring-blue-400 resize-none"
+                              />
+                            </FormControl>
+                            <FormMessage className="text-orange-300" />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="availability"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-white text-sm">Disponibilité pour un échange</FormLabel>
+                            <FormControl>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <SelectTrigger className="bg-white/10 border-white/20 text-white">
+                                  <SelectValue placeholder="Quand seriez-vous disponible ?" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-gray-900 border-white/20">
+                                  {availabilityOptions.map((option) => (
+                                    <SelectItem key={option} value={option} className="text-white hover:bg-white/10">
+                                      {option}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage className="text-orange-300" />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
-                </div>
-              </form>
-            </Form>
-          </Card>
+
+                  {/* Submit button */}
+                  <div className="pt-1">
+                    <Button
+                      type="submit"
+                      disabled={!isFormValid() || isSubmitting}
+                      className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold text-base py-5 rounded-xl shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center gap-3 justify-center">
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                          Envoi en cours...
+                        </div>
+                      ) : (
+                        '🚀 Recevoir mes automatisations'
+                      )}
+                    </Button>
+                    <p className="text-center text-white/50 text-xs mt-2">
+                      Vous recevrez vos recommandations par email sous 24h
+                    </p>
+                  </div>
+                </form>
+              </Form>
+            </motion.div>
+
+            {/* Trust signals */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="text-center mt-4 text-white/60 text-xs"
+            >
+              <p>✓ Gratuit et sans engagement • ✓ Réponse sous 24h • ✓ 100% personnalisé</p>
+            </motion.div>
+          </div>
         </div>
       </div>
+
+      {/* Custom cursor */}
+      <CustomCursor />
     </motion.div>
   );
 }
