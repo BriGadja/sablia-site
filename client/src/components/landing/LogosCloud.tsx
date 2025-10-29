@@ -37,8 +37,8 @@ const integrations: Integration[] = [
     imageUrl: "/logos/integrations/n8n.svg",
     category: "automation",
     categoryLabel: "Automatisation",
-    description: "Plateforme d'automatisation no-code open-source avec +400 intégrations natives",
-    useCase: "Synchronisation CRM → Sheets → Slack en temps réel",
+    description: "Notre plateforme de référence pour 90% de nos projets. Open-source, +400 intégrations natives, personnalisation illimitée et hébergement souverain possible.",
+    useCase: "Workflows complexes multi-branches : CRM → IA → Sheets → Slack avec logique conditionnelle avancée",
   },
   {
     id: 2,
@@ -186,30 +186,58 @@ export default function LogosCloud() {
 
           {/* Logos Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 lg:gap-12">
-            {integrations.map((integration, index) => (
-              <motion.div
-                key={integration.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.08 }}
-                className="flex items-center justify-center"
-              >
-                <HoverCard openDelay={200} closeDelay={100}>
-                  <HoverCardTrigger asChild>
+            {integrations.map((integration, index) => {
+              const isN8n = integration.name === "n8n";
+
+              return (
+                <motion.div
+                  key={integration.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  className="flex flex-col items-center justify-center gap-2"
+                >
+                  {/* Badge for n8n only */}
+                  {isN8n && (
                     <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      className="cursor-pointer flex items-center justify-center"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.5, duration: 0.3 }}
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-gradient-to-r from-v2-cyan/20 to-v2-magenta/20 text-v2-cyan border border-v2-cyan/30"
                     >
-                      <img
-                        src={integration.imageUrl}
-                        alt={`${integration.name} integration`}
-                        title={integration.name}
-                        className="h-12 lg:h-14 w-auto object-contain transition-all duration-300 opacity-60 hover:opacity-100"
-                      />
+                      <span className="text-xs">🌟</span>
+                      <span>Notre cœur de métier</span>
                     </motion.div>
-                  </HoverCardTrigger>
-                  <HoverCardContent className="w-80 bg-v2-navy/95 border border-v2-gray-700 backdrop-blur-sm p-4">
+                  )}
+
+                  <HoverCard openDelay={200} closeDelay={100}>
+                    <HoverCardTrigger asChild>
+                      <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        className={`cursor-pointer flex items-center justify-center ${
+                          isN8n ? "relative" : ""
+                        }`}
+                      >
+                        {/* Glow effect for n8n */}
+                        {isN8n && (
+                          <div className="absolute inset-0 blur-xl bg-v2-cyan/30 rounded-full animate-pulse" />
+                        )}
+                        <img
+                          src={integration.imageUrl}
+                          alt={`${integration.name} integration`}
+                          title={integration.name}
+                          className={`${
+                            isN8n ? "h-16 lg:h-20" : "h-12 lg:h-14"
+                          } w-auto object-contain transition-all duration-300 opacity-60 hover:opacity-100 relative z-10`}
+                        />
+                      </motion.div>
+                    </HoverCardTrigger>
+                  <HoverCardContent
+                    side={index >= 8 ? "top" : "bottom"}
+                    align="center"
+                    className="w-80 bg-v2-navy/95 border border-v2-gray-700 backdrop-blur-sm p-4"
+                  >
                     <div className="space-y-3">
                       {/* Category Badge */}
                       <div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium uppercase tracking-wide bg-v2-cyan/10 text-v2-cyan border border-v2-cyan/20">
@@ -237,7 +265,8 @@ export default function LogosCloud() {
                   </HoverCardContent>
                 </HoverCard>
               </motion.div>
-            ))}
+            );
+            })}
           </div>
 
           {/* Footer Text */}
