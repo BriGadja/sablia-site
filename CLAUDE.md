@@ -159,17 +159,19 @@ Extended FAQ documentation for customer support:
 - Onboarding documentation
 - SEO content source (FAQ schema markup)
 
-#### `sitemap.xml`
+#### `client/public/sitemap.xml`
 SEO sitemap for search engine crawlers:
 - All public pages with priorities and change frequencies
 - Canonical URLs (https://sablia.io)
 - Last modification dates
 - XML format compliant with sitemaps.org protocol
+- **Location**: `client/public/sitemap.xml` (copied to `dist/public/sitemap.xml` during build)
 
 **Purpose**:
 - Improve Google/Bing indexation
 - Signal page hierarchy to crawlers
 - SEO best practice compliance
+- Accessible at https://sablia.io/sitemap.xml in production
 
 **Maintenance**: Update lastmod dates when pages change significantly.
 
@@ -221,7 +223,7 @@ SEO-optimized meta-tags for all pages:
 - ✅ Updating contact information or processes
 - ✅ Adding new client testimonials or examples
 
-**Update `sitemap.xml`** when:
+**Update `client/public/sitemap.xml`** when:
 - ✅ Adding or removing pages/routes
 - ✅ Changing page priorities or frequencies
 - ✅ Making significant content updates (update lastmod)
@@ -247,7 +249,7 @@ SEO-optimized meta-tags for all pages:
    - `docs/content-index.json` for structured data
    - `docs/OFFRES.md` for service offerings
    - `docs/FAQ.md` for FAQ changes
-   - `sitemap.xml` for route or priority changes
+   - `client/public/sitemap.xml` for route or priority changes
    - `docs/meta-tags.json` for SEO updates
 2. Commit documentation changes alongside content changes
 3. Use commit message format:
@@ -258,7 +260,7 @@ SEO-optimized meta-tags for all pages:
    - Updated docs/SITE_CONTENT.md to reflect changes
    - Synced docs/content-index.json
    - [Optional] Updated docs/OFFRES.md with new pricing
-   - [Optional] Refreshed sitemap.xml lastmod dates
+   - [Optional] Refreshed client/public/sitemap.xml lastmod dates
 
    🤖 Generated with [Claude Code](https://claude.com/claude-code)
    Co-Authored-By: Claude <noreply@anthropic.com>
@@ -271,7 +273,7 @@ Before committing content changes, verify:
 - [ ] `docs/content-index.json` data structures are updated
 - [ ] `docs/OFFRES.md` pricing and offers are current (if applicable)
 - [ ] `docs/FAQ.md` questions/answers match site content (if applicable)
-- [ ] `sitemap.xml` lastmod dates updated for changed pages
+- [ ] `client/public/sitemap.xml` lastmod dates updated for changed pages
 - [ ] `docs/meta-tags.json` reflects new/updated page metadata (if applicable)
 - [ ] Last updated date is current in all docs (format: YYYY-MM-DD)
 - [ ] No placeholder or outdated information remains
