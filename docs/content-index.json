@@ -1,0 +1,414 @@
+{
+  "siteName": "Sablia",
+  "domain": "sablia.io",
+  "lastUpdated": "2025-10-29",
+  "description": "Services d'automatisation business et IA pour PME françaises",
+  "valueProposition": "Formation des équipes + installation des systèmes + maintien du contrôle",
+  "targetAudience": "PME et ETI françaises (10-250 personnes)",
+
+  "pages": [
+    {
+      "path": "/",
+      "name": "Homepage / Landing",
+      "title": "L'IA au service de votre croissance",
+      "description": "Page principale avec présentation complète des services et conversion leads",
+      "sections": [
+        {
+          "id": "hero",
+          "name": "Hero Section",
+          "headline": "L'IA au service de votre croissance",
+          "subheadline": "On forme vos équipes. On installe les systèmes. Vous gardez le contrôle.",
+          "ctaPrimary": "Diagnostic Gratuit",
+          "ctaSecondary": "Calculer mon ROI"
+        },
+        {
+          "id": "testimonials",
+          "name": "Testimonials Section",
+          "title": "Des résultats mesurables",
+          "testimonialsCount": 5,
+          "keyResults": [
+            "90% temps gagné (GirlsGang - génération menus)",
+            "Avantage compétitif décisif (veille concurrentielle)",
+            "Taux conversion amélioré (Norloc - agent vocal)",
+            "Milliers contacts réactivés (Stefano Design)",
+            "Organisation transformée (BTP - gestion interventions)"
+          ]
+        },
+        {
+          "id": "problem",
+          "name": "Problem Section",
+          "title": "Les défis de l'automatisation",
+          "problems": [
+            "Temps perdu sur tâches répétitives",
+            "Erreurs humaines coûteuses",
+            "Croissance limitée par manque d'outils"
+          ]
+        },
+        {
+          "id": "solution",
+          "name": "Solution Section",
+          "title": "La méthode Sablia",
+          "pillars": [
+            "Diagnostic Complet",
+            "Solutions Spécifiques",
+            "Sécurité & Conformité",
+            "ROI Mesurable"
+          ]
+        },
+        {
+          "id": "process",
+          "name": "Process Section",
+          "title": "Notre processus en 3 étapes",
+          "steps": [
+            {
+              "number": 1,
+              "title": "Découvrir",
+              "description": "Audit de vos processus actuels",
+              "duration": "Modulaire",
+              "options": ["Audit Express (1h30)", "Audit Complet (1-2 semaines)"]
+            },
+            {
+              "number": 2,
+              "title": "Implémenter",
+              "description": "Formation et/ou développement workflows",
+              "duration": "Modulaire",
+              "options": ["Formation (1-5 jours)", "Développement (2-8 semaines)", "Hybride"]
+            },
+            {
+              "number": 3,
+              "title": "Optimiser & Accompagner",
+              "description": "Adaptations basées sur retours terrain",
+              "duration": "Continu"
+            }
+          ]
+        },
+        {
+          "id": "pricing",
+          "name": "Pricing Section",
+          "title": "Nos offres",
+          "columns": [
+            {
+              "category": "Audit & Consulting",
+              "offers": [
+                {
+                  "name": "Appel Découverte",
+                  "price": "GRATUIT",
+                  "duration": "30 min"
+                },
+                {
+                  "name": "Audit Express",
+                  "price": "350€",
+                  "duration": "1h30"
+                },
+                {
+                  "name": "Audit Complet",
+                  "price": "2 000-5 000€",
+                  "duration": "1-2 semaines"
+                }
+              ]
+            },
+            {
+              "category": "Formations",
+              "offers": [
+                {
+                  "name": "Formation Demi-Journée",
+                  "price": "700€",
+                  "duration": "3h30"
+                },
+                {
+                  "name": "Formation 1 Jour",
+                  "price": "1 200€",
+                  "duration": "7h"
+                },
+                {
+                  "name": "Formation 2-3 Jours",
+                  "price": "2 200-3 300€",
+                  "duration": "14-21h"
+                }
+              ]
+            },
+            {
+              "category": "Solutions d'automatisation",
+              "offers": [
+                {
+                  "name": "Workflow Simple",
+                  "price": "2 500-5 000€",
+                  "duration": "3-7 jours"
+                },
+                {
+                  "name": "Système Standard",
+                  "price": "8 000-18 000€",
+                  "duration": "2-4 semaines"
+                },
+                {
+                  "name": "Transformation Complète",
+                  "price": "25 000-60 000€",
+                  "duration": "6-12 semaines",
+                  "roi": "50 000-150 000€ année 1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "calculator",
+          "name": "Calculator ROI Section",
+          "title": "Calculateur ROI",
+          "cta": "Calculer mon ROI"
+        },
+        {
+          "id": "contact",
+          "name": "Contact Form Section",
+          "title": "Diagnostic Gratuit",
+          "formFields": ["name", "email", "company", "message"],
+          "integration": "Calendly"
+        },
+        {
+          "id": "faq",
+          "name": "FAQ Section",
+          "title": "Questions fréquentes",
+          "questionsCount": 8,
+          "topQuestions": [
+            "Quels outils d'automatisation utilisez-vous ?",
+            "Combien de temps pour automatiser un processus ?",
+            "Compétences techniques nécessaires ?",
+            "ROI typique ?",
+            "Support après mise en production ?"
+          ]
+        }
+      ],
+      "ctaPrimary": "Diagnostic Gratuit",
+      "ctaSecondary": "Calculer mon ROI"
+    },
+    {
+      "path": "/about",
+      "name": "À propos",
+      "title": "À propos - Brice Gachadoat",
+      "description": "Présentation de l'expert, storytelling personnel et crédibilité",
+      "mainContent": {
+        "expert": "Brice Gachadoat",
+        "title": "Expert en automatisation et intelligence artificielle",
+        "experience": "10+ ans en gestion de projets IT, Data et automatisation",
+        "background": ["MeltOne Advisory", "LVMH"],
+        "personalStory": {
+          "trigger": "Aider sa femme nutritionniste",
+          "results": [
+            "90% temps gagné sur génération menus",
+            "70% temps gagné sur tâches administratives",
+            "60% plus de clientes sans augmentation charge travail"
+          ]
+        },
+        "tools": ["n8n (principal)", "Make.com", "Notion", "Airtable", "Supabase"],
+        "sectors": ["Conseil", "Marketing", "Formation", "Événementiel", "ESN", "Entrepreneurs"]
+      },
+      "ctaPrimary": {
+        "text": "Réservez un appel découverte gratuit",
+        "url": "https://calendly.com/brice-gachadoat/30min"
+      }
+    },
+    {
+      "path": "/gap",
+      "name": "GAP Analysis",
+      "title": "Générateur d'Automatisations Personnalisées",
+      "description": "Formulaire de qualification pour recommandations automatisations sur mesure",
+      "formSections": [
+        {
+          "section": "Vos coordonnées",
+          "required": true,
+          "fields": ["firstName", "lastName", "email", "companyName"]
+        },
+        {
+          "section": "Votre contexte",
+          "required": false,
+          "fields": [
+            {
+              "name": "sector",
+              "type": "select",
+              "options": [
+                "E-commerce",
+                "Marketing & Communication",
+                "Services B2B",
+                "Industrie & Manufacturing",
+                "Tech & Software",
+                "Santé & Bien-être",
+                "Finance & Assurance",
+                "Autre"
+              ]
+            },
+            {
+              "name": "challenge",
+              "type": "textarea"
+            },
+            {
+              "name": "availability",
+              "type": "select",
+              "options": [
+                "Cette semaine",
+                "Semaine prochaine",
+                "Dans 2 semaines",
+                "Flexible"
+              ]
+            }
+          ]
+        }
+      ],
+      "ctaPrimary": "🚀 Recevoir mes automatisations",
+      "trustSignals": [
+        "Gratuit et sans engagement",
+        "Réponse sous 24h",
+        "100% personnalisé"
+      ],
+      "postSubmit": "Redirection vers / avec toast confirmation"
+    },
+    {
+      "path": "/tarifs",
+      "name": "Tarifs",
+      "title": "Nos offres et tarifs",
+      "description": "Grille tarifaire complète détaillée (identique à section pricing homepage)",
+      "content": "Voir section pricing de la homepage pour détails complets"
+    },
+    {
+      "path": "/roi",
+      "name": "Calculateur ROI",
+      "title": "Calculateur ROI Automatisation",
+      "description": "Outil interactif pour estimer économies potentielles",
+      "inputs": [
+        "Nombre d'employés",
+        "Heures/semaine sur tâches répétitives",
+        "Coût horaire moyen",
+        "Processus à automatiser"
+      ],
+      "outputs": [
+        "Économies annuelles estimées",
+        "ROI en mois",
+        "Temps libéré par an"
+      ]
+    }
+  ],
+
+  "legalPages": [
+    {
+      "path": "/politique-confidentialite",
+      "name": "Politique de Confidentialité",
+      "content": "Collecte et traitement données personnelles, conformité RGPD"
+    },
+    {
+      "path": "/cgv",
+      "name": "Conditions Générales de Vente",
+      "content": "Modalités de prestation, tarification, garanties"
+    },
+    {
+      "path": "/mentions-legales",
+      "name": "Mentions Légales",
+      "content": "Informations légales entreprise, hébergement, propriété intellectuelle"
+    }
+  ],
+
+  "navigation": {
+    "mainMenu": [
+      { "label": "Services", "target": "#solution" },
+      { "label": "Processus", "target": "#process" },
+      { "label": "Tarifs", "target": "#pricing" },
+      { "label": "À propos", "target": "/about" },
+      { "label": "Contact", "target": "#contact" }
+    ],
+    "ctaButton": {
+      "text": "Démarrer",
+      "target": "#contact"
+    }
+  },
+
+  "footer": {
+    "columns": [
+      {
+        "title": "Services",
+        "links": [
+          "Audit & Consulting",
+          "Formations",
+          "Solutions d'automatisation"
+        ]
+      },
+      {
+        "title": "Ressources",
+        "links": [
+          { "label": "À propos", "url": "/about" },
+          { "label": "Tarifs", "url": "/tarifs" },
+          { "label": "ROI Calculator", "url": "/roi" },
+          { "label": "FAQ", "url": "/#faq" }
+        ]
+      },
+      {
+        "title": "Légal",
+        "links": [
+          { "label": "Politique de confidentialité", "url": "/politique-confidentialite" },
+          { "label": "CGV", "url": "/cgv" },
+          { "label": "Mentions légales", "url": "/mentions-legales" }
+        ]
+      },
+      {
+        "title": "Contact",
+        "links": [
+          { "label": "Email", "value": "brice@sablia.io" },
+          { "label": "Calendly", "url": "https://calendly.com/brice-gachadoat/30min" }
+        ]
+      }
+    ]
+  },
+
+  "keyMessaging": {
+    "tagline": "L'IA au service de votre croissance",
+    "subtagline": "On forme vos équipes. On installe les systèmes. Vous gardez le contrôle.",
+    "differentiators": [
+      "Formation-First: Autonomisation vs simple développement",
+      "Modulaire: 350€ à 60k€",
+      "Souveraineté: Outils européens (n8n, Make.com)",
+      "ROI mesurable: 50-150k€ économies annuelles",
+      "Approche humaine: Expert individuel vs agence"
+    ],
+    "proofPoints": [
+      "10+ ans expérience IT/Data",
+      "Parcours MeltOne Advisory + LVMH",
+      "5 témoignages clients vérifiables",
+      "Secteurs diversifiés accompagnés"
+    ]
+  },
+
+  "integrations": {
+    "calendly": {
+      "url": "https://calendly.com/brice-gachadoat/30min",
+      "duration": "30min",
+      "type": "Appel découverte gratuit"
+    },
+    "n8nWebhook": {
+      "form": "GAP Analysis",
+      "envVar": "VITE_N8N_WEBHOOK_URL"
+    }
+  },
+
+  "technicalInfo": {
+    "stack": {
+      "frontend": "React 18 + TypeScript + Vite + Wouter",
+      "backend": "Express.js + TypeScript",
+      "database": "PostgreSQL + Drizzle ORM",
+      "ui": "Radix UI + shadcn/ui + Tailwind CSS",
+      "animations": "Framer Motion + GSAP + TSParticles"
+    },
+    "theme": {
+      "name": "v3",
+      "colors": {
+        "primary": {
+          "navy": "#0A2463",
+          "electric": "#3E92CC",
+          "cyan": "#52D1DC"
+        },
+        "secondary": {
+          "charcoal": "#2D3142",
+          "brown": "#3d2f1f"
+        },
+        "accent": {
+          "orange": "#FFA559"
+        }
+      }
+    }
+  }
+}
