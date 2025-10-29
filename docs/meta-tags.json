@@ -1,0 +1,323 @@
+{
+  "meta": {
+    "siteName": "Sablia",
+    "domain": "https://sablia.io",
+    "author": "Sablia",
+    "locale": "fr_FR",
+    "twitterHandle": "@sablia_io",
+    "defaultImage": "https://sablia.io/og-image.png",
+    "lastUpdated": "2025-10-29"
+  },
+
+  "pages": {
+    "/": {
+      "title": "Sablia - Automatisation IA pour PME | n8n & Make.com",
+      "titleTemplate": "%s | Formation + Développement d'Automatisations",
+      "description": "Automatisez vos processus métier avec Sablia. Formation de vos équipes + développement de workflows n8n/Make.com. ROI mesurable. Audit gratuit 30 min.",
+      "keywords": [
+        "automatisation business",
+        "n8n",
+        "Make.com",
+        "automatisation PME",
+        "workflow automation",
+        "IA entreprise",
+        "transformation digitale",
+        "ROI automatisation",
+        "formation n8n",
+        "consultant automatisation"
+      ],
+      "canonical": "https://sablia.io/",
+      "openGraph": {
+        "type": "website",
+        "title": "Sablia - Automatisation IA pour PME françaises",
+        "description": "Formation de vos équipes + installation de workflows automatisés. Gardez le contrôle, économisez 50-150k€/an. n8n & Make.com.",
+        "url": "https://sablia.io/",
+        "image": "https://sablia.io/og-image-home.png",
+        "imageAlt": "Sablia - Automatisation business et IA pour PME",
+        "siteName": "Sablia"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "Sablia - Automatisation IA pour PME",
+        "description": "Formation + développement d'automatisations. ROI mesurable. Audit gratuit.",
+        "image": "https://sablia.io/twitter-image-home.png",
+        "creator": "@sablia_io"
+      },
+      "structuredData": {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Sablia",
+        "url": "https://sablia.io",
+        "logo": "https://sablia.io/logo.png",
+        "description": "Services d'automatisation business et IA pour PME françaises",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "FR"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "Sales",
+          "email": "contact@sablia.io",
+          "availableLanguage": "French"
+        },
+        "sameAs": [
+          "https://linkedin.com/company/sablia",
+          "https://twitter.com/sablia_io"
+        ]
+      }
+    },
+
+    "/tarifs": {
+      "title": "Tarifs Automatisation - Offres & Packages | Sablia",
+      "description": "Découvrez nos offres d'automatisation : Audit (gratuit-2000€), Formations (1200-3000€), Solutions (2500-60000€). Paiement échelonné. Devis personnalisé gratuit.",
+      "keywords": [
+        "tarif automatisation",
+        "prix n8n",
+        "coût Make.com",
+        "devis automatisation",
+        "prix formation n8n",
+        "tarif consultant automatisation",
+        "ROI automatisation",
+        "budget transformation digitale"
+      ],
+      "canonical": "https://sablia.io/tarifs",
+      "openGraph": {
+        "type": "website",
+        "title": "Tarifs & Offres d'Automatisation | Sablia",
+        "description": "Audit gratuit, formations 1200-3000€, solutions 2500-60000€. ROI 4-12 mois. Paiement échelonné disponible.",
+        "url": "https://sablia.io/tarifs",
+        "image": "https://sablia.io/og-image-tarifs.png",
+        "siteName": "Sablia"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "Tarifs Automatisation | Sablia",
+        "description": "Offres modulaires : Audit, Formations, Solutions. ROI 4-12 mois.",
+        "image": "https://sablia.io/twitter-image-tarifs.png"
+      },
+      "structuredData": {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Offres Sablia",
+        "description": "Services d'automatisation pour PME",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "name": "Appel Découverte",
+            "price": "0",
+            "priceCurrency": "EUR"
+          },
+          {
+            "@type": "Offer",
+            "name": "Audit Express",
+            "price": "350",
+            "priceCurrency": "EUR"
+          },
+          {
+            "@type": "Offer",
+            "name": "Diagnostic Complet",
+            "price": "2000",
+            "priceCurrency": "EUR"
+          }
+        ]
+      }
+    },
+
+    "/gap": {
+      "title": "Analyse GAP Gratuite - Évaluez votre Potentiel d'Automatisation",
+      "description": "Formulaire d'analyse GAP gratuit. Identifiez vos opportunités d'automatisation et estimez vos économies potentielles. Réponse sous 24h.",
+      "keywords": [
+        "analyse GAP",
+        "audit automatisation gratuit",
+        "diagnostic entreprise",
+        "évaluation processus",
+        "opportunités automatisation",
+        "audit digital gratuit"
+      ],
+      "canonical": "https://sablia.io/gap",
+      "openGraph": {
+        "type": "website",
+        "title": "Analyse GAP Gratuite | Sablia",
+        "description": "Formulaire gratuit pour identifier vos opportunités d'automatisation. Réponse personnalisée sous 24h.",
+        "url": "https://sablia.io/gap",
+        "image": "https://sablia.io/og-image-gap.png",
+        "siteName": "Sablia"
+      },
+      "twitter": {
+        "card": "summary",
+        "title": "Analyse GAP Gratuite | Sablia",
+        "description": "Identifiez vos opportunités d'automatisation. Réponse sous 24h.",
+        "image": "https://sablia.io/twitter-image-gap.png"
+      }
+    },
+
+    "/roi": {
+      "title": "Calculateur ROI Automatisation - Estimez vos Économies | Sablia",
+      "description": "Calculez le ROI de vos projets d'automatisation. Estimez vos économies en temps, argent, et productivité. Outil gratuit, résultats instantanés.",
+      "keywords": [
+        "calculateur ROI",
+        "ROI automatisation",
+        "calcul économies automatisation",
+        "retour sur investissement n8n",
+        "estimation gains automatisation",
+        "calculer ROI workflow"
+      ],
+      "canonical": "https://sablia.io/roi",
+      "openGraph": {
+        "type": "website",
+        "title": "Calculateur ROI Automatisation | Sablia",
+        "description": "Estimez vos économies en automatisant vos processus. Résultats instantanés. Gratuit.",
+        "url": "https://sablia.io/roi",
+        "image": "https://sablia.io/og-image-roi.png",
+        "siteName": "Sablia"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "Calculateur ROI Automatisation | Sablia",
+        "description": "Estimez vos économies potentielles. Gratuit et instantané.",
+        "image": "https://sablia.io/twitter-image-roi.png"
+      },
+      "structuredData": {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Calculateur ROI Automatisation Sablia",
+        "url": "https://sablia.io/roi",
+        "applicationCategory": "BusinessApplication",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "EUR"
+        }
+      }
+    },
+
+    "/about": {
+      "title": "À propos de Sablia - Experts en Automatisation Business",
+      "description": "Sablia accompagne les PME françaises dans leur transformation digitale avec n8n et Make.com. Approche Formation-First. Souveraineté des données garantie.",
+      "keywords": [
+        "Sablia",
+        "consultant automatisation",
+        "expert n8n France",
+        "formation Make.com",
+        "transformation digitale PME",
+        "automatisation souveraine"
+      ],
+      "canonical": "https://sablia.io/about",
+      "openGraph": {
+        "type": "website",
+        "title": "À propos de Sablia | Experts Automatisation PME",
+        "description": "Nous accompagnons les PME françaises dans leur transformation digitale. Formation + développement.",
+        "url": "https://sablia.io/about",
+        "image": "https://sablia.io/og-image-about.png",
+        "siteName": "Sablia"
+      },
+      "twitter": {
+        "card": "summary",
+        "title": "À propos de Sablia",
+        "description": "Experts en automatisation business pour PME françaises.",
+        "image": "https://sablia.io/twitter-image-about.png"
+      }
+    },
+
+    "/mentions-legales": {
+      "title": "Mentions Légales - Sablia",
+      "description": "Mentions légales du site Sablia.io. Informations légales, hébergement, propriété intellectuelle.",
+      "keywords": [
+        "mentions légales",
+        "informations légales Sablia"
+      ],
+      "canonical": "https://sablia.io/mentions-legales",
+      "robots": "noindex, follow",
+      "openGraph": {
+        "type": "website",
+        "title": "Mentions Légales | Sablia",
+        "url": "https://sablia.io/mentions-legales",
+        "siteName": "Sablia"
+      }
+    },
+
+    "/politique-confidentialite": {
+      "title": "Politique de Confidentialité - Sablia",
+      "description": "Politique de confidentialité et gestion des données personnelles de Sablia.io. Conformité RGPD.",
+      "keywords": [
+        "politique confidentialité",
+        "RGPD",
+        "données personnelles Sablia"
+      ],
+      "canonical": "https://sablia.io/politique-confidentialite",
+      "robots": "noindex, follow",
+      "openGraph": {
+        "type": "website",
+        "title": "Politique de Confidentialité | Sablia",
+        "url": "https://sablia.io/politique-confidentialite",
+        "siteName": "Sablia"
+      }
+    },
+
+    "/cgv": {
+      "title": "Conditions Générales de Vente - Sablia",
+      "description": "Conditions générales de vente des services Sablia. Modalités de paiement, livraison, garanties.",
+      "keywords": [
+        "CGV",
+        "conditions générales vente Sablia",
+        "modalités paiement"
+      ],
+      "canonical": "https://sablia.io/cgv",
+      "robots": "noindex, follow",
+      "openGraph": {
+        "type": "website",
+        "title": "CGV | Sablia",
+        "url": "https://sablia.io/cgv",
+        "siteName": "Sablia"
+      }
+    }
+  },
+
+  "globalMetaTags": {
+    "viewport": "width=device-width, initial-scale=1.0",
+    "charset": "utf-8",
+    "theme-color": "#01F2EF",
+    "robots": "index, follow",
+    "googlebot": "index, follow",
+    "author": "Sablia",
+    "language": "fr",
+    "revisit-after": "7 days"
+  },
+
+  "implementation": {
+    "notes": [
+      "Utiliser react-helmet-async ou Next.js Head pour injecter les meta-tags",
+      "Générer les images Open Graph (og-image-*.png) avec dimensions 1200x630px",
+      "Générer les images Twitter Card (twitter-image-*.png) avec dimensions 1200x600px",
+      "Ajouter balise <link rel='canonical'> pour éviter duplicate content",
+      "Implémenter structured data (JSON-LD) dans <script type='application/ld+json'>",
+      "Tester avec Google Rich Results Test et Facebook Sharing Debugger",
+      "Mettre à jour lastmod dans sitemap.xml lors de changements de meta-tags"
+    ],
+    "priorityActions": [
+      "1. Créer les images Open Graph pour chaque page principale",
+      "2. Implémenter les meta-tags dans les composants de page",
+      "3. Valider avec Google Search Console",
+      "4. Tester les partages sociaux (Facebook, LinkedIn, Twitter)",
+      "5. Monitorer les CTR dans Google Search Console après déploiement"
+    ]
+  },
+
+  "seoRecommendations": {
+    "titleOptimization": {
+      "length": "50-60 caractères idéalement",
+      "structure": "Mot-clé principal | Bénéfice | Marque",
+      "example": "Automatisation IA pour PME | ROI Mesurable | Sablia"
+    },
+    "descriptionOptimization": {
+      "length": "150-160 caractères idéalement",
+      "structure": "Bénéfice + Détails + CTA",
+      "example": "Automatisez vos processus avec n8n/Make.com. Formation + développement. ROI 4-12 mois. Audit gratuit."
+    },
+    "keywordsStrategy": {
+      "primary": ["automatisation business", "n8n", "Make.com"],
+      "secondary": ["workflow automation", "transformation digitale PME", "ROI automatisation"],
+      "longTail": ["formation n8n pour PME", "consultant automatisation France", "automatisation souveraine données"]
+    }
+  }
+}

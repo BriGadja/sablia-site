@@ -95,6 +95,200 @@ The site uses **Landing** as the homepage (`/` route):
 - `/tarifs` - Pricing page
 - `/roi` - ROI calculator
 
+## Site Content Documentation
+
+**CRITICAL**: The site content is fully documented in `docs/` for LLM accessibility and consistency.
+
+### Documentation Files
+
+#### `docs/SITE_CONTENT.md`
+Comprehensive markdown documentation of ALL site content:
+- Complete page structure and sections
+- All headlines, copy, and CTAs
+- Pricing tables and offers
+- Testimonials and social proof
+- FAQ questions and answers
+- Navigation and footer content
+- Design system (colors, animations, effects)
+- Key messaging and differentiators
+
+**Purpose**:
+- Enable LLMs to understand site content without browsing
+- Serve as single source of truth for content
+- Facilitate content updates and translations
+- Support SEO and marketing alignment
+
+#### `docs/content-index.json`
+Structured JSON index of site content:
+- Programmatic access to all pages and sections
+- Metadata for each page (title, description, CTAs)
+- Pricing data structure
+- Navigation and footer structure
+- Technical stack and theme information
+
+**Purpose**:
+- Machine-readable content for automated tools
+- Quick lookup for specific content elements
+- Integration with CMS or content pipelines
+
+#### `docs/OFFRES.md`
+Detailed documentation of all Sablia service offerings:
+- **3 categories**: Audit & Consulting, Formations, Solutions d'automatisation
+- Complete descriptions with pricing, deliverables, and timelines
+- Target audiences and use cases
+- Technical specifications and prerequisites
+- ROI calculations and examples
+
+**Purpose**:
+- Sales and commercial reference
+- Onboarding guide for new team members
+- Client proposal foundation
+- Service catalog maintenance
+
+#### `docs/FAQ.md`
+Extended FAQ documentation for customer support:
+- **8 categories**: Tools, Delays, Skills, ROI, Support, Approach, Pricing, Security
+- 30+ questions with detailed answers
+- Client success examples and testimonials
+- Troubleshooting and edge cases
+- Glossary of technical terms
+
+**Purpose**:
+- First-line customer support resource
+- Sales objection handling
+- Onboarding documentation
+- SEO content source (FAQ schema markup)
+
+#### `sitemap.xml`
+SEO sitemap for search engine crawlers:
+- All public pages with priorities and change frequencies
+- Canonical URLs (https://sablia.io)
+- Last modification dates
+- XML format compliant with sitemaps.org protocol
+
+**Purpose**:
+- Improve Google/Bing indexation
+- Signal page hierarchy to crawlers
+- SEO best practice compliance
+
+**Maintenance**: Update lastmod dates when pages change significantly.
+
+#### `docs/meta-tags.json`
+SEO-optimized meta-tags for all pages:
+- Title tags (50-60 chars) with keyword optimization
+- Meta descriptions (150-160 chars) for SERP CTR
+- Open Graph tags (Facebook, LinkedIn)
+- Twitter Card tags
+- Structured data (JSON-LD) for rich snippets
+- Implementation notes and testing checklist
+
+**Purpose**:
+- Improve search engine rankings
+- Optimize social media sharing previews
+- Increase click-through rates from search results
+- Enable rich snippets in Google
+
+**Maintenance**: Update when page content changes or when launching new pages.
+
+### Maintenance Protocol
+
+**IMPORTANT**: These documentation files MUST be kept in sync with actual site content.
+
+#### When to Update
+
+**Update `docs/SITE_CONTENT.md` and `docs/content-index.json`** when:
+- ✅ Modifying any text on landing page sections
+- ✅ Changing pricing, offers, or packages
+- ✅ Adding/removing/editing testimonials
+- ✅ Updating FAQ questions or answers
+- ✅ Changing CTAs or navigation items
+- ✅ Modifying page structure or adding new sections
+- ✅ Updating contact information or links
+- ✅ Changing color palette or design system
+- ✅ Adding or removing pages
+
+**Update `docs/OFFRES.md`** when:
+- ✅ Changing pricing or package details
+- ✅ Adding/removing service offerings
+- ✅ Modifying deliverables or timelines
+- ✅ Updating ROI calculations or examples
+- ✅ Changing target audience descriptions
+
+**Update `docs/FAQ.md`** when:
+- ✅ Adding new frequently asked questions
+- ✅ Modifying answers based on customer feedback
+- ✅ Adding new categories or reorganizing content
+- ✅ Updating contact information or processes
+- ✅ Adding new client testimonials or examples
+
+**Update `sitemap.xml`** when:
+- ✅ Adding or removing pages/routes
+- ✅ Changing page priorities or frequencies
+- ✅ Making significant content updates (update lastmod)
+- ✅ Restructuring site navigation
+
+**Update `docs/meta-tags.json`** when:
+- ✅ Launching new pages
+- ✅ Changing page titles or descriptions
+- ✅ Updating SEO keywords strategy
+- ✅ Creating new Open Graph images
+- ✅ Modifying structured data
+
+#### How to Update
+
+**For PRP-based changes**:
+1. Include content documentation update in PRP validation steps
+2. Verify documentation matches implementation before completing
+3. Add specific task in TodoWrite to update documentation
+
+**For direct changes**:
+1. After modifying site content, immediately update relevant docs:
+   - `docs/SITE_CONTENT.md` for page content
+   - `docs/content-index.json` for structured data
+   - `docs/OFFRES.md` for service offerings
+   - `docs/FAQ.md` for FAQ changes
+   - `sitemap.xml` for route or priority changes
+   - `docs/meta-tags.json` for SEO updates
+2. Commit documentation changes alongside content changes
+3. Use commit message format:
+   ```
+   feat: Update [section] content + sync documentation
+
+   - Modified [specific content change]
+   - Updated docs/SITE_CONTENT.md to reflect changes
+   - Synced docs/content-index.json
+   - [Optional] Updated docs/OFFRES.md with new pricing
+   - [Optional] Refreshed sitemap.xml lastmod dates
+
+   🤖 Generated with [Claude Code](https://claude.com/claude-code)
+   Co-Authored-By: Claude <noreply@anthropic.com>
+   ```
+
+#### Validation Checklist
+
+Before committing content changes, verify:
+- [ ] `docs/SITE_CONTENT.md` reflects all text changes
+- [ ] `docs/content-index.json` data structures are updated
+- [ ] `docs/OFFRES.md` pricing and offers are current (if applicable)
+- [ ] `docs/FAQ.md` questions/answers match site content (if applicable)
+- [ ] `sitemap.xml` lastmod dates updated for changed pages
+- [ ] `docs/meta-tags.json` reflects new/updated page metadata (if applicable)
+- [ ] Last updated date is current in all docs (format: YYYY-MM-DD)
+- [ ] No placeholder or outdated information remains
+- [ ] All URLs and links are correct (sablia.io, not other domains)
+
+### Why This Matters
+
+Maintaining accurate content documentation:
+- ✅ Enables Claude Code to answer content questions instantly
+- ✅ Prevents content drift and inconsistencies
+- ✅ Facilitates collaboration with copywriters/marketers
+- ✅ Supports A/B testing and content experiments
+- ✅ Creates audit trail for content evolution
+- ✅ Enables automated content analysis and SEO optimization
+
+**Golden Rule**: Code and content documentation should always match reality. When in doubt, verify against live site or actual component code.
+
 ## Visual Validation with Playwright MCP
 
 When making design changes to the Landing page or other visual components, **ALWAYS** use Playwright MCP integration to validate changes before committing:
