@@ -48,7 +48,7 @@ export default function CGV() {
               <p><strong>Site web :</strong> sablia.io</p>
               <p><strong>Email :</strong> <a href="mailto:brice@sablia.io" className="text-orange-500 hover:text-orange-400">brice@sablia.io</a></p>
               <p><strong>Téléphone :</strong> +33 6 25 42 68 38</p>
-              <p className="mt-4"><strong>Activité principale :</strong> Conseil, formation et développement d'automatisations, de Chatbots et agents vocaux alimentés à l'Intelligence Artificielle.</p>
+              <p className="mt-4"><strong>Activité principale :</strong> Conseil, formation et développement d'automatisations et d'agents IA alimentés à l'Intelligence Artificielle.</p>
               <p><strong>Responsable de publication :</strong> GACHADOAT Brice</p>
             </div>
           </section>
@@ -68,7 +68,7 @@ export default function CGV() {
                 <li>Formations (présentiel ou distanciel)</li>
                 <li>Conseils et audits</li>
                 <li>Développements spécifiques d'automatisations</li>
-                <li>Développements de chatbots et agents conversationnels</li>
+                <li>Développements d'agents IA et solutions d'automatisation intelligente</li>
                 <li>Missions de conseil en transformation numérique</li>
                 <li>Prestations de paramétrage et intégration</li>
               </ul>

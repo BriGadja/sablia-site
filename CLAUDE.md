@@ -63,7 +63,6 @@ The Express server (port 5000) serves both API and client:
 
 ## Key Integrations
 
-- **Voiceflow**: Chatbot integration for customer support
 - **Calendly**: Appointment scheduling system
 - **TSParticles**: Background animations
 

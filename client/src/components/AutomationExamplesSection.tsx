@@ -16,19 +16,6 @@ import {
 const examples = [
   {
     id: 1,
-    title: "🤖 Chatbot FAQ & Support Client Automatisé",
-    subtitle: "Assistance instantanée 24/7 pour une expérience client fluide",
-    features: [
-      "Réponses automatisées aux questions fréquentes grâce à l'IA",
-      "Intégration multi-canaux (site web, Messenger, WhatsApp)",
-      "Escalade intelligente vers un conseiller pour les cas complexes"
-    ],
-    quote: "Le compagnon digital qui répond à vos clients, même quand vous dormez.",
-    gain: "Réduisez vos coûts de support de 60% en 3 mois",
-    icon: MessageCircle
-  },
-  {
-    id: 2,
     title: "🧠 Votre propre assistant personnel",
     subtitle: "Un collaborateur virtuel disponible 24/7",
     features: [
@@ -41,7 +28,7 @@ const examples = [
     icon: Mail
   },
   {
-    id: 3,
+    id: 2,
     title: "🎯 Onboarding client automatisé",
     subtitle: "Pour freelances/agences qui scalent",
     features: [
@@ -54,7 +41,7 @@ const examples = [
     icon: FolderGit2
   },
   {
-    id: 4,
+    id: 3,
     title: "⚡ Devis pros en 2 minutes chrono",
     subtitle: "Pour commerciaux qui détestent l'admin",
     features: [
@@ -67,11 +54,11 @@ const examples = [
     icon: FileCheck
   },
   {
-    id: 5,
+    id: 4,
     title: "📄 Génération de documents templatés",
     subtitle: "Automatisation intelligente de vos documents",
     features: [
-      "Création de documents à partir de formulaires ou conversations chatbot",
+      "Création de documents à partir de formulaires ou données clients",
       "Transformation automatique de CV au format de votre entreprise",
       "Templates personnalisables pour tout type de document professionnel"
     ],
@@ -80,7 +67,7 @@ const examples = [
     icon: FileText
   },
   {
-    id: 6,
+    id: 5,
     title: "🎥 Générateur de contenu 2.0",
     subtitle: "Pour agences marketing et créateurs pressés",
     features: [

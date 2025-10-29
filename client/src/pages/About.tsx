@@ -68,7 +68,7 @@ export default function About() {
             </li>
             <li className="flex items-start">
               <span className="mr-2">💬</span>
-              <span><strong>Développement d'agents conversationnels intelligents</strong> — Par exemple, un chatbot capable de qualifier vos prospects et générer des propositions commerciales sur mesure</span>
+              <span><strong>Automatisations intelligentes de qualification</strong> — Systèmes automatisés capables de qualifier vos prospects et générer des propositions commerciales sur mesure</span>
             </li>
             <li className="flex items-start">
               <span className="mr-2">🤖</span>
@@ -83,7 +83,7 @@ export default function About() {
           <h3 className="text-2xl font-semibold mb-4 text-white">🛠️ Mon expertise technique</h3>
 
           <p className="text-gray-300 mb-6">
-            Je conçois des chatbots avancés sur Voiceflow et développe des automatisations principalement sur n8n, avec des compétences complémentaires sur Make.com. J'intègre efficacement des outils comme Notion, Airtable et Supabase pour créer des écosystèmes connectés et performants.
+            Je développe des automatisations principalement sur n8n, avec des compétences complémentaires sur Make.com. J'intègre efficacement des outils comme Notion, Airtable et Supabase pour créer des écosystèmes connectés et performants.
           </p>
 
           <p className="text-gray-300 mb-6">

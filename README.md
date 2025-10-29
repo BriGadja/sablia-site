@@ -93,7 +93,6 @@ Site web moderne de conseil en automatisation d'entreprise avec calculateur ROI,
 
 ### Intégrations
 
-- **Voiceflow**: Chatbot intégré pour le support client
 - **Calendly**: Système de prise de rendez-vous
 - **TSParticles**: Animations de fond
 
@@ -103,7 +102,6 @@ Site web moderne de conseil en automatisation d'entreprise avec calculateur ROI,
 - ✅ Formulaires de génération de leads
 - ✅ Design responsive et moderne
 - ✅ Animations fluides
-- ✅ Chatbot intégré
 - ✅ Interface administrateur
 
 ## 📝 Licence

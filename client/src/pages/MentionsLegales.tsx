@@ -44,7 +44,7 @@ export default function MentionsLegales() {
               <li>Siret : 94090112700016</li>
               <li>Adresse : 60 RUE François Ier, 75008 Paris, France</li>
               <li>Date de création : 24/02/2025</li>
-              <li>Activité principale : Conseil, formation et développement d'automatisations, de Chatbot et agents vocaux alimentés à l'Intelligence Artificielle</li>
+              <li>Activité principale : Conseil, formation et développement d'automatisations et d'agents IA alimentés à l'Intelligence Artificielle</li>
               <li>Code APE : 6201Z - Programmation informatique</li>
               <li>Nom commercial : Sablia</li>
             </ul>
