@@ -35,6 +35,16 @@
           ]
         },
         {
+          "id": "integrations",
+          "name": "Integrations & Tools Section",
+          "surtitle": "Les outils que nous maîtrisons",
+          "title": "Intégrations & Outils",
+          "subtitle": "Automatisez vos workflows avec les outils que vous utilisez déjà",
+          "toolsCount": 12,
+          "interactionType": "HoverCard (desktop hover, mobile title attribute)",
+          "footer": "Et bien d'autres intégrations possibles"
+        },
+        {
           "id": "problem",
           "name": "Problem Section",
           "title": "Les défis de l'automatisation",
@@ -366,6 +376,91 @@
       "form": "GAP Analysis",
       "envVar": "VITE_N8N_WEBHOOK_URL"
     }
+  },
+
+  "toolsShowcase": {
+    "automation": [
+      {
+        "name": "n8n",
+        "category": "Automatisation",
+        "description": "Plateforme d'automatisation no-code open-source avec +400 intégrations natives",
+        "useCase": "Synchronisation CRM → Sheets → Slack en temps réel"
+      },
+      {
+        "name": "Make",
+        "category": "Automatisation",
+        "description": "Automatisation visuelle pour connecter vos applications business sans coder",
+        "useCase": "Workflows complexes multi-étapes pour gestion de leads"
+      }
+    ],
+    "ai": [
+      {
+        "name": "OpenAI",
+        "category": "Intelligence Artificielle",
+        "description": "IA générative pour automatiser création de contenu et analyses avancées",
+        "useCase": "Génération automatique de rapports et documentation"
+      },
+      {
+        "name": "Anthropic",
+        "category": "Intelligence Artificielle",
+        "description": "Claude AI pour assistance intelligente et traitement de documents complexes",
+        "useCase": "Extraction de données depuis factures et contrats"
+      },
+      {
+        "name": "Gemini",
+        "category": "Intelligence Artificielle",
+        "description": "IA multimodale Google pour analyse de données et génération de contenu",
+        "useCase": "Analyse prédictive et insights business automatisés"
+      },
+      {
+        "name": "Perplexity",
+        "category": "Intelligence Artificielle",
+        "description": "Recherche augmentée par IA pour veille concurrentielle et benchmarking",
+        "useCase": "Monitoring automatisé des tendances sectorielles"
+      }
+    ],
+    "productivity": [
+      {
+        "name": "Google Sheets",
+        "category": "Productivité",
+        "description": "Tableurs collaboratifs pour centraliser et automatiser vos données business",
+        "useCase": "Dashboards KPI mis à jour en temps réel via API"
+      },
+      {
+        "name": "Google Drive",
+        "category": "Productivité",
+        "description": "Stockage cloud pour centraliser documents et automatiser partage/archivage",
+        "useCase": "Archivage automatique de devis et factures par projet"
+      },
+      {
+        "name": "Notion",
+        "category": "Productivité",
+        "description": "Base de connaissances collaborative pour documenter workflows et procédures",
+        "useCase": "Documentation automatique de processus et formations"
+      }
+    ],
+    "communication": [
+      {
+        "name": "Slack",
+        "category": "Communication",
+        "description": "Hub de communication d'équipe avec notifications automatisées intelligentes",
+        "useCase": "Alertes temps réel sur nouveaux leads et deadlines"
+      }
+    ],
+    "development": [
+      {
+        "name": "GitHub",
+        "category": "Développement",
+        "description": "Gestion de versions et CI/CD pour déploiement automatisé de solutions",
+        "useCase": "Déploiement continu d'automatisations personnalisées"
+      },
+      {
+        "name": "Vercel",
+        "category": "Développement",
+        "description": "Plateforme de déploiement serverless pour applications et outils web",
+        "useCase": "Hébergement de dashboards clients et interfaces sur-mesure"
+      }
+    ]
   },
 
   "technicalInfo": {

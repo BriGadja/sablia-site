@@ -47,10 +47,41 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
   - **Valentin (Stefano Design)**: Réactivation automatisée de milliers de contacts dormants
   - **Amir (BTP)**: Gestion des interventions → organisation transformée
 
-#### 3. Logos Cloud Section
+#### 3. Intégrations & Outils Section
 
-- **Sous-titre**: "Ils ont transformé leurs opérations"
-- **Affichage**: Logos des clients (carrousel infini)
+- **Surtitre**: "Les outils que nous maîtrisons"
+- **Titre**: "Intégrations & Outils"
+- **Sous-titre**: "Automatisez vos workflows avec les outils que vous utilisez déjà"
+- **12 logos d'applications** avec HoverCards interactifs (au hover desktop uniquement):
+
+  **Automatisation** (2):
+  - **n8n**: Plateforme d'automatisation no-code open-source avec +400 intégrations natives → _Exemple: Synchronisation CRM → Sheets → Slack en temps réel_
+  - **Make**: Automatisation visuelle pour connecter vos applications business sans coder → _Exemple: Workflows complexes multi-étapes pour gestion de leads_
+
+  **Intelligence Artificielle** (4):
+  - **OpenAI**: IA générative pour automatiser création de contenu et analyses avancées → _Exemple: Génération automatique de rapports et documentation_
+  - **Anthropic**: Claude AI pour assistance intelligente et traitement de documents complexes → _Exemple: Extraction de données depuis factures et contrats_
+  - **Gemini**: IA multimodale Google pour analyse de données et génération de contenu → _Exemple: Analyse prédictive et insights business automatisés_
+  - **Perplexity**: Recherche augmentée par IA pour veille concurrentielle et benchmarking → _Exemple: Monitoring automatisé des tendances sectorielles_
+
+  **Productivité** (3):
+  - **Google Sheets**: Tableurs collaboratifs pour centraliser et automatiser vos données business → _Exemple: Dashboards KPI mis à jour en temps réel via API_
+  - **Google Drive**: Stockage cloud pour centraliser documents et automatiser partage/archivage → _Exemple: Archivage automatique de devis et factures par projet_
+  - **Notion**: Base de connaissances collaborative pour documenter workflows et procédures → _Exemple: Documentation automatique de processus et formations_
+
+  **Communication** (1):
+  - **Slack**: Hub de communication d'équipe avec notifications automatisées intelligentes → _Exemple: Alertes temps réel sur nouveaux leads et deadlines_
+
+  **Développement** (2):
+  - **GitHub**: Gestion de versions et CI/CD pour déploiement automatisé de solutions → _Exemple: Déploiement continu d'automatisations personnalisées_
+  - **Vercel**: Plateforme de déploiement serverless pour applications et outils web → _Exemple: Hébergement de dashboards clients et interfaces sur-mesure_
+
+- **Footer**: "Et bien d'autres intégrations possibles"
+
+**UX Interaction**:
+- Desktop: Hover sur logo → HoverCard avec badge catégorie + description + use case
+- Mobile: Attribut `title` natif du navigateur (fallback)
+- Styling: Design system v2 (navy/cyan), glassmorphism, fade-in 200ms
 
 #### 4. Problem Section
 
