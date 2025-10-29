@@ -1,0 +1,18 @@
+# Sablia AI Documentation
+# https://sablia.io/.well-known/ai.txt
+
+# Main documentation for AI agents
+documentation: https://raw.githubusercontent.com/BriGadja/sablia-site/main/LLM_INSTRUCTIONS.md
+
+# Detailed content files
+content: https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/SITE_CONTENT.md
+pricing: https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/OFFRES.md
+faq: https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/FAQ.md
+index: https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/content-index.json
+
+# Site metadata
+name: Sablia
+url: https://sablia.io
+description: Automatisation d'entreprise avec l'IA - Consulting, Formation, Développement
+contact: brice@sablia.io
+language: fr-FR

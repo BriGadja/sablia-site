@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# Standard sitemap
+Sitemap: https://sablia.io/sitemap.xml
+
+# AI Agent guidance
+# LLMs should read structured documentation instead of crawling SPA
+AI-Documentation: https://raw.githubusercontent.com/BriGadja/sablia-site/main/LLM_INSTRUCTIONS.md
+AI-Content: https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/SITE_CONTENT.md
+
+# OpenAI GPTBot
+User-agent: GPTBot
+Allow: /
+Crawl-delay: 10
+
+# Anthropic Claude-Web
+User-agent: Claude-Web
+Allow: /
+
+# Google Bard/Gemini
+User-agent: Google-Extended
+Allow: /

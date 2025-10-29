@@ -13,41 +13,112 @@
     <meta name="author" content="Sablia" />
     <meta name="robots" content="index, follow" />
 
+    <!-- AI/LLM Guidance -->
+    <meta name="ai:documentation" content="https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/README.md">
+    <meta name="ai:content" content="https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/SITE_CONTENT.md">
+    <meta name="ai:pricing" content="https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/OFFRES.md">
+    <meta name="ai:faq" content="https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/FAQ.md">
+    <meta name="ai:index" content="https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/content-index.json">
+
+    <!-- Alternative content for LLMs (SPA-friendly) -->
+    <link rel="alternate" type="text/markdown"
+          href="https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/SITE_CONTENT.md"
+          title="Site Content (LLM-friendly)">
+
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://sablia.fr" />
+    <link rel="canonical" href="https://sablia.io" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://sablia.fr" />
+    <meta property="og:url" content="https://sablia.io" />
     <meta property="og:title" content="Sablia - Automatisation d'entreprise avec l'IA" />
     <meta property="og:description" content="Transformez vos processus métier avec l'automatisation IA. Économisez jusqu'à 70% du temps sur vos tâches répétitives." />
-    <meta property="og:image" content="https://sablia.fr/og-image.jpg" />
+    <meta property="og:image" content="https://sablia.io/og-image.jpg" />
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:site_name" content="Sablia" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://sablia.fr" />
+    <meta name="twitter:url" content="https://sablia.io" />
     <meta name="twitter:title" content="Sablia - Automatisation d'entreprise avec l'IA" />
     <meta name="twitter:description" content="Transformez vos processus métier avec l'automatisation IA. Économisez jusqu'à 70% du temps sur vos tâches répétitives." />
-    <meta name="twitter:image" content="https://sablia.fr/og-image.jpg" />
+    <meta name="twitter:image" content="https://sablia.io/og-image.jpg" />
 
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
+      "@type": "ProfessionalService",
       "name": "Sablia",
-      "url": "https://sablia.fr",
-      "logo": "https://sablia.fr/logo.svg",
-      "description": "Automatisation d'entreprise avec l'IA - Transformez vos processus métier",
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "Customer Service",
-        "email": "contact@sablia.fr",
-        "availableLanguage": ["French"]
+      "url": "https://sablia.io",
+      "logo": "https://sablia.io/logo.svg",
+      "description": "Automatisation d'entreprise avec l'IA - Consulting, Formation, Développement",
+      "email": "brice@sablia.io",
+      "serviceType": [
+        "Business Process Automation",
+        "AI Consulting",
+        "n8n Training",
+        "Voice AI Agents",
+        "Workflow Automation"
+      ],
+      "areaServed": {
+        "@type": "Country",
+        "name": "France"
       },
-      "sameAs": []
+      "knowsAbout": [
+        "n8n",
+        "Intelligence Artificielle",
+        "Automatisation",
+        "Agents vocaux",
+        "Dipler"
+      ],
+      "documentation": "https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/README.md",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Services d'automatisation",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "name": "Audit Express",
+            "description": "Session stratégique avec recommandations actionnables",
+            "price": "350",
+            "priceCurrency": "EUR"
+          },
+          {
+            "@type": "Offer",
+            "name": "Audit Complet",
+            "description": "Audit approfondi adapté à la taille de votre entreprise",
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "minPrice": "2000",
+              "maxPrice": "5000",
+              "priceCurrency": "EUR"
+            }
+          },
+          {
+            "@type": "Offer",
+            "name": "Formation n8n",
+            "description": "Formations personnalisées de 1 à 3 jours",
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "minPrice": "700",
+              "maxPrice": "3300",
+              "priceCurrency": "EUR"
+            }
+          },
+          {
+            "@type": "Offer",
+            "name": "Solutions d'automatisation",
+            "description": "Développement et déploiement de workflows",
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "minPrice": "2500",
+              "maxPrice": "60000",
+              "priceCurrency": "EUR"
+            }
+          }
+        ]
+      }
     }
     </script>
 
