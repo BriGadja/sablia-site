@@ -12,14 +12,14 @@ import { motion } from "framer-motion";
 
 export default function Home() {
   return (
-    <motion.div 
+    <motion.div
       className="min-h-screen bg-gray-900 text-gray-100 relative"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <div className="relative z-[2]">        
+      <div className="relative z-[2]">
         <Navbar />
         <main className="bg-gray-900">
           <HeroSection />
@@ -29,11 +29,13 @@ export default function Home() {
           <section className="py-20 bg-gray-800/50">
             <div className="container mx-auto px-4 text-center">
               <h2 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                Découvrez les <span className="rainbow-text">automatisations</span><br />
+                Découvrez les <span className="rainbow-text">automatisations</span>
+                <br />
                 <span className="text-4xl md:text-5xl">idéales pour votre business</span>
               </h2>
               <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
-                Utilisez notre générateur d'automatisations personnalisées et recevez des recommandations sur-mesure qui vont faire exploser votre productivité
+                Utilisez notre générateur d'automatisations personnalisées et recevez des
+                recommandations sur-mesure qui vont faire exploser votre productivité
               </p>
               <motion.div
                 whileHover={{ scale: 1.05 }}
@@ -59,14 +61,17 @@ export default function Home() {
           <section className="py-16 bg-gray-800">
             <div className="container mx-auto px-4 text-center">
               <h2 className="text-5xl md:text-6xl font-bold text-gray-100 mb-6 leading-tight">
-                Prêt à <span className="rainbow-text">transformer</span><br /> 
+                Prêt à <span className="rainbow-text">transformer</span>
+                <br />
                 <span className="text-4xl md:text-5xl">votre entreprise ?</span>
               </h2>
               <div className="flex gap-4 justify-center flex-wrap">
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-3"
-                  onClick={() => window.open('https://calendly.com/brice-gachadoat/30min', '_blank')}
+                  onClick={() =>
+                    window.open("https://calendly.com/brice-gachadoat/30min", "_blank")
+                  }
                 >
                   Réserver votre consultation gratuite
                 </Button>

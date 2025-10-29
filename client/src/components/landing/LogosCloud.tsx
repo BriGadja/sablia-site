@@ -32,8 +32,18 @@ const integrations: Integration[] = [
   { id: 6, name: "Perplexity", imageUrl: "/logos/integrations/perplexity.svg", category: "ai" },
 
   // Productivity & Google ecosystem (3)
-  { id: 7, name: "Google Sheets", imageUrl: "/logos/integrations/googlesheets.svg", category: "productivity" },
-  { id: 8, name: "Google Drive", imageUrl: "/logos/integrations/googledrive.svg", category: "productivity" },
+  {
+    id: 7,
+    name: "Google Sheets",
+    imageUrl: "/logos/integrations/googlesheets.svg",
+    category: "productivity",
+  },
+  {
+    id: 8,
+    name: "Google Drive",
+    imageUrl: "/logos/integrations/googledrive.svg",
+    category: "productivity",
+  },
   { id: 9, name: "Notion", imageUrl: "/logos/integrations/notion.svg", category: "productivity" },
 
   // Communication (1)
@@ -46,10 +56,7 @@ const integrations: Integration[] = [
 
 export default function LogosCloud() {
   return (
-    <section
-      id="logos"
-      className="py-24 relative overflow-hidden"
-    >
+    <section id="logos" className="py-24 relative overflow-hidden">
       <div className="container mx-auto px-6 lg:px-8">
         <ScrollReveal>
           {/* Section Header */}

@@ -60,10 +60,7 @@
           "email": "contact@sablia.io",
           "availableLanguage": "French"
         },
-        "sameAs": [
-          "https://linkedin.com/company/sablia",
-          "https://twitter.com/sablia_io"
-        ]
+        "sameAs": ["https://linkedin.com/company/sablia", "https://twitter.com/sablia_io"]
       }
     },
 
@@ -222,10 +219,7 @@
     "/mentions-legales": {
       "title": "Mentions Légales - Sablia",
       "description": "Mentions légales du site Sablia.io. Informations légales, hébergement, propriété intellectuelle.",
-      "keywords": [
-        "mentions légales",
-        "informations légales Sablia"
-      ],
+      "keywords": ["mentions légales", "informations légales Sablia"],
       "canonical": "https://sablia.io/mentions-legales",
       "robots": "noindex, follow",
       "openGraph": {
@@ -239,11 +233,7 @@
     "/politique-confidentialite": {
       "title": "Politique de Confidentialité - Sablia",
       "description": "Politique de confidentialité et gestion des données personnelles de Sablia.io. Conformité RGPD.",
-      "keywords": [
-        "politique confidentialité",
-        "RGPD",
-        "données personnelles Sablia"
-      ],
+      "keywords": ["politique confidentialité", "RGPD", "données personnelles Sablia"],
       "canonical": "https://sablia.io/politique-confidentialite",
       "robots": "noindex, follow",
       "openGraph": {
@@ -257,11 +247,7 @@
     "/cgv": {
       "title": "Conditions Générales de Vente - Sablia",
       "description": "Conditions générales de vente des services Sablia. Modalités de paiement, livraison, garanties.",
-      "keywords": [
-        "CGV",
-        "conditions générales vente Sablia",
-        "modalités paiement"
-      ],
+      "keywords": ["CGV", "conditions générales vente Sablia", "modalités paiement"],
       "canonical": "https://sablia.io/cgv",
       "robots": "noindex, follow",
       "openGraph": {
@@ -317,7 +303,11 @@
     "keywordsStrategy": {
       "primary": ["automatisation business", "n8n", "Make.com"],
       "secondary": ["workflow automation", "transformation digitale PME", "ROI automatisation"],
-      "longTail": ["formation n8n pour PME", "consultant automatisation France", "automatisation souveraine données"]
+      "longTail": [
+        "formation n8n pour PME",
+        "consultant automatisation France",
+        "automatisation souveraine données"
+      ]
     }
   }
 }

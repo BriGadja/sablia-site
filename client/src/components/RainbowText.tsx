@@ -1,4 +1,3 @@
-
 import React from "react";
 import { cn } from "@/lib/utils";
 
@@ -8,9 +7,5 @@ interface RainbowTextProps {
 }
 
 export function RainbowText({ children, className }: RainbowTextProps) {
-  return (
-    <span className={cn("rainbow-text", className)}>
-      {children}
-    </span>
-  );
+  return <span className={cn("rainbow-text", className)}>{children}</span>;
 }

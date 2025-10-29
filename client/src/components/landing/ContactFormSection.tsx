@@ -27,16 +27,11 @@ import { useToast } from "@/hooks/use-toast";
 // ============================================
 
 const contactSchema = z.object({
-  nom: z.string()
-    .min(2, "Le nom doit contenir au moins 2 caractères"),
-  email: z.string()
-    .email("Adresse email invalide"),
-  entreprise: z.string()
-    .min(2, "Le nom d'entreprise doit contenir au moins 2 caractères"),
-  telephone: z.string()
-    .optional(),
-  message: z.string()
-    .min(10, "Le message doit contenir au moins 10 caractères")
+  nom: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
+  email: z.string().email("Adresse email invalide"),
+  entreprise: z.string().min(2, "Le nom d'entreprise doit contenir au moins 2 caractères"),
+  telephone: z.string().optional(),
+  message: z.string().min(10, "Le message doit contenir au moins 10 caractères"),
 });
 
 type ContactInputs = z.infer<typeof contactSchema>;
@@ -58,10 +53,10 @@ export default function ContactFormSection() {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm<ContactInputs>({
     resolver: zodResolver(contactSchema),
-    mode: "onChange"
+    mode: "onChange",
   });
 
   // Form submission handler
@@ -73,9 +68,9 @@ export default function ContactFormSection() {
       const response = await fetch("https://n8n.voipia.fr/webhook/sablia-site-formulaire", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {
@@ -88,20 +83,19 @@ export default function ContactFormSection() {
       toast({
         title: "Message envoyé !",
         description: "Nous vous répondrons dans les 24 heures.",
-        variant: "default"
+        variant: "default",
       });
 
       // Auto-reset success state after 5 seconds
       setTimeout(() => {
         setIsSuccess(false);
       }, 5000);
-
     } catch (error) {
       console.error("Contact form error:", error);
       toast({
         title: "Erreur",
         description: "Une erreur est survenue lors de l'envoi. Veuillez réessayer.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -149,9 +143,7 @@ export default function ContactFormSection() {
                   className="w-full bg-v2-navy/50 border border-v2-cyan/30 rounded-lg px-4 py-3 text-v2-white text-base focus:outline-none focus:border-v2-cyan transition-colors"
                   placeholder="Jean Dupont"
                 />
-                {errors.nom && (
-                  <p className="text-red-400 text-sm mt-1">{errors.nom.message}</p>
-                )}
+                {errors.nom && <p className="text-red-400 text-sm mt-1">{errors.nom.message}</p>}
               </div>
 
               {/* Field 2: Email (required) */}
@@ -259,9 +251,7 @@ export default function ContactFormSection() {
             </motion.div>
 
             {/* Success Message */}
-            <h3 className="text-2xl sm:text-3xl font-bold text-v2-white mb-3">
-              Message envoyé !
-            </h3>
+            <h3 className="text-2xl sm:text-3xl font-bold text-v2-white mb-3">Message envoyé !</h3>
             <p className="text-base sm:text-lg text-v2-off-white/80">
               Merci pour votre message. Nous vous répondrons dans les 24 heures.
             </p>

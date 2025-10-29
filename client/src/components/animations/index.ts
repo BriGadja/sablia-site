@@ -19,12 +19,7 @@ export { default as CustomCursor } from "./CustomCursor";
 export { default as AnimatedParticles } from "./AnimatedParticles";
 
 // Animations au scroll (GSAP)
-export {
-  ScrollReveal,
-  ParallaxSection,
-  ColorChangeText,
-  ScaleOnScroll,
-} from "./ScrollReveal";
+export { ScrollReveal, ParallaxSection, ColorChangeText, ScaleOnScroll } from "./ScrollReveal";
 
 // Éléments magnétiques
 export { MagneticButton, MagneticCard } from "./MagneticElements";

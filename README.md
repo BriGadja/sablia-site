@@ -20,29 +20,35 @@ Site web moderne de conseil en automatisation d'entreprise avec calculateur ROI,
 ### Configuration locale
 
 1. **Cloner le projet**
+
    ```bash
    git clone https://github.com/BriGadja/sablia-site.git
    cd sablia-site
    ```
 
 2. **Installer les dépendances**
+
    ```bash
    npm install
    ```
 
 3. **Configuration de l'environnement**
+
    ```bash
    cp .env.example .env
    ```
+
    Puis modifier le fichier `.env` avec vos propres valeurs.
 
 4. **Configuration de la base de données**
+
    ```bash
    # Pousser le schéma vers la base de données
    npm run db:push
    ```
 
 5. **Lancer en développement**
+
    ```bash
    npm run dev
    ```
@@ -109,4 +115,5 @@ Site web moderne de conseil en automatisation d'entreprise avec calculateur ROI,
 MIT
 
 ---
-*Dernière mise à jour : Migration vers Vercel*
+
+_Dernière mise à jour : Migration vers Vercel_

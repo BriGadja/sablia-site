@@ -9,10 +9,12 @@ export default function HeroSection() {
             AUTOMATE YOUR BUSINESS
           </p>
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white mb-16 leading-tight max-w-full overflow-hidden">
-            Laissez l'<span className="rainbow-text">IA</span> & vos<br className="hidden sm:block" /> <span className="rainbow-text">automatisations</span><br /> booster votre Business.
+            Laissez l'<span className="rainbow-text">IA</span> & vos
+            <br className="hidden sm:block" /> <span className="rainbow-text">automatisations</span>
+            <br /> booster votre Business.
           </h1>
           <p className="text-base sm:text-lg md:text-2xl text-gray-300 mb-20 max-w-full px-4">
-            Libérez votre temps des tâches répétitives. 
+            Libérez votre temps des tâches répétitives.
           </p>
           <div className="flex gap-6 justify-center flex-wrap px-4 mt-8">
             <a
@@ -23,7 +25,10 @@ export default function HeroSection() {
             >
               Réservez un call gratuit !
             </a>
-            <Link href="/gap" className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 sm:px-8 py-3 rounded-md inline-block shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base font-medium truncate">
+            <Link
+              href="/gap"
+              className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 sm:px-8 py-3 rounded-md inline-block shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base font-medium truncate"
+            >
               Découvrez vos automatisations sur-mesure !
             </Link>
           </div>

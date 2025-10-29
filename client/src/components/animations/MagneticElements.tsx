@@ -71,7 +71,8 @@ export function MagneticButton({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           style={{
-            background: "radial-gradient(circle at center, rgba(82, 209, 220, 0.2), transparent 70%)",
+            background:
+              "radial-gradient(circle at center, rgba(82, 209, 220, 0.2), transparent 70%)",
           }}
         />
       )}
@@ -90,11 +91,7 @@ interface MagneticCardProps {
   className?: string;
 }
 
-export function MagneticCard({
-  children,
-  glassEffect = false,
-  className = "",
-}: MagneticCardProps) {
+export function MagneticCard({ children, glassEffect = false, className = "" }: MagneticCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -150,7 +147,8 @@ export function MagneticCard({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           style={{
-            background: "radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(82, 209, 220, 0.1), transparent 40%)",
+            background:
+              "radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(82, 209, 220, 0.1), transparent 40%)",
           }}
         />
       )}

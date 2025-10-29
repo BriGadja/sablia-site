@@ -19,20 +19,23 @@ const problems: Problem[] = [
     id: 1,
     icon: <Clock size={48} className="text-v2-cyan" />,
     title: "Temps perdu sur tâches répétitives",
-    description: "Vos équipes passent des heures sur des tâches manuelles qui pourraient être automatisées, au détriment de missions à plus forte valeur ajoutée."
+    description:
+      "Vos équipes passent des heures sur des tâches manuelles qui pourraient être automatisées, au détriment de missions à plus forte valeur ajoutée.",
   },
   {
     id: 2,
     icon: <AlertTriangle size={48} className="text-v2-cyan" />,
     title: "Erreurs humaines coûteuses",
-    description: "Les processus manuels génèrent des erreurs de saisie, des doublons et des oublis qui impactent votre professionnalisme et votre chiffre d'affaires."
+    description:
+      "Les processus manuels génèrent des erreurs de saisie, des doublons et des oublis qui impactent votre professionnalisme et votre chiffre d'affaires.",
   },
   {
     id: 3,
     icon: <TrendingDown size={48} className="text-v2-cyan" />,
     title: "Croissance limitée par le manque d'outils",
-    description: "Sans automatisation, votre capacité à scaler est limitée par les ressources humaines disponibles et les budgets contraints."
-  }
+    description:
+      "Sans automatisation, votre capacité à scaler est limitée par les ressources humaines disponibles et les budgets contraints.",
+  },
 ];
 
 export default function ProblemSection() {
@@ -41,7 +44,7 @@ export default function ProblemSection() {
   useEffect(() => {
     if (!cardsRef.current) return;
 
-    const cards = cardsRef.current.querySelectorAll('.problem-card');
+    const cards = cardsRef.current.querySelectorAll(".problem-card");
 
     gsap.fromTo(
       cards,
@@ -56,14 +59,14 @@ export default function ProblemSection() {
           trigger: cardsRef.current,
           start: "top 80%",
           end: "bottom 20%",
-          toggleActions: "play none none reverse"
-        }
-      }
+          toggleActions: "play none none reverse",
+        },
+      },
     );
 
     // Cleanup ScrollTrigger on unmount
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 

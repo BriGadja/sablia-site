@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 /**
  * useReducedMotion Hook
@@ -23,18 +23,16 @@ import { useEffect, useState } from 'react';
  * - Respects user preferences for reduced motion
  */
 export function useReducedMotion(): boolean {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(
-    () => {
-      // Check if window is defined (SSR safety)
-      if (typeof window === 'undefined') return false;
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() => {
+    // Check if window is defined (SSR safety)
+    if (typeof window === "undefined") return false;
 
-      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    }
-  );
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
 
   useEffect(() => {
     // Media query for reduced motion preference
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     // Handler for media query changes
     const listener = (event: MediaQueryListEvent) => {
@@ -42,10 +40,10 @@ export function useReducedMotion(): boolean {
     };
 
     // Add event listener for dynamic updates
-    mediaQuery.addEventListener('change', listener);
+    mediaQuery.addEventListener("change", listener);
 
     // Cleanup
-    return () => mediaQuery.removeEventListener('change', listener);
+    return () => mediaQuery.removeEventListener("change", listener);
   }, []);
 
   return prefersReducedMotion;

@@ -37,7 +37,7 @@ function Router() {
 function App() {
   // Utiliser le hook pour vérifier s'il y a un toast en attente
   usePersistentToast();
-  
+
   return (
     <QueryClientProvider client={queryClient}>
       <Router />

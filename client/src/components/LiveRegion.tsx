@@ -43,15 +43,15 @@ interface LiveRegionProps {
    * Use "status" for: Form submission confirmations, loading states, progress updates
    * Use "alert": Validation errors, critical warnings, time-sensitive info
    */
-  role?: 'status' | 'alert';
+  role?: "status" | "alert";
 }
 
-export function LiveRegion({ message, role = 'status' }: LiveRegionProps) {
+export function LiveRegion({ message, role = "status" }: LiveRegionProps) {
   // aria-live is set implicitly by role="status" (polite) or role="alert" (assertive)
   return (
     <div
       role={role}
-      aria-live={role === 'alert' ? 'assertive' : 'polite'}
+      aria-live={role === "alert" ? "assertive" : "polite"}
       aria-atomic="true"
       className="sr-only"
     >

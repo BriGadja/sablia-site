@@ -10,7 +10,7 @@ import {
   TrendingUp,
   ChevronLeft,
   ChevronRight,
-  Video
+  Video,
 } from "lucide-react";
 
 const examples = [
@@ -21,11 +21,11 @@ const examples = [
     features: [
       "Envoi et gestion automatisés de vos emails professionnels",
       "Organisation et planification intelligente de vos réunions",
-      "Multitâche avancé pour libérer votre temps et votre esprit"
+      "Multitâche avancé pour libérer votre temps et votre esprit",
     ],
     quote: "L'assistant qui ne prend jamais de congés et s'adapte parfaitement à vos besoins.",
     gain: "Récupérez 15h de productivité par semaine dès le premier mois",
-    icon: Mail
+    icon: Mail,
   },
   {
     id: 2,
@@ -34,11 +34,11 @@ const examples = [
     features: [
       "Dossier Google Drive/Notion généré automatiquement",
       "Checklist tâches (Asana, ClickUp, Trello)",
-      "Email de bienvenue avec accès client"
+      "Email de bienvenue avec accès client",
     ],
     quote: "L'organisation d'une entreprise structurée… sans embaucher un assistant.",
     gain: "Diminuez de 80% le temps d'intégration client en 2 semaines",
-    icon: FolderGit2
+    icon: FolderGit2,
   },
   {
     id: 3,
@@ -47,11 +47,11 @@ const examples = [
     features: [
       "Conversion automatique réunion → PDF professionnel",
       "Intégration logo/normes de votre entreprise",
-      "Envoi tracker avec signature électronique"
+      "Envoi tracker avec signature électronique",
     ],
     quote: "Vos propositions commerciales passent du 'brouillon' à 'signé' en un clic.",
     gain: "Automatisez la phase de rédaction de devis et de contrats et gagnez jusqu'à 2 heures d'admin par client",
-    icon: FileCheck
+    icon: FileCheck,
   },
   {
     id: 4,
@@ -60,11 +60,12 @@ const examples = [
     features: [
       "Création de documents à partir de formulaires ou données clients",
       "Transformation automatique de CV au format de votre entreprise",
-      "Templates personnalisables pour tout type de document professionnel"
+      "Templates personnalisables pour tout type de document professionnel",
     ],
-    quote: "Votre usine à documents professionnels qui fonctionne pendant que vous vous concentrez sur l'essentiel.",
+    quote:
+      "Votre usine à documents professionnels qui fonctionne pendant que vous vous concentrez sur l'essentiel.",
     gain: "Économisez 90% du temps de production documentaire en 1 mois",
-    icon: FileText
+    icon: FileText,
   },
   {
     id: 5,
@@ -73,12 +74,12 @@ const examples = [
     features: [
       "Scan automatique des tendances YouTube/Instagram",
       "Réécriture sur-mesure (ton, longueur, mots-clés)",
-      "Programmation sur tous vos canaux en 1 clic"
+      "Programmation sur tous vos canaux en 1 clic",
     ],
     quote: "Votre usine à contenu personnalisé, même sans rédacteur.",
     gain: "Produisez 5x plus de contenu avec le même budget en 30 jours",
-    icon: Video
-  }
+    icon: Video,
+  },
 ];
 
 export const AutomationExamplesSection = () => {
@@ -87,17 +88,17 @@ export const AutomationExamplesSection = () => {
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  
+
   // Check if device is mobile
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   useEffect(() => {
@@ -122,19 +123,14 @@ export const AutomationExamplesSection = () => {
   // Calculate examples to display based on device
   const currentExamples = isMobile
     ? [examples[currentIndex]]
-    : [
-        examples[currentIndex],
-        examples[(currentIndex + 1) % examples.length]
-      ];
+    : [examples[currentIndex], examples[(currentIndex + 1) % examples.length]];
 
   const handlePrevious = () => {
     if (isMobile) {
-      setCurrentIndex((prevIndex) => 
-        prevIndex === 0 ? examples.length - 1 : prevIndex - 1
-      );
+      setCurrentIndex((prevIndex) => (prevIndex === 0 ? examples.length - 1 : prevIndex - 1));
     } else {
-      setCurrentIndex((prevIndex) => 
-        prevIndex === 0 ? examples.length - 2 : (prevIndex - 2 + examples.length) % examples.length
+      setCurrentIndex((prevIndex) =>
+        prevIndex === 0 ? examples.length - 2 : (prevIndex - 2 + examples.length) % examples.length,
       );
     }
     setTimeLeft(10);
@@ -153,17 +149,17 @@ export const AutomationExamplesSection = () => {
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
   };
-  
+
   const handleTouchMove = (e: React.TouchEvent) => {
     setTouchEnd(e.targetTouches[0].clientX);
   };
-  
+
   const handleTouchEnd = () => {
     if (touchStart - touchEnd > 100) {
       // Swipe left
       handleNext();
     }
-    
+
     if (touchEnd - touchStart > 100) {
       // Swipe right
       handlePrevious();
@@ -181,19 +177,21 @@ export const AutomationExamplesSection = () => {
             Découvrez comment nos solutions peuvent transformer votre quotidien professionnel
           </p>
         </div>
-        
+
         <div className="flex justify-center items-center mb-4">
-          <span className="md:hidden text-xs text-gray-400 mr-2">
-            ← glisser →
-          </span>
+          <span className="md:hidden text-xs text-gray-400 mr-2">← glisser →</span>
           <div className="flex items-center space-x-3">
             {examples.map((_, idx) => (
               <div
                 key={idx}
                 className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                  isMobile 
-                    ? (currentIndex === idx ? 'bg-orange-500 scale-125' : 'bg-gray-600')
-                    : (idx % 2 === 0 && currentIndex === idx ? 'bg-orange-500 scale-125' : 'bg-gray-600')
+                  isMobile
+                    ? currentIndex === idx
+                      ? "bg-orange-500 scale-125"
+                      : "bg-gray-600"
+                    : idx % 2 === 0 && currentIndex === idx
+                      ? "bg-orange-500 scale-125"
+                      : "bg-gray-600"
                 }`}
                 onClick={() => {
                   if (isMobile) {
@@ -208,10 +206,12 @@ export const AutomationExamplesSection = () => {
           </div>
         </div>
 
-        <div className="relative"
-           onTouchStart={handleTouchStart}
-           onTouchMove={handleTouchMove}
-           onTouchEnd={handleTouchEnd}>
+        <div
+          className="relative"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
             <AnimatePresence mode="wait">
               {currentExamples.map((example, index) => (
@@ -221,9 +221,9 @@ export const AutomationExamplesSection = () => {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -100 }}
                   transition={{ duration: 0.5, delay: index * 0.2 }}
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.02,
-                    transition: { duration: 0.2 }
+                    transition: { duration: 0.2 },
                   }}
                 >
                   <Card className="p-6 h-full bg-gray-800/50 border-gray-700 hover:bg-gray-800 transition-colors duration-200">
@@ -262,7 +262,7 @@ export const AutomationExamplesSection = () => {
           </div>
 
           {/* Navigation arrows - hidden on mobile */}
-          <button 
+          <button
             onClick={handlePrevious}
             className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-8 lg:-translate-x-12 bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full z-10 hidden md:block"
             aria-label="Exemple précédent"
@@ -270,7 +270,7 @@ export const AutomationExamplesSection = () => {
             <ChevronLeft className="w-6 h-6" />
           </button>
 
-          <button 
+          <button
             onClick={handleNext}
             className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-8 lg:translate-x-12 bg-gray-800/80 hover:bg-gray-700 text-white p-2 rounded-full z-10 hidden md:block"
             aria-label="Exemple suivant"

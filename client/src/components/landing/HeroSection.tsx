@@ -38,10 +38,7 @@ export default function HeroSection() {
           >
             {/* Headline with gradient animation */}
             <h1 className="text-5xl sm:text-6xl lg:text-8xl xl:text-9xl font-bold leading-tight tracking-tight">
-              <GradientText
-                colors={["#FFFFFF", "#FFA559", "#FFFFFF"]}
-                className="inline-block"
-              >
+              <GradientText colors={["#FFFFFF", "#FFA559", "#FFFFFF"]} className="inline-block">
                 L'IA au service de votre croissance
               </GradientText>
             </h1>

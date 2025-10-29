@@ -30,6 +30,7 @@ docs/
 ## 📖 Documentation développeur
 
 Pour l'architecture du projet, les conventions de code, et les workflows :
+
 - Lisez `CLAUDE.md` (racine du projet)
 
 ---

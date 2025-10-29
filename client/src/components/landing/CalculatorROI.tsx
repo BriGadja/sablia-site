@@ -40,7 +40,7 @@ const calculatorSchema = z.object({
   processesToAutomate: z
     .number({ invalid_type_error: "Nombre de processus requis" })
     .min(1, "Minimum 1 processus")
-    .max(50, "Maximum 50 processus")
+    .max(50, "Maximum 50 processus"),
 });
 
 type CalculatorFormData = z.infer<typeof calculatorSchema>;
@@ -73,7 +73,7 @@ function calculateROI(data: CalculatorFormData): ROIResults {
     hoursSavedPerYear,
     annualSavings,
     estimatedInvestment,
-    roiPercentage
+    roiPercentage,
   };
 }
 
@@ -85,16 +85,16 @@ export default function CalculatorROI() {
   const {
     register,
     watch,
-    formState: { errors }
+    formState: { errors },
   } = useForm<CalculatorFormData>({
     resolver: zodResolver(calculatorSchema),
     defaultValues: {
       employees: 10,
       hoursPerWeek: 5,
       hourlyCost: 40,
-      processesToAutomate: 3
+      processesToAutomate: 3,
     },
-    mode: "onChange"
+    mode: "onChange",
   });
 
   // Watch all form values for real-time calculation
@@ -102,10 +102,10 @@ export default function CalculatorROI() {
 
   // Calculate ROI (only if all fields are valid numbers)
   const isValidData =
-    typeof formValues.employees === 'number' &&
-    typeof formValues.hoursPerWeek === 'number' &&
-    typeof formValues.hourlyCost === 'number' &&
-    typeof formValues.processesToAutomate === 'number' &&
+    typeof formValues.employees === "number" &&
+    typeof formValues.hoursPerWeek === "number" &&
+    typeof formValues.hourlyCost === "number" &&
+    typeof formValues.processesToAutomate === "number" &&
     !isNaN(formValues.employees) &&
     !isNaN(formValues.hoursPerWeek) &&
     !isNaN(formValues.hourlyCost) &&
@@ -128,7 +128,8 @@ export default function CalculatorROI() {
               </h2>
             </div>
             <p className="text-xl sm:text-2xl text-v2-off-white/80 max-w-3xl mx-auto">
-              Estimez le retour sur investissement de votre transformation digitale en quelques secondes
+              Estimez le retour sur investissement de votre transformation digitale en quelques
+              secondes
             </p>
           </div>
         </ScrollReveal>
@@ -167,7 +168,10 @@ export default function CalculatorROI() {
 
               {/* Input 2: Hours per Week */}
               <div>
-                <label htmlFor="hoursPerWeek" className="block text-v2-off-white/80 mb-2 font-medium">
+                <label
+                  htmlFor="hoursPerWeek"
+                  className="block text-v2-off-white/80 mb-2 font-medium"
+                >
                   Heures par semaine passées sur tâches répétitives
                 </label>
                 <input
@@ -202,7 +206,10 @@ export default function CalculatorROI() {
 
               {/* Input 4: Processes to Automate */}
               <div>
-                <label htmlFor="processesToAutomate" className="block text-v2-off-white/80 mb-2 font-medium">
+                <label
+                  htmlFor="processesToAutomate"
+                  className="block text-v2-off-white/80 mb-2 font-medium"
+                >
                   Nombre de processus à automatiser
                 </label>
                 <input
@@ -236,7 +243,8 @@ export default function CalculatorROI() {
               <div className="p-4 rounded-lg bg-v2-navy/30 border border-v2-cyan/20">
                 <p className="text-v2-off-white/70 text-sm mb-1">Heures économisées par an</p>
                 <p className="text-3xl font-bold text-v2-cyan">
-                  {results.hoursSavedPerYear.toLocaleString('fr-FR', { maximumFractionDigits: 0 })} h
+                  {results.hoursSavedPerYear.toLocaleString("fr-FR", { maximumFractionDigits: 0 })}{" "}
+                  h
                 </p>
               </div>
 
@@ -244,7 +252,7 @@ export default function CalculatorROI() {
               <div className="p-4 rounded-lg bg-v2-navy/30 border border-v2-cyan/20">
                 <p className="text-v2-off-white/70 text-sm mb-1">Économies annuelles</p>
                 <p className="text-3xl font-bold text-v2-cyan">
-                  {results.annualSavings.toLocaleString('fr-FR', { maximumFractionDigits: 0 })} €
+                  {results.annualSavings.toLocaleString("fr-FR", { maximumFractionDigits: 0 })} €
                 </p>
               </div>
 
@@ -252,7 +260,10 @@ export default function CalculatorROI() {
               <div className="p-4 rounded-lg bg-v2-navy/30 border border-v2-cyan/20">
                 <p className="text-v2-off-white/70 text-sm mb-1">Investissement estimé</p>
                 <p className="text-3xl font-bold text-v2-white">
-                  {results.estimatedInvestment.toLocaleString('fr-FR', { maximumFractionDigits: 0 })} €
+                  {results.estimatedInvestment.toLocaleString("fr-FR", {
+                    maximumFractionDigits: 0,
+                  })}{" "}
+                  €
                 </p>
               </div>
 
@@ -260,8 +271,8 @@ export default function CalculatorROI() {
               <div className="p-4 rounded-lg bg-v2-cyan/20 border border-v2-cyan/50">
                 <p className="text-v2-white/90 text-sm mb-1">ROI Première Année</p>
                 <p className="text-4xl font-bold text-v2-cyan">
-                  {results.roiPercentage > 0 ? '+' : ''}
-                  {results.roiPercentage.toLocaleString('fr-FR', { maximumFractionDigits: 0 })} %
+                  {results.roiPercentage > 0 ? "+" : ""}
+                  {results.roiPercentage.toLocaleString("fr-FR", { maximumFractionDigits: 0 })} %
                 </p>
               </div>
             </div>
@@ -272,8 +283,8 @@ export default function CalculatorROI() {
                 strength={0.2}
                 className="w-full py-4 rounded-lg font-semibold text-lg bg-v2-cyan text-v2-navy hover:bg-v2-cyan/90 transition-colors duration-300"
                 onClick={() => {
-                  const target = document.querySelector('#contact');
-                  target?.scrollIntoView({ behavior: 'smooth' });
+                  const target = document.querySelector("#contact");
+                  target?.scrollIntoView({ behavior: "smooth" });
                 }}
               >
                 Discuter de mon projet
@@ -284,8 +295,8 @@ export default function CalculatorROI() {
 
         {/* Disclaimer */}
         <p className="text-center text-v2-off-white/50 text-base sm:text-lg mt-8 max-w-3xl mx-auto">
-          *Estimation basée sur un taux d'efficacité de 70% et un coût moyen de 3 500€ par processus automatisé.
-          Les résultats réels peuvent varier selon votre contexte spécifique.
+          *Estimation basée sur un taux d'efficacité de 70% et un coût moyen de 3 500€ par processus
+          automatisé. Les résultats réels peuvent varier selon votre contexte spécifique.
         </p>
       </div>
     </section>

@@ -52,4 +52,4 @@ vite.config.ts.*
 # Coverage
 coverage/
 *.lcov
-.nyc_output
+.nyc_outputnul

@@ -37,18 +37,22 @@ npm run check           # Run TypeScript type checking
 ## Project Architecture
 
 ### Path Aliases
+
 - `@/` → `client/src/`
 - `@db` → `db/`
 - `@db/*` → `db/*`
 
 ### Server Architecture
+
 The Express server (port 5000) serves both API and client:
+
 - Development: Vite dev server integration via `server/vite.ts`
 - Production: Static file serving from `dist/public`
 - API routes registered via `server/routes.ts`
 - Request logging middleware for `/api` endpoints
 
-### Client Architecture  
+### Client Architecture
+
 - **Routing**: Wouter-based SPA with pages in `client/src/pages/`
 - **Components**: Reusable UI components in `client/src/components/`
 - **State**: React Query for server state management
@@ -56,6 +60,7 @@ The Express server (port 5000) serves both API and client:
 - **Toasts**: Persistent toast system using custom hooks
 
 ### Database
+
 - Drizzle ORM with PostgreSQL
 - Schema defined in `db/schema.ts`
 - Connection via `DATABASE_URL` environment variable
@@ -69,6 +74,7 @@ The Express server (port 5000) serves both API and client:
 ## Environment Variables
 
 Required in `.env`:
+
 - `DATABASE_URL` - PostgreSQL connection string
 - `NODE_ENV` - Environment (development/production)
 
@@ -84,11 +90,13 @@ Required in `.env`:
 ## Current Landing Page Architecture
 
 The site uses **Landing** as the homepage (`/` route):
+
 - **Main Page**: `client/src/pages/Landing.tsx` - Complete landing page with all sections
 - **Components**: All landing page components are in `client/src/components/landing/`
 - **Navigation**: Includes both anchor links to sections AND route links to `/gap` and `/about` pages
 
 ### Available Routes
+
 - `/` - Landing (homepage with all sections)
 - `/gap` - GAP analysis form
 - `/about` - About page
@@ -102,7 +110,9 @@ The site uses **Landing** as the homepage (`/` route):
 ### Documentation Files
 
 #### `docs/SITE_CONTENT.md`
+
 Comprehensive markdown documentation of ALL site content:
+
 - Complete page structure and sections
 - All headlines, copy, and CTAs
 - Pricing tables and offers
@@ -113,13 +123,16 @@ Comprehensive markdown documentation of ALL site content:
 - Key messaging and differentiators
 
 **Purpose**:
+
 - Enable LLMs to understand site content without browsing
 - Serve as single source of truth for content
 - Facilitate content updates and translations
 - Support SEO and marketing alignment
 
 #### `docs/content-index.json`
+
 Structured JSON index of site content:
+
 - Programmatic access to all pages and sections
 - Metadata for each page (title, description, CTAs)
 - Pricing data structure
@@ -127,12 +140,15 @@ Structured JSON index of site content:
 - Technical stack and theme information
 
 **Purpose**:
+
 - Machine-readable content for automated tools
 - Quick lookup for specific content elements
 - Integration with CMS or content pipelines
 
 #### `docs/OFFRES.md`
+
 Detailed documentation of all Sablia service offerings:
+
 - **3 categories**: Audit & Consulting, Formations, Solutions d'automatisation
 - Complete descriptions with pricing, deliverables, and timelines
 - Target audiences and use cases
@@ -140,13 +156,16 @@ Detailed documentation of all Sablia service offerings:
 - ROI calculations and examples
 
 **Purpose**:
+
 - Sales and commercial reference
 - Onboarding guide for new team members
 - Client proposal foundation
 - Service catalog maintenance
 
 #### `docs/FAQ.md`
+
 Extended FAQ documentation for customer support:
+
 - **8 categories**: Tools, Delays, Skills, ROI, Support, Approach, Pricing, Security
 - 30+ questions with detailed answers
 - Client success examples and testimonials
@@ -154,13 +173,16 @@ Extended FAQ documentation for customer support:
 - Glossary of technical terms
 
 **Purpose**:
+
 - First-line customer support resource
 - Sales objection handling
 - Onboarding documentation
 - SEO content source (FAQ schema markup)
 
 #### `client/public/sitemap.xml`
+
 SEO sitemap for search engine crawlers:
+
 - All public pages with priorities and change frequencies
 - Canonical URLs (https://sablia.io)
 - Last modification dates
@@ -168,6 +190,7 @@ SEO sitemap for search engine crawlers:
 - **Location**: `client/public/sitemap.xml` (copied to `dist/public/sitemap.xml` during build)
 
 **Purpose**:
+
 - Improve Google/Bing indexation
 - Signal page hierarchy to crawlers
 - SEO best practice compliance
@@ -176,7 +199,9 @@ SEO sitemap for search engine crawlers:
 **Maintenance**: Update lastmod dates when pages change significantly.
 
 #### `docs/meta-tags.json`
+
 SEO-optimized meta-tags for all pages:
+
 - Title tags (50-60 chars) with keyword optimization
 - Meta descriptions (150-160 chars) for SERP CTR
 - Open Graph tags (Facebook, LinkedIn)
@@ -185,6 +210,7 @@ SEO-optimized meta-tags for all pages:
 - Implementation notes and testing checklist
 
 **Purpose**:
+
 - Improve search engine rankings
 - Optimize social media sharing previews
 - Increase click-through rates from search results
@@ -199,6 +225,7 @@ SEO-optimized meta-tags for all pages:
 #### When to Update
 
 **Update `docs/SITE_CONTENT.md` and `docs/content-index.json`** when:
+
 - ✅ Modifying any text on landing page sections
 - ✅ Changing pricing, offers, or packages
 - ✅ Adding/removing/editing testimonials
@@ -210,6 +237,7 @@ SEO-optimized meta-tags for all pages:
 - ✅ Adding or removing pages
 
 **Update `docs/OFFRES.md`** when:
+
 - ✅ Changing pricing or package details
 - ✅ Adding/removing service offerings
 - ✅ Modifying deliverables or timelines
@@ -217,6 +245,7 @@ SEO-optimized meta-tags for all pages:
 - ✅ Changing target audience descriptions
 
 **Update `docs/FAQ.md`** when:
+
 - ✅ Adding new frequently asked questions
 - ✅ Modifying answers based on customer feedback
 - ✅ Adding new categories or reorganizing content
@@ -224,12 +253,14 @@ SEO-optimized meta-tags for all pages:
 - ✅ Adding new client testimonials or examples
 
 **Update `client/public/sitemap.xml`** when:
+
 - ✅ Adding or removing pages/routes
 - ✅ Changing page priorities or frequencies
 - ✅ Making significant content updates (update lastmod)
 - ✅ Restructuring site navigation
 
 **Update `docs/meta-tags.json`** when:
+
 - ✅ Launching new pages
 - ✅ Changing page titles or descriptions
 - ✅ Updating SEO keywords strategy
@@ -239,11 +270,13 @@ SEO-optimized meta-tags for all pages:
 #### How to Update
 
 **For PRP-based changes**:
+
 1. Include content documentation update in PRP validation steps
 2. Verify documentation matches implementation before completing
 3. Add specific task in TodoWrite to update documentation
 
 **For direct changes**:
+
 1. After modifying site content, immediately update relevant docs:
    - `docs/SITE_CONTENT.md` for page content
    - `docs/content-index.json` for structured data
@@ -253,6 +286,7 @@ SEO-optimized meta-tags for all pages:
    - `docs/meta-tags.json` for SEO updates
 2. Commit documentation changes alongside content changes
 3. Use commit message format:
+
    ```
    feat: Update [section] content + sync documentation
 
@@ -269,6 +303,7 @@ SEO-optimized meta-tags for all pages:
 #### Validation Checklist
 
 Before committing content changes, verify:
+
 - [ ] `docs/SITE_CONTENT.md` reflects all text changes
 - [ ] `docs/content-index.json` data structures are updated
 - [ ] `docs/OFFRES.md` pricing and offers are current (if applicable)
@@ -282,6 +317,7 @@ Before committing content changes, verify:
 ### Why This Matters
 
 Maintaining accurate content documentation:
+
 - ✅ Enables Claude Code to answer content questions instantly
 - ✅ Prevents content drift and inconsistencies
 - ✅ Facilitates collaboration with copywriters/marketers
@@ -298,21 +334,25 @@ When making design changes to the Landing page or other visual components, **ALW
 ### Workflow for Visual Changes
 
 1. **Start dev server:**
+
    ```bash
    npm run dev  # Runs on http://localhost:5000
    ```
 
 2. **Navigate to the page:**
+
    ```javascript
-   mcp__playwright__browser_navigate({ url: "http://localhost:5000" })
+   mcp__playwright__browser_navigate({ url: "http://localhost:5000" });
    ```
 
 3. **Capture visual state:**
 
    **PREFERRED METHOD - Accessibility Snapshot:**
+
    ```javascript
-   mcp__playwright__browser_snapshot()
+   mcp__playwright__browser_snapshot();
    ```
+
    Use this for structure analysis, layout verification, and identifying elements. Best for most validation tasks.
 
    **ALTERNATIVE - Partial Screenshots ONLY:**
@@ -322,35 +362,38 @@ When making design changes to the Landing page or other visual components, **ALW
    Instead, take partial screenshots of:
 
    a) **Viewport only** (visible area):
+
    ```javascript
    mcp__playwright__browser_take_screenshot({
-     filename: "hero-viewport.png"
-   })
+     filename: "hero-viewport.png",
+   });
    ```
 
    b) **Specific elements** (after getting element ref from snapshot):
+
    ```javascript
    // First get snapshot to find element refs
-   mcp__playwright__browser_snapshot()
+   mcp__playwright__browser_snapshot();
 
    // Then screenshot specific element
    mcp__playwright__browser_take_screenshot({
      element: "Hero section",
      ref: "[element-ref-from-snapshot]",
-     filename: "hero-section.png"
-   })
+     filename: "hero-section.png",
+   });
    ```
 
    c) **Multiple sections** (take separate screenshots):
+
    ```javascript
    // Hero section
-   mcp__playwright__browser_take_screenshot({ filename: "section-hero.png" })
+   mcp__playwright__browser_take_screenshot({ filename: "section-hero.png" });
 
    // Scroll down
-   mcp__playwright__browser_evaluate({ function: "() => window.scrollBy(0, 800)" })
+   mcp__playwright__browser_evaluate({ function: "() => window.scrollBy(0, 800)" });
 
    // Problem section
-   mcp__playwright__browser_take_screenshot({ filename: "section-problem.png" })
+   mcp__playwright__browser_take_screenshot({ filename: "section-problem.png" });
    ```
 
 4. **Review against design requirements:**
@@ -367,6 +410,7 @@ When making design changes to the Landing page or other visual components, **ALW
 ### Why This Matters
 
 Visual validation prevents:
+
 - ❌ Emoji overuse that damages B2B credibility (74% of professionals 45+ see it as unprofessional)
 - ❌ Positioning conflicts (e.g., scroll indicators over CTAs)
 - ❌ Animations too subtle to notice
@@ -402,6 +446,7 @@ For features outside the landing page (backend, database, forms, etc.), follow s
 ### Commit Message Template
 
 Use descriptive commit messages that explain the "why" and include:
+
 - Clear summary of changes
 - Reference to design guide compliance when relevant
 - Metrics (bundle size, emoji count, performance)
@@ -418,6 +463,7 @@ This project uses **Context Engineering** - a systematic approach to working wit
 **Context Engineering > Prompt Engineering > Vibe Coding**
 
 Context Engineering is not about clever prompts - it's about providing comprehensive context through:
+
 - Structured documentation
 - Real code examples
 - Validation loops
@@ -436,43 +482,52 @@ INITIAL.md → /generate-prp → PRP → /execute-prp → Implementation
 When you want to build a new feature, create or edit `INITIAL.md` with four key sections:
 
 **FEATURE**: Specific description of what to build
+
 - Be detailed about functionality and requirements
 - Include user-facing behavior and technical requirements
 
 **EXAMPLES**: Reference examples from `examples/` folder
+
 - Point to specific files that demonstrate patterns to follow
 - Explain what aspects should be mimicked
 - Examples are CRITICAL for success
 
 **DOCUMENTATION**: Include all relevant resources
+
 - API documentation URLs with specific sections
 - Library guides and best practices
 - Database schema references
 - MCP server documentation
 
 **OTHER CONSIDERATIONS**: Capture important details
+
 - Common pitfalls and gotchas
 - Performance requirements
 - Authentication/security needs
 - Edge cases often missed
 
 **Example INITIAL.md**:
+
 ```markdown
 ## FEATURE:
+
 Build a contact form component with Calendly integration. The form should
 collect name, email, phone, and allow users to schedule a consultation.
 
 ## EXAMPLES:
+
 - `examples/components/FormExample.tsx` - Follow this pattern for form
   structure with React Hook Form and Zod validation
 - `examples/api/useDataHook.ts` - Use this pattern for API integration
 
 ## DOCUMENTATION:
+
 - React Hook Form: https://react-hook-form.com/docs
 - Calendly API: https://developer.calendly.com/
 - Zod validation: https://zod.dev/
 
 ## OTHER CONSIDERATIONS:
+
 - Must work on mobile devices
 - Include GDPR-compliant consent checkbox
 - Show loading state during submission
@@ -482,11 +537,13 @@ collect name, email, phone, and allow users to schedule a consultation.
 #### 2. Generate a PRP (Product Requirements Prompt)
 
 Run the slash command:
+
 ```bash
 /generate-prp INITIAL.md
 ```
 
 This command will:
+
 1. **Research Phase**: Analyze your codebase for similar patterns
 2. **Documentation Gathering**: Fetch relevant docs and examples
 3. **Blueprint Creation**: Create a step-by-step implementation plan
@@ -497,11 +554,13 @@ Output: `PRPs/{feature-name}.md` - a comprehensive implementation blueprint
 #### 3. Execute the PRP
 
 Run the slash command:
+
 ```bash
 /execute-prp PRPs/{feature-name}.md
 ```
 
 The AI will:
+
 1. **Load**: Read all context from the PRP
 2. **Plan**: Create detailed task list with TodoWrite
 3. **Implement**: Execute each component
@@ -514,17 +573,20 @@ The AI will:
 Every PRP includes validation commands that MUST pass:
 
 **Level 1 - Syntax & Style**:
+
 ```bash
 npm run check    # TypeScript type checking
 npm run lint     # Code style
 ```
 
 **Level 2 - Build**:
+
 ```bash
 npm run build    # Production build
 ```
 
 **Level 3 - Testing** (when applicable):
+
 ```bash
 npm test         # Unit/integration tests
 ```
@@ -563,6 +625,7 @@ Traditional approaches fail because they lack context. Context Engineering succe
 ### Advanced: Reusing PRPs
 
 Well-crafted PRPs can be reused for similar features:
+
 1. Copy a similar PRP from `PRPs/` folder
 2. Modify for your specific needs
 3. Execute with `/execute-prp`

@@ -11,6 +11,7 @@
 Sablia propose des services d'automatisation business et d'intelligence artificielle pour les PME françaises, avec une approche centrée sur la formation et l'autonomisation des équipes.
 
 ### Proposition de valeur principale
+
 - **IA au service de votre croissance** - Formation des équipes + installation des systèmes + maintien du contrôle
 - **Approche modulaire** - De l'audit express (350€) à la transformation complète (25-60k€)
 - **Formation-First** - Autonomisation des équipes sur n8n et Make.com
@@ -27,6 +28,7 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 **Sections** (ordre d'apparition):
 
 #### 1. Hero Section
+
 - **Titre**: "L'IA au service de votre croissance"
 - **Sous-titre**: "On forme vos équipes. On installe les systèmes. Vous gardez le contrôle."
 - **CTAs primaires**:
@@ -35,6 +37,7 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 - **Effets visuels**: Gradient animé (Navy → Electric → Cyan), magnetic buttons, particles background
 
 #### 2. Testimonials Section
+
 - **Titre**: "Des résultats mesurables"
 - **Format**: Carrousel infini horizontal avec 5 témoignages clients
 - **Témoignages clés**:
@@ -45,10 +48,12 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
   - **Amir (BTP)**: Gestion des interventions → organisation transformée
 
 #### 3. Logos Cloud Section
+
 - **Sous-titre**: "Ils ont transformé leurs opérations"
 - **Affichage**: Logos des clients (carrousel infini)
 
 #### 4. Problem Section
+
 - **Titre**: "Les défis de l'automatisation"
 - **Sous-titre**: "Vous reconnaissez-vous dans l'une de ces situations ?"
 - **3 problèmes identifiés**:
@@ -57,6 +62,7 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
   3. **Croissance limitée par manque d'outils** - Scalabilité contrainte par ressources humaines
 
 #### 5. Solution Section
+
 - **Titre**: "La méthode Sablia"
 - **Sous-titre**: "Une approche qui place l'humain au centre de l'automatisation"
 - **4 piliers horizontaux**:
@@ -66,6 +72,7 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
   4. **ROI Mesurable** - Temps gagné + économies quantifiées
 
 #### 6. Process Section
+
 - **Titre**: "Notre processus en 3 étapes"
 - **Sous-titre**: "De l'audit initial à l'optimisation continue"
 - **Timeline horizontale** (desktop) avec 3 étapes:
@@ -91,11 +98,13 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
   - Mises à jour + optimisation continue
 
 #### 7. Pricing Section
+
 - **Titre**: "Nos offres"
 - **Sous-titre**: "Des solutions adaptées à chaque étape de votre transformation"
 - **3 colonnes d'offres**:
 
 **Colonne 1 - Audit & Consulting**:
+
 1. **Appel Découverte** - GRATUIT (30 min)
    - Visio de qualification
    - Sans engagement
@@ -112,6 +121,7 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
    - Workshop avec stakeholders
 
 **Colonne 2 - Formations**:
+
 1. **Formation Demi-Journée** - 700€ (3h30)
    - IA générative, automatisation basics, découverte n8n
    - Intra-entreprise, jusqu'à 10 participants
@@ -125,6 +135,7 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
    - Formation intensive + documentation complète
 
 **Colonne 3 - Solutions d'automatisation**:
+
 1. **Workflow Simple** - 2 500-5 000€ (3-7 jours)
    - 1-2 processus automatisés
    - Conception + développement + documentation
@@ -142,17 +153,20 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
    - **ROI année 1**: 50 000-150 000€
 
 #### 8. Calculator ROI Section
+
 - **Titre**: "Calculateur ROI"
 - **Outil interactif** pour estimer économies potentielles
 - **CTA**: "Calculer mon ROI" → page /roi
 
 #### 9. Contact Form Section
+
 - **Titre**: "Diagnostic Gratuit"
 - **Formulaire de contact** avec intégration Calendly
 - **Champs**: Nom, email, entreprise, message
 - **CTA**: "Demander un diagnostic"
 
 #### 10. FAQ Section
+
 - **Titre**: "Questions fréquentes"
 - **Sous-titre**: "Tout ce que vous devez savoir sur nos services d'automatisation"
 - **8 questions en accordéon** (2 colonnes desktop):
@@ -174,15 +188,19 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 **Structure**:
 
 #### Header
+
 - **Titre**: "À propos"
 - **Sous-titre**: "Simplifier votre quotidien, c'est mon métier"
 
 #### Contenu principal
+
 **Présentation** - Brice Gachadoat, expert en automatisation et IA:
+
 - Ingénieur informatique, 10+ ans d'expérience IT
 - Spécialisé automatisation intelligente et IA conversationnelle
 
 **Déclic personnel**:
+
 - Cas d'usage: Femme nutritionniste
 - **Résultats concrets**:
   - 90% de temps gagné sur génération de menus
@@ -190,17 +208,20 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
   - 60% plus de clientes sans augmentation charge de travail
 
 **Ce que j'apporte**:
+
 1. 🔄 **Automatisation des tâches chronophages** - Ex: CV au format entreprise (30 min → quelques secondes)
 2. 💬 **Automatisations intelligentes de qualification** - Qualification prospects + propositions commerciales automatiques
 3. 🤖 **Assistants IA personnalisés** - Ex: Assistant emails/contacts/réunions (10h/semaine libérées)
 4. 🎓 **Formations sur mesure** - Maîtrise des solutions + bonnes pratiques IA
 
 **Expertise technique**:
+
 - **Outils principaux**: n8n (principal), Make.com (complémentaire)
 - **Écosystème**: Notion, Airtable, Supabase
 - **Secteurs accompagnés**: Conseil, marketing, formation, événementiel, ESN, entrepreneurs indépendants
 
 **Pourquoi faire confiance**:
+
 - 📊 **Expérience confirmée**: 10+ ans IT/Data/automatisation
   - Parcours: **MeltOne Advisory** (cabinet conseil) + **LVMH** (groupe luxe)
 - ✓ **Engagement concret**: Résultats garantis ou satisfait/remboursé
@@ -217,18 +238,21 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 **Contenu**:
 
 #### Header
+
 - **Titre**: "Générateur d'Automatisations Personnalisées"
 - **Sous-titre**: "En 2 minutes, obtenez des recommandations d'automatisations sur mesure pour votre entreprise"
 
 #### Formulaire en 2 sections
 
 **Section 1 - Vos coordonnées** (requis):
-- Prénom *
-- Nom *
-- Email professionnel *
-- Entreprise *
+
+- Prénom \*
+- Nom \*
+- Email professionnel \*
+- Entreprise \*
 
 **Section 2 - Votre contexte** (optionnel mais recommandé):
+
 - Secteur d'activité (dropdown):
   - E-commerce, Marketing & Communication, Services B2B, Industrie & Manufacturing, Tech & Software, Santé & Bien-être, Finance & Assurance, Autre
 - Principal défi business (textarea)
@@ -247,6 +271,7 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 **Objectif**: Présenter grille tarifaire complète de manière détaillée
 
 **Contenu**:
+
 - Identique à la section Pricing de la page d'accueil
 - Page dédiée pour référencement SEO et accès direct
 - Voir section "Pricing Section" ci-dessus pour détails complets
@@ -258,6 +283,7 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 **Objectif**: Permettre aux prospects d'estimer leurs économies potentielles
 
 **Contenu**:
+
 - Calculateur interactif ROI
 - **Inputs**:
   - Nombre d'employés
@@ -274,16 +300,19 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 ## Pages Légales
 
 ### Politique de Confidentialité (/politique-confidentialite)
+
 - Collecte et traitement des données personnelles
 - Conformité RGPD
 - Droits des utilisateurs
 
 ### Conditions Générales de Vente (/cgv)
+
 - Modalités de prestation
 - Tarification et paiement
 - Garanties et responsabilités
 
 ### Mentions Légales (/mentions-legales)
+
 - Informations légales de l'entreprise
 - Hébergement
 - Propriété intellectuelle
@@ -293,8 +322,10 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 ## Éléments Transversaux
 
 ### Navigation
+
 **Logo**: Sablia (lien vers /)
 **Menu principal** (capsule nav):
+
 - Services → #solution
 - Processus → #process
 - Tarifs → #pricing
@@ -304,7 +335,9 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 **CTA Navigation**: "Démarrer" → #contact
 
 ### Footer
+
 **Colonnes**:
+
 1. **Services**:
    - Audit & Consulting
    - Formations
@@ -326,9 +359,11 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
    - Calendly: https://calendly.com/brice-gachadoat/30min
 
 **Social**:
+
 - LinkedIn: [lien à ajouter]
 
 ### Animations & Effets
+
 - **AnimatedParticles**: Particules flottantes en arrière-plan
 - **CustomCursor**: Curseur personnalisé avec effet magnétique
 - **ScrollReveal**: Animations au scroll
@@ -337,6 +372,7 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 - **Glassmorphism**: Cartes avec effet verre dépoli (backdrop-blur)
 
 ### Palette de Couleurs (Thème v3)
+
 - **Primary**:
   - Navy: #0A2463
   - Electric: #3E92CC
@@ -351,6 +387,7 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
   - Orange: #FFA559 (CTAs, highlights)
 
 ### Gradient Background
+
 ```
 linear-gradient(to bottom,
   #2B9AB8 0%,
@@ -369,6 +406,7 @@ linear-gradient(to bottom,
 ## Messages Clés
 
 ### Différenciateurs
+
 1. **Formation-First**: Autonomisation des équipes vs simple développement
 2. **Modulaire**: Offres adaptables de 350€ à 60k€
 3. **Souveraineté**: Outils européens (n8n, Make.com)
@@ -376,12 +414,14 @@ linear-gradient(to bottom,
 5. **Approche humaine**: Expert individuel vs agence impersonnelle
 
 ### Preuves Sociales
+
 - 10+ ans d'expérience IT/Data
 - Parcours prestigieux: MeltOne Advisory + LVMH
 - 5 témoignages clients vérifiables avec résultats concrets
 - Secteurs diversifiés accompagnés
 
 ### Objections Anticipées (FAQ)
+
 - Pas de compétences techniques requises
 - ROI rapide (< 12 mois)
 - Support post-livraison inclus
@@ -393,16 +433,19 @@ linear-gradient(to bottom,
 ## Intégrations & Outils
 
 ### Calendly
+
 - URL: https://calendly.com/brice-gachadoat/30min
 - Appel découverte gratuit 30 minutes
 - Intégré dans CTAs sur pages: /, /about
 
 ### n8n Webhook
+
 - Formulaire GAP Analysis
 - Collecte leads qualifiés
 - Variable d'environnement: `VITE_N8N_WEBHOOK_URL`
 
 ### Analytics & Tracking
+
 - [À définir selon configuration]
 
 ---
@@ -410,23 +453,28 @@ linear-gradient(to bottom,
 ## SEO & Métadonnées
 
 ### Homepage (/)
+
 - **Title**: "Sablia - L'IA au service de votre croissance | Automatisation pour PME"
 - **Description**: "Formation + Installation + Contrôle. Automatisez vos processus métier avec n8n et Make.com. ROI mesurable sous 12 mois. Audit gratuit."
 - **Keywords**: automatisation business, IA PME, n8n, Make.com, formations automatisation, consultant automatisation
 
 ### À Propos (/about)
+
 - **Title**: "Brice Gachadoat - Expert Automatisation & IA | Sablia"
 - **Description**: "10+ ans d'expérience IT/Data. Parcours MeltOne Advisory + LVMH. Spécialisé automatisation intelligente et IA conversationnelle pour PME."
 
 ### GAP Analysis (/gap)
+
 - **Title**: "Générateur d'Automatisations Personnalisées | Sablia"
 - **Description**: "Obtenez des recommandations d'automatisations sur mesure en 2 minutes. Gratuit, sans engagement, réponse sous 24h."
 
 ### Tarifs (/tarifs)
+
 - **Title**: "Tarifs Automatisation & Formation IA | Sablia"
 - **Description**: "De 350€ (Audit Express) à 60k€ (Transformation Complète). Audit & Consulting, Formations n8n/Make.com, Solutions d'automatisation. ROI garanti."
 
 ### ROI Calculator (/roi)
+
 - **Title**: "Calculateur ROI Automatisation | Sablia"
 - **Description**: "Estimez vos économies potentielles avec l'automatisation. Calcul gratuit en ligne basé sur vos données réelles."
 
@@ -435,6 +483,7 @@ linear-gradient(to bottom,
 ## Architecture Technique
 
 ### Stack
+
 - **Frontend**: React 18 + TypeScript + Vite + Wouter
 - **Backend**: Express.js + TypeScript
 - **Base de données**: PostgreSQL + Drizzle ORM
@@ -444,6 +493,7 @@ linear-gradient(to bottom,
 - **State**: React Query (TanStack Query)
 
 ### Routes
+
 - `/` - Landing (homepage)
 - `/about` - À propos
 - `/gap` - GAP Analysis form
@@ -454,6 +504,7 @@ linear-gradient(to bottom,
 - `/mentions-legales` - Legal notice
 
 ### Path Aliases
+
 - `@/` → `client/src/`
 - `@db` → `db/`
 
@@ -462,6 +513,7 @@ linear-gradient(to bottom,
 ## Maintenance & Updates
 
 **Ce document doit être mis à jour lors de**:
+
 - Modification du contenu des sections landing page
 - Ajout/suppression de pages
 - Changement de tarification

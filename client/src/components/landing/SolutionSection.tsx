@@ -26,26 +26,30 @@ const solutions: Solution[] = [
     id: 1,
     icon: <Search size={56} className="text-v2-cyan" />,
     title: "Diagnostic Complet",
-    description: "Audit de vos processus, identification des opportunités d'automatisation et accompagnement personnalisé : formation, conseil ou développement."
+    description:
+      "Audit de vos processus, identification des opportunités d'automatisation et accompagnement personnalisé : formation, conseil ou développement.",
   },
   {
     id: 2,
     icon: <Sparkles size={56} className="text-v2-cyan" />,
     title: "Solutions Spécifiques",
-    description: "Votre entreprise est unique, nos solutions aussi. Chaque automatisation est développée sur-mesure pour répondre précisément à vos besoins."
+    description:
+      "Votre entreprise est unique, nos solutions aussi. Chaque automatisation est développée sur-mesure pour répondre précisément à vos besoins.",
   },
   {
     id: 3,
     icon: <ShieldCheck size={56} className="text-v2-cyan" />,
     title: "Sécurité & Conformité",
-    description: "Vos données restent protégées. Nous respectons le RGPD et privilégions des solutions européennes pour garantir la sécurité de vos informations."
+    description:
+      "Vos données restent protégées. Nous respectons le RGPD et privilégions des solutions européennes pour garantir la sécurité de vos informations.",
   },
   {
     id: 4,
     icon: <TrendingUp size={56} className="text-v2-cyan" />,
     title: "ROI Mesurable",
-    description: "Chaque automatisation génère un ROI quantifiable. Nous mesurons temps gagné et économies réalisées."
-  }
+    description:
+      "Chaque automatisation génère un ROI quantifiable. Nous mesurons temps gagné et économies réalisées.",
+  },
 ];
 
 export default function SolutionSection() {

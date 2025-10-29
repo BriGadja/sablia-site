@@ -89,19 +89,19 @@
   @apply bg-clip-text text-transparent;
   background-image: linear-gradient(
     to right,
-    #ff0000, /* Rouge */
-    #ff8000, /* Orange */
-    #ffff00, /* Jaune */
-    #80ff00, /* Jaune-vert */
-    #00ff00, /* Vert */
-    #00ff80, /* Vert-cyan */
-    #00ffff, /* Cyan */
-    #0080ff, /* Bleu clair */
-    #0000ff, /* Bleu */
-    #8000ff, /* Indigo */
-    #ff00ff, /* Magenta */
-    #ff0080, /* Rose */
-    #ff0000  /* Rouge (retour au début) */
+    #ff0000,
+    /* Rouge */ #ff8000,
+    /* Orange */ #ffff00,
+    /* Jaune */ #80ff00,
+    /* Jaune-vert */ #00ff00,
+    /* Vert */ #00ff80,
+    /* Vert-cyan */ #00ffff,
+    /* Cyan */ #0080ff,
+    /* Bleu clair */ #0000ff,
+    /* Bleu */ #8000ff,
+    /* Indigo */ #ff00ff,
+    /* Magenta */ #ff0080,
+    /* Rose */ #ff0000 /* Rouge (retour au début) */
   );
   background-size: 400% auto;
   animation: rainbow-text-animation 8s linear infinite;
@@ -118,7 +118,8 @@
 
 /* Animated gradient for hero background */
 @keyframes gradient-xy {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   50% {
@@ -158,7 +159,9 @@
 .page-transition-enter-active {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 400ms, transform 400ms;
+  transition:
+    opacity 400ms,
+    transform 400ms;
 }
 
 .page-transition-exit {
@@ -169,7 +172,9 @@
 .page-transition-exit-active {
   opacity: 0;
   transform: translateY(-20px);
-  transition: opacity 300ms, transform 300ms;
+  transition:
+    opacity 300ms,
+    transform 300ms;
 }
 
 /* Accessibility: Respect user's reduced motion preference */

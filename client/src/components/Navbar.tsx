@@ -14,9 +14,9 @@ export default function Navbar() {
 
   const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     // Si c'est un lien d'ancrage et nous sommes sur une page autre que l'accueil
-    if (href.startsWith('#') && window.location.pathname !== '/') {
+    if (href.startsWith("#") && window.location.pathname !== "/") {
       e.preventDefault();
-      window.location.href = '/' + href;
+      window.location.href = "/" + href;
     }
   };
 
@@ -86,7 +86,6 @@ export default function Navbar() {
   );
 }
 
-
 // New About page component
 function About() {
   const aboutText = `[Insert the text provided by the user here]`; //Replace with actual text
@@ -98,4 +97,4 @@ function About() {
   );
 }
 
-export {About};
+export { About };

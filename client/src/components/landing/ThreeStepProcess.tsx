@@ -21,32 +21,35 @@ const steps: Step[] = [
     id: 1,
     icon: <Search size={48} className="text-v2-cyan" />,
     title: "Découvrir",
-    description: "Audit de vos processus actuels pour identifier les gains rapides et bâtir une roadmap d'automatisation adaptée à votre contexte.",
+    description:
+      "Audit de vos processus actuels pour identifier les gains rapides et bâtir une roadmap d'automatisation adaptée à votre contexte.",
     duration: "Modulaire",
     badges: [
       { icon: "⚡", label: "Audit Express", duration: "1h30" },
-      { icon: "🔍", label: "Audit Complet", duration: "Jusqu'à 2 semaines" }
-    ]
+      { icon: "🔍", label: "Audit Complet", duration: "Jusqu'à 2 semaines" },
+    ],
   },
   {
     id: 2,
     icon: <Zap size={48} className="text-v2-cyan" />,
     title: "Implémenter",
-    description: "Formation de vos équipes et/ou développement des workflows selon votre besoin. Approche modulaire adaptée à votre contexte.",
+    description:
+      "Formation de vos équipes et/ou développement des workflows selon votre besoin. Approche modulaire adaptée à votre contexte.",
     duration: "Modulaire",
     badges: [
       { icon: "🎓", label: "Formation", duration: "1-5 jours" },
       { icon: "⚙️", label: "Développement", duration: "2-8 semaines" },
-      { icon: "🔄", label: "Hybride", duration: "Combiné" }
-    ]
+      { icon: "🔄", label: "Hybride", duration: "Combiné" },
+    ],
   },
   {
     id: 3,
     icon: <Rocket size={48} className="text-v2-cyan" />,
     title: "Optimiser & Accompagner",
-    description: "Sur la base des retours terrain, nous adaptons vos workflows : modifications, formation de nouveaux collaborateurs, mises à jour et optimisation continue.",
-    duration: "Continu"
-  }
+    description:
+      "Sur la base des retours terrain, nous adaptons vos workflows : modifications, formation de nouveaux collaborateurs, mises à jour et optimisation continue.",
+    duration: "Continu",
+  },
 ];
 
 export default function ThreeStepProcess() {
@@ -56,15 +59,15 @@ export default function ThreeStepProcess() {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const cards = containerRef.current.querySelectorAll('.step-card');
-    const cardBorders = containerRef.current.querySelectorAll('.step-card-border');
+    const cards = containerRef.current.querySelectorAll(".step-card");
+    const cardBorders = containerRef.current.querySelectorAll(".step-card-border");
 
     // If user prefers reduced motion, set final state immediately with no animation
     if (prefersReducedMotion) {
       gsap.set(cards, { opacity: 1, y: 0 });
       gsap.set(cardBorders, {
         boxShadow: "0 0 30px rgba(82, 209, 220, 0.6), 0 0 60px rgba(82, 209, 220, 0.3)",
-        borderColor: "rgba(82, 209, 220, 0.8)"
+        borderColor: "rgba(82, 209, 220, 0.8)",
       });
       return;
     }
@@ -82,9 +85,9 @@ export default function ThreeStepProcess() {
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top 80%",
-          toggleActions: "play none none reverse"
-        }
-      }
+          toggleActions: "play none none reverse",
+        },
+      },
     );
 
     // Progressive light border animation (left to right)
@@ -92,7 +95,7 @@ export default function ThreeStepProcess() {
       cardBorders,
       {
         boxShadow: "0 0 0px rgba(82, 209, 220, 0)",
-        borderColor: "rgba(82, 209, 220, 0.2)"
+        borderColor: "rgba(82, 209, 220, 0.2)",
       },
       {
         boxShadow: "0 0 30px rgba(82, 209, 220, 0.6), 0 0 60px rgba(82, 209, 220, 0.3)",
@@ -106,14 +109,14 @@ export default function ThreeStepProcess() {
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top 80%",
-          toggleActions: "play none none pause"
-        }
-      }
+          toggleActions: "play none none pause",
+        },
+      },
     );
 
     // Cleanup
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, [prefersReducedMotion]);
 
@@ -126,7 +129,8 @@ export default function ThreeStepProcess() {
             Notre processus en 3 étapes
           </h2>
           <p className="text-xl sm:text-2xl text-v2-off-white/80 text-center mb-20 max-w-3xl mx-auto">
-            De l'audit initial à l'optimisation continue, nous accompagnons votre transformation digitale avec une méthodologie éprouvée
+            De l'audit initial à l'optimisation continue, nous accompagnons votre transformation
+            digitale avec une méthodologie éprouvée
           </p>
         </ScrollReveal>
 

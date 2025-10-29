@@ -35,46 +35,51 @@ const testimonials: Testimonial[] = [
     role: "Fondatrice",
     company: "GirlsGang",
     avatar: "HE",
-    quote: "De 1h de conception par menu à 30 minutes de relecture pour toutes mes clientes. L'automatisation développée par Sablia m'a redonné du temps pour me concentrer sur l'essentiel : mes clientes.",
+    quote:
+      "De 1h de conception par menu à 30 minutes de relecture pour toutes mes clientes. L'automatisation développée par Sablia m'a redonné du temps pour me concentrer sur l'essentiel : mes clientes.",
     metric: "Économie de 90% du temps",
-    project: "Génération de menus"
+    project: "Génération de menus",
   },
   {
     name: "Directeur",
     role: "Direction",
     company: "Entreprise anonyme",
     avatar: "DI",
-    quote: "Une vision à 360° de notre marché et une longueur d'avance sur nos concurrents. Ce système de veille nous a permis de passer d'une position réactive à une stratégie proactive.",
+    quote:
+      "Une vision à 360° de notre marché et une longueur d'avance sur nos concurrents. Ce système de veille nous a permis de passer d'une position réactive à une stratégie proactive.",
     metric: "Avantage compétitif décisif",
-    project: "Veille concurrentielle"
+    project: "Veille concurrentielle",
   },
   {
     name: "Yassine",
     role: "Fondateur",
     company: "Norloc",
     avatar: "YN",
-    quote: "Notre gestion des prospects est passée au niveau supérieur. L'agent vocal couplé à l'automatisation du CRM nous fait gagner des heures chaque semaine et améliore nos taux de conversion.",
+    quote:
+      "Notre gestion des prospects est passée au niveau supérieur. L'agent vocal couplé à l'automatisation du CRM nous fait gagner des heures chaque semaine et améliore nos taux de conversion.",
     metric: "Taux de conversion amélioré",
-    project: "Agent vocal + CRM"
+    project: "Agent vocal + CRM",
   },
   {
     name: "Valentin",
     role: "Fondateur",
     company: "Stefano Design & Exotic Design",
     avatar: "VD",
-    quote: "Des milliers de contacts dormants transformés en opportunités commerciales concrètes. L'agent vocal nous a permis d'exploiter un gisement de valeur que nous avions sous-estimé.",
+    quote:
+      "Des milliers de contacts dormants transformés en opportunités commerciales concrètes. L'agent vocal nous a permis d'exploiter un gisement de valeur que nous avions sous-estimé.",
     metric: "Milliers de contacts réactivés",
-    project: "Réactivation automatisée de BDD"
+    project: "Réactivation automatisée de BDD",
   },
   {
     name: "Amir",
     role: "Fondateur",
     company: "Entreprise BTP",
     avatar: "AM",
-    quote: "De la demande client au suivi de chantier, tout est automatisé. Plus de temps perdu, plus d'erreurs, juste de l'efficacité. Notre organisation a été transformée.",
+    quote:
+      "De la demande client au suivi de chantier, tout est automatisé. Plus de temps perdu, plus d'erreurs, juste de l'efficacité. Notre organisation a été transformée.",
     metric: "Organisation transformée",
-    project: "Gestion des interventions"
-  }
+    project: "Gestion des interventions",
+  },
 ];
 
 export default function TestimonialsSection() {
@@ -82,10 +87,7 @@ export default function TestimonialsSection() {
   const displayTestimonials = [...testimonials, ...testimonials, ...testimonials];
 
   return (
-    <section
-      id="testimonials"
-      className="py-24 relative overflow-hidden"
-    >
+    <section id="testimonials" className="py-24 relative overflow-hidden">
       <div className="container mx-auto px-6 lg:px-8">
         <ScrollReveal>
           {/* Section Header */}
@@ -116,9 +118,7 @@ export default function TestimonialsSection() {
             <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#3D92CB] to-transparent z-10 pointer-events-none" />
 
             {/* Scrolling cards wrapper with pause on hover (CSS animation) */}
-            <div
-              className="flex gap-6 animate-scroll-testimonials"
-            >
+            <div className="flex gap-6 animate-scroll-testimonials">
               {displayTestimonials.map((testimonial, index) => (
                 <div
                   key={`${testimonial.name}-${index}`}
@@ -129,20 +129,14 @@ export default function TestimonialsSection() {
                     {/* Header: Avatar + Name */}
                     <div className="flex items-start gap-4 mb-4">
                       <div className="w-12 h-12 rounded-full bg-gradient-to-br from-v2-cyan to-v2-electric flex items-center justify-center flex-shrink-0">
-                        <span className="text-v2-navy font-bold text-sm">
-                          {testimonial.avatar}
-                        </span>
+                        <span className="text-v2-navy font-bold text-sm">{testimonial.avatar}</span>
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="font-bold text-v2-white text-lg leading-tight">
                           {testimonial.name}
                         </h3>
-                        <p className="text-sm text-v2-off-white/70">
-                          {testimonial.role}
-                        </p>
-                        <p className="text-xs text-v2-off-white/50">
-                          {testimonial.company}
-                        </p>
+                        <p className="text-sm text-v2-off-white/70">{testimonial.role}</p>
+                        <p className="text-xs text-v2-off-white/50">{testimonial.company}</p>
                       </div>
                     </div>
 
@@ -155,13 +149,9 @@ export default function TestimonialsSection() {
                     <div className="pt-4 border-t border-v2-white/10 space-y-2">
                       <div className="inline-flex items-center gap-2 bg-v2-cyan/30 text-v2-white px-3 py-1.5 rounded-full">
                         <span className="text-lg">✓</span>
-                        <span className="text-sm font-semibold">
-                          {testimonial.metric}
-                        </span>
+                        <span className="text-sm font-semibold">{testimonial.metric}</span>
                       </div>
-                      <p className="text-xs text-v2-off-white/60">
-                        Projet : {testimonial.project}
-                      </p>
+                      <p className="text-xs text-v2-off-white/60">Projet : {testimonial.project}</p>
                     </div>
                   </div>
                 </div>

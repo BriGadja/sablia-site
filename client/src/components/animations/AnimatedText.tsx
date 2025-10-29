@@ -16,11 +16,7 @@ interface AnimatedTextProps {
   staggerDelay?: number;
 }
 
-export function AnimatedText({
-  children,
-  className = "",
-  staggerDelay = 0.1,
-}: AnimatedTextProps) {
+export function AnimatedText({ children, className = "", staggerDelay = 0.1 }: AnimatedTextProps) {
   const words = children.split(" ");
 
   return (
@@ -90,11 +86,7 @@ interface TypewriterTextProps {
   speed?: number;
 }
 
-export function TypewriterText({
-  children,
-  className = "",
-  speed = 0.05,
-}: TypewriterTextProps) {
+export function TypewriterText({ children, className = "", speed = 0.05 }: TypewriterTextProps) {
   const letters = children.split("");
 
   return (
@@ -126,11 +118,7 @@ interface RevealTextProps {
   delay?: number;
 }
 
-export function RevealText({
-  children,
-  className = "",
-  delay = 0,
-}: RevealTextProps) {
+export function RevealText({ children, className = "", delay = 0 }: RevealTextProps) {
   return (
     <div className={`relative inline-block overflow-hidden ${className}`}>
       <motion.div

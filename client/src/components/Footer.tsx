@@ -2,7 +2,7 @@ import { Link } from "wouter";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900" style={{ backgroundColor: '#0f172a' }}>
+    <footer className="bg-gray-900" style={{ backgroundColor: "#0f172a" }}>
       <div className="container py-12 mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
@@ -13,10 +13,7 @@ export default function Footer() {
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-100">Contact</h3>
-            <a
-              href="mailto:brice@sablia.io"
-              className="text-gray-300 hover:text-white block"
-            >
+            <a href="mailto:brice@sablia.io" className="text-gray-300 hover:text-white block">
               brice@sablia.io
             </a>
           </div>
@@ -25,7 +22,10 @@ export default function Footer() {
             <Link href="/mentions-legales" className="text-gray-300 hover:text-white block mb-2">
               Mentions légales
             </Link>
-            <Link href="/politique-confidentialite" className="text-gray-300 hover:text-white block mb-2">
+            <Link
+              href="/politique-confidentialite"
+              className="text-gray-300 hover:text-white block mb-2"
+            >
               Politique de confidentialité
             </Link>
             <Link href="/cgv" className="text-gray-300 hover:text-white block">

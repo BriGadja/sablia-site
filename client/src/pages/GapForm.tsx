@@ -3,9 +3,22 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { usePersistentToast } from "@/hooks/use-persistent-toast";
@@ -62,7 +75,7 @@ export default function GapForm() {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (isSubmitting) return;
-    
+
     setIsSubmitting(true);
     try {
       const params = new URLSearchParams();
@@ -72,15 +85,15 @@ export default function GapForm() {
         }
       });
 
-      const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL ||
-                        window.location.origin + '/api/webhook-test';
+      const webhookUrl =
+        import.meta.env.VITE_N8N_WEBHOOK_URL || window.location.origin + "/api/webhook-test";
 
       const response = await fetch(`${webhookUrl}?${params.toString()}`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest'
-        }
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+        },
       });
 
       if (!response.ok) {
@@ -94,10 +107,9 @@ export default function GapForm() {
       });
 
       // Redirection vers la page d'accueil
-      window.location.href = '/';
-
+      window.location.href = "/";
     } catch (error) {
-      console.error('Erreur:', error);
+      console.error("Erreur:", error);
       setIsSubmitting(false);
       toast({
         variant: "destructive",
@@ -107,7 +119,6 @@ export default function GapForm() {
     }
   };
 
-
   const sectorOptions = [
     "E-commerce",
     "Marketing & Communication",
@@ -116,21 +127,17 @@ export default function GapForm() {
     "Tech & Software",
     "Santé & Bien-être",
     "Finance & Assurance",
-    "Autre"
+    "Autre",
   ];
 
-  const availabilityOptions = [
-    "Cette semaine",
-    "Semaine prochaine",
-    "Dans 2 semaines",
-    "Flexible"
-  ];
+  const availabilityOptions = ["Cette semaine", "Semaine prochaine", "Dans 2 semaines", "Flexible"];
 
   return (
     <motion.div
       className="min-h-screen relative"
       style={{
-        background: "linear-gradient(to bottom, #2B9AB8 0%, #3E92CC 15%, #0A2463 35%, #0A2463 50%, #2D3142 65%, #3d2f1f 80%, #4a3621 95%, #3d2f1f 100%)"
+        background:
+          "linear-gradient(to bottom, #2B9AB8 0%, #3E92CC 15%, #0A2463 35%, #0A2463 50%, #2D3142 65%, #3d2f1f 80%, #4a3621 95%, #3d2f1f 100%)",
       }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -144,7 +151,10 @@ export default function GapForm() {
       <div className="relative z-10 min-h-screen flex flex-col">
         {/* Back link */}
         <div className="container mx-auto px-4 pt-8">
-          <Link href="/" className="inline-flex items-center text-white/80 hover:text-white transition-colors">
+          <Link
+            href="/"
+            className="inline-flex items-center text-white/80 hover:text-white transition-colors"
+          >
             ← Retour à l'accueil
           </Link>
         </div>
@@ -163,7 +173,8 @@ export default function GapForm() {
                 Générateur d'<RainbowText>Automatisations</RainbowText> Personnalisées
               </h1>
               <p className="text-base sm:text-lg text-white/80 max-w-2xl mx-auto">
-                En 2 minutes, obtenez des recommandations d'automatisations sur mesure pour votre entreprise
+                En 2 minutes, obtenez des recommandations d'automatisations sur mesure pour votre
+                entreprise
               </p>
             </motion.div>
 
@@ -182,10 +193,14 @@ export default function GapForm() {
                     <div className="space-y-4">
                       <div className="border-b border-white/20 pb-3">
                         <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-                          <span className="flex items-center justify-center w-7 h-7 rounded-full bg-orange-500 text-white text-sm font-bold">1</span>
+                          <span className="flex items-center justify-center w-7 h-7 rounded-full bg-orange-500 text-white text-sm font-bold">
+                            1
+                          </span>
                           Vos coordonnées
                         </h2>
-                        <p className="text-white/60 text-xs mt-1">Requis pour recevoir vos automatisations</p>
+                        <p className="text-white/60 text-xs mt-1">
+                          Requis pour recevoir vos automatisations
+                        </p>
                       </div>
 
                       <FormField
@@ -193,7 +208,9 @@ export default function GapForm() {
                         name="firstName"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-white text-sm">Prénom <span className="text-orange-400">*</span></FormLabel>
+                            <FormLabel className="text-white text-sm">
+                              Prénom <span className="text-orange-400">*</span>
+                            </FormLabel>
                             <FormControl>
                               <Input
                                 {...field}
@@ -211,7 +228,9 @@ export default function GapForm() {
                         name="lastName"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-white text-sm">Nom <span className="text-orange-400">*</span></FormLabel>
+                            <FormLabel className="text-white text-sm">
+                              Nom <span className="text-orange-400">*</span>
+                            </FormLabel>
                             <FormControl>
                               <Input
                                 {...field}
@@ -229,7 +248,9 @@ export default function GapForm() {
                         name="email"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-white text-sm">Email professionnel <span className="text-orange-400">*</span></FormLabel>
+                            <FormLabel className="text-white text-sm">
+                              Email professionnel <span className="text-orange-400">*</span>
+                            </FormLabel>
                             <FormControl>
                               <Input
                                 {...field}
@@ -248,7 +269,9 @@ export default function GapForm() {
                         name="companyName"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-white text-sm">Entreprise <span className="text-orange-400">*</span></FormLabel>
+                            <FormLabel className="text-white text-sm">
+                              Entreprise <span className="text-orange-400">*</span>
+                            </FormLabel>
                             <FormControl>
                               <Input
                                 {...field}
@@ -266,7 +289,9 @@ export default function GapForm() {
                     <div className="space-y-4">
                       <div className="border-b border-white/20 pb-3">
                         <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-                          <span className="flex items-center justify-center w-7 h-7 rounded-full bg-blue-500 text-white text-sm font-bold">2</span>
+                          <span className="flex items-center justify-center w-7 h-7 rounded-full bg-blue-500 text-white text-sm font-bold">
+                            2
+                          </span>
                           Votre contexte
                         </h2>
                         <p className="text-white/60 text-xs mt-1">
@@ -287,7 +312,11 @@ export default function GapForm() {
                                 </SelectTrigger>
                                 <SelectContent className="bg-gray-900 border-white/20">
                                   {sectorOptions.map((option) => (
-                                    <SelectItem key={option} value={option} className="text-white hover:bg-white/10">
+                                    <SelectItem
+                                      key={option}
+                                      value={option}
+                                      className="text-white hover:bg-white/10"
+                                    >
                                       {option}
                                     </SelectItem>
                                   ))}
@@ -325,7 +354,9 @@ export default function GapForm() {
                         name="availability"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-white text-sm">Disponibilité pour un échange</FormLabel>
+                            <FormLabel className="text-white text-sm">
+                              Disponibilité pour un échange
+                            </FormLabel>
                             <FormControl>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <SelectTrigger className="bg-white/10 border-white/20 text-white">
@@ -333,7 +364,11 @@ export default function GapForm() {
                                 </SelectTrigger>
                                 <SelectContent className="bg-gray-900 border-white/20">
                                   {availabilityOptions.map((option) => (
-                                    <SelectItem key={option} value={option} className="text-white hover:bg-white/10">
+                                    <SelectItem
+                                      key={option}
+                                      value={option}
+                                      className="text-white hover:bg-white/10"
+                                    >
                                       {option}
                                     </SelectItem>
                                   ))}
@@ -360,7 +395,7 @@ export default function GapForm() {
                           Envoi en cours...
                         </div>
                       ) : (
-                        '🚀 Recevoir mes automatisations'
+                        "🚀 Recevoir mes automatisations"
                       )}
                     </Button>
                     <p className="text-center text-white/50 text-xs mt-2">

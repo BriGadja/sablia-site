@@ -1,11 +1,5 @@
-
 import { Clock, Wrench, CheckCircle, Rocket } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "./ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion";
 
 const steps = [
   {
@@ -19,7 +13,7 @@ const steps = [
     • Une analyse clé en main de vos points bloquants
     • Des idées d'automatisation adaptées à vos besoins
     
-    Vous repartez avec des solutions, même si nous ne travaillons pas ensemble !`
+    Vous repartez avec des solutions, même si nous ne travaillons pas ensemble !`,
   },
   {
     icon: Wrench,
@@ -30,7 +24,7 @@ const steps = [
     ✅ Notre promesse :
     • Pas de modèle prédéfini : tout est conçu pour votre activité
     • Des mises à jour régulières sur l'avancée du projet
-    • Des technologies sécurisées et compatibles avec vos systèmes`
+    • Des technologies sécurisées et compatibles avec vos systèmes`,
   },
   {
     icon: CheckCircle,
@@ -41,7 +35,7 @@ const steps = [
     ✅ Pourquoi ça marche :
     • Des retours intégrés en temps réel
     • Des corrections rapides (souvent sous 24h)
-    • Une équipe disponible pour répondre à toutes vos questions`
+    • Une équipe disponible pour répondre à toutes vos questions`,
   },
   {
     icon: Rocket,
@@ -54,31 +48,27 @@ const steps = [
     • Documentation et tutoriels vidéo inclus
     • Un support réactif pendant 1 mois offert
     
-    Votre succès est le nôtre : nous célébrerons ensemble chaque gain de productivité !`
-  }
+    Votre succès est le nôtre : nous célébrerons ensemble chaque gain de productivité !`,
+  },
 ];
 
 export default function ProcessSection() {
   return (
     <section id="process" className="py-16">
       <div className="container mx-auto px-4 max-w-4xl">
-        <h2 className="section-title text-center mb-12 text-3xl font-bold text-white">Notre Processus</h2>
+        <h2 className="section-title text-center mb-12 text-3xl font-bold text-white">
+          Notre Processus
+        </h2>
         <div className="relative">
           <div className="absolute left-8 top-0 h-full w-px bg-gradient-to-b from-orange-500/30 to-orange-600/30" />
           <Accordion type="single" collapsible className="space-y-6">
             {steps.map((step, index) => (
-              <AccordionItem
-                key={index}
-                value={`step-${index}`}
-                className="border-none relative"
-              >
+              <AccordionItem key={index} value={`step-${index}`} className="border-none relative">
                 <div className="absolute -left-3 top-4 h-4 w-4 rounded-full bg-orange-500" />
                 <div className="pl-12">
                   <AccordionTrigger className="hover:no-underline [&[data-state=open]>div]:text-orange-500">
                     <div className="flex flex-col items-start text-left">
-                      <h3 className="text-xl font-semibold mb-2 text-white">
-                        {step.title}
-                      </h3>
+                      <h3 className="text-xl font-semibold mb-2 text-white">{step.title}</h3>
                       <p className="text-gray-400 text-sm">{step.subtitle}</p>
                     </div>
                   </AccordionTrigger>

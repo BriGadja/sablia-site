@@ -30,16 +30,16 @@ export default defineConfig({
     sourcemap: false,
     rollupOptions: {
       input: {
-        main: path.resolve(__dirname, "client/index.html")
+        main: path.resolve(__dirname, "client/index.html"),
       },
       output: {
         manualChunks: {
           // Vendor chunks for better caching
           "react-vendor": ["react", "react-dom", "react/jsx-runtime"],
-          "router": ["wouter"],
-          "animation": ["framer-motion", "gsap"],
-          "forms": ["react-hook-form", "@hookform/resolvers", "zod"],
-          "ui": ["@radix-ui/react-accordion", "@radix-ui/react-toast"],
+          router: ["wouter"],
+          animation: ["framer-motion", "gsap"],
+          forms: ["react-hook-form", "@hookform/resolvers", "zod"],
+          ui: ["@radix-ui/react-accordion", "@radix-ui/react-toast"],
         },
       },
     },

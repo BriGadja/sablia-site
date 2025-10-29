@@ -55,11 +55,7 @@ const pricingColumns: PricingColumn[] = [
         price: "GRATUIT",
         duration: "30 min",
         description: "Visio de qualification pour comprendre vos besoins",
-        features: [
-          "Échange personnalisé",
-          "Sans engagement",
-          "Premiers conseils"
-        ]
+        features: ["Échange personnalisé", "Sans engagement", "Premiers conseils"],
       },
       {
         name: "Audit Express",
@@ -69,22 +65,23 @@ const pricingColumns: PricingColumn[] = [
         features: [
           "30 min cadrage + 1h stratégie",
           "Livrable 5-10 pages",
-          "Regard expert immédiat"
-        ]
+          "Regard expert immédiat",
+        ],
       },
       {
         name: "Audit Complet",
         price: "2 000-5 000€",
         duration: "1-2 semaines",
-        description: "Audit approfondi adapté à la taille de votre entreprise et au nombre de départements",
+        description:
+          "Audit approfondi adapté à la taille de votre entreprise et au nombre de départements",
         features: [
           "Analyse approfondie multi-départements",
           "Roadmap détaillée avec priorités",
-          "Workshop avec stakeholders"
-        ]
-      }
+          "Workshop avec stakeholders",
+        ],
+      },
     ],
-    ctaPrimary: { text: "Réserver un appel", url: "#contact" }
+    ctaPrimary: { text: "Réserver un appel", url: "#contact" },
   },
   {
     id: "formations",
@@ -96,34 +93,24 @@ const pricingColumns: PricingColumn[] = [
         price: "700€",
         duration: "3h30",
         description: "IA générative, automatisation basics, découverte n8n",
-        features: [
-          "Intra-entreprise",
-          "Jusqu'à 10 participants"
-        ]
+        features: ["Intra-entreprise", "Jusqu'à 10 participants"],
       },
       {
         name: "Formation 1 Jour",
         price: "1 200€",
         duration: "7h",
         description: "IA/automatisation standard, n8n débutant",
-        features: [
-          "Cas pratiques inclus",
-          "Support 1 mois post-formation"
-        ]
+        features: ["Cas pratiques inclus", "Support 1 mois post-formation"],
       },
       {
         name: "Formation 2-3 Jours",
         price: "2 200-3 300€",
         duration: "14-21h",
         description: "n8n avancé + certification équipe complète",
-        features: [
-          "Formation intensive",
-          "Certification",
-          "Documentation complète"
-        ]
-      }
+        features: ["Formation intensive", "Certification", "Documentation complète"],
+      },
     ],
-    ctaPrimary: { text: "Voir les formations", url: "#contact" }
+    ctaPrimary: { text: "Voir les formations", url: "#contact" },
   },
   {
     id: "solutions",
@@ -135,38 +122,26 @@ const pricingColumns: PricingColumn[] = [
         price: "2 500-5 000€",
         duration: "3-7 jours",
         description: "1-2 processus automatisés",
-        features: [
-          "Conception + développement",
-          "Documentation",
-          "2 semaines support"
-        ]
+        features: ["Conception + développement", "Documentation", "2 semaines support"],
       },
       {
         name: "Système Standard",
         price: "8 000-18 000€",
         duration: "2-4 semaines",
         description: "3-5 processus interconnectés",
-        features: [
-          "Architecture complète",
-          "Formation 1 jour",
-          "1 mois support"
-        ]
+        features: ["Architecture complète", "Formation 1 jour", "1 mois support"],
       },
       {
         name: "Transformation Complète",
         price: "25 000-60 000€",
         duration: "6-12 semaines",
         description: "5+ processus multi-départements",
-        features: [
-          "Audit préalable inclus",
-          "Formation 2-3 jours",
-          "3 mois support"
-        ],
-        roi: "ROI année 1 : 50 000-150 000€"
-      }
+        features: ["Audit préalable inclus", "Formation 2-3 jours", "3 mois support"],
+        roi: "ROI année 1 : 50 000-150 000€",
+      },
     ],
-    ctaPrimary: { text: "Démarrer un projet", url: "#contact" }
-  }
+    ctaPrimary: { text: "Démarrer un projet", url: "#contact" },
+  },
 ];
 
 // ============================================
@@ -178,25 +153,15 @@ function OfferItem({ offer }: { offer: PricingOffer }) {
     <div className="border-t border-v2-cyan/20 pt-4">
       {/* Name + Price */}
       <div className="flex justify-between items-baseline mb-2">
-        <h4 className="font-semibold text-v2-white text-lg">
-          {offer.name}
-        </h4>
-        <span className="text-v2-cyan font-bold text-xl">
-          {offer.price}
-        </span>
+        <h4 className="font-semibold text-v2-white text-lg">{offer.name}</h4>
+        <span className="text-v2-cyan font-bold text-xl">{offer.price}</span>
       </div>
 
       {/* Duration */}
-      {offer.duration && (
-        <p className="text-v2-off-white/50 text-sm mb-2">
-          {offer.duration}
-        </p>
-      )}
+      {offer.duration && <p className="text-v2-off-white/50 text-sm mb-2">{offer.duration}</p>}
 
       {/* Description */}
-      <p className="text-v2-off-white/80 text-sm mb-3">
-        {offer.description}
-      </p>
+      <p className="text-v2-off-white/80 text-sm mb-3">{offer.description}</p>
 
       {/* Features List */}
       <ul className="space-y-2">
@@ -209,11 +174,7 @@ function OfferItem({ offer }: { offer: PricingOffer }) {
       </ul>
 
       {/* Optional ROI Callout */}
-      {offer.roi && (
-        <p className="text-v2-cyan text-sm font-semibold mt-3">
-          {offer.roi}
-        </p>
-      )}
+      {offer.roi && <p className="text-v2-cyan text-sm font-semibold mt-3">{offer.roi}</p>}
     </div>
   );
 }
@@ -239,12 +200,8 @@ function PricingCard({ column, index }: { column: PricingColumn; index: number }
     >
       {/* Column Header */}
       <div className="text-center mb-8">
-        <h3 className="text-2xl sm:text-3xl font-bold text-v2-white mb-2">
-          {column.title}
-        </h3>
-        <p className="text-v2-off-white/70 text-base sm:text-lg">
-          {column.subtitle}
-        </p>
+        <h3 className="text-2xl sm:text-3xl font-bold text-v2-white mb-2">{column.title}</h3>
+        <p className="text-v2-off-white/70 text-base sm:text-lg">{column.subtitle}</p>
       </div>
 
       {/* Offers List */}
@@ -265,7 +222,7 @@ function PricingCard({ column, index }: { column: PricingColumn; index: number }
         "
         onClick={() => {
           const target = document.querySelector(column.ctaPrimary.url);
-          target?.scrollIntoView({ behavior: 'smooth' });
+          target?.scrollIntoView({ behavior: "smooth" });
         }}
       >
         {column.ctaPrimary.text}
@@ -295,11 +252,7 @@ export default function PricingSection() {
         {/* Pricing Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {pricingColumns.map((column, colIndex) => (
-            <PricingCard
-              key={column.id}
-              column={column}
-              index={colIndex}
-            />
+            <PricingCard key={column.id} column={column} index={colIndex} />
           ))}
         </div>
       </div>

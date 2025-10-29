@@ -38,7 +38,7 @@ export default function Navigation() {
 
   // Check prefers-reduced-motion
   const prefersReducedMotion = useRef(
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
 
   // Close mobile menu on escape key
@@ -110,20 +110,16 @@ export default function Navigation() {
       const lerpFactor = prefersReducedMotion.current ? 1 : 0.15;
 
       // Lerp underline
-      currentRef.current.left = lerp(
-        currentRef.current.left,
-        targetRef.current.left,
-        lerpFactor
-      );
+      currentRef.current.left = lerp(currentRef.current.left, targetRef.current.left, lerpFactor);
       currentRef.current.width = lerp(
         currentRef.current.width,
         targetRef.current.width,
-        lerpFactor
+        lerpFactor,
       );
       currentRef.current.opacity = lerp(
         currentRef.current.opacity,
         targetRef.current.opacity,
-        lerpFactor
+        lerpFactor,
       );
 
       // Update DOM
@@ -161,17 +157,14 @@ export default function Navigation() {
       </Link>
 
       {/* Capsule nav - top right (desktop) */}
-      <nav
-        onMouseLeave={handleCapsuleLeave}
-        className="hidden md:block fixed top-6 right-6 z-50"
-      >
+      <nav onMouseLeave={handleCapsuleLeave} className="hidden md:block fixed top-6 right-6 z-50">
         <div
           ref={capsuleRef}
           className={cn(
             "relative px-4 py-3 rounded-[24px]",
             "bg-white/10 backdrop-blur-[10px]",
             "border border-white/20",
-            "shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_2px_8px_rgba(0,0,0,0.1)]"
+            "shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_2px_8px_rgba(0,0,0,0.1)]",
           )}
         >
           {/* Underline indicator */}
@@ -185,7 +178,6 @@ export default function Navigation() {
           />
 
           <div className="flex items-center gap-1 relative">
-
             {/* Menu Items */}
             {menuItems.map((item, index) => (
               <button
@@ -198,7 +190,7 @@ export default function Navigation() {
                 className={cn(
                   "px-4 py-2 text-sm font-medium transition-colors relative",
                   "text-white/70 hover:text-white focus:text-white",
-                  "focus:outline-none focus-visible:text-white"
+                  "focus:outline-none focus-visible:text-white",
                 )}
                 aria-label={`Aller à la section ${item.label}`}
               >
@@ -217,7 +209,7 @@ export default function Navigation() {
                 "ml-2 px-5 py-2 rounded-xl text-sm font-medium transition-all",
                 "bg-black text-white",
                 "hover:bg-black/90",
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50",
               )}
               aria-label="Réserver un diagnostic gratuit"
             >
@@ -229,7 +221,10 @@ export default function Navigation() {
 
       {/* Mobile: Logo + Hamburger */}
       <div className="md:hidden fixed top-6 left-6 right-6 z-50 flex items-center justify-between">
-        <Link href="/" className="text-2xl font-bold text-white hover:text-v2-cyan transition-colors">
+        <Link
+          href="/"
+          className="text-2xl font-bold text-white hover:text-v2-cyan transition-colors"
+        >
           Sablia
         </Link>
 
@@ -238,7 +233,7 @@ export default function Navigation() {
           className={cn(
             "p-3 rounded-xl text-white transition-all min-h-[48px] min-w-[48px]",
             "bg-white/10 backdrop-blur-[10px]",
-            "border border-white/20"
+            "border border-white/20",
           )}
           aria-label="Toggle menu"
         >
@@ -295,7 +290,7 @@ export default function Navigation() {
                     className={cn(
                       "block w-full px-6 py-3 text-center rounded-lg font-medium transition-all",
                       "bg-black text-white",
-                      "hover:bg-black/90"
+                      "hover:bg-black/90",
                     )}
                     aria-label="Réserver un diagnostic gratuit"
                   >

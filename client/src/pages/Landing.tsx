@@ -19,7 +19,8 @@ export default function Landing() {
     <motion.div
       className="min-h-screen"
       style={{
-        background: "linear-gradient(to bottom, #2B9AB8 0%, #3E92CC 15%, #0A2463 35%, #0A2463 50%, #2D3142 65%, #3d2f1f 80%, #4a3621 95%, #3d2f1f 100%)"
+        background:
+          "linear-gradient(to bottom, #2B9AB8 0%, #3E92CC 15%, #0A2463 35%, #0A2463 50%, #2D3142 65%, #3d2f1f 80%, #4a3621 95%, #3d2f1f 100%)",
       }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}

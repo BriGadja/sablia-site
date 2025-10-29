@@ -242,22 +242,13 @@
             {
               "name": "availability",
               "type": "select",
-              "options": [
-                "Cette semaine",
-                "Semaine prochaine",
-                "Dans 2 semaines",
-                "Flexible"
-              ]
+              "options": ["Cette semaine", "Semaine prochaine", "Dans 2 semaines", "Flexible"]
             }
           ]
         }
       ],
       "ctaPrimary": "🚀 Recevoir mes automatisations",
-      "trustSignals": [
-        "Gratuit et sans engagement",
-        "Réponse sous 24h",
-        "100% personnalisé"
-      ],
+      "trustSignals": ["Gratuit et sans engagement", "Réponse sous 24h", "100% personnalisé"],
       "postSubmit": "Redirection vers / avec toast confirmation"
     },
     {
@@ -278,11 +269,7 @@
         "Coût horaire moyen",
         "Processus à automatiser"
       ],
-      "outputs": [
-        "Économies annuelles estimées",
-        "ROI en mois",
-        "Temps libéré par an"
-      ]
+      "outputs": ["Économies annuelles estimées", "ROI en mois", "Temps libéré par an"]
     }
   ],
 
@@ -322,11 +309,7 @@
     "columns": [
       {
         "title": "Services",
-        "links": [
-          "Audit & Consulting",
-          "Formations",
-          "Solutions d'automatisation"
-        ]
+        "links": ["Audit & Consulting", "Formations", "Solutions d'automatisation"]
       },
       {
         "title": "Ressources",

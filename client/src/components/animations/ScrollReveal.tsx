@@ -60,27 +60,23 @@ export function ScrollReveal({
     const children = element.children;
     const targets = stagger > 0 ? Array.from(children) : element;
 
-    gsap.fromTo(
-      targets,
-      animations[direction],
-      {
-        ...animations[direction],
-        y: 0,
-        x: 0,
-        scale: 1,
-        opacity: 1,
-        duration,
-        delay,
-        stagger,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: element,
-          start: "top 80%",
-          end: "top 20%",
-          toggleActions: "play none none reverse",
-        },
-      }
-    );
+    gsap.fromTo(targets, animations[direction], {
+      ...animations[direction],
+      y: 0,
+      x: 0,
+      scale: 1,
+      opacity: 1,
+      duration,
+      delay,
+      stagger,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: element,
+        start: "top 80%",
+        end: "top 20%",
+        toggleActions: "play none none reverse",
+      },
+    });
   }, [direction, duration, delay, stagger, prefersReducedMotion]);
 
   return (
@@ -100,11 +96,7 @@ interface ParallaxSectionProps {
   className?: string;
 }
 
-export function ParallaxSection({
-  children,
-  speed = 0.5,
-  className = "",
-}: ParallaxSectionProps) {
+export function ParallaxSection({ children, speed = 0.5, className = "" }: ParallaxSectionProps) {
   const elementRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
 
@@ -177,7 +169,7 @@ export function ColorChangeText({
           end: "top 30%",
           scrub: true,
         },
-      }
+      },
     );
   }, [fromColor, toColor, prefersReducedMotion]);
 
@@ -231,7 +223,7 @@ export function ScaleOnScroll({
           start: "top 80%",
           toggleActions: "play none none reverse",
         },
-      }
+      },
     );
   }, [fromScale, toScale, prefersReducedMotion]);
 
