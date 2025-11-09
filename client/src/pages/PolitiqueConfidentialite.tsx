@@ -4,6 +4,7 @@ import Navigation from "@/components/landing/Navigation";
 import ScrollToTop from "@/components/ScrollToTop";
 import AnimatedParticles from "@/components/animations/AnimatedParticles";
 import CustomCursor from "@/components/animations/CustomCursor";
+import SEO from "@/components/SEO";
 import { motion } from "framer-motion";
 
 export default function PolitiqueConfidentialite() {
@@ -12,7 +13,9 @@ export default function PolitiqueConfidentialite() {
   }, []);
 
   return (
-    <motion.div
+    <>
+      <SEO page="/politique-confidentialite" />
+      <motion.div
       className="min-h-screen"
       style={{
         background:
@@ -568,6 +571,7 @@ export default function PolitiqueConfidentialite() {
 
       {/* Custom cursor layer */}
       <CustomCursor />
-    </motion.div>
+      </motion.div>
+    </>
   );
 }

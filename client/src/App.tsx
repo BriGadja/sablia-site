@@ -4,6 +4,7 @@ import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
 import { usePersistentToast } from "@/hooks/use-persistent-toast";
 import { AnimatePresence } from "framer-motion";
+import { HelmetProvider } from "react-helmet-async";
 import Home from "@/pages/Home";
 import Landing from "@/pages/Landing";
 import Tarifs from "@/pages/Tarifs";
@@ -39,10 +40,12 @@ function App() {
   usePersistentToast();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router />
-      <Toaster />
-    </QueryClientProvider>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <Router />
+        <Toaster />
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 }
 

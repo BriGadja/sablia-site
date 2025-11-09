@@ -13,22 +13,25 @@ import PricingSection from "@/components/landing/PricingSection";
 import CalculatorROI from "@/components/landing/CalculatorROI";
 import ContactFormSection from "@/components/landing/ContactFormSection";
 import FaqSection from "@/components/landing/FaqSection";
+import SEO from "@/components/SEO";
 
 export default function Landing() {
   return (
-    <motion.div
-      className="min-h-screen"
-      style={{
-        background:
-          "linear-gradient(to bottom, #2B9AB8 0%, #3E92CC 15%, #0A2463 35%, #0A2463 50%, #2D3142 65%, #3d2f1f 80%, #4a3621 95%, #3d2f1f 100%)",
-      }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.4 }}
-    >
-      {/* Animated particles background - renders first for proper layering */}
-      <AnimatedParticles />
+    <>
+      <SEO page="/" />
+      <motion.div
+        className="min-h-screen"
+        style={{
+          background:
+            "linear-gradient(to bottom, #2B9AB8 0%, #3E92CC 15%, #0A2463 35%, #0A2463 50%, #2D3142 65%, #3d2f1f 80%, #4a3621 95%, #3d2f1f 100%)",
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        {/* Animated particles background - renders first for proper layering */}
+        <AnimatedParticles />
 
       {/* Content layer - must have relative z-10 to appear above particles */}
       <div className="relative z-10">
@@ -79,8 +82,9 @@ export default function Landing() {
         <Footer />
       </div>
 
-      {/* Custom cursor layer - renders last for highest z-index in paint order */}
-      <CustomCursor />
-    </motion.div>
+        {/* Custom cursor layer - renders last for highest z-index in paint order */}
+        <CustomCursor />
+      </motion.div>
+    </>
   );
 }

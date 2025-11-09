@@ -27,6 +27,7 @@ import { RainbowText } from "@/components/RainbowText";
 import { motion } from "framer-motion";
 import AnimatedParticles from "@/components/animations/AnimatedParticles";
 import CustomCursor from "@/components/animations/CustomCursor";
+import SEO from "@/components/SEO";
 
 const formSchema = z.object({
   // Contact (obligatoires)
@@ -133,7 +134,9 @@ export default function GapForm() {
   const availabilityOptions = ["Cette semaine", "Semaine prochaine", "Dans 2 semaines", "Flexible"];
 
   return (
-    <motion.div
+    <>
+      <SEO page="/gap" />
+      <motion.div
       className="min-h-screen relative"
       style={{
         background:
@@ -421,6 +424,7 @@ export default function GapForm() {
 
       {/* Custom cursor */}
       <CustomCursor />
-    </motion.div>
+      </motion.div>
+    </>
   );
 }

@@ -4,6 +4,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import AnimatedParticles from "@/components/animations/AnimatedParticles";
 import CustomCursor from "@/components/animations/CustomCursor";
 import RoiCalculator from "@/components/RoiCalculator";
+import SEO from "@/components/SEO";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 
@@ -14,7 +15,9 @@ export default function Roi() {
   }, []);
 
   return (
-    <motion.div
+    <>
+      <SEO page="/roi" />
+      <motion.div
       className="min-h-screen"
       style={{
         background:
@@ -42,6 +45,7 @@ export default function Roi() {
 
       {/* Custom cursor layer */}
       <CustomCursor />
-    </motion.div>
+      </motion.div>
+    </>
   );
 }

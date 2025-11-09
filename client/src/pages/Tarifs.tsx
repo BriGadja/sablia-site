@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import AnimatedParticles from "@/components/animations/AnimatedParticles";
 import CustomCursor from "@/components/animations/CustomCursor";
+import SEO from "@/components/SEO";
 
 /**
  * Page Tarifs - Grille tarifaire détaillée complète
@@ -12,7 +13,9 @@ import CustomCursor from "@/components/animations/CustomCursor";
  */
 export default function Tarifs() {
   return (
-    <motion.div
+    <>
+      <SEO page="/tarifs" />
+      <motion.div
       className="min-h-screen"
       style={{
         background:
@@ -38,6 +41,7 @@ export default function Tarifs() {
 
       {/* Custom cursor layer */}
       <CustomCursor />
-    </motion.div>
+      </motion.div>
+    </>
   );
 }
