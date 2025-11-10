@@ -4,6 +4,7 @@ import Navigation from "@/components/landing/Navigation";
 import ScrollToTop from "@/components/ScrollToTop";
 import AnimatedParticles from "@/components/animations/AnimatedParticles";
 import CustomCursor from "@/components/animations/CustomCursor";
+import SEO from "@/components/SEO";
 import { motion } from "framer-motion";
 
 export default function About() {
@@ -13,7 +14,9 @@ export default function About() {
   }, []);
 
   return (
-    <motion.div
+    <>
+      <SEO page="/about" />
+      <motion.div
       className="min-h-screen"
       style={{
         background:
@@ -184,6 +187,7 @@ export default function About() {
 
       {/* Custom cursor layer */}
       <CustomCursor />
-    </motion.div>
+      </motion.div>
+    </>
   );
 }
