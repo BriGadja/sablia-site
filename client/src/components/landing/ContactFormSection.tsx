@@ -65,7 +65,7 @@ export default function ContactFormSection() {
 
     try {
       // n8n webhook call
-      const response = await fetch("https://n8n.voipia.fr/webhook/sablia-site-formulaire", {
+      const response = await fetch("https://n8n.sablia.io/webhook/sablia-site-formulaire", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
