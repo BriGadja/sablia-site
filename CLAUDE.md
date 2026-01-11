@@ -61,10 +61,20 @@ The Express server (port 5000) serves both API and client:
 
 ### Database
 
-- Drizzle ORM with PostgreSQL
+- Drizzle ORM with PostgreSQL (hosted on Supabase)
 - Schema defined in `db/schema.ts`
 - Connection via `DATABASE_URL` environment variable
 - Migrations stored in `migrations/`
+
+**Supabase Instance**: `supabase-sablia` (shared with n8n-intelligence)
+- Project: `qlxoitzdxjqhljjoeqoq`
+- URL: `db.qlxoitzdxjqhljjoeqoq.supabase.co:5432`
+- Credentials: `~/.credentials/supabase-sablia-db-url.txt`
+
+**IMPORTANT - Table Naming Convention**:
+- Use `site_` prefix for all new tables (e.g., `site_users`, `site_contacts`, `site_leads`)
+- This avoids conflicts with existing n8n-intelligence tables in the same database
+- Update `db/schema.ts` with prefixed table names before running `db:push`
 
 ## Key Integrations
 
