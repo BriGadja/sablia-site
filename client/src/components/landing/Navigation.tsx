@@ -28,7 +28,7 @@ export default function Navigation() {
 
   // Refs for animation
   const capsuleRef = useRef<HTMLDivElement>(null);
-  const linksRef = useRef<(HTMLAnchorElement | HTMLButtonElement | null)[]>([]);
+  const linksRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const underlineRef = useRef<HTMLDivElement>(null);
 
   // Animation state
@@ -180,10 +180,14 @@ export default function Navigation() {
           <div className="flex items-center gap-1 relative">
             {/* Menu Items */}
             {menuItems.map((item, index) => (
-              <button
+              <a
                 key={item.href}
                 ref={(el) => (linksRef.current[index] = el)}
-                onClick={() => handleNavClick(item.href, item.type)}
+                href={item.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(item.href, item.type);
+                }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onFocus={() => setFocusedIndex(index)}
                 onBlur={() => setFocusedIndex(null)}
@@ -195,13 +199,17 @@ export default function Navigation() {
                 aria-label={`Aller à la section ${item.label}`}
               >
                 {item.label}
-              </button>
+              </a>
             ))}
 
             {/* CTA Button - inside capsule, aligned right */}
-            <button
+            <a
               ref={(el) => (linksRef.current[menuItems.length] = el)}
-              onClick={() => handleNavClick("#contact", "anchor")}
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick("#contact", "anchor");
+              }}
               onMouseEnter={() => setHoveredIndex(menuItems.length)}
               onFocus={() => setFocusedIndex(menuItems.length)}
               onBlur={() => setFocusedIndex(null)}
@@ -214,7 +222,7 @@ export default function Navigation() {
               aria-label="Réserver un diagnostic gratuit"
             >
               Diagnostic Gratuit
-            </button>
+            </a>
           </div>
         </div>
       </nav>
@@ -266,17 +274,21 @@ export default function Navigation() {
               <div className="flex flex-col p-6 space-y-6">
                 {/* Menu Items */}
                 {menuItems.map((item, index) => (
-                  <motion.button
+                  <motion.a
                     key={item.href}
+                    href={item.href}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
-                    onClick={() => handleNavClick(item.href, item.type)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNavClick(item.href, item.type);
+                    }}
                     className="text-left text-xl text-white hover:text-v2-cyan transition-colors font-medium"
                     aria-label={`Aller à la section ${item.label}`}
                   >
                     {item.label}
-                  </motion.button>
+                  </motion.a>
                 ))}
 
                 {/* CTA Button */}
@@ -285,8 +297,12 @@ export default function Navigation() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: menuItems.length * 0.05 }}
                 >
-                  <button
-                    onClick={() => handleNavClick("#contact", "anchor")}
+                  <a
+                    href="#contact"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNavClick("#contact", "anchor");
+                    }}
                     className={cn(
                       "block w-full px-6 py-3 text-center rounded-lg font-medium transition-all",
                       "bg-black text-white",
@@ -295,7 +311,7 @@ export default function Navigation() {
                     aria-label="Réserver un diagnostic gratuit"
                   >
                     Diagnostic Gratuit
-                  </button>
+                  </a>
                 </motion.div>
               </div>
             </motion.div>
