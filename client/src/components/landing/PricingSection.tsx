@@ -245,8 +245,10 @@ const serviceSchema = {
     "url": "https://sablia.io",
     "address": {
       "@type": "PostalAddress",
+      "streetAddress": "60 rue François 1er",
+      "postalCode": "75008",
+      "addressLocality": "Paris",
       "addressCountry": "FR",
-      "addressLocality": "France",
     },
   },
   "serviceType": "Business Automation Consulting",

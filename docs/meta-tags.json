@@ -52,8 +52,10 @@
         "description": "Services d'automatisation business et IA pour PME françaises",
         "address": {
           "@type": "PostalAddress",
-          "addressCountry": "FR",
-          "addressLocality": "France"
+          "streetAddress": "60 rue François 1er",
+          "postalCode": "75008",
+          "addressLocality": "Paris",
+          "addressCountry": "FR"
         },
         "contactPoint": {
           "@type": "ContactPoint",
