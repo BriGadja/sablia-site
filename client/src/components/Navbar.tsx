@@ -25,9 +25,8 @@ export default function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
-            <a href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-              <img src="/logo.svg" alt="Sablia" width={32} height={32} className="h-8 w-8" />
-              <span className="text-xl font-semibold text-gray-100">Sablia</span>
+            <a href="/" className="flex items-center hover:opacity-80 transition-opacity">
+              <img src="/logo.svg" alt="Sablia" width={40} height={40} className="h-10 w-10" />
             </a>
           </div>
 
