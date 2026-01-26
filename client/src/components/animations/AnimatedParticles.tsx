@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * AnimatedParticles - Système de particules organiques en fond
@@ -9,6 +9,8 @@ import { useEffect, useRef } from "react";
  * - Connexions dynamiques entre particules proches
  * - Interaction curseur (attraction dans rayon 150px)
  * - Couleurs: blanc pur et blanc semi-transparent pour visibilité optimale
+ * - Optimisé pour mobile (moins de particules, pas de connexions)
+ * - Respecte prefers-reduced-motion
  *
  * Performance: 60fps garanti sur desktop moderne
  */
@@ -24,13 +26,33 @@ interface Particle {
 
 export default function AnimatedParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
   useEffect(() => {
+    // Check for prefers-reduced-motion
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+
+    const handleMotionChange = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches);
+    };
+    mediaQuery.addEventListener("change", handleMotionChange);
+
+    return () => mediaQuery.removeEventListener("change", handleMotionChange);
+  }, []);
+
+  useEffect(() => {
+    // Don't animate if user prefers reduced motion
+    if (prefersReducedMotion) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    // Detect mobile for performance optimization
+    const isMobile = window.innerWidth < 768;
 
     // Dimensions
     const updateSize = () => {
@@ -40,8 +62,9 @@ export default function AnimatedParticles() {
     updateSize();
     window.addEventListener("resize", updateSize);
 
-    // Particules
-    const particleCount = Math.floor((canvas.width * canvas.height) / 15000);
+    // Particules - reduced on mobile, capped at 100 max
+    const baseCount = Math.floor((canvas.width * canvas.height) / (isMobile ? 30000 : 15000));
+    const particleCount = Math.min(baseCount, isMobile ? 30 : 100);
     const particles: Particle[] = [];
     const colors = ["#FFFFFF", "rgba(255, 255, 255, 0.8)"];
 
@@ -102,20 +125,22 @@ export default function AnimatedParticles() {
         ctx.fillStyle = particle.color;
         ctx.fill();
 
-        // Connexions entre particules proches
-        for (let j = i + 1; j < particles.length; j++) {
-          const other = particles[j];
-          const dx2 = particle.x - other.x;
-          const dy2 = particle.y - other.y;
-          const dist = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+        // Connexions entre particules proches (skip on mobile for performance)
+        if (!isMobile) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const other = particles[j];
+            const dx2 = particle.x - other.x;
+            const dy2 = particle.y - other.y;
+            const dist = Math.sqrt(dx2 * dx2 + dy2 * dy2);
 
-          if (dist < 100) {
-            ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(other.x, other.y);
-            ctx.strokeStyle = `rgba(255, 255, 255, ${0.3 * (1 - dist / 100)})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
+            if (dist < 100) {
+              ctx.beginPath();
+              ctx.moveTo(particle.x, particle.y);
+              ctx.lineTo(other.x, other.y);
+              ctx.strokeStyle = `rgba(255, 255, 255, ${0.3 * (1 - dist / 100)})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
           }
         }
       });
@@ -129,7 +154,12 @@ export default function AnimatedParticles() {
       window.removeEventListener("resize", updateSize);
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, []);
+  }, [prefersReducedMotion]);
+
+  // Don't render canvas if user prefers reduced motion
+  if (prefersReducedMotion) {
+    return null;
+  }
 
   return (
     <canvas

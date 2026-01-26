@@ -1,6 +1,6 @@
 # Contenu du Site Sablia
 
-**Dernière mise à jour**: 29 octobre 2025
+**Dernière mise à jour**: 26 janvier 2026
 **Domaine**: https://sablia.io
 **Type**: Site vitrine B2B - Services d'automatisation et IA pour PME
 
@@ -469,11 +469,16 @@ linear-gradient(to bottom,
 - Appel découverte gratuit 30 minutes
 - Intégré dans CTAs sur pages: /, /about
 
-### n8n Webhook
+### n8n Webhooks
 
-- Formulaire GAP Analysis
-- Collecte leads qualifiés
+**Contact Form** (Landing page):
+- URL: `https://n8n.sablia.io/webhook/sablia-site-formulaire`
+- Méthode: POST avec JSON body
+- Champs: nom, email, entreprise, telephone (optionnel), message
+
+**GAP Analysis Form** (/gap):
 - Variable d'environnement: `VITE_N8N_WEBHOOK_URL`
+- Fallback: `/api/webhook-test` (dev local)
 
 ### Analytics & Tracking
 
@@ -554,4 +559,4 @@ linear-gradient(to bottom,
 
 **Responsable**: Vérifier cohérence avant chaque commit majeur ou via processus PRP
 
-**Version**: 1.0 - 29 octobre 2025
+**Version**: 1.1 - 26 janvier 2026

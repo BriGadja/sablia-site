@@ -55,7 +55,11 @@
       "Bash(git rm:*)",
       "Bash(git mv:*)",
       "Bash(test:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(inkscape --version:*)",
+      "Bash(convert:*)",
+      "Bash(apt-cache show:*)",
+      "Bash(rsvg-convert:*)"
     ],
     "deny": [],
     "ask": []

@@ -2,6 +2,45 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+**Last updated**: 2026-01-26
+
+## Quick Reference
+
+| Item | Value |
+|------|-------|
+| **Domain** | sablia.io |
+| **Dev server** | http://localhost:5000 |
+| **Contact form webhook** | https://n8n.sablia.io/webhook/sablia-site-formulaire |
+| **GAP form webhook** | Uses `VITE_N8N_WEBHOOK_URL` env var |
+| **Calendly** | https://calendly.com/brice-gachadoat/30min |
+| **Supabase project** | supabase-sablia (shared with n8n-intelligence) |
+| **DB table prefix** | `site_` (e.g., `site_users`) |
+
+### Key Files for Content Questions
+
+- **Site content (text, pricing, testimonials)**: `docs/SITE_CONTENT.md`
+- **Service offerings details**: `docs/OFFRES.md`
+- **FAQ answers**: `docs/FAQ.md`
+- **SEO meta-tags**: `docs/meta-tags.json`
+- **Structured content data**: `docs/content-index.json`
+
+### Landing Page Sections (in order)
+
+1. Navigation → `components/landing/Navigation.tsx`
+2. Hero → `components/landing/HeroSection.tsx`
+3. Testimonials → `components/landing/TestimonialsSection.tsx`
+4. Integrations (LogosCloud) → `components/landing/LogosCloud.tsx`
+5. Problem → `components/landing/ProblemSection.tsx`
+6. Solution → `components/landing/SolutionSection.tsx`
+7. Process → `components/landing/ThreeStepProcess.tsx`
+8. Pricing → `components/landing/PricingSection.tsx`
+9. ROI Calculator → `components/landing/CalculatorROI.tsx`
+10. Contact Form → `components/landing/ContactFormSection.tsx`
+11. FAQ → `components/landing/FaqSection.tsx`
+12. Footer → `components/Footer.tsx`
+
+---
+
 ## Project Overview
 
 Sablia is a modern business automation consulting website built with a React frontend and Express backend, using TypeScript throughout. The application features lead generation forms, ROI calculator, and service presentations.
@@ -15,7 +54,7 @@ Sablia is a modern business automation consulting website built with a React fro
 - **Styling**: Tailwind CSS + Tailwind Animate
 - **State Management**: React Query (TanStack Query)
 - **Forms**: React Hook Form + Zod validation
-- **Animations**: Framer Motion + TSParticles
+- **Animations**: Framer Motion + GSAP + TSParticles
 
 ## Essential Commands
 
@@ -78,8 +117,26 @@ The Express server (port 5000) serves both API and client:
 
 ## Key Integrations
 
-- **Calendly**: Appointment scheduling system
-- **TSParticles**: Background animations
+| Integration | Purpose | Details |
+|-------------|---------|---------|
+| **n8n webhook** | Contact form submissions | `https://n8n.sablia.io/webhook/sablia-site-formulaire` |
+| **Calendly** | Appointment scheduling | `https://calendly.com/brice-gachadoat/30min` (30min discovery call) |
+| **Framer Motion** | Component animations | fadeInUp, staggerContainer, buttonHover, cardHover |
+| **GSAP** | Advanced timeline animations | Complex scroll-based animations |
+| **TSParticles** | Background particles | Interactive particle system in hero |
+
+### Form Integrations
+
+**Contact Form** (`ContactFormSection.tsx`):
+- Sends POST to n8n webhook with: `nom`, `email`, `entreprise`, `telephone`, `message`
+- Shows success animation with CheckCircle icon
+- Auto-resets after 5 seconds
+- Toast notifications for feedback
+
+**GAP Analysis Form** (`GapForm.tsx`):
+- Uses `VITE_N8N_WEBHOOK_URL` environment variable
+- Falls back to `/api/webhook-test` for local development
+- Fields: prénom, nom, email, entreprise, secteur, challenge, disponibilité
 
 ## Environment Variables
 
@@ -107,11 +164,17 @@ The site uses **Landing** as the homepage (`/` route):
 
 ### Available Routes
 
-- `/` - Landing (homepage with all sections)
-- `/gap` - GAP analysis form
-- `/about` - About page
-- `/tarifs` - Pricing page
-- `/roi` - ROI calculator
+| Route | Page | Description |
+|-------|------|-------------|
+| `/` | Landing | Homepage with all sections |
+| `/home` | Home | Alternative home layout |
+| `/gap` | GapForm | GAP analysis lead gen form |
+| `/about` | About | About Brice + Sablia |
+| `/tarifs` | Tarifs | Pricing page (same as landing pricing section) |
+| `/roi` | Roi | ROI calculator page |
+| `/mentions-legales` | MentionsLegales | Legal notice |
+| `/politique-confidentialite` | PolitiqueConfidentialite | Privacy policy (GDPR) |
+| `/cgv` | CGV | Terms of service |
 
 ## Site Content Documentation
 

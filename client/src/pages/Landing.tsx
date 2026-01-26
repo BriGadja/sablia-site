@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
 import AnimatedParticles from "@/components/animations/AnimatedParticles";
@@ -10,10 +11,12 @@ import ProblemSection from "@/components/landing/ProblemSection";
 import SolutionSection from "@/components/landing/SolutionSection";
 import ThreeStepProcess from "@/components/landing/ThreeStepProcess";
 import PricingSection from "@/components/landing/PricingSection";
-import CalculatorROI from "@/components/landing/CalculatorROI";
-import ContactFormSection from "@/components/landing/ContactFormSection";
-import FaqSection from "@/components/landing/FaqSection";
 import SEO from "@/components/SEO";
+
+// Lazy load below-fold sections for better LCP
+const CalculatorROI = lazy(() => import("@/components/landing/CalculatorROI"));
+const ContactFormSection = lazy(() => import("@/components/landing/ContactFormSection"));
+const FaqSection = lazy(() => import("@/components/landing/FaqSection"));
 
 export default function Landing() {
   return (
@@ -60,14 +63,17 @@ export default function Landing() {
           {/* Pricing Section - 3 Columns */}
           <PricingSection />
 
-          {/* Calculator ROI Section */}
-          <CalculatorROI />
+          {/* Lazy-loaded below-fold sections */}
+          <Suspense fallback={<div className="min-h-[400px]" />}>
+            {/* Calculator ROI Section */}
+            <CalculatorROI />
 
-          {/* Contact Form Section */}
-          <ContactFormSection />
+            {/* Contact Form Section */}
+            <ContactFormSection />
 
-          {/* FAQ Section */}
-          <FaqSection />
+            {/* FAQ Section */}
+            <FaqSection />
+          </Suspense>
 
           {/* Hidden section placeholders - will be visible in DOM inspector */}
           <div className="hidden">
