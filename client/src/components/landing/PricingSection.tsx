@@ -243,6 +243,11 @@ const serviceSchema = {
     "@type": "Organization",
     "name": "Sablia",
     "url": "https://sablia.io",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "FR",
+      "addressLocality": "France",
+    },
   },
   "serviceType": "Business Automation Consulting",
   "areaServed": {

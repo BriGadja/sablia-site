@@ -52,7 +52,8 @@
         "description": "Services d'automatisation business et IA pour PME françaises",
         "address": {
           "@type": "PostalAddress",
-          "addressCountry": "FR"
+          "addressCountry": "FR",
+          "addressLocality": "France"
         },
         "contactPoint": {
           "@type": "ContactPoint",
