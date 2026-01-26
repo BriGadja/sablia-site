@@ -26,7 +26,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
             <a href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-              <img src="/logo.svg" alt="Sablia" className="h-8 w-8" />
+              <img src="/logo.svg" alt="Sablia" width={32} height={32} className="h-8 w-8" />
               <span className="text-xl font-semibold text-gray-100">Sablia</span>
             </a>
           </div>

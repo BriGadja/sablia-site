@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Plus, Minus } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
 /**
@@ -92,8 +93,28 @@ export default function FaqSection() {
     setActiveId(activeId === id ? null : id);
   };
 
+  // Generate FAQPage structured data for SEO
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map((faq) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer,
+      },
+    })),
+  };
+
   return (
-    <section id="faq" className="py-24 relative overflow-hidden">
+    <>
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(faqSchema)}
+        </script>
+      </Helmet>
+      <section id="faq" className="py-24 relative overflow-hidden">
       <div className="container mx-auto px-6 lg:px-8">
         {/* Section Header */}
         <ScrollReveal>
@@ -164,5 +185,6 @@ export default function FaqSection() {
         </div>
       </div>
     </section>
+    </>
   );
 }

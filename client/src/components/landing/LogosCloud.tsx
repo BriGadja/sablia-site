@@ -227,6 +227,8 @@ export default function LogosCloud() {
                           src={integration.imageUrl}
                           alt={`${integration.name} integration`}
                           title={integration.name}
+                          width={isN8n ? 80 : 56}
+                          height={isN8n ? 80 : 56}
                           className={`${
                             isN8n ? "h-16 lg:h-20" : "h-12 lg:h-14"
                           } w-auto object-contain transition-all duration-300 opacity-60 hover:opacity-100 relative z-10`}
