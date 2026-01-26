@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import { MagneticButton } from "@/components/animations/MagneticElements";
 
@@ -232,11 +233,152 @@ function PricingCard({ column, index }: { column: PricingColumn; index: number }
 }
 
 // ============================================
+// Service Schema (JSON-LD) for rich snippets
+// ============================================
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "provider": {
+    "@type": "Organization",
+    "name": "Sablia",
+    "url": "https://sablia.io",
+  },
+  "serviceType": "Business Automation Consulting",
+  "areaServed": {
+    "@type": "Country",
+    "name": "France",
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Services d'automatisation Sablia",
+    "itemListElement": [
+      {
+        "@type": "OfferCatalog",
+        "name": "Audit & Consulting",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Appel Découverte",
+              "description": "Visio de qualification pour comprendre vos besoins (30 min)",
+            },
+            "price": "0",
+            "priceCurrency": "EUR",
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Audit Express",
+              "description": "Session stratégique avec recommandations actionnables (1h30)",
+            },
+            "price": "350",
+            "priceCurrency": "EUR",
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Audit Complet",
+              "description": "Audit approfondi adapté à la taille de votre entreprise (1-2 semaines)",
+            },
+            "priceRange": "2000-5000",
+            "priceCurrency": "EUR",
+          },
+        ],
+      },
+      {
+        "@type": "OfferCatalog",
+        "name": "Formations",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Formation Demi-Journée",
+              "description": "IA générative, automatisation basics, découverte n8n (3h30)",
+            },
+            "price": "700",
+            "priceCurrency": "EUR",
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Formation 1 Jour",
+              "description": "IA/automatisation standard, n8n débutant (7h)",
+            },
+            "price": "1200",
+            "priceCurrency": "EUR",
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Formation 2-3 Jours",
+              "description": "n8n avancé + certification équipe complète (14-21h)",
+            },
+            "priceRange": "2200-3300",
+            "priceCurrency": "EUR",
+          },
+        ],
+      },
+      {
+        "@type": "OfferCatalog",
+        "name": "Solutions d'automatisation",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Workflow Simple",
+              "description": "1-2 processus automatisés (3-7 jours)",
+            },
+            "priceRange": "2500-5000",
+            "priceCurrency": "EUR",
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Système Standard",
+              "description": "3-5 processus interconnectés (2-4 semaines)",
+            },
+            "priceRange": "8000-18000",
+            "priceCurrency": "EUR",
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Transformation Complète",
+              "description": "5+ processus multi-départements (6-12 semaines)",
+            },
+            "priceRange": "25000-60000",
+            "priceCurrency": "EUR",
+          },
+        ],
+      },
+    ],
+  },
+};
+
+// ============================================
 // Main PricingSection Component
 // ============================================
 
 export default function PricingSection() {
   return (
+    <>
+      {/* Service Schema JSON-LD */}
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(serviceSchema)}
+        </script>
+      </Helmet>
+
     <section id="pricing" className="py-24 relative overflow-hidden">
       <div className="container mx-auto px-6 lg:px-8">
         {/* Section Header with ScrollReveal */}
@@ -257,5 +399,6 @@ export default function PricingSection() {
         </div>
       </div>
     </section>
+    </>
   );
 }

@@ -10,6 +10,7 @@ import metaTags from "../../../docs/meta-tags.json";
  * - Open Graph tags for social media sharing
  * - Twitter Card tags
  * - Structured data (JSON-LD) for rich snippets
+ * - BreadcrumbList schema for navigation context
  * - Canonical URLs
  *
  * @param page - Page path (e.g., "/", "/tarifs", "/gap")
@@ -17,6 +18,60 @@ import metaTags from "../../../docs/meta-tags.json";
 
 interface SEOProps {
   page: "/" | "/tarifs" | "/gap" | "/roi" | "/about" | "/mentions-legales" | "/politique-confidentialite" | "/cgv";
+}
+
+// Breadcrumb configuration for each page
+const breadcrumbConfig: Record<string, { name: string; position: number }[]> = {
+  "/": [],
+  "/tarifs": [
+    { name: "Accueil", position: 1 },
+    { name: "Tarifs", position: 2 },
+  ],
+  "/gap": [
+    { name: "Accueil", position: 1 },
+    { name: "Analyse GAP", position: 2 },
+  ],
+  "/roi": [
+    { name: "Accueil", position: 1 },
+    { name: "Calculateur ROI", position: 2 },
+  ],
+  "/about": [
+    { name: "Accueil", position: 1 },
+    { name: "À propos", position: 2 },
+  ],
+  "/mentions-legales": [
+    { name: "Accueil", position: 1 },
+    { name: "Mentions légales", position: 2 },
+  ],
+  "/politique-confidentialite": [
+    { name: "Accueil", position: 1 },
+    { name: "Politique de confidentialité", position: 2 },
+  ],
+  "/cgv": [
+    { name: "Accueil", position: 1 },
+    { name: "CGV", position: 2 },
+  ],
+};
+
+/**
+ * Generates BreadcrumbList structured data for SEO
+ */
+function generateBreadcrumbSchema(page: string) {
+  const breadcrumbs = breadcrumbConfig[page];
+  if (!breadcrumbs || breadcrumbs.length === 0) return null;
+
+  const domain = metaTags.meta.domain;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": breadcrumbs.map((item) => ({
+      "@type": "ListItem",
+      "position": item.position,
+      "name": item.name,
+      "item": item.position === 1 ? `${domain}/` : `${domain}${page}`,
+    })),
+  };
 }
 
 export default function SEO({ page }: SEOProps) {
@@ -98,6 +153,13 @@ export default function SEO({ page }: SEOProps) {
       {pageData.structuredData && (
         <script type="application/ld+json">
           {JSON.stringify(pageData.structuredData)}
+        </script>
+      )}
+
+      {/* BreadcrumbList Schema */}
+      {generateBreadcrumbSchema(page) && (
+        <script type="application/ld+json">
+          {JSON.stringify(generateBreadcrumbSchema(page))}
         </script>
       )}
 

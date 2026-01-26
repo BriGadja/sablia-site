@@ -5,7 +5,53 @@ import ScrollToTop from "@/components/ScrollToTop";
 import AnimatedParticles from "@/components/animations/AnimatedParticles";
 import CustomCursor from "@/components/animations/CustomCursor";
 import SEO from "@/components/SEO";
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
+
+// ============================================
+// Person Schema (JSON-LD) for rich snippets
+// ============================================
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Brice Gachadoat",
+  "url": "https://sablia.io/about",
+  "image": "https://sablia.io/brice-gachadoat.jpg",
+  "jobTitle": "Expert en Automatisation et Intelligence Artificielle",
+  "description": "Ingénieur informatique avec plus de 10 ans d'expérience dans l'IT, spécialisé en automatisation business avec n8n et Make.com.",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Sablia",
+    "url": "https://sablia.io",
+  },
+  "knowsAbout": [
+    "Automatisation business",
+    "n8n",
+    "Make.com",
+    "Intelligence Artificielle",
+    "Transformation digitale",
+    "Workflows",
+    "ChatGPT",
+    "Notion",
+    "Airtable",
+    "Supabase",
+  ],
+  "alumniOf": [
+    {
+      "@type": "Organization",
+      "name": "MeltOne Advisory",
+    },
+    {
+      "@type": "Organization",
+      "name": "LVMH",
+    },
+  ],
+  "sameAs": [
+    "https://linkedin.com/in/brice-gachadoat",
+    "https://calendly.com/brice-gachadoat",
+  ],
+};
 
 export default function About() {
   useEffect(() => {
@@ -16,6 +62,12 @@ export default function About() {
   return (
     <>
       <SEO page="/about" />
+      {/* Person Schema JSON-LD */}
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(personSchema)}
+        </script>
+      </Helmet>
       <motion.div
       className="min-h-screen"
       style={{

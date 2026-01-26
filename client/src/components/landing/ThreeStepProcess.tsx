@@ -1,11 +1,53 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Helmet } from "react-helmet-async";
 import { Search, Rocket, Zap } from "lucide-react";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 gsap.registerPlugin(ScrollTrigger);
+
+// ============================================
+// HowTo Schema (JSON-LD) for rich snippets
+// ============================================
+
+const howToSchema = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "Comment automatiser votre entreprise avec Sablia",
+  "description": "Processus en 3 étapes pour transformer et automatiser vos opérations business avec n8n et Make.com",
+  "totalTime": "P12W",
+  "estimatedCost": {
+    "@type": "MonetaryAmount",
+    "currency": "EUR",
+    "minValue": "350",
+    "maxValue": "60000",
+  },
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "Découvrir",
+      "text": "Audit de vos processus actuels pour identifier les gains rapides et bâtir une roadmap d'automatisation adaptée à votre contexte.",
+      "url": "https://sablia.io/#process",
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Implémenter",
+      "text": "Formation de vos équipes et/ou développement des workflows selon votre besoin. Approche modulaire adaptée à votre contexte.",
+      "url": "https://sablia.io/#process",
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "Optimiser & Accompagner",
+      "text": "Sur la base des retours terrain, nous adaptons vos workflows : modifications, formation de nouveaux collaborateurs, mises à jour et optimisation continue.",
+      "url": "https://sablia.io/#process",
+    },
+  ],
+};
 
 interface Step {
   id: number;
@@ -121,6 +163,14 @@ export default function ThreeStepProcess() {
   }, [prefersReducedMotion]);
 
   return (
+    <>
+      {/* HowTo Schema JSON-LD */}
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(howToSchema)}
+        </script>
+      </Helmet>
+
     <section id="process" className="py-24 relative overflow-hidden">
       <div className="container mx-auto px-6 lg:px-8">
         {/* Section Header */}
@@ -239,5 +289,6 @@ export default function ThreeStepProcess() {
         </div>
       </div>
     </section>
+    </>
   );
 }

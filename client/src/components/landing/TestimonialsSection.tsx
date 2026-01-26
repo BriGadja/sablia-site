@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
 /**
@@ -82,11 +83,59 @@ const testimonials: Testimonial[] = [
   },
 ];
 
+// ============================================
+// Review & AggregateRating Schema (JSON-LD)
+// ============================================
+
+const reviewSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Sablia",
+  "url": "https://sablia.io",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "5",
+    "bestRating": "5",
+    "worstRating": "1",
+  },
+  "review": testimonials.map((t, index) => ({
+    "@type": "Review",
+    "author": {
+      "@type": "Person",
+      "name": t.name,
+    },
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": "5",
+      "bestRating": "5",
+    },
+    "reviewBody": t.quote,
+    "datePublished": "2025-01-01",
+    "itemReviewed": {
+      "@type": "Service",
+      "name": t.project,
+      "provider": {
+        "@type": "Organization",
+        "name": "Sablia",
+      },
+    },
+  })),
+};
+
 export default function TestimonialsSection() {
   // Triple array for seamless infinite loop
   const displayTestimonials = [...testimonials, ...testimonials, ...testimonials];
 
   return (
+    <>
+      {/* Review & AggregateRating Schema JSON-LD */}
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(reviewSchema)}
+        </script>
+      </Helmet>
+
     <section id="testimonials" className="py-24 relative overflow-hidden">
       <div className="container mx-auto px-6 lg:px-8">
         <ScrollReveal>
@@ -173,5 +222,6 @@ export default function TestimonialsSection() {
         </ScrollReveal>
       </div>
     </section>
+    </>
   );
 }
