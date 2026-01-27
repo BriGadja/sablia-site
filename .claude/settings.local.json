@@ -59,7 +59,8 @@
       "Bash(inkscape --version:*)",
       "Bash(convert:*)",
       "Bash(apt-cache show:*)",
-      "Bash(rsvg-convert:*)"
+      "Bash(rsvg-convert:*)",
+      "Skill(close)"
     ],
     "deny": [],
     "ask": []
