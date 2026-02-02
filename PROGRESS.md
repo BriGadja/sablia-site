@@ -1,7 +1,51 @@
-# Sablia Site - SEO Audit Progress
+# Sablia Site Progress
 
-**Plan**: [.claude/plans/sablia-site-seo-audit.md](../../.claude/plans/sablia-site-seo-audit.md)
-**Started**: 2026-01-26
+---
+
+## Completed: Calendly Integration
+
+**Plan**: [.claude/plans/sablia-site-calendly-integration.md](../../../../.claude/plans/sablia-site-calendly-integration.md)
+**Started**: 2026-02-02
+**Completed**: 2026-02-02
+**Status**: COMPLETED
+
+### Phases
+
+| # | Phase | Status | Notes |
+|---|-------|--------|-------|
+| 1 | Installation react-calendly | COMPLETED | 3 packages added |
+| 2 | Refactoring ContactFormSection | COMPLETED | 2-column grid layout |
+| 3 | Personnalisation et Polish | COMPLETED | pageSettings colors |
+| 4 | Validation Finale | COMPLETED | Build + Playwright visual test |
+
+### Validation Checklist
+
+- [x] `npm run build` passes
+- [x] Contact form still works (5 fields + submit)
+- [x] Calendly widget displays correctly (InlineWidget)
+- [x] Responsive layout (md:grid-cols-2)
+- [x] Visual harmony with site theme (glassmorphism, cyan accents)
+
+### Implementation Notes
+
+**ContactFormSection changes**:
+- Added `react-calendly` dependency (InlineWidget component)
+- Converted from single-column (max-w-2xl) to 2-column grid (max-w-6xl)
+- Left column: Contact form with Send icon
+- Right column: Calendly InlineWidget with Calendar icon
+- Both columns use matching glassmorphism styling
+- Calendly pageSettings: primaryColor `48d1cc`, backgroundColor `0a2463`
+- Widget height: 580px, responsive min-width: 280px
+
+**Bundle impact**:
+- ContactFormSection: 6.82 KB → 18.82 KB (+12 KB for react-calendly)
+
+---
+
+## Completed: SEO Audit
+
+**Plan**: [.claude/plans/sablia-site-seo-audit.md](../../../../.claude/plans/sablia-site-seo-audit.md)
+**Completed**: 2026-01-26
 
 ---
 
@@ -144,6 +188,33 @@
 ---
 
 ## Session Log
+
+### 2026-02-02 - Calendly Integration Complete
+
+**What was done:**
+- Phase 1: Installed `react-calendly` package (3 dependencies added)
+- Phase 2: Refactored `ContactFormSection.tsx` to 2-column layout
+  - Grid layout: `md:grid-cols-2 gap-8 lg:gap-12`
+  - Left column: Contact form with "Envoyer un message" header
+  - Right column: Calendly InlineWidget with "Réserver un appel" header
+- Phase 3: Applied Calendly pageSettings (primaryColor, backgroundColor)
+- Phase 4: Visual validation with Playwright (calendar functional, shows Feb 2026)
+
+**Files Modified:**
+- `package.json` - Added react-calendly dependency
+- `client/src/components/landing/ContactFormSection.tsx` - Major refactor
+
+**Decisions:**
+- Used InlineWidget (not PopupWidget) for always-visible booking
+- Calendly URL: `https://calendly.com/brice-gachadoat/30min`
+- Widget height 580px (compact but functional)
+- Form textarea rows reduced from 5 to 4 for better column balance
+
+**Next session:**
+- Consider mobile optimization (PopupWidget alternative for small screens)
+- Update docs/SITE_CONTENT.md to reflect new contact section layout
+
+---
 
 ### 2026-01-26 - SEO Audit Project Closure
 **What was done:**
