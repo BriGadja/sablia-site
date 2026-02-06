@@ -54,7 +54,7 @@ Sablia is a modern business automation consulting website built with a React fro
 - **Styling**: Tailwind CSS + Tailwind Animate
 - **State Management**: React Query (TanStack Query)
 - **Forms**: React Hook Form + Zod validation
-- **Animations**: Framer Motion + GSAP + TSParticles
+- **Animations**: Framer Motion + TSParticles
 
 ## Essential Commands
 
@@ -121,8 +121,7 @@ The Express server (port 5000) serves both API and client:
 |-------------|---------|---------|
 | **n8n webhook** | Contact form submissions | `https://n8n.sablia.io/webhook/sablia-site-formulaire` |
 | **Calendly** | Appointment scheduling | `https://calendly.com/brice-gachadoat/30min` (30min discovery call) |
-| **Framer Motion** | Component animations | fadeInUp, staggerContainer, buttonHover, cardHover |
-| **GSAP** | Advanced timeline animations | Complex scroll-based animations |
+| **Framer Motion** | Component animations | fadeInUp, whileInView, staggerContainer, buttonHover, cardHover |
 | **TSParticles** | Background particles | Interactive particle system in hero |
 
 ### Form Integrations
@@ -167,11 +166,12 @@ The site uses **Landing** as the homepage (`/` route):
 | Route | Page | Description |
 |-------|------|-------------|
 | `/` | Landing | Homepage with all sections |
-| `/home` | Home | Alternative home layout |
 | `/gap` | GapForm | GAP analysis lead gen form |
 | `/about` | About | About Brice + Sablia |
 | `/tarifs` | Tarifs | Pricing page (same as landing pricing section) |
 | `/roi` | Roi | ROI calculator page |
+| `/faq` | Faq | Full FAQ (30+ questions, 8 categories) |
+| `/cas-clients` | CaseStudies | Case studies (3 anonymized examples) |
 | `/mentions-legales` | MentionsLegales | Legal notice |
 | `/politique-confidentialite` | PolitiqueConfidentialite | Privacy policy (GDPR) |
 | `/cgv` | CGV | Terms of service |
