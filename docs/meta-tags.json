@@ -259,6 +259,44 @@
         "url": "https://sablia.io/cgv",
         "siteName": "Sablia"
       }
+    },
+
+    "/faq": {
+      "title": "FAQ - Questions fréquentes sur l'automatisation | Sablia",
+      "description": "Toutes les réponses à vos questions sur l'automatisation d'entreprise avec Sablia. Outils, délais, ROI, support, sécurité et tarification.",
+      "keywords": ["FAQ automatisation", "questions fréquentes n8n", "aide Make.com", "automatisation PME FAQ"],
+      "canonical": "https://sablia.io/faq",
+      "openGraph": {
+        "type": "website",
+        "title": "FAQ | Sablia - Automatisation IA pour PME",
+        "description": "30+ réponses à vos questions sur l'automatisation business avec n8n et Make.com.",
+        "url": "https://sablia.io/faq",
+        "siteName": "Sablia"
+      },
+      "twitter": {
+        "card": "summary",
+        "title": "FAQ | Sablia",
+        "description": "Toutes les réponses sur l'automatisation d'entreprise avec Sablia."
+      }
+    },
+
+    "/cas-clients": {
+      "title": "Cas clients - Exemples de transformations | Sablia",
+      "description": "Découvrez comment nos clients ont transformé leur entreprise grâce à l'automatisation. Études de cas e-commerce, conseil et associations.",
+      "keywords": ["cas clients automatisation", "études de cas n8n", "témoignages Make.com", "transformation digitale PME"],
+      "canonical": "https://sablia.io/cas-clients",
+      "openGraph": {
+        "type": "website",
+        "title": "Cas clients | Sablia - Automatisation IA pour PME",
+        "description": "Des transformations concrètes, des résultats mesurables. Découvrez nos études de cas.",
+        "url": "https://sablia.io/cas-clients",
+        "siteName": "Sablia"
+      },
+      "twitter": {
+        "card": "summary",
+        "title": "Cas clients | Sablia",
+        "description": "Études de cas : e-commerce, cabinet de conseil, association. Résultats mesurables."
+      }
     }
   },
 

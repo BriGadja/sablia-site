@@ -1,8 +1,11 @@
 import { lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
-import AnimatedParticles from "@/components/animations/AnimatedParticles";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import CustomCursor from "@/components/animations/CustomCursor";
+
+// Lazy load particles (heavy tsparticles dependency)
+const AnimatedParticles = lazy(() => import("@/components/animations/AnimatedParticles"));
 import Navigation from "@/components/landing/Navigation";
 import HeroSection from "@/components/landing/HeroSection";
 import TestimonialsSection from "@/components/landing/TestimonialsSection";
@@ -34,7 +37,9 @@ export default function Landing() {
         transition={{ duration: 0.4 }}
       >
         {/* Animated particles background - renders first for proper layering */}
-        <AnimatedParticles />
+        <Suspense fallback={null}>
+          <AnimatedParticles />
+        </Suspense>
 
       {/* Content layer - must have relative z-10 to appear above particles */}
       <div className="relative z-10">
@@ -64,25 +69,46 @@ export default function Landing() {
           <PricingSection />
 
           {/* Lazy-loaded below-fold sections */}
-          <Suspense fallback={<div className="min-h-[400px]" />}>
-            {/* Calculator ROI Section */}
-            <CalculatorROI />
+          <ErrorBoundary>
+            <Suspense
+              fallback={
+                <div className="space-y-24 py-24">
+                  {/* Calculator skeleton */}
+                  <div className="container mx-auto px-6 lg:px-8 max-w-4xl">
+                    <div className="h-10 w-64 bg-v2-charcoal/30 rounded-lg animate-pulse mx-auto mb-8" />
+                    <div className="h-64 bg-v2-charcoal/20 rounded-2xl animate-pulse" />
+                  </div>
+                  {/* Contact skeleton */}
+                  <div className="container mx-auto px-6 lg:px-8 max-w-6xl">
+                    <div className="h-10 w-48 bg-v2-charcoal/30 rounded-lg animate-pulse mx-auto mb-8" />
+                    <div className="grid md:grid-cols-2 gap-8">
+                      <div className="h-96 bg-v2-charcoal/20 rounded-2xl animate-pulse" />
+                      <div className="h-96 bg-v2-charcoal/20 rounded-2xl animate-pulse" />
+                    </div>
+                  </div>
+                  {/* FAQ skeleton */}
+                  <div className="container mx-auto px-6 lg:px-8 max-w-3xl">
+                    <div className="h-10 w-32 bg-v2-charcoal/30 rounded-lg animate-pulse mx-auto mb-8" />
+                    <div className="space-y-4">
+                      {[1, 2, 3, 4].map((i) => (
+                        <div key={i} className="h-14 bg-v2-charcoal/20 rounded-xl animate-pulse" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              }
+            >
+              {/* Calculator ROI Section */}
+              <CalculatorROI />
 
-            {/* Contact Form Section */}
-            <ContactFormSection />
+              {/* Contact Form Section */}
+              <ContactFormSection />
 
-            {/* FAQ Section */}
-            <FaqSection />
-          </Suspense>
+              {/* FAQ Section */}
+              <FaqSection />
+            </Suspense>
+          </ErrorBoundary>
 
-          {/* Hidden section placeholders - will be visible in DOM inspector */}
-          <div className="hidden">
-            <section id="process" className="py-24" />
-            <section id="pricing" className="py-24" />
-            <section id="calculator" className="py-24" />
-            <section id="contact" className="py-24" />
-            <section id="faq" className="py-24" />
-          </div>
         </main>
 
         <Footer />

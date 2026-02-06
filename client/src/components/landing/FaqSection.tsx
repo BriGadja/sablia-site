@@ -183,6 +183,15 @@ export default function FaqSection() {
             </motion.div>
           ))}
         </div>
+        {/* Link to full FAQ page */}
+        <div className="text-center mt-12">
+          <a
+            href="/faq"
+            className="inline-block text-v2-cyan hover:text-v2-cyan/80 font-medium text-lg underline underline-offset-4 transition-colors"
+          >
+            Voir toutes les questions
+          </a>
+        </div>
       </div>
     </section>
     </>

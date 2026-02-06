@@ -2,6 +2,72 @@
 
 ---
 
+## Completed: Site Refactor (Tech Debt & Compliance)
+
+**Plan**: [.claude/plans/sablia-site-refactor.md](.claude/plans/sablia-site-refactor.md)
+**Started**: 2026-02-06
+**Completed**: 2026-02-06
+**Status**: COMPLETED
+
+### Phases
+
+| # | Phase | Status | Notes |
+|---|-------|--------|-------|
+| A | Critical Fixes & Compliance | COMPLETED | RGPD, error boundaries, skeletons |
+| B | Dead Code & Dependency Cleanup | COMPLETED | 7 components, 32 ui files, 57 packages removed |
+| C | Animation Migration & Performance | COMPLETED | GSAP → Framer Motion |
+| D | Content Pages & SEO Polish | COMPLETED | /faq, /cas-clients pages, sitemap |
+
+### Bundle Size Impact (Before → After)
+
+| Asset | Before | After | Savings |
+|-------|--------|-------|---------|
+| CSS | 87.61 KB | 50.86 KB | -36.75 KB (-42%) |
+| main.js | 424.67 KB | 367.01 KB | -57.66 KB (-14%) |
+| animation.js | 185.04 KB | 114.78 KB | -70.26 KB (-38%) |
+| ui.js | 28.67 KB | 23.06 KB | -5.61 KB (-20%) |
+| **Total gzipped** | **~302 KB** | **~238 KB** | **~-64 KB (-21%)** |
+
+### Key Changes
+
+**Phase A**:
+- RGPD consent checkbox on contact form (z.literal(true) validation)
+- ErrorBoundary component wrapping App and Suspense blocks
+- Skeleton loaders replacing empty div fallbacks
+- robots.txt already existed (SEO audit)
+- Sitemap dates updated to 2026-02-06
+
+**Phase B**:
+- Deleted 7 legacy components (Navbar, HeroSection, old FaqSection, ProcessSection, ServicesSection, RoiBanner, AutomationExamplesSection)
+- Deleted Home.tsx, TestStackValue.tsx pages + /home route
+- Removed 32 unused shadcn/ui components (kept accordion, skeleton)
+- Removed: passport, express-session, memorystore, react-icons, recharts, embla-carousel
+- Removed hidden section placeholders from Landing.tsx
+
+**Phase C**:
+- Migrated ThreeStepProcess.tsx from GSAP to Framer Motion (whileInView + variants)
+- Migrated ProblemSection.tsx from GSAP to Framer Motion
+- Migrated ScrollReveal.tsx from GSAP to Framer Motion (all 4 exported components)
+- Removed GSAP dependency + fixed vite.config.ts manualChunks reference
+- Lazy-loaded AnimatedParticles in Landing.tsx
+
+**Phase D**:
+- Created /faq page (30+ questions across 8 categories, FAQPage schema)
+- Created /cas-clients page (3 anonymized case studies)
+- Added routes in App.tsx
+- Added "Voir toutes les questions" link to landing FAQ section
+- Added "Ressources" column in Footer (FAQ, Cas clients, ROI)
+- Updated sitemap.xml with new pages
+- Updated SEO.tsx breadcrumb config for new pages
+
+### Deferred
+
+- D3: OG image generation (requires design tooling, manual task)
+- D4: Full docs update (SITE_CONTENT.md, content-index.json, OFFRES.md, meta-tags.json) — content pages added but docs not yet synced
+- RainbowText kept (used by GapForm.tsx, not listed as legacy)
+
+---
+
 ## Completed: Calendly Integration
 
 **Plan**: [.claude/plans/sablia-site-calendly-integration.md](../../../../.claude/plans/sablia-site-calendly-integration.md)

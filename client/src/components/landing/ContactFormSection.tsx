@@ -35,6 +35,9 @@ const contactSchema = z.object({
   entreprise: z.string().min(2, "Le nom d'entreprise doit contenir au moins 2 caractères"),
   telephone: z.string().optional(),
   message: z.string().min(10, "Le message doit contenir au moins 10 caractères"),
+  rgpdConsent: z.literal(true, {
+    errorMap: () => ({ message: "Vous devez accepter la politique de confidentialité" }),
+  }),
 });
 
 type ContactInputs = z.infer<typeof contactSchema>;
@@ -216,6 +219,32 @@ export default function ContactFormSection() {
                   />
                   {errors.message && (
                     <p className="text-red-400 text-sm mt-1">{errors.message.message}</p>
+                  )}
+                </div>
+
+                {/* RGPD Consent Checkbox */}
+                <div>
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      {...register("rgpdConsent")}
+                      className="mt-1 w-4 h-4 accent-v2-cyan bg-v2-navy/50 border-v2-cyan/30 rounded"
+                    />
+                    <span className="text-sm text-v2-off-white/70">
+                      J'accepte que mes données soient traitées conformément à la{" "}
+                      <a
+                        href="/politique-confidentialite"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-v2-cyan underline hover:text-v2-cyan/80"
+                      >
+                        politique de confidentialité
+                      </a>
+                      . <span className="text-v2-cyan">*</span>
+                    </span>
+                  </label>
+                  {errors.rgpdConsent && (
+                    <p className="text-red-400 text-sm mt-1">{errors.rgpdConsent.message}</p>
                   )}
                 </div>
 

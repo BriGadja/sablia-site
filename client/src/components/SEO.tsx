@@ -17,7 +17,7 @@ import metaTags from "../../../docs/meta-tags.json";
  */
 
 interface SEOProps {
-  page: "/" | "/tarifs" | "/gap" | "/roi" | "/about" | "/mentions-legales" | "/politique-confidentialite" | "/cgv";
+  page: "/" | "/tarifs" | "/gap" | "/roi" | "/about" | "/mentions-legales" | "/politique-confidentialite" | "/cgv" | "/faq" | "/cas-clients";
 }
 
 // Breadcrumb configuration for each page
@@ -51,6 +51,14 @@ const breadcrumbConfig: Record<string, { name: string; position: number }[]> = {
     { name: "Accueil", position: 1 },
     { name: "CGV", position: 2 },
   ],
+  "/faq": [
+    { name: "Accueil", position: 1 },
+    { name: "FAQ", position: 2 },
+  ],
+  "/cas-clients": [
+    { name: "Accueil", position: 1 },
+    { name: "Cas clients", position: 2 },
+  ],
 };
 
 /**
@@ -75,7 +83,7 @@ function generateBreadcrumbSchema(page: string) {
 }
 
 export default function SEO({ page }: SEOProps) {
-  const pageData = metaTags.pages[page] as any;
+  const pageData = (metaTags.pages as Record<string, any>)[page];
   const meta = metaTags.meta;
 
   if (!pageData) {

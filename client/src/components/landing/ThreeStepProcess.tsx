@@ -1,12 +1,8 @@
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Helmet } from "react-helmet-async";
+import { motion } from "framer-motion";
 import { Search, Rocket, Zap } from "lucide-react";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-
-gsap.registerPlugin(ScrollTrigger);
 
 // ============================================
 // HowTo Schema (JSON-LD) for rich snippets
@@ -94,73 +90,17 @@ const steps: Step[] = [
   },
 ];
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 60 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, delay: i * 0.3, ease: [0.16, 1, 0.3, 1] },
+  }),
+};
+
 export default function ThreeStepProcess() {
-  const containerRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
-
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    const cards = containerRef.current.querySelectorAll(".step-card");
-    const cardBorders = containerRef.current.querySelectorAll(".step-card-border");
-
-    // If user prefers reduced motion, set final state immediately with no animation
-    if (prefersReducedMotion) {
-      gsap.set(cards, { opacity: 1, y: 0 });
-      gsap.set(cardBorders, {
-        boxShadow: "0 0 30px rgba(82, 209, 220, 0.6), 0 0 60px rgba(82, 209, 220, 0.3)",
-        borderColor: "rgba(82, 209, 220, 0.8)",
-      });
-      return;
-    }
-
-    // Staggered card reveal
-    gsap.fromTo(
-      cards,
-      { opacity: 0, y: 60 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        stagger: 0.3,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
-      },
-    );
-
-    // Progressive light border animation (left to right)
-    gsap.fromTo(
-      cardBorders,
-      {
-        boxShadow: "0 0 0px rgba(82, 209, 220, 0)",
-        borderColor: "rgba(82, 209, 220, 0.2)",
-      },
-      {
-        boxShadow: "0 0 30px rgba(82, 209, 220, 0.6), 0 0 60px rgba(82, 209, 220, 0.3)",
-        borderColor: "rgba(82, 209, 220, 0.8)",
-        duration: 1.2,
-        stagger: 0.4,
-        ease: "power2.inOut",
-        repeat: -1,
-        yoyo: true,
-        repeatDelay: 2,
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 80%",
-          toggleActions: "play none none pause",
-        },
-      },
-    );
-
-    // Cleanup
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
-  }, [prefersReducedMotion]);
 
   return (
     <>
@@ -185,13 +125,21 @@ export default function ThreeStepProcess() {
         </ScrollReveal>
 
         {/* Timeline Container */}
-        <div ref={containerRef} className="relative max-w-6xl mx-auto">
+        <div className="relative max-w-6xl mx-auto">
           {/* Desktop: Horizontal Timeline */}
           <div className="hidden lg:flex items-start justify-between gap-8 relative">
-            {steps.map((step, _index) => (
-              <div key={step.id} className="step-card flex-1 relative">
+            {steps.map((step, index) => (
+              <motion.div
+                key={step.id}
+                custom={index}
+                variants={cardVariants}
+                initial={prefersReducedMotion ? "visible" : "hidden"}
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                className="flex-1 relative"
+              >
                 {/* Step Card */}
-                <div className="step-card-border bg-v2-charcoal/20 backdrop-blur-md rounded-2xl p-8 border border-v2-cyan/20 relative">
+                <div className="bg-v2-charcoal/20 backdrop-blur-md rounded-2xl p-8 border border-v2-cyan/20 relative hover:border-v2-cyan/50 hover:shadow-[0_0_30px_rgba(82,209,220,0.3)] transition-all duration-500">
                   {/* Step Number Watermark */}
                   <div className="absolute top-4 right-4 text-[80px] font-bold text-v2-white/10 leading-none">
                     {step.id}
@@ -233,15 +181,22 @@ export default function ThreeStepProcess() {
                     {step.duration}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
           {/* Mobile: Vertical Stack */}
           <div className="flex lg:hidden flex-col gap-8">
-            {steps.map((step) => (
-              <div key={step.id} className="step-card">
-                <div className="step-card-border bg-v2-charcoal/20 backdrop-blur-md rounded-2xl p-8 border border-v2-cyan/20 relative">
+            {steps.map((step, index) => (
+              <motion.div
+                key={step.id}
+                custom={index}
+                variants={cardVariants}
+                initial={prefersReducedMotion ? "visible" : "hidden"}
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+              >
+                <div className="bg-v2-charcoal/20 backdrop-blur-md rounded-2xl p-8 border border-v2-cyan/20 relative hover:border-v2-cyan/50 hover:shadow-[0_0_30px_rgba(82,209,220,0.3)] transition-all duration-500">
                   {/* Step Number Watermark */}
                   <div className="absolute top-4 right-4 text-[48px] font-bold text-v2-white/10 leading-none">
                     {step.id}
@@ -283,7 +238,7 @@ export default function ThreeStepProcess() {
                     {step.duration}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

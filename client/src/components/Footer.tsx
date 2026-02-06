@@ -4,12 +4,24 @@ export default function Footer() {
   return (
     <footer className="bg-gray-900" style={{ backgroundColor: "#0f172a" }}>
       <div className="container py-12 mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-100">Sablia</h3>
             <p className="text-gray-300">
               Solutions d'automatisation intelligentes pour votre entreprise
             </p>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-gray-100">Ressources</h3>
+            <Link href="/faq" className="text-gray-300 hover:text-white block mb-2">
+              FAQ
+            </Link>
+            <Link href="/cas-clients" className="text-gray-300 hover:text-white block mb-2">
+              Cas clients
+            </Link>
+            <Link href="/roi" className="text-gray-300 hover:text-white block">
+              Calculateur ROI
+            </Link>
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4 text-gray-100">Contact</h3>

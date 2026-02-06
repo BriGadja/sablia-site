@@ -37,7 +37,7 @@ export default defineConfig({
           // Vendor chunks for better caching
           "react-vendor": ["react", "react-dom", "react/jsx-runtime"],
           router: ["wouter"],
-          animation: ["framer-motion", "gsap"],
+          animation: ["framer-motion"],
           forms: ["react-hook-form", "@hookform/resolvers", "zod"],
           ui: ["@radix-ui/react-accordion", "@radix-ui/react-toast"],
         },
@@ -46,5 +46,6 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    allowedHosts: ["code.sablia.io"],
   },
 });
