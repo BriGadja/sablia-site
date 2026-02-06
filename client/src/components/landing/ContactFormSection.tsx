@@ -5,29 +5,7 @@ import * as z from "zod";
 import { motion } from "framer-motion";
 import { CheckCircle, Send, Loader2, Calendar } from "lucide-react";
 import { InlineWidget } from "react-calendly";
-import ScrollReveal from "@/components/animations/ScrollReveal";
-import { MagneticButton } from "@/components/animations/MagneticElements";
 import { useToast } from "@/hooks/use-toast";
-
-/**
- * ContactFormSection - Professional contact form with Calendly integration
- *
- * Features:
- * - 2-column responsive layout (form left, Calendly right)
- * - 5 fields: Nom*, Email*, Entreprise*, Téléphone (optional), Message*
- * - React Hook Form + Zod validation
- * - Form states: idle, submitting, success, error
- * - Toast notifications for feedback
- * - Success animation with CheckCircle icon
- * - Auto-reset after 5 seconds
- * - Backend POST to n8n webhook
- * - Calendly InlineWidget for 30-min discovery calls
- * - Glassmorphism styling
- */
-
-// ============================================
-// Zod Validation Schema
-// ============================================
 
 const contactSchema = z.object({
   nom: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
@@ -42,284 +20,171 @@ const contactSchema = z.object({
 
 type ContactInputs = z.infer<typeof contactSchema>;
 
-// ============================================
-// Main Component
-// ============================================
+const inputClasses = "w-full px-4 py-3 rounded-md bg-white border border-gray-200 text-sablia-text text-base focus:outline-none focus:border-sablia-accent focus:ring-1 focus:ring-sablia-accent transition-colors";
 
 export default function ContactFormSection() {
-  // Form state management
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-
-  // Toast notification hook
   const { toast } = useToast();
 
-  // React Hook Form with Zod validation
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<ContactInputs>({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<ContactInputs>({
     resolver: zodResolver(contactSchema),
     mode: "onChange",
   });
 
-  // Form submission handler
   const onSubmit = async (data: ContactInputs) => {
     setIsSubmitting(true);
-
     try {
-      // n8n webhook call
       const response = await fetch("https://n8n.sablia.io/webhook/sablia-site-formulaire", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
+      if (!response.ok) throw new Error("Échec de l'envoi du message");
 
-      if (!response.ok) {
-        throw new Error("Échec de l'envoi du message");
-      }
-
-      // Success: Show animation + toast
       setIsSuccess(true);
-      reset(); // Clear form fields
-      toast({
-        title: "Message envoyé !",
-        description: "Nous vous répondrons dans les 24 heures.",
-        variant: "default",
-      });
-
-      // Auto-reset success state after 5 seconds
-      setTimeout(() => {
-        setIsSuccess(false);
-      }, 5000);
+      reset();
+      toast({ title: "Message envoyé !", description: "Nous vous répondrons dans les 24 heures.", variant: "default" });
+      setTimeout(() => setIsSuccess(false), 5000);
     } catch (error) {
       console.error("Contact form error:", error);
-      toast({
-        title: "Erreur",
-        description: "Une erreur est survenue lors de l'envoi. Veuillez réessayer.",
-        variant: "destructive",
-      });
+      toast({ title: "Erreur", description: "Une erreur est survenue lors de l'envoi. Veuillez réessayer.", variant: "destructive" });
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <section id="contact" className="py-24 relative overflow-hidden">
+    <section id="contact" className="py-32">
       <div className="container mx-auto px-6 lg:px-8">
-        {/* Section Header */}
-        <ScrollReveal>
-          <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-center text-v2-white mb-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
+        >
+          <h2 className="text-3xl lg:text-4xl font-bold text-center text-sablia-text mb-3">
             Contactez-nous
           </h2>
-          <p className="text-xl sm:text-2xl text-v2-off-white/80 text-center mb-16 max-w-3xl mx-auto">
+          <p className="text-lg text-sablia-text-secondary text-center mb-16 max-w-2xl mx-auto">
             Prêt à transformer votre entreprise ? Parlons de votre projet d'automatisation
           </p>
-        </ScrollReveal>
+        </motion.div>
 
-        {/* 2-Column Grid: Form + Calendly */}
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 lg:gap-12">
-          {/* Column 1: Contact Form */}
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-6 lg:gap-8">
           {!isSuccess ? (
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="bg-v2-charcoal/30 backdrop-blur-md rounded-2xl p-8 border border-v2-cyan/30"
+              transition={{ duration: 0.4 }}
+              className="bg-white border border-gray-100 rounded-lg p-8"
             >
-              <div className="flex items-center gap-3 mb-2">
-                <Send size={24} className="text-v2-cyan" />
-                <h3 className="text-2xl sm:text-3xl font-bold text-v2-white">
-                  Envoyer un message
-                </h3>
+              <div className="flex items-center gap-2.5 mb-1.5">
+                <Send size={18} className="text-sablia-accent" />
+                <h3 className="text-xl font-semibold text-sablia-text">Envoyer un message</h3>
               </div>
-              <p className="text-base sm:text-lg text-v2-off-white/70 mb-8">
-                Réponse sous 24 heures, promis.
-              </p>
+              <p className="text-sm text-sablia-text-secondary mb-6">Réponse sous 24 heures, promis.</p>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-                {/* Field 1: Nom (required) */}
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div>
-                  <label htmlFor="nom" className="block text-v2-white mb-2 font-medium">
-                    Nom <span className="text-v2-cyan">*</span>
+                  <label htmlFor="nom" className="block text-sablia-text mb-1.5 text-sm font-medium">
+                    Nom <span className="text-sablia-accent">*</span>
                   </label>
-                  <input
-                    id="nom"
-                    type="text"
-                    {...register("nom")}
-                    className="w-full bg-v2-navy/50 border border-v2-cyan/30 rounded-lg px-4 py-3 text-v2-white text-base focus:outline-none focus:border-v2-cyan transition-colors"
-                    placeholder="Jean Dupont"
-                  />
-                  {errors.nom && <p className="text-red-400 text-sm mt-1">{errors.nom.message}</p>}
+                  <input id="nom" type="text" {...register("nom")} className={inputClasses} placeholder="Jean Dupont" />
+                  {errors.nom && <p className="text-red-500 text-sm mt-1">{errors.nom.message}</p>}
                 </div>
 
-                {/* Field 2: Email (required) */}
                 <div>
-                  <label htmlFor="email" className="block text-v2-white mb-2 font-medium">
-                    Email <span className="text-v2-cyan">*</span>
+                  <label htmlFor="email" className="block text-sablia-text mb-1.5 text-sm font-medium">
+                    Email <span className="text-sablia-accent">*</span>
                   </label>
-                  <input
-                    id="email"
-                    type="email"
-                    {...register("email")}
-                    className="w-full bg-v2-navy/50 border border-v2-cyan/30 rounded-lg px-4 py-3 text-v2-white text-base focus:outline-none focus:border-v2-cyan transition-colors"
-                    placeholder="jean.dupont@exemple.fr"
-                  />
-                  {errors.email && (
-                    <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>
-                  )}
+                  <input id="email" type="email" {...register("email")} className={inputClasses} placeholder="jean.dupont@exemple.fr" />
+                  {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
                 </div>
 
-                {/* Field 3: Entreprise (required) */}
                 <div>
-                  <label htmlFor="entreprise" className="block text-v2-white mb-2 font-medium">
-                    Entreprise <span className="text-v2-cyan">*</span>
+                  <label htmlFor="entreprise" className="block text-sablia-text mb-1.5 text-sm font-medium">
+                    Entreprise <span className="text-sablia-accent">*</span>
                   </label>
-                  <input
-                    id="entreprise"
-                    type="text"
-                    {...register("entreprise")}
-                    className="w-full bg-v2-navy/50 border border-v2-cyan/30 rounded-lg px-4 py-3 text-v2-white text-base focus:outline-none focus:border-v2-cyan transition-colors"
-                    placeholder="ACME Corp"
-                  />
-                  {errors.entreprise && (
-                    <p className="text-red-400 text-sm mt-1">{errors.entreprise.message}</p>
-                  )}
+                  <input id="entreprise" type="text" {...register("entreprise")} className={inputClasses} placeholder="ACME Corp" />
+                  {errors.entreprise && <p className="text-red-500 text-sm mt-1">{errors.entreprise.message}</p>}
                 </div>
 
-                {/* Field 4: Téléphone (optional) */}
                 <div>
-                  <label htmlFor="telephone" className="block text-v2-white mb-2 font-medium">
-                    Téléphone <span className="text-v2-off-white/50">(optionnel)</span>
+                  <label htmlFor="telephone" className="block text-sablia-text mb-1.5 text-sm font-medium">
+                    Téléphone <span className="text-sablia-text-tertiary">(optionnel)</span>
                   </label>
-                  <input
-                    id="telephone"
-                    type="tel"
-                    {...register("telephone")}
-                    className="w-full bg-v2-navy/50 border border-v2-cyan/30 rounded-lg px-4 py-3 text-v2-white text-base focus:outline-none focus:border-v2-cyan transition-colors"
-                    placeholder="+33 6 12 34 56 78"
-                  />
+                  <input id="telephone" type="tel" {...register("telephone")} className={inputClasses} placeholder="+33 6 12 34 56 78" />
                 </div>
 
-                {/* Field 5: Message (required, textarea) */}
                 <div>
-                  <label htmlFor="message" className="block text-v2-white mb-2 font-medium">
-                    Message <span className="text-v2-cyan">*</span>
+                  <label htmlFor="message" className="block text-sablia-text mb-1.5 text-sm font-medium">
+                    Message <span className="text-sablia-accent">*</span>
                   </label>
-                  <textarea
-                    id="message"
-                    rows={4}
-                    {...register("message")}
-                    className="w-full bg-v2-navy/50 border border-v2-cyan/30 rounded-lg px-4 py-3 text-v2-white text-base focus:outline-none focus:border-v2-cyan transition-colors resize-none"
-                    placeholder="Décrivez votre projet d'automatisation..."
-                  />
-                  {errors.message && (
-                    <p className="text-red-400 text-sm mt-1">{errors.message.message}</p>
-                  )}
+                  <textarea id="message" rows={4} {...register("message")} className={`${inputClasses} resize-none`} placeholder="Décrivez votre projet d'automatisation..." />
+                  {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
                 </div>
 
-                {/* RGPD Consent Checkbox */}
                 <div>
-                  <label className="flex items-start gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      {...register("rgpdConsent")}
-                      className="mt-1 w-4 h-4 accent-v2-cyan bg-v2-navy/50 border-v2-cyan/30 rounded"
-                    />
-                    <span className="text-sm text-v2-off-white/70">
+                  <label className="flex items-start gap-2.5 cursor-pointer">
+                    <input type="checkbox" {...register("rgpdConsent")} className="mt-1 w-4 h-4 accent-sablia-accent rounded" />
+                    <span className="text-sm text-sablia-text-secondary">
                       J'accepte que mes données soient traitées conformément à la{" "}
-                      <a
-                        href="/politique-confidentialite"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-v2-cyan underline hover:text-v2-cyan/80"
-                      >
+                      <a href="/politique-confidentialite" target="_blank" rel="noopener noreferrer" className="text-sablia-accent underline hover:text-sablia-accent-hover">
                         politique de confidentialité
-                      </a>
-                      . <span className="text-v2-cyan">*</span>
+                      </a>. <span className="text-sablia-accent">*</span>
                     </span>
                   </label>
-                  {errors.rgpdConsent && (
-                    <p className="text-red-400 text-sm mt-1">{errors.rgpdConsent.message}</p>
-                  )}
+                  {errors.rgpdConsent && <p className="text-red-500 text-sm mt-1">{errors.rgpdConsent.message}</p>}
                 </div>
 
-                {/* Submit Button */}
                 {isSubmitting ? (
-                  <button
-                    type="button"
-                    disabled
-                    className="w-full bg-v2-cyan/50 text-v2-navy px-8 py-4 rounded-lg font-bold text-lg cursor-not-allowed flex items-center justify-center gap-2"
-                  >
-                    <Loader2 size={20} className="animate-spin" />
-                    <span>Envoi en cours...</span>
+                  <button type="button" disabled className="w-full bg-sablia-accent/60 text-white px-6 py-3.5 rounded-md font-medium cursor-not-allowed flex items-center justify-center gap-2">
+                    <Loader2 size={18} className="animate-spin" />
+                    Envoi en cours...
                   </button>
                 ) : (
-                  <MagneticButton
-                    strength={0.2}
-                    className="w-full bg-v2-cyan text-v2-navy px-8 py-4 rounded-lg font-bold text-lg hover:bg-v2-cyan/90 transition-colors flex items-center justify-center gap-2"
-                  >
-                    <Send size={20} />
-                    <span>Envoyer le message</span>
-                  </MagneticButton>
+                  <button type="submit" className="w-full bg-sablia-accent text-white px-6 py-3.5 rounded-md font-medium hover:bg-sablia-accent-hover transition-colors duration-200 flex items-center justify-center gap-2">
+                    <Send size={18} />
+                    Envoyer le message
+                  </button>
                 )}
               </form>
             </motion.div>
           ) : (
-            // Success Animation (replaces form column)
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="bg-v2-charcoal/30 backdrop-blur-md rounded-2xl p-12 border border-v2-cyan/50 text-center flex flex-col justify-center"
+              transition={{ duration: 0.3 }}
+              className="bg-white border border-gray-100 rounded-lg p-12 text-center flex flex-col justify-center"
             >
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, duration: 0.4, type: "spring", stiffness: 200 }}
-                className="inline-block mb-6"
-              >
-                <CheckCircle size={80} className="text-v2-cyan mx-auto" />
-              </motion.div>
-              <h3 className="text-2xl sm:text-3xl font-bold text-v2-white mb-3">Message envoyé !</h3>
-              <p className="text-base sm:text-lg text-v2-off-white/80">
+              <CheckCircle size={56} className="text-sablia-accent mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-sablia-text mb-2">Message envoyé !</h3>
+              <p className="text-base text-sablia-text-secondary">
                 Merci pour votre message. Nous vous répondrons dans les 24 heures.
               </p>
             </motion.div>
           )}
 
-          {/* Column 2: Calendly Widget */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-v2-charcoal/30 backdrop-blur-md rounded-2xl p-8 border border-v2-cyan/30"
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="bg-white border border-gray-100 rounded-lg p-8"
           >
-            <div className="flex items-center gap-3 mb-2">
-              <Calendar size={24} className="text-v2-cyan" />
-              <h3 className="text-2xl sm:text-3xl font-bold text-v2-white">
-                Réserver un appel
-              </h3>
+            <div className="flex items-center gap-2.5 mb-1.5">
+              <Calendar size={18} className="text-sablia-accent" />
+              <h3 className="text-xl font-semibold text-sablia-text">Réserver un appel</h3>
             </div>
-            <p className="text-base sm:text-lg text-v2-off-white/70 mb-6">
-              30 minutes pour découvrir vos besoins.
-            </p>
+            <p className="text-sm text-sablia-text-secondary mb-6">30 minutes pour découvrir vos besoins.</p>
 
-            {/* Calendly InlineWidget */}
-            <div className="rounded-xl overflow-hidden">
+            <div className="rounded-md overflow-hidden">
               <InlineWidget
                 url="https://calendly.com/brice-gachadoat/30min"
-                styles={{
-                  height: "580px",
-                  minWidth: "280px",
-                }}
+                styles={{ height: "580px", minWidth: "280px" }}
                 pageSettings={{
-                  primaryColor: "48d1cc",
-                  backgroundColor: "0a2463",
+                  primaryColor: "2563eb",
+                  backgroundColor: "ffffff",
                   hideEventTypeDetails: false,
                   hideLandingPageDetails: false,
                 }}

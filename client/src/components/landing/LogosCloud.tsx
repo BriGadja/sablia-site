@@ -1,23 +1,9 @@
 import { motion } from "framer-motion";
-import ScrollReveal from "@/components/animations/ScrollReveal";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-
-/**
- * LogosCloud - Responsive grid of 12 integration logos with interactive HoverCards
- *
- * Features:
- * - 12 integration logos (automation, AI, productivity, communication, development)
- * - Interactive HoverCards with tool descriptions and use cases
- * - Responsive grid: 4 columns desktop → 3 tablet → 2 mobile
- * - White logos with opacity hover effect (60% → 100%)
- * - Staggered fade-in animation (0.08s delay per logo)
- * - ScrollReveal wrapper for section entry animation
- * - Scale effect on hover (1.05x)
- */
 
 interface Integration {
   id: number;
@@ -30,237 +16,106 @@ interface Integration {
 }
 
 const integrations: Integration[] = [
-  // Automation platforms (2)
-  {
-    id: 1,
-    name: "n8n",
-    imageUrl: "/logos/integrations/n8n.svg",
-    category: "automation",
-    categoryLabel: "Automatisation",
-    description: "Notre plateforme de référence pour 90% de nos projets. Open-source, +400 intégrations natives, personnalisation illimitée et hébergement souverain possible.",
-    useCase: "Workflows complexes multi-branches : CRM → IA → Sheets → Slack avec logique conditionnelle avancée",
-  },
-  {
-    id: 2,
-    name: "Make",
-    imageUrl: "/logos/integrations/make.svg",
-    category: "automation",
-    categoryLabel: "Automatisation",
-    description: "Automatisation visuelle pour connecter vos applications business sans coder",
-    useCase: "Workflows complexes multi-étapes pour gestion de leads",
-  },
-
-  // AI platforms (4)
-  {
-    id: 3,
-    name: "OpenAI",
-    imageUrl: "/logos/integrations/openai.svg",
-    category: "ai",
-    categoryLabel: "Intelligence Artificielle",
-    description: "IA générative pour automatiser création de contenu et analyses avancées",
-    useCase: "Génération automatique de rapports et documentation",
-  },
-  {
-    id: 4,
-    name: "Anthropic",
-    imageUrl: "/logos/integrations/anthropic.svg",
-    category: "ai",
-    categoryLabel: "Intelligence Artificielle",
-    description: "Claude AI pour assistance intelligente et traitement de documents complexes",
-    useCase: "Extraction de données depuis factures et contrats",
-  },
-  {
-    id: 5,
-    name: "Gemini",
-    imageUrl: "/logos/integrations/googlegemini.svg",
-    category: "ai",
-    categoryLabel: "Intelligence Artificielle",
-    description: "IA multimodale Google pour analyse de données et génération de contenu",
-    useCase: "Analyse prédictive et insights business automatisés",
-  },
-  {
-    id: 6,
-    name: "Perplexity",
-    imageUrl: "/logos/integrations/perplexity.svg",
-    category: "ai",
-    categoryLabel: "Intelligence Artificielle",
-    description: "Recherche augmentée par IA pour veille concurrentielle et benchmarking",
-    useCase: "Monitoring automatisé des tendances sectorielles",
-  },
-
-  // Productivity & Google ecosystem (3)
-  {
-    id: 7,
-    name: "Google Sheets",
-    imageUrl: "/logos/integrations/googlesheets.svg",
-    category: "productivity",
-    categoryLabel: "Productivité",
-    description: "Tableurs collaboratifs pour centraliser et automatiser vos données business",
-    useCase: "Dashboards KPI mis à jour en temps réel via API",
-  },
-  {
-    id: 8,
-    name: "Google Drive",
-    imageUrl: "/logos/integrations/googledrive.svg",
-    category: "productivity",
-    categoryLabel: "Productivité",
-    description: "Stockage cloud pour centraliser documents et automatiser partage/archivage",
-    useCase: "Archivage automatique de devis et factures par projet",
-  },
-  {
-    id: 9,
-    name: "Notion",
-    imageUrl: "/logos/integrations/notion.svg",
-    category: "productivity",
-    categoryLabel: "Productivité",
-    description: "Base de connaissances collaborative pour documenter workflows et procédures",
-    useCase: "Documentation automatique de processus et formations",
-  },
-
-  // Communication (1)
-  {
-    id: 10,
-    name: "Slack",
-    imageUrl: "/logos/integrations/slack.svg",
-    category: "communication",
-    categoryLabel: "Communication",
-    description: "Hub de communication d'équipe avec notifications automatisées intelligentes",
-    useCase: "Alertes temps réel sur nouveaux leads et deadlines",
-  },
-
-  // Development & Deployment (2)
-  {
-    id: 11,
-    name: "GitHub",
-    imageUrl: "/logos/integrations/github.svg",
-    category: "development",
-    categoryLabel: "Développement",
-    description: "Gestion de versions et CI/CD pour déploiement automatisé de solutions",
-    useCase: "Déploiement continu d'automatisations personnalisées",
-  },
-  {
-    id: 12,
-    name: "Vercel",
-    imageUrl: "/logos/integrations/vercel.svg",
-    category: "development",
-    categoryLabel: "Développement",
-    description: "Plateforme de déploiement serverless pour applications et outils web",
-    useCase: "Hébergement de dashboards clients et interfaces sur-mesure",
-  },
+  { id: 1, name: "n8n", imageUrl: "/logos/integrations/n8n.svg", category: "automation", categoryLabel: "Automatisation", description: "Notre plateforme de référence pour 90% de nos projets. Open-source, +400 intégrations natives, personnalisation illimitée et hébergement souverain possible.", useCase: "Workflows complexes multi-branches : CRM → IA → Sheets → Slack avec logique conditionnelle avancée" },
+  { id: 2, name: "Make", imageUrl: "/logos/integrations/make.svg", category: "automation", categoryLabel: "Automatisation", description: "Automatisation visuelle pour connecter vos applications business sans coder", useCase: "Workflows complexes multi-étapes pour gestion de leads" },
+  { id: 3, name: "OpenAI", imageUrl: "/logos/integrations/openai.svg", category: "ai", categoryLabel: "Intelligence Artificielle", description: "IA générative pour automatiser création de contenu et analyses avancées", useCase: "Génération automatique de rapports et documentation" },
+  { id: 4, name: "Anthropic", imageUrl: "/logos/integrations/anthropic.svg", category: "ai", categoryLabel: "Intelligence Artificielle", description: "Claude AI pour assistance intelligente et traitement de documents complexes", useCase: "Extraction de données depuis factures et contrats" },
+  { id: 5, name: "Gemini", imageUrl: "/logos/integrations/googlegemini.svg", category: "ai", categoryLabel: "Intelligence Artificielle", description: "IA multimodale Google pour analyse de données et génération de contenu", useCase: "Analyse prédictive et insights business automatisés" },
+  { id: 6, name: "Perplexity", imageUrl: "/logos/integrations/perplexity.svg", category: "ai", categoryLabel: "Intelligence Artificielle", description: "Recherche augmentée par IA pour veille concurrentielle et benchmarking", useCase: "Monitoring automatisé des tendances sectorielles" },
+  { id: 7, name: "Google Sheets", imageUrl: "/logos/integrations/googlesheets.svg", category: "productivity", categoryLabel: "Productivité", description: "Tableurs collaboratifs pour centraliser et automatiser vos données business", useCase: "Dashboards KPI mis à jour en temps réel via API" },
+  { id: 8, name: "Google Drive", imageUrl: "/logos/integrations/googledrive.svg", category: "productivity", categoryLabel: "Productivité", description: "Stockage cloud pour centraliser documents et automatiser partage/archivage", useCase: "Archivage automatique de devis et factures par projet" },
+  { id: 9, name: "Notion", imageUrl: "/logos/integrations/notion.svg", category: "productivity", categoryLabel: "Productivité", description: "Base de connaissances collaborative pour documenter workflows et procédures", useCase: "Documentation automatique de processus et formations" },
+  { id: 10, name: "Slack", imageUrl: "/logos/integrations/slack.svg", category: "communication", categoryLabel: "Communication", description: "Hub de communication d'équipe avec notifications automatisées intelligentes", useCase: "Alertes temps réel sur nouveaux leads et deadlines" },
+  { id: 11, name: "GitHub", imageUrl: "/logos/integrations/github.svg", category: "development", categoryLabel: "Développement", description: "Gestion de versions et CI/CD pour déploiement automatisé de solutions", useCase: "Déploiement continu d'automatisations personnalisées" },
+  { id: 12, name: "Vercel", imageUrl: "/logos/integrations/vercel.svg", category: "development", categoryLabel: "Développement", description: "Plateforme de déploiement serverless pour applications et outils web", useCase: "Hébergement de dashboards clients et interfaces sur-mesure" },
 ];
 
 export default function LogosCloud() {
   return (
-    <section id="logos" className="py-24 relative overflow-hidden">
+    <section id="logos" className="py-32">
       <div className="container mx-auto px-6 lg:px-8">
-        <ScrollReveal>
-          {/* Section Header */}
-          <div className="text-center mb-16">
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-lg sm:text-xl font-semibold text-v2-cyan uppercase tracking-wider mb-4"
-            >
-              Les outils que nous maîtrisons
-            </motion.p>
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="text-5xl sm:text-6xl lg:text-7xl font-bold text-v2-white"
-            >
-              Intégrations & Outils
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="text-xl sm:text-2xl text-v2-off-white/70 mt-4"
-            >
-              Automatisez vos workflows avec les outils que vous utilisez déjà
-            </motion.p>
-          </div>
+        <div className="text-center mb-16">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-sm font-semibold text-sablia-accent uppercase tracking-wider mb-3"
+          >
+            Les outils que nous maîtrisons
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.06 }}
+            className="text-3xl lg:text-4xl font-bold text-sablia-text"
+          >
+            Intégrations & Outils
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.12 }}
+            className="text-lg text-sablia-text-secondary mt-3"
+          >
+            Automatisez vos workflows avec les outils que vous utilisez déjà
+          </motion.p>
+        </div>
 
-          {/* Logos Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 lg:gap-12">
-            {integrations.map((integration, index) => {
-              const isN8n = integration.name === "n8n";
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 lg:gap-12 max-w-4xl mx-auto">
+          {integrations.map((integration, index) => {
+            const isN8n = integration.name === "n8n";
 
-              return (
-                <motion.div
-                  key={integration.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.08 }}
-                  className="flex flex-col items-center justify-center gap-2"
-                >
-                  {/* Badge for n8n only */}
-                  {isN8n && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.5, duration: 0.3 }}
-                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-gradient-to-r from-v2-cyan/20 to-v2-magenta/20 text-v2-cyan border border-v2-cyan/30"
-                    >
-                      <span className="text-xs">🌟</span>
-                      <span>Notre cœur de métier</span>
-                    </motion.div>
-                  )}
+            return (
+              <motion.div
+                key={integration.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.06 }}
+                className="flex flex-col items-center justify-center gap-2"
+              >
+                {isN8n && (
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider text-sablia-accent bg-sablia-accent/5 border border-sablia-accent/10">
+                    Notre coeur de métier
+                  </span>
+                )}
 
-                  <HoverCard openDelay={200} closeDelay={100}>
-                    <HoverCardTrigger asChild>
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        className={`cursor-pointer flex items-center justify-center ${
-                          isN8n ? "relative" : ""
-                        }`}
-                      >
-                        {/* Glow effect for n8n */}
-                        {isN8n && (
-                          <div className="absolute inset-0 blur-xl bg-v2-cyan/30 rounded-full animate-pulse" />
-                        )}
-                        <img
-                          src={integration.imageUrl}
-                          alt={`${integration.name} integration`}
-                          title={integration.name}
-                          width={isN8n ? 80 : 56}
-                          height={isN8n ? 80 : 56}
-                          loading="lazy"
-                          className={`${
-                            isN8n ? "h-16 lg:h-20" : "h-12 lg:h-14"
-                          } w-auto object-contain transition-all duration-300 opacity-60 hover:opacity-100 relative z-10`}
-                        />
-                      </motion.div>
-                    </HoverCardTrigger>
+                <HoverCard openDelay={200} closeDelay={100}>
+                  <HoverCardTrigger asChild>
+                    <div className="cursor-pointer flex items-center justify-center">
+                      <img
+                        src={integration.imageUrl}
+                        alt={`${integration.name} integration`}
+                        title={integration.name}
+                        width={isN8n ? 80 : 56}
+                        height={isN8n ? 80 : 56}
+                        loading="lazy"
+                        className={`${
+                          isN8n ? "h-16 lg:h-20" : "h-12 lg:h-14"
+                        } w-auto object-contain transition-opacity duration-200 opacity-50 hover:opacity-100`}
+                      />
+                    </div>
+                  </HoverCardTrigger>
                   <HoverCardContent
                     side={index >= 8 ? "top" : "bottom"}
                     align="center"
-                    className="w-80 bg-v2-navy/95 border border-v2-gray-700 backdrop-blur-sm p-4"
+                    className="w-80 bg-white border border-gray-200 p-4 shadow-lg"
                   >
-                    <div className="space-y-3">
-                      {/* Category Badge */}
-                      <div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium uppercase tracking-wide bg-v2-cyan/10 text-v2-cyan border border-v2-cyan/20">
+                    <div className="space-y-2.5">
+                      <div className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium uppercase tracking-wide text-sablia-accent bg-sablia-accent/5">
                         {integration.categoryLabel}
                       </div>
-
-                      {/* Tool Name */}
-                      <h3 className="text-lg font-semibold text-v2-white">
+                      <h3 className="text-base font-semibold text-sablia-text">
                         {integration.name}
                       </h3>
-
-                      {/* Description */}
-                      <p className="text-sm text-v2-gray-300 leading-relaxed">
+                      <p className="text-sm text-sablia-text-secondary leading-relaxed">
                         {integration.description}
                       </p>
-
-                      {/* Use Case */}
-                      <div className="pt-2 border-t border-v2-gray-700/50">
-                        <p className="text-xs text-v2-cyan/90 italic">
-                          <span className="font-semibold not-italic">Exemple :</span>{" "}
+                      <div className="pt-2 border-t border-gray-100">
+                        <p className="text-xs text-sablia-text-secondary">
+                          <span className="font-semibold">Exemple :</span>{" "}
                           {integration.useCase}
                         </p>
                       </div>
@@ -269,19 +124,17 @@ export default function LogosCloud() {
                 </HoverCard>
               </motion.div>
             );
-            })}
-          </div>
+          })}
+        </div>
 
-          {/* Footer Text */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mt-12 text-base sm:text-lg text-v2-off-white/50"
-          >
-            Et bien d'autres intégrations possibles
-          </motion.p>
-        </ScrollReveal>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mt-10 text-sm text-sablia-text-tertiary"
+        >
+          Et bien d'autres intégrations possibles
+        </motion.p>
       </div>
     </section>
   );

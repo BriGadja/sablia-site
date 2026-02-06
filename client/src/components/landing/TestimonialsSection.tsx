@@ -1,24 +1,5 @@
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
-import ScrollReveal from "@/components/animations/ScrollReveal";
-
-/**
- * TestimonialsSection - Infinite scrolling carousel with social media-style cards
- *
- * Features:
- * - Infinite horizontal scroll (tripled array for seamless loop)
- * - Pause on hover functionality (CSS animation-play-state)
- * - Social media post card design (compact, scannable)
- * - Short testimonial versions for readability while scrolling
- * - Glassmorphism cards with dark theme (v3)
- * - Gradient fade overlays on edges
- * - ScrollReveal animation on section entry
- *
- * Technical Note:
- * - Uses CSS animations instead of Framer Motion for infinite scroll
- *   to preserve position when pausing (animation-play-state: paused)
- * - Framer Motion's animate prop restarts from beginning after pause
- */
 
 interface Testimonial {
   name: string;
@@ -83,10 +64,6 @@ const testimonials: Testimonial[] = [
   },
 ];
 
-// ============================================
-// Review & AggregateRating Schema (JSON-LD)
-// ============================================
-
 const reviewSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -99,53 +76,37 @@ const reviewSchema = {
     "bestRating": "5",
     "worstRating": "1",
   },
-  "review": testimonials.map((t, index) => ({
+  "review": testimonials.map((t) => ({
     "@type": "Review",
-    "author": {
-      "@type": "Person",
-      "name": t.name,
-    },
-    "reviewRating": {
-      "@type": "Rating",
-      "ratingValue": "5",
-      "bestRating": "5",
-    },
+    "author": { "@type": "Person", "name": t.name },
+    "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
     "reviewBody": t.quote,
     "datePublished": "2025-01-01",
     "itemReviewed": {
       "@type": "Service",
       "name": t.project,
-      "provider": {
-        "@type": "Organization",
-        "name": "Sablia",
-      },
+      "provider": { "@type": "Organization", "name": "Sablia" },
     },
   })),
 };
 
 export default function TestimonialsSection() {
-  // Triple array for seamless infinite loop
-  const displayTestimonials = [...testimonials, ...testimonials, ...testimonials];
-
   return (
     <>
-      {/* Review & AggregateRating Schema JSON-LD */}
       <Helmet>
         <script type="application/ld+json">
           {JSON.stringify(reviewSchema)}
         </script>
       </Helmet>
 
-    <section id="testimonials" className="py-24 relative overflow-hidden">
-      <div className="container mx-auto px-6 lg:px-8">
-        <ScrollReveal>
-          {/* Section Header */}
+      <section id="testimonials" className="py-32 bg-sablia-surface">
+        <div className="container mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-lg sm:text-xl font-semibold text-v2-white/70 uppercase tracking-wider mb-4"
+              className="text-sm font-semibold text-sablia-accent uppercase tracking-wider mb-3"
             >
               Ils ont transformé leurs opérations
             </motion.p>
@@ -153,75 +114,97 @@ export default function TestimonialsSection() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="text-5xl sm:text-6xl lg:text-7xl font-bold text-v2-white"
+              transition={{ delay: 0.06 }}
+              className="text-3xl lg:text-4xl font-bold text-sablia-text"
             >
               Des résultats mesurables
             </motion.h2>
           </div>
 
-          {/* Carousel Container */}
-          <div className="relative overflow-hidden">
-            {/* Gradient fade overlays - color matches the background gradient at this scroll position (~14% = between #2B9AB8 and #3E92CC) */}
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#3D92CB] to-transparent z-10 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#3D92CB] to-transparent z-10 pointer-events-none" />
-
-            {/* Scrolling cards wrapper with pause on hover (CSS animation) */}
-            <div className="flex gap-6 animate-scroll-testimonials">
-              {displayTestimonials.map((testimonial, index) => (
-                <div
-                  key={`${testimonial.name}-${index}`}
-                  className="flex-shrink-0 w-[320px] md:w-[380px]"
-                >
-                  {/* Social Media Post Card */}
-                  <div className="bg-v2-navy/80 backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-v2-cyan/20 h-full flex flex-col">
-                    {/* Header: Avatar + Name */}
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-v2-cyan to-v2-electric flex items-center justify-center flex-shrink-0">
-                        <span className="text-v2-navy font-bold text-sm">{testimonial.avatar}</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-v2-white text-lg leading-tight">
-                          {testimonial.name}
-                        </h3>
-                        <p className="text-sm text-v2-off-white/70">{testimonial.role}</p>
-                        <p className="text-xs text-v2-off-white/50">{testimonial.company}</p>
-                      </div>
-                    </div>
-
-                    {/* Quote */}
-                    <p className="text-v2-off-white/90 leading-relaxed mb-4 flex-grow text-sm md:text-base">
-                      "{testimonial.quote}"
-                    </p>
-
-                    {/* Footer: Metric Badge + Project Tag */}
-                    <div className="pt-4 border-t border-v2-white/10 space-y-2">
-                      <div className="inline-flex items-center gap-2 bg-v2-cyan/30 text-v2-white px-3 py-1.5 rounded-full">
-                        <span className="text-lg">✓</span>
-                        <span className="text-sm font-semibold">{testimonial.metric}</span>
-                      </div>
-                      <p className="text-xs text-v2-off-white/60">Projet : {testimonial.project}</p>
-                    </div>
+          {/* Static 3-column grid (replaces infinite scroll) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {testimonials.slice(0, 3).map((testimonial, index) => (
+              <motion.div
+                key={testimonial.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.08 }}
+                className="bg-white border border-gray-100 rounded-lg p-6 hover:shadow-sm hover:border-gray-200 transition-all duration-200"
+              >
+                <div className="flex items-start gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-sablia-accent/10 flex items-center justify-center flex-shrink-0">
+                    <span className="text-sablia-accent font-semibold text-sm">{testimonial.avatar}</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-sablia-text text-base leading-tight">
+                      {testimonial.name}
+                    </h3>
+                    <p className="text-sm text-sablia-text-secondary">{testimonial.role}, {testimonial.company}</p>
                   </div>
                 </div>
-              ))}
-            </div>
+
+                <p className="text-sablia-text-secondary leading-relaxed mb-4 text-sm">
+                  "{testimonial.quote}"
+                </p>
+
+                <div className="pt-4 border-t border-gray-100 space-y-1.5">
+                  <div className="inline-flex items-center gap-1.5 bg-sablia-accent/5 text-sablia-accent px-2.5 py-1 rounded-md">
+                    <span className="text-sm font-medium">{testimonial.metric}</span>
+                  </div>
+                  <p className="text-xs text-sablia-text-tertiary">Projet : {testimonial.project}</p>
+                </div>
+              </motion.div>
+            ))}
           </div>
 
-          {/* Subtitle */}
-          <motion.div
+          {/* Second row — 2 remaining testimonials centered */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mt-6">
+            {testimonials.slice(3).map((testimonial, index) => (
+              <motion.div
+                key={testimonial.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: (index + 3) * 0.08 }}
+                className="bg-white border border-gray-100 rounded-lg p-6 hover:shadow-sm hover:border-gray-200 transition-all duration-200"
+              >
+                <div className="flex items-start gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-sablia-accent/10 flex items-center justify-center flex-shrink-0">
+                    <span className="text-sablia-accent font-semibold text-sm">{testimonial.avatar}</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-sablia-text text-base leading-tight">
+                      {testimonial.name}
+                    </h3>
+                    <p className="text-sm text-sablia-text-secondary">{testimonial.role}, {testimonial.company}</p>
+                  </div>
+                </div>
+
+                <p className="text-sablia-text-secondary leading-relaxed mb-4 text-sm">
+                  "{testimonial.quote}"
+                </p>
+
+                <div className="pt-4 border-t border-gray-100 space-y-1.5">
+                  <div className="inline-flex items-center gap-1.5 bg-sablia-accent/5 text-sablia-accent px-2.5 py-1 rounded-md">
+                    <span className="text-sm font-medium">{testimonial.metric}</span>
+                  </div>
+                  <p className="text-xs text-sablia-text-tertiary">Projet : {testimonial.project}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mt-12"
+            className="text-center mt-10 text-sm text-sablia-text-tertiary"
           >
-            <p className="text-base sm:text-lg text-v2-off-white/60">
-              Projets réels · Résultats vérifiables
-            </p>
-          </motion.div>
-        </ScrollReveal>
-      </div>
-    </section>
+            Projets réels · Résultats vérifiables
+          </motion.p>
+        </div>
+      </section>
     </>
   );
 }

@@ -61,17 +61,13 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // v2 Landing Page Colors
-        "v2-navy": "#0A2463",
-        "v2-electric": "#3E92CC",
-        "v2-cyan": "#52D1DC",
-        "v2-white": "#FFFFFF",
-        "v2-off-white": "#F8F9FA",
-        "v2-charcoal": "#2D3142",
-        // v3 Sunrise gradient colors (for continuous sky → night → dawn gradient)
-        "v3-orange": "#FF8C42",
-        "v3-amber": "#FFA559",
-        "v3-gold": "#FFB347",
+        // Sablia design system
+        "sablia-text": "#1a1c21",
+        "sablia-text-secondary": "rgba(26, 28, 33, 0.55)",
+        "sablia-text-tertiary": "rgba(26, 28, 33, 0.35)",
+        "sablia-accent": "#2563eb",
+        "sablia-accent-hover": "#1d4ed8",
+        "sablia-surface": "#fafafa",
       },
       keyframes: {
         "accordion-down": {
@@ -96,8 +92,7 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
-        inter: ["Inter", "sans-serif"],
+        sans: ["Inter Tight", "Inter", "system-ui", "sans-serif"],
       },
     },
   },

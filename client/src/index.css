@@ -5,64 +5,34 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 228 10% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 228 10% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 228 10% 10%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 228 10% 10%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 221 83% 53%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 221 83% 53%;
 
     --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
   }
 }
 
@@ -72,82 +42,10 @@
   }
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
-}
-
-/* Backgrounds patterns */
-.bg-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15 0C6.716 0 0 6.716 0 15c0 8.284 6.716 15 15 15 8.284 0 15-6.716 15-15 0-8.284-6.716-15-15-15zm0 26c-6.065 0-11-4.935-11-11s4.935-11 11-11 11 4.935 11 11-4.935 11-11 11z' fill='%239C92AC' fill-opacity='0.05' fill-rule='nonzero'/%3E%3C/svg%3E");
-}
-
-.bg-dots-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(50,100,150,0.07)'%3E%3C/path%3E%3C/svg%3E");
-}
-
-/* Rainbow Text Effect */
-.rainbow-text {
-  @apply bg-clip-text text-transparent;
-  background-image: linear-gradient(
-    to right,
-    #ff0000,
-    /* Rouge */ #ff8000,
-    /* Orange */ #ffff00,
-    /* Jaune */ #80ff00,
-    /* Jaune-vert */ #00ff00,
-    /* Vert */ #00ff80,
-    /* Vert-cyan */ #00ffff,
-    /* Cyan */ #0080ff,
-    /* Bleu clair */ #0000ff,
-    /* Bleu */ #8000ff,
-    /* Indigo */ #ff00ff,
-    /* Magenta */ #ff0080,
-    /* Rose */ #ff0000 /* Rouge (retour au début) */
-  );
-  background-size: 400% auto;
-  animation: rainbow-text-animation 8s linear infinite;
-}
-
-@keyframes rainbow-text-animation {
-  0% {
-    background-position: 0% center;
-  }
-  100% {
-    background-position: 400% center;
-  }
-}
-
-/* Animated gradient for hero background */
-@keyframes gradient-xy {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.animate-gradient-xy {
-  background-size: 400% 400%;
-  animation: gradient-xy 15s ease infinite;
-}
-
-/* Testimonials carousel infinite scroll */
-@keyframes scroll-testimonials {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-2020px); /* 5 cards × 404px (380px + 24px gap) */
-  }
-}
-
-.animate-scroll-testimonials {
-  animation: scroll-testimonials 40s linear infinite;
-}
-
-.animate-scroll-testimonials:hover {
-  animation-play-state: paused;
 }
 
 /* Page transitions */
@@ -186,10 +84,5 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-
-  /* Specific handling for testimonials carousel */
-  .animate-scroll-testimonials {
-    animation: none !important;
   }
 }

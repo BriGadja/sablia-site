@@ -5,8 +5,6 @@ import { Helmet } from "react-helmet-async";
 import Navigation from "@/components/landing/Navigation";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
-import AnimatedParticles from "@/components/animations/AnimatedParticles";
-import CustomCursor from "@/components/animations/CustomCursor";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 import SEO from "@/components/SEO";
 
@@ -234,19 +232,13 @@ export default function Faq() {
       </Helmet>
 
       <motion.div
-        className="min-h-screen"
-        style={{
-          background:
-            "linear-gradient(to bottom, #2B9AB8 0%, #3E92CC 15%, #0A2463 35%, #0A2463 50%, #2D3142 65%, #3d2f1f 80%, #4a3621 95%, #3d2f1f 100%)",
-        }}
+        className="min-h-screen bg-white"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.4 }}
+        transition={{ duration: 0.3 }}
       >
-        <AnimatedParticles />
-
-        <div className="relative z-10">
+        <div>
           <Navigation />
 
           <main className="pt-20">
@@ -254,10 +246,10 @@ export default function Faq() {
               <div className="container mx-auto px-6 lg:px-8">
                 {/* Page Header */}
                 <ScrollReveal>
-                  <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-center text-v2-white mb-4">
+                  <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-center text-sablia-text mb-4">
                     Questions fréquentes
                   </h1>
-                  <p className="text-xl sm:text-2xl text-v2-off-white/80 text-center mb-16 max-w-3xl mx-auto">
+                  <p className="text-xl sm:text-2xl text-sablia-text-secondary text-center mb-16 max-w-3xl mx-auto">
                     Tout ce que vous devez savoir sur nos services d'automatisation
                   </p>
                 </ScrollReveal>
@@ -268,7 +260,7 @@ export default function Faq() {
                     <a
                       key={cat.id}
                       href={`#${cat.id}`}
-                      className="px-4 py-2 rounded-full bg-v2-charcoal/30 border border-v2-cyan/20 text-v2-off-white/80 text-sm hover:border-v2-cyan/50 hover:text-v2-white transition-colors"
+                      className="px-4 py-2 rounded-full bg-white border border-gray-100 text-sablia-text-secondary text-sm hover:border-sablia-accent hover:text-sablia-text transition-colors"
                     >
                       {cat.title}
                     </a>
@@ -286,7 +278,7 @@ export default function Faq() {
                       viewport={{ once: true }}
                       transition={{ duration: 0.6, delay: catIndex * 0.05 }}
                     >
-                      <h2 className="text-2xl sm:text-3xl font-bold text-v2-white mb-6 border-b border-v2-cyan/20 pb-3">
+                      <h2 className="text-2xl sm:text-3xl font-bold text-sablia-text mb-6 border-b border-gray-100 pb-3">
                         {category.title}
                       </h2>
 
@@ -298,14 +290,14 @@ export default function Faq() {
                           return (
                             <div
                               key={key}
-                              className="bg-v2-charcoal/30 backdrop-blur-md rounded-xl overflow-hidden border border-v2-cyan/20"
+                              className="bg-white border border-gray-100 rounded-lg overflow-hidden"
                             >
                               <button
                                 onClick={() => toggleItem(key)}
-                                className="w-full flex items-center justify-between p-6 text-left hover:bg-v2-charcoal/50 transition-colors"
+                                className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
                                 aria-expanded={isOpen}
                               >
-                                <h3 className="text-base sm:text-lg font-semibold text-v2-white pr-4">
+                                <h3 className="text-base sm:text-lg font-semibold text-sablia-text pr-4">
                                   {item.question}
                                 </h3>
                                 <motion.div
@@ -315,9 +307,9 @@ export default function Faq() {
                                   aria-hidden="true"
                                 >
                                   {isOpen ? (
-                                    <Minus size={24} className="text-v2-cyan" />
+                                    <Minus size={24} className="text-sablia-accent" />
                                   ) : (
-                                    <Plus size={24} className="text-v2-cyan" />
+                                    <Plus size={24} className="text-sablia-accent" />
                                   )}
                                 </motion.div>
                               </button>
@@ -332,7 +324,7 @@ export default function Faq() {
                                     className="overflow-hidden"
                                   >
                                     <div className="px-6 pb-6">
-                                      <p className="text-base sm:text-lg text-v2-off-white/80 leading-relaxed">
+                                      <p className="text-base sm:text-lg text-sablia-text-secondary leading-relaxed">
                                         {item.answer}
                                       </p>
                                     </div>
@@ -350,12 +342,12 @@ export default function Faq() {
                 {/* CTA */}
                 <ScrollReveal>
                   <div className="text-center mt-16">
-                    <p className="text-lg text-v2-off-white/70 mb-6">
+                    <p className="text-lg text-sablia-text-secondary mb-6">
                       Vous n'avez pas trouvé votre réponse ?
                     </p>
                     <a
                       href="/#contact"
-                      className="inline-block bg-v2-cyan text-v2-navy px-8 py-4 rounded-lg font-bold text-lg hover:bg-v2-cyan/90 transition-colors"
+                      className="inline-block bg-sablia-accent text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-sablia-accent-hover transition-colors"
                     >
                       Contactez-nous
                     </a>
@@ -368,8 +360,6 @@ export default function Faq() {
           <Footer />
           <ScrollToTop />
         </div>
-
-        <CustomCursor />
       </motion.div>
     </>
   );

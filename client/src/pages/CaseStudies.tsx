@@ -4,8 +4,6 @@ import Navigation from "@/components/landing/Navigation";
 import SEO from "@/components/SEO";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
-import AnimatedParticles from "@/components/animations/AnimatedParticles";
-import CustomCursor from "@/components/animations/CustomCursor";
 import ScrollReveal from "@/components/animations/ScrollReveal";
 
 // ============================================
@@ -91,19 +89,13 @@ export default function CaseStudies() {
       <SEO page="/cas-clients" />
 
       <motion.div
-        className="min-h-screen"
-        style={{
-          background:
-            "linear-gradient(to bottom, #2B9AB8 0%, #3E92CC 15%, #0A2463 35%, #0A2463 50%, #2D3142 65%, #3d2f1f 80%, #4a3621 95%, #3d2f1f 100%)",
-        }}
+        className="min-h-screen bg-white"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.4 }}
+        transition={{ duration: 0.3 }}
       >
-        <AnimatedParticles />
-
-        <div className="relative z-10">
+        <div>
           <Navigation />
 
           <main className="pt-20">
@@ -111,10 +103,10 @@ export default function CaseStudies() {
               <div className="container mx-auto px-6 lg:px-8">
                 {/* Page Header */}
                 <ScrollReveal>
-                  <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-center text-v2-white mb-4">
+                  <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-center text-sablia-text mb-4">
                     Cas clients
                   </h1>
-                  <p className="text-xl sm:text-2xl text-v2-off-white/80 text-center mb-16 max-w-3xl mx-auto">
+                  <p className="text-xl sm:text-2xl text-sablia-text-secondary text-center mb-16 max-w-3xl mx-auto">
                     Des transformations concrètes, des résultats mesurables
                   </p>
                 </ScrollReveal>
@@ -128,14 +120,14 @@ export default function CaseStudies() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.6, delay: index * 0.1 }}
-                      className="bg-v2-charcoal/30 backdrop-blur-md rounded-2xl border border-v2-cyan/20 overflow-hidden"
+                      className="bg-white border border-gray-100 rounded-lg overflow-hidden shadow-sm"
                     >
                       {/* Header */}
                       <div className="p-8 pb-0">
-                        <span className="inline-block px-3 py-1 rounded-full bg-v2-cyan/20 text-v2-cyan text-sm font-medium mb-4">
+                        <span className="inline-block px-3 py-1 rounded-full bg-sablia-accent/10 text-sablia-accent text-sm font-medium mb-4">
                           {study.sector}
                         </span>
-                        <h2 className="text-2xl sm:text-3xl font-bold text-v2-white mb-4">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-sablia-text mb-4">
                           {study.title}
                         </h2>
                       </div>
@@ -143,18 +135,18 @@ export default function CaseStudies() {
                       {/* Challenge & Solution */}
                       <div className="p-8 grid md:grid-cols-2 gap-6">
                         <div>
-                          <h3 className="text-sm font-semibold text-v2-cyan uppercase tracking-wider mb-2">
+                          <h3 className="text-sm font-semibold text-sablia-accent uppercase tracking-wider mb-2">
                             Le Défi
                           </h3>
-                          <p className="text-base text-v2-off-white/80 leading-relaxed">
+                          <p className="text-base text-sablia-text-secondary leading-relaxed">
                             {study.challenge}
                           </p>
                         </div>
                         <div>
-                          <h3 className="text-sm font-semibold text-v2-cyan uppercase tracking-wider mb-2">
+                          <h3 className="text-sm font-semibold text-sablia-accent uppercase tracking-wider mb-2">
                             La Solution
                           </h3>
-                          <p className="text-base text-v2-off-white/80 leading-relaxed">
+                          <p className="text-base text-sablia-text-secondary leading-relaxed">
                             {study.solution}
                           </p>
                         </div>
@@ -166,15 +158,15 @@ export default function CaseStudies() {
                           {study.results.map((result, i) => (
                             <div
                               key={i}
-                              className="bg-v2-navy/30 rounded-xl p-4 text-center border border-v2-cyan/10"
+                              className="bg-gray-50 rounded-lg p-4 text-center border border-gray-100"
                             >
-                              <div className="flex justify-center text-v2-cyan mb-2">
+                              <div className="flex justify-center text-sablia-accent mb-2">
                                 {result.icon}
                               </div>
-                              <div className="text-2xl sm:text-3xl font-bold text-v2-white">
+                              <div className="text-2xl sm:text-3xl font-bold text-sablia-text">
                                 {result.value}
                               </div>
-                              <div className="text-xs sm:text-sm text-v2-off-white/60 mt-1">
+                              <div className="text-xs sm:text-sm text-sablia-text-tertiary mt-1">
                                 {result.label}
                               </div>
                             </div>
@@ -184,11 +176,11 @@ export default function CaseStudies() {
 
                       {/* Quote */}
                       <div className="px-8 pb-8 pt-4">
-                        <blockquote className="border-l-2 border-v2-cyan/50 pl-4">
-                          <p className="text-base italic text-v2-off-white/70 mb-2">
+                        <blockquote className="border-l-2 border-sablia-accent/50 pl-4">
+                          <p className="text-base italic text-sablia-text-secondary mb-2">
                             "{study.quote}"
                           </p>
-                          <cite className="text-sm text-v2-off-white/50 not-italic">
+                          <cite className="text-sm text-sablia-text-tertiary not-italic">
                             {study.author}, {study.role}
                           </cite>
                         </blockquote>
@@ -200,12 +192,12 @@ export default function CaseStudies() {
                 {/* CTA */}
                 <ScrollReveal>
                   <div className="text-center mt-16">
-                    <p className="text-lg text-v2-off-white/70 mb-6">
+                    <p className="text-lg text-sablia-text-secondary mb-6">
                       Prêt à écrire votre propre success story ?
                     </p>
                     <a
                       href="/#contact"
-                      className="inline-flex items-center gap-2 bg-v2-cyan text-v2-navy px-8 py-4 rounded-lg font-bold text-lg hover:bg-v2-cyan/90 transition-colors"
+                      className="inline-flex items-center gap-2 bg-sablia-accent text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-sablia-accent-hover transition-colors"
                     >
                       Discutons de votre projet
                       <ArrowRight size={20} />
@@ -219,8 +211,6 @@ export default function CaseStudies() {
           <Footer />
           <ScrollToTop />
         </div>
-
-        <CustomCursor />
       </motion.div>
     </>
   );

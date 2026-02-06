@@ -1,18 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Search, Sparkles, ShieldCheck, TrendingUp } from "lucide-react";
-import ScrollReveal from "@/components/animations/ScrollReveal";
-
-/**
- * SolutionSection - 4-pillar horizontal layout with separators
- *
- * Features:
- * - Horizontal layout desktop (flex-row) with vertical separators
- * - Vertical stack mobile (flex-col) without separators
- * - Staggered fade-in animation (Framer Motion whileInView)
- * - Icons: Search (56px), Sparkles (56px), ShieldCheck (56px), TrendingUp (56px)
- * - Copy: Diagnostic Complet, Solutions Spécifiques, Sécurité & Conformité, ROI Mesurable
- */
 
 interface Solution {
   id: number;
@@ -24,28 +12,28 @@ interface Solution {
 const solutions: Solution[] = [
   {
     id: 1,
-    icon: <Search size={56} className="text-v2-cyan" />,
+    icon: <Search size={32} className="text-sablia-accent" />,
     title: "Diagnostic Complet",
     description:
       "Audit de vos processus, identification des opportunités d'automatisation et accompagnement personnalisé : formation, conseil ou développement.",
   },
   {
     id: 2,
-    icon: <Sparkles size={56} className="text-v2-cyan" />,
+    icon: <Sparkles size={32} className="text-sablia-accent" />,
     title: "Solutions Spécifiques",
     description:
       "Votre entreprise est unique, nos solutions aussi. Chaque automatisation est développée sur-mesure pour répondre précisément à vos besoins.",
   },
   {
     id: 3,
-    icon: <ShieldCheck size={56} className="text-v2-cyan" />,
+    icon: <ShieldCheck size={32} className="text-sablia-accent" />,
     title: "Sécurité & Conformité",
     description:
       "Vos données restent protégées. Nous respectons le RGPD et privilégions des solutions européennes pour garantir la sécurité de vos informations.",
   },
   {
     id: 4,
-    icon: <TrendingUp size={56} className="text-v2-cyan" />,
+    icon: <TrendingUp size={32} className="text-sablia-accent" />,
     title: "ROI Mesurable",
     description:
       "Chaque automatisation génère un ROI quantifiable. Nous mesurons temps gagné et économies réalisées.",
@@ -54,47 +42,43 @@ const solutions: Solution[] = [
 
 export default function SolutionSection() {
   return (
-    <section id="solution" className="py-24">
+    <section id="solution" className="py-32 bg-sablia-surface">
       <div className="container mx-auto px-6 lg:px-8">
-        {/* Section Header with ScrollReveal */}
-        <ScrollReveal direction="fade" duration={0.8}>
-          <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-center text-v2-white mb-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
+        >
+          <h2 className="text-3xl lg:text-4xl font-bold text-center text-sablia-text mb-3">
             La méthode Sablia
           </h2>
-          <p className="text-xl sm:text-2xl text-v2-off-white/80 text-center mb-16 max-w-3xl mx-auto">
+          <p className="text-lg text-sablia-text-secondary text-center mb-16 max-w-2xl mx-auto">
             Une approche qui place l'humain au centre de l'automatisation
           </p>
-        </ScrollReveal>
+        </motion.div>
 
-        {/* Pillars Layout with Separators */}
-        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-12 lg:gap-0">
+        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-10 lg:gap-0 max-w-6xl mx-auto">
           {solutions.map((solution, index) => (
             <React.Fragment key={solution.id}>
-              {/* Pillar */}
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                className="flex-1 flex flex-col items-center text-center px-8"
+                transition={{ duration: 0.4, delay: index * 0.08 }}
+                className="flex-1 flex flex-col items-center text-center px-6"
               >
-                {/* Icon */}
-                <div className="mb-6">{solution.icon}</div>
-
-                {/* Title */}
-                <h3 className="text-2xl sm:text-3xl font-bold text-v2-white mb-4">
+                <div className="mb-5">{solution.icon}</div>
+                <h3 className="text-xl font-semibold text-sablia-text mb-3">
                   {solution.title}
                 </h3>
-
-                {/* Description */}
-                <p className="text-base sm:text-lg text-v2-off-white/80 leading-relaxed max-w-sm mx-auto">
+                <p className="text-base text-sablia-text-secondary leading-relaxed max-w-xs mx-auto">
                   {solution.description}
                 </p>
               </motion.div>
 
-              {/* Separator (except after last pillar) */}
               {index < solutions.length - 1 && (
-                <div className="hidden lg:block h-48 w-px bg-v2-cyan/30" />
+                <div className="hidden lg:block h-40 w-px bg-gray-200" />
               )}
             </React.Fragment>
           ))}

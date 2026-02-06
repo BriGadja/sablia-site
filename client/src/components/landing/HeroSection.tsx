@@ -1,18 +1,4 @@
 import { motion } from "framer-motion";
-import { MagneticButton } from "@/components/animations/MagneticElements";
-import ScrollReveal from "@/components/animations/ScrollReveal";
-import { GradientText } from "@/components/animations/AnimatedText";
-
-/**
- * HeroSection - Premium hero with animated gradient and magnetic CTAs
- *
- * Features:
- * - Animated 3-color gradient background (Navy → Electric → Cyan)
- * - 72px headline with gradient text animation
- * - Two CTA buttons with magnetic hover effects
- * - ScrollReveal animation on re-entrance
- * - Full viewport height, content centered
- */
 
 export default function HeroSection() {
   const handleCTAClick = (href: string) => {
@@ -25,51 +11,40 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center"
     >
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 lg:px-8 text-center">
-        <ScrollReveal direction="fade" duration={0.8}>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="space-y-8"
-          >
-            {/* Headline with gradient animation */}
-            <h1 className="text-5xl sm:text-6xl lg:text-8xl xl:text-9xl font-bold leading-tight tracking-tight">
-              <GradientText colors={["#FFFFFF", "#FFA559", "#FFFFFF"]} className="inline-block">
-                L'IA au service de votre croissance
-              </GradientText>
-            </h1>
+      <div className="container mx-auto px-6 lg:px-8 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          className="space-y-8"
+        >
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-sablia-text">
+            L'IA au service de{" "}
+            <span className="text-sablia-accent">votre croissance</span>
+          </h1>
 
-            {/* Subheadline */}
-            <p className="text-xl sm:text-2xl lg:text-3xl text-v2-off-white/90 max-w-3xl mx-auto">
-              On forme vos équipes. On installe les systèmes. Vous gardez le contrôle.
-            </p>
+          <p className="text-lg sm:text-xl text-sablia-text-secondary max-w-2xl mx-auto leading-relaxed">
+            On forme vos équipes. On installe les systèmes. Vous gardez le contrôle.
+          </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-              {/* Primary CTA */}
-              <MagneticButton
-                strength={0.5}
-                onClick={() => handleCTAClick("#contact")}
-                className="bg-v2-cyan text-v2-navy px-8 py-4 rounded-xl text-lg font-semibold hover:bg-v2-electric hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                Diagnostic Gratuit
-              </MagneticButton>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+            <button
+              onClick={() => handleCTAClick("#contact")}
+              className="bg-sablia-accent text-white px-8 py-3.5 rounded-md text-base font-medium hover:bg-sablia-accent-hover transition-colors duration-200"
+            >
+              Diagnostic Gratuit
+            </button>
 
-              {/* Secondary CTA */}
-              <MagneticButton
-                strength={0.3}
-                onClick={() => handleCTAClick("#calculator")}
-                className="border-2 border-v2-cyan text-v2-cyan px-8 py-4 rounded-xl text-lg font-semibold hover:bg-v2-cyan hover:text-v2-navy transition-all duration-300"
-              >
-                Calculer mon ROI
-              </MagneticButton>
-            </div>
-          </motion.div>
-        </ScrollReveal>
+            <button
+              onClick={() => handleCTAClick("#calculator")}
+              className="border border-gray-200 text-sablia-text px-8 py-3.5 rounded-md text-base font-medium hover:bg-gray-50 transition-colors duration-200"
+            >
+              Calculer mon ROI
+            </button>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

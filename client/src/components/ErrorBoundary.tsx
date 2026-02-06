@@ -28,7 +28,7 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         this.props.fallback ?? (
           <div className="min-h-[200px] flex items-center justify-center text-center p-8">
-            <p className="text-v2-off-white/60 text-lg">
+            <p className="text-sablia-text-secondary text-base">
               Une erreur est survenue. Veuillez rafraîchir la page.
             </p>
           </div>
