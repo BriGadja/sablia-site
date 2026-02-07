@@ -33,16 +33,16 @@ export default function HeroSection() {
             transition={{ delay: 0.2, duration: 0.5 }}
             className="text-sm font-medium uppercase tracking-[0.2em] text-sablia-text-secondary"
           >
-            Automatisation & Intelligence Artificielle
+            Automatisation & IA sur mesure pour PME
           </motion.p>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-display font-semibold leading-[1.1] tracking-tight text-sablia-text">
-            L'IA au service de{" "}
-            <span className="text-sablia-sienna">votre croissance</span>
+            Retournez{" "}
+            <span className="text-sablia-sienna">le sablier</span>
           </h1>
 
           <p className="text-lg sm:text-xl text-sablia-text-secondary max-w-2xl mx-auto leading-relaxed font-light">
-            On forme vos équipes. On installe les systèmes. Vous gardez le contrôle.
+            Sablia automatise vos processus répétitifs. Vous récupérez vos heures.
           </p>
 
           {/* Thin decorative line */}
@@ -63,6 +63,18 @@ export default function HeroSection() {
               Calculer mon ROI
             </button>
           </div>
+
+          <p className="text-sm text-sablia-text-tertiary pt-2">
+            Brice Gachadoat — Resp. Pédagogique & Expert IA,{" "}
+            <a
+              href="https://iapreneurs.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:text-sablia-text-secondary transition-colors"
+            >
+              IAPreneurs (160k+)
+            </a>
+          </p>
         </motion.div>
       </div>
     </section>

@@ -1,38 +1,53 @@
 import { motion } from "framer-motion";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+import { ClipboardCheck, GraduationCap, Workflow, Bot } from "lucide-react";
 
-interface Integration {
-  id: number;
-  name: string;
-  imageUrl: string;
-  category: "automation" | "ai" | "productivity" | "communication" | "development";
-  categoryLabel: string;
+interface Expertise {
+  icon: React.ReactNode;
+  title: string;
   description: string;
-  useCase: string;
+  href: string;
+  accent: string;
 }
 
-const integrations: Integration[] = [
-  { id: 1, name: "n8n", imageUrl: "/logos/integrations/n8n.svg", category: "automation", categoryLabel: "Automatisation", description: "Notre plateforme de référence pour 90% de nos projets. Open-source, +400 intégrations natives, personnalisation illimitée et hébergement souverain possible.", useCase: "Workflows complexes multi-branches : CRM → IA → Sheets → Slack avec logique conditionnelle avancée" },
-  { id: 2, name: "Make", imageUrl: "/logos/integrations/make.svg", category: "automation", categoryLabel: "Automatisation", description: "Automatisation visuelle pour connecter vos applications business sans coder", useCase: "Workflows complexes multi-étapes pour gestion de leads" },
-  { id: 3, name: "OpenAI", imageUrl: "/logos/integrations/openai.svg", category: "ai", categoryLabel: "Intelligence Artificielle", description: "IA générative pour automatiser création de contenu et analyses avancées", useCase: "Génération automatique de rapports et documentation" },
-  { id: 4, name: "Anthropic", imageUrl: "/logos/integrations/anthropic.svg", category: "ai", categoryLabel: "Intelligence Artificielle", description: "Claude AI pour assistance intelligente et traitement de documents complexes", useCase: "Extraction de données depuis factures et contrats" },
-  { id: 5, name: "Gemini", imageUrl: "/logos/integrations/googlegemini.svg", category: "ai", categoryLabel: "Intelligence Artificielle", description: "IA multimodale Google pour analyse de données et génération de contenu", useCase: "Analyse prédictive et insights business automatisés" },
-  { id: 6, name: "Perplexity", imageUrl: "/logos/integrations/perplexity.svg", category: "ai", categoryLabel: "Intelligence Artificielle", description: "Recherche augmentée par IA pour veille concurrentielle et benchmarking", useCase: "Monitoring automatisé des tendances sectorielles" },
-  { id: 7, name: "Google Sheets", imageUrl: "/logos/integrations/googlesheets.svg", category: "productivity", categoryLabel: "Productivité", description: "Tableurs collaboratifs pour centraliser et automatiser vos données business", useCase: "Dashboards KPI mis à jour en temps réel via API" },
-  { id: 8, name: "Google Drive", imageUrl: "/logos/integrations/googledrive.svg", category: "productivity", categoryLabel: "Productivité", description: "Stockage cloud pour centraliser documents et automatiser partage/archivage", useCase: "Archivage automatique de devis et factures par projet" },
-  { id: 9, name: "Notion", imageUrl: "/logos/integrations/notion.svg", category: "productivity", categoryLabel: "Productivité", description: "Base de connaissances collaborative pour documenter workflows et procédures", useCase: "Documentation automatique de processus et formations" },
-  { id: 10, name: "Slack", imageUrl: "/logos/integrations/slack.svg", category: "communication", categoryLabel: "Communication", description: "Hub de communication d'équipe avec notifications automatisées intelligentes", useCase: "Alertes temps réel sur nouveaux leads et deadlines" },
-  { id: 11, name: "GitHub", imageUrl: "/logos/integrations/github.svg", category: "development", categoryLabel: "Développement", description: "Gestion de versions et CI/CD pour déploiement automatisé de solutions", useCase: "Déploiement continu d'automatisations personnalisées" },
-  { id: 12, name: "Vercel", imageUrl: "/logos/integrations/vercel.svg", category: "development", categoryLabel: "Développement", description: "Plateforme de déploiement serverless pour applications et outils web", useCase: "Hébergement de dashboards clients et interfaces sur-mesure" },
+const expertises: Expertise[] = [
+  {
+    icon: <ClipboardCheck size={24} />,
+    title: "Diagnostic Express",
+    description: "Identifiez vos gains rapides en 1h30. Audit de vos processus et feuille de route personnalisée.",
+    href: "#contact",
+    accent: "border-l-sablia-sienna text-sablia-sienna",
+  },
+  {
+    icon: <GraduationCap size={24} />,
+    title: "Vos équipes autonomes",
+    description: "De débutant à expert en 1 à 3 jours. Formations n8n, IA et automatisation sur mesure.",
+    href: "#pricing",
+    accent: "border-l-sablia-accent text-sablia-accent",
+  },
+  {
+    icon: <Workflow size={24} />,
+    title: "Workflows sur mesure",
+    description: "Vos processus, automatisés et fiables. Développement, déploiement et maintenance inclus.",
+    href: "#pricing",
+    accent: "border-l-sablia-alba text-sablia-alba",
+  },
+  {
+    icon: <Bot size={24} />,
+    title: "Agents IA",
+    description: "L'IA qui travaille pour vous. Agents vocaux, traitement de documents, veille automatisée.",
+    href: "#pricing",
+    accent: "border-l-sablia-sienna text-sablia-sienna",
+  },
 ];
 
 export default function LogosCloud() {
+  const handleClick = (href: string) => {
+    const el = document.querySelector(href);
+    el?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <section id="logos" className="py-32">
+    <section id="expertise" className="py-32">
       <div className="container mx-auto px-6 lg:px-8">
         <div className="text-center mb-16">
           <motion.p
@@ -41,7 +56,7 @@ export default function LogosCloud() {
             viewport={{ once: true }}
             className="text-sm font-medium uppercase tracking-[0.15em] text-sablia-sienna mb-3"
           >
-            Les outils que nous maîtrisons
+            Ce que nous faisons
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -50,91 +65,67 @@ export default function LogosCloud() {
             transition={{ delay: 0.06 }}
             className="text-3xl lg:text-4xl font-display font-semibold text-sablia-text"
           >
-            Intégrations & Outils
+            Nos expertises
           </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.12 }}
-            className="text-lg text-sablia-text-secondary mt-3"
-          >
-            Automatisez vos workflows avec les outils que vous utilisez déjà
-          </motion.p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 lg:gap-12 max-w-4xl mx-auto">
-          {integrations.map((integration, index) => {
-            const isN8n = integration.name === "n8n";
+        {/* Desktop: 4-column grid */}
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          {expertises.map((item, index) => (
+            <motion.button
+              key={item.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.08 }}
+              onClick={() => handleClick(item.href)}
+              className={`text-left bg-sablia-surface border border-sablia-border border-l-[3px] ${item.accent.split(" ")[0]} rounded p-6 hover:shadow-warm-sm transition-all duration-200 group`}
+            >
+              <div className={`mb-4 ${item.accent.split(" ")[1]}`}>
+                {item.icon}
+              </div>
+              <h3 className="text-lg font-semibold text-sablia-text mb-2">
+                {item.title}
+              </h3>
+              <p className="text-sm text-sablia-text-secondary leading-relaxed mb-4">
+                {item.description}
+              </p>
+              <span className="text-sm font-medium text-sablia-accent group-hover:underline underline-offset-2">
+                En savoir plus &rarr;
+              </span>
+            </motion.button>
+          ))}
+        </div>
 
-            return (
-              <motion.div
-                key={integration.id}
+        {/* Mobile: horizontal scroll with snap */}
+        <div className="md:hidden -mx-6 px-6">
+          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide">
+            {expertises.map((item, index) => (
+              <motion.button
+                key={item.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.06 }}
-                className="flex flex-col items-center justify-center gap-2"
+                transition={{ duration: 0.4, delay: index * 0.08 }}
+                onClick={() => handleClick(item.href)}
+                className={`text-left flex-shrink-0 w-[280px] snap-start bg-sablia-surface border border-sablia-border border-l-[3px] ${item.accent.split(" ")[0]} rounded p-6`}
               >
-                {isN8n && (
-                  <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider text-sablia-sienna bg-sablia-sienna/8 border border-sablia-sienna/10">
-                    Notre coeur de métier
-                  </span>
-                )}
-
-                <HoverCard openDelay={200} closeDelay={100}>
-                  <HoverCardTrigger asChild>
-                    <div className="cursor-pointer flex items-center justify-center">
-                      <img
-                        src={integration.imageUrl}
-                        alt={`${integration.name} integration`}
-                        title={integration.name}
-                        width={isN8n ? 80 : 56}
-                        height={isN8n ? 80 : 56}
-                        loading="lazy"
-                        className={`${
-                          isN8n ? "h-16 lg:h-20" : "h-12 lg:h-14"
-                        } w-auto object-contain transition-opacity duration-200 opacity-40 hover:opacity-100`}
-                      />
-                    </div>
-                  </HoverCardTrigger>
-                  <HoverCardContent
-                    side={index >= 8 ? "top" : "bottom"}
-                    align="center"
-                    className="w-80 bg-sablia-bg border border-sablia-border p-4 shadow-warm-lg"
-                  >
-                    <div className="space-y-2.5">
-                      <div className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium uppercase tracking-wide text-sablia-accent bg-sablia-accent/[0.06]">
-                        {integration.categoryLabel}
-                      </div>
-                      <h3 className="text-base font-semibold text-sablia-text">
-                        {integration.name}
-                      </h3>
-                      <p className="text-sm text-sablia-text-secondary leading-relaxed">
-                        {integration.description}
-                      </p>
-                      <div className="pt-2 border-t border-sablia-border">
-                        <p className="text-xs text-sablia-text-secondary">
-                          <span className="font-semibold">Exemple :</span>{" "}
-                          {integration.useCase}
-                        </p>
-                      </div>
-                    </div>
-                  </HoverCardContent>
-                </HoverCard>
-              </motion.div>
-            );
-          })}
+                <div className={`mb-4 ${item.accent.split(" ")[1]}`}>
+                  {item.icon}
+                </div>
+                <h3 className="text-lg font-semibold text-sablia-text mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-sablia-text-secondary leading-relaxed mb-4">
+                  {item.description}
+                </p>
+                <span className="text-sm font-medium text-sablia-accent">
+                  En savoir plus &rarr;
+                </span>
+              </motion.button>
+            ))}
+          </div>
         </div>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mt-10 text-sm text-sablia-text-tertiary"
-        >
-          Et bien d'autres intégrations possibles
-        </motion.p>
       </div>
     </section>
   );

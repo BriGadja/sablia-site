@@ -9,6 +9,7 @@ interface Testimonial {
   quote: string;
   metric: string;
   project: string;
+  before: string;
 }
 
 const testimonials: Testimonial[] = [
@@ -21,6 +22,7 @@ const testimonials: Testimonial[] = [
       "De 1h de conception par menu à 30 minutes de relecture pour toutes mes clientes. L'automatisation développée par Sablia m'a redonné du temps pour me concentrer sur l'essentiel : mes clientes.",
     metric: "Économie de 90% du temps",
     project: "Génération de menus",
+    before: "1h de conception manuelle par menu client",
   },
   {
     name: "Directeur",
@@ -31,6 +33,7 @@ const testimonials: Testimonial[] = [
       "Une vision à 360° de notre marché et une longueur d'avance sur nos concurrents. Ce système de veille nous a permis de passer d'une position réactive à une stratégie proactive.",
     metric: "Avantage compétitif décisif",
     project: "Veille concurrentielle",
+    before: "Veille manuelle, toujours en retard sur le marché",
   },
   {
     name: "Yassine",
@@ -41,6 +44,7 @@ const testimonials: Testimonial[] = [
       "Notre gestion des prospects est passée au niveau supérieur. L'agent vocal couplé à l'automatisation du CRM nous fait gagner des heures chaque semaine et améliore nos taux de conversion.",
     metric: "Taux de conversion amélioré",
     project: "Agent vocal + CRM",
+    before: "Suivi prospect manuel, relances oubliées",
   },
   {
     name: "Valentin",
@@ -51,6 +55,7 @@ const testimonials: Testimonial[] = [
       "Des milliers de contacts dormants transformés en opportunités commerciales concrètes. L'agent vocal nous a permis d'exploiter un gisement de valeur que nous avions sous-estimé.",
     metric: "Milliers de contacts réactivés",
     project: "Réactivation automatisée de BDD",
+    before: "Base de données de contacts dormante et inexploitée",
   },
   {
     name: "Amir",
@@ -61,6 +66,7 @@ const testimonials: Testimonial[] = [
       "De la demande client au suivi de chantier, tout est automatisé. Plus de temps perdu, plus d'erreurs, juste de l'efficacité. Notre organisation a été transformée.",
     metric: "Organisation transformée",
     project: "Gestion des interventions",
+    before: "Gestion papier des demandes et suivis de chantier",
   },
 ];
 
@@ -89,6 +95,43 @@ const reviewSchema = {
     },
   })),
 };
+
+function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; index: number }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay: index * 0.08 }}
+      className="bg-sablia-bg border border-sablia-border rounded p-6 hover:shadow-warm-sm transition-all duration-200"
+    >
+      <div className="bg-sablia-sienna/10 text-sablia-sienna px-3 py-1.5 rounded mb-4 inline-block">
+        <span className="text-base font-bold">{testimonial.metric}</span>
+      </div>
+
+      <p className="text-xs text-sablia-text-tertiary mb-3 italic">
+        Avant : {testimonial.before}
+      </p>
+
+      <p className="text-sablia-text-secondary leading-relaxed mb-4 text-sm">
+        "{testimonial.quote}"
+      </p>
+
+      <div className="pt-4 border-t border-sablia-border flex items-center gap-3">
+        <div className="w-10 h-10 rounded-full bg-sablia-accent/8 flex items-center justify-center flex-shrink-0">
+          <span className="text-sablia-accent font-semibold text-sm">{testimonial.avatar}</span>
+        </div>
+        <div className="flex-1 min-w-0">
+          <h3 className="font-semibold text-sablia-text text-sm leading-tight">
+            {testimonial.name}
+          </h3>
+          <p className="text-xs text-sablia-text-secondary">{testimonial.role}, {testimonial.company}</p>
+        </div>
+        <p className="text-xs text-sablia-text-tertiary">{testimonial.project}</p>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function TestimonialsSection() {
   return (
@@ -119,77 +162,30 @@ export default function TestimonialsSection() {
             >
               Des résultats mesurables
             </motion.h2>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.12 }}
+              className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-6 text-sm"
+            >
+              <span><strong className="text-sablia-sienna">15+</strong>{" "}<span className="text-sablia-text-secondary">projets livrés</span></span>
+              <span className="text-sablia-border">·</span>
+              <span><strong className="text-sablia-sienna">4.9/5</strong>{" "}<span className="text-sablia-text-secondary">satisfaction</span></span>
+              <span className="text-sablia-border">·</span>
+              <span><strong className="text-sablia-sienna">5</strong>{" "}<span className="text-sablia-text-secondary">secteurs d'activité</span></span>
+            </motion.div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {testimonials.slice(0, 3).map((testimonial, index) => (
-              <motion.div
-                key={testimonial.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.08 }}
-                className="bg-sablia-bg border border-sablia-border rounded p-6 hover:shadow-warm-sm transition-all duration-200"
-              >
-                <div className="flex items-start gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-sablia-accent/8 flex items-center justify-center flex-shrink-0">
-                    <span className="text-sablia-accent font-semibold text-sm">{testimonial.avatar}</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-sablia-text text-base leading-tight">
-                      {testimonial.name}
-                    </h3>
-                    <p className="text-sm text-sablia-text-secondary">{testimonial.role}, {testimonial.company}</p>
-                  </div>
-                </div>
-
-                <p className="text-sablia-text-secondary leading-relaxed mb-4 text-sm">
-                  "{testimonial.quote}"
-                </p>
-
-                <div className="pt-4 border-t border-sablia-border space-y-1.5">
-                  <div className="inline-flex items-center gap-1.5 bg-sablia-sienna/8 text-sablia-sienna px-2.5 py-1 rounded">
-                    <span className="text-sm font-medium">{testimonial.metric}</span>
-                  </div>
-                  <p className="text-xs text-sablia-text-tertiary">Projet : {testimonial.project}</p>
-                </div>
-              </motion.div>
+              <TestimonialCard key={testimonial.name} testimonial={testimonial} index={index} />
             ))}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mt-6">
             {testimonials.slice(3).map((testimonial, index) => (
-              <motion.div
-                key={testimonial.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: (index + 3) * 0.08 }}
-                className="bg-sablia-bg border border-sablia-border rounded p-6 hover:shadow-warm-sm transition-all duration-200"
-              >
-                <div className="flex items-start gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-sablia-accent/8 flex items-center justify-center flex-shrink-0">
-                    <span className="text-sablia-accent font-semibold text-sm">{testimonial.avatar}</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-sablia-text text-base leading-tight">
-                      {testimonial.name}
-                    </h3>
-                    <p className="text-sm text-sablia-text-secondary">{testimonial.role}, {testimonial.company}</p>
-                  </div>
-                </div>
-
-                <p className="text-sablia-text-secondary leading-relaxed mb-4 text-sm">
-                  "{testimonial.quote}"
-                </p>
-
-                <div className="pt-4 border-t border-sablia-border space-y-1.5">
-                  <div className="inline-flex items-center gap-1.5 bg-sablia-sienna/8 text-sablia-sienna px-2.5 py-1 rounded">
-                    <span className="text-sm font-medium">{testimonial.metric}</span>
-                  </div>
-                  <p className="text-xs text-sablia-text-tertiary">Projet : {testimonial.project}</p>
-                </div>
-              </motion.div>
+              <TestimonialCard key={testimonial.name} testimonial={testimonial} index={index + 3} />
             ))}
           </div>
 

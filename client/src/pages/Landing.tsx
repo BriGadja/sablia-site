@@ -7,8 +7,7 @@ import Navigation from "@/components/landing/Navigation";
 import HeroSection from "@/components/landing/HeroSection";
 import TestimonialsSection from "@/components/landing/TestimonialsSection";
 import LogosCloud from "@/components/landing/LogosCloud";
-import ProblemSection from "@/components/landing/ProblemSection";
-import SolutionSection from "@/components/landing/SolutionSection";
+import TransformationSection from "@/components/landing/TransformationSection";
 import ThreeStepProcess from "@/components/landing/ThreeStepProcess";
 import PricingSection from "@/components/landing/PricingSection";
 import SEO from "@/components/SEO";
@@ -35,8 +34,7 @@ export default function Landing() {
           <HeroSection />
           <TestimonialsSection />
           <LogosCloud />
-          <ProblemSection />
-          <SolutionSection />
+          <TransformationSection />
           <ThreeStepProcess />
           <PricingSection />
 

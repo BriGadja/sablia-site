@@ -2,6 +2,88 @@
 
 ---
 
+## Completed: Landing Page Refinements
+
+**Plan**: [.claude/plans/landing-page-refinements.md](.claude/plans/landing-page-refinements.md)
+**Started**: 2026-02-07
+**Completed**: 2026-02-07
+**Status**: COMPLETED
+
+### Phases
+
+| # | Phase | Status | Notes |
+|---|-------|--------|-------|
+| A | Hero Rework | COMPLETED | "Retournez le sablier" + credential badge |
+| B | Testimonials Elevation | COMPLETED | Aggregate header, metric badges at top, "Avant:" context |
+| C | Replace Logos → Service Cards | COMPLETED | 4-card Langdock-style layout, mobile horizontal scroll |
+| D | Problem + Solution Merge | COMPLETED | New TransformationSection, "Le Syndrome du Copier-Coller" |
+| E | ROI Calculator Simplification | COMPLETED | 2 sliders, animated results, micro-testimonial |
+
+### Key Changes
+
+**Phase A — Hero**:
+- Headline: "Retournez le sablier" (brand wordplay with sablier/hourglass)
+- Sub-headline: "Sablia automatise vos processus répétitifs. Vous récupérez vos heures."
+- Small label updated: "Automatisation & IA sur mesure pour PME"
+- Credential badge: "Brice Gachadoat — Resp. Pédagogique & Expert IA, IAPreneurs (160k+)"
+
+**Phase B — Testimonials**:
+- Added aggregate credibility header: "15+ projets livrés · 4.9/5 satisfaction · 5 secteurs"
+- Metric badge moved to top of card (larger, `bg-sablia-sienna/10`)
+- Added "Avant:" context line per testimonial (before/after framing)
+- Extracted TestimonialCard sub-component to reduce duplication
+
+**Phase C — Service Cards**:
+- Replaced broken LogosCloud (white SVGs on beige) with "Nos expertises" section
+- 4 cards: Diagnostic Express, Vos équipes autonomes, Workflows sur mesure, Agents IA
+- Desktop: 4-column grid; Mobile: horizontal scroll with snap
+- Colored left borders per card, lucide icons
+- Deleted unused `hover-card.tsx` component
+- Added `scrollbar-hide` CSS utility
+
+**Phase D — Transformation**:
+- Created `TransformationSection.tsx` replacing separate Problem + Solution sections
+- Before/after layout: 3 rows with problem → arrow → solution
+- Named problem: "Le Syndrome du Copier-Coller"
+- CTA: "Diagnostiquer mes processus"
+- Deleted `ProblemSection.tsx` and `SolutionSection.tsx`
+
+**Phase E — ROI Calculator**:
+- Reduced from 4 number inputs to 2 range sliders
+- Sliders: hours/week (2-40h) and hourly cost (20-80€)
+- Animated count-up results using requestAnimationFrame
+- Contextual comparison: "X jours de travail récupérés"
+- Micro-testimonial: "Hélène a économisé 90% de son temps"
+- Fixed investment frame at 1,500€
+
+**Navigation fix**:
+- Updated nav links from `#problem`/`#solution` to `#expertise`/`#transformation`
+
+### Bundle Impact
+
+| Asset | Before | After | Change |
+|-------|--------|-------|--------|
+| main.js | 367.01 KB | 355.36 KB | -11.65 KB |
+| CSS | 50.86 KB | 47.31 KB | -3.55 KB |
+| CalculatorROI.js | (in main) | 6.26 KB | separate chunk |
+
+### Files Modified
+- `client/src/components/landing/HeroSection.tsx` — hero copy + credential
+- `client/src/components/landing/TestimonialsSection.tsx` — elevation redesign
+- `client/src/components/landing/LogosCloud.tsx` — rewritten as service cards
+- `client/src/components/landing/Navigation.tsx` — updated nav anchors
+- `client/src/components/landing/CalculatorROI.tsx` — simplified with sliders
+- `client/src/components/landing/TransformationSection.tsx` — NEW
+- `client/src/pages/Landing.tsx` — updated imports
+- `client/src/index.css` — added scrollbar-hide utility
+
+### Files Deleted
+- `client/src/components/landing/ProblemSection.tsx`
+- `client/src/components/landing/SolutionSection.tsx`
+- `client/src/components/ui/hover-card.tsx`
+
+---
+
 ## Completed: Site Refactor (Tech Debt & Compliance)
 
 **Plan**: [.claude/plans/sablia-site-refactor.md](.claude/plans/sablia-site-refactor.md)

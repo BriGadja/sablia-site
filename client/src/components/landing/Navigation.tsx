@@ -26,8 +26,8 @@ export default function Navigation() {
   }, []);
 
   const menuItems = [
-    { label: "Problématique", href: "#problem", type: "anchor" as const },
-    { label: "Solution", href: "#solution", type: "anchor" as const },
+    { label: "Expertises", href: "#expertise", type: "anchor" as const },
+    { label: "Transformation", href: "#transformation", type: "anchor" as const },
     { label: "Processus", href: "#process", type: "anchor" as const },
     { label: "Tarifs", href: "#pricing", type: "anchor" as const },
     { label: "FAQ", href: "#faq", type: "anchor" as const },
