@@ -42,7 +42,7 @@ export default function HeroSection() {
           </h1>
 
           <p className="text-lg sm:text-xl text-sablia-text-secondary max-w-2xl mx-auto leading-relaxed font-light">
-            Sablia automatise vos processus répétitifs. Vous récupérez vos heures.
+            Sablia automatise vos processus répétitifs. Reprenez le contrôle de votre temps.
           </p>
 
           {/* Thin decorative line */}
