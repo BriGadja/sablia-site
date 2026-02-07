@@ -1,14 +1,14 @@
 # Sablia Site - Status
 
-**Last Updated**: 2026-02-06
+**Last Updated**: 2026-02-07
 
 ---
 
 ## Current State
 
-Site is live at https://sablia.io with completed visual redesign.
+Site is live at https://sablia.io with warm Mediterranean beige palette.
 
-**Recent Completion**: Luxury Minimal B2B Redesign — migrated from dark glassmorphism to clean light design (Inter Tight, #2563eb accent, white backgrounds). 33 files changed, 7 unused components deleted, -2283 net lines.
+**Recent Completion**: Landing Page Refinements — "Retournez le sablier" hero wordplay, testimonials elevation, Langdock-style service cards, before/after transformation section, simplified 2-slider ROI calculator. 13 files changed, 3 deleted, -15KB bundle savings.
 
 ---
 
