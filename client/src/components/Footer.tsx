@@ -2,11 +2,14 @@ import { Link } from "wouter";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-gray-100 bg-white">
+    <footer className="border-t border-sablia-border bg-sablia-surface">
       <div className="container py-12 mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-base font-semibold mb-4 text-sablia-text">Sablia</h3>
+            <div className="flex items-center gap-2 mb-4">
+              <img src="/logo.svg" alt="Sablia" className="h-6 w-auto" />
+              <h3 className="text-base font-semibold text-sablia-text">Sablia</h3>
+            </div>
             <p className="text-sm text-sablia-text-secondary leading-relaxed">
               Solutions d'automatisation intelligentes pour votre entreprise
             </p>
@@ -42,7 +45,7 @@ export default function Footer() {
             </Link>
           </div>
         </div>
-        <div className="border-t border-gray-100 mt-8 pt-8 text-center">
+        <div className="border-t border-sablia-border mt-8 pt-8 text-center">
           <p className="text-sm text-sablia-text-tertiary">&copy; {new Date().getFullYear()} Sablia. Tous droits réservés.</p>
         </div>
       </div>

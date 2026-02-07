@@ -20,7 +20,7 @@ const contactSchema = z.object({
 
 type ContactInputs = z.infer<typeof contactSchema>;
 
-const inputClasses = "w-full px-4 py-3 rounded-md bg-white border border-gray-200 text-sablia-text text-base focus:outline-none focus:border-sablia-accent focus:ring-1 focus:ring-sablia-accent transition-colors";
+const inputClasses = "w-full px-4 py-3 rounded bg-sablia-bg border border-sablia-border text-sablia-text text-base focus:outline-none focus:border-sablia-accent focus:ring-1 focus:ring-sablia-accent transition-colors";
 
 export default function ContactFormSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -63,7 +63,7 @@ export default function ContactFormSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
         >
-          <h2 className="text-3xl lg:text-4xl font-bold text-center text-sablia-text mb-3">
+          <h2 className="text-3xl lg:text-4xl font-display font-semibold text-center text-sablia-text mb-3">
             Contactez-nous
           </h2>
           <p className="text-lg text-sablia-text-secondary text-center mb-16 max-w-2xl mx-auto">
@@ -77,7 +77,7 @@ export default function ContactFormSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="bg-white border border-gray-100 rounded-lg p-8"
+              className="bg-sablia-bg border border-sablia-border rounded p-8"
             >
               <div className="flex items-center gap-2.5 mb-1.5">
                 <Send size={18} className="text-sablia-accent" />
@@ -144,7 +144,7 @@ export default function ContactFormSection() {
                     Envoi en cours...
                   </button>
                 ) : (
-                  <button type="submit" className="w-full bg-sablia-accent text-white px-6 py-3.5 rounded-md font-medium hover:bg-sablia-accent-hover transition-colors duration-200 flex items-center justify-center gap-2">
+                  <button type="submit" className="w-full bg-sablia-accent text-sablia-bg px-6 py-3.5 rounded-md font-medium hover:bg-sablia-accent-hover transition-colors duration-200 flex items-center justify-center gap-2">
                     <Send size={18} />
                     Envoyer le message
                   </button>
@@ -156,7 +156,7 @@ export default function ContactFormSection() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3 }}
-              className="bg-white border border-gray-100 rounded-lg p-12 text-center flex flex-col justify-center"
+              className="bg-sablia-bg border border-sablia-border rounded p-12 text-center flex flex-col justify-center"
             >
               <CheckCircle size={56} className="text-sablia-accent mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-sablia-text mb-2">Message envoyé !</h3>
@@ -170,7 +170,7 @@ export default function ContactFormSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="bg-white border border-gray-100 rounded-lg p-8"
+            className="bg-sablia-bg border border-sablia-border rounded p-8"
           >
             <div className="flex items-center gap-2.5 mb-1.5">
               <Calendar size={18} className="text-sablia-accent" />
@@ -183,8 +183,8 @@ export default function ContactFormSection() {
                 url="https://calendly.com/brice-gachadoat/30min"
                 styles={{ height: "580px", minWidth: "280px" }}
                 pageSettings={{
-                  primaryColor: "2563eb",
-                  backgroundColor: "ffffff",
+                  primaryColor: "1a2e4e",
+                  backgroundColor: "f4efe2",
                   hideEventTypeDetails: false,
                   hideLandingPageDetails: false,
                 }}

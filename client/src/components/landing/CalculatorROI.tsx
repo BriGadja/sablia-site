@@ -46,7 +46,7 @@ export default function CalculatorROI() {
     ? calculateROI(formValues)
     : { hoursSavedPerYear: 0, annualSavings: 0, estimatedInvestment: 0, roiPercentage: 0 };
 
-  const inputClasses = "w-full px-4 py-3 rounded-md bg-white border border-gray-200 text-sablia-text text-base focus:outline-none focus:border-sablia-accent focus:ring-1 focus:ring-sablia-accent transition-colors";
+  const inputClasses = "w-full px-4 py-3 rounded bg-sablia-bg border border-sablia-border text-sablia-text text-base focus:outline-none focus:border-sablia-accent focus:ring-1 focus:ring-sablia-accent transition-colors";
 
   return (
     <section id="calculator" className="py-32">
@@ -60,7 +60,7 @@ export default function CalculatorROI() {
           <div className="text-center mb-16">
             <div className="flex items-center justify-center gap-3 mb-3">
               <Calculator size={28} className="text-sablia-accent" />
-              <h2 className="text-3xl lg:text-4xl font-bold text-sablia-text">
+              <h2 className="text-3xl lg:text-4xl font-display font-semibold text-sablia-text">
                 Calculateur ROI
               </h2>
             </div>
@@ -76,7 +76,7 @@ export default function CalculatorROI() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            className="bg-white border border-gray-100 rounded-lg p-8"
+            className="bg-sablia-bg border border-sablia-border rounded p-8"
           >
             <h3 className="text-xl font-semibold text-sablia-text mb-6">
               Votre situation actuelle
@@ -122,35 +122,35 @@ export default function CalculatorROI() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="bg-white border border-gray-100 rounded-lg p-8"
+            className="bg-sablia-bg border border-sablia-border rounded p-8"
           >
             <h3 className="text-xl font-semibold text-sablia-text mb-6">
               Votre retour sur investissement
             </h3>
 
             <div className="space-y-4">
-              <div className="p-4 rounded-md bg-gray-50 border border-gray-100">
+              <div className="p-4 rounded bg-sablia-surface border border-sablia-border">
                 <p className="text-sablia-text-secondary text-sm mb-1">Heures économisées par an</p>
                 <p className="text-2xl font-bold text-sablia-text">
                   {results.hoursSavedPerYear.toLocaleString("fr-FR", { maximumFractionDigits: 0 })} h
                 </p>
               </div>
 
-              <div className="p-4 rounded-md bg-gray-50 border border-gray-100">
+              <div className="p-4 rounded bg-sablia-surface border border-sablia-border">
                 <p className="text-sablia-text-secondary text-sm mb-1">Économies annuelles</p>
                 <p className="text-2xl font-bold text-sablia-accent">
                   {results.annualSavings.toLocaleString("fr-FR", { maximumFractionDigits: 0 })} €
                 </p>
               </div>
 
-              <div className="p-4 rounded-md bg-gray-50 border border-gray-100">
+              <div className="p-4 rounded bg-sablia-surface border border-sablia-border">
                 <p className="text-sablia-text-secondary text-sm mb-1">Investissement estimé</p>
                 <p className="text-2xl font-bold text-sablia-text">
                   {results.estimatedInvestment.toLocaleString("fr-FR", { maximumFractionDigits: 0 })} €
                 </p>
               </div>
 
-              <div className="p-4 rounded-md bg-sablia-accent/5 border border-sablia-accent/20">
+              <div className="p-4 rounded bg-sablia-accent/[0.04] border border-sablia-accent/15">
                 <p className="text-sablia-text-secondary text-sm mb-1">ROI Première Année</p>
                 <p className="text-3xl font-bold text-sablia-accent">
                   {results.roiPercentage > 0 ? "+" : ""}{results.roiPercentage.toLocaleString("fr-FR", { maximumFractionDigits: 0 })} %
@@ -160,7 +160,7 @@ export default function CalculatorROI() {
 
             <div className="mt-6">
               <button
-                className="w-full py-3.5 rounded-md font-medium text-base bg-sablia-accent text-white hover:bg-sablia-accent-hover transition-colors duration-200"
+                className="w-full py-3.5 rounded font-medium text-base bg-sablia-accent text-sablia-bg hover:bg-sablia-accent-hover transition-colors duration-200"
                 onClick={() => {
                   const target = document.querySelector("#contact");
                   target?.scrollIntoView({ behavior: "smooth" });

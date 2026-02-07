@@ -52,7 +52,7 @@ export default function FaqSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
           >
-            <h2 className="text-3xl lg:text-4xl font-bold text-center text-sablia-text mb-3">
+            <h2 className="text-3xl lg:text-4xl font-display font-semibold text-center text-sablia-text mb-3">
               Questions fréquentes
             </h2>
             <p className="text-lg text-sablia-text-secondary text-center mb-16 max-w-2xl mx-auto">
@@ -68,11 +68,11 @@ export default function FaqSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.06 }}
-                className="bg-white border border-gray-100 rounded-lg overflow-hidden"
+                className="bg-sablia-bg border border-sablia-border rounded overflow-hidden"
               >
                 <button
                   onClick={() => toggleQuestion(faq.id)}
-                  className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center justify-between p-5 text-left hover:bg-sablia-surface transition-colors"
                   aria-expanded={activeId === faq.id}
                   aria-label={`${faq.question} - ${activeId === faq.id ? "Cliquez pour fermer" : "Cliquez pour voir la réponse"}`}
                 >

@@ -106,7 +106,7 @@ export default function TestimonialsSection() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-sm font-semibold text-sablia-accent uppercase tracking-wider mb-3"
+              className="text-sm font-medium uppercase tracking-[0.15em] text-sablia-sienna mb-3"
             >
               Ils ont transformé leurs opérations
             </motion.p>
@@ -115,13 +115,12 @@ export default function TestimonialsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.06 }}
-              className="text-3xl lg:text-4xl font-bold text-sablia-text"
+              className="text-3xl lg:text-4xl font-display font-semibold text-sablia-text"
             >
               Des résultats mesurables
             </motion.h2>
           </div>
 
-          {/* Static 3-column grid (replaces infinite scroll) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {testimonials.slice(0, 3).map((testimonial, index) => (
               <motion.div
@@ -130,10 +129,10 @@ export default function TestimonialsSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.08 }}
-                className="bg-white border border-gray-100 rounded-lg p-6 hover:shadow-sm hover:border-gray-200 transition-all duration-200"
+                className="bg-sablia-bg border border-sablia-border rounded p-6 hover:shadow-warm-sm transition-all duration-200"
               >
                 <div className="flex items-start gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-sablia-accent/10 flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-sablia-accent/8 flex items-center justify-center flex-shrink-0">
                     <span className="text-sablia-accent font-semibold text-sm">{testimonial.avatar}</span>
                   </div>
                   <div className="flex-1 min-w-0">
@@ -148,8 +147,8 @@ export default function TestimonialsSection() {
                   "{testimonial.quote}"
                 </p>
 
-                <div className="pt-4 border-t border-gray-100 space-y-1.5">
-                  <div className="inline-flex items-center gap-1.5 bg-sablia-accent/5 text-sablia-accent px-2.5 py-1 rounded-md">
+                <div className="pt-4 border-t border-sablia-border space-y-1.5">
+                  <div className="inline-flex items-center gap-1.5 bg-sablia-sienna/8 text-sablia-sienna px-2.5 py-1 rounded">
                     <span className="text-sm font-medium">{testimonial.metric}</span>
                   </div>
                   <p className="text-xs text-sablia-text-tertiary">Projet : {testimonial.project}</p>
@@ -158,7 +157,6 @@ export default function TestimonialsSection() {
             ))}
           </div>
 
-          {/* Second row — 2 remaining testimonials centered */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mt-6">
             {testimonials.slice(3).map((testimonial, index) => (
               <motion.div
@@ -167,10 +165,10 @@ export default function TestimonialsSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: (index + 3) * 0.08 }}
-                className="bg-white border border-gray-100 rounded-lg p-6 hover:shadow-sm hover:border-gray-200 transition-all duration-200"
+                className="bg-sablia-bg border border-sablia-border rounded p-6 hover:shadow-warm-sm transition-all duration-200"
               >
                 <div className="flex items-start gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-sablia-accent/10 flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-sablia-accent/8 flex items-center justify-center flex-shrink-0">
                     <span className="text-sablia-accent font-semibold text-sm">{testimonial.avatar}</span>
                   </div>
                   <div className="flex-1 min-w-0">
@@ -185,8 +183,8 @@ export default function TestimonialsSection() {
                   "{testimonial.quote}"
                 </p>
 
-                <div className="pt-4 border-t border-gray-100 space-y-1.5">
-                  <div className="inline-flex items-center gap-1.5 bg-sablia-accent/5 text-sablia-accent px-2.5 py-1 rounded-md">
+                <div className="pt-4 border-t border-sablia-border space-y-1.5">
+                  <div className="inline-flex items-center gap-1.5 bg-sablia-sienna/8 text-sablia-sienna px-2.5 py-1 rounded">
                     <span className="text-sm font-medium">{testimonial.metric}</span>
                   </div>
                   <p className="text-xs text-sablia-text-tertiary">Projet : {testimonial.project}</p>

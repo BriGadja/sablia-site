@@ -39,7 +39,7 @@ export default function LogosCloud() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-sm font-semibold text-sablia-accent uppercase tracking-wider mb-3"
+            className="text-sm font-medium uppercase tracking-[0.15em] text-sablia-sienna mb-3"
           >
             Les outils que nous maîtrisons
           </motion.p>
@@ -48,7 +48,7 @@ export default function LogosCloud() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.06 }}
-            className="text-3xl lg:text-4xl font-bold text-sablia-text"
+            className="text-3xl lg:text-4xl font-display font-semibold text-sablia-text"
           >
             Intégrations & Outils
           </motion.h2>
@@ -77,7 +77,7 @@ export default function LogosCloud() {
                 className="flex flex-col items-center justify-center gap-2"
               >
                 {isN8n && (
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider text-sablia-accent bg-sablia-accent/5 border border-sablia-accent/10">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider text-sablia-sienna bg-sablia-sienna/8 border border-sablia-sienna/10">
                     Notre coeur de métier
                   </span>
                 )}
@@ -94,17 +94,17 @@ export default function LogosCloud() {
                         loading="lazy"
                         className={`${
                           isN8n ? "h-16 lg:h-20" : "h-12 lg:h-14"
-                        } w-auto object-contain transition-opacity duration-200 opacity-50 hover:opacity-100`}
+                        } w-auto object-contain transition-opacity duration-200 opacity-40 hover:opacity-100`}
                       />
                     </div>
                   </HoverCardTrigger>
                   <HoverCardContent
                     side={index >= 8 ? "top" : "bottom"}
                     align="center"
-                    className="w-80 bg-white border border-gray-200 p-4 shadow-lg"
+                    className="w-80 bg-sablia-bg border border-sablia-border p-4 shadow-warm-lg"
                   >
                     <div className="space-y-2.5">
-                      <div className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium uppercase tracking-wide text-sablia-accent bg-sablia-accent/5">
+                      <div className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium uppercase tracking-wide text-sablia-accent bg-sablia-accent/[0.06]">
                         {integration.categoryLabel}
                       </div>
                       <h3 className="text-base font-semibold text-sablia-text">
@@ -113,7 +113,7 @@ export default function LogosCloud() {
                       <p className="text-sm text-sablia-text-secondary leading-relaxed">
                         {integration.description}
                       </p>
-                      <div className="pt-2 border-t border-gray-100">
+                      <div className="pt-2 border-t border-sablia-border">
                         <p className="text-xs text-sablia-text-secondary">
                           <span className="font-semibold">Exemple :</span>{" "}
                           {integration.useCase}

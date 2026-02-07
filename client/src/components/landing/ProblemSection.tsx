@@ -11,21 +11,21 @@ interface Problem {
 const problems: Problem[] = [
   {
     id: 1,
-    icon: <Clock size={32} className="text-sablia-accent" />,
+    icon: <Clock size={28} className="text-sablia-sienna" />,
     title: "Temps perdu sur tâches répétitives",
     description:
       "Vos équipes passent des heures sur des tâches manuelles qui pourraient être automatisées, au détriment de missions à plus forte valeur ajoutée.",
   },
   {
     id: 2,
-    icon: <AlertTriangle size={32} className="text-sablia-accent" />,
+    icon: <AlertTriangle size={28} className="text-sablia-sienna" />,
     title: "Erreurs humaines coûteuses",
     description:
       "Les processus manuels génèrent des erreurs de saisie, des doublons et des oublis qui impactent votre professionnalisme et votre chiffre d'affaires.",
   },
   {
     id: 3,
-    icon: <TrendingDown size={32} className="text-sablia-accent" />,
+    icon: <TrendingDown size={28} className="text-sablia-sienna" />,
     title: "Croissance limitée par le manque d'outils",
     description:
       "Sans automatisation, votre capacité à scaler est limitée par les ressources humaines disponibles et les budgets contraints.",
@@ -42,7 +42,7 @@ export default function ProblemSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
         >
-          <h2 className="text-3xl lg:text-4xl font-bold text-center text-sablia-text mb-3">
+          <h2 className="text-3xl lg:text-4xl font-display font-semibold text-center text-sablia-text mb-3">
             Les défis de l'automatisation
           </h2>
           <p className="text-lg text-sablia-text-secondary text-center mb-16 max-w-2xl mx-auto">
@@ -58,7 +58,7 @@ export default function ProblemSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.4, delay: index * 0.08 }}
-              className="bg-white border border-gray-100 rounded-lg p-8 hover:shadow-sm hover:border-gray-200 transition-all duration-200"
+              className="bg-sablia-bg border border-sablia-border rounded p-8 hover:shadow-warm-sm transition-all duration-200"
             >
               <div className="mb-5">{problem.icon}</div>
               <h3 className="text-xl font-semibold text-sablia-text mb-3">

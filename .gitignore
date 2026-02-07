@@ -53,3 +53,7 @@ vite.config.ts.*
 coverage/
 *.lcov
 .nyc_outputnul
+
+# Workspace symlinks (inherited skills & rules)
+.claude/skills
+.claude/rules

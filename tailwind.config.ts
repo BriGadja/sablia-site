@@ -61,13 +61,17 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Sablia design system
-        "sablia-text": "#1a1c21",
-        "sablia-text-secondary": "rgba(26, 28, 33, 0.55)",
-        "sablia-text-tertiary": "rgba(26, 28, 33, 0.35)",
-        "sablia-accent": "#2563eb",
-        "sablia-accent-hover": "#1d4ed8",
-        "sablia-surface": "#fafafa",
+        // Sablia design system — Mediterranean parchment + deep navy
+        "sablia-text": "#1a2e4e",
+        "sablia-text-secondary": "rgba(26, 46, 78, 0.62)",
+        "sablia-text-tertiary": "rgba(26, 46, 78, 0.40)",
+        "sablia-accent": "#1a2e4e",
+        "sablia-accent-hover": "#0f1c30",
+        "sablia-surface": "#eae3d2",
+        "sablia-bg": "#f4efe2",
+        "sablia-sienna": "#c45a2c",
+        "sablia-alba": "#d4956a",
+        "sablia-border": "rgba(26, 46, 78, 0.10)",
       },
       keyframes: {
         "accordion-down": {
@@ -93,6 +97,12 @@ export default {
       },
       fontFamily: {
         sans: ["Inter Tight", "Inter", "system-ui", "sans-serif"],
+        display: ["Cormorant Garamond", "Georgia", "serif"],
+      },
+      boxShadow: {
+        "warm-sm": "0 1px 3px rgba(26, 46, 78, 0.05), 0 1px 2px rgba(139, 115, 80, 0.04)",
+        "warm": "0 4px 12px rgba(26, 46, 78, 0.06), 0 2px 4px rgba(139, 115, 80, 0.04)",
+        "warm-lg": "0 12px 32px rgba(26, 46, 78, 0.08), 0 4px 8px rgba(139, 115, 80, 0.04)",
       },
     },
   },

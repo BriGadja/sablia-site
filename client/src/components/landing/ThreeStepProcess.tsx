@@ -34,7 +34,7 @@ interface Step {
 const steps: Step[] = [
   {
     id: 1,
-    icon: <Search size={32} className="text-sablia-accent" />,
+    icon: <Search size={28} className="text-sablia-accent" />,
     title: "Découvrir",
     description: "Audit de vos processus actuels pour identifier les gains rapides et bâtir une roadmap d'automatisation adaptée à votre contexte.",
     duration: "Modulaire",
@@ -45,7 +45,7 @@ const steps: Step[] = [
   },
   {
     id: 2,
-    icon: <Zap size={32} className="text-sablia-accent" />,
+    icon: <Zap size={28} className="text-sablia-accent" />,
     title: "Implémenter",
     description: "Formation de vos équipes et/ou développement des workflows selon votre besoin. Approche modulaire adaptée à votre contexte.",
     duration: "Modulaire",
@@ -57,7 +57,7 @@ const steps: Step[] = [
   },
   {
     id: 3,
-    icon: <Rocket size={32} className="text-sablia-accent" />,
+    icon: <Rocket size={28} className="text-sablia-accent" />,
     title: "Optimiser & Accompagner",
     description: "Sur la base des retours terrain, nous adaptons vos workflows : modifications, formation de nouveaux collaborateurs, mises à jour et optimisation continue.",
     duration: "Continu",
@@ -83,7 +83,7 @@ export default function ThreeStepProcess() {
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
           >
-            <h2 className="text-3xl lg:text-4xl font-bold text-center text-sablia-text mb-3">
+            <h2 className="text-3xl lg:text-4xl font-display font-semibold text-center text-sablia-text mb-3">
               Notre processus en 3 étapes
             </h2>
             <p className="text-lg text-sablia-text-secondary text-center mb-20 max-w-2xl mx-auto">
@@ -99,14 +99,14 @@ export default function ThreeStepProcess() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.4, delay: index * 0.08 }}
-                className="relative bg-white border border-gray-100 rounded-lg p-8 hover:shadow-sm hover:border-gray-200 transition-all duration-200"
+                className="relative bg-sablia-bg border border-sablia-border rounded p-8 hover:shadow-warm-sm transition-all duration-200"
               >
-                <div className="absolute top-4 right-4 text-6xl font-bold text-gray-100 leading-none">
+                <div className="absolute top-4 right-4 text-6xl font-display font-bold text-sablia-accent/[0.06] leading-none">
                   {step.id}
                 </div>
 
                 <div className="relative z-10 mb-5">
-                  <div className="w-16 h-16 rounded-full border border-sablia-accent/20 flex items-center justify-center bg-sablia-accent/5">
+                  <div className="w-14 h-14 rounded-full border border-sablia-accent/15 flex items-center justify-center bg-sablia-accent/[0.04]">
                     {step.icon}
                   </div>
                 </div>
@@ -123,7 +123,7 @@ export default function ThreeStepProcess() {
                     {step.badges.map((badge, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gray-50 border border-gray-100 text-sm"
+                        className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-sablia-surface border border-sablia-border text-sm"
                       >
                         <span className="text-sablia-text font-medium">{badge.label}</span>
                         <span className="text-sablia-text-tertiary text-xs">· {badge.duration}</span>
@@ -132,7 +132,7 @@ export default function ThreeStepProcess() {
                   </div>
                 )}
 
-                <div className="inline-block px-3 py-1.5 rounded-md bg-sablia-accent/5 text-sablia-accent text-sm font-medium relative z-10">
+                <div className="inline-block px-3 py-1.5 rounded bg-sablia-accent/[0.06] text-sablia-accent text-sm font-medium relative z-10">
                   {step.duration}
                 </div>
               </motion.div>

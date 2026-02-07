@@ -57,10 +57,10 @@ const pricingColumns: PricingColumn[] = [
 
 function OfferItem({ offer }: { offer: PricingOffer }) {
   return (
-    <div className="border-t border-gray-100 pt-4">
+    <div className="border-t border-sablia-border pt-4">
       <div className="flex justify-between items-baseline mb-2">
         <h4 className="font-semibold text-sablia-text text-base">{offer.name}</h4>
-        <span className="text-sablia-accent font-bold text-lg">{offer.price}</span>
+        <span className="text-sablia-sienna font-bold text-lg">{offer.price}</span>
       </div>
       {offer.duration && <p className="text-sablia-text-tertiary text-sm mb-2">{offer.duration}</p>}
       <p className="text-sablia-text-secondary text-sm mb-3">{offer.description}</p>
@@ -72,7 +72,7 @@ function OfferItem({ offer }: { offer: PricingOffer }) {
           </li>
         ))}
       </ul>
-      {offer.roi && <p className="text-sablia-accent text-sm font-medium mt-3">{offer.roi}</p>}
+      {offer.roi && <p className="text-sablia-sienna text-sm font-medium mt-3">{offer.roi}</p>}
     </div>
   );
 }
@@ -84,7 +84,7 @@ function PricingCard({ column, index }: { column: PricingColumn; index: number }
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: index * 0.08 }}
-      className="relative flex flex-col bg-white border border-gray-100 rounded-lg p-8 hover:shadow-sm hover:border-gray-200 transition-all duration-200"
+      className="relative flex flex-col bg-sablia-bg border border-sablia-border rounded p-8 hover:shadow-warm-sm transition-all duration-200"
     >
       <div className="text-center mb-8">
         <h3 className="text-xl font-bold text-sablia-text mb-1">{column.title}</h3>
@@ -98,7 +98,7 @@ function PricingCard({ column, index }: { column: PricingColumn; index: number }
       </div>
 
       <button
-        className="w-full py-3.5 rounded-md font-medium transition-colors duration-200 border border-gray-200 text-sablia-text hover:bg-gray-50"
+        className="w-full py-3.5 rounded font-medium transition-colors duration-200 border border-sablia-accent/20 text-sablia-text hover:bg-sablia-accent/[0.04]"
         onClick={() => {
           const target = document.querySelector(column.ctaPrimary.url);
           target?.scrollIntoView({ behavior: "smooth" });
@@ -161,7 +161,7 @@ export default function PricingSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
           >
-            <h2 className="text-3xl lg:text-4xl font-bold text-center text-sablia-text mb-3">
+            <h2 className="text-3xl lg:text-4xl font-display font-semibold text-center text-sablia-text mb-3">
               Nos offres
             </h2>
             <p className="text-lg text-sablia-text-secondary text-center mb-16 max-w-2xl mx-auto">

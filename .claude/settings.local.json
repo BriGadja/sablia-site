@@ -60,9 +60,26 @@
       "Bash(convert:*)",
       "Bash(apt-cache show:*)",
       "Bash(rsvg-convert:*)",
-      "Skill(close)"
+      "Skill(close)",
+      "Bash(sudo ufw allow:*)",
+      "Bash(sudo journalctl:*)",
+      "Bash(sudo ss:*)",
+      "Bash(sudo tee:*)",
+      "Bash(~/.ssh/authorized_keys)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "enabledMcpjsonServers": [
+    "n8n-mcp",
+    "sequential-thinking",
+    "github",
+    "supabase-sablia",
+    "supabase-vox",
+    "google-workspace",
+    "todoist",
+    "playwright",
+    "vapi"
+  ],
+  "enableAllProjectMcpServers": true
 }

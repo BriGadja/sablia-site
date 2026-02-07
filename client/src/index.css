@@ -4,35 +4,35 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 228 10% 10%;
+    --background: 42 42% 92%;
+    --foreground: 216 50% 20%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 228 10% 10%;
+    --card: 42 42% 92%;
+    --card-foreground: 216 50% 20%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 228 10% 10%;
+    --popover: 42 50% 95%;
+    --popover-foreground: 216 50% 20%;
 
-    --primary: 221 83% 53%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 216 50% 20%;
+    --primary-foreground: 42 50% 95%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 228 10% 10%;
+    --secondary: 40 35% 87%;
+    --secondary-foreground: 216 50% 20%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 40 35% 87%;
+    --muted-foreground: 216 28% 38%;
 
-    --accent: 221 83% 53%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 216 50% 20%;
+    --accent-foreground: 42 50% 95%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 221 83% 53%;
+    --border: 38 20% 82%;
+    --input: 38 20% 82%;
+    --ring: 216 50% 20%;
 
-    --radius: 0.5rem;
+    --radius: 0.375rem;
   }
 }
 
@@ -45,6 +45,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* Signature brand line — 2px terracotta at page top */
+    border-top: 2px solid #c45a2c;
   }
 }
 

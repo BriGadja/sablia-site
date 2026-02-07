@@ -12,28 +12,28 @@ interface Solution {
 const solutions: Solution[] = [
   {
     id: 1,
-    icon: <Search size={32} className="text-sablia-accent" />,
+    icon: <Search size={28} className="text-sablia-accent" />,
     title: "Diagnostic Complet",
     description:
       "Audit de vos processus, identification des opportunités d'automatisation et accompagnement personnalisé : formation, conseil ou développement.",
   },
   {
     id: 2,
-    icon: <Sparkles size={32} className="text-sablia-accent" />,
+    icon: <Sparkles size={28} className="text-sablia-accent" />,
     title: "Solutions Spécifiques",
     description:
       "Votre entreprise est unique, nos solutions aussi. Chaque automatisation est développée sur-mesure pour répondre précisément à vos besoins.",
   },
   {
     id: 3,
-    icon: <ShieldCheck size={32} className="text-sablia-accent" />,
+    icon: <ShieldCheck size={28} className="text-sablia-accent" />,
     title: "Sécurité & Conformité",
     description:
       "Vos données restent protégées. Nous respectons le RGPD et privilégions des solutions européennes pour garantir la sécurité de vos informations.",
   },
   {
     id: 4,
-    icon: <TrendingUp size={32} className="text-sablia-accent" />,
+    icon: <TrendingUp size={28} className="text-sablia-accent" />,
     title: "ROI Mesurable",
     description:
       "Chaque automatisation génère un ROI quantifiable. Nous mesurons temps gagné et économies réalisées.",
@@ -50,7 +50,7 @@ export default function SolutionSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
         >
-          <h2 className="text-3xl lg:text-4xl font-bold text-center text-sablia-text mb-3">
+          <h2 className="text-3xl lg:text-4xl font-display font-semibold text-center text-sablia-text mb-3">
             La méthode Sablia
           </h2>
           <p className="text-lg text-sablia-text-secondary text-center mb-16 max-w-2xl mx-auto">
@@ -78,7 +78,7 @@ export default function SolutionSection() {
               </motion.div>
 
               {index < solutions.length - 1 && (
-                <div className="hidden lg:block h-40 w-px bg-gray-200" />
+                <div className="hidden lg:block h-40 w-px bg-sablia-border" />
               )}
             </React.Fragment>
           ))}
