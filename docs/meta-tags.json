@@ -48,7 +48,7 @@
         "@type": "Organization",
         "name": "Sablia",
         "url": "https://sablia.io",
-        "logo": "https://sablia.io/logo.png",
+        "logo": "https://sablia.io/logo.svg",
         "description": "Services d'automatisation business et IA pour PME françaises",
         "address": {
           "@type": "PostalAddress",
@@ -86,14 +86,14 @@
         "title": "Tarifs & Offres d'Automatisation | Sablia",
         "description": "Audit gratuit, formations 1200-3000€, solutions 2500-60000€. ROI 4-12 mois. Paiement échelonné disponible.",
         "url": "https://sablia.io/tarifs",
-        "image": "https://sablia.io/og-image-tarifs.png",
+        "image": "https://sablia.io/og-image.png",
         "siteName": "Sablia"
       },
       "twitter": {
         "card": "summary_large_image",
         "title": "Tarifs Automatisation | Sablia",
         "description": "Offres modulaires : Audit, Formations, Solutions. ROI 4-12 mois.",
-        "image": "https://sablia.io/twitter-image-tarifs.png"
+        "image": "https://sablia.io/twitter-image.png"
       },
       "structuredData": {
         "@context": "https://schema.org",
@@ -140,14 +140,14 @@
         "title": "Analyse GAP Gratuite | Sablia",
         "description": "Formulaire gratuit pour identifier vos opportunités d'automatisation. Réponse personnalisée sous 24h.",
         "url": "https://sablia.io/gap",
-        "image": "https://sablia.io/og-image-gap.png",
+        "image": "https://sablia.io/og-image.png",
         "siteName": "Sablia"
       },
       "twitter": {
         "card": "summary",
         "title": "Analyse GAP Gratuite | Sablia",
         "description": "Identifiez vos opportunités d'automatisation. Réponse sous 24h.",
-        "image": "https://sablia.io/twitter-image-gap.png"
+        "image": "https://sablia.io/twitter-image.png"
       }
     },
 
@@ -168,14 +168,14 @@
         "title": "Calculateur ROI Automatisation | Sablia",
         "description": "Estimez vos économies en automatisant vos processus. Résultats instantanés. Gratuit.",
         "url": "https://sablia.io/roi",
-        "image": "https://sablia.io/og-image-roi.png",
+        "image": "https://sablia.io/og-image.png",
         "siteName": "Sablia"
       },
       "twitter": {
         "card": "summary_large_image",
         "title": "Calculateur ROI Automatisation | Sablia",
         "description": "Estimez vos économies potentielles. Gratuit et instantané.",
-        "image": "https://sablia.io/twitter-image-roi.png"
+        "image": "https://sablia.io/twitter-image.png"
       },
       "structuredData": {
         "@context": "https://schema.org",
@@ -208,14 +208,14 @@
         "title": "À propos de Sablia | Experts Automatisation PME",
         "description": "Nous accompagnons les PME françaises dans leur transformation digitale. Formation + développement.",
         "url": "https://sablia.io/about",
-        "image": "https://sablia.io/og-image-about.png",
+        "image": "https://sablia.io/og-image.png",
         "siteName": "Sablia"
       },
       "twitter": {
         "card": "summary",
         "title": "À propos de Sablia",
         "description": "Experts en automatisation business pour PME françaises.",
-        "image": "https://sablia.io/twitter-image-about.png"
+        "image": "https://sablia.io/twitter-image.png"
       }
     },
 

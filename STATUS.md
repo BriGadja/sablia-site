@@ -1,6 +1,6 @@
 # Sablia Site - Status
 
-**Last Updated**: 2026-02-07
+**Last Updated**: 2026-02-11
 
 ---
 
@@ -8,39 +8,66 @@
 
 Site is live at https://sablia.io with warm Mediterranean beige palette.
 
-**Recent Completion**: Landing Page Refinements — "Retournez le sablier" hero wordplay, testimonials elevation, Langdock-style service cards, before/after transformation section, simplified 2-slider ROI calculator. 13 files changed, 3 deleted, -15KB bundle savings.
+**Pending Deployment**: Logo update (navy-sienna B mark) + PWA manifest + updated OG/Twitter images. Changes are local, not yet committed.
 
 ---
 
-## Operational Tasks (from SEO Phase E)
+## Uncommitted Changes (deploy first)
 
-These are manual/external setup tasks, not code changes.
+- [x] Updated OG images (1200x630px) with new branding
+- [x] Updated Twitter images (1200x630px) with new branding
+- [x] Updated favicons and PWA icons
+- [x] Added `manifest.json` for PWA support
+- [x] Added `favicon.ico` fallback
+- [x] Updated `meta-tags.json` (logo.svg, consolidated OG images)
+- [x] Updated `index.html` (theme-color, manifest link, apple-mobile-web-app)
+- [ ] **Commit, push, and deploy these changes**
 
-### Google Search Console
+---
+
+## SEO Audit Status
+
+### Completed (Phases A-C)
+
+All code-side SEO work is done:
+- Sitemap with correct dates and all pages
+- Title/meta tags harmonized (index.html + meta-tags.json + SEO.tsx)
+- FAQPage structured data on FAQ section
+- Font preloads + DNS prefetch for external services
+- Image dimensions for CLS prevention
+- Lazy loading for below-fold sections (CalculatorROI, ContactForm, FAQ)
+- AnimatedParticles mobile optimization (30 particles, no connections)
+- Navigation.tsx proper anchor elements (SEO-friendly)
+- BreadcrumbList schema on all pages
+- Service schema (9 offerings)
+- HowTo schema (3-step process)
+- Review/AggregateRating schema (5 reviews, 4.9/5)
+- Person schema for About page
+
+### Remaining: Manual/External Tasks (Phase E)
+
+#### Google Search Console (Priority: HIGH)
 - [ ] Verify domain ownership (DNS TXT or HTML file)
 - [ ] Submit sitemap: https://sablia.io/sitemap.xml
 - [ ] Monitor indexing status
 - [ ] Check for crawl errors weekly
 
-### Google Analytics 4
+#### Google Analytics 4
 - [ ] Set up GA4 property for sablia.io
 - [ ] Configure SEO dashboard (organic traffic, landing pages)
 - [ ] Set up conversion tracking (form submissions, Calendly clicks)
 
-### Bing Webmaster Tools
+#### Bing Webmaster Tools
 - [ ] Register sablia.io
 - [ ] Submit sitemap
 
-### Backlink Strategy
+#### Backlink Strategy
 - [ ] Post in n8n Community forum (with sablia.io link)
 - [ ] Post in Make.com community
 - [ ] Consider French startup directories
 - [ ] Guest post opportunities (automation blogs)
 
-### Local SEO (Optional)
-- [ ] Consider Google Business Profile if targeting local clients
-
-### Rank Tracking
+#### Rank Tracking
 - [ ] Set up rank tracking for target keywords:
   - "automatisation PME"
   - "consultant n8n"
@@ -49,17 +76,7 @@ These are manual/external setup tasks, not code changes.
 
 ---
 
-## Manual SEO Tasks (from Phase A)
-
-- [ ] A4. Create Open Graph images (1200x630px) for each page
-- [ ] A5. Create Twitter Card images (1200x600px) for each page
-- [ ] A8. Verify Google Search Console ownership
-
----
-
-## Validation Checklist (Post-Deployment)
-
-Run these after any deployment:
+## Validation Checklist (after deploying uncommitted changes)
 
 - [ ] Test OG tags: https://developers.facebook.com/tools/debug/
 - [ ] Test Twitter cards: https://cards-dev.twitter.com/validator
@@ -70,9 +87,10 @@ Run these after any deployment:
 
 ## Next Actions
 
-1. **Immediate**: Complete GSC setup and verify ownership
-2. **This week**: Submit sitemap to Google and Bing
-3. **When ready**: Start blog project with `/plan sablia-blog`
+1. **Now**: Commit + deploy logo/PWA/OG changes
+2. **After deploy**: Run validation checklist above
+3. **This week**: Set up GSC + submit sitemap
+4. **When ready**: Start blog project with `/plan sablia-blog`
 
 ---
 
