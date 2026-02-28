@@ -1,14 +1,14 @@
-import { useEffect } from "react";
-import Footer from "@/components/Footer";
-import Navigation from "@/components/landing/Navigation";
-import ScrollToTop from "@/components/ScrollToTop";
-import SEO from "@/components/SEO";
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion'
+import { useEffect } from 'react'
+import Footer from '@/components/Footer'
+import Navigation from '@/components/landing/Navigation'
+import ScrollToTop from '@/components/ScrollToTop'
+import SEO from '@/components/SEO'
 
 export default function PolitiqueConfidentialite() {
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <>
@@ -24,17 +24,21 @@ export default function PolitiqueConfidentialite() {
           <Navigation />
           <main className="container mx-auto px-4 py-16">
             <div className="flex flex-col items-center mb-10 mt-12">
-              <h1 className="text-4xl font-bold text-center text-sablia-text">Politique de confidentialité</h1>
-              <p className="text-sablia-text-tertiary mt-2">Dernière mise à jour : 28 octobre 2025</p>
+              <h1 className="text-4xl font-bold text-center text-sablia-text">
+                Politique de confidentialité
+              </h1>
+              <p className="text-sablia-text-tertiary mt-2">
+                Dernière mise à jour : 28 octobre 2025
+              </p>
             </div>
 
             <div className="max-w-4xl mx-auto prose prose-lg">
               <p className="text-sablia-text-secondary mb-8">
-                La présente politique explique comment{" "}
+                La présente politique explique comment{' '}
                 <strong>Sablia – Entreprise Individuelle (micro‑entrepreneur)</strong> (« nous »)
-                collecte, utilise et partage les données personnelles des visiteurs et utilisateurs du
-                site <strong>sablia.io</strong> (le « Site »), ainsi que les droits dont disposent les
-                personnes concernées.
+                collecte, utilise et partage les données personnelles des visiteurs et utilisateurs
+                du site <strong>sablia.io</strong> (le « Site »), ainsi que les droits dont
+                disposent les personnes concernées.
               </p>
 
               <section className="mb-8">
@@ -43,8 +47,8 @@ export default function PolitiqueConfidentialite() {
                 </h2>
                 <ul className="text-sablia-text-secondary space-y-2">
                   <li>
-                    <strong>Responsable</strong> : GACHADOAT Brice – Entrepreneur individuel (SIREN :
-                    940 901 127)
+                    <strong>Responsable</strong> : GACHADOAT Brice – Entrepreneur individuel (SIREN
+                    : 940 901 127)
                   </li>
                   <li>
                     <strong>Nom commercial</strong> : Sablia
@@ -53,7 +57,7 @@ export default function PolitiqueConfidentialite() {
                     <strong>Adresse</strong> : 60 rue François Ier, 75008 Paris, France
                   </li>
                   <li>
-                    <strong>E‑mail de contact</strong> :{" "}
+                    <strong>E‑mail de contact</strong> :{' '}
                     <a
                       href="mailto:brice@sablia.io"
                       className="text-sablia-accent hover:text-sablia-accent-hover"
@@ -65,8 +69,8 @@ export default function PolitiqueConfidentialite() {
                     <strong>Téléphone</strong> : +33 6 25 42 68 38
                   </li>
                   <li>
-                    <strong>Délégué à la protection des données (si applicable)</strong> : non désigné
-                    à ce jour
+                    <strong>Délégué à la protection des données (si applicable)</strong> : non
+                    désigné à ce jour
                   </li>
                 </ul>
               </section>
@@ -103,14 +107,14 @@ export default function PolitiqueConfidentialite() {
                   <li>
                     <strong>Données techniques et de navigation</strong> : URL visitée, date/heure,
                     pages consultées, temps passé, identifiants de cookies/traceurs strictement
-                    nécessaires, adresse IP tronquée/anonymisée selon paramétrage, informations sur le
-                    navigateur et l'appareil.
+                    nécessaires, adresse IP tronquée/anonymisée selon paramétrage, informations sur
+                    le navigateur et l'appareil.
                   </li>
                   <li>
-                    <strong>Mesure d'audience</strong> : <em>non déployée à ce jour</em>. Si un outil
-                    d'analytics est mis en place ultérieurement (par ex. GA4 / Plausible / Matomo),
-                    nous mettrons à jour la présente politique et, si nécessaire, recueillerons votre
-                    consentement préalable.
+                    <strong>Mesure d'audience</strong> : <em>non déployée à ce jour</em>. Si un
+                    outil d'analytics est mis en place ultérieurement (par ex. GA4 / Plausible /
+                    Matomo), nous mettrons à jour la présente politique et, si nécessaire,
+                    recueillerons votre consentement préalable.
                   </li>
                 </ul>
               </section>
@@ -124,7 +128,9 @@ export default function PolitiqueConfidentialite() {
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="px-4 py-3 text-left border-b border-gray-200">Finalité</th>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">Base légale</th>
+                        <th className="px-4 py-3 text-left border-b border-gray-200">
+                          Base légale
+                        </th>
                         <th className="px-4 py-3 text-left border-b border-gray-200">Détails</th>
                       </tr>
                     </thead>
@@ -192,7 +198,9 @@ export default function PolitiqueConfidentialite() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">4) Durées de conservation</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
+                  4) Durées de conservation
+                </h2>
                 <ul className="text-sablia-text-secondary space-y-2">
                   <li>
                     <strong>Prospects</strong> : 3 ans à compter du dernier contact.
@@ -206,7 +214,7 @@ export default function PolitiqueConfidentialite() {
                     cookie/traceur (voir annexe Cookies).
                   </li>
                   <li>
-                    <strong>Enregistrements / transcriptions de démos (agents voix)</strong> :{" "}
+                    <strong>Enregistrements / transcriptions de démos (agents voix)</strong> :{' '}
                     <strong>90 jours</strong> par défaut, puis suppression ou anonymisation.
                   </li>
                 </ul>
@@ -227,11 +235,11 @@ export default function PolitiqueConfidentialite() {
                 </p>
                 <ul className="text-sablia-text-secondary space-y-2">
                   <li>
-                    <strong>Hébergement & diffusion</strong> : <strong>Vercel</strong> (hébergement de
-                    l'application/site et CDN).
+                    <strong>Hébergement & diffusion</strong> : <strong>Vercel</strong> (hébergement
+                    de l'application/site et CDN).
                   </li>
                   <li>
-                    <strong>Base de données/Backend</strong> : <strong>Supabase</strong> (UE –{" "}
+                    <strong>Base de données/Backend</strong> : <strong>Supabase</strong> (UE –{' '}
                     <strong>Irlande</strong>, AWS eu‑west‑1).
                   </li>
                   <li>
@@ -246,7 +254,7 @@ export default function PolitiqueConfidentialite() {
                   </li>
                 </ul>
                 <p className="text-sablia-text-secondary mt-4">
-                  Un <strong>contrat de sous‑traitance (DPA)</strong> et des{" "}
+                  Un <strong>contrat de sous‑traitance (DPA)</strong> et des{' '}
                   <strong>mesures de sécurité</strong> appropriées encadrent ces traitements.
                 </p>
               </section>
@@ -256,17 +264,17 @@ export default function PolitiqueConfidentialite() {
                   6) Transferts hors Union européenne
                 </h2>
                 <p className="text-sablia-text-secondary mb-4">
-                  Certains prestataires sont établis en dehors de l'UE/EEE ou opèrent depuis des zones
-                  tierces (par ex. <strong>Twilio</strong> et <strong>Vercel</strong> – société
-                  américaine – ainsi que certains services de <strong>Google</strong>). Des{" "}
+                  Certains prestataires sont établis en dehors de l'UE/EEE ou opèrent depuis des
+                  zones tierces (par ex. <strong>Twilio</strong> et <strong>Vercel</strong> –
+                  société américaine – ainsi que certains services de <strong>Google</strong>). Des{' '}
                   <strong>transferts</strong> peuvent donc avoir lieu.
                 </p>
                 <p className="text-sablia-text-secondary mb-4">
-                  Lorsque cela se produit, nous nous assurons d'un <strong>mécanisme légal</strong>{" "}
-                  valide (par ex. <strong>décision d'adéquation</strong> ou{" "}
-                  <strong>Clauses Contractuelles Types</strong> de la Commission européenne), complété
-                  le cas échéant par des mesures additionnelles. Les détails (destinataires, pays,
-                  mécanisme) sont disponibles sur demande.
+                  Lorsque cela se produit, nous nous assurons d'un <strong>mécanisme légal</strong>{' '}
+                  valide (par ex. <strong>décision d'adéquation</strong> ou{' '}
+                  <strong>Clauses Contractuelles Types</strong> de la Commission européenne),
+                  complété le cas échéant par des mesures additionnelles. Les détails
+                  (destinataires, pays, mécanisme) sont disponibles sur demande.
                 </p>
                 <p className="text-sablia-text-secondary mb-3">
                   <strong>Notes spécifiques :</strong>
@@ -281,11 +289,11 @@ export default function PolitiqueConfidentialite() {
                     d'infrastructures globales ; mécanisme de transfert : CCT/équivalent.
                   </li>
                   <li>
-                    <strong>Google Drive (stockage)</strong> : infrastructures globales ; mécanisme de
-                    transfert : décision d'adéquation et/ou CCT selon service/configuration.
+                    <strong>Google Drive (stockage)</strong> : infrastructures globales ; mécanisme
+                    de transfert : décision d'adéquation et/ou CCT selon service/configuration.
                   </li>
                   <li>
-                    <strong>Supabase</strong> : projet hébergé en{" "}
+                    <strong>Supabase</strong> : projet hébergé en{' '}
                     <strong>UE – Irlande (AWS eu‑west‑1)</strong> ; pas de transfert hors UE pour le
                     stockage principal. En cas d'usage de services complémentaires impliquant un
                     transfert, nous appliquerons les <strong>CCT</strong> si nécessaire.
@@ -294,18 +302,20 @@ export default function PolitiqueConfidentialite() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">7) Cookies et traceurs</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
+                  7) Cookies et traceurs
+                </h2>
                 <p className="text-sablia-text-secondary mb-4">
-                  À ce jour, nous n'utilisons <strong>aucun outil d'analytics</strong> ni traceur non
-                  essentiel. Seuls des <strong>cookies/traceurs strictement nécessaires</strong> au
-                  fonctionnement, à la sécurité et à la répartition de charge (hébergement/CDN)
+                  À ce jour, nous n'utilisons <strong>aucun outil d'analytics</strong> ni traceur
+                  non essentiel. Seuls des <strong>cookies/traceurs strictement nécessaires</strong>{' '}
+                  au fonctionnement, à la sécurité et à la répartition de charge (hébergement/CDN)
                   peuvent être déposés.
                 </p>
                 <p className="text-sablia-text-secondary">
                   Si, à l'avenir, des traqueurs non essentiels (mesure d'audience, marketing) sont
                   déployés, nous <strong>recueillerons votre consentement</strong> via un bandeau
-                  conforme et offrirons un module « <strong>Préférences cookies</strong> » permettant
-                  l'acceptation, le refus et le retrait du consentement à tout moment.
+                  conforme et offrirons un module « <strong>Préférences cookies</strong> »
+                  permettant l'acceptation, le refus et le retrait du consentement à tout moment.
                 </p>
                 <p className="text-sablia-text-secondary mt-4">
                   Voir <strong>Annexe A – Registre des cookies</strong> pour l'état actuel.
@@ -318,7 +328,7 @@ export default function PolitiqueConfidentialite() {
                   Nous mettons en œuvre des mesures techniques et organisationnelles adaptées
                   (chiffrement en transit, contrôle des accès, journalisation, sauvegardes, principe
                   du moindre privilège). En cas d'<strong>incident de sécurité</strong> susceptible
-                  d'engendrer un risque pour les droits et libertés, nous suivons la procédure de{" "}
+                  d'engendrer un risque pour les droits et libertés, nous suivons la procédure de{' '}
                   <strong>notification</strong> aux autorités et aux personnes concernées lorsque
                   requis.
                 </p>
@@ -347,25 +357,29 @@ export default function PolitiqueConfidentialite() {
                     prospection ;
                   </li>
                   <li>
-                    <strong>Portabilité</strong> des données fournies lorsque le traitement est fondé
-                    sur le consentement ou le contrat et effectué à l'aide de procédés automatisés ;
+                    <strong>Portabilité</strong> des données fournies lorsque le traitement est
+                    fondé sur le consentement ou le contrat et effectué à l'aide de procédés
+                    automatisés ;
                   </li>
                   <li>
-                    <strong>Retrait du consentement</strong> à tout moment pour les traitements fondés
-                    sur celui‑ci.
+                    <strong>Retrait du consentement</strong> à tout moment pour les traitements
+                    fondés sur celui‑ci.
                   </li>
                 </ul>
                 <p className="text-sablia-text-secondary mt-4">
-                  Vous pouvez exercer ces droits en nous écrivant à{" "}
-                  <a href="mailto:brice@sablia.io" className="text-sablia-accent hover:text-sablia-accent-hover">
+                  Vous pouvez exercer ces droits en nous écrivant à{' '}
+                  <a
+                    href="mailto:brice@sablia.io"
+                    className="text-sablia-accent hover:text-sablia-accent-hover"
+                  >
                     brice@sablia.io
-                  </a>{" "}
-                  (ou via le formulaire dédié). En cas de doute sérieux, une preuve d'identité pourra
-                  être demandée.
+                  </a>{' '}
+                  (ou via le formulaire dédié). En cas de doute sérieux, une preuve d'identité
+                  pourra être demandée.
                 </p>
                 <p className="text-sablia-text-secondary mt-4">
-                  Vous disposez également du droit d'introduire une <strong>réclamation</strong>{" "}
-                  auprès de l'<strong>autorité de contrôle</strong> compétente, notamment la{" "}
+                  Vous disposez également du droit d'introduire une <strong>réclamation</strong>{' '}
+                  auprès de l'<strong>autorité de contrôle</strong> compétente, notamment la{' '}
                   <strong>CNIL</strong> (
                   <a
                     href="https://www.cnil.fr"
@@ -384,17 +398,18 @@ export default function PolitiqueConfidentialite() {
                   10) Prise de décision automatisée
                 </h2>
                 <p className="text-sablia-text-secondary">
-                  Nous ne réalisons pas de profilage ni de décisions produisant des effets juridiques
-                  fondées uniquement sur un traitement automatisé, sauf information contraire
-                  explicite et consentement lorsque requis.
+                  Nous ne réalisons pas de profilage ni de décisions produisant des effets
+                  juridiques fondées uniquement sur un traitement automatisé, sauf information
+                  contraire explicite et consentement lorsque requis.
                 </p>
               </section>
 
               <section className="mb-8">
                 <h2 className="text-2xl font-semibold mb-4 text-sablia-text">11) Liens externes</h2>
                 <p className="text-sablia-text-secondary">
-                  Le Site peut contenir des liens vers des sites tiers. Nous n'exerçons aucun contrôle
-                  sur leurs pratiques de confidentialité ; veuillez consulter leurs politiques.
+                  Le Site peut contenir des liens vers des sites tiers. Nous n'exerçons aucun
+                  contrôle sur leurs pratiques de confidentialité ; veuillez consulter leurs
+                  politiques.
                 </p>
               </section>
 
@@ -419,10 +434,14 @@ export default function PolitiqueConfidentialite() {
                         <th className="px-4 py-3 text-left border-b border-gray-200">
                           Nom du cookie
                         </th>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">Fournisseur</th>
+                        <th className="px-4 py-3 text-left border-b border-gray-200">
+                          Fournisseur
+                        </th>
                         <th className="px-4 py-3 text-left border-b border-gray-200">Finalité</th>
                         <th className="px-4 py-3 text-left border-b border-gray-200">Durée</th>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">Base légale</th>
+                        <th className="px-4 py-3 text-left border-b border-gray-200">
+                          Base légale
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -446,8 +465,9 @@ export default function PolitiqueConfidentialite() {
                   </table>
                 </div>
                 <p className="text-sablia-text-secondary mt-4">
-                  <strong>Gestion des préférences</strong> : pas de bandeau à ce jour (aucun traqueur
-                  non essentiel). Il sera activé si/when des cookies non essentiels sont déployés.
+                  <strong>Gestion des préférences</strong> : pas de bandeau à ce jour (aucun
+                  traqueur non essentiel). Il sera activé si/when des cookies non essentiels sont
+                  déployés.
                 </p>
               </section>
 
@@ -459,7 +479,9 @@ export default function PolitiqueConfidentialite() {
                   <table className="min-w-full text-sm text-sablia-text-secondary border border-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">Fournisseur</th>
+                        <th className="px-4 py-3 text-left border-b border-gray-200">
+                          Fournisseur
+                        </th>
                         <th className="px-4 py-3 text-left border-b border-gray-200">Service</th>
                         <th className="px-4 py-3 text-left border-b border-gray-200">
                           Localisation des données
@@ -526,10 +548,12 @@ export default function PolitiqueConfidentialite() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">Annexe C – Coordonnées</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
+                  Annexe C – Coordonnées
+                </h2>
                 <ul className="text-sablia-text-secondary space-y-2">
                   <li>
-                    <strong>Contact confidentialité</strong> :{" "}
+                    <strong>Contact confidentialité</strong> :{' '}
                     <a
                       href="mailto:brice@sablia.io"
                       className="text-sablia-accent hover:text-sablia-accent-hover"
@@ -541,7 +565,7 @@ export default function PolitiqueConfidentialite() {
                     <strong>Contact DPO (si nommé)</strong> : non désigné
                   </li>
                   <li>
-                    <strong>Autorité de contrôle</strong> : CNIL –{" "}
+                    <strong>Autorité de contrôle</strong> : CNIL –{' '}
                     <a
                       href="https://www.cnil.fr"
                       target="_blank"
@@ -560,5 +584,5 @@ export default function PolitiqueConfidentialite() {
         </div>
       </motion.div>
     </>
-  );
+  )
 }

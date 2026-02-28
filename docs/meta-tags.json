@@ -264,7 +264,12 @@
     "/faq": {
       "title": "FAQ - Questions fréquentes sur l'automatisation | Sablia",
       "description": "Toutes les réponses à vos questions sur l'automatisation d'entreprise avec Sablia. Outils, délais, ROI, support, sécurité et tarification.",
-      "keywords": ["FAQ automatisation", "questions fréquentes n8n", "aide Make.com", "automatisation PME FAQ"],
+      "keywords": [
+        "FAQ automatisation",
+        "questions fréquentes n8n",
+        "aide Make.com",
+        "automatisation PME FAQ"
+      ],
       "canonical": "https://sablia.io/faq",
       "openGraph": {
         "type": "website",
@@ -283,7 +288,12 @@
     "/cas-clients": {
       "title": "Cas clients - Exemples de transformations | Sablia",
       "description": "Découvrez comment nos clients ont transformé leur entreprise grâce à l'automatisation. Études de cas e-commerce, conseil et associations.",
-      "keywords": ["cas clients automatisation", "études de cas n8n", "témoignages Make.com", "transformation digitale PME"],
+      "keywords": [
+        "cas clients automatisation",
+        "études de cas n8n",
+        "témoignages Make.com",
+        "transformation digitale PME"
+      ],
       "canonical": "https://sablia.io/cas-clients",
       "openGraph": {
         "type": "website",

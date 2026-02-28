@@ -1,21 +1,20 @@
-import { lazy, Suspense } from "react";
-import { motion } from "framer-motion";
-import Footer from "@/components/Footer";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
-
-import Navigation from "@/components/landing/Navigation";
-import HeroSection from "@/components/landing/HeroSection";
-import TestimonialsSection from "@/components/landing/TestimonialsSection";
-import LogosCloud from "@/components/landing/LogosCloud";
-import TransformationSection from "@/components/landing/TransformationSection";
-import ThreeStepProcess from "@/components/landing/ThreeStepProcess";
-import PricingSection from "@/components/landing/PricingSection";
-import SEO from "@/components/SEO";
+import { motion } from 'framer-motion'
+import { lazy, Suspense } from 'react'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
+import Footer from '@/components/Footer'
+import HeroSection from '@/components/landing/HeroSection'
+import LogosCloud from '@/components/landing/LogosCloud'
+import Navigation from '@/components/landing/Navigation'
+import PricingSection from '@/components/landing/PricingSection'
+import TestimonialsSection from '@/components/landing/TestimonialsSection'
+import ThreeStepProcess from '@/components/landing/ThreeStepProcess'
+import TransformationSection from '@/components/landing/TransformationSection'
+import SEO from '@/components/SEO'
 
 // Lazy load below-fold sections for better LCP
-const CalculatorROI = lazy(() => import("@/components/landing/CalculatorROI"));
-const ContactFormSection = lazy(() => import("@/components/landing/ContactFormSection"));
-const FaqSection = lazy(() => import("@/components/landing/FaqSection"));
+const CalculatorROI = lazy(() => import('@/components/landing/CalculatorROI'))
+const ContactFormSection = lazy(() => import('@/components/landing/ContactFormSection'))
+const FaqSection = lazy(() => import('@/components/landing/FaqSection'))
 
 export default function Landing() {
   return (
@@ -75,5 +74,5 @@ export default function Landing() {
         <Footer />
       </motion.div>
     </>
-  );
+  )
 }

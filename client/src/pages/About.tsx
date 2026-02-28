@@ -1,70 +1,66 @@
-import { useEffect } from "react";
-import Footer from "@/components/Footer";
-import Navigation from "@/components/landing/Navigation";
-import ScrollToTop from "@/components/ScrollToTop";
-import SEO from "@/components/SEO";
-import { Helmet } from "react-helmet-async";
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion'
+import { useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
+import Footer from '@/components/Footer'
+import Navigation from '@/components/landing/Navigation'
+import ScrollToTop from '@/components/ScrollToTop'
+import SEO from '@/components/SEO'
 
 // ============================================
 // Person Schema (JSON-LD) for rich snippets
 // ============================================
 
 const personSchema = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Brice Gachadoat",
-  "url": "https://sablia.io/about",
-  "image": "https://sablia.io/brice-gachadoat.jpg",
-  "jobTitle": "Expert en Automatisation et Intelligence Artificielle",
-  "description": "Ingénieur informatique avec plus de 10 ans d'expérience dans l'IT, spécialisé en automatisation business avec n8n et Make.com.",
-  "worksFor": {
-    "@type": "Organization",
-    "name": "Sablia",
-    "url": "https://sablia.io",
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Brice Gachadoat',
+  url: 'https://sablia.io/about',
+  image: 'https://sablia.io/brice-gachadoat.jpg',
+  jobTitle: 'Expert en Automatisation et Intelligence Artificielle',
+  description:
+    "Ingénieur informatique avec plus de 10 ans d'expérience dans l'IT, spécialisé en automatisation business avec n8n et Make.com.",
+  worksFor: {
+    '@type': 'Organization',
+    name: 'Sablia',
+    url: 'https://sablia.io',
   },
-  "knowsAbout": [
-    "Automatisation business",
-    "n8n",
-    "Make.com",
-    "Intelligence Artificielle",
-    "Transformation digitale",
-    "Workflows",
-    "ChatGPT",
-    "Notion",
-    "Airtable",
-    "Supabase",
+  knowsAbout: [
+    'Automatisation business',
+    'n8n',
+    'Make.com',
+    'Intelligence Artificielle',
+    'Transformation digitale',
+    'Workflows',
+    'ChatGPT',
+    'Notion',
+    'Airtable',
+    'Supabase',
   ],
-  "alumniOf": [
+  alumniOf: [
     {
-      "@type": "Organization",
-      "name": "MeltOne Advisory",
+      '@type': 'Organization',
+      name: 'MeltOne Advisory',
     },
     {
-      "@type": "Organization",
-      "name": "LVMH",
+      '@type': 'Organization',
+      name: 'LVMH',
     },
   ],
-  "sameAs": [
-    "https://linkedin.com/in/brice-gachadoat",
-    "https://calendly.com/brice-gachadoat",
-  ],
-};
+  sameAs: ['https://linkedin.com/in/brice-gachadoat', 'https://calendly.com/brice-gachadoat'],
+}
 
 export default function About() {
   useEffect(() => {
     // Scroll to top when the page loads
-    window.scrollTo(0, 0);
-  }, []);
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <>
       <SEO page="/about" />
       {/* Person Schema JSON-LD */}
       <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify(personSchema)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(personSchema)}</script>
       </Helmet>
       <motion.div
         className="min-h-screen bg-white"
@@ -88,8 +84,8 @@ export default function About() {
               <p className="text-sablia-text-secondary mb-6">
                 Je suis <strong>Brice Gachadoat</strong>, expert en automatisation et intelligence
                 artificielle. Vous êtes probablement ici parce que vous passez trop de temps sur des
-                tâches répétitives ou que vous souhaitez tirer parti des dernières avancées en IA pour
-                votre activité. Bonne nouvelle, c'est exactement ma spécialité.
+                tâches répétitives ou que vous souhaitez tirer parti des dernières avancées en IA
+                pour votre activité. Bonne nouvelle, c'est exactement ma spécialité.
               </p>
 
               <p className="text-sablia-text-secondary mb-6">
@@ -101,15 +97,15 @@ export default function About() {
               <h3 className="text-2xl font-semibold mb-4 text-sablia-text">Mon déclic personnel</h3>
 
               <p className="text-sablia-text-secondary mb-6">
-                Tout a changé quand j'ai voulu aider ma femme, nutritionniste, à simplifier la gestion
-                chronophage de ses dossiers et rendez-vous clients. Ma frustration de ne pas pouvoir
-                l'assister efficacement malgré mes compétences techniques s'est envolée lorsque j'ai
-                découvert les plateformes d'automatisation comme Make.com et n8n.
+                Tout a changé quand j'ai voulu aider ma femme, nutritionniste, à simplifier la
+                gestion chronophage de ses dossiers et rendez-vous clients. Ma frustration de ne pas
+                pouvoir l'assister efficacement malgré mes compétences techniques s'est envolée
+                lorsque j'ai découvert les plateformes d'automatisation comme Make.com et n8n.
               </p>
 
               <p className="text-sablia-text-secondary mb-6">
                 Lorsque ChatGPT a été mis à disposition du public, j'ai immédiatement compris le
-                potentiel immense de cette technologie et commencé à l'intégrer dans mes solutions.{" "}
+                potentiel immense de cette technologie et commencé à l'intégrer dans mes solutions.{' '}
                 <strong>Résultat concret</strong> : ma femme a réduit de 90% le temps consacré à la
                 génération de menus et de 70% ses tâches administratives. Elle a pu accueillir 60%
                 plus de clientes sans augmentation significative de sa charge de travail.
@@ -127,9 +123,9 @@ export default function About() {
               <ul className="text-sablia-text-secondary mb-6 space-y-3">
                 <li className="flex items-start">
                   <span>
-                    <strong>Automatisation des tâches chronophages</strong> — Comme la transformation
-                    automatique de CV au format de votre entreprise, réduisant un travail de 30
-                    minutes à quelques secondes
+                    <strong>Automatisation des tâches chronophages</strong> — Comme la
+                    transformation automatique de CV au format de votre entreprise, réduisant un
+                    travail de 30 minutes à quelques secondes
                   </span>
                 </li>
                 <li className="flex items-start">
@@ -142,31 +138,33 @@ export default function About() {
                 <li className="flex items-start">
                   <span>
                     <strong>Assistants IA personnalisés</strong> — À l'image de l'assistant que j'ai
-                    développé pour gérer mes emails, contacts et planifier mes réunions, libérant plus
-                    de 10 heures par semaine
+                    développé pour gérer mes emails, contacts et planifier mes réunions, libérant
+                    plus de 10 heures par semaine
                   </span>
                 </li>
                 <li className="flex items-start">
                   <span>
-                    <strong>Formations sur mesure</strong> — J'accompagne vos équipes dans la maîtrise
-                    des solutions mises en place et propose des formations dédiées aux bonnes
-                    pratiques de l'IA pour garantir leur autonomie et maximiser votre retour sur
-                    investissement
+                    <strong>Formations sur mesure</strong> — J'accompagne vos équipes dans la
+                    maîtrise des solutions mises en place et propose des formations dédiées aux
+                    bonnes pratiques de l'IA pour garantir leur autonomie et maximiser votre retour
+                    sur investissement
                   </span>
                 </li>
               </ul>
 
-              <h3 className="text-2xl font-semibold mb-4 text-sablia-text">Mon expertise technique</h3>
+              <h3 className="text-2xl font-semibold mb-4 text-sablia-text">
+                Mon expertise technique
+              </h3>
 
               <p className="text-sablia-text-secondary mb-6">
                 Je développe des automatisations principalement sur n8n, avec des compétences
-                complémentaires sur Make.com. J'intègre efficacement des outils comme Notion, Airtable
-                et Supabase pour créer des écosystèmes connectés et performants.
+                complémentaires sur Make.com. J'intègre efficacement des outils comme Notion,
+                Airtable et Supabase pour créer des écosystèmes connectés et performants.
               </p>
 
               <p className="text-sablia-text-secondary mb-6">
-                J'ai accompagné avec succès des clients dans les secteurs du conseil, du marketing, de
-                la formation, de l'organisation d'événements et des ESN, ainsi que de nombreux
+                J'ai accompagné avec succès des clients dans les secteurs du conseil, du marketing,
+                de la formation, de l'organisation d'événements et des ESN, ainsi que de nombreux
                 entrepreneurs indépendants.
               </p>
 
@@ -177,9 +175,9 @@ export default function About() {
               <ul className="text-sablia-text-secondary mb-6 space-y-3">
                 <li className="flex items-start">
                   <span>
-                    <strong>Expérience confirmée</strong> : 10+ ans en gestion de projets IT, Data et
-                    automatisation, dont un parcours au sein du prestigieux cabinet{" "}
-                    <strong>MeltOne Advisory</strong> et du groupe de luxe mondial{" "}
+                    <strong>Expérience confirmée</strong> : 10+ ans en gestion de projets IT, Data
+                    et automatisation, dont un parcours au sein du prestigieux cabinet{' '}
+                    <strong>MeltOne Advisory</strong> et du groupe de luxe mondial{' '}
                     <strong>LVMH</strong>
                   </span>
                 </li>
@@ -190,8 +188,8 @@ export default function About() {
                 </li>
                 <li className="flex items-start">
                   <span>
-                    <strong>Relation durable</strong> : je vous accompagne au-delà de la mise en place
-                    technique, en formant vos équipes
+                    <strong>Relation durable</strong> : je vous accompagne au-delà de la mise en
+                    place technique, en formant vos équipes
                   </span>
                 </li>
               </ul>
@@ -199,9 +197,9 @@ export default function About() {
               <h3 className="text-2xl font-semibold mb-4 text-sablia-text">Passons à l'action</h3>
 
               <p className="text-sablia-text-secondary mb-6">
-                Vous souhaitez retrouver du temps pour vous concentrer sur l'essentiel de votre métier
-                ? <strong>Réservez un appel gratuit de 30 minutes</strong> pour identifier ensemble
-                les automatisations qui transformeront votre business. Sans engagement.
+                Vous souhaitez retrouver du temps pour vous concentrer sur l'essentiel de votre
+                métier ? <strong>Réservez un appel gratuit de 30 minutes</strong> pour identifier
+                ensemble les automatisations qui transformeront votre business. Sans engagement.
               </p>
 
               <div className="mt-12 text-center">
@@ -221,5 +219,5 @@ export default function About() {
         </div>
       </motion.div>
     </>
-  );
+  )
 }

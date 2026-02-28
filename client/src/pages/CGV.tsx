@@ -1,14 +1,14 @@
-import { useEffect } from "react";
-import Footer from "@/components/Footer";
-import Navigation from "@/components/landing/Navigation";
-import ScrollToTop from "@/components/ScrollToTop";
-import SEO from "@/components/SEO";
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion'
+import { useEffect } from 'react'
+import Footer from '@/components/Footer'
+import Navigation from '@/components/landing/Navigation'
+import ScrollToTop from '@/components/ScrollToTop'
+import SEO from '@/components/SEO'
 
 export default function CGV() {
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <>
@@ -24,14 +24,20 @@ export default function CGV() {
           <Navigation />
           <main className="container mx-auto px-4 py-16">
             <div className="flex flex-col items-center mb-10 mt-12">
-              <h1 className="text-4xl font-bold text-center text-sablia-text">Conditions Générales de Vente (CGV)</h1>
-              <p className="text-sablia-text-tertiary mt-2">Dernière mise à jour : 28 octobre 2025</p>
+              <h1 className="text-4xl font-bold text-center text-sablia-text">
+                Conditions Générales de Vente (CGV)
+              </h1>
+              <p className="text-sablia-text-tertiary mt-2">
+                Dernière mise à jour : 28 octobre 2025
+              </p>
             </div>
 
             <div className="max-w-4xl mx-auto prose prose-lg">
               {/* Informations légales */}
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">INFORMATIONS LÉGALES</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
+                  INFORMATIONS LÉGALES
+                </h2>
                 <div className="text-sablia-text-secondary space-y-2">
                   <p>
                     <strong>Entreprise :</strong> GACHADOAT Brice, entrepreneur individuel
@@ -55,7 +61,7 @@ export default function CGV() {
                     <strong>Site web :</strong> sablia.io
                   </p>
                   <p>
-                    <strong>Email :</strong>{" "}
+                    <strong>Email :</strong>{' '}
                     <a
                       href="mailto:brice@sablia.io"
                       className="text-sablia-accent hover:text-sablia-accent-hover"
@@ -114,17 +120,19 @@ export default function CGV() {
                   </ul>
                 </div>
 
-                <h3 className="text-xl font-semibold mb-3 text-sablia-text">1.2 Champ d'application</h3>
+                <h3 className="text-xl font-semibold mb-3 text-sablia-text">
+                  1.2 Champ d'application
+                </h3>
                 <p className="text-sablia-text-secondary mb-4">
-                  Les présentes CGV s'appliquent exclusivement aux relations commerciales entre Sablia
-                  et ses clients professionnels (B2B) ou consommateurs (B2C), à l'exclusion de toute
-                  autre condition, notamment celles du client.
+                  Les présentes CGV s'appliquent exclusivement aux relations commerciales entre
+                  Sablia et ses clients professionnels (B2B) ou consommateurs (B2C), à l'exclusion
+                  de toute autre condition, notamment celles du client.
                 </p>
 
                 <h3 className="text-xl font-semibold mb-3 text-sablia-text">1.3 Acceptation</h3>
                 <p className="text-sablia-text-secondary">
-                  La validation d'une commande ou la signature d'un devis implique l'acceptation sans
-                  réserve des présentes CGV par le client.
+                  La validation d'une commande ou la signature d'un devis implique l'acceptation
+                  sans réserve des présentes CGV par le client.
                 </p>
               </section>
 
@@ -134,8 +142,12 @@ export default function CGV() {
                   ARTICLE 2 - COMMANDES ET CONCLUSION DU CONTRAT
                 </h2>
 
-                <h3 className="text-xl font-semibold mb-3 text-sablia-text">2.1 Modalités de commande</h3>
-                <p className="text-sablia-text-secondary mb-2">Les commandes peuvent être passées par :</p>
+                <h3 className="text-xl font-semibold mb-3 text-sablia-text">
+                  2.1 Modalités de commande
+                </h3>
+                <p className="text-sablia-text-secondary mb-2">
+                  Les commandes peuvent être passées par :
+                </p>
                 <ul className="text-sablia-text-secondary list-disc ml-6 space-y-1 mb-4">
                   <li>Email (brice@sablia.io)</li>
                   <li>Formulaire de contact sur sablia.io</li>
@@ -162,8 +174,8 @@ export default function CGV() {
                   2.3 Confirmation de commande
                 </h3>
                 <p className="text-sablia-text-secondary">
-                  Sablia confirme la commande par email dans un délai de 48 heures ouvrées. Le contrat
-                  est définitivement formé à la réception de cette confirmation.
+                  Sablia confirme la commande par email dans un délai de 48 heures ouvrées. Le
+                  contrat est définitivement formé à la réception de cette confirmation.
                 </p>
               </section>
 
@@ -182,7 +194,9 @@ export default function CGV() {
                   <li>Ceux mentionnés dans le devis accepté par le client</li>
                 </ul>
 
-                <h3 className="text-xl font-semibold mb-3 text-sablia-text">3.2 Révision des prix</h3>
+                <h3 className="text-xl font-semibold mb-3 text-sablia-text">
+                  3.2 Révision des prix
+                </h3>
                 <p className="text-sablia-text-secondary mb-2">
                   <strong>Pour les prestations ponctuelles :</strong>
                 </p>
@@ -219,7 +233,9 @@ export default function CGV() {
                   ARTICLE 4 - MODALITÉS DE PAIEMENT
                 </h2>
 
-                <h3 className="text-xl font-semibold mb-3 text-sablia-text">4.1 Prestations ponctuelles</h3>
+                <h3 className="text-xl font-semibold mb-3 text-sablia-text">
+                  4.1 Prestations ponctuelles
+                </h3>
                 <p className="text-sablia-text-secondary mb-2">
                   Le paiement s'effectue selon l'une des modalités suivantes, précisée au devis :
                 </p>
@@ -236,11 +252,13 @@ export default function CGV() {
                   </li>
                 </ul>
 
-                <h3 className="text-xl font-semibold mb-3 text-sablia-text">4.2 Abonnements mensuels</h3>
+                <h3 className="text-xl font-semibold mb-3 text-sablia-text">
+                  4.2 Abonnements mensuels
+                </h3>
 
                 <p className="text-sablia-text-secondary font-semibold mb-2">A) Principe général</p>
                 <p className="text-sablia-text-secondary mb-4">
-                  Les abonnements mensuels sont facturés <strong>d'avance</strong>, le{" "}
+                  Les abonnements mensuels sont facturés <strong>d'avance</strong>, le{' '}
                   <strong>1er jour de chaque mois</strong> pour le mois en cours.
                 </p>
 
@@ -253,16 +271,16 @@ export default function CGV() {
                     vocal, accès plateforme)
                   </li>
                   <li>
-                    <strong>Partie variable</strong> (si applicable) : consommation à l'usage (volume
-                    d'appels, SMS, API calls, etc.)
+                    <strong>Partie variable</strong> (si applicable) : consommation à l'usage
+                    (volume d'appels, SMS, API calls, etc.)
                   </li>
                 </ul>
 
                 <p className="text-sablia-text-secondary font-semibold mb-2">B) Facturation</p>
                 <ul className="text-sablia-text-secondary list-disc ml-6 space-y-1 mb-4">
                   <li>
-                    <strong>Partie fixe :</strong> facturée le 1er du mois (période du 1er au dernier
-                    jour du mois)
+                    <strong>Partie fixe :</strong> facturée le 1er du mois (période du 1er au
+                    dernier jour du mois)
                   </li>
                   <li>
                     <strong>Partie variable :</strong> facturée le 1er du mois suivant, à terme échu
@@ -291,20 +309,26 @@ export default function CGV() {
 
                 <p className="text-sablia-text-secondary font-semibold mb-2">D) Dernier mois</p>
                 <p className="text-sablia-text-secondary mb-4">
-                  En cas de résiliation, la partie fixe du dernier mois est due intégralement (pas de
-                  remboursement au prorata). La partie variable est facturée jusqu'à la date effective
-                  de résiliation.
+                  En cas de résiliation, la partie fixe du dernier mois est due intégralement (pas
+                  de remboursement au prorata). La partie variable est facturée jusqu'à la date
+                  effective de résiliation.
                 </p>
 
-                <h3 className="text-xl font-semibold mb-3 text-sablia-text">4.3 Moyens de paiement</h3>
-                <p className="text-sablia-text-secondary mb-2">Les moyens de paiement acceptés sont :</p>
+                <h3 className="text-xl font-semibold mb-3 text-sablia-text">
+                  4.3 Moyens de paiement
+                </h3>
+                <p className="text-sablia-text-secondary mb-2">
+                  Les moyens de paiement acceptés sont :
+                </p>
                 <ul className="text-sablia-text-secondary list-disc ml-6 space-y-1 mb-4">
                   <li>Virement bancaire (privilégié)</li>
                   <li>Prélèvement SEPA (pour les abonnements récurrents)</li>
                   <li>Carte bancaire (via solution de paiement sécurisée)</li>
                 </ul>
 
-                <h3 className="text-xl font-semibold mb-3 text-sablia-text">4.4 Échéances de paiement</h3>
+                <h3 className="text-xl font-semibold mb-3 text-sablia-text">
+                  4.4 Échéances de paiement
+                </h3>
                 <p className="text-sablia-text-secondary mb-2">
                   Sauf mention contraire au devis ou à la facture :
                 </p>
@@ -319,24 +343,27 @@ export default function CGV() {
                   </li>
                 </ul>
 
-                <h3 className="text-xl font-semibold mb-3 text-sablia-text">4.5 Retard de paiement</h3>
+                <h3 className="text-xl font-semibold mb-3 text-sablia-text">
+                  4.5 Retard de paiement
+                </h3>
                 <p className="text-sablia-text-secondary mb-2">
-                  En cas de retard de paiement, et conformément aux articles L441-6 et D441-5 du Code
-                  de Commerce :
+                  En cas de retard de paiement, et conformément aux articles L441-6 et D441-5 du
+                  Code de Commerce :
                 </p>
 
                 <div className="text-sablia-text-secondary mb-4">
                   <p className="font-semibold mb-2">A) Pénalités de retard</p>
                   <p className="mb-4">
-                    Des pénalités de retard égales à{" "}
+                    Des pénalités de retard égales à{' '}
                     <strong>trois fois le taux d'intérêt légal en vigueur</strong> seront appliquées
-                    de plein droit, sans qu'un rappel soit nécessaire, dès le premier jour de retard.
+                    de plein droit, sans qu'un rappel soit nécessaire, dès le premier jour de
+                    retard.
                   </p>
 
                   <p className="font-semibold mb-2">B) Indemnité forfaitaire</p>
                   <p className="mb-4">
-                    Une indemnité forfaitaire de <strong>40 euros</strong> pour frais de recouvrement
-                    sera également due.
+                    Une indemnité forfaitaire de <strong>40 euros</strong> pour frais de
+                    recouvrement sera également due.
                   </p>
 
                   <p className="font-semibold mb-2">C) Indemnisation complémentaire</p>
@@ -388,14 +415,18 @@ export default function CGV() {
                 <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
                   ARTICLE 7 - DROIT DE RÉTRACTATION
                 </h2>
-                <h3 className="text-xl font-semibold mb-3 text-sablia-text">7.1 Consommateurs (B2C)</h3>
+                <h3 className="text-xl font-semibold mb-3 text-sablia-text">
+                  7.1 Consommateurs (B2C)
+                </h3>
                 <p className="text-sablia-text-secondary mb-4">
-                  Conformément à l'article L221-18 du Code de la consommation, le consommateur dispose
-                  d'un délai de 14 jours pour exercer son droit de rétractation. Exceptions :
-                  prestations pleinement exécutées avec accord préalable exprès.
+                  Conformément à l'article L221-18 du Code de la consommation, le consommateur
+                  dispose d'un délai de 14 jours pour exercer son droit de rétractation. Exceptions
+                  : prestations pleinement exécutées avec accord préalable exprès.
                 </p>
 
-                <h3 className="text-xl font-semibold mb-3 text-sablia-text">7.2 Professionnels (B2B)</h3>
+                <h3 className="text-xl font-semibold mb-3 text-sablia-text">
+                  7.2 Professionnels (B2B)
+                </h3>
                 <p className="text-sablia-text-secondary">
                   Il n'existe pas de droit de rétractation pour les professionnels. La commande est
                   ferme et définitive dès sa validation.
@@ -421,28 +452,31 @@ export default function CGV() {
                   ARTICLE 9 - PROTECTION DES DONNÉES PERSONNELLES (RGPD)
                 </h2>
                 <p className="text-sablia-text-secondary mb-4">
-                  La collecte et le traitement des données personnelles sont régis par la{" "}
+                  La collecte et le traitement des données personnelles sont régis par la{' '}
                   <a
                     href="/politique-confidentialite"
                     className="text-sablia-accent hover:text-sablia-accent-hover"
                   >
                     Politique de Confidentialité
-                  </a>{" "}
+                  </a>{' '}
                   de Sablia.
                 </p>
                 <p className="text-sablia-text-secondary mb-4">
                   Sablia agit en qualité de Responsable de traitement pour les données clients. Pour
-                  les services techniques (agents vocaux), Sablia agit en qualité de Sous-traitant. Un
-                  DPA (Data Processing Agreement) est conclu en annexe.
+                  les services techniques (agents vocaux), Sablia agit en qualité de Sous-traitant.
+                  Un DPA (Data Processing Agreement) est conclu en annexe.
                 </p>
                 <p className="text-sablia-text-secondary mb-4">
-                  Contact pour exercer vos droits :{" "}
-                  <a href="mailto:brice@sablia.io" className="text-sablia-accent hover:text-sablia-accent-hover">
+                  Contact pour exercer vos droits :{' '}
+                  <a
+                    href="mailto:brice@sablia.io"
+                    className="text-sablia-accent hover:text-sablia-accent-hover"
+                  >
                     brice@sablia.io
                   </a>
                 </p>
                 <p className="text-sablia-text-secondary">
-                  Réclamation possible auprès de la CNIL :{" "}
+                  Réclamation possible auprès de la CNIL :{' '}
                   <a
                     href="https://www.cnil.fr"
                     target="_blank"
@@ -460,9 +494,10 @@ export default function CGV() {
                   ARTICLE 10 - CONFIDENTIALITÉ
                 </h2>
                 <p className="text-sablia-text-secondary mb-4">
-                  Chaque partie s'engage à garder strictement confidentielles toutes les informations
-                  échangées et à ne pas les divulguer sans autorisation préalable écrite. L'obligation
-                  de confidentialité se poursuit pendant 2 ans après le terme du contrat.
+                  Chaque partie s'engage à garder strictement confidentielles toutes les
+                  informations échangées et à ne pas les divulguer sans autorisation préalable
+                  écrite. L'obligation de confidentialité se poursuit pendant 2 ans après le terme
+                  du contrat.
                 </p>
               </section>
 
@@ -484,7 +519,9 @@ export default function CGV() {
 
               {/* Article 12 */}
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">ARTICLE 12 - FORCE MAJEURE</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
+                  ARTICLE 12 - FORCE MAJEURE
+                </h2>
                 <p className="text-sablia-text-secondary mb-4">
                   En cas de force majeure (catastrophes naturelles, guerres, pannes généralisées,
                   cyberattaques majeures), les obligations sont suspendues sans indemnité. Si
@@ -499,8 +536,11 @@ export default function CGV() {
                 </h2>
                 <p className="text-sablia-text-secondary">
                   Sauf opposition expresse, Sablia est autorisée à mentionner le nom et le logo du
-                  client comme référence commerciale. Opposition possible à tout moment par email à{" "}
-                  <a href="mailto:brice@sablia.io" className="text-sablia-accent hover:text-sablia-accent-hover">
+                  client comme référence commerciale. Opposition possible à tout moment par email à{' '}
+                  <a
+                    href="mailto:brice@sablia.io"
+                    className="text-sablia-accent hover:text-sablia-accent-hover"
+                  >
                     brice@sablia.io
                   </a>
                   .
@@ -526,7 +566,7 @@ export default function CGV() {
                 </h3>
                 <p className="text-sablia-text-secondary mb-4">
                   En cas de litige avec un consommateur, celui-ci peut recourir gratuitement à un
-                  médiateur de la consommation. Plateforme européenne :{" "}
+                  médiateur de la consommation. Plateforme européenne :{' '}
                   <a
                     href="https://ec.europa.eu/consumers/odr/"
                     target="_blank"
@@ -569,8 +609,8 @@ export default function CGV() {
                   ARTICLE 16 - INTÉGRALITÉ DE L'ACCORD
                 </h2>
                 <p className="text-sablia-text-secondary">
-                  Les CGV, le devis et le contrat d'abonnement constituent l'intégralité de l'accord.
-                  Ordre de priorité : 1) Contrat particulier, 2) Devis, 3) DPA, 4) CGV.
+                  Les CGV, le devis et le contrat d'abonnement constituent l'intégralité de
+                  l'accord. Ordre de priorité : 1) Contrat particulier, 2) Devis, 3) DPA, 4) CGV.
                 </p>
               </section>
 
@@ -599,14 +639,18 @@ export default function CGV() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">ARTICLE 19 - TOLÉRANCE</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
+                  ARTICLE 19 - TOLÉRANCE
+                </h2>
                 <p className="text-sablia-text-secondary">
                   Le fait de ne pas se prévaloir d'un manquement ne constitue pas une renonciation.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">ARTICLE 20 - NOTIFICATIONS</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
+                  ARTICLE 20 - NOTIFICATIONS
+                </h2>
                 <p className="text-sablia-text-secondary mb-2">
                   Toute notification doit être effectuée par écrit :
                 </p>
@@ -615,10 +659,13 @@ export default function CGV() {
                   <li>Lettre recommandée avec accusé de réception</li>
                 </ul>
                 <p className="text-sablia-text-secondary">
-                  <strong>Sablia :</strong>{" "}
-                  <a href="mailto:brice@sablia.io" className="text-sablia-accent hover:text-sablia-accent-hover">
+                  <strong>Sablia :</strong>{' '}
+                  <a
+                    href="mailto:brice@sablia.io"
+                    className="text-sablia-accent hover:text-sablia-accent-hover"
+                  >
                     brice@sablia.io
-                  </a>{" "}
+                  </a>{' '}
                   / 60 rue François Ier, 75008 Paris
                 </p>
               </section>
@@ -636,7 +683,9 @@ export default function CGV() {
               {/* Annexes */}
               <section className="mb-8">
                 <h2 className="text-2xl font-semibold mb-4 text-sablia-text">ANNEXES</h2>
-                <p className="text-sablia-text-secondary mb-2">Les CGV peuvent être complétées par :</p>
+                <p className="text-sablia-text-secondary mb-2">
+                  Les CGV peuvent être complétées par :
+                </p>
                 <ul className="text-sablia-text-secondary list-disc ml-6 space-y-1">
                   <li>
                     <strong>Annexe 1 :</strong> DPA (Data Processing Agreement)
@@ -664,8 +713,11 @@ export default function CGV() {
                   </strong>
                 </p>
                 <p className="text-sablia-text-secondary">
-                  Email :{" "}
-                  <a href="mailto:brice@sablia.io" className="text-sablia-accent hover:text-sablia-accent-hover">
+                  Email :{' '}
+                  <a
+                    href="mailto:brice@sablia.io"
+                    className="text-sablia-accent hover:text-sablia-accent-hover"
+                  >
                     brice@sablia.io
                   </a>
                   <br />
@@ -682,5 +734,5 @@ export default function CGV() {
         </div>
       </motion.div>
     </>
-  );
+  )
 }

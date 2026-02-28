@@ -1,153 +1,154 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
-import { format } from "date-fns";
-import { fr } from "date-fns/locale";
-import { Card, CardContent } from "@/components/ui/card";
-import { Slider } from "@/components/ui/slider";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { format } from 'date-fns'
+import { fr } from 'date-fns/locale'
+import { motion } from 'framer-motion'
 import {
   Calculator,
-  Clock,
   Calendar,
-  Users,
+  CalendarDays,
+  Clock,
   Euro,
-  TrendingUp,
   Info,
   Sparkles,
-  CalendarDays,
-} from "lucide-react";
+  TrendingUp,
+  Users,
+} from 'lucide-react'
+import type React from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Slider } from '@/components/ui/slider'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import {
   calculateRoi,
-  Frequency,
-  SalaryMode,
   DEFAULT_MONTHLY_NET_SALARY,
   DEV_DAYS,
-} from "@/utils/roi";
+  type Frequency,
+  type SalaryMode,
+} from '@/utils/roi'
 
 // Convertit les heures en format lisible (ex: 1.5h -> 1h 30min)
 const formatHours = (hours: number) => {
-  const h = Math.floor(hours);
-  const m = Math.round((hours - h) * 60);
+  const h = Math.floor(hours)
+  const m = Math.round((hours - h) * 60)
 
-  if (h === 0) return `${m} min`;
-  if (m === 0) return `${h}h`;
-  return `${h}h ${m}min`;
-};
+  if (h === 0) return `${m} min`
+  if (m === 0) return `${h}h`
+  return `${h}h ${m}min`
+}
 
 // Formate les valeurs monétaires
 const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat("fr-FR", {
-    style: "currency",
-    currency: "EUR",
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency: 'EUR',
     maximumFractionDigits: 0,
-  }).format(value);
-};
+  }).format(value)
+}
 
 // Formate les valeurs monétaires avec 2 décimales max
 const formatCurrencyWithDecimals = (value: number) => {
-  return new Intl.NumberFormat("fr-FR", {
-    style: "currency",
-    currency: "EUR",
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency: 'EUR',
     maximumFractionDigits: 2,
-  }).format(value);
-};
+  }).format(value)
+}
 
 // Formate les pourcentages
 const formatPercentage = (value: number) => {
-  return new Intl.NumberFormat("fr-FR", {
-    style: "percent",
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'percent',
     maximumFractionDigits: 0,
-  }).format(value / 100);
-};
+  }).format(value / 100)
+}
 
 // Échelle linéaire avec des paliers de 30 minutes, de 0h à 8h
 // La plage va de 0 à 480 minutes (0 à 8h)
 const sliderToHours = (value: number) => {
   // Convertir de minutes (0-480) en heures (0-8)
-  return value / 60;
-};
+  return value / 60
+}
 
 // Convertit les heures en valeur du slider (minutes)
 const hoursToSlider = (hours: number) => {
   // Convertir les heures en minutes et arrondir à un multiple de 30 le plus proche
-  const minutes = Math.round((hours * 60) / 30) * 30;
+  const minutes = Math.round((hours * 60) / 30) * 30
   // S'assurer que la valeur est dans la plage valide (0-480 minutes)
-  return Math.max(0, Math.min(480, minutes));
-};
+  return Math.max(0, Math.min(480, minutes))
+}
 
 // Étiquettes pour le slider - affichage uniquement aux points spécifiés
 const sliderMarks = [
-  { value: 0, label: "0h" }, // 0 minutes
-  { value: 120, label: "2h" }, // 120 minutes
-  { value: 240, label: "4h" }, // 240 minutes
-  { value: 360, label: "6h" }, // 360 minutes
-  { value: 480, label: "8h" }, // 480 minutes
-];
+  { value: 0, label: '0h' }, // 0 minutes
+  { value: 120, label: '2h' }, // 120 minutes
+  { value: 240, label: '4h' }, // 240 minutes
+  { value: 360, label: '6h' }, // 360 minutes
+  { value: 480, label: '8h' }, // 480 minutes
+]
 
 const RoiCalculator: React.FC = () => {
   // États du formulaire
-  const [sliderValue, setSliderValue] = useState(hoursToSlider(2)); // 2h par défaut
-  const [taskHours, setTaskHours] = useState(2);
-  const [frequency, setFrequency] = useState<Frequency>("daily"); // Quotidienne par défaut
-  const [salaryMode, setSalaryMode] = useState<SalaryMode>("monthly");
-  const [hourlyNet, setHourlyNet] = useState<number | undefined>(undefined);
-  const [monthlyNet, setMonthlyNet] = useState<number>(DEFAULT_MONTHLY_NET_SALARY);
-  const [annualBrut, setAnnualBrut] = useState<number | undefined>(undefined);
-  const [employees, setEmployees] = useState(2); // 2 employés par défaut
-  const [cost, setCost] = useState(5000);
+  const [sliderValue, setSliderValue] = useState(hoursToSlider(2)) // 2h par défaut
+  const [taskHours, setTaskHours] = useState(2)
+  const [frequency, setFrequency] = useState<Frequency>('daily') // Quotidienne par défaut
+  const [salaryMode, setSalaryMode] = useState<SalaryMode>('monthly')
+  const [hourlyNet, setHourlyNet] = useState<number | undefined>(undefined)
+  const [monthlyNet, setMonthlyNet] = useState<number>(DEFAULT_MONTHLY_NET_SALARY)
+  const [annualBrut, setAnnualBrut] = useState<number | undefined>(undefined)
+  const [employees, setEmployees] = useState(2) // 2 employés par défaut
+  const [cost, setCost] = useState(5000)
 
   // État pour les résultats du calcul
-  const [results, setResults] = useState<any>(null);
+  const [results, setResults] = useState<any>(null)
 
   // Fonction debounce pour limiter les calculs
   const debounce = <T extends (...args: unknown[]) => void>(func: T, wait: number) => {
-    let timeout: NodeJS.Timeout;
+    let timeout: NodeJS.Timeout
     return (...args: Parameters<T>) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func(...args), wait);
-    };
-  };
+      clearTimeout(timeout)
+      timeout = setTimeout(() => func(...args), wait)
+    }
+  }
 
   // Fonction pour arrondir à 2 décimales
   const roundToTwoDecimals = (value: number): number => {
-    return Math.round(value * 100) / 100;
-  };
+    return Math.round(value * 100) / 100
+  }
 
   // Synchronise les différents formats de salaire
   const syncSalary = useCallback(
     (mode: SalaryMode, hourly?: number, monthly?: number, annual?: number) => {
-      if (mode === "hourly" && hourly !== undefined) {
-        const hourlyRounded = roundToTwoDecimals(hourly);
-        const monthlyCalculated = roundToTwoDecimals(hourlyRounded * 151.67);
-        const annualCalculated = roundToTwoDecimals(((hourlyRounded * 151.67) / 0.757) * 12);
+      if (mode === 'hourly' && hourly !== undefined) {
+        const hourlyRounded = roundToTwoDecimals(hourly)
+        const monthlyCalculated = roundToTwoDecimals(hourlyRounded * 151.67)
+        const annualCalculated = roundToTwoDecimals(((hourlyRounded * 151.67) / 0.757) * 12)
 
-        setHourlyNet(hourlyRounded);
-        setMonthlyNet(monthlyCalculated);
-        setAnnualBrut(annualCalculated);
-      } else if (mode === "monthly" && monthly !== undefined) {
-        const monthlyRounded = roundToTwoDecimals(monthly);
-        const hourlyCalculated = roundToTwoDecimals(monthlyRounded / 151.67);
-        const annualCalculated = roundToTwoDecimals((monthlyRounded / 0.757) * 12);
+        setHourlyNet(hourlyRounded)
+        setMonthlyNet(monthlyCalculated)
+        setAnnualBrut(annualCalculated)
+      } else if (mode === 'monthly' && monthly !== undefined) {
+        const monthlyRounded = roundToTwoDecimals(monthly)
+        const hourlyCalculated = roundToTwoDecimals(monthlyRounded / 151.67)
+        const annualCalculated = roundToTwoDecimals((monthlyRounded / 0.757) * 12)
 
-        setHourlyNet(hourlyCalculated);
-        setMonthlyNet(monthlyRounded);
-        setAnnualBrut(annualCalculated);
-      } else if (mode === "annual" && annual !== undefined) {
-        const annualRounded = roundToTwoDecimals(annual);
-        const monthlyCalculated = roundToTwoDecimals((annualRounded * 0.757) / 12);
-        const hourlyCalculated = roundToTwoDecimals(monthlyCalculated / 151.67);
+        setHourlyNet(hourlyCalculated)
+        setMonthlyNet(monthlyRounded)
+        setAnnualBrut(annualCalculated)
+      } else if (mode === 'annual' && annual !== undefined) {
+        const annualRounded = roundToTwoDecimals(annual)
+        const monthlyCalculated = roundToTwoDecimals((annualRounded * 0.757) / 12)
+        const hourlyCalculated = roundToTwoDecimals(monthlyCalculated / 151.67)
 
-        setHourlyNet(hourlyCalculated);
-        setMonthlyNet(monthlyCalculated);
-        setAnnualBrut(annualRounded);
+        setHourlyNet(hourlyCalculated)
+        setMonthlyNet(monthlyCalculated)
+        setAnnualBrut(annualRounded)
       }
     },
     [],
-  );
+  )
 
   // Mettre à jour les résultats
   const updateResults = useCallback(
@@ -162,41 +163,41 @@ const RoiCalculator: React.FC = () => {
           annualBrut,
           employees,
           cost,
-        };
+        }
 
-        const calculationResults = calculateRoi(input);
-        setResults(calculationResults);
+        const calculationResults = calculateRoi(input)
+        setResults(calculationResults)
       } catch (error) {
-        console.error("Erreur de calcul ROI:", error);
+        console.error('Erreur de calcul ROI:', error)
       }
     }, 300),
     [taskHours, frequency, salaryMode, hourlyNet, monthlyNet, annualBrut, employees, cost],
-  );
+  )
 
   // Lancer le calcul à chaque changement d'entrée
   useEffect(() => {
-    updateResults();
-  }, [taskHours, frequency, employees, cost, hourlyNet, monthlyNet, annualBrut, updateResults]);
+    updateResults()
+  }, [taskHours, frequency, employees, cost, hourlyNet, monthlyNet, annualBrut, updateResults])
 
   // Initialiser les salaires
   useEffect(() => {
-    syncSalary("monthly", undefined, DEFAULT_MONTHLY_NET_SALARY);
-  }, [syncSalary]);
+    syncSalary('monthly', undefined, DEFAULT_MONTHLY_NET_SALARY)
+  }, [syncSalary])
 
   // Mise à jour du slider
   const handleSliderChange = (value: number[]) => {
-    const newValue = value[0];
-    setSliderValue(newValue);
-    setTaskHours(sliderToHours(newValue));
-  };
+    const newValue = value[0]
+    setSliderValue(newValue)
+    setTaskHours(sliderToHours(newValue))
+  }
 
   // Déterminer la classe CSS pour le ROI en fonction de sa valeur
   const getRoiColorClass = (percentage: number) => {
-    if (percentage < 0) return "text-red-500";
-    if (percentage < 100) return "text-amber-500";
-    if (percentage < 200) return "text-emerald-500";
-    return "text-blue-500";
-  };
+    if (percentage < 0) return 'text-red-500'
+    if (percentage < 100) return 'text-amber-500'
+    if (percentage < 200) return 'text-emerald-500'
+    return 'text-blue-500'
+  }
 
   return (
     <motion.section
@@ -216,7 +217,7 @@ const RoiCalculator: React.FC = () => {
           className="text-center mb-8"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-            Calculez votre{" "}
+            Calculez votre{' '}
             <span className="bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent">
               retour sur investissement
             </span>
@@ -247,7 +248,7 @@ const RoiCalculator: React.FC = () => {
                   <div className="flex justify-between items-center mb-2">
                     <Label className="text-white flex items-center gap-2">
                       <Clock className="h-4 w-4 text-blue-400" />
-                      Durée actuelle de la tâche:{" "}
+                      Durée actuelle de la tâche:{' '}
                       <span className="font-bold text-blue-400 ml-2">{formatHours(taskHours)}</span>
                     </Label>
                   </div>
@@ -313,39 +314,39 @@ const RoiCalculator: React.FC = () => {
 
                   <div className="grid grid-cols-3 gap-3 mb-4">
                     <Button
-                      variant={salaryMode === "hourly" ? "default" : "outline"}
+                      variant={salaryMode === 'hourly' ? 'default' : 'outline'}
                       size="sm"
-                      onClick={() => setSalaryMode("hourly")}
+                      onClick={() => setSalaryMode('hourly')}
                       className={
-                        salaryMode === "hourly"
-                          ? "bg-gradient-to-r from-cyan-500 to-purple-600 border-0"
-                          : ""
+                        salaryMode === 'hourly'
+                          ? 'bg-gradient-to-r from-cyan-500 to-purple-600 border-0'
+                          : ''
                       }
                     >
                       Horaire net
                     </Button>
 
                     <Button
-                      variant={salaryMode === "monthly" ? "default" : "outline"}
+                      variant={salaryMode === 'monthly' ? 'default' : 'outline'}
                       size="sm"
-                      onClick={() => setSalaryMode("monthly")}
+                      onClick={() => setSalaryMode('monthly')}
                       className={
-                        salaryMode === "monthly"
-                          ? "bg-gradient-to-r from-cyan-500 to-purple-600 border-0"
-                          : ""
+                        salaryMode === 'monthly'
+                          ? 'bg-gradient-to-r from-cyan-500 to-purple-600 border-0'
+                          : ''
                       }
                     >
                       Mensuel net
                     </Button>
 
                     <Button
-                      variant={salaryMode === "annual" ? "default" : "outline"}
+                      variant={salaryMode === 'annual' ? 'default' : 'outline'}
                       size="sm"
-                      onClick={() => setSalaryMode("annual")}
+                      onClick={() => setSalaryMode('annual')}
                       className={
-                        salaryMode === "annual"
-                          ? "bg-gradient-to-r from-cyan-500 to-purple-600 border-0"
-                          : ""
+                        salaryMode === 'annual'
+                          ? 'bg-gradient-to-r from-cyan-500 to-purple-600 border-0'
+                          : ''
                       }
                     >
                       Annuel brut
@@ -353,15 +354,15 @@ const RoiCalculator: React.FC = () => {
                   </div>
 
                   <div className="mb-3">
-                    {salaryMode === "hourly" && (
+                    {salaryMode === 'hourly' && (
                       <div className="flex items-center space-x-2">
                         <Input
                           type="number"
-                          value={hourlyNet?.toString() || ""}
+                          value={hourlyNet?.toString() || ''}
                           onChange={(e) => {
-                            const value = parseFloat(e.target.value);
+                            const value = parseFloat(e.target.value)
                             if (!isNaN(value) && value >= 0) {
-                              syncSalary("hourly", value);
+                              syncSalary('hourly', value)
                             }
                           }}
                           className="bg-gray-700/50 border-gray-600 text-white"
@@ -371,15 +372,15 @@ const RoiCalculator: React.FC = () => {
                       </div>
                     )}
 
-                    {salaryMode === "monthly" && (
+                    {salaryMode === 'monthly' && (
                       <div className="flex items-center space-x-2">
                         <Input
                           type="number"
-                          value={monthlyNet?.toString() || ""}
+                          value={monthlyNet?.toString() || ''}
                           onChange={(e) => {
-                            const value = parseFloat(e.target.value);
+                            const value = parseFloat(e.target.value)
                             if (!isNaN(value) && value >= 0) {
-                              syncSalary("monthly", undefined, value);
+                              syncSalary('monthly', undefined, value)
                             }
                           }}
                           className="bg-gray-700/50 border-gray-600 text-white"
@@ -389,15 +390,15 @@ const RoiCalculator: React.FC = () => {
                       </div>
                     )}
 
-                    {salaryMode === "annual" && (
+                    {salaryMode === 'annual' && (
                       <div className="flex items-center space-x-2">
                         <Input
                           type="number"
-                          value={annualBrut?.toString() || ""}
+                          value={annualBrut?.toString() || ''}
                           onChange={(e) => {
-                            const value = parseFloat(e.target.value);
+                            const value = parseFloat(e.target.value)
                             if (!isNaN(value) && value >= 0) {
-                              syncSalary("annual", undefined, undefined, value);
+                              syncSalary('annual', undefined, undefined, value)
                             }
                           }}
                           className="bg-gray-700/50 border-gray-600 text-white"
@@ -409,25 +410,25 @@ const RoiCalculator: React.FC = () => {
                   </div>
 
                   <div className="text-xs text-gray-400 italic">
-                    {salaryMode !== "hourly" && (
+                    {salaryMode !== 'hourly' && (
                       <p>
-                        Salaire horaire équivalent:{" "}
+                        Salaire horaire équivalent:{' '}
                         <span className="text-blue-400">
                           {formatCurrencyWithDecimals(hourlyNet || 0)}/h
                         </span>
                       </p>
                     )}
-                    {salaryMode !== "monthly" && (
+                    {salaryMode !== 'monthly' && (
                       <p>
-                        Salaire mensuel équivalent:{" "}
+                        Salaire mensuel équivalent:{' '}
                         <span className="text-blue-400">
                           {formatCurrencyWithDecimals(monthlyNet || 0)}/mois
                         </span>
                       </p>
                     )}
-                    {salaryMode !== "annual" && (
+                    {salaryMode !== 'annual' && (
                       <p>
-                        Salaire annuel équivalent:{" "}
+                        Salaire annuel équivalent:{' '}
                         <span className="text-blue-400">
                           {formatCurrencyWithDecimals(annualBrut || 0)}/an
                         </span>
@@ -479,9 +480,9 @@ const RoiCalculator: React.FC = () => {
                       type="number"
                       value={cost}
                       onChange={(e) => {
-                        const value = parseFloat(e.target.value);
+                        const value = parseFloat(e.target.value)
                         if (!isNaN(value) && value >= 0) {
-                          setCost(value);
+                          setCost(value)
                         }
                       }}
                       className="bg-gray-700/50 border-gray-600 text-white"
@@ -632,8 +633,8 @@ const RoiCalculator: React.FC = () => {
                           <p className="text-xl font-bold text-white">
                             {results.profitableDate instanceof Date &&
                             !isNaN(results.profitableDate.getTime())
-                              ? format(results.profitableDate, "dd MMM yyyy", { locale: fr })
-                              : "Calcul en cours..."}
+                              ? format(results.profitableDate, 'dd MMM yyyy', { locale: fr })
+                              : 'Calcul en cours...'}
                           </p>
                         </div>
                       </div>
@@ -665,7 +666,7 @@ const RoiCalculator: React.FC = () => {
         </div>
       </div>
     </motion.section>
-  );
-};
+  )
+}
 
-export default RoiCalculator;
+export default RoiCalculator

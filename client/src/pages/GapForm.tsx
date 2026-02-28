@@ -1,79 +1,117 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { Link } from 'wouter'
+import * as z from 'zod'
+import SEO from '@/components/SEO'
+import { Button } from '@/components/ui/button'
 import {
-  Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
-import { usePersistentToast } from "@/hooks/use-persistent-toast";
-import { Link } from "wouter";
-import { motion } from "framer-motion";
-import SEO from "@/components/SEO";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { usePersistentToast } from '@/hooks/use-persistent-toast'
+import { useToast } from '@/hooks/use-toast'
 
 const formSchema = z.object({
-  firstName: z.string().min(1, "Le prénom est requis"),
-  lastName: z.string().min(1, "Le nom est requis"),
-  email: z.string().email("Email invalide").min(1, "L'email est requis"),
+  firstName: z.string().min(1, 'Le prénom est requis'),
+  lastName: z.string().min(1, 'Le nom est requis'),
+  email: z.string().email('Email invalide').min(1, "L'email est requis"),
   companyName: z.string().min(1, "Le nom de l'entreprise est requis"),
   sector: z.string().optional(),
   challenge: z.string().optional(),
   availability: z.string().optional(),
-});
+})
 
 export default function GapForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
-  const { setPendingToast } = usePersistentToast();
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { toast } = useToast()
+  const { setPendingToast } = usePersistentToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: "", lastName: "", email: "", companyName: "",
-      sector: "", challenge: "", availability: "",
+      firstName: '',
+      lastName: '',
+      email: '',
+      companyName: '',
+      sector: '',
+      challenge: '',
+      availability: '',
     },
-  });
+  })
 
   const isFormValid = () => {
-    const values = form.getValues();
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return !!values.firstName && !!values.lastName && !!values.email && emailRegex.test(values.email) && !!values.companyName;
-  };
+    const values = form.getValues()
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    return (
+      !!values.firstName &&
+      !!values.lastName &&
+      !!values.email &&
+      emailRegex.test(values.email) &&
+      !!values.companyName
+    )
+  }
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    if (isSubmitting) return;
-    setIsSubmitting(true);
+    if (isSubmitting) return
+    setIsSubmitting(true)
     try {
-      const params = new URLSearchParams();
+      const params = new URLSearchParams()
       Object.entries(data).forEach(([key, value]) => {
-        if (value) params.append(key, value.toString());
-      });
-      const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || window.location.origin + "/api/webhook-test";
+        if (value) params.append(key, value.toString())
+      })
+      const webhookUrl =
+        import.meta.env.VITE_N8N_WEBHOOK_URL || window.location.origin + '/api/webhook-test'
       const response = await fetch(`${webhookUrl}?${params.toString()}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-      });
-      if (!response.ok) throw new Error(`Erreur lors de l'envoi du formulaire: ${response.status}`);
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+      })
+      if (!response.ok) throw new Error(`Erreur lors de l'envoi du formulaire: ${response.status}`)
 
-      setPendingToast({ title: "Formulaire envoyé avec succès !", description: "Nous vous contacterons rapidement avec des solutions personnalisées." });
-      window.location.href = "/";
+      setPendingToast({
+        title: 'Formulaire envoyé avec succès !',
+        description: 'Nous vous contacterons rapidement avec des solutions personnalisées.',
+      })
+      window.location.href = '/'
     } catch (error) {
-      console.error("Erreur:", error);
-      setIsSubmitting(false);
-      toast({ variant: "destructive", title: "Erreur", description: "Une erreur est survenue lors de l'envoi du formulaire." });
+      console.error('Erreur:', error)
+      setIsSubmitting(false)
+      toast({
+        variant: 'destructive',
+        title: 'Erreur',
+        description: "Une erreur est survenue lors de l'envoi du formulaire.",
+      })
     }
-  };
+  }
 
-  const sectorOptions = ["E-commerce", "Marketing & Communication", "Services B2B", "Industrie & Manufacturing", "Tech & Software", "Santé & Bien-être", "Finance & Assurance", "Autre"];
-  const availabilityOptions = ["Cette semaine", "Semaine prochaine", "Dans 2 semaines", "Flexible"];
+  const sectorOptions = [
+    'E-commerce',
+    'Marketing & Communication',
+    'Services B2B',
+    'Industrie & Manufacturing',
+    'Tech & Software',
+    'Santé & Bien-être',
+    'Finance & Assurance',
+    'Autre',
+  ]
+  const availabilityOptions = ['Cette semaine', 'Semaine prochaine', 'Dans 2 semaines', 'Flexible']
 
-  const inputClasses = "bg-white border-gray-200 text-sablia-text placeholder:text-sablia-text-tertiary focus:border-sablia-accent focus:ring-sablia-accent";
+  const inputClasses =
+    'bg-white border-gray-200 text-sablia-text placeholder:text-sablia-text-tertiary focus:border-sablia-accent focus:ring-sablia-accent'
 
   return (
     <>
@@ -87,7 +125,10 @@ export default function GapForm() {
       >
         <div className="min-h-screen flex flex-col">
           <div className="container mx-auto px-4 pt-8">
-            <Link href="/" className="inline-flex items-center text-sablia-text-secondary hover:text-sablia-text transition-colors text-sm">
+            <Link
+              href="/"
+              className="inline-flex items-center text-sablia-text-secondary hover:text-sablia-text transition-colors text-sm"
+            >
               ← Retour à l'accueil
             </Link>
           </div>
@@ -101,10 +142,12 @@ export default function GapForm() {
                 className="text-center mb-6"
               >
                 <h1 className="text-3xl sm:text-4xl font-bold text-sablia-text mb-3">
-                  Générateur d'<span className="text-sablia-accent">Automatisations</span> Personnalisées
+                  Générateur d'<span className="text-sablia-accent">Automatisations</span>{' '}
+                  Personnalisées
                 </h1>
                 <p className="text-base text-sablia-text-secondary max-w-2xl mx-auto">
-                  En 2 minutes, obtenez des recommandations d'automatisations sur mesure pour votre entreprise
+                  En 2 minutes, obtenez des recommandations d'automatisations sur mesure pour votre
+                  entreprise
                 </p>
               </motion.div>
 
@@ -120,97 +163,185 @@ export default function GapForm() {
                       <div className="space-y-4">
                         <div className="border-b border-gray-100 pb-3">
                           <h2 className="text-lg font-semibold text-sablia-text flex items-center gap-2">
-                            <span className="flex items-center justify-center w-6 h-6 rounded-full bg-sablia-accent text-white text-xs font-bold">1</span>
+                            <span className="flex items-center justify-center w-6 h-6 rounded-full bg-sablia-accent text-white text-xs font-bold">
+                              1
+                            </span>
                             Vos coordonnées
                           </h2>
-                          <p className="text-sablia-text-tertiary text-xs mt-1">Requis pour recevoir vos automatisations</p>
+                          <p className="text-sablia-text-tertiary text-xs mt-1">
+                            Requis pour recevoir vos automatisations
+                          </p>
                         </div>
 
-                        <FormField control={form.control} name="firstName" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-sablia-text text-sm">Prénom <span className="text-sablia-accent">*</span></FormLabel>
-                            <FormControl><Input {...field} placeholder="Jean" className={inputClasses} /></FormControl>
-                            <FormMessage className="text-red-500" />
-                          </FormItem>
-                        )} />
+                        <FormField
+                          control={form.control}
+                          name="firstName"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-sablia-text text-sm">
+                                Prénom <span className="text-sablia-accent">*</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Input {...field} placeholder="Jean" className={inputClasses} />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
 
-                        <FormField control={form.control} name="lastName" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-sablia-text text-sm">Nom <span className="text-sablia-accent">*</span></FormLabel>
-                            <FormControl><Input {...field} placeholder="Dupont" className={inputClasses} /></FormControl>
-                            <FormMessage className="text-red-500" />
-                          </FormItem>
-                        )} />
+                        <FormField
+                          control={form.control}
+                          name="lastName"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-sablia-text text-sm">
+                                Nom <span className="text-sablia-accent">*</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Input {...field} placeholder="Dupont" className={inputClasses} />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
 
-                        <FormField control={form.control} name="email" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-sablia-text text-sm">Email professionnel <span className="text-sablia-accent">*</span></FormLabel>
-                            <FormControl><Input {...field} type="email" placeholder="jean.dupont@entreprise.fr" className={inputClasses} /></FormControl>
-                            <FormMessage className="text-red-500" />
-                          </FormItem>
-                        )} />
+                        <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-sablia-text text-sm">
+                                Email professionnel <span className="text-sablia-accent">*</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  {...field}
+                                  type="email"
+                                  placeholder="jean.dupont@entreprise.fr"
+                                  className={inputClasses}
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
 
-                        <FormField control={form.control} name="companyName" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-sablia-text text-sm">Entreprise <span className="text-sablia-accent">*</span></FormLabel>
-                            <FormControl><Input {...field} placeholder="Nom de votre entreprise" className={inputClasses} /></FormControl>
-                            <FormMessage className="text-red-500" />
-                          </FormItem>
-                        )} />
+                        <FormField
+                          control={form.control}
+                          name="companyName"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-sablia-text text-sm">
+                                Entreprise <span className="text-sablia-accent">*</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  {...field}
+                                  placeholder="Nom de votre entreprise"
+                                  className={inputClasses}
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
                       </div>
 
                       <div className="space-y-4">
                         <div className="border-b border-gray-100 pb-3">
                           <h2 className="text-lg font-semibold text-sablia-text flex items-center gap-2">
-                            <span className="flex items-center justify-center w-6 h-6 rounded-full bg-sablia-accent/20 text-sablia-accent text-xs font-bold">2</span>
+                            <span className="flex items-center justify-center w-6 h-6 rounded-full bg-sablia-accent/20 text-sablia-accent text-xs font-bold">
+                              2
+                            </span>
                             Votre contexte
                           </h2>
-                          <p className="text-sablia-text-tertiary text-xs mt-1">Optionnel - Améliore la qualité de nos recommandations</p>
+                          <p className="text-sablia-text-tertiary text-xs mt-1">
+                            Optionnel - Améliore la qualité de nos recommandations
+                          </p>
                         </div>
 
-                        <FormField control={form.control} name="sector" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-sablia-text text-sm">Secteur d'activité</FormLabel>
-                            <FormControl>
-                              <Select onValueChange={field.onChange} value={field.value}>
-                                <SelectTrigger className={inputClasses}><SelectValue placeholder="Sélectionnez votre secteur" /></SelectTrigger>
-                                <SelectContent className="bg-white border-gray-200">
-                                  {sectorOptions.map((option) => (
-                                    <SelectItem key={option} value={option} className="text-sablia-text hover:bg-gray-50">{option}</SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                            <FormMessage className="text-red-500" />
-                          </FormItem>
-                        )} />
+                        <FormField
+                          control={form.control}
+                          name="sector"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-sablia-text text-sm">
+                                Secteur d'activité
+                              </FormLabel>
+                              <FormControl>
+                                <Select onValueChange={field.onChange} value={field.value}>
+                                  <SelectTrigger className={inputClasses}>
+                                    <SelectValue placeholder="Sélectionnez votre secteur" />
+                                  </SelectTrigger>
+                                  <SelectContent className="bg-white border-gray-200">
+                                    {sectorOptions.map((option) => (
+                                      <SelectItem
+                                        key={option}
+                                        value={option}
+                                        className="text-sablia-text hover:bg-gray-50"
+                                      >
+                                        {option}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
 
-                        <FormField control={form.control} name="challenge" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-sablia-text text-sm">Principal défi business</FormLabel>
-                            <FormControl>
-                              <Textarea {...field} placeholder="Ex: Trop de temps perdu sur la gestion des emails clients..." rows={3} className={`${inputClasses} resize-none`} />
-                            </FormControl>
-                            <FormMessage className="text-red-500" />
-                          </FormItem>
-                        )} />
+                        <FormField
+                          control={form.control}
+                          name="challenge"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-sablia-text text-sm">
+                                Principal défi business
+                              </FormLabel>
+                              <FormControl>
+                                <Textarea
+                                  {...field}
+                                  placeholder="Ex: Trop de temps perdu sur la gestion des emails clients..."
+                                  rows={3}
+                                  className={`${inputClasses} resize-none`}
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
 
-                        <FormField control={form.control} name="availability" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-sablia-text text-sm">Disponibilité pour un échange</FormLabel>
-                            <FormControl>
-                              <Select onValueChange={field.onChange} value={field.value}>
-                                <SelectTrigger className={inputClasses}><SelectValue placeholder="Quand seriez-vous disponible ?" /></SelectTrigger>
-                                <SelectContent className="bg-white border-gray-200">
-                                  {availabilityOptions.map((option) => (
-                                    <SelectItem key={option} value={option} className="text-sablia-text hover:bg-gray-50">{option}</SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                            <FormMessage className="text-red-500" />
-                          </FormItem>
-                        )} />
+                        <FormField
+                          control={form.control}
+                          name="availability"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-sablia-text text-sm">
+                                Disponibilité pour un échange
+                              </FormLabel>
+                              <FormControl>
+                                <Select onValueChange={field.onChange} value={field.value}>
+                                  <SelectTrigger className={inputClasses}>
+                                    <SelectValue placeholder="Quand seriez-vous disponible ?" />
+                                  </SelectTrigger>
+                                  <SelectContent className="bg-white border-gray-200">
+                                    {availabilityOptions.map((option) => (
+                                      <SelectItem
+                                        key={option}
+                                        value={option}
+                                        className="text-sablia-text hover:bg-gray-50"
+                                      >
+                                        {option}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+                              <FormMessage className="text-red-500" />
+                            </FormItem>
+                          )}
+                        />
                       </div>
                     </div>
 
@@ -226,7 +357,7 @@ export default function GapForm() {
                             Envoi en cours...
                           </div>
                         ) : (
-                          "Recevoir mes automatisations"
+                          'Recevoir mes automatisations'
                         )}
                       </Button>
                       <p className="text-center text-sablia-text-tertiary text-xs mt-2">
@@ -250,5 +381,5 @@ export default function GapForm() {
         </div>
       </motion.div>
     </>
-  );
+  )
 }

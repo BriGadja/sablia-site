@@ -65,11 +65,21 @@
       "Bash(sudo journalctl:*)",
       "Bash(sudo ss:*)",
       "Bash(sudo tee:*)",
-      "Bash(~/.ssh/authorized_keys)"
+      "Bash(~/.ssh/authorized_keys)",
+      "mcp__claude_ai_Vercel__list_teams",
+      "mcp__claude_ai_Vercel__list_projects",
+      "mcp__claude_ai_Vercel__list_deployments",
+      "mcp__claude_ai_Vercel__get_deployment",
+      "mcp__claude_ai_Vercel__get_deployment_build_logs",
+      "mcp__claude_ai_Vercel__get_project",
+      "Bash(while read f)",
+      "Bash(pip3 list:*)",
+      "Bash(identify:*)"
     ],
     "deny": [],
     "ask": []
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "n8n-mcp",
     "sequential-thinking",
@@ -80,6 +90,5 @@
     "todoist",
     "playwright",
     "vapi"
-  ],
-  "enableAllProjectMcpServers": true
+  ]
 }

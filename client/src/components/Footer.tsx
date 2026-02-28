@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { Link } from 'wouter'
 
 export default function Footer() {
   return (
@@ -16,39 +16,62 @@ export default function Footer() {
           </div>
           <div>
             <h3 className="text-base font-semibold mb-4 text-sablia-text">Ressources</h3>
-            <Link href="/faq" className="text-sm text-sablia-text-secondary hover:text-sablia-text block mb-2 transition-colors">
+            <Link
+              href="/faq"
+              className="text-sm text-sablia-text-secondary hover:text-sablia-text block mb-2 transition-colors"
+            >
               FAQ
             </Link>
-            <Link href="/cas-clients" className="text-sm text-sablia-text-secondary hover:text-sablia-text block mb-2 transition-colors">
+            <Link
+              href="/cas-clients"
+              className="text-sm text-sablia-text-secondary hover:text-sablia-text block mb-2 transition-colors"
+            >
               Cas clients
             </Link>
-            <Link href="/roi" className="text-sm text-sablia-text-secondary hover:text-sablia-text block transition-colors">
+            <Link
+              href="/roi"
+              className="text-sm text-sablia-text-secondary hover:text-sablia-text block transition-colors"
+            >
               Calculateur ROI
             </Link>
           </div>
           <div>
             <h3 className="text-base font-semibold mb-4 text-sablia-text">Contact</h3>
-            <a href="mailto:brice@sablia.io" className="text-sm text-sablia-text-secondary hover:text-sablia-text block transition-colors">
+            <a
+              href="mailto:brice@sablia.io"
+              className="text-sm text-sablia-text-secondary hover:text-sablia-text block transition-colors"
+            >
               brice@sablia.io
             </a>
           </div>
           <div>
             <h3 className="text-base font-semibold mb-4 text-sablia-text">Légal</h3>
-            <Link href="/mentions-legales" className="text-sm text-sablia-text-secondary hover:text-sablia-text block mb-2 transition-colors">
+            <Link
+              href="/mentions-legales"
+              className="text-sm text-sablia-text-secondary hover:text-sablia-text block mb-2 transition-colors"
+            >
               Mentions légales
             </Link>
-            <Link href="/politique-confidentialite" className="text-sm text-sablia-text-secondary hover:text-sablia-text block mb-2 transition-colors">
+            <Link
+              href="/politique-confidentialite"
+              className="text-sm text-sablia-text-secondary hover:text-sablia-text block mb-2 transition-colors"
+            >
               Politique de confidentialité
             </Link>
-            <Link href="/cgv" className="text-sm text-sablia-text-secondary hover:text-sablia-text block transition-colors">
+            <Link
+              href="/cgv"
+              className="text-sm text-sablia-text-secondary hover:text-sablia-text block transition-colors"
+            >
               CGV
             </Link>
           </div>
         </div>
         <div className="border-t border-sablia-border mt-8 pt-8 text-center">
-          <p className="text-sm text-sablia-text-tertiary">&copy; {new Date().getFullYear()} Sablia. Tous droits réservés.</p>
+          <p className="text-sm text-sablia-text-tertiary">
+            &copy; {new Date().getFullYear()} Sablia. Tous droits réservés.
+          </p>
         </div>
       </div>
     </footer>
-  );
+  )
 }

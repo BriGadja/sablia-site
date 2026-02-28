@@ -1,20 +1,20 @@
-import { motion } from "framer-motion";
-import { Clock, AlertTriangle, TrendingDown, Zap, ShieldCheck, TrendingUp } from "lucide-react";
+import { motion } from 'framer-motion'
+import { AlertTriangle, Clock, ShieldCheck, TrendingDown, TrendingUp, Zap } from 'lucide-react'
 
 interface TransformRow {
-  problem: { icon: React.ReactNode; text: string };
-  solution: { icon: React.ReactNode; text: string };
+  problem: { icon: React.ReactNode; text: string }
+  solution: { icon: React.ReactNode; text: string }
 }
 
 const rows: TransformRow[] = [
   {
     problem: {
       icon: <Clock size={20} className="text-sablia-sienna flex-shrink-0" />,
-      text: "2h par jour à copier des données entre Excel et votre CRM",
+      text: '2h par jour à copier des données entre Excel et votre CRM',
     },
     solution: {
       icon: <Zap size={20} className="text-sablia-accent flex-shrink-0" />,
-      text: "Zéro saisie manuelle. Vos outils se parlent automatiquement.",
+      text: 'Zéro saisie manuelle. Vos outils se parlent automatiquement.',
     },
   },
   {
@@ -30,14 +30,14 @@ const rows: TransformRow[] = [
   {
     problem: {
       icon: <TrendingDown size={20} className="text-sablia-sienna flex-shrink-0" />,
-      text: "Impossible de scaler sans recruter — la charge explose",
+      text: 'Impossible de scaler sans recruter — la charge explose',
     },
     solution: {
       icon: <TrendingUp size={20} className="text-sablia-accent flex-shrink-0" />,
       text: "Scalez sans recruter. L'automatisation absorbe la charge.",
     },
   },
-];
+]
 
 export default function TransformationSection() {
   return (
@@ -81,12 +81,30 @@ export default function TransformationSection() {
 
               {/* Arrow */}
               <div className="hidden md:flex items-center justify-center text-sablia-sienna">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </div>
               <div className="md:hidden flex justify-center text-sablia-sienna">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M12 5v14M5 12l7 7 7-7" />
                 </svg>
               </div>
@@ -111,7 +129,7 @@ export default function TransformationSection() {
         >
           <button
             onClick={() => {
-              document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+              document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })
             }}
             className="bg-sablia-accent text-sablia-bg px-8 py-3.5 rounded text-base font-medium hover:bg-sablia-accent-hover transition-colors duration-200"
           >
@@ -120,5 +138,5 @@ export default function TransformationSection() {
         </motion.div>
       </div>
     </section>
-  );
+  )
 }

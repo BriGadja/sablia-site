@@ -1,50 +1,54 @@
-import { motion } from "framer-motion";
-import { ClipboardCheck, GraduationCap, Workflow, Bot } from "lucide-react";
+import { motion } from 'framer-motion'
+import { Bot, ClipboardCheck, GraduationCap, Workflow } from 'lucide-react'
 
 interface Expertise {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  href: string;
-  accent: string;
+  icon: React.ReactNode
+  title: string
+  description: string
+  href: string
+  accent: string
 }
 
 const expertises: Expertise[] = [
   {
     icon: <ClipboardCheck size={24} />,
-    title: "Diagnostic Express",
-    description: "Identifiez vos gains rapides en 1h30. Audit de vos processus et feuille de route personnalisée.",
-    href: "#contact",
-    accent: "border-l-sablia-sienna text-sablia-sienna",
+    title: 'Diagnostic Express',
+    description:
+      'Identifiez vos gains rapides en 1h30. Audit de vos processus et feuille de route personnalisée.',
+    href: '#contact',
+    accent: 'border-l-sablia-sienna text-sablia-sienna',
   },
   {
     icon: <GraduationCap size={24} />,
-    title: "Vos équipes autonomes",
-    description: "De débutant à expert en 1 à 3 jours. Formations n8n, IA et automatisation sur mesure.",
-    href: "#pricing",
-    accent: "border-l-sablia-accent text-sablia-accent",
+    title: 'Vos équipes autonomes',
+    description:
+      'De débutant à expert en 1 à 3 jours. Formations n8n, IA et automatisation sur mesure.',
+    href: '#pricing',
+    accent: 'border-l-sablia-accent text-sablia-accent',
   },
   {
     icon: <Workflow size={24} />,
-    title: "Workflows sur mesure",
-    description: "Vos processus, automatisés et fiables. Développement, déploiement et maintenance inclus.",
-    href: "#pricing",
-    accent: "border-l-sablia-alba text-sablia-alba",
+    title: 'Workflows sur mesure',
+    description:
+      'Vos processus, automatisés et fiables. Développement, déploiement et maintenance inclus.',
+    href: '#pricing',
+    accent: 'border-l-sablia-alba text-sablia-alba',
   },
   {
     icon: <Bot size={24} />,
-    title: "Agents IA",
-    description: "L'IA qui travaille pour vous. Agents vocaux, traitement de documents, veille automatisée.",
-    href: "#pricing",
-    accent: "border-l-sablia-sienna text-sablia-sienna",
+    title: 'Agents IA',
+    description:
+      "L'IA qui travaille pour vous. Agents vocaux, traitement de documents, veille automatisée.",
+    href: '#pricing',
+    accent: 'border-l-sablia-sienna text-sablia-sienna',
   },
-];
+]
 
 export default function LogosCloud() {
   const handleClick = (href: string) => {
-    const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: "smooth" });
-  };
+    const el = document.querySelector(href)
+    el?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   return (
     <section id="expertise" className="py-32">
@@ -79,14 +83,10 @@ export default function LogosCloud() {
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.08 }}
               onClick={() => handleClick(item.href)}
-              className={`text-left bg-sablia-surface border border-sablia-border border-l-[3px] ${item.accent.split(" ")[0]} rounded p-6 hover:shadow-warm-sm transition-all duration-200 group`}
+              className={`text-left bg-sablia-surface border border-sablia-border border-l-[3px] ${item.accent.split(' ')[0]} rounded p-6 hover:shadow-warm-sm transition-all duration-200 group`}
             >
-              <div className={`mb-4 ${item.accent.split(" ")[1]}`}>
-                {item.icon}
-              </div>
-              <h3 className="text-lg font-semibold text-sablia-text mb-2">
-                {item.title}
-              </h3>
+              <div className={`mb-4 ${item.accent.split(' ')[1]}`}>{item.icon}</div>
+              <h3 className="text-lg font-semibold text-sablia-text mb-2">{item.title}</h3>
               <p className="text-sm text-sablia-text-secondary leading-relaxed mb-4">
                 {item.description}
               </p>
@@ -108,14 +108,10 @@ export default function LogosCloud() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.08 }}
                 onClick={() => handleClick(item.href)}
-                className={`text-left flex-shrink-0 w-[280px] snap-start bg-sablia-surface border border-sablia-border border-l-[3px] ${item.accent.split(" ")[0]} rounded p-6`}
+                className={`text-left flex-shrink-0 w-[280px] snap-start bg-sablia-surface border border-sablia-border border-l-[3px] ${item.accent.split(' ')[0]} rounded p-6`}
               >
-                <div className={`mb-4 ${item.accent.split(" ")[1]}`}>
-                  {item.icon}
-                </div>
-                <h3 className="text-lg font-semibold text-sablia-text mb-2">
-                  {item.title}
-                </h3>
+                <div className={`mb-4 ${item.accent.split(' ')[1]}`}>{item.icon}</div>
+                <h3 className="text-lg font-semibold text-sablia-text mb-2">{item.title}</h3>
                 <p className="text-sm text-sablia-text-secondary leading-relaxed mb-4">
                   {item.description}
                 </p>
@@ -128,5 +124,5 @@ export default function LogosCloud() {
         </div>
       </div>
     </section>
-  );
+  )
 }

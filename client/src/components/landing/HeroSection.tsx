@@ -1,18 +1,15 @@
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion'
 
 export default function HeroSection() {
   const handleCTAClick = (href: string) => {
-    const element = document.querySelector(href);
+    const element = document.querySelector(href)
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      element.scrollIntoView({ behavior: 'smooth' })
     }
-  };
+  }
 
   return (
-    <section
-      id="hero"
-      className="relative min-h-screen flex items-center justify-center"
-    >
+    <section id="hero" className="relative min-h-screen flex items-center justify-center">
       {/* Warm atmospheric gradient */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-sablia-bg via-sablia-bg to-sablia-surface" />
@@ -37,8 +34,7 @@ export default function HeroSection() {
           </motion.p>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-display font-semibold leading-[1.1] tracking-tight text-sablia-text">
-            Retournez{" "}
-            <span className="text-sablia-sienna">le sablier</span>
+            Retournez <span className="text-sablia-sienna">le sablier</span>
           </h1>
 
           <p className="text-lg sm:text-xl text-sablia-text-secondary max-w-2xl mx-auto leading-relaxed font-light">
@@ -50,14 +46,14 @@ export default function HeroSection() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
             <button
-              onClick={() => handleCTAClick("#contact")}
+              onClick={() => handleCTAClick('#contact')}
               className="bg-sablia-accent text-sablia-bg px-8 py-3.5 rounded text-base font-medium hover:bg-sablia-accent-hover transition-colors duration-200 tracking-wide"
             >
               Diagnostic Gratuit
             </button>
 
             <button
-              onClick={() => handleCTAClick("#calculator")}
+              onClick={() => handleCTAClick('#calculator')}
               className="border border-sablia-accent/20 text-sablia-text px-8 py-3.5 rounded text-base font-medium hover:bg-sablia-accent/5 transition-colors duration-200"
             >
               Calculer mon ROI
@@ -65,7 +61,7 @@ export default function HeroSection() {
           </div>
 
           <p className="text-sm text-sablia-text-tertiary pt-2">
-            Brice Gachadoat — Resp. Pédagogique & Expert IA,{" "}
+            Brice Gachadoat — Resp. Pédagogique & Expert IA,{' '}
             <a
               href="https://iapreneurs.com"
               target="_blank"
@@ -78,5 +74,5 @@ export default function HeroSection() {
         </motion.div>
       </div>
     </section>
-  );
+  )
 }

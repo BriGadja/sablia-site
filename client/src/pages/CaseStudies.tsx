@@ -1,83 +1,83 @@
-import { motion } from "framer-motion";
-import { ArrowRight, Clock, TrendingUp, Users } from "lucide-react";
-import Navigation from "@/components/landing/Navigation";
-import SEO from "@/components/SEO";
-import Footer from "@/components/Footer";
-import ScrollToTop from "@/components/ScrollToTop";
-import ScrollReveal from "@/components/animations/ScrollReveal";
+import { motion } from 'framer-motion'
+import { ArrowRight, Clock, TrendingUp, Users } from 'lucide-react'
+import ScrollReveal from '@/components/animations/ScrollReveal'
+import Footer from '@/components/Footer'
+import Navigation from '@/components/landing/Navigation'
+import ScrollToTop from '@/components/ScrollToTop'
+import SEO from '@/components/SEO'
 
 // ============================================
 // Case Study Data
 // ============================================
 
 interface CaseStudy {
-  id: number;
-  sector: string;
-  title: string;
-  challenge: string;
-  solution: string;
-  results: { label: string; value: string; icon: React.ReactNode }[];
-  quote: string;
-  author: string;
-  role: string;
+  id: number
+  sector: string
+  title: string
+  challenge: string
+  solution: string
+  results: { label: string; value: string; icon: React.ReactNode }[]
+  quote: string
+  author: string
+  role: string
 }
 
 const caseStudies: CaseStudy[] = [
   {
     id: 1,
-    sector: "E-commerce",
-    title: "Automatisation du traitement des commandes",
+    sector: 'E-commerce',
+    title: 'Automatisation du traitement des commandes',
     challenge:
-      "Une entreprise e-commerce de 25 personnes perdait des heures chaque jour sur le traitement manuel des commandes, la mise à jour des stocks et les relances clients.",
+      'Une entreprise e-commerce de 25 personnes perdait des heures chaque jour sur le traitement manuel des commandes, la mise à jour des stocks et les relances clients.',
     solution:
-      "Mise en place de workflows n8n automatisant la synchronisation commandes-stocks, les emails de suivi, et les alertes de réapprovisionnement.",
+      'Mise en place de workflows n8n automatisant la synchronisation commandes-stocks, les emails de suivi, et les alertes de réapprovisionnement.',
     results: [
-      { label: "Heures économisées/an", value: "1 000h", icon: <Clock size={20} /> },
-      { label: "Réduction des erreurs", value: "-80%", icon: <TrendingUp size={20} /> },
-      { label: "Capacité commandes", value: "x3", icon: <Users size={20} /> },
+      { label: 'Heures économisées/an', value: '1 000h', icon: <Clock size={20} /> },
+      { label: 'Réduction des erreurs', value: '-80%', icon: <TrendingUp size={20} /> },
+      { label: 'Capacité commandes', value: 'x3', icon: <Users size={20} /> },
     ],
     quote:
       "En 4 mois, l'investissement était rentabilisé. Nos équipes se concentrent enfin sur la relation client.",
-    author: "Directeur des Opérations",
-    role: "E-commerce, 25 personnes",
+    author: 'Directeur des Opérations',
+    role: 'E-commerce, 25 personnes',
   },
   {
     id: 2,
-    sector: "Cabinet de conseil",
-    title: "Transformation des processus administratifs",
+    sector: 'Cabinet de conseil',
+    title: 'Transformation des processus administratifs',
     challenge:
-      "Un cabinet de conseil passait 60% de son temps sur des tâches administratives : facturation, reporting, relances, et synchronisation CRM.",
+      'Un cabinet de conseil passait 60% de son temps sur des tâches administratives : facturation, reporting, relances, et synchronisation CRM.',
     solution:
-      "Déploiement de Make.com pour automatiser la chaîne facturation-CRM-reporting avec formation de 3 champions internes.",
+      'Déploiement de Make.com pour automatiser la chaîne facturation-CRM-reporting avec formation de 3 champions internes.',
     results: [
-      { label: "Tâches admin réduites", value: "-60%", icon: <Clock size={20} /> },
-      { label: "Délai facturation", value: "-75%", icon: <TrendingUp size={20} /> },
-      { label: "Collaborateurs formés", value: "12", icon: <Users size={20} /> },
+      { label: 'Tâches admin réduites', value: '-60%', icon: <Clock size={20} /> },
+      { label: 'Délai facturation', value: '-75%', icon: <TrendingUp size={20} /> },
+      { label: 'Collaborateurs formés', value: '12', icon: <Users size={20} /> },
     ],
     quote:
-      "La formation a été clé. Nos consultants créent maintenant leurs propres automatisations.",
-    author: "Associé fondateur",
-    role: "Cabinet de conseil, 40 personnes",
+      'La formation a été clé. Nos consultants créent maintenant leurs propres automatisations.',
+    author: 'Associé fondateur',
+    role: 'Cabinet de conseil, 40 personnes',
   },
   {
     id: 3,
-    sector: "Association",
-    title: "Scaling sans recrutement",
+    sector: 'Association',
+    title: 'Scaling sans recrutement',
     challenge:
-      "Une association en forte croissance ne pouvait pas recruter proportionnellement. Les bénévoles croulaient sous les tâches manuelles de gestion des dons et événements.",
+      'Une association en forte croissance ne pouvait pas recruter proportionnellement. Les bénévoles croulaient sous les tâches manuelles de gestion des dons et événements.',
     solution:
-      "Architecture n8n auto-hébergée pour gérer les dons, communications adhérents, et la logistique événementielle de bout en bout.",
+      'Architecture n8n auto-hébergée pour gérer les dons, communications adhérents, et la logistique événementielle de bout en bout.',
     results: [
-      { label: "Volume traité", value: "x3", icon: <TrendingUp size={20} /> },
-      { label: "Sans recrutement", value: "0 ETP", icon: <Users size={20} /> },
-      { label: "ROI", value: "6 mois", icon: <Clock size={20} /> },
+      { label: 'Volume traité', value: 'x3', icon: <TrendingUp size={20} /> },
+      { label: 'Sans recrutement', value: '0 ETP', icon: <Users size={20} /> },
+      { label: 'ROI', value: '6 mois', icon: <Clock size={20} /> },
     ],
     quote:
       "Nous avons triplé notre capacité sans ajouter une seule personne. L'automatisation a changé notre façon de travailler.",
-    author: "Directrice générale",
-    role: "Association, 15 personnes",
+    author: 'Directrice générale',
+    role: 'Association, 15 personnes',
   },
-];
+]
 
 // ============================================
 // Main Component
@@ -213,5 +213,5 @@ export default function CaseStudies() {
         </div>
       </motion.div>
     </>
-  );
+  )
 }

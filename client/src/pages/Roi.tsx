@@ -1,16 +1,16 @@
-import Navigation from "@/components/landing/Navigation";
-import Footer from "@/components/Footer";
-import ScrollToTop from "@/components/ScrollToTop";
-import RoiCalculator from "@/components/RoiCalculator";
-import SEO from "@/components/SEO";
-import { motion } from "framer-motion";
-import { useEffect } from "react";
+import { motion } from 'framer-motion'
+import { useEffect } from 'react'
+import Footer from '@/components/Footer'
+import Navigation from '@/components/landing/Navigation'
+import RoiCalculator from '@/components/RoiCalculator'
+import ScrollToTop from '@/components/ScrollToTop'
+import SEO from '@/components/SEO'
 
 export default function Roi() {
   // Scroll to top on mount
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <>
@@ -34,5 +34,5 @@ export default function Roi() {
         </div>
       </motion.div>
     </>
-  );
+  )
 }

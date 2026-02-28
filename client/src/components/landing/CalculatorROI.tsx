@@ -1,54 +1,54 @@
-import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { Calculator } from "lucide-react";
+import { motion } from 'framer-motion'
+import { Calculator } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 
-const INVESTMENT = 1500;
-const EFFICIENCY = 0.7;
-const WORK_WEEKS = 48;
-const HOURS_PER_DAY = 7;
+const INVESTMENT = 1500
+const EFFICIENCY = 0.7
+const WORK_WEEKS = 48
+const HOURS_PER_DAY = 7
 
 function useCountUp(target: number, duration = 600) {
-  const [value, setValue] = useState(0);
-  const rafRef = useRef<number>(0);
+  const [value, setValue] = useState(0)
+  const rafRef = useRef<number>(0)
 
   useEffect(() => {
-    const start = value;
-    const diff = target - start;
+    const start = value
+    const diff = target - start
     if (Math.abs(diff) < 1) {
-      setValue(target);
-      return;
+      setValue(target)
+      return
     }
-    const startTime = performance.now();
+    const startTime = performance.now()
 
     function animate(now: number) {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setValue(Math.round(start + diff * eased));
+      const elapsed = now - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      const eased = 1 - (1 - progress) ** 3
+      setValue(Math.round(start + diff * eased))
       if (progress < 1) {
-        rafRef.current = requestAnimationFrame(animate);
+        rafRef.current = requestAnimationFrame(animate)
       }
     }
 
-    rafRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [target, duration]);
+    rafRef.current = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [target, duration])
 
-  return value;
+  return value
 }
 
 export default function CalculatorROI() {
-  const [hoursPerWeek, setHoursPerWeek] = useState(8);
-  const [hourlyCost, setHourlyCost] = useState(35);
+  const [hoursPerWeek, setHoursPerWeek] = useState(8)
+  const [hourlyCost, setHourlyCost] = useState(35)
 
-  const hoursSaved = Math.round(hoursPerWeek * EFFICIENCY * WORK_WEEKS);
-  const annualSavings = hoursSaved * hourlyCost;
-  const roi = Math.round(((annualSavings - INVESTMENT) / INVESTMENT) * 100);
-  const daysEquivalent = Math.round(hoursSaved / HOURS_PER_DAY);
+  const hoursSaved = Math.round(hoursPerWeek * EFFICIENCY * WORK_WEEKS)
+  const annualSavings = hoursSaved * hourlyCost
+  const roi = Math.round(((annualSavings - INVESTMENT) / INVESTMENT) * 100)
+  const daysEquivalent = Math.round(hoursSaved / HOURS_PER_DAY)
 
-  const animatedHours = useCountUp(hoursSaved);
-  const animatedSavings = useCountUp(annualSavings);
-  const animatedRoi = useCountUp(roi);
+  const animatedHours = useCountUp(hoursSaved)
+  const animatedSavings = useCountUp(annualSavings)
+  const animatedRoi = useCountUp(roi)
 
   return (
     <section id="calculator" className="py-32">
@@ -144,29 +144,32 @@ export default function CalculatorROI() {
               <div className="p-4 rounded bg-sablia-surface border border-sablia-border">
                 <p className="text-sablia-text-secondary text-sm mb-1">Heures récupérées par an</p>
                 <p className="text-3xl font-bold text-sablia-sienna tabular-nums">
-                  {animatedHours.toLocaleString("fr-FR")} h
+                  {animatedHours.toLocaleString('fr-FR')} h
                 </p>
               </div>
 
               <div className="p-4 rounded bg-sablia-surface border border-sablia-border">
                 <p className="text-sablia-text-secondary text-sm mb-1">Économies annuelles</p>
                 <p className="text-3xl font-bold text-sablia-accent tabular-nums">
-                  {animatedSavings.toLocaleString("fr-FR")} €
+                  {animatedSavings.toLocaleString('fr-FR')} €
                 </p>
               </div>
 
               <div className="p-4 rounded bg-sablia-accent/[0.04] border border-sablia-accent/15">
                 <p className="text-sablia-text-secondary text-sm mb-1">
-                  Pour un investissement de ~{INVESTMENT.toLocaleString("fr-FR")} €
+                  Pour un investissement de ~{INVESTMENT.toLocaleString('fr-FR')} €
                 </p>
                 <p className="text-3xl font-bold text-sablia-accent tabular-nums">
-                  {animatedRoi > 0 ? "+" : ""}{animatedRoi.toLocaleString("fr-FR")} % ROI
+                  {animatedRoi > 0 ? '+' : ''}
+                  {animatedRoi.toLocaleString('fr-FR')} % ROI
                 </p>
               </div>
             </div>
 
             <p className="text-sm text-sablia-text-secondary mt-4 leading-relaxed">
-              C'est l'équivalent de <strong className="text-sablia-text">{daysEquivalent} jours de travail</strong> récupérés par an.
+              C'est l'équivalent de{' '}
+              <strong className="text-sablia-text">{daysEquivalent} jours de travail</strong>{' '}
+              récupérés par an.
             </p>
 
             <div className="mt-4 pt-4 border-t border-sablia-border">
@@ -178,7 +181,7 @@ export default function CalculatorROI() {
             <button
               className="w-full py-3.5 rounded font-medium text-base bg-sablia-accent text-sablia-bg hover:bg-sablia-accent-hover transition-colors duration-200 mt-6"
               onClick={() => {
-                document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+                document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })
               }}
             >
               Discuter de mon projet
@@ -187,9 +190,10 @@ export default function CalculatorROI() {
         </div>
 
         <p className="text-center text-sablia-text-tertiary text-sm mt-8 max-w-2xl mx-auto">
-          *Estimation basée sur un taux d'efficacité de 70%, 48 semaines travaillées, et un investissement moyen de {INVESTMENT.toLocaleString("fr-FR")} €.
+          *Estimation basée sur un taux d'efficacité de 70%, 48 semaines travaillées, et un
+          investissement moyen de {INVESTMENT.toLocaleString('fr-FR')} €.
         </p>
       </div>
     </section>
-  );
+  )
 }

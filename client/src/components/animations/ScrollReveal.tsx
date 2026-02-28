@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
-import { motion } from "framer-motion";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { motion } from 'framer-motion'
+import type { ReactNode } from 'react'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 
 /**
  * ScrollReveal - Animation au scroll avec Framer Motion
@@ -13,11 +13,11 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 // ============================================
 
 interface ScrollRevealProps {
-  children: ReactNode;
-  direction?: "up" | "down" | "left" | "right" | "fade" | "scale";
-  duration?: number;
-  delay?: number;
-  className?: string;
+  children: ReactNode
+  direction?: 'up' | 'down' | 'left' | 'right' | 'fade' | 'scale'
+  duration?: number
+  delay?: number
+  className?: string
 }
 
 const directionMap = {
@@ -27,17 +27,17 @@ const directionMap = {
   right: { y: 0, x: -50, scale: 1 },
   fade: { y: 0, x: 0, scale: 1 },
   scale: { y: 0, x: 0, scale: 0.8 },
-};
+}
 
 export function ScrollReveal({
   children,
-  direction = "up",
+  direction = 'up',
   duration = 1,
   delay = 0,
-  className = "",
+  className = '',
 }: ScrollRevealProps) {
-  const prefersReducedMotion = useReducedMotion();
-  const offsets = directionMap[direction];
+  const prefersReducedMotion = useReducedMotion()
+  const offsets = directionMap[direction]
 
   return (
     <motion.div
@@ -49,7 +49,7 @@ export function ScrollReveal({
     >
       {children}
     </motion.div>
-  );
+  )
 }
 
 // ============================================
@@ -57,16 +57,16 @@ export function ScrollReveal({
 // ============================================
 
 interface ParallaxSectionProps {
-  children: ReactNode;
-  speed?: number;
-  className?: string;
+  children: ReactNode
+  speed?: number
+  className?: string
 }
 
-export function ParallaxSection({ children, speed = 0.5, className = "" }: ParallaxSectionProps) {
-  const prefersReducedMotion = useReducedMotion();
+export function ParallaxSection({ children, speed = 0.5, className = '' }: ParallaxSectionProps) {
+  const prefersReducedMotion = useReducedMotion()
 
   if (prefersReducedMotion) {
-    return <div className={className}>{children}</div>;
+    return <div className={className}>{children}</div>
   }
 
   return (
@@ -74,12 +74,12 @@ export function ParallaxSection({ children, speed = 0.5, className = "" }: Paral
       initial={{ y: 0 }}
       whileInView={{ y: speed * 100 }}
       viewport={{ once: false }}
-      transition={{ ease: "linear" }}
+      transition={{ ease: 'linear' }}
       className={className}
     >
       {children}
     </motion.div>
-  );
+  )
 }
 
 // ============================================
@@ -87,22 +87,22 @@ export function ParallaxSection({ children, speed = 0.5, className = "" }: Paral
 // ============================================
 
 interface ColorChangeTextProps {
-  children: ReactNode;
-  fromColor?: string;
-  toColor?: string;
-  className?: string;
+  children: ReactNode
+  fromColor?: string
+  toColor?: string
+  className?: string
 }
 
 export function ColorChangeText({
   children,
-  toColor = "#52D1DC",
-  className = "",
+  toColor = '#52D1DC',
+  className = '',
 }: ColorChangeTextProps) {
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotion()
 
   return (
     <motion.div
-      initial={prefersReducedMotion ? { color: toColor } : { color: "#FFFFFF" }}
+      initial={prefersReducedMotion ? { color: toColor } : { color: '#FFFFFF' }}
       whileInView={{ color: toColor }}
       viewport={{ once: true, amount: 0.5 }}
       transition={{ duration: 0.8 }}
@@ -110,7 +110,7 @@ export function ColorChangeText({
     >
       {children}
     </motion.div>
-  );
+  )
 }
 
 // ============================================
@@ -118,23 +118,25 @@ export function ColorChangeText({
 // ============================================
 
 interface ScaleOnScrollProps {
-  children: ReactNode;
-  fromScale?: number;
-  toScale?: number;
-  className?: string;
+  children: ReactNode
+  fromScale?: number
+  toScale?: number
+  className?: string
 }
 
 export function ScaleOnScroll({
   children,
   fromScale = 0.8,
   toScale = 1,
-  className = "",
+  className = '',
 }: ScaleOnScrollProps) {
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotion()
 
   return (
     <motion.div
-      initial={prefersReducedMotion ? { scale: toScale, opacity: 1 } : { scale: fromScale, opacity: 0 }}
+      initial={
+        prefersReducedMotion ? { scale: toScale, opacity: 1 } : { scale: fromScale, opacity: 0 }
+      }
       whileInView={{ scale: toScale, opacity: 1 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -142,7 +144,7 @@ export function ScaleOnScroll({
     >
       {children}
     </motion.div>
-  );
+  )
 }
 
-export default ScrollReveal;
+export default ScrollReveal

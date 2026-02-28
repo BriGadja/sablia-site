@@ -1,58 +1,72 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { motion } from "framer-motion";
-import { CheckCircle, Send, Loader2, Calendar } from "lucide-react";
-import { InlineWidget } from "react-calendly";
-import { useToast } from "@/hooks/use-toast";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { motion } from 'framer-motion'
+import { Calendar, CheckCircle, Loader2, Send } from 'lucide-react'
+import { useState } from 'react'
+import { InlineWidget } from 'react-calendly'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
+import { useToast } from '@/hooks/use-toast'
 
 const contactSchema = z.object({
-  nom: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
-  email: z.string().email("Adresse email invalide"),
+  nom: z.string().min(2, 'Le nom doit contenir au moins 2 caractères'),
+  email: z.string().email('Adresse email invalide'),
   entreprise: z.string().min(2, "Le nom d'entreprise doit contenir au moins 2 caractères"),
   telephone: z.string().optional(),
-  message: z.string().min(10, "Le message doit contenir au moins 10 caractères"),
+  message: z.string().min(10, 'Le message doit contenir au moins 10 caractères'),
   rgpdConsent: z.literal(true, {
-    errorMap: () => ({ message: "Vous devez accepter la politique de confidentialité" }),
+    errorMap: () => ({ message: 'Vous devez accepter la politique de confidentialité' }),
   }),
-});
+})
 
-type ContactInputs = z.infer<typeof contactSchema>;
+type ContactInputs = z.infer<typeof contactSchema>
 
-const inputClasses = "w-full px-4 py-3 rounded bg-sablia-bg border border-sablia-border text-sablia-text text-base focus:outline-none focus:border-sablia-accent focus:ring-1 focus:ring-sablia-accent transition-colors";
+const inputClasses =
+  'w-full px-4 py-3 rounded bg-sablia-bg border border-sablia-border text-sablia-text text-base focus:outline-none focus:border-sablia-accent focus:ring-1 focus:ring-sablia-accent transition-colors'
 
 export default function ContactFormSection() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const { toast } = useToast()
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<ContactInputs>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<ContactInputs>({
     resolver: zodResolver(contactSchema),
-    mode: "onChange",
-  });
+    mode: 'onChange',
+  })
 
   const onSubmit = async (data: ContactInputs) => {
-    setIsSubmitting(true);
+    setIsSubmitting(true)
     try {
-      const response = await fetch("https://n8n.sablia.io/webhook/sablia-site-formulaire", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('https://n8n.sablia.io/webhook/sablia-site-formulaire', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
-      });
-      if (!response.ok) throw new Error("Échec de l'envoi du message");
+      })
+      if (!response.ok) throw new Error("Échec de l'envoi du message")
 
-      setIsSuccess(true);
-      reset();
-      toast({ title: "Message envoyé !", description: "Nous vous répondrons dans les 24 heures.", variant: "default" });
-      setTimeout(() => setIsSuccess(false), 5000);
+      setIsSuccess(true)
+      reset()
+      toast({
+        title: 'Message envoyé !',
+        description: 'Nous vous répondrons dans les 24 heures.',
+        variant: 'default',
+      })
+      setTimeout(() => setIsSuccess(false), 5000)
     } catch (error) {
-      console.error("Contact form error:", error);
-      toast({ title: "Erreur", description: "Une erreur est survenue lors de l'envoi. Veuillez réessayer.", variant: "destructive" });
+      console.error('Contact form error:', error)
+      toast({
+        title: 'Erreur',
+        description: "Une erreur est survenue lors de l'envoi. Veuillez réessayer.",
+        variant: 'destructive',
+      })
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <section id="contact" className="py-32">
@@ -83,68 +97,140 @@ export default function ContactFormSection() {
                 <Send size={18} className="text-sablia-accent" />
                 <h3 className="text-xl font-semibold text-sablia-text">Envoyer un message</h3>
               </div>
-              <p className="text-sm text-sablia-text-secondary mb-6">Réponse sous 24 heures, promis.</p>
+              <p className="text-sm text-sablia-text-secondary mb-6">
+                Réponse sous 24 heures, promis.
+              </p>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div>
-                  <label htmlFor="nom" className="block text-sablia-text mb-1.5 text-sm font-medium">
+                  <label
+                    htmlFor="nom"
+                    className="block text-sablia-text mb-1.5 text-sm font-medium"
+                  >
                     Nom <span className="text-sablia-accent">*</span>
                   </label>
-                  <input id="nom" type="text" {...register("nom")} className={inputClasses} placeholder="Jean Dupont" />
+                  <input
+                    id="nom"
+                    type="text"
+                    {...register('nom')}
+                    className={inputClasses}
+                    placeholder="Jean Dupont"
+                  />
                   {errors.nom && <p className="text-red-500 text-sm mt-1">{errors.nom.message}</p>}
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sablia-text mb-1.5 text-sm font-medium">
+                  <label
+                    htmlFor="email"
+                    className="block text-sablia-text mb-1.5 text-sm font-medium"
+                  >
                     Email <span className="text-sablia-accent">*</span>
                   </label>
-                  <input id="email" type="email" {...register("email")} className={inputClasses} placeholder="jean.dupont@exemple.fr" />
-                  {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+                  <input
+                    id="email"
+                    type="email"
+                    {...register('email')}
+                    className={inputClasses}
+                    placeholder="jean.dupont@exemple.fr"
+                  />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                  )}
                 </div>
 
                 <div>
-                  <label htmlFor="entreprise" className="block text-sablia-text mb-1.5 text-sm font-medium">
+                  <label
+                    htmlFor="entreprise"
+                    className="block text-sablia-text mb-1.5 text-sm font-medium"
+                  >
                     Entreprise <span className="text-sablia-accent">*</span>
                   </label>
-                  <input id="entreprise" type="text" {...register("entreprise")} className={inputClasses} placeholder="ACME Corp" />
-                  {errors.entreprise && <p className="text-red-500 text-sm mt-1">{errors.entreprise.message}</p>}
+                  <input
+                    id="entreprise"
+                    type="text"
+                    {...register('entreprise')}
+                    className={inputClasses}
+                    placeholder="ACME Corp"
+                  />
+                  {errors.entreprise && (
+                    <p className="text-red-500 text-sm mt-1">{errors.entreprise.message}</p>
+                  )}
                 </div>
 
                 <div>
-                  <label htmlFor="telephone" className="block text-sablia-text mb-1.5 text-sm font-medium">
+                  <label
+                    htmlFor="telephone"
+                    className="block text-sablia-text mb-1.5 text-sm font-medium"
+                  >
                     Téléphone <span className="text-sablia-text-tertiary">(optionnel)</span>
                   </label>
-                  <input id="telephone" type="tel" {...register("telephone")} className={inputClasses} placeholder="+33 6 12 34 56 78" />
+                  <input
+                    id="telephone"
+                    type="tel"
+                    {...register('telephone')}
+                    className={inputClasses}
+                    placeholder="+33 6 12 34 56 78"
+                  />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sablia-text mb-1.5 text-sm font-medium">
+                  <label
+                    htmlFor="message"
+                    className="block text-sablia-text mb-1.5 text-sm font-medium"
+                  >
                     Message <span className="text-sablia-accent">*</span>
                   </label>
-                  <textarea id="message" rows={4} {...register("message")} className={`${inputClasses} resize-none`} placeholder="Décrivez votre projet d'automatisation..." />
-                  {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
+                  <textarea
+                    id="message"
+                    rows={4}
+                    {...register('message')}
+                    className={`${inputClasses} resize-none`}
+                    placeholder="Décrivez votre projet d'automatisation..."
+                  />
+                  {errors.message && (
+                    <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
+                  )}
                 </div>
 
                 <div>
                   <label className="flex items-start gap-2.5 cursor-pointer">
-                    <input type="checkbox" {...register("rgpdConsent")} className="mt-1 w-4 h-4 accent-sablia-accent rounded" />
+                    <input
+                      type="checkbox"
+                      {...register('rgpdConsent')}
+                      className="mt-1 w-4 h-4 accent-sablia-accent rounded"
+                    />
                     <span className="text-sm text-sablia-text-secondary">
-                      J'accepte que mes données soient traitées conformément à la{" "}
-                      <a href="/politique-confidentialite" target="_blank" rel="noopener noreferrer" className="text-sablia-accent underline hover:text-sablia-accent-hover">
+                      J'accepte que mes données soient traitées conformément à la{' '}
+                      <a
+                        href="/politique-confidentialite"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sablia-accent underline hover:text-sablia-accent-hover"
+                      >
                         politique de confidentialité
-                      </a>. <span className="text-sablia-accent">*</span>
+                      </a>
+                      . <span className="text-sablia-accent">*</span>
                     </span>
                   </label>
-                  {errors.rgpdConsent && <p className="text-red-500 text-sm mt-1">{errors.rgpdConsent.message}</p>}
+                  {errors.rgpdConsent && (
+                    <p className="text-red-500 text-sm mt-1">{errors.rgpdConsent.message}</p>
+                  )}
                 </div>
 
                 {isSubmitting ? (
-                  <button type="button" disabled className="w-full bg-sablia-accent/60 text-white px-6 py-3.5 rounded-md font-medium cursor-not-allowed flex items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    disabled
+                    className="w-full bg-sablia-accent/60 text-white px-6 py-3.5 rounded-md font-medium cursor-not-allowed flex items-center justify-center gap-2"
+                  >
                     <Loader2 size={18} className="animate-spin" />
                     Envoi en cours...
                   </button>
                 ) : (
-                  <button type="submit" className="w-full bg-sablia-accent text-sablia-bg px-6 py-3.5 rounded-md font-medium hover:bg-sablia-accent-hover transition-colors duration-200 flex items-center justify-center gap-2">
+                  <button
+                    type="submit"
+                    className="w-full bg-sablia-accent text-sablia-bg px-6 py-3.5 rounded-md font-medium hover:bg-sablia-accent-hover transition-colors duration-200 flex items-center justify-center gap-2"
+                  >
                     <Send size={18} />
                     Envoyer le message
                   </button>
@@ -176,15 +262,17 @@ export default function ContactFormSection() {
               <Calendar size={18} className="text-sablia-accent" />
               <h3 className="text-xl font-semibold text-sablia-text">Réserver un appel</h3>
             </div>
-            <p className="text-sm text-sablia-text-secondary mb-6">30 minutes pour découvrir vos besoins.</p>
+            <p className="text-sm text-sablia-text-secondary mb-6">
+              30 minutes pour découvrir vos besoins.
+            </p>
 
             <div className="rounded-md overflow-hidden">
               <InlineWidget
                 url="https://calendly.com/brice-gachadoat/30min"
-                styles={{ height: "580px", minWidth: "280px" }}
+                styles={{ height: '580px', minWidth: '280px' }}
                 pageSettings={{
-                  primaryColor: "1a2e4e",
-                  backgroundColor: "f4efe2",
+                  primaryColor: '1a2e4e',
+                  backgroundColor: 'f4efe2',
                   hideEventTypeDetails: false,
                   hideLandingPageDetails: false,
                 }}
@@ -194,5 +282,5 @@ export default function ContactFormSection() {
         </div>
       </div>
     </section>
-  );
+  )
 }

@@ -1,78 +1,98 @@
-import { Helmet } from "react-helmet-async";
-import { motion } from "framer-motion";
-import { Search, Rocket, Zap } from "lucide-react";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { motion } from 'framer-motion'
+import { Rocket, Search, Zap } from 'lucide-react'
+import { Helmet } from 'react-helmet-async'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 
 const howToSchema = {
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "Comment automatiser votre entreprise avec Sablia",
-  "description": "Processus en 3 étapes pour transformer et automatiser vos opérations business avec n8n et Make.com",
-  "totalTime": "P12W",
-  "estimatedCost": {
-    "@type": "MonetaryAmount",
-    "currency": "EUR",
-    "minValue": "350",
-    "maxValue": "60000",
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'Comment automatiser votre entreprise avec Sablia',
+  description:
+    'Processus en 3 étapes pour transformer et automatiser vos opérations business avec n8n et Make.com',
+  totalTime: 'P12W',
+  estimatedCost: {
+    '@type': 'MonetaryAmount',
+    currency: 'EUR',
+    minValue: '350',
+    maxValue: '60000',
   },
-  "step": [
-    { "@type": "HowToStep", "position": 1, "name": "Découvrir", "text": "Audit de vos processus actuels pour identifier les gains rapides et bâtir une roadmap d'automatisation adaptée à votre contexte.", "url": "https://sablia.io/#process" },
-    { "@type": "HowToStep", "position": 2, "name": "Implémenter", "text": "Formation de vos équipes et/ou développement des workflows selon votre besoin. Approche modulaire adaptée à votre contexte.", "url": "https://sablia.io/#process" },
-    { "@type": "HowToStep", "position": 3, "name": "Optimiser & Accompagner", "text": "Sur la base des retours terrain, nous adaptons vos workflows : modifications, formation de nouveaux collaborateurs, mises à jour et optimisation continue.", "url": "https://sablia.io/#process" },
+  step: [
+    {
+      '@type': 'HowToStep',
+      position: 1,
+      name: 'Découvrir',
+      text: "Audit de vos processus actuels pour identifier les gains rapides et bâtir une roadmap d'automatisation adaptée à votre contexte.",
+      url: 'https://sablia.io/#process',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 2,
+      name: 'Implémenter',
+      text: 'Formation de vos équipes et/ou développement des workflows selon votre besoin. Approche modulaire adaptée à votre contexte.',
+      url: 'https://sablia.io/#process',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 3,
+      name: 'Optimiser & Accompagner',
+      text: 'Sur la base des retours terrain, nous adaptons vos workflows : modifications, formation de nouveaux collaborateurs, mises à jour et optimisation continue.',
+      url: 'https://sablia.io/#process',
+    },
   ],
-};
+}
 
 interface Step {
-  id: number;
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  duration: string;
-  badges?: Array<{ label: string; duration: string }>;
+  id: number
+  icon: React.ReactNode
+  title: string
+  description: string
+  duration: string
+  badges?: Array<{ label: string; duration: string }>
 }
 
 const steps: Step[] = [
   {
     id: 1,
     icon: <Search size={28} className="text-sablia-accent" />,
-    title: "Découvrir",
-    description: "Audit de vos processus actuels pour identifier les gains rapides et bâtir une roadmap d'automatisation adaptée à votre contexte.",
-    duration: "Modulaire",
+    title: 'Découvrir',
+    description:
+      "Audit de vos processus actuels pour identifier les gains rapides et bâtir une roadmap d'automatisation adaptée à votre contexte.",
+    duration: 'Modulaire',
     badges: [
-      { label: "Audit Express", duration: "1h30" },
-      { label: "Audit Complet", duration: "Jusqu'à 2 semaines" },
+      { label: 'Audit Express', duration: '1h30' },
+      { label: 'Audit Complet', duration: "Jusqu'à 2 semaines" },
     ],
   },
   {
     id: 2,
     icon: <Zap size={28} className="text-sablia-accent" />,
-    title: "Implémenter",
-    description: "Formation de vos équipes et/ou développement des workflows selon votre besoin. Approche modulaire adaptée à votre contexte.",
-    duration: "Modulaire",
+    title: 'Implémenter',
+    description:
+      'Formation de vos équipes et/ou développement des workflows selon votre besoin. Approche modulaire adaptée à votre contexte.',
+    duration: 'Modulaire',
     badges: [
-      { label: "Formation", duration: "1-5 jours" },
-      { label: "Développement", duration: "2-8 semaines" },
-      { label: "Hybride", duration: "Combiné" },
+      { label: 'Formation', duration: '1-5 jours' },
+      { label: 'Développement', duration: '2-8 semaines' },
+      { label: 'Hybride', duration: 'Combiné' },
     ],
   },
   {
     id: 3,
     icon: <Rocket size={28} className="text-sablia-accent" />,
-    title: "Optimiser & Accompagner",
-    description: "Sur la base des retours terrain, nous adaptons vos workflows : modifications, formation de nouveaux collaborateurs, mises à jour et optimisation continue.",
-    duration: "Continu",
+    title: 'Optimiser & Accompagner',
+    description:
+      'Sur la base des retours terrain, nous adaptons vos workflows : modifications, formation de nouveaux collaborateurs, mises à jour et optimisation continue.',
+    duration: 'Continu',
   },
-];
+]
 
 export default function ThreeStepProcess() {
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useReducedMotion()
 
   return (
     <>
       <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify(howToSchema)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(howToSchema)}</script>
       </Helmet>
 
       <section id="process" className="py-32">
@@ -87,7 +107,8 @@ export default function ThreeStepProcess() {
               Notre processus en 3 étapes
             </h2>
             <p className="text-lg text-sablia-text-secondary text-center mb-20 max-w-2xl mx-auto">
-              De l'audit initial à l'optimisation continue, nous accompagnons votre transformation digitale
+              De l'audit initial à l'optimisation continue, nous accompagnons votre transformation
+              digitale
             </p>
           </motion.div>
 
@@ -126,7 +147,9 @@ export default function ThreeStepProcess() {
                         className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-sablia-surface border border-sablia-border text-sm"
                       >
                         <span className="text-sablia-text font-medium">{badge.label}</span>
-                        <span className="text-sablia-text-tertiary text-xs">· {badge.duration}</span>
+                        <span className="text-sablia-text-tertiary text-xs">
+                          · {badge.duration}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -141,5 +164,5 @@ export default function ThreeStepProcess() {
         </div>
       </section>
     </>
-  );
+  )
 }

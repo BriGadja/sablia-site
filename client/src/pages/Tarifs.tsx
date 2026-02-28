@@ -1,9 +1,9 @@
-import { motion } from "framer-motion";
-import Navigation from "@/components/landing/Navigation";
-import PricingSection from "@/components/landing/PricingSection";
-import Footer from "@/components/Footer";
-import ScrollToTop from "@/components/ScrollToTop";
-import SEO from "@/components/SEO";
+import { motion } from 'framer-motion'
+import Footer from '@/components/Footer'
+import Navigation from '@/components/landing/Navigation'
+import PricingSection from '@/components/landing/PricingSection'
+import ScrollToTop from '@/components/ScrollToTop'
+import SEO from '@/components/SEO'
 
 /**
  * Page Tarifs - Grille tarifaire détaillée complète
@@ -30,5 +30,5 @@ export default function Tarifs() {
         </div>
       </motion.div>
     </>
-  );
+  )
 }

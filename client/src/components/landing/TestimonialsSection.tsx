@@ -1,100 +1,100 @@
-import { motion } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { motion } from 'framer-motion'
+import { Helmet } from 'react-helmet-async'
 
 interface Testimonial {
-  name: string;
-  role: string;
-  company: string;
-  avatar: string;
-  quote: string;
-  metric: string;
-  project: string;
-  before: string;
+  name: string
+  role: string
+  company: string
+  avatar: string
+  quote: string
+  metric: string
+  project: string
+  before: string
 }
 
 const testimonials: Testimonial[] = [
   {
-    name: "Hélène",
-    role: "Fondatrice",
-    company: "GirlsGang",
-    avatar: "HE",
+    name: 'Hélène',
+    role: 'Fondatrice',
+    company: 'GirlsGang',
+    avatar: 'HE',
     quote:
       "De 1h de conception par menu à 30 minutes de relecture pour toutes mes clientes. L'automatisation développée par Sablia m'a redonné du temps pour me concentrer sur l'essentiel : mes clientes.",
-    metric: "Économie de 90% du temps",
-    project: "Génération de menus",
-    before: "1h de conception manuelle par menu client",
+    metric: 'Économie de 90% du temps',
+    project: 'Génération de menus',
+    before: '1h de conception manuelle par menu client',
   },
   {
-    name: "Directeur",
-    role: "Direction",
-    company: "Entreprise anonyme",
-    avatar: "DI",
+    name: 'Directeur',
+    role: 'Direction',
+    company: 'Entreprise anonyme',
+    avatar: 'DI',
     quote:
       "Une vision à 360° de notre marché et une longueur d'avance sur nos concurrents. Ce système de veille nous a permis de passer d'une position réactive à une stratégie proactive.",
-    metric: "Avantage compétitif décisif",
-    project: "Veille concurrentielle",
-    before: "Veille manuelle, toujours en retard sur le marché",
+    metric: 'Avantage compétitif décisif',
+    project: 'Veille concurrentielle',
+    before: 'Veille manuelle, toujours en retard sur le marché',
   },
   {
-    name: "Yassine",
-    role: "Fondateur",
-    company: "Norloc",
-    avatar: "YN",
+    name: 'Yassine',
+    role: 'Fondateur',
+    company: 'Norloc',
+    avatar: 'YN',
     quote:
       "Notre gestion des prospects est passée au niveau supérieur. L'agent vocal couplé à l'automatisation du CRM nous fait gagner des heures chaque semaine et améliore nos taux de conversion.",
-    metric: "Taux de conversion amélioré",
-    project: "Agent vocal + CRM",
-    before: "Suivi prospect manuel, relances oubliées",
+    metric: 'Taux de conversion amélioré',
+    project: 'Agent vocal + CRM',
+    before: 'Suivi prospect manuel, relances oubliées',
   },
   {
-    name: "Valentin",
-    role: "Fondateur",
-    company: "Stefano Design & Exotic Design",
-    avatar: "VD",
+    name: 'Valentin',
+    role: 'Fondateur',
+    company: 'Stefano Design & Exotic Design',
+    avatar: 'VD',
     quote:
       "Des milliers de contacts dormants transformés en opportunités commerciales concrètes. L'agent vocal nous a permis d'exploiter un gisement de valeur que nous avions sous-estimé.",
-    metric: "Milliers de contacts réactivés",
-    project: "Réactivation automatisée de BDD",
-    before: "Base de données de contacts dormante et inexploitée",
+    metric: 'Milliers de contacts réactivés',
+    project: 'Réactivation automatisée de BDD',
+    before: 'Base de données de contacts dormante et inexploitée',
   },
   {
-    name: "Amir",
-    role: "Fondateur",
-    company: "Entreprise BTP",
-    avatar: "AM",
+    name: 'Amir',
+    role: 'Fondateur',
+    company: 'Entreprise BTP',
+    avatar: 'AM',
     quote:
       "De la demande client au suivi de chantier, tout est automatisé. Plus de temps perdu, plus d'erreurs, juste de l'efficacité. Notre organisation a été transformée.",
-    metric: "Organisation transformée",
-    project: "Gestion des interventions",
-    before: "Gestion papier des demandes et suivis de chantier",
+    metric: 'Organisation transformée',
+    project: 'Gestion des interventions',
+    before: 'Gestion papier des demandes et suivis de chantier',
   },
-];
+]
 
 const reviewSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Sablia",
-  "url": "https://sablia.io",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "reviewCount": "5",
-    "bestRating": "5",
-    "worstRating": "1",
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Sablia',
+  url: 'https://sablia.io',
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.9',
+    reviewCount: '5',
+    bestRating: '5',
+    worstRating: '1',
   },
-  "review": testimonials.map((t) => ({
-    "@type": "Review",
-    "author": { "@type": "Person", "name": t.name },
-    "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-    "reviewBody": t.quote,
-    "datePublished": "2025-01-01",
-    "itemReviewed": {
-      "@type": "Service",
-      "name": t.project,
-      "provider": { "@type": "Organization", "name": "Sablia" },
+  review: testimonials.map((t) => ({
+    '@type': 'Review',
+    author: { '@type': 'Person', name: t.name },
+    reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+    reviewBody: t.quote,
+    datePublished: '2025-01-01',
+    itemReviewed: {
+      '@type': 'Service',
+      name: t.project,
+      provider: { '@type': 'Organization', name: 'Sablia' },
     },
   })),
-};
+}
 
 function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; index: number }) {
   return (
@@ -109,9 +109,7 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
         <span className="text-base font-bold">{testimonial.metric}</span>
       </div>
 
-      <p className="text-xs text-sablia-text-tertiary mb-3 italic">
-        Avant : {testimonial.before}
-      </p>
+      <p className="text-xs text-sablia-text-tertiary mb-3 italic">Avant : {testimonial.before}</p>
 
       <p className="text-sablia-text-secondary leading-relaxed mb-4 text-sm">
         "{testimonial.quote}"
@@ -125,21 +123,21 @@ function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; ind
           <h3 className="font-semibold text-sablia-text text-sm leading-tight">
             {testimonial.name}
           </h3>
-          <p className="text-xs text-sablia-text-secondary">{testimonial.role}, {testimonial.company}</p>
+          <p className="text-xs text-sablia-text-secondary">
+            {testimonial.role}, {testimonial.company}
+          </p>
         </div>
         <p className="text-xs text-sablia-text-tertiary">{testimonial.project}</p>
       </div>
     </motion.div>
-  );
+  )
 }
 
 export default function TestimonialsSection() {
   return (
     <>
       <Helmet>
-        <script type="application/ld+json">
-          {JSON.stringify(reviewSchema)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(reviewSchema)}</script>
       </Helmet>
 
       <section id="testimonials" className="py-32 bg-sablia-surface">
@@ -169,11 +167,20 @@ export default function TestimonialsSection() {
               transition={{ delay: 0.12 }}
               className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-6 text-sm"
             >
-              <span><strong className="text-sablia-sienna">15+</strong>{" "}<span className="text-sablia-text-secondary">projets livrés</span></span>
+              <span>
+                <strong className="text-sablia-sienna">15+</strong>{' '}
+                <span className="text-sablia-text-secondary">projets livrés</span>
+              </span>
               <span className="text-sablia-border">·</span>
-              <span><strong className="text-sablia-sienna">4.9/5</strong>{" "}<span className="text-sablia-text-secondary">satisfaction</span></span>
+              <span>
+                <strong className="text-sablia-sienna">4.9/5</strong>{' '}
+                <span className="text-sablia-text-secondary">satisfaction</span>
+              </span>
               <span className="text-sablia-border">·</span>
-              <span><strong className="text-sablia-sienna">5</strong>{" "}<span className="text-sablia-text-secondary">secteurs d'activité</span></span>
+              <span>
+                <strong className="text-sablia-sienna">5</strong>{' '}
+                <span className="text-sablia-text-secondary">secteurs d'activité</span>
+              </span>
             </motion.div>
           </div>
 
@@ -200,5 +207,5 @@ export default function TestimonialsSection() {
         </div>
       </section>
     </>
-  );
+  )
 }

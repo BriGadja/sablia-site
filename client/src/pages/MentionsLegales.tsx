@@ -1,14 +1,14 @@
-import { useEffect } from "react";
-import Footer from "@/components/Footer";
-import Navigation from "@/components/landing/Navigation";
-import ScrollToTop from "@/components/ScrollToTop";
-import SEO from "@/components/SEO";
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion'
+import { useEffect } from 'react'
+import Footer from '@/components/Footer'
+import Navigation from '@/components/landing/Navigation'
+import ScrollToTop from '@/components/ScrollToTop'
+import SEO from '@/components/SEO'
 
 export default function MentionsLegales() {
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <>
@@ -65,18 +65,22 @@ export default function MentionsLegales() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">Propriété intellectuelle</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
+                  Propriété intellectuelle
+                </h2>
                 <p className="text-sablia-text-secondary">
-                  L'ensemble du contenu présent sur le site sablia.io, incluant notamment les textes,
-                  images, logos, et éléments graphiques, est la propriété de GACHADOAT Brice ou de ses
-                  partenaires, et est protégé par les lois françaises et internationales relatives à
-                  la propriété intellectuelle. Toute reproduction, distribution, ou utilisation sans
-                  autorisation préalable est interdite.
+                  L'ensemble du contenu présent sur le site sablia.io, incluant notamment les
+                  textes, images, logos, et éléments graphiques, est la propriété de GACHADOAT Brice
+                  ou de ses partenaires, et est protégé par les lois françaises et internationales
+                  relatives à la propriété intellectuelle. Toute reproduction, distribution, ou
+                  utilisation sans autorisation préalable est interdite.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">Conditions d'utilisation</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
+                  Conditions d'utilisation
+                </h2>
                 <p className="text-sablia-text-secondary">
                   L'utilisation du site sablia.io implique l'acceptation des présentes mentions
                   légales. En cas de non-respect, l'accès au site peut être suspendu ou interdit.
@@ -89,20 +93,25 @@ export default function MentionsLegales() {
                 </h2>
                 <p className="text-sablia-text-secondary">
                   Les données collectées via le site sont destinées à l'usage exclusif de GACHADOAT
-                  Brice. Conformément au Règlement Général sur la Protection des Données (RGPD), vous
-                  disposez d'un droit d'accès, de rectification ou de suppression de vos données
-                  personnelles. Pour exercer ces droits, contactez-nous à l'adresse :{" "}
-                  <a href="mailto:brice@sablia.io" className="text-sablia-accent hover:text-sablia-accent-hover">
+                  Brice. Conformément au Règlement Général sur la Protection des Données (RGPD),
+                  vous disposez d'un droit d'accès, de rectification ou de suppression de vos
+                  données personnelles. Pour exercer ces droits, contactez-nous à l'adresse :{' '}
+                  <a
+                    href="mailto:brice@sablia.io"
+                    className="text-sablia-accent hover:text-sablia-accent-hover"
+                  >
                     brice@sablia.io
                   </a>
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">Liens vers d'autres sites</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
+                  Liens vers d'autres sites
+                </h2>
                 <p className="text-sablia-text-secondary">
-                  Le site sablia.io peut contenir des liens vers d'autres sites. GACHADOAT Brice n'est
-                  pas responsable du contenu ou des pratiques de ces sites.
+                  Le site sablia.io peut contenir des liens vers d'autres sites. GACHADOAT Brice
+                  n'est pas responsable du contenu ou des pratiques de ces sites.
                 </p>
               </section>
             </div>
@@ -112,5 +121,5 @@ export default function MentionsLegales() {
         </div>
       </motion.div>
     </>
-  );
+  )
 }
