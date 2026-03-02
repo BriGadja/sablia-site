@@ -181,6 +181,18 @@ export default function PolitiqueConfidentialite() {
                         </td>
                       </tr>
                       <tr className="border-b border-gray-100">
+                        <td className="px-4 py-3">
+                          Mesure de l'efficacité des campagnes publicitaires
+                        </td>
+                        <td className="px-4 py-3">
+                          <strong>Consentement</strong>
+                        </td>
+                        <td className="px-4 py-3">
+                          Suivi des conversions Google Ads : permet de mesurer si une visite issue
+                          d'une annonce aboutit à une action (formulaire, prise de rendez‑vous).
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-100">
                         <td className="px-4 py-3">Sécurité du Site et prévention de la fraude</td>
                         <td className="px-4 py-3">Intérêt légitime</td>
                         <td className="px-4 py-3">Logs, détection d'anomalies et d'abus.</td>
@@ -308,9 +320,13 @@ export default function PolitiqueConfidentialite() {
                 </h2>
                 <p className="text-sablia-text-secondary mb-4">
                   Nous utilisons <strong>Google Analytics 4 (GA4)</strong> pour mesurer l'audience
-                  du Site. GA4 dépose des cookies d'analyse (<code>_ga</code>, <code>_ga_*</code>)
-                  qui permettent de distinguer les visiteurs et de comprendre les parcours de
-                  navigation. L'adresse IP est <strong>anonymisée</strong> par défaut.
+                  du Site et <strong>Google Ads (suivi de conversions)</strong> pour mesurer
+                  l'efficacité de nos campagnes publicitaires. GA4 dépose des cookies d'analyse (
+                  <code>_ga</code>, <code>_ga_*</code>) qui permettent de distinguer les visiteurs
+                  et de comprendre les parcours de navigation. Google Ads dépose des cookies de
+                  conversion (<code>_gcl_aw</code>, <code>_gcl_au</code>) qui permettent d'attribuer
+                  une conversion à une annonce. L'adresse IP est <strong>anonymisée</strong> par
+                  défaut.
                 </p>
                 <p className="text-sablia-text-secondary mb-4">
                   Ces cookies ne sont déposés qu'<strong>après votre consentement explicite</strong>
@@ -490,6 +506,30 @@ export default function PolitiqueConfidentialite() {
                         <td className="px-4 py-3">2 ans</td>
                         <td className="px-4 py-3">Consentement</td>
                       </tr>
+                      <tr className="border-b border-gray-100">
+                        <td className="px-4 py-3">Publicitaire</td>
+                        <td className="px-4 py-3">
+                          <code>_gcl_aw</code>
+                        </td>
+                        <td className="px-4 py-3">Google LLC</td>
+                        <td className="px-4 py-3">
+                          Suivi des conversions Google Ads (attribution clic publicitaire)
+                        </td>
+                        <td className="px-4 py-3">90 jours</td>
+                        <td className="px-4 py-3">Consentement</td>
+                      </tr>
+                      <tr className="border-b border-gray-100">
+                        <td className="px-4 py-3">Publicitaire</td>
+                        <td className="px-4 py-3">
+                          <code>_gcl_au</code>
+                        </td>
+                        <td className="px-4 py-3">Google LLC</td>
+                        <td className="px-4 py-3">
+                          Attribution des conversions Google Ads (identifiant first‑party)
+                        </td>
+                        <td className="px-4 py-3">90 jours</td>
+                        <td className="px-4 py-3">Consentement</td>
+                      </tr>
                       <tr>
                         <td className="px-4 py-3">Préférence</td>
                         <td className="px-4 py-3">
@@ -588,7 +628,9 @@ export default function PolitiqueConfidentialite() {
                         <td className="px-4 py-3">
                           <strong>Google LLC</strong>
                         </td>
-                        <td className="px-4 py-3">Mesure d'audience (GA4)</td>
+                        <td className="px-4 py-3">
+                          Mesure d'audience (GA4) et suivi de conversions publicitaires (Google Ads)
+                        </td>
                         <td className="px-4 py-3">Global (centres de données Google)</td>
                         <td className="px-4 py-3">CCT</td>
                         <td className="px-4 py-3">Oui</td>

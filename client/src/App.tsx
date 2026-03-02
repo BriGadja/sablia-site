@@ -1,6 +1,6 @@
 import { QueryClientProvider } from '@tanstack/react-query'
 import { AnimatePresence } from 'framer-motion'
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { HelmetProvider } from 'react-helmet-async'
 import { Route, Switch } from 'wouter'
 import CookieConsentBanner from '@/components/CookieConsentBanner'
@@ -22,6 +22,9 @@ import Tarifs from '@/pages/Tarifs'
 import ThankYou from '@/pages/ThankYou'
 import { queryClient } from './lib/queryClient'
 
+const LpAutomatisation = lazy(() => import('@/pages/LpAutomatisation'))
+const LpAuditGratuit = lazy(() => import('@/pages/LpAuditGratuit'))
+
 function Router() {
   return (
     <AnimatePresence mode="wait">
@@ -37,6 +40,16 @@ function Router() {
         <Route path="/faq" component={Faq} />
         <Route path="/cas-clients" component={CaseStudies} />
         <Route path="/thank-you" component={ThankYou} />
+        <Route path="/lp/automatisation-pme">
+          <Suspense fallback={null}>
+            <LpAutomatisation />
+          </Suspense>
+        </Route>
+        <Route path="/lp/audit-gratuit">
+          <Suspense fallback={null}>
+            <LpAuditGratuit />
+          </Suspense>
+        </Route>
         <Route component={NotFound} />
       </Switch>
     </AnimatePresence>

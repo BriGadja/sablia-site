@@ -5,8 +5,16 @@ declare global {
   }
 }
 
+type ConversionType = 'contact_form' | 'gap_form' | 'calendly_booking'
+
 const CONSENT_KEY = 'analytics_consent'
 const GA4_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID as string | undefined
+const GADS_CONVERSION_ID = import.meta.env.VITE_GADS_CONVERSION_ID as string | undefined
+const GADS_LABELS: Record<ConversionType, string | undefined> = {
+  contact_form: import.meta.env.VITE_GADS_LABEL_CONTACT as string | undefined,
+  gap_form: import.meta.env.VITE_GADS_LABEL_GAP as string | undefined,
+  calendly_booking: import.meta.env.VITE_GADS_LABEL_CALENDLY as string | undefined,
+}
 
 type ConsentState = 'accepted' | 'rejected' | null
 
@@ -42,6 +50,11 @@ export function initGA4(): void {
     send_page_view: false, // We handle page views manually for SPA
   })
 
+  // Configure Google Ads conversion tracking
+  if (GADS_CONVERSION_ID) {
+    window.gtag('config', GADS_CONVERSION_ID)
+  }
+
   initialized = true
 }
 
@@ -58,12 +71,22 @@ export function trackEvent(name: string, params?: Record<string, string>): void 
   window.gtag('event', name, params)
 }
 
-type ConversionType = 'contact_form' | 'gap_form' | 'calendly_booking'
+export type { ConversionType }
 
 export function trackConversion(type: ConversionType): void {
   if (!initialized) return
+
+  // GA4 conversion event
   window.gtag('event', 'generate_lead', {
     event_category: 'conversion',
     event_label: type,
   })
+
+  // Google Ads conversion event
+  const label = GADS_LABELS[type]
+  if (GADS_CONVERSION_ID && label) {
+    window.gtag('event', 'conversion', {
+      send_to: `${GADS_CONVERSION_ID}/${label}`,
+    })
+  }
 }

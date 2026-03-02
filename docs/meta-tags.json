@@ -313,6 +313,20 @@
       "title": "Merci - Sablia",
       "description": "Votre demande a bien été prise en compte. Nous vous répondrons dans les 24 heures.",
       "robots": "noindex, nofollow"
+    },
+
+    "/lp/automatisation-pme": {
+      "title": "Automatisez vos processus répétitifs | Sablia",
+      "description": "Gagnez 20h par semaine en automatisant vos tâches répétitives. Formation + développement n8n/Make.com. ROI en 4-8 mois.",
+      "robots": "noindex, follow",
+      "_note": "Ad landing page — not in sitemap, noindex"
+    },
+
+    "/lp/audit-gratuit": {
+      "title": "Audit Automatisation Gratuit | Sablia",
+      "description": "Découvrez vos opportunités d'automatisation en 2 minutes. Recommandations personnalisées, réponse sous 24h, sans engagement.",
+      "robots": "noindex, follow",
+      "_note": "Ad landing page — not in sitemap, noindex"
     }
   },
 

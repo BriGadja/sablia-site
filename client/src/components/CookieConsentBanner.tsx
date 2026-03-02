@@ -29,8 +29,9 @@ export default function CookieConsentBanner() {
         >
           <div className="max-w-3xl w-full bg-sablia-bg border border-sablia-border rounded-lg shadow-lg p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <p className="text-sm text-sablia-text-secondary flex-1">
-              Nous utilisons des cookies d'analyse (Google Analytics) pour ameliorer votre
-              experience. Consultez notre{' '}
+              Nous utilisons des cookies d'analyse et de mesure publicitaire (Google Analytics,
+              Google Ads) pour ameliorer votre experience et mesurer l'efficacite de nos campagnes.
+              Consultez notre{' '}
               <a
                 href="/politique-confidentialite"
                 className="text-sablia-accent underline hover:text-sablia-accent-hover"

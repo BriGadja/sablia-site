@@ -25,6 +25,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/hooks/use-toast'
 import { trackEvent } from '@/lib/analytics'
+import { getUTMParams } from '@/lib/utm'
 
 const formSchema = z.object({
   firstName: z.string().min(1, 'Le prénom est requis'),
@@ -83,7 +84,7 @@ export default function GapForm() {
       const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, ...getUTMParams() }),
       })
       if (!response.ok) throw new Error(`Erreur lors de l'envoi du formulaire: ${response.status}`)
 

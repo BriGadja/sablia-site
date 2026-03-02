@@ -8,6 +8,7 @@ import { useLocation } from 'wouter'
 import * as z from 'zod'
 import { useToast } from '@/hooks/use-toast'
 import { trackConversion, trackEvent } from '@/lib/analytics'
+import { getUTMParams } from '@/lib/utm'
 
 const contactSchema = z.object({
   nom: z.string().min(2, 'Le nom doit contenir au moins 2 caractères'),
@@ -60,7 +61,7 @@ export default function ContactFormSection() {
       const response = await fetch('https://n8n.sablia.io/webhook/sablia-site-formulaire', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, ...getUTMParams() }),
       })
       if (!response.ok) throw new Error("Échec de l'envoi du message")
 
