@@ -6,7 +6,7 @@
 
 ## Current State
 
-Site is live at https://sablia.io. GA4 + Google Ads infrastructure fully deployed. Conversion import pending first form submission.
+Site is live at https://sablia.io. GA4 + Google Ads infrastructure fully deployed. First GAP form submitted successfully. Conversion import pending GA4 event propagation (few hours).
 
 ---
 
@@ -18,7 +18,7 @@ Site is live at https://sablia.io. GA4 + Google Ads infrastructure fully deploye
 - [x] Redeploy (building with both env vars)
 - [x] Create Google Ads account (424-135-0048, Visa 0705, promo: spend €400 get €400)
 - [x] Link GA4 → Google Ads (done during onboarding, metrics + audiences enabled)
-- [ ] Import `generate_lead` conversion (needs first form submit → Goals > Conversions > Import from GA4)
+- [ ] Import `generate_lead` conversion (form submitted — wait a few hours then Goals > Conversions > Import from GA4)
 - [x] Submit sitemap to Google Search Console
 - [x] Create n8n GAP webhook (workflow `fZwezgtYw9X5kUCd`, POST at `sablia-site-gap`)
 
@@ -42,10 +42,9 @@ Site is live at https://sablia.io. GA4 + Google Ads infrastructure fully deploye
 
 ## Next Actions
 
-1. **Now**: Submit a test form on sablia.io (accept cookies first) to trigger `generate_lead` event
-2. **Then**: Import `generate_lead` conversion in Google Ads (Goals > Conversions > New > Import from GA4)
-3. **This week**: Create first Google Ads campaign (Search, targeting automation keywords)
-4. **When ready**: Logo SVG cleanup (`/execute sablia-site-logo-deployment`)
+1. **Today/Tomorrow**: Import `generate_lead` conversion in Google Ads (Goals > Conversions > New > Import from GA4)
+2. **This week**: Create first Google Ads campaign (Search, targeting automation keywords)
+3. **When ready**: Logo SVG cleanup (`/execute sablia-site-logo-deployment`)
 
 ---
 
