@@ -1,102 +1,55 @@
 # Sablia Site - Status
 
-**Last Updated**: 2026-02-11
+**Last Updated**: 2026-03-02
 
 ---
 
 ## Current State
 
-Site is live at https://sablia.io with warm Mediterranean beige palette.
-
-**Pending Deployment**: Logo update (navy-sienna B mark) + PWA manifest + updated OG/Twitter images. Changes are local, not yet committed.
+Site is live at https://sablia.io. GA4 + Google Ads infrastructure fully deployed. Conversion import pending first form submission.
 
 ---
 
-## Uncommitted Changes (deploy first)
+## Google Ads Readiness — Manual Steps
 
-- [x] Updated OG images (1200x630px) with new branding
-- [x] Updated Twitter images (1200x630px) with new branding
-- [x] Updated favicons and PWA icons
-- [x] Added `manifest.json` for PWA support
-- [x] Added `favicon.ico` fallback
-- [x] Updated `meta-tags.json` (logo.svg, consolidated OG images)
-- [x] Updated `index.html` (theme-color, manifest link, apple-mobile-web-app)
-- [ ] **Commit, push, and deploy these changes**
-
----
-
-## SEO Audit Status
-
-### Completed (Phases A-C)
-
-All code-side SEO work is done:
-- Sitemap with correct dates and all pages
-- Title/meta tags harmonized (index.html + meta-tags.json + SEO.tsx)
-- FAQPage structured data on FAQ section
-- Font preloads + DNS prefetch for external services
-- Image dimensions for CLS prevention
-- Lazy loading for below-fold sections (CalculatorROI, ContactForm, FAQ)
-- AnimatedParticles mobile optimization (30 particles, no connections)
-- Navigation.tsx proper anchor elements (SEO-friendly)
-- BreadcrumbList schema on all pages
-- Service schema (9 offerings)
-- HowTo schema (3-step process)
-- Review/AggregateRating schema (5 reviews, 4.9/5)
-- Person schema for About page
-
-### Remaining: Manual/External Tasks (Phase E)
-
-#### Google Search Console (Priority: HIGH)
-- [ ] Verify domain ownership (DNS TXT or HTML file)
-- [ ] Submit sitemap: https://sablia.io/sitemap.xml
-- [ ] Monitor indexing status
-- [ ] Check for crawl errors weekly
-
-#### Google Analytics 4
-- [ ] Set up GA4 property for sablia.io
-- [ ] Configure SEO dashboard (organic traffic, landing pages)
-- [ ] Set up conversion tracking (form submissions, Calendly clicks)
-
-#### Bing Webmaster Tools
-- [ ] Register sablia.io
-- [ ] Submit sitemap
-
-#### Backlink Strategy
-- [ ] Post in n8n Community forum (with sablia.io link)
-- [ ] Post in Make.com community
-- [ ] Consider French startup directories
-- [ ] Guest post opportunities (automation blogs)
-
-#### Rank Tracking
-- [ ] Set up rank tracking for target keywords:
-  - "automatisation PME"
-  - "consultant n8n"
-  - "automatisation entreprise IA"
-  - "formation n8n"
+- [x] Create GA4 property (sablia.io, ID: 526481476)
+- [x] Set `VITE_GA4_MEASUREMENT_ID=G-JVXKHE3VD8` in Vercel
+- [x] Set `VITE_N8N_WEBHOOK_URL=https://n8n.sablia.io/webhook/sablia-site-gap` in Vercel
+- [x] Redeploy (building with both env vars)
+- [x] Create Google Ads account (424-135-0048, Visa 0705, promo: spend €400 get €400)
+- [x] Link GA4 → Google Ads (done during onboarding, metrics + audiences enabled)
+- [ ] Import `generate_lead` conversion (needs first form submit → Goals > Conversions > Import from GA4)
+- [x] Submit sitemap to Google Search Console
+- [x] Create n8n GAP webhook (workflow `fZwezgtYw9X5kUCd`, POST at `sablia-site-gap`)
 
 ---
 
-## Validation Checklist (after deploying uncommitted changes)
+## Known Issues
 
-- [ ] Test OG tags: https://developers.facebook.com/tools/debug/
-- [ ] Test Twitter cards: https://cards-dev.twitter.com/validator
-- [ ] Validate schemas: https://search.google.com/test/rich-results
-- [ ] Check Core Web Vitals: https://pagespeed.web.dev/
+- Footer.test.tsx: "Documentation pour IA" test fails (link was removed, test not updated)
+- Footer.test.tsx: TS type errors (missing vitest type augmentation for toBeInTheDocument)
+- animations.ts: TS errors (framer-motion Variant type mismatch)
+
+---
+
+## Active Plans
+
+| Plan | Status |
+|------|--------|
+| sablia-site-logo-deployment | Pending (SVG path cleanup) |
 
 ---
 
 ## Next Actions
 
-1. **Now**: Commit + deploy logo/PWA/OG changes
-2. **After deploy**: Run validation checklist above
-3. **This week**: Set up GSC + submit sitemap
-4. **When ready**: Start blog project with `/plan sablia-blog`
+1. **Now**: Submit a test form on sablia.io (accept cookies first) to trigger `generate_lead` event
+2. **Then**: Import `generate_lead` conversion in Google Ads (Goals > Conversions > New > Import from GA4)
+3. **This week**: Create first Google Ads campaign (Search, targeting automation keywords)
+4. **When ready**: Logo SVG cleanup (`/execute sablia-site-logo-deployment`)
 
 ---
 
 ## References
 
-- **Roadmap**: `docs/ROADMAP.md` (future features)
-- **SEO Progress**: `PROGRESS.md` (completed audit details)
 - **Meta Tags Config**: `docs/meta-tags.json`
 - **Sitemap**: `client/public/sitemap.xml`
