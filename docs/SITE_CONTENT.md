@@ -537,7 +537,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for full design tokens.
 - **UI**: Radix UI + shadcn/ui + Tailwind CSS
 - **Animations**: Framer Motion
 - **Forms**: React Hook Form + Zod
-- **State**: React Query (TanStack Query)
+- **State**: React hooks (useState, useMemo, useEffect)
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for full technical reference (component tree, route map, build config, design tokens).
 

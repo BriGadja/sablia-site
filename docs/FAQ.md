@@ -2,7 +2,7 @@
 
 **Derniere mise a jour**: 2026-03-02
 **URL du site**: https://sablia.io
-**24 questions** across 8 categories (matches Faq.tsx page)
+**29 questions** across 8 categories (24 displayed on Faq.tsx page, 5 additional in this reference doc)
 
 ---
 
