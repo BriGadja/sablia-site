@@ -23,7 +23,7 @@ describe('Footer', () => {
     )
 
     const currentYear = new Date().getFullYear()
-    expect(screen.getByText(new RegExp(`${currentYear}.*Sablia`, 'i'))).toBeInTheDocument()
+    expect(screen.getByText(new RegExp(`${currentYear}.*Sablia`, 'i'))).toBeDefined()
   })
 
   it('has email contact link', () => {
@@ -34,8 +34,8 @@ describe('Footer', () => {
     )
 
     const emailLink = screen.getByText(/brice@sablia.io/i)
-    expect(emailLink).toBeInTheDocument()
-    expect(emailLink.closest('a')).toHaveAttribute('href', 'mailto:brice@sablia.io')
+    expect(emailLink).toBeDefined()
+    expect(emailLink.closest('a')?.getAttribute('href')).toBe('mailto:brice@sablia.io')
   })
 
   it('has legal links', () => {
@@ -45,23 +45,20 @@ describe('Footer', () => {
       </Router>,
     )
 
-    expect(screen.getByText(/Mentions légales/i)).toBeInTheDocument()
-    expect(screen.getByText(/Politique de confidentialité/i)).toBeInTheDocument()
-    expect(screen.getByText(/CGV/i)).toBeInTheDocument()
+    expect(screen.getByText(/Mentions légales/i)).toBeDefined()
+    expect(screen.getByText(/Politique de confidentialité/i)).toBeDefined()
+    expect(screen.getByText(/CGV/i)).toBeDefined()
   })
 
-  it('has AI documentation link', () => {
+  it('has resource links', () => {
     render(
       <Router>
         <Footer />
       </Router>,
     )
 
-    const docLink = screen.getByText(/Documentation pour IA/i)
-    expect(docLink).toBeInTheDocument()
-    expect(docLink.closest('a')).toHaveAttribute(
-      'href',
-      'https://github.com/BriGadja/sablia-site/blob/main/docs/README.md',
-    )
+    expect(screen.getByText(/FAQ/)).toBeDefined()
+    expect(screen.getByText(/Cas clients/)).toBeDefined()
+    expect(screen.getByText(/Calculateur ROI/)).toBeDefined()
   })
 })

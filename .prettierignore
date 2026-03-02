@@ -1,7 +1,0 @@
-node_modules
-dist
-.replit
-*.log
-package-lock.json
-pnpm-lock.yaml
-.env

@@ -1,4 +1,3 @@
-import { QueryClientProvider } from '@tanstack/react-query'
 import { AnimatePresence } from 'framer-motion'
 import { lazy, Suspense, useEffect } from 'react'
 import { HelmetProvider } from 'react-helmet-async'
@@ -20,7 +19,6 @@ import PolitiqueConfidentialite from '@/pages/PolitiqueConfidentialite'
 import Roi from '@/pages/Roi'
 import Tarifs from '@/pages/Tarifs'
 import ThankYou from '@/pages/ThankYou'
-import { queryClient } from './lib/queryClient'
 
 const LpAutomatisation = lazy(() => import('@/pages/LpAutomatisation'))
 const LpAuditGratuit = lazy(() => import('@/pages/LpAuditGratuit'))
@@ -68,11 +66,9 @@ function App() {
   return (
     <ErrorBoundary>
       <HelmetProvider>
-        <QueryClientProvider client={queryClient}>
-          <Router />
-          <Toaster />
-          <CookieConsentBanner />
-        </QueryClientProvider>
+        <Router />
+        <Toaster />
+        <CookieConsentBanner />
       </HelmetProvider>
     </ErrorBoundary>
   )

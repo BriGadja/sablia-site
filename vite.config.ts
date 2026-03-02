@@ -39,7 +39,7 @@ export default defineConfig({
           router: ["wouter"],
           animation: ["framer-motion"],
           forms: ["react-hook-form", "@hookform/resolvers", "zod"],
-          ui: ["@radix-ui/react-accordion", "@radix-ui/react-toast"],
+          ui: ["@radix-ui/react-toast"],
         },
       },
     },

@@ -8,7 +8,7 @@
 ## Entry Flow
 
 ```
-main.tsx > StrictMode > App.tsx > ErrorBoundary > HelmetProvider > QueryClientProvider > Router > AnimatePresence > Routes
+main.tsx > StrictMode > App.tsx > ErrorBoundary > HelmetProvider > Router > AnimatePresence > Routes
 ```
 
 Global overlays rendered alongside Router: `Toaster`, `CookieConsentBanner`
@@ -59,7 +59,7 @@ Located in `client/src/components/landing/`:
 - FaqSection
 - Navigation
 
-### Core Components (7)
+### Core Components (5)
 
 Located in `client/src/components/`:
 - ErrorBoundary
@@ -67,39 +67,38 @@ Located in `client/src/components/`:
 - SEO (meta-tags + BreadcrumbList schema)
 - RoiCalculator
 - CookieConsentBanner
-- LiveRegion
-- ScrollToTop
 
-### UI Components (14 — shadcn/ui)
+### Animation Components (1)
+
+Located in `client/src/components/animations/`:
+- ScrollReveal (scroll-triggered reveal animation, respects `prefers-reduced-motion`)
+
+### UI Components (12 — shadcn/ui)
 
 Located in `client/src/components/ui/`:
-accordion, button, card, form, input, label, radio-group, select, skeleton, slider, textarea, toast, toaster, tooltip
+button, card, form, input, label, radio-group, select, slider, textarea, toast, toaster, tooltip
 
 ---
 
-## Hooks (5)
+## Hooks (3)
 
 Located in `client/src/hooks/`:
 
-| Hook | File | Status | Purpose |
-|------|------|--------|---------|
-| useToast | use-toast.ts | Active | Toast notification state |
-| usePageTracking | use-page-tracking.ts | Active | GA4 page view tracking |
-| useReducedMotion | useReducedMotion.ts | Active | prefers-reduced-motion detection |
-| useIsMobile | use-mobile.tsx | Dead code | Mobile viewport detection (unused) |
-| usePersistentToast | use-persistent-toast.ts | Dead code | Persistent toast state (unused) |
+| Hook | File | Purpose |
+|------|------|---------|
+| useToast | use-toast.ts | Toast notification state |
+| usePageTracking | use-page-tracking.ts | GA4 page view tracking |
+| useReducedMotion | useReducedMotion.ts | prefers-reduced-motion detection |
 
 ---
 
-## Lib Files (5 + 1 utils)
+## Lib Files (3 + 1 utils)
 
 Located in `client/src/lib/`:
 
 | File | Purpose |
 |------|---------|
 | analytics.ts | GA4 + Google Ads init, consent, page view tracking, conversion tracking |
-| animations.ts | Framer Motion animation variants and helpers |
-| queryClient.ts | TanStack React Query client config |
 | utils.ts | `cn()` classname merge utility (clsx + tailwind-merge) |
 | utm.ts | UTM parameter extraction from URL search params |
 
@@ -113,13 +112,7 @@ Located in `client/src/utils/`:
 
 ## Server
 
-Express on port 5000, 3 routes (all debug/stub — no production use):
-
-| Method | Path | Purpose |
-|--------|------|---------|
-| GET | `/api/webhook-test` | Debug: echo query params (dev webhook fallback) |
-| GET | `/api/env-check` | Debug: list VITE_ env vars (defined/not) |
-| POST | `/api/contact` | Stub: contact form endpoint (not used — forms go to n8n) |
+Express on port 5000. No API routes — all forms submit directly to n8n webhooks. Server only handles static file serving and SPA routing.
 
 ---
 
@@ -139,7 +132,7 @@ Express on port 5000, 3 routes (all debug/stub — no production use):
 | router | wouter |
 | animation | framer-motion |
 | forms | react-hook-form, @hookform/resolvers, zod |
-| ui | @radix-ui/react-accordion, @radix-ui/react-toast |
+| ui | @radix-ui/react-toast |
 
 ---
 
