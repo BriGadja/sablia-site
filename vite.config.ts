@@ -20,6 +20,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@db": path.resolve(__dirname, "db"),
+      "@docs": path.resolve(__dirname, "docs"),
       "@": path.resolve(__dirname, "client", "src"),
     },
   },

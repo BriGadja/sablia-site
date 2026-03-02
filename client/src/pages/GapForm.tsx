@@ -25,6 +25,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/hooks/use-toast'
 import { trackEvent } from '@/lib/analytics'
+import { inputClasses, WEBHOOK_GAP } from '@/lib/form-constants'
 import { getUTMParams } from '@/lib/utm'
 
 const formSchema = z.object({
@@ -35,6 +36,9 @@ const formSchema = z.object({
   sector: z.string().optional(),
   challenge: z.string().optional(),
   availability: z.string().optional(),
+  rgpdConsent: z.literal(true, {
+    errorMap: () => ({ message: 'Vous devez accepter la politique de confidentialité' }),
+  }),
 })
 
 export default function GapForm() {
@@ -56,18 +60,6 @@ export default function GapForm() {
     },
   })
 
-  const isFormValid = () => {
-    const values = form.getValues()
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    return (
-      !!values.firstName &&
-      !!values.lastName &&
-      !!values.email &&
-      emailRegex.test(values.email) &&
-      !!values.companyName
-    )
-  }
-
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (isSubmitting) return
 
@@ -79,9 +71,7 @@ export default function GapForm() {
 
     setIsSubmitting(true)
     try {
-      const webhookUrl =
-        import.meta.env.VITE_N8N_WEBHOOK_URL || `${window.location.origin}/api/webhook-test`
-      const response = await fetch(webhookUrl, {
+      const response = await fetch(WEBHOOK_GAP, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...data, ...getUTMParams() }),
@@ -92,12 +82,13 @@ export default function GapForm() {
       setLocation('/thank-you?source=gap')
     } catch (error) {
       console.error('Erreur:', error)
-      setIsSubmitting(false)
       toast({
         variant: 'destructive',
         title: 'Erreur',
         description: "Une erreur est survenue lors de l'envoi du formulaire.",
       })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -113,8 +104,7 @@ export default function GapForm() {
   ]
   const availabilityOptions = ['Cette semaine', 'Semaine prochaine', 'Dans 2 semaines', 'Flexible']
 
-  const inputClasses =
-    'bg-white border-gray-200 text-sablia-text placeholder:text-sablia-text-tertiary focus:border-sablia-accent focus:ring-sablia-accent'
+  const gapInputClasses = `${inputClasses} placeholder:text-sablia-text-tertiary`
 
   return (
     <>
@@ -199,7 +189,7 @@ export default function GapForm() {
                                 Prénom <span className="text-sablia-accent">*</span>
                               </FormLabel>
                               <FormControl>
-                                <Input {...field} placeholder="Jean" className={inputClasses} />
+                                <Input {...field} placeholder="Jean" className={gapInputClasses} />
                               </FormControl>
                               <FormMessage className="text-red-500" />
                             </FormItem>
@@ -215,7 +205,7 @@ export default function GapForm() {
                                 Nom <span className="text-sablia-accent">*</span>
                               </FormLabel>
                               <FormControl>
-                                <Input {...field} placeholder="Dupont" className={inputClasses} />
+                                <Input {...field} placeholder="Dupont" className={gapInputClasses} />
                               </FormControl>
                               <FormMessage className="text-red-500" />
                             </FormItem>
@@ -235,7 +225,7 @@ export default function GapForm() {
                                   {...field}
                                   type="email"
                                   placeholder="jean.dupont@entreprise.fr"
-                                  className={inputClasses}
+                                  className={gapInputClasses}
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -255,7 +245,7 @@ export default function GapForm() {
                                 <Input
                                   {...field}
                                   placeholder="Nom de votre entreprise"
-                                  className={inputClasses}
+                                  className={gapInputClasses}
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -287,7 +277,7 @@ export default function GapForm() {
                               </FormLabel>
                               <FormControl>
                                 <Select onValueChange={field.onChange} value={field.value}>
-                                  <SelectTrigger className={inputClasses}>
+                                  <SelectTrigger className={gapInputClasses}>
                                     <SelectValue placeholder="Sélectionnez votre secteur" />
                                   </SelectTrigger>
                                   <SelectContent className="bg-white border-gray-200">
@@ -321,7 +311,7 @@ export default function GapForm() {
                                   {...field}
                                   placeholder="Ex: Trop de temps perdu sur la gestion des emails clients..."
                                   rows={3}
-                                  className={`${inputClasses} resize-none`}
+                                  className={`${gapInputClasses} resize-none`}
                                 />
                               </FormControl>
                               <FormMessage className="text-red-500" />
@@ -339,7 +329,7 @@ export default function GapForm() {
                               </FormLabel>
                               <FormControl>
                                 <Select onValueChange={field.onChange} value={field.value}>
-                                  <SelectTrigger className={inputClasses}>
+                                  <SelectTrigger className={gapInputClasses}>
                                     <SelectValue placeholder="Quand seriez-vous disponible ?" />
                                   </SelectTrigger>
                                   <SelectContent className="bg-white border-gray-200">
@@ -362,10 +352,42 @@ export default function GapForm() {
                       </div>
                     </div>
 
+                    <FormField
+                      control={form.control}
+                      name="rgpdConsent"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <label className="flex items-start gap-2.5 cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={field.value === true}
+                                onChange={(e) => field.onChange(e.target.checked ? true : undefined)}
+                                className="mt-1 w-4 h-4 accent-sablia-accent rounded"
+                              />
+                              <span className="text-sm text-sablia-text-secondary">
+                                J'accepte que mes données soient traitées conformément à la{' '}
+                                <a
+                                  href="/politique-confidentialite"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-sablia-accent underline hover:text-sablia-accent-hover"
+                                >
+                                  politique de confidentialité
+                                </a>
+                                . <span className="text-sablia-accent">*</span>
+                              </span>
+                            </label>
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
+
                     <div className="pt-1">
                       <Button
                         type="submit"
-                        disabled={!isFormValid() || isSubmitting}
+                        disabled={isSubmitting}
                         className="w-full bg-sablia-accent hover:bg-sablia-accent-hover text-white font-medium text-base py-5 rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                       >
                         {isSubmitting ? (

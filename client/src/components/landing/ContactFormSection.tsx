@@ -8,6 +8,7 @@ import { useLocation } from 'wouter'
 import * as z from 'zod'
 import { useToast } from '@/hooks/use-toast'
 import { trackConversion, trackEvent } from '@/lib/analytics'
+import { inputClasses, WEBHOOK_CONTACT } from '@/lib/form-constants'
 import { getUTMParams } from '@/lib/utm'
 
 const contactSchema = z.object({
@@ -22,9 +23,6 @@ const contactSchema = z.object({
 })
 
 type ContactInputs = z.infer<typeof contactSchema>
-
-const inputClasses =
-  'w-full px-4 py-3 rounded bg-sablia-bg border border-sablia-border text-sablia-text text-base focus:outline-none focus:border-sablia-accent focus:ring-1 focus:ring-sablia-accent transition-colors'
 
 export default function ContactFormSection() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -58,7 +56,7 @@ export default function ContactFormSection() {
 
     setIsSubmitting(true)
     try {
-      const response = await fetch('https://n8n.sablia.io/webhook/sablia-site-formulaire', {
+      const response = await fetch(WEBHOOK_CONTACT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...data, ...getUTMParams() }),

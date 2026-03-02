@@ -14,9 +14,9 @@ All meta-tags are defined in `docs/meta-tags.json` and applied via `react-helmet
 | `/tarifs` | Tarifs Automatisation - Offres & Packages | Yes | Yes | summary_large_image | ItemList (offers) |
 | `/gap` | Analyse GAP Gratuite | Yes | Yes | summary | - |
 | `/roi` | Calculateur ROI Automatisation | Yes | Yes | summary_large_image | WebApplication |
-| `/about` | A propos de Sablia | Yes | Yes | summary | Person (inline) |
+| `/about` | A propos de Sablia | Yes | Yes | summary | Person |
 | `/faq` | FAQ - Questions frequentes | Yes | Yes | summary | FAQPage (inline) |
-| `/cas-clients` | Cas clients - Exemples de transformations | Yes | Yes | summary | - |
+| `/cas-clients` | Cas clients - Exemples de transformations | Yes | Yes | summary | ItemList |
 | `/thank-you` | Merci - Sablia | Yes | - | - | noindex, nofollow |
 | `/mentions-legales` | Mentions Legales | Yes | Yes | - | noindex, follow |
 | `/politique-confidentialite` | Politique de Confidentialite | Yes | Yes | - | noindex, follow |
@@ -31,15 +31,16 @@ All meta-tags are defined in `docs/meta-tags.json` and applied via `react-helmet
 | Page | Schema Type | Source File |
 |------|------------|-------------|
 | All pages (head) | ProfessionalService + OfferCatalog | index.html (inline JSON-LD) |
-| All pages (meta) | Organization | meta-tags.json via SEO.tsx |
+| All pages (meta) | Organization | meta-tags.json homepage structuredData, via SEO.tsx |
 | All non-home pages | BreadcrumbList | SEO.tsx (dynamic) |
 | `/` pricing section | Service (9 offerings) | PricingSection.tsx |
 | `/` process section | HowTo (3 steps) | ThreeStepProcess.tsx |
 | `/` testimonials | AggregateRating + Review (5 reviews, 4.9/5) | TestimonialsSection.tsx |
 | `/` FAQ section | FAQPage | FaqSection.tsx |
-| `/about` | Person (Brice Gachadoat) | About.tsx (inline Helmet) |
+| `/about` | Person (Brice Gachadoat) | meta-tags.json via SEO.tsx |
 | `/faq` | FAQPage | Faq.tsx (inline Helmet) |
 | `/roi` | WebApplication | meta-tags.json |
+| `/cas-clients` | ItemList (case studies) | meta-tags.json |
 | `/tarifs` | ItemList (offers) | meta-tags.json |
 
 ---
@@ -48,7 +49,7 @@ All meta-tags are defined in `docs/meta-tags.json` and applied via `react-helmet
 
 **File**: `client/public/sitemap.xml`
 **Routes**: 10 public routes (landing pages and thank-you excluded)
-**Last modified**: 2026-02-11
+**Last modified**: 2026-03-02
 
 | Route | Priority | Change Freq |
 |-------|----------|-------------|
@@ -82,11 +83,11 @@ All meta-tags are defined in `docs/meta-tags.json` and applied via `react-helmet
 
 From PRD audit (sections 3.3-3.7):
 
-- [ ] **Canonical trailing slash inconsistency** — some pages have trailing slash in canonical, others don't
-- [ ] **Homepage has 2 JSON-LD blocks** — one in index.html (ProfessionalService), one via SEO.tsx (Organization)
-- [ ] **`/cas-clients` missing structured data** — no schema.org markup for case studies
+- [x] **Canonical trailing slash inconsistency** — Fixed: index.html canonical now has trailing slash
+- [x] **Homepage has 2 JSON-LD blocks** — Fixed: removed duplicate Organization from meta-tags.json, keeping ProfessionalService in index.html
+- [x] **`/cas-clients` missing structured data** — Fixed: added ItemList schema to meta-tags.json
 - [ ] **www vs non-www redirect** — `sablia.io` redirects 307 to `www.sablia.io` but all canonicals say `https://sablia.io`. Fix via Vercel DNS settings.
-- [ ] **Stale sitemap lastmod dates** — all set to 2026-02-11, should reflect actual last-modified per page
+- [x] **Stale sitemap lastmod dates** — Fixed: updated to 2026-03-02
 
 ---
 

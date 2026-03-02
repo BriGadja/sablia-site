@@ -8,8 +8,8 @@
 
 | Service | Method | Files | Env Var | Status |
 |---------|--------|-------|---------|--------|
-| n8n (contact) | POST webhook | ContactFormSection.tsx, LpAutomatisation.tsx | Hardcoded URL | Working |
-| n8n (GAP) | POST webhook | GapForm.tsx | `VITE_N8N_WEBHOOK_URL` | Working |
+| n8n (contact) | POST webhook | ContactFormSection.tsx, LpAutomatisation.tsx | `VITE_CONTACT_WEBHOOK_URL` (fallback hardcoded) | Working |
+| n8n (GAP) | POST webhook | GapForm.tsx | `VITE_GAP_WEBHOOK_URL` (fallback hardcoded) | Working |
 | Calendly | react-calendly InlineWidget | ContactFormSection.tsx, ThankYou.tsx | Hardcoded URL | Working |
 | GA4 | gtag.js dynamic load | analytics.ts, use-page-tracking.ts, CookieConsentBanner.tsx, App.tsx | `VITE_GA4_MEASUREMENT_ID` | Working (consent-gated) |
 | Google Ads | Conversion tracking via gtag | analytics.ts, form components, ThankYou.tsx | `VITE_GADS_CONVERSION_ID` + 3 labels | Working (consent-gated) |
@@ -19,9 +19,12 @@
 
 ## n8n Webhooks
 
+Both webhooks are centralized in `client/src/lib/form-constants.ts` with env var overrides and hardcoded fallbacks.
+
 ### Contact Form
 
-- **URL**: `https://n8n.sablia.io/webhook/sablia-site-formulaire` (hardcoded)
+- **URL**: `https://n8n.sablia.io/webhook/sablia-site-formulaire`
+- **Env var**: `VITE_CONTACT_WEBHOOK_URL` (optional override, constant: `WEBHOOK_CONTACT`)
 - **Workflow**: `4GqFPLR750ms4GmI`
 - **Used by**: `ContactFormSection.tsx`, `LpAutomatisation.tsx`
 - **Payload**: `{ nom, email, entreprise, telephone?, message, rgpdConsent, source_page, ...utmParams }`
@@ -29,12 +32,10 @@
 ### GAP Analysis Form
 
 - **URL**: `https://n8n.sablia.io/webhook/sablia-site-gap`
+- **Env var**: `VITE_GAP_WEBHOOK_URL` (optional override, constant: `WEBHOOK_GAP`)
 - **Workflow**: `fZwezgtYw9X5kUCd`
-- **Env var**: `VITE_N8N_WEBHOOK_URL` (falls back to `/api/webhook-test` in dev)
 - **Used by**: `GapForm.tsx`
-- **Payload**: form data + UTM params
-
-> **Note**: Webhook URL asymmetry — the GAP form uses an env var while the contact form has the URL hardcoded. This is a known inconsistency (tech debt for Unit 3).
+- **Payload**: form data + UTM params + `rgpdConsent`
 
 ---
 
@@ -130,7 +131,8 @@ Form submit → trackEvent('form_submit', { type }) → redirect /thank-you → 
 | `VITE_GADS_LABEL_CONTACT` | Prod | Ads label for contact form conversion |
 | `VITE_GADS_LABEL_GAP` | Prod | Ads label for GAP form conversion |
 | `VITE_GADS_LABEL_CALENDLY` | Prod | Ads label for Calendly booking conversion |
-| `VITE_N8N_WEBHOOK_URL` | Prod | n8n GAP form webhook URL |
+| `VITE_CONTACT_WEBHOOK_URL` | Optional | n8n contact form webhook URL (fallback hardcoded) |
+| `VITE_GAP_WEBHOOK_URL` | Optional | n8n GAP form webhook URL (fallback hardcoded) |
 
 ---
 

@@ -2,7 +2,7 @@
 
 **PRD**: `PRD.md`
 **Created**: 2026-03-02
-**Status**: New — 3 units, PRD approved
+**Status**: COMPLETED — all 3 units done
 
 ---
 

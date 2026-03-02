@@ -43,28 +43,7 @@
         "image": "https://sablia.io/twitter-image-home.png",
         "creator": "@sablia_io"
       },
-      "structuredData": {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Sablia",
-        "url": "https://sablia.io",
-        "logo": "https://sablia.io/logo.svg",
-        "description": "Services d'automatisation business et IA pour PME françaises",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "60 rue François 1er",
-          "postalCode": "75008",
-          "addressLocality": "Paris",
-          "addressCountry": "FR"
-        },
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "contactType": "Sales",
-          "email": "contact@sablia.io",
-          "availableLanguage": "French"
-        },
-        "sameAs": ["https://linkedin.com/company/sablia", "https://twitter.com/sablia_io"]
-      }
+      "_structuredDataNote": "Homepage JSON-LD is ProfessionalService in index.html — no duplicate here"
     },
 
     "/tarifs": {
@@ -216,6 +195,31 @@
         "title": "À propos de Sablia",
         "description": "Experts en automatisation business pour PME françaises.",
         "image": "https://sablia.io/twitter-image.png"
+      },
+      "structuredData": {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Brice Gachadoat",
+        "url": "https://sablia.io/about",
+        "image": "https://sablia.io/brice-gachadoat.jpg",
+        "jobTitle": "Expert en Automatisation et Intelligence Artificielle",
+        "description": "Ingénieur informatique avec plus de 10 ans d'expérience dans l'IT, spécialisé en automatisation business avec n8n et Make.com.",
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Sablia",
+          "url": "https://sablia.io"
+        },
+        "knowsAbout": [
+          "Automatisation business",
+          "n8n",
+          "Make.com",
+          "Intelligence Artificielle",
+          "Transformation digitale"
+        ],
+        "sameAs": [
+          "https://linkedin.com/in/brice-gachadoat",
+          "https://calendly.com/brice-gachadoat"
+        ]
       }
     },
 
@@ -306,6 +310,32 @@
         "card": "summary",
         "title": "Cas clients | Sablia",
         "description": "Études de cas : e-commerce, cabinet de conseil, association. Résultats mesurables."
+      },
+      "structuredData": {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Cas clients Sablia",
+        "description": "Études de cas d'automatisation pour PME",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "E-commerce — Automatisation du pipeline de vente",
+            "description": "Pipeline de vente automatisé de A à Z. Résultat : 30h/semaine économisées."
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Cabinet de conseil — Automatisation des rapports clients",
+            "description": "Rapports clients générés automatiquement. Résultat : 85% de temps gagné."
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Association — Gestion des adhérents et communications",
+            "description": "Gestion des adhérents et communications automatisée. Résultat : 0 erreur de suivi."
+          }
+        ]
       }
     },
 

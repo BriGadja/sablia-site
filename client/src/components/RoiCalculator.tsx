@@ -12,8 +12,7 @@ import {
   TrendingUp,
   Users,
 } from 'lucide-react'
-import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -89,7 +88,7 @@ const sliderMarks = [
   { value: 480, label: '8h' }, // 480 minutes
 ]
 
-const RoiCalculator: React.FC = () => {
+export default function RoiCalculator() {
   // États du formulaire
   const [sliderValue, setSliderValue] = useState(hoursToSlider(2)) // 2h par défaut
   const [taskHours, setTaskHours] = useState(2)
@@ -103,15 +102,6 @@ const RoiCalculator: React.FC = () => {
 
   // État pour les résultats du calcul
   const [results, setResults] = useState<any>(null)
-
-  // Fonction debounce pour limiter les calculs
-  const debounce = <T extends (...args: unknown[]) => void>(func: T, wait: number) => {
-    let timeout: NodeJS.Timeout
-    return (...args: Parameters<T>) => {
-      clearTimeout(timeout)
-      timeout = setTimeout(() => func(...args), wait)
-    }
-  }
 
   // Fonction pour arrondir à 2 décimales
   const roundToTwoDecimals = (value: number): number => {
@@ -150,34 +140,36 @@ const RoiCalculator: React.FC = () => {
     [],
   )
 
-  // Mettre à jour les résultats
-  const updateResults = useCallback(
-    debounce(() => {
-      try {
-        const input = {
-          taskHours,
-          frequency,
-          salaryMode,
-          hourlyNet,
-          monthlyNet,
-          annualBrut,
-          employees,
-          cost,
+  // Mettre à jour les résultats avec debounce
+  const debouncedUpdate = useMemo(() => {
+    let timeout: ReturnType<typeof setTimeout>
+    return () => {
+      clearTimeout(timeout)
+      timeout = setTimeout(() => {
+        try {
+          const input = {
+            taskHours,
+            frequency,
+            salaryMode,
+            hourlyNet,
+            monthlyNet,
+            annualBrut,
+            employees,
+            cost,
+          }
+          const calculationResults = calculateRoi(input)
+          setResults(calculationResults)
+        } catch (error) {
+          console.error('Erreur de calcul ROI:', error)
         }
-
-        const calculationResults = calculateRoi(input)
-        setResults(calculationResults)
-      } catch (error) {
-        console.error('Erreur de calcul ROI:', error)
-      }
-    }, 300),
-    [taskHours, frequency, salaryMode, hourlyNet, monthlyNet, annualBrut, employees, cost],
-  )
+      }, 300)
+    }
+  }, [taskHours, frequency, salaryMode, hourlyNet, monthlyNet, annualBrut, employees, cost])
 
   // Lancer le calcul à chaque changement d'entrée
   useEffect(() => {
-    updateResults()
-  }, [taskHours, frequency, employees, cost, hourlyNet, monthlyNet, annualBrut, updateResults])
+    debouncedUpdate()
+  }, [debouncedUpdate])
 
   // Initialiser les salaires
   useEffect(() => {
@@ -668,5 +660,3 @@ const RoiCalculator: React.FC = () => {
     </motion.section>
   )
 }
-
-export default RoiCalculator

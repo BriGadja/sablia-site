@@ -26,6 +26,7 @@
 ### Path Aliases
 - `@/` → `client/src/`
 - `@db` → `db/`
+- `@docs` → `docs/`
 
 ### Project Structure
 ```
@@ -36,7 +37,7 @@ client/src/           # React frontend (Vite)
   └── lib/            # Utilities
 server/               # Express backend
   ├── index.ts        # Entry point
-  └── routes.ts       # API routes (debug/stub only)
+  └── routes.ts       # HTTP server setup (no API routes)
 db/                   # Drizzle ORM schema
 docs/                 # All documentation
 ```
@@ -44,14 +45,12 @@ docs/                 # All documentation
 ### Key Integrations
 | Integration | Details |
 |-------------|---------|
-| n8n (contact) | `https://n8n.sablia.io/webhook/sablia-site-formulaire` (hardcoded URL) |
-| n8n (GAP) | env `VITE_N8N_WEBHOOK_URL` → `https://n8n.sablia.io/webhook/sablia-site-gap` |
+| n8n (contact) | `WEBHOOK_CONTACT` from `form-constants.ts` → `https://n8n.sablia.io/webhook/sablia-site-formulaire` |
+| n8n (GAP) | `WEBHOOK_GAP` from `form-constants.ts` → `https://n8n.sablia.io/webhook/sablia-site-gap` |
 | Calendly | `https://calendly.com/brice-gachadoat/30min` (react-calendly InlineWidget) |
 | GA4 | `VITE_GA4_MEASUREMENT_ID` — consent-gated |
 | Google Ads | `VITE_GADS_CONVERSION_ID` + 3 labels — consent-gated |
 | Supabase | `qlxoitzdxjqhljjoeqoq` — `site_*` tables (**connected but unused at runtime**) |
-
-> **Note**: Webhook URL asymmetry — GAP form uses env var, contact form has URL hardcoded. Tech debt.
 
 ## Routes
 | Route | Page |
@@ -109,4 +108,5 @@ When modifying site content, update the corresponding doc (see `docs/README.md` 
 | `VITE_GADS_LABEL_CONTACT` | Ads label: contact form |
 | `VITE_GADS_LABEL_GAP` | Ads label: GAP form |
 | `VITE_GADS_LABEL_CALENDLY` | Ads label: Calendly booking |
-| `VITE_N8N_WEBHOOK_URL` | GAP form webhook URL |
+| `VITE_CONTACT_WEBHOOK_URL` | Contact form webhook URL (optional, fallback hardcoded) |
+| `VITE_GAP_WEBHOOK_URL` | GAP form webhook URL (optional, fallback hardcoded) |

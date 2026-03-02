@@ -8,7 +8,7 @@
 ## Entry Flow
 
 ```
-main.tsx > StrictMode > App.tsx > ErrorBoundary > HelmetProvider > Router > AnimatePresence > Routes
+main.tsx > StrictMode > App.tsx > ErrorBoundary > MotionConfig(reducedMotion="user") > HelmetProvider > Router > AnimatePresence > Routes
 ```
 
 Global overlays rendered alongside Router: `Toaster`, `CookieConsentBanner`
@@ -92,13 +92,14 @@ Located in `client/src/hooks/`:
 
 ---
 
-## Lib Files (3 + 1 utils)
+## Lib Files (4 + 1 utils)
 
 Located in `client/src/lib/`:
 
 | File | Purpose |
 |------|---------|
 | analytics.ts | GA4 + Google Ads init, consent, page view tracking, conversion tracking |
+| form-constants.ts | Shared form constants: webhook URLs (`WEBHOOK_CONTACT`, `WEBHOOK_GAP`), `inputClasses` |
 | utils.ts | `cn()` classname merge utility (clsx + tailwind-merge) |
 | utm.ts | UTM parameter extraction from URL search params |
 
@@ -119,7 +120,7 @@ Express on port 5000. No API routes — all forms submit directly to n8n webhook
 ## Build Config
 
 **Vite** (`vite.config.ts`):
-- Path aliases: `@/` → `client/src/`, `@db` → `db/`
+- Path aliases: `@/` → `client/src/`, `@db` → `db/`, `@docs` → `docs/`
 - Output: `dist/public`
 - Sourcemaps: disabled
 - Bundle visualizer: `dist/stats.html`

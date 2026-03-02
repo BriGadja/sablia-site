@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async'
-import metaTags from '../../../docs/meta-tags.json'
+import metaTags from '@docs/meta-tags.json'
 
 /**
  * SEO Component - Manages meta-tags for all pages

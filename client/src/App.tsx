@@ -1,4 +1,4 @@
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, MotionConfig } from 'framer-motion'
 import { lazy, Suspense, useEffect } from 'react'
 import { HelmetProvider } from 'react-helmet-async'
 import { Route, Switch } from 'wouter'
@@ -65,11 +65,13 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <HelmetProvider>
-        <Router />
-        <Toaster />
-        <CookieConsentBanner />
-      </HelmetProvider>
+      <MotionConfig reducedMotion="user">
+        <HelmetProvider>
+          <Router />
+          <Toaster />
+          <CookieConsentBanner />
+        </HelmetProvider>
+      </MotionConfig>
     </ErrorBoundary>
   )
 }
