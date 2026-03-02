@@ -1,6 +1,6 @@
 # Contenu du Site Sablia
 
-**Dernière mise à jour**: 26 janvier 2026
+**Dernière mise à jour**: 2 mars 2026
 **Domaine**: https://sablia.io
 **Type**: Site vitrine B2B - Services d'automatisation et IA pour PME
 
@@ -354,7 +354,7 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 
 ### Navigation
 
-**Logo**: Sablia (lien vers /)
+**Logo**: Navy-sienna "B" mark with gradient (navy #1a2e4e → sienna #c45a2c), SVG format (lien vers /)
 **Menu principal** (capsule nav):
 
 - Services → #solution

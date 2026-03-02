@@ -6,7 +6,7 @@
     "locale": "fr_FR",
     "twitterHandle": "@sablia_io",
     "defaultImage": "https://sablia.io/og-image.png",
-    "lastUpdated": "2026-01-26"
+    "lastUpdated": "2026-03-02"
   },
 
   "pages": {
@@ -319,7 +319,7 @@
   "globalMetaTags": {
     "viewport": "width=device-width, initial-scale=1.0",
     "charset": "utf-8",
-    "theme-color": "#01F2EF",
+    "theme-color": "#1a2e4e",
     "robots": "index, follow",
     "googlebot": "index, follow",
     "author": "Sablia",

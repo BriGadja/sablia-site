@@ -38,13 +38,13 @@ SVG reconstruction is the trickiest part — need to identify vertices correctly
 
 ## Phase Status
 
-| Phase | Name | Tasks |
-|-------|------|-------|
-| 0 | SVG Straightening & Raster Regeneration | 4 |
-| A | Web Manifest & Meta Tags | 4 |
-| B | OG/Social Images | 3 |
-| C | Legacy & Maskable Icons | 2 |
-| D | Documentation Sync & Build | 3 |
+| Phase | Name | Tasks | Status |
+|-------|------|-------|--------|
+| 0 | SVG Straightening & Raster Regeneration | 4 | COMPLETED |
+| A | Web Manifest & Meta Tags | 4 | COMPLETED |
+| B | OG/Social Images | 3 | COMPLETED |
+| C | Legacy & Maskable Icons | 2 | COMPLETED |
+| D | Documentation Sync & Build | 3 | COMPLETED |
 
 ---
 
@@ -53,10 +53,10 @@ SVG reconstruction is the trickiest part — need to identify vertices correctly
 **This phase is the foundation — all other phases depend on it.**
 
 ### Tasks
-- [ ] 0.1. Analyze the current SVG path to extract key vertex positions
-- [ ] 0.2. Reconstruct the SVG path with clean geometry (straight `L` segments, snapped coordinates)
-- [ ] 0.3. Update `logo.svg` and `favicon.svg` with the straightened path
-- [ ] 0.4. Regenerate ALL raster images from the clean SVG (favicon.png 32x32, apple-touch-icon.png 180x180, icon-192.png, icon-512.png)
+- [x] 0.1. Analyze the current SVG path to extract key vertex positions
+- [x] 0.2. Reconstruct the SVG path with clean geometry (straight `L` segments, snapped coordinates)
+- [x] 0.3. Update `logo.svg` and `favicon.svg` with the straightened path
+- [x] 0.4. Regenerate ALL raster images from the clean SVG (favicon.png 32x32, apple-touch-icon.png 180x180, icon-192.png, icon-512.png)
 
 ### Technical Details
 
@@ -117,10 +117,10 @@ magick -background none -density 300 favicon.svg -resize 32x32 favicon.png
 ## Phase A: Web Manifest & Meta Tags
 
 ### Tasks
-- [ ] A1. Create `client/public/manifest.json` with full icon set
-- [ ] A2. Add `<link rel="manifest" href="/manifest.json">` to `client/index.html`
-- [ ] A3. Add `<meta name="theme-color" content="#1a2e4e">` to `client/index.html`
-- [ ] A4. Add `<meta name="apple-mobile-web-app-capable" content="yes">` and `<meta name="apple-mobile-web-app-title" content="Sablia">` to index.html
+- [x] A1. Create `client/public/manifest.json` with full icon set
+- [x] A2. Add `<link rel="manifest" href="/manifest.json">` to `client/index.html`
+- [x] A3. Add `<meta name="theme-color" content="#1a2e4e">` to `client/index.html`
+- [x] A4. Add `<meta name="apple-mobile-web-app-capable" content="yes">` and `<meta name="apple-mobile-web-app-title" content="Sablia">` to index.html
 
 ### Technical Details
 
@@ -193,9 +193,9 @@ magick -background none -density 300 favicon.svg -resize 32x32 favicon.png
 ## Phase B: OG/Social Images
 
 ### Tasks
-- [ ] B1. Regenerate `og-image-home.png` and `twitter-image-home.png` with new logo (1200x630)
-- [ ] B2. Create a generic `og-image.png` fallback with new logo (1200x630)
-- [ ] B3. Remove references to non-existent per-page OG images from `docs/meta-tags.json` (tarifs, gap, roi, about) — or generate them
+- [x] B1. Regenerate `og-image-home.png` and `twitter-image-home.png` with new logo (1200x630)
+- [x] B2. Create a generic `og-image.png` fallback with new logo (1200x630)
+- [x] B3. Remove references to non-existent per-page OG images from `docs/meta-tags.json` (tarifs, gap, roi, about) — or generate them
 
 ### Technical Details
 
@@ -224,8 +224,8 @@ magick -background none -density 300 favicon.svg -resize 32x32 favicon.png
 ## Phase C: Legacy & Maskable Icons
 
 ### Tasks
-- [ ] C1. Generate `favicon.ico` (32x32 ICO format) from favicon.png
-- [ ] C2. Generate maskable icons (`icon-maskable-192.png`, `icon-maskable-512.png`) — same logo with 25% padding and solid background
+- [x] C1. Generate `favicon.ico` (32x32 ICO format) from favicon.png
+- [x] C2. Generate maskable icons (`icon-maskable-192.png`, `icon-maskable-512.png`) — same logo with 25% padding and solid background
 
 ### Technical Details
 
@@ -257,9 +257,9 @@ convert client/public/favicon.png client/public/favicon.ico
 ## Phase D: Documentation Sync & Build
 
 ### Tasks
-- [ ] D1. Update `docs/meta-tags.json` — fix logo.png → logo.svg, clean up missing image refs
-- [ ] D2. Update `docs/SITE_CONTENT.md` — reflect new logo description (navy-sienna B mark)
-- [ ] D3. Run `npm run build` to sync dist/ folder
+- [x] D1. Update `docs/meta-tags.json` — fix logo.png → logo.svg, clean up missing image refs
+- [x] D2. Update `docs/SITE_CONTENT.md` — reflect new logo description (navy-sienna B mark)
+- [x] D3. Run `npm run build` to sync dist/ folder
 
 ### Technical Details
 
