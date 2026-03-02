@@ -1,254 +1,277 @@
-# PRD - Sablia.io Website Refactor
+# PRD — Sablia Site Documentation & Refactoring
 
-**Version**: 1.0
-**Date**: 2026-02-06
-**Status**: Draft - Awaiting Approval
-**Author**: Brice Gachadoat + Claude Code
-
----
-
-## 1. Purpose & Goals
-
-### What is Sablia.io?
-French B2B consulting website for AI automation services (n8n, Make, voice AI) targeting SMEs with 10-250 employees. One-person consultancy by Brice Gachadoat.
-
-### Why Refactor?
-The current site is functional but carries significant tech debt and missed conversion opportunities:
-
-- **~1,000 lines of dead code** (duplicate components, unused pages, legacy deps)
-- **~650KB of unnecessary bundle weight** (passport, react-icons, GSAP for 3 files, unused shadcn/ui)
-- **Missing legal compliance** (no RGPD consent checkbox on contact form)
-- **No error boundaries** (white screen on any component crash)
-- **Conversion gaps** (no case studies page, no exit intent, limited social proof placement)
-- **Performance debt** (3 animation libraries where 1 suffices, no robots.txt)
-
-### Success Metrics
-
-| Metric | Current (estimated) | Target |
-|--------|-------------------|--------|
-| Bundle size (gzipped) | ~700KB+ | <400KB |
-| LCP | Unknown | <2.0s |
-| CLS | Unknown | <0.05 |
-| INP | Unknown | <200ms |
-| Lighthouse Performance | Unknown | >90 |
-| Form conversion rate | ~2% | >4% |
-| Bounce rate | Unknown | <55% |
+**Project**: sablia-site
+**Type**: Internal — documentation overhaul + tech debt cleanup
+**Date**: 2026-03-02
+**Status**: Draft — pending approval
 
 ---
 
-## 2. Target Audience
+## 1. Objective
 
-| Segment | Description | Priority |
-|---------|-------------|----------|
-| **PME Décideurs** | CEOs/COOs of 10-50 person French SMEs, non-technical, looking for efficiency gains | Primary |
-| **ETI Managers** | Ops/IT managers in 50-250 person companies, somewhat technical, need justification for leadership | Secondary |
-| **Solopreneurs** | Entrepreneurs wanting to automate to scale without hiring | Tertiary |
+Transform the sablia-site codebase into a well-documented, consistent, lean codebase where every file, pattern, and integration is accurately documented and cross-referenced. Then use that documentation as a map to systematically eliminate accumulated tech debt.
 
-### User Journey
-```
-Google/LinkedIn → Landing page → Scan hero (3s decision) → Social proof →
-Problem recognition → Solution understanding → Pricing scan →
-ROI calculation → Contact/Calendly booking
-```
+**Success criteria:**
+- Every doc file is accurate, up-to-date, and cross-references related docs
+- Zero dead code (files, exports, packages, CSS)
+- One consistent pattern per concern (styling, forms, animations, data fetching)
+- Google Ads/SEO work is fully documented (current state + roadmap)
+- CLAUDE.md is the single entry point to find any information about the project
 
 ---
 
-## 3. Information Architecture
+## 2. Scope
 
-### Current Structure (Keep)
-```
-/                         Landing (homepage) — all sections
-/about                    About Brice + Sablia
-/gap                      GAP analysis lead gen form
-/tarifs                   Dedicated pricing page
-/roi                      ROI calculator
-/mentions-legales         Legal notice
-/politique-confidentialite Privacy policy (RGPD)
-/cgv                      Terms of service
-```
+### In Scope
+1. Documentation audit and rewrite (CLAUDE.md, docs/*, content docs)
+2. Dead code removal (files, exports, packages, CSS, API routes)
+3. Pattern standardization (forms, styling, animations, error handling)
+4. SEO fixes (meta-tags, structured data, sitemap)
+5. Google Ads documentation (current state + unfinished roadmap)
+6. Dependency cleanup (unused packages, redundant tooling)
+7. Bug fixes discovered during audit (GapForm finally, debounce, RGPD consent)
 
-### Proposed Additions
-```
-/cas-clients              Case studies index (NEW — Phase D)
-/faq                      Full FAQ page with 30+ questions (NEW — Phase C)
-```
-
-### Proposed Removals
-```
-/home                     Legacy alternative homepage → DELETE
-TestStackValue.tsx        Unrouted test page → DELETE
-```
-
-### Landing Page Section Flow (Refined)
-
-Current flow is mostly correct per B2B best practices. Adjustments:
-
-| # | Section | Status | Notes |
-|---|---------|--------|-------|
-| 1 | Navigation | Keep | Add sticky behavior if not already |
-| 2 | Hero | **Refine** | Add concrete metric to subheadline (e.g., "15h/semaine économisées en moyenne") |
-| 3 | Social Proof / Logos | **Move up** | Client logos immediately after hero (before testimonials) |
-| 4 | Testimonials | Keep | Already strong with 5 stories |
-| 5 | Problem | Keep | Consider adding micro-stats |
-| 6 | Solution | Keep | |
-| 7 | Process | Keep | |
-| 8 | Pricing | Keep | |
-| 9 | ROI Calculator | Keep | |
-| 10 | Contact + Calendly | **Fix** | Add RGPD checkbox |
-| 11 | FAQ | Keep | Add "Voir toutes les questions" link to /faq |
-| 12 | Footer | Keep | Add robots.txt |
+### Out of Scope
+- New features or pages
+- Google Ads campaign creation (document roadmap only)
+- Database redesign (document current state only)
+- Performance optimization beyond dead code removal
+- Full visual redesign of RoiCalculator (document as tech debt for future)
 
 ---
 
-## 4. Content Inventory
+## 3. Current State Assessment
 
-### What Stays (As-Is)
-- All service offerings and pricing tiers
-- 5 testimonials
-- 12 integration logos with hover cards
-- ROI calculator logic
-- FAQ 8 core questions on landing
-- About page content
-- GAP analysis form
-- Legal pages (mentions, RGPD, CGV)
+### 3.1 Architecture Overview
 
-### What Changes
-| Element | Change | Reason |
-|---------|--------|--------|
-| Hero subheadline | Add concrete metric | Conversion optimization — specific numbers > vague promises |
-| Contact form | Add RGPD consent checkbox | Legal compliance (CRITICAL) |
-| FAQ section footer | Add link to /faq | Surface full 30+ FAQ for SEO + completeness |
-| Lazy loading | Extend to AnimatedParticles | Performance — heavy component loads eagerly |
-| Suspense fallbacks | Replace blank divs with skeletons | Better perceived performance |
+| Layer | Tech | Status |
+|-------|------|--------|
+| Client | React 18 + Vite + TypeScript + Wouter + Tailwind | Working |
+| UI | shadcn/ui (14 components) + Framer Motion | Working, some unused |
+| Forms | React Hook Form + Zod (3 forms) | Working, inconsistent patterns |
+| Server | Express (port 5000) | Barely used — 3 stub/debug routes |
+| DB | Drizzle ORM + Supabase/Neon | Connected but unused at runtime |
+| Deploy | Vercel auto-deploy from GitHub main | Working |
+| Analytics | GA4 (consent-gated) + Google Ads conversion tracking | Working, campaign pending |
+| Integrations | n8n webhooks, Calendly embed | Working |
 
-### What's New
-| Element | Description | Phase |
-|---------|-------------|-------|
-| Error boundaries | Root + section-level crash protection | A |
-| robots.txt | Search engine crawl directives | A |
-| /faq page | Full 30+ question FAQ from docs/FAQ.md | C |
-| /cas-clients page | Case studies with before/after metrics | D |
-| Missing OG images | og-image-tarifs, gap, roi, about | C |
+### 3.2 File Inventory
 
-### What's Removed
-| Element | Reason |
-|---------|--------|
-| `/home` route + Home.tsx | Legacy, unused |
-| TestStackValue.tsx | Test artifact |
-| components/Navbar.tsx | Replaced by landing/Navigation.tsx |
-| components/HeroSection.tsx | Replaced by landing/HeroSection.tsx |
-| components/FaqSection.tsx | Duplicate of landing/FaqSection.tsx |
-| components/ProcessSection.tsx | Replaced by ThreeStepProcess.tsx |
-| components/ServicesSection.tsx | Replaced by SolutionSection.tsx |
-| components/RoiBanner.tsx | Unused |
-| components/RainbowText.tsx | Unused |
-| passport + session deps | Never implemented auth |
-| react-icons dep | lucide-react used instead |
+| Category | Count | Dead/Unused |
+|----------|-------|-------------|
+| Pages | 14 | 0 |
+| Root components | 8 | 1 (LiveRegion) |
+| Landing components | 10 | 0 |
+| UI components (shadcn) | 14 | 2 (accordion, skeleton) |
+| Animation components | 1 | 3 dead exports |
+| Hooks | 5 | 2 (use-mobile, use-persistent-toast) |
+| Lib utilities | 5 | 1 (animations.ts — all exports dead) |
+| Docs files | 9 | 0 (but 6 outdated) |
+| Server routes | 3 | 2 debug + 1 dead stub |
+
+### 3.3 Dead Code Inventory
+
+#### Files to delete
+| File | Reason |
+|------|--------|
+| `client/src/components/LiveRegion.tsx` | Zero imports across codebase |
+| `client/src/components/ui/skeleton.tsx` | Zero imports across codebase |
+| `client/src/hooks/use-mobile.tsx` | Zero imports (Navigation uses local state) |
+| `client/src/hooks/use-persistent-toast.ts` | Zero imports |
+| `client/src/lib/animations.ts` | All 6 exports dead (GSAP migration remnant) |
+| `eslint.config.js` | Biome replaces ESLint entirely |
+| `.prettierrc` / `.prettierignore` | Biome replaces Prettier |
+
+#### Dead exports to prune
+| File | Dead Exports |
+|------|-------------|
+| `ScrollReveal.tsx` | `ParallaxSection`, `ColorChangeText`, `ScaleOnScroll` |
+
+#### Dead CSS to remove
+| File | Dead CSS |
+|------|---------|
+| `index.css` | `.page-transition-enter`, `.page-transition-exit` classes |
+
+#### Dead server code
+| Route | Reason |
+|-------|--------|
+| `GET /api/webhook-test` | Debug endpoint, leaks request details |
+| `GET /api/env-check` | Debug endpoint, leaks env var names |
+| `POST /api/contact` | Stub — never called (forms go to n8n directly) |
+
+### 3.4 Unused Packages (26+ to remove)
+
+**Runtime:**
+`@radix-ui/react-alert-dialog`, `@radix-ui/react-aspect-ratio`, `@radix-ui/react-avatar`, `@radix-ui/react-checkbox`, `@radix-ui/react-collapsible`, `@radix-ui/react-context-menu`, `@radix-ui/react-dialog`, `@radix-ui/react-dropdown-menu`, `@radix-ui/react-hover-card`, `@radix-ui/react-menubar`, `@radix-ui/react-navigation-menu`, `@radix-ui/react-popover`, `@radix-ui/react-progress`, `@radix-ui/react-scroll-area`, `@radix-ui/react-switch`, `@radix-ui/react-tabs`, `@radix-ui/react-toggle`, `@radix-ui/react-toggle-group`, `@replit/vite-plugin-runtime-error-modal`, `@replit/vite-plugin-shadcn-theme-json`, `@jridgewell/trace-mapping`, `cmdk`, `input-otp`, `react-day-picker`, `react-resizable-panels`, `vaul`
+
+**Dev:**
+`eslint`, `@eslint/js`, `eslint-plugin-react`, `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`, `typescript-eslint`, `prettier`, `sharp`
+
+**Consider removing:**
+- `@tanstack/react-query` — QueryClientProvider wraps app but zero useQuery/useMutation calls
+- `@radix-ui/react-accordion` — component file exists but never imported by any page
+
+### 3.5 Pattern Inconsistencies
+
+| Concern | Current State | Target Standard |
+|---------|--------------|-----------------|
+| **Styling** | RoiCalculator uses dark theme (gray-900, cyan, purple); others use sablia-* tokens | `sablia-*` tokens everywhere (RoiCalculator deferred) |
+| **cn() usage** | Only Navigation uses cn() outside ui/; others use string concatenation | `cn()` for all conditional classes |
+| **inputClasses** | Defined 3x (GapForm, ContactForm, LpAutomatisation) with different values | Single shared constant |
+| **Form rendering** | GapForm: shadcn Form wrappers; ContactForm + LpAutomatisation: raw HTML inputs | shadcn `<Form>` wrappers everywhere |
+| **Form validation** | GapForm has redundant `isFormValid()` alongside Zod | Zod via RHF only |
+| **RGPD consent** | ContactForm + LpAutomatisation have it; GapForm doesn't | All forms include RGPD consent |
+| **Webhook URL** | GapForm: env var; ContactForm + LpAutomatisation: hardcoded | Env var or single config constant |
+| **Error handling** | GapForm: `catch` only; others: `finally` | Always `finally` for cleanup |
+| **useReducedMotion** | 2 of 20+ animated components respect it | All animated components |
+| **Component typing** | RoiCalculator: `React.FC`; others: plain function | Plain `export default function` |
+| **SEO approach** | Most: `<SEO>` component; About+Faq: `<SEO>` + inline `<Helmet>` | Single `<SEO>` handles all structured data |
+
+### 3.6 Content Documentation Drift
+
+| Doc | Issue |
+|-----|-------|
+| `SITE_CONTENT.md` | Missing routes (/faq, /cas-clients, /lp/*, /thank-you); analytics "A definir" but GA4+Ads live; contact title wrong |
+| `OFFRES.md` | Retainer Standard price: 1200 vs FAQ.md: 1800 |
+| `FAQ.md` | Says 30+ questions; Faq.tsx has 24; n8n integration count inconsistency |
+| `content-index.json` | Missing /faq, /cas-clients, /lp/*, /thank-you pages |
+| `ROADMAP.md` | CaseStudies listed as "Planned" — already exists |
+| `SEO-MANUAL-TASKS.md` | GA4 setup marked pending but done; no completion tracking |
+| `README.md` (docs/) | Sync date stale (2025-10-29) |
+| `CLAUDE.md` | Missing /thank-you route; no doc cross-references |
+
+### 3.7 SEO Issues
+
+| Issue | Severity |
+|-------|----------|
+| Canonical URL trailing slash inconsistency (index.html vs meta-tags.json) | Low |
+| Sitemap lastmod dates stale (2026-02-11) | Low |
+| Homepage has 2 JSON-LD blocks (ProfessionalService + Organization) | Low |
+| `/cas-clients` missing structured data | Medium |
+| `/gap` missing structured data | Low |
+| www vs non-www redirect (Vercel DNS) | Medium |
+
+### 3.8 Google Ads Status
+
+| Item | Status |
+|------|--------|
+| GA4 Measurement ID configured | Done |
+| Google Ads Conversion ID + labels | Done |
+| Landing pages deployed | Done |
+| GA4 <> Google Ads linked | Done |
+| Conversion tracking code deployed | Done (needs Tag Assistant verification) |
+| Campaign creation | NOT done |
+| Budget/bidding/extensions | NOT done |
+| Promo: spend 400 get 400 | Expires May 1, 2026 |
 
 ---
 
-## 5. Design Direction & Brand Guidelines
+## 4. Documentation Architecture (Target State)
 
-### Current Brand (Preserve)
-- **Colors**: Navy (#0A2463), Electric (#3E92CC), Cyan (#52D1DC), Orange accent (#FFA559)
-- **Tone**: Professional, approachable, expert but not intimidating
-- **Language**: French (client-facing), formal but warm
+CLAUDE.md is the index. Every question about the project can be answered by following cross-references.
 
-### Design Principles for Refactor
-1. **Strategic minimalism** — Cut clutter, guide users through frictionless journey
-2. **Performance as design** — Faster = more professional. Trim animation weight.
-3. **Trust-first** — Credentials, metrics, and testimonials near every CTA
-4. **Mobile-first responsive** — 60%+ traffic is mobile in 2026
+### 4.1 Doc Map
 
-### Animation Strategy (Simplified)
-- **Keep**: Framer Motion (dominant, 30 files, excellent DX)
-- **Migrate**: GSAP usages (3 files) → Framer Motion equivalents
-- **Evaluate**: AnimatedParticles — keep if performant, lazy-load regardless
-- **Remove**: GSAP dependency entirely after migration
+```
+CLAUDE.md                            # Index — quick reference + links to everything
+  |-- docs/ARCHITECTURE.md           # Component tree, route map, data flow, build config
+  |-- docs/SITE_CONTENT.md           # All page text, CTAs, form fields
+  |-- docs/OFFRES.md                 # Service offerings and pricing
+  |-- docs/FAQ.md                    # FAQ questions and answers
+  |-- docs/meta-tags.json            # SEO configuration (structured data, OG tags)
+  |-- docs/GOOGLE_ADS.md             # Ads IDs, conversion tracking, campaign roadmap
+  |-- docs/SEO.md                    # SEO status, structured data inventory, manual tasks
+  |-- docs/INTEGRATIONS.md           # n8n, Calendly, Supabase, Vercel, GA4 config
+  |-- docs/ROADMAP.md                # Future work backlog
+  |-- docs/content-index.json        # Machine-readable content index
+```
 
----
+### 4.2 New docs to create
 
-## 6. Technical Requirements & Constraints
+| Doc | Purpose |
+|-----|---------|
+| `docs/ARCHITECTURE.md` | Component tree, route map, data flow, build config — technical reference |
+| `docs/INTEGRATIONS.md` | Every external service: connection method, files, env vars, status |
+| `docs/SEO.md` | Merge SEO-MANUAL-TASKS.md + structured data inventory + current status |
+| `docs/GOOGLE_ADS.md` | Rename + update GOOGLE_ADS_STRATEGY.md with current status + roadmap |
 
-### Stack (No Changes)
-- React 18 + TypeScript + Vite + Wouter
-- Express.js backend (port 5000)
-- Tailwind CSS + shadcn/ui + Radix UI
-- Drizzle ORM + PostgreSQL (Supabase)
-- Deployed on Vercel
+### 4.3 Docs to update
 
-### Performance Budget
-| Resource | Budget |
-|----------|--------|
-| Initial JS bundle (gzipped) | <250KB |
-| Total page weight | <1MB |
-| LCP | <2.0s |
-| INP | <200ms |
-| CLS | <0.05 |
-| Fonts | System stack or 1 web font max |
+| Doc | Changes |
+|-----|---------|
+| `CLAUDE.md` | Add /thank-you route; add doc cross-references section; fix integrations |
+| `docs/SITE_CONTENT.md` | Add missing routes; fix analytics section; correct form fields |
+| `docs/OFFRES.md` | Resolve retainer price inconsistency |
+| `docs/FAQ.md` | Fix question count; resolve n8n integration count |
+| `docs/content-index.json` | Add all missing pages |
+| `docs/ROADMAP.md` | Mark CaseStudies complete; add tech debt backlog |
+| `docs/README.md` | Update sync date; add new docs to index |
 
-### Bundle Optimization Targets
-| Dependency | Action | Savings (est.) |
-|------------|--------|---------------|
-| passport, passport-local, express-session, memorystore | Remove | ~100KB |
-| react-icons | Remove | ~50KB |
-| gsap | Remove (after migration) | ~150KB |
-| recharts | Remove if ui/chart.tsx unused | ~200KB |
-| Unused shadcn/ui components | Remove ~15-20 components | ~100-150KB |
-| **Total estimated savings** | | **~600-650KB** |
+### 4.4 Docs to delete/merge
 
-### Compatibility
-- Browsers: Last 2 versions of Chrome, Firefox, Safari, Edge
-- Mobile: iOS 15+, Android 10+
-- Screen sizes: 320px to 2560px
-
-### Constraints
-- No breaking changes to n8n webhook integrations
-- Preserve all SEO structured data (6 schemas)
-- Keep Calendly inline widget integration
-- Forms must continue submitting to n8n webhooks
-- Database schema untouched (site_users table)
+| Doc | Action |
+|-----|--------|
+| `docs/SEO-MANUAL-TASKS.md` | Merge into new `docs/SEO.md`, delete |
+| `docs/GOOGLE_ADS_STRATEGY.md` | Rename to `docs/GOOGLE_ADS.md`, update |
+| `LLM_INSTRUCTIONS.md` | Merge useful bits into `docs/README.md`, delete |
+| `PROGRESS.md` | Review; delete if superseded by STATUS.md |
 
 ---
 
-## 7. Out of Scope (This Refactor)
+## 5. Tech Deliverables
 
-- Blog / content marketing system
-- Authentication / user accounts
-- CMS integration
-- Multi-language (EN) support
-- A/B testing infrastructure
-- Analytics integration (GA4, Hotjar)
-- Industry-specific landing pages (/solutions/immobilier, etc.)
-- Dark mode toggle
-- Live chat widget
+### Documentation
+- Updated `CLAUDE.md` with cross-references to all docs
+- New `docs/ARCHITECTURE.md` — technical reference
+- New `docs/INTEGRATIONS.md` — service integration guide
+- New `docs/SEO.md` — SEO status and config
+- New `docs/GOOGLE_ADS.md` — Ads status and roadmap
+- Updated `docs/SITE_CONTENT.md`, `OFFRES.md`, `FAQ.md`, `content-index.json`, `ROADMAP.md`
 
-These are valid future enhancements but not part of this refactor.
+### Cleanup
+- 26+ unused packages removed from `package.json`
+- 7 dead files deleted
+- Dead CSS removed from `index.css`
+- Dead server routes removed/gated
+- Dead exports pruned from ScrollReveal.tsx
+- `vite.config.ts` manualChunks updated after package removal
+- Redundant ESLint + Prettier config removed
+
+### Refactoring
+- Forms standardized to RHF + Zod + shadcn pattern
+- Webhook URL centralized (env var or config constant)
+- `useReducedMotion` applied to all animated components
+- SEO.tsx enhanced to handle all structured data (remove inline Helmet)
+- Sitemap regenerated with current dates
+- Canonical URL normalized
+
+### Bug Fixes
+- GapForm: add `finally` for isSubmitting reset
+- GapForm: add RGPD consent checkbox
+- RoiCalculator: fix debounce (move outside component)
 
 ---
 
-## 8. Risks & Mitigations
+## 6. Risks & Mitigations
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| GSAP → Framer Motion migration breaks animations | Medium | Test each component individually, keep GSAP as fallback until verified |
-| Removing unused shadcn/ui breaks something | Low | Grep every component before removal, build check after each deletion |
-| SEO ranking dip during refactor | Low | Don't change URLs, keep all structured data, update sitemap |
-| Bundle analysis reveals hidden dependencies | Low | Use rollup-plugin-visualizer (already installed) before and after |
+| Removing packages breaks something | Medium | `npm run build` + `npm run check` after each batch |
+| Content doc changes don't match actual site | Low | Cross-reference with live components during doc writes |
+| SEO changes cause ranking dip | Low | Don't change URLs; keep all structured data |
+| Form refactoring breaks submissions | High | Test each form end-to-end after changes |
 
 ---
 
-## 9. Definition of Done
+## 7. Definition of Done
 
-- [ ] All dead code removed (duplicates, unused deps, legacy pages)
-- [ ] Bundle size reduced by >500KB (measured before/after)
-- [ ] RGPD consent checkbox on contact form
-- [ ] Error boundaries at root + lazy-loaded sections
-- [ ] robots.txt created and serving correctly
-- [ ] GSAP migrated to Framer Motion (3 components)
-- [ ] Lighthouse Performance score >90
-- [ ] All existing tests pass
-- [ ] `npm run build` succeeds with no errors
-- [ ] `npm run check` passes TypeScript checks
-- [ ] Visual validation with Playwright MCP on key sections
-- [ ] Documentation updated (SITE_CONTENT.md, content-index.json)
+- [ ] All doc files accurate, cross-referenced, no drift from code
+- [ ] CLAUDE.md serves as complete project index
+- [ ] Zero dead files, exports, or packages in codebase
+- [ ] One consistent pattern per concern (forms, animations, styling, error handling)
+- [ ] Google Ads/SEO fully documented with current status + roadmap
+- [ ] All forms have RGPD consent, consistent webhook URL, `finally` cleanup
+- [ ] `npm run build` succeeds
+- [ ] `npm run check` passes
+- [ ] `npm test` passes
+- [ ] All Biome lint checks pass

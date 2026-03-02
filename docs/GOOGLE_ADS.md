@@ -1,16 +1,51 @@
-# Google Ads Campaign Strategy — Sablia
+# Google Ads — Sablia Site
 
-**Version**: 1.0
-**Date**: 2 mars 2026
-**Budget promo**: Depenser 400 EUR → recevoir 400 EUR (expire 1er mai 2026)
-**Google Ads Account**: 424-135-0048
-**GA4 Measurement ID**: G-JVXKHE3VD8
+**Last updated**: 2026-03-02
 
 ---
 
-## 1. Campaign Structure
+## IDs & Accounts
+
+| Item | Value |
+|------|-------|
+| GA4 Property | 526481476 |
+| GA4 Measurement ID | G-JVXKHE3VD8 |
+| GA4 Web Stream ID | 13689650940 |
+| Google Ads Account | 424-135-0048 |
+| Conversion ID | AW-17987411130 |
+| GA4 <> Ads linked | Yes |
+
+### Conversion Labels
+
+| Conversion | Label | GA4 Event | Estimated Value |
+|------------|-------|-----------|-----------------|
+| contact_form | `v-CoCPq02YEcELq5iIFD` | `generate_lead` (label: contact_form) | 50 EUR |
+| gap_form | `0t07CP202YEcELq5iIFD` | `generate_lead` (label: gap_form) | 100 EUR |
+| calendly_booking | `sZJBCPi12YEcELq5iIFD` | `generate_lead` (label: calendly_booking) | 150 EUR |
+
+---
+
+## Implementation Status
+
+- [x] Conversion actions created in Google Ads
+- [x] Conversion labels configured in `.env` (VITE_GADS_*)
+- [x] Landing pages deployed (`/lp/automatisation-pme`, `/lp/audit-gratuit`)
+- [x] Conversion tracking code in `analytics.ts` + form components
+- [x] GA4 <> Google Ads linked (metrics + audiences)
+- [ ] **Campaign creation** (NOT done)
+- [ ] **Budget/bidding/extensions** (NOT done)
+- [ ] **Tag Assistant verification** (NOT done)
+
+### Promo
+
+Spend 400 EUR, get 400 EUR credit. **Expires May 1, 2026.**
+
+---
+
+## Campaign Structure
 
 ### Campaign: "Sablia — Automatisation PME" (Search)
+
 - **Type**: Search (Reseau de Recherche)
 - **Objectif**: Leads (formulaire contact + GAP)
 - **Zone geographique**: France metropolitaine
@@ -29,9 +64,10 @@
 
 ---
 
-## 2. Keywords (Phrase Match)
+## Keywords (Phrase Match)
 
 ### Ad Group 1 — Automatisation Entreprise
+
 ```
 "automatisation entreprise"
 "automatiser processus"
@@ -51,6 +87,7 @@
 ```
 
 ### Ad Group 2 — n8n / No-Code
+
 ```
 "n8n consultant"
 "n8n France"
@@ -70,6 +107,7 @@
 ```
 
 ### Ad Group 3 — Audit Gratuit
+
 ```
 "audit automatisation"
 "audit digital gratuit"
@@ -86,6 +124,7 @@
 ```
 
 ### Ad Group 4 — Formation IA / Automatisation
+
 ```
 "formation automatisation"
 "formation IA entreprise"
@@ -101,35 +140,22 @@
 "accompagnement IA entreprise"
 ```
 
-### Negative Keywords (au niveau campagne)
+### Negative Keywords (campaign level)
+
 ```
-"emploi"
-"recrutement"
-"salaire"
-"offre d'emploi"
-"stage"
-"alternance"
-"tutoriel gratuit"
-"cours gratuit"
-"open source"
-"telecharger"
-"code source"
-"github"
-"definition"
-"c'est quoi"
-"wikipedia"
-"RPA" (trop technique / marche different)
-"robot"
-"chatbot" (hors scope)
+"emploi" "recrutement" "salaire" "offre d'emploi" "stage" "alternance"
+"tutoriel gratuit" "cours gratuit" "open source" "telecharger" "code source" "github"
+"definition" "c'est quoi" "wikipedia"
+"RPA" "robot" "chatbot"
 ```
 
 ---
 
-## 3. Ad Copy (Responsive Search Ads)
+## Ad Copy (Responsive Search Ads)
 
 ### Ad Group 1 — Automatisation Entreprise
 
-**Headlines (15 max, 30 chars each)**:
+**Headlines** (30 chars each):
 1. Automatisez Votre Entreprise
 2. -20h de Taches Manuelles
 3. ROI en 4-8 Mois Garanti
@@ -146,7 +172,7 @@
 14. Liberez Vos Equipes
 15. Solution Sur Mesure
 
-**Descriptions (4 max, 90 chars each)**:
+**Descriptions** (90 chars each):
 1. Formation de vos equipes + developpement de workflows. Gardez le controle total.
 2. Automatisez CRM, facturation, emails. ROI mesurable en 4-8 mois. Devis gratuit.
 3. Expert n8n et Make.com en France. Accompagnement personnalise pour votre PME.
@@ -229,40 +255,29 @@
 
 ---
 
-## 4. Budget Plan
+## Budget Plan
 
 ### Phase 1 — Apprentissage (Semaines 1-4)
+
 - **Budget**: 400 EUR (budget initial)
 - **Budget quotidien**: ~15 EUR/jour
 - **Strategie**: Maximiser les conversions
-- **Objectif**: Collecter des donnees, identifier les meilleures combinaisons mots-cles / annonces
-- **Actions**:
-  - Activer les 4 ad groups
-  - Monitorer le Quality Score
-  - Identifier les search terms performants
-  - Ajouter des negative keywords au fil de l'eau
+- **Actions**: Activer 4 ad groups, monitorer Quality Score, identifier search terms, ajouter negative keywords
 
 ### Phase 2 — Optimisation (Semaines 5-8)
+
 - **Budget**: 400 EUR (credits promo)
 - **Budget quotidien**: ~15 EUR/jour
 - **Strategie**: CPA cible (base sur donnees Phase 1)
-- **Objectif**: Optimiser le cout par lead, couper les mots-cles non performants
-- **Actions**:
-  - Pauser les ad groups sous-performants
-  - Augmenter les encheres sur les top performers
-  - A/B tester les headlines
-  - Raffiner le ciblage geographique si necessaire
+- **Actions**: Pauser sous-performants, augmenter encheres top performers, A/B tester headlines
 
 ### Phase 3 — Scale (Mois 3+)
-- **Budget**: A definir selon ROI
-- **Condition**: CPA < 50 EUR par lead ET leads qui convertissent en clients
-- **Strategie**: Augmenter le budget sur les campaigns rentables
-- **Actions**:
-  - Ajouter des ad groups (remarketing, Display)
-  - Tester de nouvelles landing pages
-  - Elargir les mots-cles performants
 
-### Metriques a Suivre
+- **Budget**: Based on Phase 1-2 ROI data (not yet available)
+- **Condition**: CPA < 50 EUR par lead ET leads qui convertissent
+- **Actions**: Ajouter remarketing/Display, tester nouvelles landing pages, elargir mots-cles
+
+### Target Metrics
 
 | Metrique | Cible Phase 1 | Cible Phase 2 |
 |----------|--------------|--------------|
@@ -274,68 +289,46 @@
 
 ---
 
-## 5. Landing Page Mapping
+## Landing Page Mapping
 
 | Ad Group | Landing Page | Conversion Action |
 |----------|-------------|-------------------|
-| Automatisation Entreprise | `/lp/automatisation-pme` | `contact_form_submit` |
-| n8n / No-Code | `/lp/automatisation-pme` | `contact_form_submit` |
-| Audit Gratuit | `/lp/audit-gratuit` → `/gap` | `gap_form_submit` |
-| Formation IA | `/lp/automatisation-pme` | `contact_form_submit` |
+| Automatisation Entreprise | `/lp/automatisation-pme` | contact_form |
+| n8n / No-Code | `/lp/automatisation-pme` | contact_form |
+| Audit Gratuit | `/lp/audit-gratuit` > `/gap` | gap_form |
+| Formation IA | `/lp/automatisation-pme` | contact_form |
 
-### UTM Parameters Template
+### UTM Template
 
 ```
-utm_source=google
-utm_medium=cpc
-utm_campaign=automatisation-pme
-utm_term={keyword}
-utm_content={ad_group}
-```
-
-**Exemple d'URL finale**:
-```
-https://sablia.io/lp/automatisation-pme?utm_source=google&utm_medium=cpc&utm_campaign=automatisation-pme&utm_term=automatiser+processus&utm_content=automatisation-entreprise
+utm_source=google&utm_medium=cpc&utm_campaign=automatisation-pme&utm_term={keyword}&utm_content={ad_group}
 ```
 
 ---
 
-## 6. Conversion Tracking Setup
+## Pre-Launch Checklist
 
-| Conversion Name | Google Ads Label | GA4 Event | Value |
-|---|---|---|---|
-| `contact_form_submit` | `v-CoCPq02YEcELq5iIFD` | `generate_lead` (label: contact_form) | 50 EUR |
-| `gap_form_submit` | `0t07CP202YEcELq5iIFD` | `generate_lead` (label: gap_form) | 100 EUR |
-| `calendly_booking` | `sZJBCPi12YEcELq5iIFD` | `generate_lead` (label: calendly_booking) | 150 EUR |
+- [x] Conversion actions created
+- [x] Labels configured in `.env`
+- [x] Landing pages deployed and tested
+- [x] GA4 <> Google Ads linked
+- [ ] Conversion tracking verified with Google Tag Assistant
+- [ ] Budget quotidien configured
+- [ ] Negative keywords applied
+- [ ] Extensions configured (sitelinks, callouts, structured snippets)
 
-**Conversion ID**: `AW-17987411130`
+### Recommended Ad Extensions
+
+**Sitelinks**: Calculateur ROI (`/roi`), Nos Tarifs (`/tarifs`), Cas Clients (`/cas-clients`), FAQ (`/faq`)
+
+**Callouts**: Audit Gratuit 30 min, ROI en 4-8 Mois, Expert n8n France, Sans Engagement
+
+**Structured Snippets (Services)**: Automatisation, Formation n8n, Audit Digital, Agents Vocaux IA, Integration API
 
 ---
 
-## 7. Checklist Pre-Lancement
+## Related Docs
 
-- [x] Conversion actions creees dans Google Ads
-- [ ] Labels de conversion configures dans `.env` (VITE_GADS_*)
-- [ ] Landing pages deploiees et testees
-- [ ] Conversion tracking verifie avec Google Tag Assistant
-- [ ] Budget quotidien configure
-- [ ] Negative keywords appliques
-- [ ] Extensions d'annonces configurees (sitelinks, callouts, structured snippets)
-- [ ] Lien GA4 ↔ Google Ads verifie (deja fait)
-
-### Extensions d'Annonces Recommandees
-
-**Sitelinks**:
-- Calculateur ROI → `/roi`
-- Nos Tarifs → `/tarifs`
-- Cas Clients → `/cas-clients`
-- FAQ → `/faq`
-
-**Callouts**:
-- Audit Gratuit 30 min
-- ROI en 4-8 Mois
-- Expert n8n France
-- Sans Engagement
-
-**Structured Snippets (Type: Services)**:
-- Automatisation, Formation n8n, Audit Digital, Agents Vocaux IA, Integration API
+- [INTEGRATIONS.md](./INTEGRATIONS.md) — Conversion tracking implementation
+- [SEO.md](./SEO.md) — GA4 setup, analytics consent flow
+- [SITE_CONTENT.md](./SITE_CONTENT.md) — Landing page content

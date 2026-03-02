@@ -36,6 +36,7 @@ Site is live at https://sablia.io. GA4 + Google Ads infrastructure fully deploye
 
 | Plan | Status |
 |------|--------|
+| sablia-site-master | New — 3 units, PRD approved |
 | sablia-site-logo-deployment | Pending (SVG path cleanup) |
 
 ---

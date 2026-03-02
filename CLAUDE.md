@@ -7,6 +7,7 @@
 |-----|-------|
 | Domain | sablia.io |
 | Stack | React 18 / TypeScript / Vite / Express / Drizzle ORM / Tailwind |
+| Animations | Framer Motion (GSAP removed) |
 | Dev | `npm run dev` → http://localhost:5000 |
 | Lint | `npm run lint` (Biome) |
 | Format | `npm run format` (Biome) |
@@ -35,17 +36,22 @@ client/src/           # React frontend (Vite)
   └── lib/            # Utilities
 server/               # Express backend
   ├── index.ts        # Entry point
-  └── routes.ts       # API routes
+  └── routes.ts       # API routes (debug/stub only)
 db/                   # Drizzle ORM schema
-docs/                 # Content docs (SITE_CONTENT.md, OFFRES.md, FAQ.md)
+docs/                 # All documentation
 ```
 
 ### Key Integrations
 | Integration | Details |
 |-------------|---------|
-| n8n webhook | `https://n8n.sablia.io/webhook/sablia-site-formulaire` (contact form) |
-| Calendly | `https://calendly.com/brice-gachadoat/30min` (discovery call) |
-| Supabase | `qlxoitzdxjqhljjoeqoq` — `site_*` tables |
+| n8n (contact) | `https://n8n.sablia.io/webhook/sablia-site-formulaire` (hardcoded URL) |
+| n8n (GAP) | env `VITE_N8N_WEBHOOK_URL` → `https://n8n.sablia.io/webhook/sablia-site-gap` |
+| Calendly | `https://calendly.com/brice-gachadoat/30min` (react-calendly InlineWidget) |
+| GA4 | `VITE_GA4_MEASUREMENT_ID` — consent-gated |
+| Google Ads | `VITE_GADS_CONVERSION_ID` + 3 labels — consent-gated |
+| Supabase | `qlxoitzdxjqhljjoeqoq` — `site_*` tables (**connected but unused at runtime**) |
+
+> **Note**: Webhook URL asymmetry — GAP form uses env var, contact form has URL hardcoded. Tech debt.
 
 ## Routes
 | Route | Page |
@@ -55,27 +61,39 @@ docs/                 # Content docs (SITE_CONTENT.md, OFFRES.md, FAQ.md)
 | `/about` | About page |
 | `/tarifs` | Pricing |
 | `/roi` | ROI calculator |
-| `/faq` | FAQ (30+ questions) |
+| `/faq` | FAQ (24 questions) |
 | `/cas-clients` | Case studies |
+| `/thank-you` | Post-form confirmation (noindex) |
 | `/mentions-legales` | Legal notice |
 | `/politique-confidentialite` | Privacy policy |
 | `/cgv` | Terms of service |
 | `/lp/automatisation-pme` | Ad landing page — automation (noindex) |
 | `/lp/audit-gratuit` | Ad landing page — free audit (noindex) |
 
-## Content Documentation
-When modifying site content, update the corresponding doc:
-- `docs/SITE_CONTENT.md` — All page text, CTAs, pricing
-- `docs/OFFRES.md` — Service offerings
-- `docs/FAQ.md` — FAQ questions/answers
-- `docs/meta-tags.json` — SEO meta-tags
-- `client/public/sitemap.xml` — Sitemap
+## Documentation
+
+| Doc | Purpose |
+|-----|---------|
+| `docs/ARCHITECTURE.md` | Component tree, routes, hooks, server, build config, design tokens |
+| `docs/INTEGRATIONS.md` | n8n, Calendly, GA4, Google Ads, Supabase, UTM, consent flow |
+| `docs/SEO.md` | Meta-tags, structured data, sitemap, manual tasks |
+| `docs/GOOGLE_ADS.md` | Ads IDs, conversion tracking, campaign strategy, keywords |
+| `docs/SITE_CONTENT.md` | All page text, CTAs, pricing |
+| `docs/OFFRES.md` | Service offerings detailed |
+| `docs/FAQ.md` | FAQ questions/answers (24 questions, 8 categories) |
+| `docs/ROADMAP.md` | Future initiatives, tech debt backlog |
+| `docs/meta-tags.json` | SEO meta-tags per page |
+| `docs/content-index.json` | Structured JSON of all pages/sections |
+| `docs/README.md` | LLM guide to docs/ |
+
+When modifying site content, update the corresponding doc (see `docs/README.md` for sync table).
 
 ## Database
 - Drizzle ORM + PostgreSQL (Supabase)
 - Schema: `db/schema.ts`
 - Migrations: `npm run db:push`
 - Table prefix: `site_`
+- **Status**: Connected but no runtime queries — forms submit directly to n8n webhooks
 
 ## Testing
 - Framework: Vitest + React Testing Library (already configured)
@@ -86,4 +104,9 @@ When modifying site content, update the corresponding doc:
 |----------|-------------|
 | `DATABASE_URL` | PostgreSQL connection string |
 | `NODE_ENV` | Environment (development/production) |
+| `VITE_GA4_MEASUREMENT_ID` | GA4 measurement ID |
+| `VITE_GADS_CONVERSION_ID` | Google Ads conversion ID |
+| `VITE_GADS_LABEL_CONTACT` | Ads label: contact form |
+| `VITE_GADS_LABEL_GAP` | Ads label: GAP form |
+| `VITE_GADS_LABEL_CALENDLY` | Ads label: Calendly booking |
 | `VITE_N8N_WEBHOOK_URL` | GAP form webhook URL |

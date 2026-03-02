@@ -1,7 +1,8 @@
 # FAQ Sablia - Questions Fréquentes
 
-**Dernière mise à jour**: 29 octobre 2025
+**Derniere mise a jour**: 2026-03-02
 **URL du site**: https://sablia.io
+**24 questions** across 8 categories (matches Faq.tsx page)
 
 ---
 
@@ -29,7 +30,7 @@ Nous travaillons principalement avec **n8n** (auto-hébergeable) et **Make.com**
 - 🇪🇺 Solutions européennes (RGPD-compliant)
 - 🔓 Open-source (n8n) ou SaaS européen (Make.com)
 - 🎓 Courbe d'apprentissage accessible
-- 🔌 800+ intégrations natives
+- 🔌 400+ integrations natives
 - 💰 Coût maîtrisé vs solutions enterprise
 
 ### Quelle est la différence entre n8n et Make.com ?
@@ -278,7 +279,7 @@ Oui. **Chaque projet inclut une période de support post-livraison** :
   - Monitoring proactif
   - Mises à jour mineures
 
-- **Retainer Pro** : 1 800€/mois
+- **Retainer Standard** : 1 200€/mois
   - 12h de support/développement
   - Nouveaux workflows inclus
   - Formation continue
@@ -626,6 +627,6 @@ Oui. Consultez nos **études de cas** sur https://sablia.io :
 
 ---
 
-**Dernière mise à jour** : 29 octobre 2025
+**Derniere mise a jour** : 2026-03-02
 **Questions non couvertes ?** → contact@sablia.io
-**Besoin d'un devis personnalisé ?** → https://sablia.io/gap
+**Besoin d'un devis personnalise ?** → https://sablia.io/gap

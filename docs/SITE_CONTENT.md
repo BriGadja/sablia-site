@@ -1,6 +1,6 @@
 # Contenu du Site Sablia
 
-**Dernière mise à jour**: 2 mars 2026
+**Derniere mise a jour**: 2026-03-02
 **Domaine**: https://sablia.io
 **Type**: Site vitrine B2B - Services d'automatisation et IA pour PME
 
@@ -29,84 +29,56 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 
 #### 1. Hero Section
 
-- **Titre**: "L'IA au service de votre croissance"
-- **Sous-titre**: "On forme vos équipes. On installe les systèmes. Vous gardez le contrôle."
+- **Small label**: "Automatisation & IA sur mesure pour PME"
+- **Titre**: "Retournez le sablier" (brand wordplay — sablier = hourglass)
+- **Sous-titre**: "Sablia automatise vos processus repetitifs. Vous recuperez vos heures."
+- **Credential badge**: "Brice Gachadoat — Resp. Pedagogique & Expert IA, IAPreneurs (160k+)"
 - **CTAs primaires**:
   - "Diagnostic Gratuit" → scroll vers #contact
   - "Calculer mon ROI" → scroll vers #calculator
-- **Effets visuels**: Gradient animé (Navy → Electric → Cyan), magnetic buttons, particles background
+- **Effets visuels**: Animated particles background, Framer Motion transitions
 
 #### 2. Testimonials Section
 
-- **Titre**: "Des résultats mesurables"
-- **Format**: Carrousel infini horizontal avec 5 témoignages clients
-- **Témoignages clés**:
-  - **Hélène (GirlsGang)**: Économie de 90% du temps sur génération de menus nutritionniste
-  - **Directeur anonyme**: Veille concurrentielle → avantage compétitif décisif
-  - **Yassine (Norloc)**: Agent vocal + CRM → amélioration taux de conversion
-  - **Valentin (Stefano Design)**: Réactivation automatisée de milliers de contacts dormants
-  - **Amir (BTP)**: Gestion des interventions → organisation transformée
+- **Aggregate header**: "15+ projets livres · 4.9/5 satisfaction · 5 secteurs"
+- **Titre**: "Des resultats mesurables"
+- **Format**: Carrousel infini horizontal avec 5 temoignages clients
+- **Card format**: Metric badge at top (bg-sablia-sienna/10), "Avant:" context line, then quote
+- **Temoignages cles**:
+  - **Helene (GirlsGang)**: Economie de 90% du temps sur generation de menus nutritionniste
+  - **Directeur anonyme**: Veille concurrentielle → avantage competitif decisif
+  - **Yassine (Norloc)**: Agent vocal + CRM → amelioration taux de conversion
+  - **Valentin (Stefano Design)**: Reactivation automatisee de milliers de contacts dormants
+  - **Amir (BTP)**: Gestion des interventions → organisation transformee
+- **Structured data**: AggregateRating (4.9/5) + 5 Review schemas
 
-#### 3. Intégrations & Outils Section
+#### 3. Nos Expertises Section (formerly Integrations)
 
-- **Surtitre**: "Les outils que nous maîtrisons"
-- **Titre**: "Intégrations & Outils"
-- **Sous-titre**: "Automatisez vos workflows avec les outils que vous utilisez déjà"
-- **12 logos d'applications** avec HoverCards interactifs (au hover desktop uniquement):
+- **Titre**: "Nos expertises"
+- **Format**: 4 service cards (Langdock-style layout)
+- **Desktop**: 4-column grid; **Mobile**: horizontal scroll with snap
+- **Cards** (colored left borders, lucide icons):
+  1. **Diagnostic Express** — Audit rapide de vos processus
+  2. **Vos equipes autonomes** — Formation sur mesure
+  3. **Workflows sur mesure** — Developpement personnalise
+  4. **Agents IA** — Assistants intelligents dedies
 
-  **Automatisation** (2):
-  - **n8n**: Plateforme d'automatisation no-code open-source avec +400 intégrations natives → _Exemple: Synchronisation CRM → Sheets → Slack en temps réel_
-  - **Make**: Automatisation visuelle pour connecter vos applications business sans coder → _Exemple: Workflows complexes multi-étapes pour gestion de leads_
+#### 4. Transformation Section (merged problem + solution)
 
-  **Intelligence Artificielle** (4):
-  - **OpenAI**: IA générative pour automatiser création de contenu et analyses avancées → _Exemple: Génération automatique de rapports et documentation_
-  - **Anthropic**: Claude AI pour assistance intelligente et traitement de documents complexes → _Exemple: Extraction de données depuis factures et contrats_
-  - **Gemini**: IA multimodale Google pour analyse de données et génération de contenu → _Exemple: Analyse prédictive et insights business automatisés_
-  - **Perplexity**: Recherche augmentée par IA pour veille concurrentielle et benchmarking → _Exemple: Monitoring automatisé des tendances sectorielles_
+- **Problem name**: "Le Syndrome du Copier-Coller"
+- **Format**: Before/after layout — 3 rows with problem → arrow → solution
+- **CTA**: "Diagnostiquer mes processus"
+- **Rows**:
+  1. Temps perdu sur taches repetitives → Processus automatises
+  2. Erreurs humaines couteuses → Workflows fiables
+  3. Croissance limitee → Scalabilite sans recrutement
 
-  **Productivité** (3):
-  - **Google Sheets**: Tableurs collaboratifs pour centraliser et automatiser vos données business → _Exemple: Dashboards KPI mis à jour en temps réel via API_
-  - **Google Drive**: Stockage cloud pour centraliser documents et automatiser partage/archivage → _Exemple: Archivage automatique de devis et factures par projet_
-  - **Notion**: Base de connaissances collaborative pour documenter workflows et procédures → _Exemple: Documentation automatique de processus et formations_
+#### 5. Process Section
 
-  **Communication** (1):
-  - **Slack**: Hub de communication d'équipe avec notifications automatisées intelligentes → _Exemple: Alertes temps réel sur nouveaux leads et deadlines_
-
-  **Développement** (2):
-  - **GitHub**: Gestion de versions et CI/CD pour déploiement automatisé de solutions → _Exemple: Déploiement continu d'automatisations personnalisées_
-  - **Vercel**: Plateforme de déploiement serverless pour applications et outils web → _Exemple: Hébergement de dashboards clients et interfaces sur-mesure_
-
-- **Footer**: "Et bien d'autres intégrations possibles"
-
-**UX Interaction**:
-- Desktop: Hover sur logo → HoverCard avec badge catégorie + description + use case
-- Mobile: Attribut `title` natif du navigateur (fallback)
-- Styling: Design system v2 (navy/cyan), glassmorphism, fade-in 200ms
-
-#### 4. Problem Section
-
-- **Titre**: "Les défis de l'automatisation"
-- **Sous-titre**: "Vous reconnaissez-vous dans l'une de ces situations ?"
-- **3 problèmes identifiés**:
-  1. **Temps perdu sur tâches répétitives** - Équipes bloquées sur tâches manuelles
-  2. **Erreurs humaines coûteuses** - Saisie, doublons, oublis → impact professionnel et CA
-  3. **Croissance limitée par manque d'outils** - Scalabilité contrainte par ressources humaines
-
-#### 5. Solution Section
-
-- **Titre**: "La méthode Sablia"
-- **Sous-titre**: "Une approche qui place l'humain au centre de l'automatisation"
-- **4 piliers horizontaux**:
-  1. **Diagnostic Complet** - Audit + identification opportunités + accompagnement personnalisé
-  2. **Solutions Spécifiques** - Développement sur-mesure pour besoins uniques
-  3. **Sécurité & Conformité** - RGPD + solutions européennes (n8n, Make.com)
-  4. **ROI Mesurable** - Temps gagné + économies quantifiées
-
-#### 6. Process Section
-
-- **Titre**: "Notre processus en 3 étapes"
-- **Sous-titre**: "De l'audit initial à l'optimisation continue"
-- **Timeline horizontale** (desktop) avec 3 étapes:
+- **Titre**: "Notre processus en 3 etapes"
+- **Sous-titre**: "De l'audit initial a l'optimisation continue"
+- **Timeline horizontale** (desktop) avec 3 etapes:
+- **Structured data**: HowTo schema (3 steps)
 
   **Étape 1 - Découvrir** (Modulaire):
   - Audit de vos processus actuels
@@ -128,10 +100,11 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
   - Modifications + formation nouveaux collaborateurs
   - Mises à jour + optimisation continue
 
-#### 7. Pricing Section
+#### 6. Pricing Section
 
 - **Titre**: "Nos offres"
-- **Sous-titre**: "Des solutions adaptées à chaque étape de votre transformation"
+- **Sous-titre**: "Des solutions adaptees a chaque etape de votre transformation"
+- **Structured data**: Service schema (9 offerings)
 - **3 colonnes d'offres**:
 
 **Colonne 1 - Audit & Consulting**:
@@ -183,32 +156,31 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
    - Formation 2-3 jours + 3 mois support
    - **ROI année 1**: 50 000-150 000€
 
-#### 8. Calculator ROI Section
+#### 7. Calculator ROI Section
 
 - **Titre**: "Calculateur ROI"
-- **Outil interactif** pour estimer économies potentielles
+- **Format**: 2 range sliders (heures/semaine 2-40h + cout horaire 20-80 EUR)
+- **Resultats animes** (count-up via requestAnimationFrame): economies annuelles, jours recuperes
+- **Micro-temoignage**: "Helene a economise 90% de son temps"
+- **Investissement fixe**: 1 500 EUR (cadre de reference)
 - **CTA**: "Calculer mon ROI" → page /roi
 
-#### 9. Contact Form Section
+#### 8. Contact Form Section
 
 - **Titre**: "Diagnostic Gratuit"
-- **Formulaire de contact** avec intégration Calendly
-- **Champs**: Nom, email, entreprise, message
-- **CTA**: "Demander un diagnostic"
+- **Format**: 2-column layout (max-w-6xl)
+  - **Left**: Contact form (nom, email, entreprise, telephone, message, RGPD consent checkbox) + honeypot anti-spam field
+  - **Right**: Calendly InlineWidget (30 min discovery call)
+- **CTA**: "Envoyer un message" (form) / "Reserver un appel" (Calendly)
+- **Webhooks**: POST to `https://n8n.sablia.io/webhook/sablia-site-formulaire` with UTM params
 
-#### 10. FAQ Section
+#### 9. FAQ Section
 
-- **Titre**: "Questions fréquentes"
+- **Titre**: "Questions frequentes"
 - **Sous-titre**: "Tout ce que vous devez savoir sur nos services d'automatisation"
-- **8 questions en accordéon** (2 colonnes desktop):
-  1. Quels outils d'automatisation utilisez-vous ? → n8n (auto-hébergeable) et Make.com (européens)
-  2. Combien de temps pour automatiser un processus ? → 3-7 jours workflow simple, 2-4 semaines système complet
-  3. Compétences techniques nécessaires ? → Non, formations adaptées tous niveaux
-  4. ROI typique ? → 50-150k€ économies annuelles pour transformation complète
-  5. Support après mise en production ? → Oui, 2 semaines à 3 mois selon offre + formules retainer
-  6. Peut-on commencer petit ? → Oui, recommandé (Audit Express 350€ ou Workflow Simple)
-  7. Toutes tailles d'entreprises ? → Spécialisés PME/ETI (10-250 personnes)
-  8. Différence n8n vs Make.com ? → n8n = auto-hébergé/open-source, Make = SaaS européen accessible
+- **8 questions en accordeon** (2 colonnes desktop)
+- **Structured data**: FAQPage schema
+- **"Voir toutes les questions"** link → /faq (24 questions)
 
 ---
 
@@ -293,7 +265,7 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 **CTA**: "🚀 Recevoir mes automatisations"
 **Trust signals**: ✓ Gratuit et sans engagement • ✓ Réponse sous 24h • ✓ 100% personnalisé
 
-**Action post-soumission**: Redirection vers page d'accueil + toast de confirmation
+**Action post-soumission**: Redirection vers /thank-you
 
 ---
 
@@ -311,20 +283,61 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 
 ### Page ROI Calculator (/roi)
 
-**Objectif**: Permettre aux prospects d'estimer leurs économies potentielles
+**Objectif**: Permettre aux prospects d'estimer leurs economies potentielles
 
 **Contenu**:
 
 - Calculateur interactif ROI
-- **Inputs**:
-  - Nombre d'employés
-  - Heures/semaine sur tâches répétitives
-  - Coût horaire moyen
-  - Processus à automatiser
-- **Outputs**:
-  - Économies annuelles estimées
-  - ROI en mois
-  - Temps libéré par an
+- **Inputs**: 2 sliders (heures/semaine sur taches repetitives + cout horaire moyen)
+- **Outputs**: Economies annuelles estimees, jours recuperes, ROI
+- **Structured data**: WebApplication schema
+
+---
+
+### Page FAQ (/faq)
+
+**Objectif**: Repondre aux questions frequentes, SEO long-tail keywords
+
+**Contenu**:
+
+- **24 questions** organisees en **8 categories**:
+  1. Outils & Technologies (4 questions)
+  2. Delais & Processus (3 questions)
+  3. Competences & Formation (2 questions)
+  4. ROI & Rentabilite (2 questions)
+  5. Support & Accompagnement (3 questions)
+  6. Approche & Methodologie (3 questions)
+  7. Tarification & Budget (3 questions)
+  8. Securite & Donnees (4 questions)
+- **Structured data**: FAQPage schema (inline Helmet)
+- **Lien depuis**: Homepage FAQ section ("Voir toutes les questions")
+
+---
+
+### Page Cas Clients (/cas-clients)
+
+**Objectif**: Social proof avec etudes de cas concrets
+
+**Contenu**:
+
+- **3 etudes de cas** (anonymisees):
+  1. E-commerce (25 personnes) — 1 000h/an economisees
+  2. Cabinet de conseil (60 personnes) — 60% reduction taches admin
+  3. Association — Scaling 3x sans recrutement
+- Format: avant/apres, metriques, processus automatises
+
+---
+
+### Page Thank You (/thank-you)
+
+**Objectif**: Confirmation post-soumission + conversion tracking
+
+**Contenu**:
+
+- Message de confirmation ("Merci ! Nous vous repondrons sous 24h")
+- Calendly InlineWidget (opportunite de reserver un appel)
+- Conversion tracking: `trackConversion()` on mount
+- **SEO**: noindex, nofollow
 
 ---
 
@@ -411,42 +424,20 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 
 ### Animations & Effets
 
-- **AnimatedParticles**: Particules flottantes en arrière-plan
-- **CustomCursor**: Curseur personnalisé avec effet magnétique
-- **ScrollReveal**: Animations au scroll
-- **MagneticButton**: Boutons avec effet d'attraction magnétique
-- **GradientText**: Texte avec gradient animé
-- **Glassmorphism**: Cartes avec effet verre dépoli (backdrop-blur)
+- **Framework**: Framer Motion (whileInView + variants pattern)
+- **AnimatedParticles**: Particules flottantes (mobile: max 30, desktop: max 100, respects prefers-reduced-motion)
+- **Glassmorphism**: Cartes avec effet verre depoli (backdrop-blur)
+- **Page transitions**: AnimatePresence mode="wait" in Router
 
-### Palette de Couleurs (Thème v3)
+### Palette de Couleurs (Sablia Design System)
 
-- **Primary**:
-  - Navy: #0A2463
-  - Electric: #3E92CC
-  - Cyan: #52D1DC (#2B9AB8 variant)
-- **Secondary**:
-  - Charcoal: #2D3142
-  - Brown tones: #3d2f1f, #4a3621
-- **Text**:
-  - White: #FFFFFF
-  - Off-white: rgba(255, 255, 255, 0.9)
-- **Accents**:
-  - Orange: #FFA559 (CTAs, highlights)
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for full design tokens.
 
-### Gradient Background
-
-```
-linear-gradient(to bottom,
-  #2B9AB8 0%,
-  #3E92CC 15%,
-  #0A2463 35%,
-  #0A2463 50%,
-  #2D3142 65%,
-  #3d2f1f 80%,
-  #4a3621 95%,
-  #3d2f1f 100%
-)
-```
+- **sablia-text**: #1a2e4e (primary text)
+- **sablia-surface**: #eae3d2 (card/surface)
+- **sablia-bg**: #f4efe2 (page background)
+- **sablia-sienna**: #c45a2c (warm accent)
+- **sablia-alba**: #d4956a (warm secondary)
 
 ---
 
@@ -498,7 +489,11 @@ linear-gradient(to bottom,
 
 ### Analytics & Tracking
 
-- [À définir selon configuration]
+- **GA4**: G-JVXKHE3VD8, consent-gated via CookieConsentBanner
+- **Google Ads**: AW-17987411130, 3 conversion actions (contact, gap, calendly)
+- **Page tracking**: SPA page views via usePageTracking hook
+- **UTM forwarding**: All form submissions include UTM params
+- See [INTEGRATIONS.md](./INTEGRATIONS.md) and [GOOGLE_ADS.md](./GOOGLE_ADS.md) for details
 
 ---
 
@@ -538,27 +533,13 @@ linear-gradient(to bottom,
 
 - **Frontend**: React 18 + TypeScript + Vite + Wouter
 - **Backend**: Express.js + TypeScript
-- **Base de données**: PostgreSQL + Drizzle ORM
+- **Base de donnees**: PostgreSQL + Drizzle ORM (connected but unused at runtime)
 - **UI**: Radix UI + shadcn/ui + Tailwind CSS
-- **Animations**: Framer Motion + GSAP + TSParticles
+- **Animations**: Framer Motion
 - **Forms**: React Hook Form + Zod
 - **State**: React Query (TanStack Query)
 
-### Routes
-
-- `/` - Landing (homepage)
-- `/about` - À propos
-- `/gap` - GAP Analysis form
-- `/tarifs` - Pricing page
-- `/roi` - ROI calculator
-- `/politique-confidentialite` - Privacy policy
-- `/cgv` - Terms of service
-- `/mentions-legales` - Legal notice
-
-### Path Aliases
-
-- `@/` → `client/src/`
-- `@db` → `db/`
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for full technical reference (component tree, route map, build config, design tokens).
 
 ---
 
@@ -575,4 +556,4 @@ linear-gradient(to bottom,
 
 **Responsable**: Vérifier cohérence avant chaque commit majeur ou via processus PRP
 
-**Version**: 1.1 - 26 janvier 2026
+**Version**: 2.0 — 2026-03-02

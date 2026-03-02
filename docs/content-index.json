@@ -1,7 +1,7 @@
 {
   "siteName": "Sablia",
   "domain": "sablia.io",
-  "lastUpdated": "2026-01-26",
+  "lastUpdated": "2026-03-02",
   "description": "Services d'automatisation business et IA pour PME françaises",
   "valueProposition": "Formation des équipes + installation des systèmes + maintien du contrôle",
   "targetAudience": "PME et ETI françaises (10-250 personnes)",
@@ -16,54 +16,47 @@
         {
           "id": "hero",
           "name": "Hero Section",
-          "headline": "L'IA au service de votre croissance",
-          "subheadline": "On forme vos équipes. On installe les systèmes. Vous gardez le contrôle.",
+          "smallLabel": "Automatisation & IA sur mesure pour PME",
+          "headline": "Retournez le sablier",
+          "subheadline": "Sablia automatise vos processus repetitifs. Vous recuperez vos heures.",
+          "credential": "Brice Gachadoat — Resp. Pedagogique & Expert IA, IAPreneurs (160k+)",
           "ctaPrimary": "Diagnostic Gratuit",
           "ctaSecondary": "Calculer mon ROI"
         },
         {
           "id": "testimonials",
           "name": "Testimonials Section",
-          "title": "Des résultats mesurables",
+          "aggregateHeader": "15+ projets livres · 4.9/5 satisfaction · 5 secteurs",
+          "title": "Des resultats mesurables",
           "testimonialsCount": 5,
+          "cardFormat": "Metric badge (top) + Avant: context + quote",
           "keyResults": [
-            "90% temps gagné (GirlsGang - génération menus)",
-            "Avantage compétitif décisif (veille concurrentielle)",
-            "Taux conversion amélioré (Norloc - agent vocal)",
-            "Milliers contacts réactivés (Stefano Design)",
-            "Organisation transformée (BTP - gestion interventions)"
+            "90% temps gagne (GirlsGang - generation menus)",
+            "Avantage competitif decisif (veille concurrentielle)",
+            "Taux conversion ameliore (Norloc - agent vocal)",
+            "Milliers contacts reactives (Stefano Design)",
+            "Organisation transformee (BTP - gestion interventions)"
+          ],
+          "structuredData": "AggregateRating (4.9/5) + 5 Review schemas"
+        },
+        {
+          "id": "expertise",
+          "name": "Nos Expertises Section",
+          "title": "Nos expertises",
+          "format": "4 service cards (Langdock-style)",
+          "cards": [
+            "Diagnostic Express",
+            "Vos equipes autonomes",
+            "Workflows sur mesure",
+            "Agents IA"
           ]
         },
         {
-          "id": "integrations",
-          "name": "Integrations & Tools Section",
-          "surtitle": "Les outils que nous maîtrisons",
-          "title": "Intégrations & Outils",
-          "subtitle": "Automatisez vos workflows avec les outils que vous utilisez déjà",
-          "toolsCount": 12,
-          "interactionType": "HoverCard (desktop hover, mobile title attribute)",
-          "footer": "Et bien d'autres intégrations possibles"
-        },
-        {
-          "id": "problem",
-          "name": "Problem Section",
-          "title": "Les défis de l'automatisation",
-          "problems": [
-            "Temps perdu sur tâches répétitives",
-            "Erreurs humaines coûteuses",
-            "Croissance limitée par manque d'outils"
-          ]
-        },
-        {
-          "id": "solution",
-          "name": "Solution Section",
-          "title": "La méthode Sablia",
-          "pillars": [
-            "Diagnostic Complet",
-            "Solutions Spécifiques",
-            "Sécurité & Conformité",
-            "ROI Mesurable"
-          ]
+          "id": "transformation",
+          "name": "Transformation Section",
+          "problemName": "Le Syndrome du Copier-Coller",
+          "format": "Before/after layout (3 rows: problem → solution)",
+          "cta": "Diagnostiquer mes processus"
         },
         {
           "id": "process",
@@ -164,14 +157,16 @@
           "id": "calculator",
           "name": "Calculator ROI Section",
           "title": "Calculateur ROI",
+          "format": "2 range sliders (heures/semaine + cout horaire) + animated results",
           "cta": "Calculer mon ROI"
         },
         {
           "id": "contact",
           "name": "Contact Form Section",
           "title": "Diagnostic Gratuit",
-          "formFields": ["name", "email", "company", "message"],
-          "integration": "Calendly"
+          "format": "2-column (form + Calendly InlineWidget)",
+          "formFields": ["name", "email", "company", "phone", "message", "rgpdConsent"],
+          "integration": "Calendly + n8n webhook"
         },
         {
           "id": "faq",
@@ -259,7 +254,7 @@
       ],
       "ctaPrimary": "🚀 Recevoir mes automatisations",
       "trustSignals": ["Gratuit et sans engagement", "Réponse sous 24h", "100% personnalisé"],
-      "postSubmit": "Redirection vers / avec toast confirmation"
+      "postSubmit": "Redirection vers /thank-you"
     },
     {
       "path": "/tarifs",
@@ -279,7 +274,62 @@
         "Coût horaire moyen",
         "Processus à automatiser"
       ],
-      "outputs": ["Économies annuelles estimées", "ROI en mois", "Temps libéré par an"]
+      "outputs": ["Economies annuelles estimees", "ROI en mois", "Temps libere par an"],
+      "structuredData": "WebApplication"
+    },
+    {
+      "path": "/faq",
+      "name": "FAQ",
+      "title": "Questions frequentes sur l'automatisation",
+      "description": "24 questions across 8 categories with FAQPage structured data",
+      "questionsCount": 24,
+      "categories": [
+        "Outils & Technologies",
+        "Delais & Processus",
+        "Competences & Formation",
+        "ROI & Rentabilite",
+        "Support & Accompagnement",
+        "Approche & Methodologie",
+        "Tarification & Budget",
+        "Securite & Donnees"
+      ],
+      "structuredData": "FAQPage"
+    },
+    {
+      "path": "/cas-clients",
+      "name": "Cas Clients",
+      "title": "Etudes de cas - Transformations clients",
+      "description": "3 anonymized case studies with before/after metrics",
+      "caseStudies": [
+        "E-commerce (25 pers.) — 1000h/an economisees",
+        "Cabinet conseil (60 pers.) — 60% reduction taches admin",
+        "Association — Scaling 3x sans recrutement"
+      ]
+    },
+    {
+      "path": "/lp/automatisation-pme",
+      "name": "Landing Page — Automatisation PME",
+      "title": "Automatisez vos processus repetitifs",
+      "description": "Ad landing page for Automatisation Entreprise, n8n/No-Code, Formation IA ad groups",
+      "seo": "noindex, follow",
+      "cta": "Contact form (n8n webhook + UTM)",
+      "_note": "Not in sitemap"
+    },
+    {
+      "path": "/lp/audit-gratuit",
+      "name": "Landing Page — Audit Gratuit",
+      "title": "Audit Automatisation Gratuit",
+      "description": "Ad landing page for Audit Gratuit ad group",
+      "seo": "noindex, follow",
+      "cta": "Links to /gap form",
+      "_note": "Not in sitemap"
+    },
+    {
+      "path": "/thank-you",
+      "name": "Thank You",
+      "title": "Merci",
+      "description": "Post-form confirmation with Calendly widget and conversion tracking",
+      "seo": "noindex, nofollow"
     }
   ],
 
@@ -469,7 +519,7 @@
       "backend": "Express.js + TypeScript",
       "database": "PostgreSQL + Drizzle ORM",
       "ui": "Radix UI + shadcn/ui + Tailwind CSS",
-      "animations": "Framer Motion + GSAP + TSParticles"
+      "animations": "Framer Motion"
     },
     "theme": {
       "name": "v3",

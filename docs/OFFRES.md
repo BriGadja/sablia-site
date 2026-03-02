@@ -1,7 +1,9 @@
 # Offres Sablia - Documentation Détaillée
 
-**Dernière mise à jour**: 29 octobre 2025
+**Derniere mise a jour**: 2026-03-02
 **URL du site**: https://sablia.io
+
+See also: [SITE_CONTENT.md](./SITE_CONTENT.md) (pricing section on homepage)
 
 ---
 
@@ -730,4 +732,4 @@ Expert Automatisation & IA
 
 ---
 
-_Document mis à jour le 29 octobre 2025. Les prix et conditions sont susceptibles d'évoluer. Merci de confirmer lors du devis officiel._
+_Document mis a jour le 2 mars 2026. Les prix et conditions sont susceptibles d'evoluer. Merci de confirmer lors du devis officiel._
