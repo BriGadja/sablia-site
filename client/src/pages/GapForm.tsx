@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'wouter'
+import { Link, useLocation } from 'wouter'
 import * as z from 'zod'
 import SEO from '@/components/SEO'
 import { Button } from '@/components/ui/button'
@@ -23,8 +23,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { usePersistentToast } from '@/hooks/use-persistent-toast'
 import { useToast } from '@/hooks/use-toast'
+import { trackEvent } from '@/lib/analytics'
 
 const formSchema = z.object({
   firstName: z.string().min(1, 'Le prénom est requis'),
@@ -38,8 +38,9 @@ const formSchema = z.object({
 
 export default function GapForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [honeypot, setHoneypot] = useState('')
+  const [, setLocation] = useLocation()
   const { toast } = useToast()
-  const { setPendingToast } = usePersistentToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -68,25 +69,26 @@ export default function GapForm() {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (isSubmitting) return
+
+    // Honeypot: if filled, fake success without sending
+    if (honeypot) {
+      setLocation('/thank-you?source=gap')
+      return
+    }
+
     setIsSubmitting(true)
     try {
-      const params = new URLSearchParams()
-      Object.entries(data).forEach(([key, value]) => {
-        if (value) params.append(key, value.toString())
-      })
       const webhookUrl =
-        import.meta.env.VITE_N8N_WEBHOOK_URL || window.location.origin + '/api/webhook-test'
-      const response = await fetch(`${webhookUrl}?${params.toString()}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        import.meta.env.VITE_N8N_WEBHOOK_URL || `${window.location.origin}/api/webhook-test`
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
       })
       if (!response.ok) throw new Error(`Erreur lors de l'envoi du formulaire: ${response.status}`)
 
-      setPendingToast({
-        title: 'Formulaire envoyé avec succès !',
-        description: 'Nous vous contacterons rapidement avec des solutions personnalisées.',
-      })
-      window.location.href = '/'
+      trackEvent('form_submit', { form_name: 'gap' })
+      setLocation('/thank-you?source=gap')
     } catch (error) {
       console.error('Erreur:', error)
       setIsSubmitting(false)
@@ -159,6 +161,20 @@ export default function GapForm() {
               >
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    {/* Honeypot field — hidden from real users */}
+                    <div className="absolute opacity-0 h-0 overflow-hidden" aria-hidden="true">
+                      <label htmlFor="gap-website">Website</label>
+                      <input
+                        id="gap-website"
+                        name="website"
+                        type="text"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        value={honeypot}
+                        onChange={(e) => setHoneypot(e.target.value)}
+                      />
+                    </div>
+
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-6">
                       <div className="space-y-4">
                         <div className="border-b border-gray-100 pb-3">

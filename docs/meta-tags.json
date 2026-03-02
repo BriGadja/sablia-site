@@ -307,6 +307,12 @@
         "title": "Cas clients | Sablia",
         "description": "Études de cas : e-commerce, cabinet de conseil, association. Résultats mesurables."
       }
+    },
+
+    "/thank-you": {
+      "title": "Merci - Sablia",
+      "description": "Votre demande a bien été prise en compte. Nous vous répondrons dans les 24 heures.",
+      "robots": "noindex, nofollow"
     }
   },
 

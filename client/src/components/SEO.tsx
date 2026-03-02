@@ -28,6 +28,7 @@ interface SEOProps {
     | '/cgv'
     | '/faq'
     | '/cas-clients'
+    | '/thank-you'
 }
 
 // Breadcrumb configuration for each page

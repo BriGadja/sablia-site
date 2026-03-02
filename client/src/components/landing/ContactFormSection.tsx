@@ -1,11 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
-import { Calendar, CheckCircle, Loader2, Send } from 'lucide-react'
+import { Calendar, Loader2, Send } from 'lucide-react'
 import { useState } from 'react'
-import { InlineWidget } from 'react-calendly'
+import { InlineWidget, useCalendlyEventListener } from 'react-calendly'
 import { useForm } from 'react-hook-form'
+import { useLocation } from 'wouter'
 import * as z from 'zod'
 import { useToast } from '@/hooks/use-toast'
+import { trackConversion, trackEvent } from '@/lib/analytics'
 
 const contactSchema = z.object({
   nom: z.string().min(2, 'Le nom doit contenir au moins 2 caractères'),
@@ -25,8 +27,15 @@ const inputClasses =
 
 export default function ContactFormSection() {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
+  const [honeypot, setHoneypot] = useState('')
+  const [, setLocation] = useLocation()
   const { toast } = useToast()
+
+  useCalendlyEventListener({
+    onEventScheduled: () => {
+      trackConversion('calendly_booking')
+    },
+  })
 
   const {
     register,
@@ -39,6 +48,13 @@ export default function ContactFormSection() {
   })
 
   const onSubmit = async (data: ContactInputs) => {
+    // Honeypot: if filled, fake success without sending
+    if (honeypot) {
+      reset()
+      setLocation('/thank-you?source=contact')
+      return
+    }
+
     setIsSubmitting(true)
     try {
       const response = await fetch('https://n8n.sablia.io/webhook/sablia-site-formulaire', {
@@ -48,14 +64,9 @@ export default function ContactFormSection() {
       })
       if (!response.ok) throw new Error("Échec de l'envoi du message")
 
-      setIsSuccess(true)
+      trackEvent('form_submit', { form_name: 'contact' })
       reset()
-      toast({
-        title: 'Message envoyé !',
-        description: 'Nous vous répondrons dans les 24 heures.',
-        variant: 'default',
-      })
-      setTimeout(() => setIsSuccess(false), 5000)
+      setLocation('/thank-you?source=contact')
     } catch (error) {
       console.error('Contact form error:', error)
       toast({
@@ -86,171 +97,167 @@ export default function ContactFormSection() {
         </motion.div>
 
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-6 lg:gap-8">
-          {!isSuccess ? (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="bg-sablia-bg border border-sablia-border rounded p-8"
-            >
-              <div className="flex items-center gap-2.5 mb-1.5">
-                <Send size={18} className="text-sablia-accent" />
-                <h3 className="text-xl font-semibold text-sablia-text">Envoyer un message</h3>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="bg-sablia-bg border border-sablia-border rounded p-8"
+          >
+            <div className="flex items-center gap-2.5 mb-1.5">
+              <Send size={18} className="text-sablia-accent" />
+              <h3 className="text-xl font-semibold text-sablia-text">Envoyer un message</h3>
+            </div>
+            <p className="text-sm text-sablia-text-secondary mb-6">
+              Réponse sous 24 heures, promis.
+            </p>
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              {/* Honeypot field — hidden from real users */}
+              <div className="absolute opacity-0 h-0 overflow-hidden" aria-hidden="true">
+                <label htmlFor="website">Website</label>
+                <input
+                  id="website"
+                  name="website"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                />
               </div>
-              <p className="text-sm text-sablia-text-secondary mb-6">
-                Réponse sous 24 heures, promis.
-              </p>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div>
-                  <label
-                    htmlFor="nom"
-                    className="block text-sablia-text mb-1.5 text-sm font-medium"
-                  >
-                    Nom <span className="text-sablia-accent">*</span>
-                  </label>
-                  <input
-                    id="nom"
-                    type="text"
-                    {...register('nom')}
-                    className={inputClasses}
-                    placeholder="Jean Dupont"
-                  />
-                  {errors.nom && <p className="text-red-500 text-sm mt-1">{errors.nom.message}</p>}
-                </div>
+              <div>
+                <label htmlFor="nom" className="block text-sablia-text mb-1.5 text-sm font-medium">
+                  Nom <span className="text-sablia-accent">*</span>
+                </label>
+                <input
+                  id="nom"
+                  type="text"
+                  {...register('nom')}
+                  className={inputClasses}
+                  placeholder="Jean Dupont"
+                />
+                {errors.nom && <p className="text-red-500 text-sm mt-1">{errors.nom.message}</p>}
+              </div>
 
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sablia-text mb-1.5 text-sm font-medium"
-                  >
-                    Email <span className="text-sablia-accent">*</span>
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    {...register('email')}
-                    className={inputClasses}
-                    placeholder="jean.dupont@exemple.fr"
-                  />
-                  {errors.email && (
-                    <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="entreprise"
-                    className="block text-sablia-text mb-1.5 text-sm font-medium"
-                  >
-                    Entreprise <span className="text-sablia-accent">*</span>
-                  </label>
-                  <input
-                    id="entreprise"
-                    type="text"
-                    {...register('entreprise')}
-                    className={inputClasses}
-                    placeholder="ACME Corp"
-                  />
-                  {errors.entreprise && (
-                    <p className="text-red-500 text-sm mt-1">{errors.entreprise.message}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="telephone"
-                    className="block text-sablia-text mb-1.5 text-sm font-medium"
-                  >
-                    Téléphone <span className="text-sablia-text-tertiary">(optionnel)</span>
-                  </label>
-                  <input
-                    id="telephone"
-                    type="tel"
-                    {...register('telephone')}
-                    className={inputClasses}
-                    placeholder="+33 6 12 34 56 78"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sablia-text mb-1.5 text-sm font-medium"
-                  >
-                    Message <span className="text-sablia-accent">*</span>
-                  </label>
-                  <textarea
-                    id="message"
-                    rows={4}
-                    {...register('message')}
-                    className={`${inputClasses} resize-none`}
-                    placeholder="Décrivez votre projet d'automatisation..."
-                  />
-                  {errors.message && (
-                    <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="flex items-start gap-2.5 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      {...register('rgpdConsent')}
-                      className="mt-1 w-4 h-4 accent-sablia-accent rounded"
-                    />
-                    <span className="text-sm text-sablia-text-secondary">
-                      J'accepte que mes données soient traitées conformément à la{' '}
-                      <a
-                        href="/politique-confidentialite"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sablia-accent underline hover:text-sablia-accent-hover"
-                      >
-                        politique de confidentialité
-                      </a>
-                      . <span className="text-sablia-accent">*</span>
-                    </span>
-                  </label>
-                  {errors.rgpdConsent && (
-                    <p className="text-red-500 text-sm mt-1">{errors.rgpdConsent.message}</p>
-                  )}
-                </div>
-
-                {isSubmitting ? (
-                  <button
-                    type="button"
-                    disabled
-                    className="w-full bg-sablia-accent/60 text-white px-6 py-3.5 rounded-md font-medium cursor-not-allowed flex items-center justify-center gap-2"
-                  >
-                    <Loader2 size={18} className="animate-spin" />
-                    Envoi en cours...
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    className="w-full bg-sablia-accent text-sablia-bg px-6 py-3.5 rounded-md font-medium hover:bg-sablia-accent-hover transition-colors duration-200 flex items-center justify-center gap-2"
-                  >
-                    <Send size={18} />
-                    Envoyer le message
-                  </button>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sablia-text mb-1.5 text-sm font-medium"
+                >
+                  Email <span className="text-sablia-accent">*</span>
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  {...register('email')}
+                  className={inputClasses}
+                  placeholder="jean.dupont@exemple.fr"
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
                 )}
-              </form>
-            </motion.div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
-              className="bg-sablia-bg border border-sablia-border rounded p-12 text-center flex flex-col justify-center"
-            >
-              <CheckCircle size={56} className="text-sablia-accent mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-sablia-text mb-2">Message envoyé !</h3>
-              <p className="text-base text-sablia-text-secondary">
-                Merci pour votre message. Nous vous répondrons dans les 24 heures.
-              </p>
-            </motion.div>
-          )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="entreprise"
+                  className="block text-sablia-text mb-1.5 text-sm font-medium"
+                >
+                  Entreprise <span className="text-sablia-accent">*</span>
+                </label>
+                <input
+                  id="entreprise"
+                  type="text"
+                  {...register('entreprise')}
+                  className={inputClasses}
+                  placeholder="ACME Corp"
+                />
+                {errors.entreprise && (
+                  <p className="text-red-500 text-sm mt-1">{errors.entreprise.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="telephone"
+                  className="block text-sablia-text mb-1.5 text-sm font-medium"
+                >
+                  Téléphone <span className="text-sablia-text-tertiary">(optionnel)</span>
+                </label>
+                <input
+                  id="telephone"
+                  type="tel"
+                  {...register('telephone')}
+                  className={inputClasses}
+                  placeholder="+33 6 12 34 56 78"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="message"
+                  className="block text-sablia-text mb-1.5 text-sm font-medium"
+                >
+                  Message <span className="text-sablia-accent">*</span>
+                </label>
+                <textarea
+                  id="message"
+                  rows={4}
+                  {...register('message')}
+                  className={`${inputClasses} resize-none`}
+                  placeholder="Décrivez votre projet d'automatisation..."
+                />
+                {errors.message && (
+                  <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="flex items-start gap-2.5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    {...register('rgpdConsent')}
+                    className="mt-1 w-4 h-4 accent-sablia-accent rounded"
+                  />
+                  <span className="text-sm text-sablia-text-secondary">
+                    J'accepte que mes données soient traitées conformément à la{' '}
+                    <a
+                      href="/politique-confidentialite"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sablia-accent underline hover:text-sablia-accent-hover"
+                    >
+                      politique de confidentialité
+                    </a>
+                    . <span className="text-sablia-accent">*</span>
+                  </span>
+                </label>
+                {errors.rgpdConsent && (
+                  <p className="text-red-500 text-sm mt-1">{errors.rgpdConsent.message}</p>
+                )}
+              </div>
+
+              {isSubmitting ? (
+                <button
+                  type="button"
+                  disabled
+                  className="w-full bg-sablia-accent/60 text-white px-6 py-3.5 rounded-md font-medium cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  <Loader2 size={18} className="animate-spin" />
+                  Envoi en cours...
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  className="w-full bg-sablia-accent text-sablia-bg px-6 py-3.5 rounded-md font-medium hover:bg-sablia-accent-hover transition-colors duration-200 flex items-center justify-center gap-2"
+                >
+                  <Send size={18} />
+                  Envoyer le message
+                </button>
+              )}
+            </form>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -27,9 +27,7 @@ export default function PolitiqueConfidentialite() {
               <h1 className="text-4xl font-bold text-center text-sablia-text">
                 Politique de confidentialité
               </h1>
-              <p className="text-sablia-text-tertiary mt-2">
-                Dernière mise à jour : 28 octobre 2025
-              </p>
+              <p className="text-sablia-text-tertiary mt-2">Dernière mise à jour : 2 mars 2026</p>
             </div>
 
             <div className="max-w-4xl mx-auto prose prose-lg">
@@ -111,10 +109,13 @@ export default function PolitiqueConfidentialite() {
                     le navigateur et l'appareil.
                   </li>
                   <li>
-                    <strong>Mesure d'audience</strong> : <em>non déployée à ce jour</em>. Si un
-                    outil d'analytics est mis en place ultérieurement (par ex. GA4 / Plausible /
-                    Matomo), nous mettrons à jour la présente politique et, si nécessaire,
-                    recueillerons votre consentement préalable.
+                    <strong>Mesure d'audience</strong> : nous utilisons{' '}
+                    <strong>Google Analytics 4 (GA4)</strong> pour mesurer la fréquentation du Site.
+                    GA4 est configuré avec l'<strong>anonymisation des adresses IP</strong> activée.
+                    Les cookies d'analyse ne sont déposés qu'
+                    <strong>après votre consentement</strong> explicite via le bandeau de
+                    consentement affiché lors de votre première visite. Vous pouvez retirer ce
+                    consentement à tout moment (voir section 7).
                   </li>
                 </ul>
               </section>
@@ -306,19 +307,25 @@ export default function PolitiqueConfidentialite() {
                   7) Cookies et traceurs
                 </h2>
                 <p className="text-sablia-text-secondary mb-4">
-                  À ce jour, nous n'utilisons <strong>aucun outil d'analytics</strong> ni traceur
-                  non essentiel. Seuls des <strong>cookies/traceurs strictement nécessaires</strong>{' '}
-                  au fonctionnement, à la sécurité et à la répartition de charge (hébergement/CDN)
-                  peuvent être déposés.
+                  Nous utilisons <strong>Google Analytics 4 (GA4)</strong> pour mesurer l'audience
+                  du Site. GA4 dépose des cookies d'analyse (<code>_ga</code>, <code>_ga_*</code>)
+                  qui permettent de distinguer les visiteurs et de comprendre les parcours de
+                  navigation. L'adresse IP est <strong>anonymisée</strong> par défaut.
+                </p>
+                <p className="text-sablia-text-secondary mb-4">
+                  Ces cookies ne sont déposés qu'<strong>après votre consentement explicite</strong>
+                  , recueilli via un bandeau affiché lors de votre première visite. Vous pouvez à
+                  tout moment <strong>retirer votre consentement</strong> en supprimant le cookie{' '}
+                  <code>analytics_consent</code> de votre navigateur. Un nouveau bandeau vous sera
+                  alors proposé lors de votre prochaine visite.
+                </p>
+                <p className="text-sablia-text-secondary mb-4">
+                  En complément, des <strong>cookies strictement nécessaires</strong> au
+                  fonctionnement, à la sécurité et à la répartition de charge (hébergement/CDN)
+                  peuvent être déposés sans consentement.
                 </p>
                 <p className="text-sablia-text-secondary">
-                  Si, à l'avenir, des traqueurs non essentiels (mesure d'audience, marketing) sont
-                  déployés, nous <strong>recueillerons votre consentement</strong> via un bandeau
-                  conforme et offrirons un module « <strong>Préférences cookies</strong> »
-                  permettant l'acceptation, le refus et le retrait du consentement à tout moment.
-                </p>
-                <p className="text-sablia-text-secondary mt-4">
-                  Voir <strong>Annexe A – Registre des cookies</strong> pour l'état actuel.
+                  Voir <strong>Annexe A – Registre des cookies</strong> pour le détail.
                 </p>
               </section>
 
@@ -453,7 +460,7 @@ export default function PolitiqueConfidentialite() {
                         <td className="px-4 py-3">session</td>
                         <td className="px-4 py-3">Intérêt légitime</td>
                       </tr>
-                      <tr>
+                      <tr className="border-b border-gray-100">
                         <td className="px-4 py-3">Nécessaire</td>
                         <td className="px-4 py-3">[ex. session applicative]</td>
                         <td className="px-4 py-3">sablia.io</td>
@@ -461,13 +468,48 @@ export default function PolitiqueConfidentialite() {
                         <td className="px-4 py-3">session</td>
                         <td className="px-4 py-3">Intérêt légitime</td>
                       </tr>
+                      <tr className="border-b border-gray-100">
+                        <td className="px-4 py-3">Analyse</td>
+                        <td className="px-4 py-3">
+                          <code>_ga</code>
+                        </td>
+                        <td className="px-4 py-3">Google LLC</td>
+                        <td className="px-4 py-3">
+                          Distinction des visiteurs (Google Analytics 4)
+                        </td>
+                        <td className="px-4 py-3">2 ans</td>
+                        <td className="px-4 py-3">Consentement</td>
+                      </tr>
+                      <tr className="border-b border-gray-100">
+                        <td className="px-4 py-3">Analyse</td>
+                        <td className="px-4 py-3">
+                          <code>_ga_*</code>
+                        </td>
+                        <td className="px-4 py-3">Google LLC</td>
+                        <td className="px-4 py-3">Maintien de l'état de session GA4</td>
+                        <td className="px-4 py-3">2 ans</td>
+                        <td className="px-4 py-3">Consentement</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-3">Préférence</td>
+                        <td className="px-4 py-3">
+                          <code>analytics_consent</code>
+                        </td>
+                        <td className="px-4 py-3">sablia.io</td>
+                        <td className="px-4 py-3">
+                          Mémorisation du choix de consentement analytics
+                        </td>
+                        <td className="px-4 py-3">localStorage (persistant)</td>
+                        <td className="px-4 py-3">Intérêt légitime</td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
                 <p className="text-sablia-text-secondary mt-4">
-                  <strong>Gestion des préférences</strong> : pas de bandeau à ce jour (aucun
-                  traqueur non essentiel). Il sera activé si/when des cookies non essentiels sont
-                  déployés.
+                  <strong>Gestion des préférences</strong> : un bandeau de consentement est affiché
+                  lors de la première visite. Vous pouvez accepter ou refuser les cookies d'analyse.
+                  Pour retirer votre consentement, supprimez le cookie{' '}
+                  <code>analytics_consent</code> dans les paramètres de votre navigateur.
                 </p>
               </section>
 
@@ -533,7 +575,7 @@ export default function PolitiqueConfidentialite() {
                         <td className="px-4 py-3">Décision d'adéquation et/ou CCT</td>
                         <td className="px-4 py-3">Oui</td>
                       </tr>
-                      <tr>
+                      <tr className="border-b border-gray-100">
                         <td className="px-4 py-3">
                           <strong>n8n (self‑host)</strong>
                         </td>
@@ -541,6 +583,15 @@ export default function PolitiqueConfidentialite() {
                         <td className="px-4 py-3">Selon l'hébergeur utilisé</td>
                         <td className="px-4 py-3">S/O (outil opéré par nos soins)</td>
                         <td className="px-4 py-3">S/O</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-3">
+                          <strong>Google LLC</strong>
+                        </td>
+                        <td className="px-4 py-3">Mesure d'audience (GA4)</td>
+                        <td className="px-4 py-3">Global (centres de données Google)</td>
+                        <td className="px-4 py-3">CCT</td>
+                        <td className="px-4 py-3">Oui</td>
                       </tr>
                     </tbody>
                   </table>

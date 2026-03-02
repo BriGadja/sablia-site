@@ -1,10 +1,13 @@
 import { QueryClientProvider } from '@tanstack/react-query'
 import { AnimatePresence } from 'framer-motion'
+import { useEffect } from 'react'
 import { HelmetProvider } from 'react-helmet-async'
 import { Route, Switch } from 'wouter'
+import CookieConsentBanner from '@/components/CookieConsentBanner'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { Toaster } from '@/components/ui/toaster'
-import { usePersistentToast } from '@/hooks/use-persistent-toast'
+import { usePageTracking } from '@/hooks/use-page-tracking'
+import { getConsentState, initGA4 } from '@/lib/analytics'
 import About from '@/pages/About'
 import CaseStudies from '@/pages/CaseStudies'
 import CGV from '@/pages/CGV'
@@ -16,6 +19,7 @@ import NotFound from '@/pages/not-found'
 import PolitiqueConfidentialite from '@/pages/PolitiqueConfidentialite'
 import Roi from '@/pages/Roi'
 import Tarifs from '@/pages/Tarifs'
+import ThankYou from '@/pages/ThankYou'
 import { queryClient } from './lib/queryClient'
 
 function Router() {
@@ -32,6 +36,7 @@ function Router() {
         <Route path="/cgv" component={CGV} />
         <Route path="/faq" component={Faq} />
         <Route path="/cas-clients" component={CaseStudies} />
+        <Route path="/thank-you" component={ThankYou} />
         <Route component={NotFound} />
       </Switch>
     </AnimatePresence>
@@ -39,8 +44,13 @@ function Router() {
 }
 
 function App() {
-  // Utiliser le hook pour vérifier s'il y a un toast en attente
-  usePersistentToast()
+  usePageTracking()
+
+  useEffect(() => {
+    if (getConsentState() === 'accepted') {
+      initGA4()
+    }
+  }, [])
 
   return (
     <ErrorBoundary>
@@ -48,6 +58,7 @@ function App() {
         <QueryClientProvider client={queryClient}>
           <Router />
           <Toaster />
+          <CookieConsentBanner />
         </QueryClientProvider>
       </HelmetProvider>
     </ErrorBoundary>
