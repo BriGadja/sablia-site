@@ -328,6 +328,22 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 
 ---
 
+## Landing Pages (Google Ads)
+
+> These pages are `noindex` — used only for paid traffic. Not in sitemap.
+
+### Automatisation PME (/lp/automatisation-pme)
+- **Target ads**: Automatisation Entreprise, n8n/No-Code, Formation IA ad groups
+- **Sections**: Minimal nav, hero, 3-stat strip (20h saved, 4-8 months ROI, 150+ processes), problem/solution, testimonial, inline contact form, minimal footer
+- **CTA**: Contact form (sends to n8n webhook with `source_page: lp-automatisation-pme` + UTM params)
+
+### Audit Gratuit (/lp/audit-gratuit)
+- **Target ads**: Audit Gratuit ad group
+- **Sections**: Minimal nav, hero ("Decouvrez vos opportunites d'automatisation en 2 minutes"), 3 value cards, benefits checklist, "2 min" CTA card, testimonial, final CTA
+- **CTA**: Links to `/gap` form
+
+---
+
 ## Pages Légales
 
 ### Politique de Confidentialité (/politique-confidentialite)

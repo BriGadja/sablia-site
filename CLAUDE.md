@@ -60,6 +60,8 @@ docs/                 # Content docs (SITE_CONTENT.md, OFFRES.md, FAQ.md)
 | `/mentions-legales` | Legal notice |
 | `/politique-confidentialite` | Privacy policy |
 | `/cgv` | Terms of service |
+| `/lp/automatisation-pme` | Ad landing page — automation (noindex) |
+| `/lp/audit-gratuit` | Ad landing page — free audit (noindex) |
 
 ## Content Documentation
 When modifying site content, update the corresponding doc:
