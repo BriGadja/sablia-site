@@ -32,7 +32,7 @@ Sablia propose des services d'automatisation business et d'intelligence artifici
 - **Small label**: "Automatisation & IA sur mesure pour PME"
 - **Titre**: "Retournez le sablier" (brand wordplay — sablier = hourglass)
 - **Sous-titre**: "Sablia automatise vos processus repetitifs. Vous recuperez vos heures."
-- **Credential badge**: "Brice Gachadoat — Resp. Pedagogique & Expert IA, IAPreneurs (160k+)"
+- **Credential badge**: "Brice Gachadoat — Resp. Pedagogique & Expert IA, IAPreneurs (500+)"
 - **CTAs primaires**:
   - "Diagnostic Gratuit" → scroll vers #contact
   - "Calculer mon ROI" → scroll vers #calculator

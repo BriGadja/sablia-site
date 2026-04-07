@@ -63,12 +63,12 @@ export default function HeroSection() {
           <p className="text-sm text-sablia-text-tertiary pt-2">
             Brice Gachadoat — Resp. Pédagogique & Expert IA,{' '}
             <a
-              href="https://iapreneurs.com"
+              href="https://www.iapreneurs.com/?affiliate_code=8b6eda"
               target="_blank"
               rel="noopener noreferrer"
               className="underline underline-offset-2 hover:text-sablia-text-secondary transition-colors"
             >
-              IAPreneurs (160k+)
+              IAPreneurs (500+)
             </a>
           </p>
         </motion.div>
