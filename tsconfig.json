@@ -9,6 +9,8 @@
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "allowUnreachableCode": false,
+    "noUncheckedSideEffectImports": true,
+    "allowUnusedLabels": false,
     "lib": ["esnext", "dom", "dom.iterable"],
     "jsx": "preserve",
     "esModuleInterop": true,
