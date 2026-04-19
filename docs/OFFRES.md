@@ -1,5 +1,7 @@
 # Offres Sablia - Documentation Détaillée
 
+> ⚠️ **SUPERSEDED (2026-04-18)** — Product SKU is now locked in `docs/product-v1.md` (frozen, part of acquisition machine v1 pre-design). Diagnostic Sablia at 990€ HT is the single door-opener; 3 post-audit paths (formation d'équipes internes / accompagnement / développement). This file is a historical snapshot of pre-pivot offers and will be rewritten when the new homepage ships.
+
 **Derniere mise a jour**: 2026-03-02
 **URL du site**: https://sablia.io
 

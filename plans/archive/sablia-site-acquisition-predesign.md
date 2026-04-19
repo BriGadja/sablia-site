@@ -1,6 +1,6 @@
 # Plan — Sablia Site: Acquisition Machine Pre-Design Package
 
-**Status**: New — 3 phases — challenging...
+**Status**: COMPLETED 2026-04-18 — 3 phases delivered, all VERIMAP + AC pass, docs frozen.
 **Brief**: `research/brainstorm/2026-04-17-sablia-acquisition-machine-v1-brief.md` (amended 2026-04-18, positioning option C locked)
 **Research**: `research/plan/2026-04-18-sablia-site-acquisition-predesign.md`
 **Confidence**: 8/10 (one-pass success likely; HITL gates documented)

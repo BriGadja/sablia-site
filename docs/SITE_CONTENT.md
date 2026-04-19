@@ -1,5 +1,7 @@
 # Contenu du Site Sablia
 
+> ⚠️ **SUPERSEDED (2026-04-18)** — Homepage copy has been rewritten in `docs/copy-v1.md` (frozen, part of acquisition machine v1 pre-design). This file is a historical snapshot of the pre-pivot site content and will be rewritten when the new homepage ships. Do not use as source of truth for homepage copy.
+
 **Derniere mise a jour**: 2026-03-02
 **Domaine**: https://sablia.io
 **Type**: Site vitrine B2B - Services d'automatisation et IA pour PME

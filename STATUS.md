@@ -6,7 +6,7 @@
 
 ## Current State
 
-Site is live at https://sablia.io. GA4 + Google Ads infrastructure deployed. Master refactor plan completed (3 units). **Strategic pivot in flight**: acquisition-machine-v1 brief amended 2026-04-18 to lock "coach-implémenteur" positioning (option C) with IAPreneurs credential + single paid-audit door-opener (no IA Booster). Ready for `/plan`.
+Site is live at https://sablia.io. GA4 + Google Ads infrastructure deployed. Master refactor plan completed (3 units). **Strategic pivot pre-design package frozen 2026-04-18**: 3 deliverables (`docs/product-v1.md`, `docs/wireframe-v1.md`, `docs/copy-v1.md`) ready for claude.ai/design handoff. Next: external visual design pass, then `/frontend-design` to implement.
 
 ---
 
@@ -23,8 +23,8 @@ Site is live at https://sablia.io. GA4 + Google Ads infrastructure deployed. Mas
 
 | Plan / Brief | Status | Next |
 |---|---|---|
-| `research/brainstorm/2026-04-17-sablia-acquisition-machine-v1-brief.md` | Amended 2026-04-18 — positioning locked (option C Coach-Implémenteur), IA Booster dropped, IAPreneurs credential validated by Yassine (affiliate link `?affiliate_code=8b6eda` already live in HeroSection.tsx), formation renamed "formation d'équipes internes", Unit 2.5 Copy & Unit 7 Design Handoff added | Brief scoped — /plan run (see next row) |
-| `plans/sablia-site-acquisition-predesign.md` | **Ready 2026-04-18** — narrow /plan covering Unit 1 + Unit 2 + Unit 2.5. Phase A Product Definition + Phase B Homepage Wireframe + Phase C Copy Package. 23 tasks, 22 verification constraints, 9 HITL open questions. Challenge: **GO** after 4 rounds (BLOCKING 3→2→1→0). Price 990€ HT validated against French market comparables | `/execute sablia-site-acquisition-predesign` (after optional /challenge review) |
+| `research/brainstorm/2026-04-17-sablia-acquisition-machine-v1-brief.md` | Amended 2026-04-18. Pre-design unit delivered. Remaining units 3-6 (pricing page redesign, hub pages, case studies, content cadence) scheduled as separate /plan passes | Plan Unit 3+ or hand off pre-design docs to claude.ai/design |
+| `plans/archive/sablia-site-acquisition-predesign.md` | **COMPLETED 2026-04-18**. 3 docs frozen: `docs/product-v1.md` + `docs/wireframe-v1.md` + `docs/copy-v1.md`. Locked: product name "Diagnostic Sablia" @ 990€ HT, C1 positioning=B, C2 hero H1=E ("Cinq jours. Un PDF. Une décision claire."), Option 3 price display (1 price floor on Formation card only), IAPreneurs credential "500+ membres, 200k+ abonnés YouTube", title "Responsable Pédagogique et Coach Développement IA" | Hand off the 3 docs to claude.ai/design externally, then `/frontend-design` to build |
 
 ---
 
