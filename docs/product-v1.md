@@ -1,9 +1,9 @@
 ---
 name: product-v1
 description: Frozen SKU definition for Sablia's single paid door-opener product, the Diagnostic Sablia. Feeds Phases B (wireframe) and C (copy).
-version: 1
+version: 2
 status: frozen
-frozen_at: 2026-04-18
+frozen_at: 2026-04-19
 frozen_by: brice@sablia.io
 source_brief: research/brainstorm/2026-04-17-sablia-acquisition-machine-v1-brief.md
 source_plan: plans/sablia-site-acquisition-predesign.md
@@ -23,15 +23,16 @@ Productized paid entry point for Sablia. Single SKU, fixed scope, fixed price, f
 
 | Axis | Spec |
 |------|------|
-| Price | **990€ HT**, affiché verbatim "990€ HT" (franchise TVA applicable, pas d'affichage TTC nécessaire) |
+| Price | **490€ HT**, affiché verbatim "490€ HT" (franchise TVA applicable, pas d'affichage TTC nécessaire) |
 | Format | 30-min intake (async form + 15-min call) → 3h deep-dive synchronous (vidéo-call) → 1h restitution (vidéo-call) |
 | Deliverable | PDF de 10-15 pages : process map + AI implementation opportunities + 90-day roadmap + recommandation du path post-audit + estimation chiffrée de l'implémentation |
 | Turnaround | 5 jours ouvrés entre la fin de l'intake et la restitution |
 | Paiement | Upfront. Moyens acceptés : Stripe + virement |
 | Annulation | 72h avant l'intake → remboursement intégral. Après l'intake → non-remboursable |
 | Facture | Mention "TVA non applicable, art. 293 B du CGI" (régime auto-entrepreneur, franchise en base) |
+| Crédit post-audit | Les **490€ HT sont déduits intégralement** de la première facture si le client signe un contrat **Développement** ou **Accompagnement** dans les **90 jours** suivant la restitution. Non applicable au path **Formation d'équipes internes** (qui reste facturé au prix plein de sa fourchette). |
 
-**Price justification**: 990€ HT fills an uncontested gap dans le marché français PME (competitors français existants : soit audits gratuits bidons, soit missions 3000€+ à barrière d'entrée trop haute). Le seuil sub-1000€ permet une décision dirigeant unilatérale sans validation board ni PO processus.
+**Price justification**: 490€ HT baisse encore le seuil d'entrée (vs 990€ initial) pour amplifier le volume de diagnostics et élargir le funnel. Reste au-dessus des audits gratuits pour filtrer les prospects non-qualifiés (un dirigeant qui sort 490€ signale intention réelle), mais bien en-dessous du seuil psychologique des 1000€ : décision unilatérale instantanée, pas de devis ni de PO. Le mécanisme de crédit post-audit (490€ déduits sur contrat Dév/Accomp.) rend l'entrée quasi gratuite pour les prospects qui convertissent, tout en maintenant un revenu récurrent pour le volume qui ne convertit pas.
 
 ## 3. Les 3 paths post-audit
 
@@ -118,7 +119,7 @@ Trafic (cold email + SEO case studies + LinkedIn)
         ↓
 Homepage sablia.io (1 CTA → #diagnostic-form)
         ↓
-Diagnostic Sablia, 990€ HT, 5 jours
+Diagnostic Sablia, 490€ HT, 5 jours (crédit 490€ si signature Dév/Accomp. dans les 90 j)
         ↓
 Recommandation vers 1 des 3 paths (formation / accompagnement / développement)
         ↓
@@ -129,4 +130,5 @@ Contrat path (1.5k – 25k€ selon path)
 
 ## Changelog
 
+- **v2 (2026-04-19)** : (i) prix 990€ HT → **490€ HT** pour abaisser encore le seuil d'entrée et maximiser le volume de diagnostics ; (ii) ajout du **crédit post-audit** — les 490€ sont déduits intégralement de la première facture si le client signe un contrat Développement ou Accompagnement dans les 90 jours (pas sur Formation). Rationale : transforme le diagnostic en "quasi-free" pour les prospects qui convertissent tout en conservant le filtre d'intention (490€ > 0€) et un revenu sur les non-convertis. Downstream : `docs/wireframe-v1.md` + `docs/copy-v1.md` + `CalculatorROI.tsx` doivent être mis à jour (remplacer 990 → 490 partout, ajouter mention du crédit dans hero CTA, FAQ Q1, narrative §4 et §9).
 - **v1 (2026-04-18)** : création initiale, freeze après résolution des 6 HITL Phase A (A1 nom, A2 facture, A4 capacité, A5 crédential, A6 différenciation, A7 Elorri). Sortie de `/execute sablia-site-acquisition-predesign` Phase A.

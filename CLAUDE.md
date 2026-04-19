@@ -79,7 +79,7 @@ docs/                 # All documentation
 | `docs/GOOGLE_ADS.md` | Ads IDs, conversion tracking, campaign strategy, keywords |
 | `docs/SITE_CONTENT.md` | All page text, CTAs, pricing (⚠️ SUPERSEDED post-2026-04-18 — homepage copy now in `docs/copy-v1.md`; doc will be rewritten when new homepage ships) |
 | `docs/OFFRES.md` | Service offerings detailed (⚠️ SUPERSEDED post-2026-04-18 — product SKU now in `docs/product-v1.md`; doc will be rewritten when new homepage ships) |
-| `docs/product-v1.md` | **Frozen SKU** (Diagnostic Sablia 990€ HT, 3 post-audit paths) |
+| `docs/product-v1.md` | **Frozen SKU v2** (Diagnostic Sablia 490€ HT, crédit intégral si signature Dév/Accomp. dans 90 j, 3 post-audit paths) |
 | `docs/wireframe-v1.md` | **Frozen homepage wireframe** (9 sections, 2 CTAs, DiagnosticForm spec) |
 | `docs/copy-v1.md` | **Frozen homepage copy** (hero, narrative arc, cards, FAQ, tone glossaire §C8) |
 | `docs/FAQ.md` | FAQ questions/answers (24 questions, 8 categories) |

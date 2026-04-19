@@ -1,9 +1,9 @@
 ---
 name: copy-v1
 description: Frozen copy package for sablia.io acquisition machine v1, every word the homepage visitor will read. Hands off to claude.ai/design and then /frontend-design.
-version: 1
+version: 2
 status: frozen
-frozen_at: 2026-04-18
+frozen_at: 2026-04-19
 frozen_by: brice@sablia.io (via /execute sablia-site-acquisition-predesign)
 source_product: docs/product-v1.md
 source_wireframe: docs/wireframe-v1.md
@@ -12,7 +12,8 @@ locked_decisions:
   tone: vouvoiement
   title_canonical: "Responsable Pédagogique et Coach Développement IA"
   iapreneurs_credential: "IAPreneurs (500+ membres, 200k+ abonnés YouTube)"
-  price_anchor: "990€ HT"
+  price_anchor: "490€ HT"
+  post_audit_credit: "Les 490€ sont déduits de la première facture si signature Développement ou Accompagnement dans les 90 jours (non applicable à Formation)."
   positioning_statement: "Intégrer l'intelligence artificielle dans votre PME, avec le Responsable Pédagogique IA d'IAPreneurs."
   hero_h1: "Cinq jours. Un PDF. Une décision claire."
 ---
@@ -47,7 +48,7 @@ Copy fills the `HeroSection.tsx` component (see `wireframe-v1.md §1.1`).
 
 - **Sub** (22 mots) :
 
-  > *"Le Diagnostic Sablia cartographie vos process, identifie les automatisations qui valent vraiment le coup, et signale celles à laisser de côté. 990€ HT."*
+  > *"Le Diagnostic Sablia cartographie vos process, identifie les automatisations qui valent vraiment le coup, et signale celles à laisser de côté. 490€ HT, déduits de la première facture si vous signez ensuite un contrat Développement ou Accompagnement."*
 
 - **Credential line** :
 
@@ -55,7 +56,7 @@ Copy fills the `HeroSection.tsx` component (see `wireframe-v1.md §1.1`).
 
 - **Primary CTA button** :
 
-  > **Démarrer mon diagnostic, 990€**
+  > **Démarrer mon diagnostic, 490€**
 
 - **Secondary link** (Calendly) :
 
@@ -81,7 +82,7 @@ Copy for each below-fold homepage section. Follows the structure locked in `wire
 - **H2** (6 words): *"Cinq jours pour y voir clair."*
 - **Body** (68 words):
 
-  *"Le Diagnostic Sablia structure votre état des lieux. Vous recevez un PDF de 10 à 15 pages : cartographie de vos process, opportunités d'implémentation IA classées par ROI, feuille de route 90 jours, et estimation chiffrée de la phase suivante. Tout ça en 5 jours ouvrés, pour 990€ HT. Payable par Stripe ou virement. Annulation avec remboursement intégral jusqu'à 72h avant l'intake."*
+  *"Le Diagnostic Sablia structure votre état des lieux. Vous recevez un PDF de 10 à 15 pages : cartographie de vos process, opportunités d'implémentation IA classées par ROI, feuille de route 90 jours, et estimation chiffrée de la phase suivante. Tout ça en 5 jours ouvrés, pour 490€ HT. Si le diagnostic débouche sur un contrat Développement ou Accompagnement signé dans les 90 jours, ces 490€ sont intégralement déduits de votre première facture. Payable par Stripe ou virement. Annulation avec remboursement intégral jusqu'à 72h avant l'intake."*
 
 ### § 5, Ce que révèle votre diagnostic
 
@@ -98,9 +99,9 @@ See **C4** below (three cards, un seul price floor sur le path d'entrée Formati
 - **H2** (6 words): *"Calculez le ROI de vos automatisations."*
 - **Body** (42 words, sous-titre du calculateur):
 
-  *"Entrez le nombre d'heures concernées, le coût horaire, l'efficacité attendue. Vous obtenez instantanément l'économie annuelle estimée et le temps de retour sur 990€. Chiffres indicatifs, le diagnostic produit l'estimation réelle pour votre cas."*
+  *"Entrez le nombre d'heures concernées, le coût horaire, l'efficacité attendue. Vous obtenez instantanément l'économie annuelle estimée et le temps de retour sur 490€. Chiffres indicatifs, le diagnostic produit l'estimation réelle pour votre cas."*
 
-- **Technical note for implementation**: `CalculatorROI.tsx`, change default investment constant from 1500 to 990 (matches diagnostic). Keep efficiency default at 70%.
+- **Technical note for implementation**: `CalculatorROI.tsx`, change default investment constant from 1500 to 490 (matches diagnostic). Keep efficiency default at 70%.
 
 ### § 8, FAQ
 
@@ -113,7 +114,7 @@ See **C5** (Sablia vs IAPreneurs) and **C6** (4-6 diagnostic FAQs) below.
 
   *"Cinq jours, un PDF, une recommandation claire. Si le diagnostic conclut que l'IA n'a pas sa place chez vous, c'est dit aussi."*
 
-- **Primary CTA button**: **Démarrer mon diagnostic, 990€**
+- **Primary CTA button**: **Démarrer mon diagnostic, 490€**
 - **Secondary link**: *"Préférer en discuter d'abord →"* (→ Calendly)
 
 ---
@@ -184,7 +185,9 @@ Single Q&A, uses the differentiation statement locked in `product-v1.md §6`.
 
 ### Q1, Combien coûte le Diagnostic Sablia ?
 
-*990€ HT. TVA non applicable (art. 293 B du CGI). Paiement upfront par Stripe ou virement. Ce prix couvre l'intake, la session de deep-dive de 3 heures, la rédaction du livrable PDF de 10 à 15 pages, et la restitution d'une heure. Pas de coût caché, pas de dépassement.*
+*490€ HT. TVA non applicable (art. 293 B du CGI). Paiement upfront par Stripe ou virement. Ce prix couvre l'intake, la session de deep-dive de 3 heures, la rédaction du livrable PDF de 10 à 15 pages, et la restitution d'une heure. Pas de coût caché, pas de dépassement.*
+
+*Si, dans les 90 jours suivant la restitution, vous signez un contrat Développement ou Accompagnement avec Sablia, les 490€ sont intégralement déduits de votre première facture. Non applicable au path Formation d'équipes internes (qui reste facturé au plein tarif de sa fourchette).*
 
 ### Q2, Combien de temps ça prend ?
 
@@ -215,7 +218,7 @@ Single Q&A, uses the differentiation statement locked in `product-v1.md §6`.
 2. **Un seul price floor affiché** : 1 500€ HT sur la card "Formation d'équipes internes" (path d'entrée, niveau de prix où la transparence aide à se qualifier soi-même).
 3. **Pas de price floor** sur Accompagnement (2 500€/mois) et Développement (5 000€+). Ces chiffres sont discutés en 1-to-1 lors de la restitution du diagnostic ou en appel de qualification. Conforme à la norme French B2B : les montants > 2 000€ sont généralement communiqués après un échange, pas en grille ouverte sur le site.
 
-**Rationale** : afficher 5 000€+ sur une card refroidit le prospect avant même qu'il ait accès au diagnostic. Le diagnostic (990€ HT) est la porte d'entrée ; les montants engagement-path se discutent une fois la relation amorcée.
+**Rationale** : afficher 5 000€+ sur une card refroidit le prospect avant même qu'il ait accès au diagnostic. Le diagnostic (490€ HT, crédité sur Développement ou Accompagnement signé) est la porte d'entrée ; les montants engagement-path se discutent une fois la relation amorcée.
 
 ---
 
@@ -238,7 +241,7 @@ Single Q&A, uses the differentiation statement locked in `product-v1.md §6`.
 ### Termes requis
 
 - **CTA verbs outcome-tied** : *"Démarrer"*, *"Recevoir"*, *"Cartographier"*, *"Obtenir"*. Jamais *"Cliquer"*, *"Soumettre"*, *"Envoyer"* nu.
-- **Prix en HT explicite** : toujours "990€ HT", "1 500€ HT", etc. Jamais de prix nu.
+- **Prix en HT explicite** : toujours "490€ HT", "1 500€ HT", etc. Jamais de prix nu.
 - **Singular hero rule** : un message, un CTA primaire. Le CTA secondaire est un lien texte, pas un bouton.
 
 ### Structure recommandée pour toute nouvelle section homepage
@@ -276,7 +279,7 @@ Avant de passer en `status: frozen`, vérifier point par point :
 - [ ] **C6**, FAQ Q6 (pourquoi payant) suit bien le framing risk-reduction
 - [ ] **C8**, Tone glossaire cohérent avec le reste du fichier
 - [ ] Grep ne doit remonter aucune occurrence des termes explicitement proscrits par le plan (aides publiques IA, co-opération IAPreneurs/Sablia, etc.)
-- [ ] Grep manuel : `grep "990" docs/copy-v1.md` → ≥ 3 résultats (hero CTA, narrative §4, FAQ Q1)
+- [ ] Grep manuel : `grep "490" docs/copy-v1.md` → ≥ 3 résultats (hero CTA, narrative §4, FAQ Q1). Mention du crédit post-audit présente dans §4 + FAQ Q1 au minimum.
 
 ### Upon freeze, update frontmatter
 
@@ -325,4 +328,5 @@ Toutes rejetées au profit de E (*"Cinq jours. Un PDF. Une décision claire."*),
 
 ## Changelog
 
+- **v2 frozen (2026-04-19)** : sync avec `product-v1.md` v2 — prix 990€ HT → **490€ HT** (hero sub C2, CTA button C2 + C3§9, narrative C3§4, ROI calculator C3§7, §C7 rationale, §C8 example, §C9 grep check). Ajout du **mécanisme de crédit post-audit** : les 490€ sont déduits de la première facture si signature Développement ou Accompagnement dans les 90 jours (pas sur Formation). Mention ajoutée verbatim dans hero sub, narrative §4, FAQ Q1, §C7 rationale. `locked_decisions.price_anchor` passé à "490€ HT", nouveau champ `locked_decisions.post_audit_credit`.
 - **v1 frozen (2026-04-18)** : création initiale + freeze après HITL C9. Picks : C1=B (positioning "Intégrer l'intelligence artificielle dans votre PME…"), C2=E (H1 "Cinq jours. Un PDF. Une décision claire."). Révisions appliquées en cours de /execute : em dashes supprimés partout (98 → 0), 160k → 200k+ YouTube, price floors réduits à 1 seul (Card 1 Formation uniquement, Cards 2 et 3 passent en discussion 1-to-1 per norme French B2B).

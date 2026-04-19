@@ -1,9 +1,9 @@
 ---
 name: wireframe-v1
 description: Frozen section-by-section homepage structure for sablia.io acquisition machine v1. No visual design, no copy text, structural contract for Phase C (copy) and eventual claude.ai/design handoff.
-version: 1
+version: 2
 status: frozen
-frozen_at: 2026-04-18
+frozen_at: 2026-04-19
 frozen_by: brice@sablia.io
 source_product: docs/product-v1.md
 source_brief: research/brainstorm/2026-04-17-sablia-acquisition-machine-v1-brief.md
@@ -37,7 +37,7 @@ Exactly **9 sections** from top to bottom. Each section has a **purpose**, **con
   - H1 (outcome, ≤10 words)
   - Sub (outcome + deliverable + timeframe, ≤25 words)
   - Credential line (Phase A A5 title + IAPreneurs credit, verbatim from `product-v1.md §5`)
-  - Primary CTA button: verb + outcome + 990€
+  - Primary CTA button: verb + outcome + 490€
   - Secondary text link → Calendly (tone: "préférer en discuter d'abord")
 - **Behavioral rules**:
   - Primary CTA scrolls to `#diagnostic-form` via smooth-scroll (NOT external link, NOT Calendly direct)
@@ -74,7 +74,8 @@ Exactly **9 sections** from top to bottom. Each section has a **purpose**, **con
   - 2-3 short paragraphs (≤80 words each)
   - Inline reference to deliverable: "PDF de 10-15 pages"
   - Inline reference to timeline: "en 5 jours ouvrés"
-  - Price mention: "990€ HT"
+  - Price mention: "490€ HT"
+  - Credit mention (close to price, 1 phrase): "déduits de la première facture si vous signez un contrat Développement ou Accompagnement dans les 90 jours"
 - **Behavioral rules**:
   - References `product-v1.md §2` verbatim for price/format/deliverable
   - No CTA in-section (CTA is the floating hero + footer band)
@@ -111,7 +112,7 @@ Exactly **9 sections** from top to bottom. Each section has a **purpose**, **con
 - **Purpose**: interactive proof that automation ROI can be measured
 - **Content slots**: existing `CalculatorROI.tsx` sliders/outputs
 - **Behavioral rules**:
-  - MODIFY `CalculatorROI.tsx`: change default investment constant from 1500€ to **990€** (matches the diagnostic entry point)
+  - MODIFY `CalculatorROI.tsx`: change default investment constant from 1500€ to **490€** (matches the diagnostic entry point)
   - Efficiency default stays at 70%
   - Keep existing interactive visuals
 
@@ -120,7 +121,7 @@ Exactly **9 sections** from top to bottom. Each section has a **purpose**, **con
 - **Purpose**: remove friction on the 4-6 most common objections
 - **Content slots**: 4-6 diagnostic-focused Q&As + 1 "Sablia vs IAPreneurs" Q
 - **Required questions**:
-  - Prix & justification (990€ HT)
+  - Prix & justification (490€ HT + mécanisme de crédit post-audit)
   - Timeline (5 jours ouvrés)
   - Pour qui (PMEs 10-250 salariés avec process manuel 5h+/sem)
   - Ce qui se passe après
@@ -136,7 +137,7 @@ Exactly **9 sections** from top to bottom. Each section has a **purpose**, **con
 - **Purpose**: final conversion opportunity for visitors who scrolled past the hero without clicking
 - **Content slots**:
   - Short final nudge line (≤15 words)
-  - Primary CTA button: "Démarrer mon diagnostic, 990€" → scrolls to `#diagnostic-form`
+  - Primary CTA button: "Démarrer mon diagnostic, 490€" → scrolls to `#diagnostic-form`
   - Secondary text link: Calendly
 - **Behavioral rules**:
   - NEW markup, can be a new component `FooterCTABand.tsx` OR merged into `Footer.tsx` above the standard footer links
@@ -205,7 +206,7 @@ Not in scope for Phase B wireframe, just document the endpoint contract here.
 - `client/src/pages/Landing.tsx`, new section stack per §1
 - `client/src/components/landing/HeroSection.tsx`, copy, credential, CTAs (see copy-v1.md)
 - `client/src/components/landing/TestimonialsSection.tsx`, 5 → 3 reduction, schema.org reviewCount
-- `client/src/components/landing/CalculatorROI.tsx`, default investment 1500 → 990
+- `client/src/components/landing/CalculatorROI.tsx`, default investment 1500 → 490
 - `client/src/components/landing/FaqSection.tsx`, diagnostic focus + Sablia vs IAPreneurs Q
 - `client/src/lib/form-constants.ts`, add `WEBHOOK_DIAGNOSTIC` constant
 
@@ -245,7 +246,7 @@ Cross-reference check, every Phase A product decision is reflected in this wiref
 | Phase A decision | Reflected in wireframe |
 |---|---|
 | Product name "Diagnostic Sablia" | §1 (Hero copy slot), §4 (Le diagnostic), §9 (footer CTA) |
-| 990€ HT price | §4 (inline), §9 (CTA button label), §8 FAQ |
+| 490€ HT price + crédit post-audit | §4 (inline), §9 (CTA button label), §8 FAQ |
 | 5 jours ouvrés turnaround | §4 (inline), §8 FAQ |
 | 3 post-audit paths + 1 price floor (formation 1 500€ HT) | §5 (3 cards) |
 | Capacity 4-6/mo | §8 FAQ (optional, implicit via "pour qui") |
@@ -256,4 +257,5 @@ Cross-reference check, every Phase A product decision is reflected in this wiref
 
 ## Changelog
 
+- **v2 (2026-04-19)** : sync avec `product-v1.md` v2 — prix 990€ → 490€ (hero CTA, §4 inline, §8 FAQ requis, §9 footer CTA, §7 CalculatorROI default), ajout mention "crédit 490€ si signature Dév/Accomp. dans 90j" dans §4 content slots + §8 FAQ requise + validation table.
 - **v1 (2026-04-18)** : création initiale, freeze après résolution des 3 HITL Phase B (B4 nouveau endpoint, B2 delete+create ClientLogosStrip, B6 delete ThreeStepProcess). Sortie de `/execute sablia-site-acquisition-predesign` Phase B. Phase C autorisée à démarrer.
