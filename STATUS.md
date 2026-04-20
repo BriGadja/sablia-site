@@ -6,7 +6,7 @@
 
 ## Current State
 
-Site is live at https://sablia.io. GA4 + Google Ads infrastructure deployed. Pre-design package frozen (product-v1 v2 / wireframe-v1 v2 / copy-v1 v2). **Homepage v2 implementation in progress** (see `plans/site-completion-checklist.md`). Build + tsc + tests all clean.
+Site is live at https://sablia.io. GA4 + Google Ads infrastructure deployed. Pre-design package frozen (product-v1 v2 / wireframe-v1 v2 / copy-v1 v2). **Homepage v2 + global cohérence shipped 2026-04-20** (P0 + P1 + P2 of `plans/site-completion-checklist.md`). Build + tsc + tests all clean. Remaining: P3 (Google Ads manual launch — promo expires 2026-05-01), P4 (HITL business decisions + E2E use cases), P5 (tech debt backlog).
 
 ---
 
@@ -20,7 +20,7 @@ Site is live at https://sablia.io. GA4 + Google Ads infrastructure deployed. Pre
 
 | Plan / Brief | Status | Next |
 |---|---|---|
-| `plans/site-completion-checklist.md` | **IN PROGRESS 2026-04-20**. Homepage v2 + Google Ads launch + use cases validation. P0 done (build + STATUS clean). P1 in progress (n8n diagnostic workflow + components refonte) | Attack P1.A → P1.G |
+| `plans/site-completion-checklist.md` | **P0 + P1 + P2 DONE 2026-04-20**. Homepage v2 shipped (9-section stack, Diagnostic Sablia funnel, n8n workflow live). Cohérence globale propagée (navigation, about, /faq, /tarifs, /cas-clients, docs). Remaining: P3 (Google Ads manual — promo expires 2026-05-01), P4 (HITL + E2E), P5 (tech debt). | Brice: launch P3 (Google Ads UI) + trancher HITL P4.1-P4.4 |
 | `research/brainstorm/2026-04-17-sablia-acquisition-machine-v1-brief.md` | Amended 2026-04-18. Pre-design unit delivered (v2: 490€ HT + crédit post-audit). Units 3-6 (pricing page redesign, hub pages, case studies, content cadence) backlog | Post P1 completion |
 
 ---

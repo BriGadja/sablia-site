@@ -4,6 +4,13 @@ description: Checklist actionnable pour rendre sablia.io opérationnel en produc
 status: in_progress
 created_at: 2026-04-20
 owner: brice@sablia.io
+progress:
+  P0: done 2026-04-20
+  P1: done 2026-04-20
+  P2: done 2026-04-20 (partial — P2.17-19 CGV blocked on HITL P4.1 statut juridique)
+  P3: pending — Brice manual Google Ads UI (promo expires 2026-05-01)
+  P4: pending — HITL P4.1-P4.4 + E2E validation
+  P5: pending — tech debt post-launch
 ---
 
 # Sablia Site — Checklist de complétion
