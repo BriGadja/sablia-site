@@ -34,10 +34,20 @@ export default function About() {
               </h2>
 
               <p className="text-sablia-text-secondary mb-6">
-                Je suis <strong>Brice Gachadoat</strong>, expert en automatisation et intelligence
-                artificielle. Vous êtes probablement ici parce que vous passez trop de temps sur des
-                tâches répétitives ou que vous souhaitez tirer parti des dernières avancées en IA
-                pour votre activité. Bonne nouvelle, c'est exactement ma spécialité.
+                Je suis <strong>Brice Gachadoat</strong>, Responsable Pédagogique et Coach
+                Développement IA chez{' '}
+                <a
+                  href="https://www.iapreneurs.com/?affiliate_code=8b6eda"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sablia-accent underline underline-offset-2 hover:text-sablia-accent-hover"
+                >
+                  IAPreneurs
+                </a>{' '}
+                (500+ membres, 200k+ abonnés YouTube). Vous êtes probablement ici parce que vous
+                passez trop de temps sur des tâches répétitives ou que vous souhaitez tirer parti des
+                dernières avancées en IA pour votre activité. Bonne nouvelle, c'est exactement ma
+                spécialité.
               </p>
 
               <p className="text-sablia-text-secondary mb-6">
@@ -149,19 +159,27 @@ export default function About() {
               <h3 className="text-2xl font-semibold mb-4 text-sablia-text">Passons à l'action</h3>
 
               <p className="text-sablia-text-secondary mb-6">
-                Vous souhaitez retrouver du temps pour vous concentrer sur l'essentiel de votre
-                métier ? <strong>Réservez un appel gratuit de 30 minutes</strong> pour identifier
-                ensemble les automatisations qui transformeront votre business. Sans engagement.
+                Vous voulez savoir ce qui est automatisable dans votre PME ? Le{' '}
+                <strong>Diagnostic Sablia</strong> cartographie vos process et vous rend un PDF de
+                10-15 pages en 5 jours ouvrés, pour 490€ HT (déduits de la première facture si le
+                diagnostic débouche sur un contrat Développement ou Accompagnement). Si vous préférez
+                en discuter d'abord, un appel Calendly de 30 min reste possible.
               </p>
 
-              <div className="mt-12 text-center">
+              <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a
+                  href="/#diagnostic-form"
+                  className="bg-sablia-accent hover:bg-sablia-accent-hover text-white px-8 py-3 rounded-md inline-block shadow-sm hover:shadow-md transition-all duration-300 text-lg font-medium"
+                >
+                  Démarrer mon diagnostic, 490€
+                </a>
                 <a
                   href="https://calendly.com/brice-gachadoat/30min"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-sablia-accent hover:bg-sablia-accent-hover text-white px-8 py-3 rounded-md inline-block shadow-sm hover:shadow-md transition-all duration-300 text-lg font-medium"
+                  className="text-sablia-text-secondary underline underline-offset-4 hover:text-sablia-text transition-colors"
                 >
-                  Réservez un appel découverte gratuit
+                  Préférer en discuter d'abord →
                 </a>
               </div>
             </div>

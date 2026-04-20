@@ -56,7 +56,7 @@ const pricingColumns: PricingColumn[] = [
         ],
       },
     ],
-    ctaPrimary: { text: 'Réserver un appel', url: '#contact' },
+    ctaPrimary: { text: 'Réserver un appel', url: '/#diagnostic-form' },
   },
   {
     id: 'formations',
@@ -85,7 +85,7 @@ const pricingColumns: PricingColumn[] = [
         features: ['Formation intensive', 'Certification', 'Documentation complète'],
       },
     ],
-    ctaPrimary: { text: 'Voir les formations', url: '#contact' },
+    ctaPrimary: { text: 'Voir les formations', url: '/#diagnostic-form' },
   },
   {
     id: 'solutions',
@@ -115,7 +115,7 @@ const pricingColumns: PricingColumn[] = [
         roi: 'ROI année 1 : 50 000-150 000€',
       },
     ],
-    ctaPrimary: { text: 'Démarrer un projet', url: '#contact' },
+    ctaPrimary: { text: 'Démarrer un projet', url: '/#diagnostic-form' },
   },
 ]
 
@@ -161,15 +161,12 @@ function PricingCard({ column, index }: { column: PricingColumn; index: number }
         ))}
       </div>
 
-      <button
-        className="w-full py-3.5 rounded font-medium transition-colors duration-200 border border-sablia-accent/20 text-sablia-text hover:bg-sablia-accent/[0.04]"
-        onClick={() => {
-          const target = document.querySelector(column.ctaPrimary.url)
-          target?.scrollIntoView({ behavior: 'smooth' })
-        }}
+      <a
+        href={column.ctaPrimary.url}
+        className="w-full py-3.5 rounded font-medium transition-colors duration-200 border border-sablia-accent/20 text-sablia-text hover:bg-sablia-accent/[0.04] text-center"
       >
         {column.ctaPrimary.text}
-      </button>
+      </a>
     </motion.div>
   )
 }

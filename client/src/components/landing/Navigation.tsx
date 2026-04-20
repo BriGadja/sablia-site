@@ -5,7 +5,7 @@ import { Link, useLocation } from 'wouter'
 import { cn } from '@/lib/utils'
 
 export default function Navigation() {
-  const [, setLocation] = useLocation()
+  const [location, setLocation] = useLocation()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -26,12 +26,10 @@ export default function Navigation() {
   }, [])
 
   const menuItems = [
-    { label: 'Expertises', href: '#expertise', type: 'anchor' as const },
-    { label: 'Transformation', href: '#transformation', type: 'anchor' as const },
-    { label: 'Processus', href: '#process', type: 'anchor' as const },
-    { label: 'Tarifs', href: '#pricing', type: 'anchor' as const },
+    { label: 'Diagnostic', href: '#diagnostic-form', type: 'anchor' as const },
+    { label: 'Cas clients', href: '/cas-clients', type: 'route' as const },
+    { label: 'ROI', href: '/roi', type: 'route' as const },
     { label: 'FAQ', href: '#faq', type: 'anchor' as const },
-    { label: 'GAP', href: '/gap', type: 'route' as const },
     { label: 'À propos', href: '/about', type: 'route' as const },
   ]
 
@@ -39,12 +37,17 @@ export default function Navigation() {
     setIsMobileMenuOpen(false)
     if (type === 'route') {
       setLocation(href)
-    } else {
-      const element = document.querySelector(href)
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' })
-      }
+      return
     }
+    // Anchor: if not on home, navigate home first, then scroll once mounted
+    if (location !== '/') {
+      setLocation('/')
+      setTimeout(() => {
+        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
+      return
+    }
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
@@ -80,15 +83,15 @@ export default function Navigation() {
           ))}
 
           <a
-            href="#contact"
+            href="#diagnostic-form"
             onClick={(e) => {
               e.preventDefault()
-              handleNavClick('#contact', 'anchor')
+              handleNavClick('#diagnostic-form', 'anchor')
             }}
-            className="ml-3 px-5 py-2 rounded text-sm font-medium bg-sablia-accent text-sablia-bg hover:bg-sablia-accent-hover transition-colors duration-200"
-            aria-label="Réserver un diagnostic gratuit"
+            className="ml-3 px-5 py-2 rounded text-sm font-medium bg-sablia-accent text-white hover:bg-sablia-accent-hover transition-colors duration-200"
+            aria-label="Démarrer mon diagnostic Sablia"
           >
-            Diagnostic Gratuit
+            Démarrer, 490€
           </a>
         </div>
       </nav>
@@ -146,15 +149,15 @@ export default function Navigation() {
                 ))}
 
                 <a
-                  href="#contact"
+                  href="#diagnostic-form"
                   onClick={(e) => {
                     e.preventDefault()
-                    handleNavClick('#contact', 'anchor')
+                    handleNavClick('#diagnostic-form', 'anchor')
                   }}
-                  className="mx-4 mt-2 px-4 py-3 text-center rounded font-medium bg-sablia-accent text-sablia-bg hover:bg-sablia-accent-hover transition-colors"
-                  aria-label="Réserver un diagnostic gratuit"
+                  className="mx-4 mt-2 px-4 py-3 text-center rounded font-medium bg-sablia-accent text-white hover:bg-sablia-accent-hover transition-colors"
+                  aria-label="Démarrer mon diagnostic Sablia"
                 >
-                  Diagnostic Gratuit
+                  Démarrer mon diagnostic, 490€
                 </a>
               </div>
             </motion.div>

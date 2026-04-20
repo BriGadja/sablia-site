@@ -193,13 +193,13 @@ export default function CaseStudies() {
                 <ScrollReveal>
                   <div className="text-center mt-16">
                     <p className="text-lg text-sablia-text-secondary mb-6">
-                      Prêt à écrire votre propre success story ?
+                      Envie de voir ce qui est automatisable chez vous ?
                     </p>
                     <a
-                      href="/#contact"
-                      className="inline-flex items-center gap-2 bg-sablia-accent text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-sablia-accent-hover transition-colors"
+                      href="/#diagnostic-form"
+                      className="inline-flex items-center gap-2 bg-sablia-accent text-white px-8 py-4 rounded-lg font-medium text-lg hover:bg-sablia-accent-hover transition-colors"
                     >
-                      Discutons de votre projet
+                      Démarrer mon diagnostic, 490€
                       <ArrowRight size={20} />
                     </a>
                   </div>
