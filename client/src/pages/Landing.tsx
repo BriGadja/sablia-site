@@ -6,7 +6,7 @@ import ClientLogosStrip from '@/components/landing/ClientLogosStrip'
 import DiagnosticSection from '@/components/landing/DiagnosticSection'
 import HeroSection from '@/components/landing/HeroSection'
 import Navigation from '@/components/landing/Navigation'
-import ProblemSection from '@/components/landing/ProblemSection'
+import FrictionSection from '@/components/landing/FrictionSection'
 import WhatRevealsSection from '@/components/landing/WhatRevealsSection'
 import SEO from '@/components/SEO'
 
@@ -35,8 +35,8 @@ export default function Landing() {
           {/* §2 Client logos strip */}
           <ClientLogosStrip />
 
-          {/* §3 Le problème */}
-          <ProblemSection />
+          {/* §3 Le constat */}
+          <FrictionSection />
 
           {/* §4 Le diagnostic + DiagnosticForm (#diagnostic-form) */}
           <DiagnosticSection />
