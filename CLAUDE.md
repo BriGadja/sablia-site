@@ -6,8 +6,10 @@
 | Key | Value |
 |-----|-------|
 | Domain | sablia.io |
-| Stack | React 18 / TypeScript / Vite / Express / Drizzle ORM / Tailwind |
-| Animations | Framer Motion (GSAP removed) |
+| Stack | React 18 / TypeScript / Vite / Express / Drizzle ORM / Tailwind v3 |
+| Palette | `sable` (fond) / `encre` (texte) / `tuile` (accent) / `foret` / `ocre` — ported from sablia-io 2026-04-20. Legacy `sablia-*` tokens kept as shims for LPs + GapForm. |
+| Typography | Fraunces Variable (display, full SOFT/WONK/opsz axes) / Geist (sans) / JetBrains Mono (mono/folio/eyebrow) — `@fontsource-variable/fraunces` + `@fontsource/geist` |
+| Animations | Framer Motion + CSS `Reveal` wrapper (`.reveal` / `.is-visible`, ease-editorial) |
 | Dev | `npm run dev` → http://localhost:5000 |
 | Lint | `npm run lint` (Biome) |
 | Format | `npm run format` (Biome) |

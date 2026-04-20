@@ -103,10 +103,10 @@ export default function CaseStudies() {
               <div className="container mx-auto px-6 lg:px-8">
                 {/* Page Header */}
                 <ScrollReveal>
-                  <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-center text-sablia-text mb-4">
+                  <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-center text-encre mb-4">
                     Cas clients
                   </h1>
-                  <p className="text-xl sm:text-2xl text-sablia-text-secondary text-center mb-16 max-w-3xl mx-auto">
+                  <p className="text-xl sm:text-2xl text-encre-70 text-center mb-16 max-w-3xl mx-auto">
                     Des transformations concrètes, des résultats mesurables
                   </p>
                 </ScrollReveal>
@@ -124,10 +124,10 @@ export default function CaseStudies() {
                     >
                       {/* Header */}
                       <div className="p-8 pb-0">
-                        <span className="inline-block px-3 py-1 rounded-full bg-sablia-accent/10 text-sablia-accent text-sm font-medium mb-4">
+                        <span className="inline-block px-3 py-1 rounded-full bg-tuile/10 text-tuile text-sm font-medium mb-4">
                           {study.sector}
                         </span>
-                        <h2 className="text-2xl sm:text-3xl font-bold text-sablia-text mb-4">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-encre mb-4">
                           {study.title}
                         </h2>
                       </div>
@@ -135,18 +135,18 @@ export default function CaseStudies() {
                       {/* Challenge & Solution */}
                       <div className="p-8 grid md:grid-cols-2 gap-6">
                         <div>
-                          <h3 className="text-sm font-semibold text-sablia-accent uppercase tracking-wider mb-2">
+                          <h3 className="text-sm font-semibold text-tuile uppercase tracking-wider mb-2">
                             Le Défi
                           </h3>
-                          <p className="text-base text-sablia-text-secondary leading-relaxed">
+                          <p className="text-base text-encre-70 leading-relaxed">
                             {study.challenge}
                           </p>
                         </div>
                         <div>
-                          <h3 className="text-sm font-semibold text-sablia-accent uppercase tracking-wider mb-2">
+                          <h3 className="text-sm font-semibold text-tuile uppercase tracking-wider mb-2">
                             La Solution
                           </h3>
-                          <p className="text-base text-sablia-text-secondary leading-relaxed">
+                          <p className="text-base text-encre-70 leading-relaxed">
                             {study.solution}
                           </p>
                         </div>
@@ -160,13 +160,13 @@ export default function CaseStudies() {
                               key={i}
                               className="bg-gray-50 rounded-lg p-4 text-center border border-gray-100"
                             >
-                              <div className="flex justify-center text-sablia-accent mb-2">
+                              <div className="flex justify-center text-tuile mb-2">
                                 {result.icon}
                               </div>
-                              <div className="text-2xl sm:text-3xl font-bold text-sablia-text">
+                              <div className="text-2xl sm:text-3xl font-bold text-encre">
                                 {result.value}
                               </div>
-                              <div className="text-xs sm:text-sm text-sablia-text-tertiary mt-1">
+                              <div className="text-xs sm:text-sm text-encre-50 mt-1">
                                 {result.label}
                               </div>
                             </div>
@@ -176,11 +176,9 @@ export default function CaseStudies() {
 
                       {/* Quote */}
                       <div className="px-8 pb-8 pt-4">
-                        <blockquote className="border-l-2 border-sablia-accent/50 pl-4">
-                          <p className="text-base italic text-sablia-text-secondary mb-2">
-                            "{study.quote}"
-                          </p>
-                          <cite className="text-sm text-sablia-text-tertiary not-italic">
+                        <blockquote className="border-l-2 border-tuile/50 pl-4">
+                          <p className="text-base italic text-encre-70 mb-2">"{study.quote}"</p>
+                          <cite className="text-sm text-encre-50 not-italic">
                             {study.author}, {study.role}
                           </cite>
                         </blockquote>
@@ -192,12 +190,12 @@ export default function CaseStudies() {
                 {/* CTA */}
                 <ScrollReveal>
                   <div className="text-center mt-16">
-                    <p className="text-lg text-sablia-text-secondary mb-6">
+                    <p className="text-lg text-encre-70 mb-6">
                       Envie de voir ce qui est automatisable chez vous ?
                     </p>
                     <a
                       href="/#diagnostic-form"
-                      className="inline-flex items-center gap-2 bg-sablia-accent text-white px-8 py-4 rounded-lg font-medium text-lg hover:bg-sablia-accent-hover transition-colors"
+                      className="inline-flex items-center gap-2 bg-tuile text-white px-8 py-4 rounded-lg font-medium text-lg hover:bg-tuile-dark transition-colors"
                     >
                       Démarrer mon diagnostic, 490€
                       <ArrowRight size={20} />

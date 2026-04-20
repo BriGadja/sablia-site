@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion'
 import { useEffect } from 'react'
-import Footer from '@/components/Footer'
-import Navigation from '@/components/landing/Navigation'
+import LegalShell, { LegalSection } from '@/components/landing/LegalShell'
 import ScrollToTop from '@/components/ScrollToTop'
 import SEO from '@/components/SEO'
+import { site } from '@/lib/site'
 
 export default function PolitiqueConfidentialite() {
   useEffect(() => {
@@ -14,667 +14,124 @@ export default function PolitiqueConfidentialite() {
     <>
       <SEO page="/politique-confidentialite" />
       <motion.div
-        className="min-h-screen bg-white"
+        className="min-h-screen bg-[color:var(--color-sable)]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <div>
-          <Navigation />
-          <main className="container mx-auto px-4 py-16">
-            <div className="flex flex-col items-center mb-10 mt-12">
-              <h1 className="text-4xl font-bold text-center text-sablia-text">
-                Politique de confidentialité
-              </h1>
-              <p className="text-sablia-text-tertiary mt-2">Dernière mise à jour : 2 mars 2026</p>
-            </div>
+        <LegalShell
+          folio="Confidentialité · RGPD"
+          title={
+            <>
+              Politique de <em>confidentialité</em>
+            </>
+          }
+          intro="Comment Sablia collecte, utilise et protège vos données personnelles. Conforme au Règlement général sur la protection des données (RGPD) et à la Loi Informatique et Libertés."
+        >
+          <LegalSection title="Données collectées via le formulaire Diagnostic">
+            <p>
+              Lorsque vous soumettez le formulaire « Démarrer mon diagnostic » sur {site.domain},
+              nous collectons strictement les champs que vous renseignez :
+            </p>
+            <ul>
+              <li>votre nom</li>
+              <li>votre adresse email professionnelle</li>
+              <li>le nom de votre entreprise</li>
+              <li>la description facultative du process qui vous coûte du temps</li>
+            </ul>
+            <p>
+              Aucune donnée n'est collectée silencieusement. Aucun cookie de pistage n'est déposé
+              sans votre consentement.
+            </p>
+          </LegalSection>
 
-            <div className="max-w-4xl mx-auto prose prose-lg">
-              <p className="text-sablia-text-secondary mb-8">
-                La présente politique explique comment{' '}
-                <strong>Sablia – Entreprise Individuelle (micro‑entrepreneur)</strong> (« nous »)
-                collecte, utilise et partage les données personnelles des visiteurs et utilisateurs
-                du site <strong>sablia.io</strong> (le « Site »), ainsi que les droits dont
-                disposent les personnes concernées.
-              </p>
+          <LegalSection title="Finalités">
+            <p>Ces données sont utilisées uniquement pour :</p>
+            <ul>
+              <li>vous recontacter afin d'organiser l'intake du diagnostic</li>
+              <li>préparer le livrable PDF du diagnostic</li>
+              <li>émettre la facture correspondante</li>
+            </ul>
+            <p>Elles ne sont jamais revendues, louées, ni transmises à un tiers marketing.</p>
+          </LegalSection>
 
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
-                  1) Responsable de traitement
-                </h2>
-                <ul className="text-sablia-text-secondary space-y-2">
-                  <li>
-                    <strong>Responsable</strong> : GACHADOAT Brice – Entrepreneur individuel (SIREN
-                    : 940 901 127)
-                  </li>
-                  <li>
-                    <strong>Nom commercial</strong> : Sablia
-                  </li>
-                  <li>
-                    <strong>Adresse</strong> : 60 rue François Ier, 75008 Paris, France
-                  </li>
-                  <li>
-                    <strong>E‑mail de contact</strong> :{' '}
-                    <a
-                      href="mailto:brice@sablia.io"
-                      className="text-sablia-accent hover:text-sablia-accent-hover"
-                    >
-                      brice@sablia.io
-                    </a>
-                  </li>
-                  <li>
-                    <strong>Téléphone</strong> : +33 6 25 42 68 38
-                  </li>
-                  <li>
-                    <strong>Délégué à la protection des données (si applicable)</strong> : non
-                    désigné à ce jour
-                  </li>
-                </ul>
-              </section>
+          <LegalSection title="Base légale">
+            <p>
+              Le traitement repose sur votre consentement explicite (case à cocher RGPD au bas du
+              formulaire) et sur l'exécution des mesures précontractuelles que vous demandez
+              (article 6-1-b du RGPD).
+            </p>
+          </LegalSection>
 
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
-                  2) Données que nous collectons
-                </h2>
-                <p className="text-sablia-text-secondary mb-4">
-                  Nous collectons uniquement les données pertinentes pour nos finalités :
-                </p>
+          <LegalSection title="Durée de conservation">
+            <p>
+              Les données liées à une demande de diagnostic sont conservées 3 ans à compter du
+              dernier contact utile, sauf obligation légale supérieure (comptabilité : 10 ans pour
+              les factures). Les demandes non converties sont anonymisées au-delà de 18 mois.
+            </p>
+          </LegalSection>
 
-                <h3 className="text-xl font-semibold mb-3 text-sablia-text">
-                  2.1. Données fournies via les formulaires
-                </h3>
-                <ul className="text-sablia-text-secondary space-y-2 mb-4">
-                  <li>
-                    <strong>Formulaire de contact / demande de devis</strong> : identité (nom,
-                    prénom), coordonnées (e‑mail, téléphone), société, message, pièces jointes.
-                  </li>
-                  <li>
-                    <strong>Prise de rendez‑vous / call</strong> : identité, coordonnées, créneaux,
-                    notes.
-                  </li>
-                  <li>
-                    <strong>Newsletter (opt‑in)</strong> : e‑mail.
-                  </li>
-                </ul>
+          <LegalSection title="Hébergement et sous-traitants">
+            <p>Les données transitent et sont stockées via les prestataires suivants :</p>
+            <ul>
+              <li>
+                <strong>Vercel Inc.</strong> — hébergement du site (États-Unis, DPA signé, cadre
+                Data Privacy Framework)
+              </li>
+              <li>
+                <strong>n8n (self-hosted)</strong> — orchestration des formulaires (serveur France,
+                propriété Sablia)
+              </li>
+              <li>
+                <strong>Supabase</strong> — base de données (région Europe, DPA signé)
+              </li>
+              <li>
+                <strong>Stripe</strong> — traitement des paiements (Irlande / États-Unis, conforme
+                PCI-DSS)
+              </li>
+              <li>
+                <strong>Google (Analytics 4, Ads)</strong> — mesure d'audience anonymisée (activé
+                uniquement après consentement bandeau)
+              </li>
+              <li>
+                <strong>Calendly</strong> — prise de rendez-vous (États-Unis, DPA signé)
+              </li>
+            </ul>
+          </LegalSection>
 
-                <h3 className="text-xl font-semibold mb-3 text-sablia-text">
-                  2.2. Données collectées automatiquement
-                </h3>
-                <ul className="text-sablia-text-secondary space-y-2">
-                  <li>
-                    <strong>Données techniques et de navigation</strong> : URL visitée, date/heure,
-                    pages consultées, temps passé, identifiants de cookies/traceurs strictement
-                    nécessaires, adresse IP tronquée/anonymisée selon paramétrage, informations sur
-                    le navigateur et l'appareil.
-                  </li>
-                  <li>
-                    <strong>Mesure d'audience</strong> : nous utilisons{' '}
-                    <strong>Google Analytics 4 (GA4)</strong> pour mesurer la fréquentation du Site.
-                    GA4 est configuré avec l'<strong>anonymisation des adresses IP</strong> activée.
-                    Les cookies d'analyse ne sont déposés qu'
-                    <strong>après votre consentement</strong> explicite via le bandeau de
-                    consentement affiché lors de votre première visite. Vous pouvez retirer ce
-                    consentement à tout moment (voir section 7).
-                  </li>
-                </ul>
-              </section>
+          <LegalSection title="Vos droits">
+            <p>Conformément au RGPD, vous disposez à tout moment des droits suivants :</p>
+            <ul>
+              <li>droit d'accès, de rectification, d'effacement de vos données</li>
+              <li>droit à la limitation et à la portabilité</li>
+              <li>droit d'opposition au traitement</li>
+              <li>droit de retirer votre consentement à tout moment</li>
+            </ul>
+            <p>
+              Pour exercer l'un de ces droits, il suffit d'écrire à{' '}
+              <a href={`mailto:${site.email}`}>{site.email}</a>. Réponse sous 30 jours maximum.
+            </p>
+            <p>
+              Vous avez également le droit d'introduire une réclamation auprès de la CNIL (
+              <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">
+                cnil.fr
+              </a>
+              ).
+            </p>
+          </LegalSection>
 
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
-                  3) Finalités et bases légales
-                </h2>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full text-sm text-sablia-text-secondary border border-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">Finalité</th>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">
-                          Base légale
-                        </th>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">Détails</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">Répondre aux demandes (contact, devis, RDV)</td>
-                        <td className="px-4 py-3">
-                          Exécution de mesures précontractuelles / contrat
-                        </td>
-                        <td className="px-4 py-3">Traitement et suivi des demandes entrantes.</td>
-                      </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">
-                          Gestion de la relation commerciale et facturation
-                        </td>
-                        <td className="px-4 py-3">Contrat / Obligation légale</td>
-                        <td className="px-4 py-3">
-                          Création de comptes clients, exécution des prestations, facturation,
-                          comptabilité.
-                        </td>
-                      </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">Prospection B2B (professionnels)</td>
-                        <td className="px-4 py-3">Intérêt légitime</td>
-                        <td className="px-4 py-3">
-                          Envoi d'informations sur nos offres à des contacts professionnels
-                          pertinents, avec possibilité d'opposition à tout moment.
-                        </td>
-                      </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">Newsletter</td>
-                        <td className="px-4 py-3">
-                          <strong>Consentement</strong>
-                        </td>
-                        <td className="px-4 py-3">
-                          Envoi d'e‑mails marketing aux personnes inscrites.
-                        </td>
-                      </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">Mesure d'audience du Site</td>
-                        <td className="px-4 py-3">
-                          Intérêt légitime <strong>ou</strong> Consentement
-                        </td>
-                        <td className="px-4 py-3">
-                          Selon l'outil et sa configuration (exemption possible si strictement
-                          nécessaire et respect des lignes CNIL).
-                        </td>
-                      </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">
-                          Mesure de l'efficacité des campagnes publicitaires
-                        </td>
-                        <td className="px-4 py-3">
-                          <strong>Consentement</strong>
-                        </td>
-                        <td className="px-4 py-3">
-                          Suivi des conversions Google Ads : permet de mesurer si une visite issue
-                          d'une annonce aboutit à une action (formulaire, prise de rendez‑vous).
-                        </td>
-                      </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">Sécurité du Site et prévention de la fraude</td>
-                        <td className="px-4 py-3">Intérêt légitime</td>
-                        <td className="px-4 py-3">Logs, détection d'anomalies et d'abus.</td>
-                      </tr>
-                      <tr>
-                        <td className="px-4 py-3">Démonstrations / agents IA</td>
-                        <td className="px-4 py-3">Contrat / Consentement</td>
-                        <td className="px-4 py-3">
-                          Fourniture de la démo demandée ; paramétrages convenus et information
-                          préalable.
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </section>
+          <LegalSection title="Cookies">
+            <p>
+              {site.domain} n'utilise aucun cookie avant consentement. Les mesures d'audience
+              (Google Analytics 4, Google Ads) ne sont chargées qu'après acceptation explicite via
+              le bandeau. Aucun cookie publicitaire de tiers n'est déposé.
+            </p>
+          </LegalSection>
 
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
-                  4) Durées de conservation
-                </h2>
-                <ul className="text-sablia-text-secondary space-y-2">
-                  <li>
-                    <strong>Prospects</strong> : 3 ans à compter du dernier contact.
-                  </li>
-                  <li>
-                    <strong>Clients et contrats</strong> : durée de la relation contractuelle, puis
-                    archivage légal (jusqu'à 10 ans pour les documents comptables).
-                  </li>
-                  <li>
-                    <strong>Mesure d'audience / cookies</strong> : selon la durée de vie du
-                    cookie/traceur (voir annexe Cookies).
-                  </li>
-                  <li>
-                    <strong>Enregistrements / transcriptions de démos (agents voix)</strong> :{' '}
-                    <strong>90 jours</strong> par défaut, puis suppression ou anonymisation.
-                  </li>
-                </ul>
-              </section>
-
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
-                  5) Destinataires et sous‑traitants
-                </h2>
-                <p className="text-sablia-text-secondary mb-4">
-                  Accès interne limité aux personnes habilitées (commercial, opérations, support,
-                  facturation). Nous recourons à des <strong>sous‑traitants</strong> pour
-                  l'hébergement, la messagerie, le stockage, la téléphonie/voix et certaines
-                  automatisations.
-                </p>
-                <p className="text-sablia-text-secondary mb-3">
-                  <strong>Sous‑traitants actuellement utilisés :</strong>
-                </p>
-                <ul className="text-sablia-text-secondary space-y-2">
-                  <li>
-                    <strong>Hébergement & diffusion</strong> : <strong>Vercel</strong> (hébergement
-                    de l'application/site et CDN).
-                  </li>
-                  <li>
-                    <strong>Base de données/Backend</strong> : <strong>Supabase</strong> (UE –{' '}
-                    <strong>Irlande</strong>, AWS eu‑west‑1).
-                  </li>
-                  <li>
-                    <strong>Automatisations</strong> : <strong>n8n</strong> (exécuté sur notre
-                    infrastructure ; connecte nos services).
-                  </li>
-                  <li>
-                    <strong>Voix/SMS</strong> : <strong>Twilio</strong>.
-                  </li>
-                  <li>
-                    <strong>Stockage documentaire</strong> : <strong>Google Drive</strong>.
-                  </li>
-                </ul>
-                <p className="text-sablia-text-secondary mt-4">
-                  Un <strong>contrat de sous‑traitance (DPA)</strong> et des{' '}
-                  <strong>mesures de sécurité</strong> appropriées encadrent ces traitements.
-                </p>
-              </section>
-
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
-                  6) Transferts hors Union européenne
-                </h2>
-                <p className="text-sablia-text-secondary mb-4">
-                  Certains prestataires sont établis en dehors de l'UE/EEE ou opèrent depuis des
-                  zones tierces (par ex. <strong>Twilio</strong> et <strong>Vercel</strong> –
-                  société américaine – ainsi que certains services de <strong>Google</strong>). Des{' '}
-                  <strong>transferts</strong> peuvent donc avoir lieu.
-                </p>
-                <p className="text-sablia-text-secondary mb-4">
-                  Lorsque cela se produit, nous nous assurons d'un <strong>mécanisme légal</strong>{' '}
-                  valide (par ex. <strong>décision d'adéquation</strong> ou{' '}
-                  <strong>Clauses Contractuelles Types</strong> de la Commission européenne),
-                  complété le cas échéant par des mesures additionnelles. Les détails
-                  (destinataires, pays, mécanisme) sont disponibles sur demande.
-                </p>
-                <p className="text-sablia-text-secondary mb-3">
-                  <strong>Notes spécifiques :</strong>
-                </p>
-                <ul className="text-sablia-text-secondary space-y-2">
-                  <li>
-                    <strong>Twilio (voix/SMS)</strong> : traitements susceptibles d'impliquer des
-                    transferts vers les États‑Unis ; mécanisme de transfert : CCT/équivalent.
-                  </li>
-                  <li>
-                    <strong>Vercel (hébergement/CDN)</strong> : société US ; utilisation potentielle
-                    d'infrastructures globales ; mécanisme de transfert : CCT/équivalent.
-                  </li>
-                  <li>
-                    <strong>Google Drive (stockage)</strong> : infrastructures globales ; mécanisme
-                    de transfert : décision d'adéquation et/ou CCT selon service/configuration.
-                  </li>
-                  <li>
-                    <strong>Supabase</strong> : projet hébergé en{' '}
-                    <strong>UE – Irlande (AWS eu‑west‑1)</strong> ; pas de transfert hors UE pour le
-                    stockage principal. En cas d'usage de services complémentaires impliquant un
-                    transfert, nous appliquerons les <strong>CCT</strong> si nécessaire.
-                  </li>
-                </ul>
-              </section>
-
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
-                  7) Cookies et traceurs
-                </h2>
-                <p className="text-sablia-text-secondary mb-4">
-                  Nous utilisons <strong>Google Analytics 4 (GA4)</strong> pour mesurer l'audience
-                  du Site et <strong>Google Ads (suivi de conversions)</strong> pour mesurer
-                  l'efficacité de nos campagnes publicitaires. GA4 dépose des cookies d'analyse (
-                  <code>_ga</code>, <code>_ga_*</code>) qui permettent de distinguer les visiteurs
-                  et de comprendre les parcours de navigation. Google Ads dépose des cookies de
-                  conversion (<code>_gcl_aw</code>, <code>_gcl_au</code>) qui permettent d'attribuer
-                  une conversion à une annonce. L'adresse IP est <strong>anonymisée</strong> par
-                  défaut.
-                </p>
-                <p className="text-sablia-text-secondary mb-4">
-                  Ces cookies ne sont déposés qu'<strong>après votre consentement explicite</strong>
-                  , recueilli via un bandeau affiché lors de votre première visite. Vous pouvez à
-                  tout moment <strong>retirer votre consentement</strong> en supprimant le cookie{' '}
-                  <code>analytics_consent</code> de votre navigateur. Un nouveau bandeau vous sera
-                  alors proposé lors de votre prochaine visite.
-                </p>
-                <p className="text-sablia-text-secondary mb-4">
-                  En complément, des <strong>cookies strictement nécessaires</strong> au
-                  fonctionnement, à la sécurité et à la répartition de charge (hébergement/CDN)
-                  peuvent être déposés sans consentement.
-                </p>
-                <p className="text-sablia-text-secondary">
-                  Voir <strong>Annexe A – Registre des cookies</strong> pour le détail.
-                </p>
-              </section>
-
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">8) Sécurité</h2>
-                <p className="text-sablia-text-secondary">
-                  Nous mettons en œuvre des mesures techniques et organisationnelles adaptées
-                  (chiffrement en transit, contrôle des accès, journalisation, sauvegardes, principe
-                  du moindre privilège). En cas d'<strong>incident de sécurité</strong> susceptible
-                  d'engendrer un risque pour les droits et libertés, nous suivons la procédure de{' '}
-                  <strong>notification</strong> aux autorités et aux personnes concernées lorsque
-                  requis.
-                </p>
-              </section>
-
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">9) Vos droits</h2>
-                <p className="text-sablia-text-secondary mb-4">
-                  Conformément au RGPD, vous disposez des droits suivants :
-                </p>
-                <ul className="text-sablia-text-secondary space-y-2">
-                  <li>
-                    <strong>Accès</strong> à vos données et obtention d'une copie ;
-                  </li>
-                  <li>
-                    <strong>Rectification</strong> des données inexactes ;
-                  </li>
-                  <li>
-                    <strong>Effacement</strong> (droit à l'oubli) dans les conditions applicables ;
-                  </li>
-                  <li>
-                    <strong>Limitation</strong> du traitement ;
-                  </li>
-                  <li>
-                    <strong>Opposition</strong> au traitement fondé sur l'intérêt légitime et à la
-                    prospection ;
-                  </li>
-                  <li>
-                    <strong>Portabilité</strong> des données fournies lorsque le traitement est
-                    fondé sur le consentement ou le contrat et effectué à l'aide de procédés
-                    automatisés ;
-                  </li>
-                  <li>
-                    <strong>Retrait du consentement</strong> à tout moment pour les traitements
-                    fondés sur celui‑ci.
-                  </li>
-                </ul>
-                <p className="text-sablia-text-secondary mt-4">
-                  Vous pouvez exercer ces droits en nous écrivant à{' '}
-                  <a
-                    href="mailto:brice@sablia.io"
-                    className="text-sablia-accent hover:text-sablia-accent-hover"
-                  >
-                    brice@sablia.io
-                  </a>{' '}
-                  (ou via le formulaire dédié). En cas de doute sérieux, une preuve d'identité
-                  pourra être demandée.
-                </p>
-                <p className="text-sablia-text-secondary mt-4">
-                  Vous disposez également du droit d'introduire une <strong>réclamation</strong>{' '}
-                  auprès de l'<strong>autorité de contrôle</strong> compétente, notamment la{' '}
-                  <strong>CNIL</strong> (
-                  <a
-                    href="https://www.cnil.fr"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sablia-accent hover:text-sablia-accent-hover"
-                  >
-                    cnil.fr
-                  </a>
-                  ).
-                </p>
-              </section>
-
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
-                  10) Prise de décision automatisée
-                </h2>
-                <p className="text-sablia-text-secondary">
-                  Nous ne réalisons pas de profilage ni de décisions produisant des effets
-                  juridiques fondées uniquement sur un traitement automatisé, sauf information
-                  contraire explicite et consentement lorsque requis.
-                </p>
-              </section>
-
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">11) Liens externes</h2>
-                <p className="text-sablia-text-secondary">
-                  Le Site peut contenir des liens vers des sites tiers. Nous n'exerçons aucun
-                  contrôle sur leurs pratiques de confidentialité ; veuillez consulter leurs
-                  politiques.
-                </p>
-              </section>
-
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">12) Mises à jour</h2>
-                <p className="text-sablia-text-secondary">
-                  Nous pouvons modifier la présente politique pour tenir compte des évolutions
-                  légales, techniques ou opérationnelles. La version en vigueur est disponible sur
-                  cette page, avec sa date de mise à jour.
-                </p>
-              </section>
-
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
-                  Annexe A – Registre des cookies (état actuel)
-                </h2>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full text-sm text-sablia-text-secondary border border-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">Catégorie</th>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">
-                          Nom du cookie
-                        </th>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">
-                          Fournisseur
-                        </th>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">Finalité</th>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">Durée</th>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">
-                          Base légale
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">Nécessaire</td>
-                        <td className="px-4 py-3">[ex. cookie de routage/CDN]</td>
-                        <td className="px-4 py-3">Vercel</td>
-                        <td className="px-4 py-3">Distribution, équilibrage de charge, sécurité</td>
-                        <td className="px-4 py-3">session</td>
-                        <td className="px-4 py-3">Intérêt légitime</td>
-                      </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">Nécessaire</td>
-                        <td className="px-4 py-3">[ex. session applicative]</td>
-                        <td className="px-4 py-3">sablia.io</td>
-                        <td className="px-4 py-3">Maintien de la session/CSRF</td>
-                        <td className="px-4 py-3">session</td>
-                        <td className="px-4 py-3">Intérêt légitime</td>
-                      </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">Analyse</td>
-                        <td className="px-4 py-3">
-                          <code>_ga</code>
-                        </td>
-                        <td className="px-4 py-3">Google LLC</td>
-                        <td className="px-4 py-3">
-                          Distinction des visiteurs (Google Analytics 4)
-                        </td>
-                        <td className="px-4 py-3">2 ans</td>
-                        <td className="px-4 py-3">Consentement</td>
-                      </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">Analyse</td>
-                        <td className="px-4 py-3">
-                          <code>_ga_*</code>
-                        </td>
-                        <td className="px-4 py-3">Google LLC</td>
-                        <td className="px-4 py-3">Maintien de l'état de session GA4</td>
-                        <td className="px-4 py-3">2 ans</td>
-                        <td className="px-4 py-3">Consentement</td>
-                      </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">Publicitaire</td>
-                        <td className="px-4 py-3">
-                          <code>_gcl_aw</code>
-                        </td>
-                        <td className="px-4 py-3">Google LLC</td>
-                        <td className="px-4 py-3">
-                          Suivi des conversions Google Ads (attribution clic publicitaire)
-                        </td>
-                        <td className="px-4 py-3">90 jours</td>
-                        <td className="px-4 py-3">Consentement</td>
-                      </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">Publicitaire</td>
-                        <td className="px-4 py-3">
-                          <code>_gcl_au</code>
-                        </td>
-                        <td className="px-4 py-3">Google LLC</td>
-                        <td className="px-4 py-3">
-                          Attribution des conversions Google Ads (identifiant first‑party)
-                        </td>
-                        <td className="px-4 py-3">90 jours</td>
-                        <td className="px-4 py-3">Consentement</td>
-                      </tr>
-                      <tr>
-                        <td className="px-4 py-3">Préférence</td>
-                        <td className="px-4 py-3">
-                          <code>analytics_consent</code>
-                        </td>
-                        <td className="px-4 py-3">sablia.io</td>
-                        <td className="px-4 py-3">
-                          Mémorisation du choix de consentement analytics
-                        </td>
-                        <td className="px-4 py-3">localStorage (persistant)</td>
-                        <td className="px-4 py-3">Intérêt légitime</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <p className="text-sablia-text-secondary mt-4">
-                  <strong>Gestion des préférences</strong> : un bandeau de consentement est affiché
-                  lors de la première visite. Vous pouvez accepter ou refuser les cookies d'analyse.
-                  Pour retirer votre consentement, supprimez le cookie{' '}
-                  <code>analytics_consent</code> dans les paramètres de votre navigateur.
-                </p>
-              </section>
-
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
-                  Annexe B – Sous‑traitants (actuels)
-                </h2>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full text-sm text-sablia-text-secondary border border-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">
-                          Fournisseur
-                        </th>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">Service</th>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">
-                          Localisation des données
-                        </th>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">
-                          Garanties de transfert
-                        </th>
-                        <th className="px-4 py-3 text-left border-b border-gray-200">DPA signé</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">
-                          <strong>Vercel</strong>
-                        </td>
-                        <td className="px-4 py-3">Hébergement/CDN</td>
-                        <td className="px-4 py-3">Global (incl. hors UE)</td>
-                        <td className="px-4 py-3">CCT/équivalents</td>
-                        <td className="px-4 py-3">Oui</td>
-                      </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">
-                          <strong>Supabase</strong>
-                        </td>
-                        <td className="px-4 py-3">Base de données/Backend</td>
-                        <td className="px-4 py-3">
-                          <strong>UE – Irlande (AWS eu‑west‑1)</strong>
-                        </td>
-                        <td className="px-4 py-3">
-                          <strong>N/A (données hébergées dans l'UE)</strong>
-                        </td>
-                        <td className="px-4 py-3">À confirmer</td>
-                      </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">
-                          <strong>Twilio</strong>
-                        </td>
-                        <td className="px-4 py-3">Voix/SMS</td>
-                        <td className="px-4 py-3">Global (incl. US)</td>
-                        <td className="px-4 py-3">CCT/équivalents</td>
-                        <td className="px-4 py-3">Oui</td>
-                      </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">
-                          <strong>Google Drive</strong>
-                        </td>
-                        <td className="px-4 py-3">Stockage documentaire</td>
-                        <td className="px-4 py-3">Global (centres de données Google)</td>
-                        <td className="px-4 py-3">Décision d'adéquation et/ou CCT</td>
-                        <td className="px-4 py-3">Oui</td>
-                      </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="px-4 py-3">
-                          <strong>n8n (self‑host)</strong>
-                        </td>
-                        <td className="px-4 py-3">Orchestration d'automatisations</td>
-                        <td className="px-4 py-3">Selon l'hébergeur utilisé</td>
-                        <td className="px-4 py-3">S/O (outil opéré par nos soins)</td>
-                        <td className="px-4 py-3">S/O</td>
-                      </tr>
-                      <tr>
-                        <td className="px-4 py-3">
-                          <strong>Google LLC</strong>
-                        </td>
-                        <td className="px-4 py-3">
-                          Mesure d'audience (GA4) et suivi de conversions publicitaires (Google Ads)
-                        </td>
-                        <td className="px-4 py-3">Global (centres de données Google)</td>
-                        <td className="px-4 py-3">CCT</td>
-                        <td className="px-4 py-3">Oui</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </section>
-
-              <section className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-sablia-text">
-                  Annexe C – Coordonnées
-                </h2>
-                <ul className="text-sablia-text-secondary space-y-2">
-                  <li>
-                    <strong>Contact confidentialité</strong> :{' '}
-                    <a
-                      href="mailto:brice@sablia.io"
-                      className="text-sablia-accent hover:text-sablia-accent-hover"
-                    >
-                      brice@sablia.io
-                    </a>
-                  </li>
-                  <li>
-                    <strong>Contact DPO (si nommé)</strong> : non désigné
-                  </li>
-                  <li>
-                    <strong>Autorité de contrôle</strong> : CNIL –{' '}
-                    <a
-                      href="https://www.cnil.fr"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sablia-accent hover:text-sablia-accent-hover"
-                    >
-                      www.cnil.fr
-                    </a>
-                  </li>
-                </ul>
-              </section>
-            </div>
-          </main>
-          <Footer />
-          <ScrollToTop />
-        </div>
+          <p className="legal-updated">Dernière mise à jour : 20/04/2026.</p>
+        </LegalShell>
+        <ScrollToTop />
       </motion.div>
     </>
   )

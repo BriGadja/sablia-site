@@ -45,19 +45,22 @@ Global overlays rendered alongside Router: `Toaster`, `CookieConsentBanner`
 Located in `client/src/pages/`:
 Landing, Tarifs, GapForm, About, Roi, Faq, CaseStudies, ThankYou, MentionsLegales, PolitiqueConfidentialite, CGV, LpAutomatisation (lazy), LpAuditGratuit (lazy), not-found
 
-### Landing Components (10)
+### Landing Components (12)
 
-Located in `client/src/components/landing/`:
-- HeroSection
-- TestimonialsSection
-- LogosCloud (now "Nos expertises" service cards)
-- TransformationSection (merged problem + solution)
-- ThreeStepProcess
-- PricingSection
-- CalculatorROI
-- ContactFormSection (2-column: form + Calendly)
-- FaqSection
-- Navigation
+Located in `client/src/components/landing/`. Order in `Landing.tsx` (9-section editorial stack, ux-migration 2026-04-20):
+- Navigation (pill fixed header, 4 anchors, cross-page scroll)
+- HeroSection (Fraunces H1, LogoMark aside desktop, 2 CTAs)
+- FrictionSection (N° 02 — 6-item ordered list)
+- OffersSection (N° 03 — triptych illustration + VoicePlayer + specifs DL)
+- AuthoritySection (intermède — Yassine / IAPreneurs credential)
+- WhatRevealsSection (N° 04 — 3 post-audit paths with folio numbers)
+- MethodSection (N° 05 — fond encre sombre, 4-step timeline, eager)
+- ProofSection (N° 06 — stats grid + 3 témoignages placeholders + sector list)
+- CalculatorROI (différentiateur sablia-site, lazy)
+- DiagnosticForm (N° 07 — Zod + honeypot + WEBHOOK_DIAGNOSTIC, anchor `#diagnostic-form`)
+- FaqSection (N° 08 — Accordion editorial, 9 Q, FAQPage JSON-LD, lazy)
+- FinalCtaSection (N° 09 — logo oversized opacity 0.07, signature Brice, lazy)
+- LegalShell (+ LegalSection helper — used by /cgv, /politique-confidentialite, /mentions-legales)
 
 ### Core Components (5)
 

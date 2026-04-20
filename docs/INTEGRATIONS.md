@@ -28,6 +28,7 @@ All webhooks are centralized in `client/src/lib/form-constants.ts` with env var 
 - **Env var**: `VITE_DIAGNOSTIC_WEBHOOK_URL` (optional override, constant: `WEBHOOK_DIAGNOSTIC`)
 - **Workflow**: `mu9odNA8y54Pb4or` ([PROD] sablia-site-diagnostic)
 - **webhookId**: `78ed4a4f-8daf-4309-8849-68b80e3392cd` (required for CORS preflight, see memory learning)
+- **Prod-confirmed**: UX migration (ux-migration plan Phases 1-5) preserves wiring — webhook URL + payload unchanged through Landing rewrite and token propagation. End-to-end live hit verified in Phase 6 pre-DNS switch.
 - **Used by**: `DiagnosticForm.tsx` (homepage `#diagnostic-form`)
 - **Payload**: `{ nom, email, entreprise, processus_couteux?, rgpdConsent, ...utmParams }`
 - **Downstream (current)**: Gmail notification to brice@sablia.io

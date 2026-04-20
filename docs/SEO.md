@@ -1,6 +1,12 @@
 # SEO — Sablia Site
 
-**Last updated**: 2026-03-02
+**Last updated**: 2026-04-20
+
+---
+
+## Recent Changes
+
+- **2026-04-20 (ux-migration Phase 5)**: Homepage H1 shifts from Inter Tight to Fraunces Variable (display serif). Palette moves navy/parchment → encre/sable. Legal pages (/cgv, /politique-confidentialite, /mentions-legales) restructured via `LegalShell` with updated editorial body copy (SIREN/APE lifted into /mentions-legales, art. 293 B CGI disclosed in /cgv §3, n8n self-host + Data Privacy Framework disclosed in /politique-confidentialite). `/faq` reviewCount on FAQPage schema unchanged (9 Q, JSON-LD via Helmet). Sitemap `lastmod` bumped to 2026-04-20 on 3 legal routes + `/gap` + `/roi`.
 
 ---
 

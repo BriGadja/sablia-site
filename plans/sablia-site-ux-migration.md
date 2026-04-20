@@ -209,7 +209,7 @@ Deux repos ont évolué en parallèle :
 
 ---
 
-### Phase 5 — Pages secondaires + docs update
+### Phase 5 — Pages secondaires + docs update ✅ DONE 2026-04-20
 
 **Objectif** : les pages `/tarifs`, `/about`, `/faq`, `/cas-clients`, `/cgv`, `/confidentialite`, `/mentions-legales`, `/thank-you`, `/roi` adoptent les nouveaux tokens visuels (pas de refonte structurelle, juste palette/typo cohérentes).
 

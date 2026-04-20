@@ -52,7 +52,7 @@ const faqs: FaqItem[] = [
   {
     question: 'Quels outils utilisez-vous pour implémenter les automatisations ?',
     answer:
-      "Principalement n8n (auto-hébergé, souveraineté totale) pour les workflows, Dipler pour les agents vocaux, et les modèles LLM (OpenAI, Claude, Mistral) pour les capacités IA. Le choix exact est arbitré pendant le diagnostic selon votre stack existante et vos contraintes de confidentialité.",
+      'Principalement n8n (auto-hébergé, souveraineté totale) pour les workflows, Dipler pour les agents vocaux, et les modèles LLM (OpenAI, Claude, Mistral) pour les capacités IA. Le choix exact est arbitré pendant le diagnostic selon votre stack existante et vos contraintes de confidentialité.',
   },
   {
     question: 'Comment garantissez-vous la sécurité des données ?',
@@ -109,10 +109,10 @@ export default function Faq() {
           <section className="py-24">
             <div className="container mx-auto px-6 lg:px-8">
               <ScrollReveal>
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-center text-sablia-text mb-4">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-center text-encre mb-4">
                   Questions fréquentes
                 </h1>
-                <p className="text-lg sm:text-xl text-sablia-text-secondary text-center mb-16 max-w-3xl mx-auto">
+                <p className="text-lg sm:text-xl text-encre-70 text-center mb-16 max-w-3xl mx-auto">
                   Tout ce que vous voulez savoir avant de démarrer votre diagnostic.
                 </p>
               </ScrollReveal>
@@ -132,7 +132,7 @@ export default function Faq() {
                         className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
                         aria-expanded={isOpen}
                       >
-                        <h2 className="text-base sm:text-lg font-semibold text-sablia-text pr-4">
+                        <h2 className="text-base sm:text-lg font-semibold text-encre pr-4">
                           {item.question}
                         </h2>
                         <motion.div
@@ -142,9 +142,9 @@ export default function Faq() {
                           aria-hidden="true"
                         >
                           {isOpen ? (
-                            <Minus size={24} className="text-sablia-accent" />
+                            <Minus size={24} className="text-tuile" />
                           ) : (
-                            <Plus size={24} className="text-sablia-accent" />
+                            <Plus size={24} className="text-tuile" />
                           )}
                         </motion.div>
                       </button>
@@ -159,7 +159,7 @@ export default function Faq() {
                             className="overflow-hidden"
                           >
                             <div className="px-6 pb-6">
-                              <p className="text-base sm:text-lg text-sablia-text-secondary leading-relaxed">
+                              <p className="text-base sm:text-lg text-encre-70 leading-relaxed">
                                 {item.answer}
                               </p>
                             </div>
@@ -173,12 +173,12 @@ export default function Faq() {
 
               <ScrollReveal>
                 <div className="text-center mt-16">
-                  <p className="text-lg text-sablia-text-secondary mb-6">
+                  <p className="text-lg text-encre-70 mb-6">
                     Prêt à savoir ce qui est automatisable dans votre PME ?
                   </p>
                   <a
                     href="/#diagnostic-form"
-                    className="inline-block bg-sablia-accent text-white px-8 py-4 rounded-lg font-medium text-lg hover:bg-sablia-accent-hover transition-colors"
+                    className="inline-block bg-tuile text-white px-8 py-4 rounded-lg font-medium text-lg hover:bg-tuile-dark transition-colors"
                   >
                     Démarrer mon diagnostic, 490€
                   </a>

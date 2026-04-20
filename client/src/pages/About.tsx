@@ -25,47 +25,47 @@ export default function About() {
           <Navigation />
           <main className="container mx-auto px-4 py-16">
             <div className="flex flex-col items-center mb-10 mt-12">
-              <h1 className="text-4xl font-bold text-center text-sablia-text">À propos</h1>
+              <h1 className="text-4xl font-bold text-center text-encre">À propos</h1>
             </div>
 
             <div className="max-w-3xl mx-auto prose">
-              <h2 className="text-3xl font-semibold mb-6 text-sablia-text">
+              <h2 className="text-3xl font-semibold mb-6 text-encre">
                 Simplifier votre quotidien, c'est mon métier.
               </h2>
 
-              <p className="text-sablia-text-secondary mb-6">
+              <p className="text-encre-70 mb-6">
                 Je suis <strong>Brice Gachadoat</strong>, Responsable Pédagogique et Coach
                 Développement IA chez{' '}
                 <a
                   href="https://www.iapreneurs.com/?affiliate_code=8b6eda"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sablia-accent underline underline-offset-2 hover:text-sablia-accent-hover"
+                  className="text-tuile underline underline-offset-2 hover:text-tuile-dark"
                 >
                   IAPreneurs
                 </a>{' '}
                 (500+ membres, 200k+ abonnés YouTube). Vous êtes probablement ici parce que vous
-                passez trop de temps sur des tâches répétitives ou que vous souhaitez tirer parti des
-                dernières avancées en IA pour votre activité. Bonne nouvelle, c'est exactement ma
-                spécialité.
+                passez trop de temps sur des tâches répétitives ou que vous souhaitez tirer parti
+                des dernières avancées en IA pour votre activité. Bonne nouvelle, c'est exactement
+                ma spécialité.
               </p>
 
-              <p className="text-sablia-text-secondary mb-6">
+              <p className="text-encre-70 mb-6">
                 Ingénieur informatique avec plus de 10 ans d'expérience dans l'IT, j'ai toujours
                 cherché des moyens innovants de faciliter le quotidien professionnel des personnes
                 autour de moi.
               </p>
 
-              <h3 className="text-2xl font-semibold mb-4 text-sablia-text">Mon déclic personnel</h3>
+              <h3 className="text-2xl font-semibold mb-4 text-encre">Mon déclic personnel</h3>
 
-              <p className="text-sablia-text-secondary mb-6">
+              <p className="text-encre-70 mb-6">
                 Tout a changé quand j'ai voulu aider ma femme, nutritionniste, à simplifier la
                 gestion chronophage de ses dossiers et rendez-vous clients. Ma frustration de ne pas
                 pouvoir l'assister efficacement malgré mes compétences techniques s'est envolée
                 lorsque j'ai découvert les plateformes d'automatisation comme Make.com et n8n.
               </p>
 
-              <p className="text-sablia-text-secondary mb-6">
+              <p className="text-encre-70 mb-6">
                 Lorsque ChatGPT a été mis à disposition du public, j'ai immédiatement compris le
                 potentiel immense de cette technologie et commencé à l'intégrer dans mes solutions.{' '}
                 <strong>Résultat concret</strong> : ma femme a réduit de 90% le temps consacré à la
@@ -73,16 +73,16 @@ export default function About() {
                 plus de clientes sans augmentation significative de sa charge de travail.
               </p>
 
-              <p className="text-sablia-text-secondary mb-6">
+              <p className="text-encre-70 mb-6">
                 Aujourd'hui, je vous propose mon expertise pour simplifier et optimiser vos propres
                 processus métier grâce à l'automatisation intelligente et l'IA conversationnelle.
               </p>
 
-              <h3 className="text-2xl font-semibold mb-4 text-sablia-text">
+              <h3 className="text-2xl font-semibold mb-4 text-encre">
                 Ce que je peux vous apporter concrètement :
               </h3>
 
-              <ul className="text-sablia-text-secondary mb-6 space-y-3">
+              <ul className="text-encre-70 mb-6 space-y-3">
                 <li className="flex items-start">
                   <span>
                     <strong>Automatisation des tâches chronophages</strong> — Comme la
@@ -114,27 +114,25 @@ export default function About() {
                 </li>
               </ul>
 
-              <h3 className="text-2xl font-semibold mb-4 text-sablia-text">
-                Mon expertise technique
-              </h3>
+              <h3 className="text-2xl font-semibold mb-4 text-encre">Mon expertise technique</h3>
 
-              <p className="text-sablia-text-secondary mb-6">
+              <p className="text-encre-70 mb-6">
                 Je développe des automatisations principalement sur n8n, avec des compétences
                 complémentaires sur Make.com. J'intègre efficacement des outils comme Notion,
                 Airtable et Supabase pour créer des écosystèmes connectés et performants.
               </p>
 
-              <p className="text-sablia-text-secondary mb-6">
+              <p className="text-encre-70 mb-6">
                 J'ai accompagné avec succès des clients dans les secteurs du conseil, du marketing,
                 de la formation, de l'organisation d'événements et des ESN, ainsi que de nombreux
                 entrepreneurs indépendants.
               </p>
 
-              <h3 className="text-2xl font-semibold mb-4 text-sablia-text">
+              <h3 className="text-2xl font-semibold mb-4 text-encre">
                 Pourquoi me faire confiance ?
               </h3>
 
-              <ul className="text-sablia-text-secondary mb-6 space-y-3">
+              <ul className="text-encre-70 mb-6 space-y-3">
                 <li className="flex items-start">
                   <span>
                     <strong>Expérience confirmée</strong> : 10+ ans en gestion de projets IT, Data
@@ -156,20 +154,20 @@ export default function About() {
                 </li>
               </ul>
 
-              <h3 className="text-2xl font-semibold mb-4 text-sablia-text">Passons à l'action</h3>
+              <h3 className="text-2xl font-semibold mb-4 text-encre">Passons à l'action</h3>
 
-              <p className="text-sablia-text-secondary mb-6">
+              <p className="text-encre-70 mb-6">
                 Vous voulez savoir ce qui est automatisable dans votre PME ? Le{' '}
                 <strong>Diagnostic Sablia</strong> cartographie vos process et vous rend un PDF de
                 10-15 pages en 5 jours ouvrés, pour 490€ HT (déduits de la première facture si le
-                diagnostic débouche sur un contrat Développement ou Accompagnement). Si vous préférez
-                en discuter d'abord, un appel Calendly de 30 min reste possible.
+                diagnostic débouche sur un contrat Développement ou Accompagnement). Si vous
+                préférez en discuter d'abord, un appel Calendly de 30 min reste possible.
               </p>
 
               <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a
                   href="/#diagnostic-form"
-                  className="bg-sablia-accent hover:bg-sablia-accent-hover text-white px-8 py-3 rounded-md inline-block shadow-sm hover:shadow-md transition-all duration-300 text-lg font-medium"
+                  className="bg-tuile hover:bg-tuile-dark text-white px-8 py-3 rounded-md inline-block shadow-sm hover:shadow-md transition-all duration-300 text-lg font-medium"
                 >
                   Démarrer mon diagnostic, 490€
                 </a>
@@ -177,7 +175,7 @@ export default function About() {
                   href="https://calendly.com/brice-gachadoat/30min"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sablia-text-secondary underline underline-offset-4 hover:text-sablia-text transition-colors"
+                  className="text-encre-70 underline underline-offset-4 hover:text-encre transition-colors"
                 >
                   Préférer en discuter d'abord →
                 </a>

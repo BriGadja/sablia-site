@@ -73,24 +73,22 @@ export default function ThankYou() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4 }}
             >
-              <CheckCircle size={64} className="text-sablia-accent mx-auto mb-6" />
-              <h1 className="text-3xl sm:text-4xl font-bold text-sablia-text mb-4">
-                {config.title}
-              </h1>
-              <p className="text-lg text-sablia-text-secondary mb-10">{config.description}</p>
+              <CheckCircle size={64} className="text-tuile mx-auto mb-6" />
+              <h1 className="text-3xl sm:text-4xl font-bold text-encre mb-4">{config.title}</h1>
+              <p className="text-lg text-encre-70 mb-10">{config.description}</p>
             </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.4 }}
-              className="bg-sablia-bg border border-sablia-border rounded-lg p-8 mb-8"
+              className="bg-sable border border-encre/10 rounded-lg p-8 mb-8"
             >
               <div className="flex items-center justify-center gap-2.5 mb-3">
-                <Calendar size={20} className="text-sablia-accent" />
-                <h2 className="text-xl font-semibold text-sablia-text">Prochaine etape</h2>
+                <Calendar size={20} className="text-tuile" />
+                <h2 className="text-xl font-semibold text-encre">Prochaine etape</h2>
               </div>
-              <p className="text-sablia-text-secondary mb-6">
+              <p className="text-encre-70 mb-6">
                 Reservez un appel decouverte gratuit de 30 minutes pour discuter de vos besoins
                 d'automatisation.
               </p>
@@ -98,7 +96,7 @@ export default function ThankYou() {
                 href="https://calendly.com/brice-gachadoat/30min"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-sablia-accent text-white px-6 py-3 rounded-md font-medium hover:bg-sablia-accent-hover transition-colors"
+                className="inline-flex items-center gap-2 bg-tuile text-white px-6 py-3 rounded-md font-medium hover:bg-tuile-dark transition-colors"
               >
                 <Calendar size={18} />
                 Reserver un appel
@@ -107,7 +105,7 @@ export default function ThankYou() {
 
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-sablia-text-secondary hover:text-sablia-text transition-colors"
+              className="inline-flex items-center gap-2 text-encre-70 hover:text-encre transition-colors"
             >
               <Home size={16} />
               Retour a l'accueil
