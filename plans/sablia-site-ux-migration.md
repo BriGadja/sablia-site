@@ -61,7 +61,7 @@ Deux repos ont évolué en parallèle :
 
 ## Phases
 
-### Phase 1 — Design tokens + typographie (base visuelle)
+### Phase 1 — Design tokens + typographie (base visuelle) ✅ DONE 2026-04-20
 
 **Objectif** : la base CSS est en place, `tailwind.config.ts` + `index.css` reflètent la palette sable/encre/tuile et la typo Fraunces. Aucun composant n'est encore porté — on valide juste que les tokens sont accessibles.
 
