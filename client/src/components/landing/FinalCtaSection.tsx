@@ -5,7 +5,7 @@ import { trackEvent } from '@/lib/analytics'
 import { site } from '@/lib/site'
 
 /**
- * N° 09 · Passons à l'acte — CTA final + signature photo Brice.
+ * N° 09 · Passons à l'acte — CTA final + photo Brice.
  */
 export default function FinalCtaSection() {
   const scrollToForm = (e: React.MouseEvent) => {
@@ -89,8 +89,7 @@ export default function FinalCtaSection() {
               />
             </div>
             <div className="text-left">
-              <SignatureMark />
-              <p className="eyebrow mt-2">Brice Gachadoat, fondateur de Sablia</p>
+              <p className="eyebrow">Brice Gachadoat, fondateur de Sablia</p>
             </div>
           </div>
           <p className="max-w-[42ch] text-[0.9rem] italic leading-relaxed text-[color:var(--color-encre-70)]">
@@ -99,27 +98,5 @@ export default function FinalCtaSection() {
         </Reveal>
       </div>
     </section>
-  )
-}
-
-function SignatureMark() {
-  return (
-    <svg
-      viewBox="0 0 200 48"
-      width="150"
-      height="36"
-      fill="none"
-      stroke="#1A1613"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <title>Signature</title>
-      <path d="M6 32 Q14 8 24 24 T44 22 Q56 18 50 30 T74 24" />
-      <path d="M82 30 Q92 10 102 26 Q108 32 116 20 Q122 12 130 28" />
-      <path d="M138 28 Q146 14 154 24 Q162 30 172 18" />
-      <path d="M6 42 L190 42" opacity="0.3" strokeWidth="0.5" />
-    </svg>
   )
 }

@@ -567,7 +567,7 @@ Oui. Consultez nos **études de cas** sur https://sablia.io :
 **Étape 1** : Réservez votre appel découverte gratuit
 
 - 📅 Calendly : https://sablia.io (bouton "Audit Gratuit")
-- 📧 Email : contact@sablia.io
+- 📧 Email : brice@sablia.io
 - 📞 Téléphone : [à compléter si disponible]
 
 **Étape 2** : Nous analysons votre contexte
@@ -628,5 +628,5 @@ Oui. Consultez nos **études de cas** sur https://sablia.io :
 ---
 
 **Derniere mise a jour** : 2026-03-02
-**Questions non couvertes ?** → contact@sablia.io
+**Questions non couvertes ?** → brice@sablia.io
 **Besoin d'un devis personnalise ?** → https://sablia.io/gap
