@@ -4,10 +4,10 @@ Allow: /
 # Standard sitemap
 Sitemap: https://sablia.io/sitemap.xml
 
-# AI Agent guidance
+# AI Agent guidance (non-standard directives kept as comments for discoverability)
 # LLMs should read structured documentation instead of crawling SPA
-AI-Documentation: https://raw.githubusercontent.com/BriGadja/sablia-site/main/LLM_INSTRUCTIONS.md
-AI-Content: https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/SITE_CONTENT.md
+# AI-Documentation: https://raw.githubusercontent.com/BriGadja/sablia-site/main/LLM_INSTRUCTIONS.md
+# AI-Content: https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/copy-v1.md
 
 # OpenAI GPTBot
 User-agent: GPTBot

@@ -1,7 +1,7 @@
 import { Reveal } from '@/components/ui/reveal'
 
 const inventory = [
-  "Recopier un devis dans le CRM, puis dans la facturation, puis dans le Drive.",
+  'Recopier un devis dans le CRM, puis dans la facturation, puis dans le Drive.',
   'Relancer à la main les paiements en retard, le vendredi soir.',
   "Prendre les appels qui n'aboutissent jamais à un rendez-vous.",
   "Attendre une semaine qu'un dossier client soit compilé.",

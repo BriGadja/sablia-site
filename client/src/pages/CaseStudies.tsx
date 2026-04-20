@@ -155,9 +155,9 @@ export default function CaseStudies() {
                       {/* Results */}
                       <div className="px-8 pb-4">
                         <div className="grid grid-cols-3 gap-4">
-                          {study.results.map((result, i) => (
+                          {study.results.map((result) => (
                             <div
-                              key={i}
+                              key={result.label}
                               className="bg-gray-50 rounded-lg p-4 text-center border border-gray-100"
                             >
                               <div className="flex justify-center text-tuile mb-2">

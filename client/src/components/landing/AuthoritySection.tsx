@@ -52,9 +52,9 @@ export default function AuthoritySection() {
               </p>
               <p className="mt-7 max-w-[54ch] text-[1.0625rem] leading-relaxed text-[color:var(--color-encre)]">
                 J'y coache au quotidien des entrepreneurs qui construisent leur agence
-                d'automatisation IA. Je vois passer des dizaines de projets par mois, les
-                réussites, les impasses, les erreurs de scope. Cette masse de cas alimente chaque
-                Diagnostic Sablia.
+                d'automatisation IA. Je vois passer des dizaines de projets par mois, les réussites,
+                les impasses, les erreurs de scope. Cette masse de cas alimente chaque Diagnostic
+                Sablia.
               </p>
             </article>
           </Reveal>
@@ -68,9 +68,9 @@ export default function AuthoritySection() {
                 structures de 10 à 250 salariés.
               </p>
               <p className="mt-7 max-w-[54ch] text-[1.0625rem] leading-relaxed text-[color:var(--color-encre)]">
-                Côté Sablia, j'accompagne directement des dirigeants qui veulent intégrer l'IA
-                dans leurs opérations existantes, pas en vendre. Le diagnostic applique ce que je
-                vois tous les jours côté formation : ce qui vaut le coup, et ce qui ne vaut pas.
+                Côté Sablia, j'accompagne directement des dirigeants qui veulent intégrer l'IA dans
+                leurs opérations existantes, pas en vendre. Le diagnostic applique ce que je vois
+                tous les jours côté formation : ce qui vaut le coup, et ce qui ne vaut pas.
               </p>
             </article>
           </Reveal>
@@ -79,8 +79,8 @@ export default function AuthoritySection() {
         <Reveal delay={240}>
           <blockquote className="mx-auto mt-20 max-w-[64ch] border-t border-[color:var(--color-encre)]/15 pt-10 text-center font-display text-[1.375rem] italic leading-snug tracking-[-0.01em] text-[color:var(--color-encre-90)] md:mt-24 md:text-[1.625rem]">
             <span className="pull-quote">
-              Former des entrepreneurs à vendre l'IA, et implémenter l'IA pour des dirigeants :
-              deux métiers, un même terrain d'observation.
+              Former des entrepreneurs à vendre l'IA, et implémenter l'IA pour des dirigeants : deux
+              métiers, un même terrain d'observation.
             </span>
           </blockquote>
         </Reveal>

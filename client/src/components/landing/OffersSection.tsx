@@ -51,17 +51,17 @@ export default function OffersSection() {
             <div className="mt-8 max-w-[58ch] space-y-5 text-[1.0625rem] leading-relaxed text-[color:var(--color-encre-70)] md:text-[1.125rem]">
               <p>
                 Le Diagnostic Sablia structure votre état des lieux. Vous recevez un{' '}
-                <span className="text-[color:var(--color-encre)]">PDF de 10 à 15 pages</span>{' '}
-                : cartographie de vos process, opportunités d'implémentation IA classées par ROI,
+                <span className="text-[color:var(--color-encre)]">PDF de 10 à 15 pages</span> :
+                cartographie de vos process, opportunités d'implémentation IA classées par ROI,
                 feuille de route 90 jours, et estimation chiffrée de la phase suivante.
               </p>
               <p>
-                Tout ça en{' '}
-                <span className="text-[color:var(--color-encre)]">5 jours ouvrés</span>, pour{' '}
-                <span className="text-[color:var(--color-encre)]">490€ HT</span>. Si le diagnostic
-                débouche sur un contrat Développement ou Accompagnement signé dans les 90 jours, ces
-                490€ sont intégralement déduits de votre première facture. Payable par Stripe ou
-                virement. Annulation avec remboursement intégral jusqu'à 72 h avant l'intake.
+                Tout ça en <span className="text-[color:var(--color-encre)]">5 jours ouvrés</span>,
+                pour <span className="text-[color:var(--color-encre)]">490€ HT</span>. Si le
+                diagnostic débouche sur un contrat Développement ou Accompagnement signé dans les 90
+                jours, ces 490€ sont intégralement déduits de votre première facture. Payable par
+                Stripe ou virement. Annulation avec remboursement intégral jusqu'à 72 h avant
+                l'intake.
               </p>
             </div>
 
@@ -95,6 +95,7 @@ export default function OffersSection() {
                   strokeWidth="1.5"
                   aria-hidden
                 >
+                  <title>Arrow</title>
                   <path d="M3 10h14M12 5l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </a>
@@ -112,14 +113,31 @@ function TriptychIllustration() {
       <figure className="relative border-b border-[color:var(--color-encre)]/10 px-5 py-6">
         <figcaption className="eyebrow mb-3">Sites qui convertissent</figcaption>
         <svg viewBox="0 0 400 220" className="h-auto w-full" aria-hidden>
+          <title>Sites qui convertissent</title>
           <defs>
             <linearGradient id="triptychSiteGrad" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#B84A1E" stopOpacity="0.9" />
               <stop offset="100%" stopColor="#953A14" stopOpacity="1" />
             </linearGradient>
           </defs>
-          <rect x="40" y="20" width="320" height="180" fill="#FBF8F2" stroke="#1A1613" strokeOpacity="0.15" />
-          <rect x="40" y="20" width="320" height="22" fill="#F4EEDF" stroke="#1A1613" strokeOpacity="0.15" />
+          <rect
+            x="40"
+            y="20"
+            width="320"
+            height="180"
+            fill="#FBF8F2"
+            stroke="#1A1613"
+            strokeOpacity="0.15"
+          />
+          <rect
+            x="40"
+            y="20"
+            width="320"
+            height="22"
+            fill="#F4EEDF"
+            stroke="#1A1613"
+            strokeOpacity="0.15"
+          />
           <circle cx="55" cy="31" r="2.5" fill="#B84A1E" />
           <circle cx="66" cy="31" r="2.5" fill="#C9A461" />
           <circle cx="77" cy="31" r="2.5" fill="#3B4A3A" />
@@ -134,6 +152,7 @@ function TriptychIllustration() {
       <figure className="relative border-b border-[color:var(--color-encre)]/10 px-5 py-6">
         <figcaption className="eyebrow mb-3">Flux internes reliés</figcaption>
         <svg viewBox="0 0 400 220" className="h-auto w-full" aria-hidden>
+          <title>Flux internes reliés</title>
           <defs>
             <pattern id="triptychDot" width="14" height="14" patternUnits="userSpaceOnUse">
               <circle cx="1" cy="1" r="1" fill="#1A1613" opacity="0.18" />
@@ -183,16 +202,23 @@ function TriptychIllustration() {
         <figcaption className="eyebrow mb-3">Voix qui prend vos appels</figcaption>
         <div className="relative">
           <svg viewBox="0 0 400 220" className="h-auto w-full" aria-hidden>
+            <title>Voix qui prend vos appels</title>
             <g stroke="#1A1613" strokeOpacity="0.08">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <line key={`h-${i}`} x1="0" y1={20 + i * 30} x2="400" y2={20 + i * 30} />
+              {[20, 50, 80, 110, 140, 170].map((y) => (
+                <line key={`h-${y}`} x1="0" y1={y} x2="400" y2={y} />
               ))}
             </g>
-            <g stroke="#B84A1E" strokeOpacity="0.45" strokeWidth="2" strokeLinecap="round" fill="none">
+            <g
+              stroke="#B84A1E"
+              strokeOpacity="0.45"
+              strokeWidth="2"
+              strokeLinecap="round"
+              fill="none"
+            >
               {Array.from({ length: 44 }).map((_, i) => {
                 const x = 30 + i * 8
                 const h = 10 + Math.abs(Math.sin(i * 0.55) * 40) + Math.abs(Math.cos(i * 0.3) * 22)
-                return <line key={`b-${i}`} x1={x} y1={110 - h / 2} x2={x} y2={110 + h / 2} />
+                return <line key={`b-${x}`} x1={x} y1={110 - h / 2} x2={x} y2={110 + h / 2} />
               })}
             </g>
             <g transform="translate(30, 165)">

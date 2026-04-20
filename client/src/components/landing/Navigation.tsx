@@ -66,7 +66,11 @@ export default function Navigation() {
             : 'border-[color:var(--color-encre)]/8 bg-[color:var(--color-sable)]/50 backdrop-blur-md shadow-[0_6px_20px_-14px_rgba(26,22,19,0.22)]',
         )}
       >
-        <Link href="/" className="focus-visible:outline-none" aria-label="Sablia · retour à l'accueil">
+        <Link
+          href="/"
+          className="focus-visible:outline-none"
+          aria-label="Sablia · retour à l'accueil"
+        >
           <LogoWordmark />
         </Link>
 
@@ -108,7 +112,15 @@ export default function Navigation() {
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
           >
-            <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <svg
+              viewBox="0 0 24 24"
+              className="h-6 w-6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              aria-hidden
+            >
+              <title>Menu</title>
               {open ? (
                 <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
               ) : (

@@ -129,8 +129,8 @@ function OfferItem({ offer }: { offer: PricingOffer }) {
       {offer.duration && <p className="text-sablia-text-tertiary text-sm mb-2">{offer.duration}</p>}
       <p className="text-sablia-text-secondary text-sm mb-3">{offer.description}</p>
       <ul className="space-y-1.5">
-        {offer.features.map((feature, fIdx) => (
-          <li key={fIdx} className="flex items-start gap-2 text-sablia-text-secondary text-sm">
+        {offer.features.map((feature) => (
+          <li key={feature} className="flex items-start gap-2 text-sablia-text-secondary text-sm">
             <Check size={14} className="text-sablia-accent mt-0.5 flex-shrink-0" />
             <span>{feature}</span>
           </li>
@@ -156,8 +156,8 @@ function PricingCard({ column, index }: { column: PricingColumn; index: number }
       </div>
 
       <div className="space-y-6 mb-8 flex-1">
-        {column.offers.map((offer, idx) => (
-          <OfferItem key={idx} offer={offer} />
+        {column.offers.map((offer) => (
+          <OfferItem key={offer.name} offer={offer} />
         ))}
       </div>
 

@@ -12,14 +12,14 @@ const steps = [
     number: '02',
     title: 'Implémentation',
     duration: '2 à 6 semaines',
-    body: "Construction de la solution : site, flux, agent. Vous voyez les avancées chaque semaine, par visio courte. Pas de livraison en big bang trois mois plus tard, pas de mystère sur ce qui se passe entre-temps.",
+    body: 'Construction de la solution : site, flux, agent. Vous voyez les avancées chaque semaine, par visio courte. Pas de livraison en big bang trois mois plus tard, pas de mystère sur ce qui se passe entre-temps.',
     deliverable: 'Démo fonctionnelle · mi-parcours',
   },
   {
     number: '03',
     title: 'Formation',
     duration: '½ à 1 journée',
-    body: "Votre équipe reprend la main. Vidéos courtes, documentation écrite en français pensée pour un dirigeant, sessions de prise en main. Rien de ce qui est livré ne repose sur notre seule présence.",
+    body: 'Votre équipe reprend la main. Vidéos courtes, documentation écrite en français pensée pour un dirigeant, sessions de prise en main. Rien de ce qui est livré ne repose sur notre seule présence.',
     deliverable: 'Manuel · accès · vidéos',
   },
   {

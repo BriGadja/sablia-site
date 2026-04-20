@@ -95,8 +95,8 @@ export default function DiagnosticForm() {
             vous savez.
           </h2>
           <p className="mt-6 max-w-[36ch] text-[color:var(--color-encre-70)]">
-            Vous recevez dans l'heure le formulaire d'intake détaillé et un lien de paiement
-            Stripe. L'appel d'intake de 15 minutes est ensuite calé avec vous.
+            Vous recevez dans l'heure le formulaire d'intake détaillé et un lien de paiement Stripe.
+            L'appel d'intake de 15 minutes est ensuite calé avec vous.
           </p>
 
           <dl className="mt-10 divide-y divide-[color:var(--color-encre)]/12 border-t border-b border-[color:var(--color-encre)]/15">
@@ -273,11 +273,8 @@ export default function DiagnosticForm() {
                     strokeWidth="1.5"
                     aria-hidden
                   >
-                    <path
-                      d="M3 10h14M12 5l5 5-5 5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
+                    <title>Arrow</title>
+                    <path d="M3 10h14M12 5l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </>
               )}

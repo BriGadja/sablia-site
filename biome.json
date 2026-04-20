@@ -44,7 +44,8 @@
       "!**/.claude",
       "!**/*.config.js",
       "!**/*.config.ts",
-      "!**/*.config.mjs"
+      "!**/*.config.mjs",
+      "!**/*.css"
     ]
   }
 }

@@ -20,7 +20,7 @@ const paths: Path[] = [
     number: '01',
     title: "Formation d'équipes internes",
     intro:
-      "Vos équipes doivent maîtriser un outil ou un workflow spécifique. On construit le curriculum sur mesure et on forme en présentiel ou à distance.",
+      'Vos équipes doivent maîtriser un outil ou un workflow spécifique. On construit le curriculum sur mesure et on forme en présentiel ou à distance.',
     bullets: [
       'Utiliser n8n ou Make pour automatiser leurs process internes sans support technique',
       'Prompter correctement un LLM pour la relecture de contrats, la synthèse de réunion, le reporting',
@@ -43,7 +43,7 @@ const paths: Path[] = [
     number: '03',
     title: 'Développement',
     intro:
-      "Vous voulez que les automatisations soient construites directement par Sablia. On livre clé en main avec documentation de handoff.",
+      'Vous voulez que les automatisations soient construites directement par Sablia. On livre clé en main avec documentation de handoff.',
     bullets: [
       'Exploiter des workflows n8n sur mesure (finance, ops, commercial, support)',
       'Déployer des agents vocaux Dipler pour standards, relances clients, prises de rendez-vous',

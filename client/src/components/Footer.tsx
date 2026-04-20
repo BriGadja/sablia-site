@@ -21,15 +21,12 @@ export default function Footer() {
               </span>
             </div>
             <p className="mt-5 max-w-[34ch] text-[0.95rem] leading-relaxed text-[color:var(--color-encre-70)]">
-              Cabinet d'automatisation pour PME françaises. Diagnostic, implémentation et
-              formation, livrés en France.
+              Cabinet d'automatisation pour PME françaises. Diagnostic, implémentation et formation,
+              livrés en France.
             </p>
           </div>
 
-          <nav
-            className="col-span-6 md:col-span-2"
-            aria-label="Ressources"
-          >
+          <nav className="col-span-6 md:col-span-2" aria-label="Ressources">
             <p className="eyebrow mb-4">Ressources</p>
             <ul className="flex flex-col gap-2 text-[0.95rem]">
               <li>

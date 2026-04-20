@@ -65,6 +65,7 @@ export function VoicePlayer({ src, label = 'Écouter la démo', className }: Voi
         >
           {playing ? (
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>
+              <title>Pause</title>
               <rect x="7" y="5" width="3.5" height="14" rx="0.5" />
               <rect x="13.5" y="5" width="3.5" height="14" rx="0.5" />
             </svg>
@@ -75,6 +76,7 @@ export function VoicePlayer({ src, label = 'Écouter la démo', className }: Voi
               fill="currentColor"
               aria-hidden
             >
+              <title>Play</title>
               <path d="M7.5 5 L18 12 L7.5 19 Z" />
             </svg>
           )}

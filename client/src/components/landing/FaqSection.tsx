@@ -30,9 +30,9 @@ const items: FaqEntry[] = [
         </p>
         <p className="mt-3">
           Si, dans les 90 jours suivant la restitution, vous signez un contrat Développement ou
-          Accompagnement avec Sablia, les 490€ sont intégralement déduits de votre première
-          facture. Non applicable au path Formation d'équipes internes (qui reste facturé au plein
-          tarif de sa fourchette).
+          Accompagnement avec Sablia, les 490€ sont intégralement déduits de votre première facture.
+          Non applicable au path Formation d'équipes internes (qui reste facturé au plein tarif de
+          sa fourchette).
         </p>
       </>
     ),
@@ -44,9 +44,9 @@ const items: FaqEntry[] = [
       "Cinq jours ouvrés entre la fin de l'intake et la restitution du PDF. L'intake lui-même dure 45 minutes (un formulaire asynchrone + un appel de 15 minutes pour clarifier). Le deep-dive synchrone dure 3 heures. La restitution dure 1 heure.",
     answer: (
       <p>
-        Cinq jours ouvrés entre la fin de l'intake et la restitution du PDF. L'intake lui-même
-        dure 45 minutes (un formulaire asynchrone + un appel de 15 minutes pour clarifier). Le
-        deep-dive synchrone dure 3 heures. La restitution dure 1 heure.
+        Cinq jours ouvrés entre la fin de l'intake et la restitution du PDF. L'intake lui-même dure
+        45 minutes (un formulaire asynchrone + un appel de 15 minutes pour clarifier). Le deep-dive
+        synchrone dure 3 heures. La restitution dure 1 heure.
       </p>
     ),
   },
@@ -58,9 +58,9 @@ const items: FaqEntry[] = [
     answer: (
       <p>
         PME de 10 à 250 salariés avec au moins un process manuel qui coûte 5 heures ou plus par
-        semaine à l'équipe. Le diagnostic est taillé pour les structures qui ont déjà des
-        opérations en place, pas pour valider une idée de startup. Si votre process ne saigne pas
-        encore 5 h+/semaine, attendez.
+        semaine à l'équipe. Le diagnostic est taillé pour les structures qui ont déjà des opérations
+        en place, pas pour valider une idée de startup. Si votre process ne saigne pas encore 5
+        h+/semaine, attendez.
       </p>
     ),
   },
@@ -71,10 +71,10 @@ const items: FaqEntry[] = [
       "Le livrable PDF contient une recommandation claire parmi trois paths : formation d'équipes internes, accompagnement d'un sponsor interne, ou développement des automatisations par Sablia. Vous êtes libre de choisir n'importe lequel, de les combiner, ou de décliner, le diagnostic se tient seul, sans obligation de continuer.",
     answer: (
       <p>
-        Le livrable PDF contient une recommandation claire parmi trois paths : formation
-        d'équipes internes, accompagnement d'un sponsor interne, ou développement des
-        automatisations par Sablia. Vous êtes libre de choisir n'importe lequel, de les combiner,
-        ou de décliner, le diagnostic se tient seul, sans obligation de continuer.
+        Le livrable PDF contient une recommandation claire parmi trois paths : formation d'équipes
+        internes, accompagnement d'un sponsor interne, ou développement des automatisations par
+        Sablia. Vous êtes libre de choisir n'importe lequel, de les combiner, ou de décliner, le
+        diagnostic se tient seul, sans obligation de continuer.
       </p>
     ),
   },
@@ -85,9 +85,9 @@ const items: FaqEntry[] = [
       "Jusqu'à 72 heures avant l'intake, annulation avec remboursement intégral sans justification. Une fois l'intake démarré, le diagnostic est non-remboursable, parce que le travail d'analyse commence immédiatement après.",
     answer: (
       <p>
-        Jusqu'à 72 heures avant l'intake, annulation avec remboursement intégral sans
-        justification. Une fois l'intake démarré, le diagnostic est non-remboursable, parce que le
-        travail d'analyse commence immédiatement après.
+        Jusqu'à 72 heures avant l'intake, annulation avec remboursement intégral sans justification.
+        Une fois l'intake démarré, le diagnostic est non-remboursable, parce que le travail
+        d'analyse commence immédiatement après.
       </p>
     ),
   },
@@ -100,9 +100,9 @@ const items: FaqEntry[] = [
       <p>
         Un audit gratuit dure 30 minutes et finit toujours par recommander ce que le prestataire
         vend. Un diagnostic payant de 5 jours cartographie réellement vos process et peut conclure
-        qu'aucune implémentation IA n'est pertinente chez vous. On préfère qu'on vous dise ça
-        plutôt qu'on vous vende une solution qui ne marchera pas. Le coût du diagnostic protège la
-        qualité de la recommandation.
+        qu'aucune implémentation IA n'est pertinente chez vous. On préfère qu'on vous dise ça plutôt
+        qu'on vous vende une solution qui ne marchera pas. Le coût du diagnostic protège la qualité
+        de la recommandation.
       </p>
     ),
   },
@@ -114,9 +114,9 @@ const items: FaqEntry[] = [
     answer: (
       <p>
         Principalement n8n (auto-hébergé, souveraineté totale) pour les workflows, Dipler pour les
-        agents vocaux, et les modèles LLM (OpenAI, Claude, Mistral) pour les capacités IA. Le
-        choix exact est arbitré pendant le diagnostic selon votre stack existante et vos
-        contraintes de confidentialité.
+        agents vocaux, et les modèles LLM (OpenAI, Claude, Mistral) pour les capacités IA. Le choix
+        exact est arbitré pendant le diagnostic selon votre stack existante et vos contraintes de
+        confidentialité.
       </p>
     ),
   },
@@ -127,9 +127,9 @@ const items: FaqEntry[] = [
       "Hébergement Europe (RGPD-compliant), chiffrement TLS 1.3 en transit et AES-256 au repos, 2FA obligatoire côté Sablia. NDA systématique. Pour les PME qui souhaitent un contrôle total, n8n peut être déployé sur vos propres serveurs — c'est l'un des paths Développement possibles.",
     answer: (
       <p>
-        Hébergement Europe (RGPD-compliant), chiffrement TLS 1.3 en transit et AES-256 au repos,
-        2FA obligatoire côté Sablia. NDA systématique. Pour les PME qui souhaitent un contrôle
-        total, n8n peut être déployé sur vos propres serveurs — c'est l'un des paths Développement
+        Hébergement Europe (RGPD-compliant), chiffrement TLS 1.3 en transit et AES-256 au repos, 2FA
+        obligatoire côté Sablia. NDA systématique. Pour les PME qui souhaitent un contrôle total,
+        n8n peut être déployé sur vos propres serveurs — c'est l'un des paths Développement
         possibles.
       </p>
     ),
@@ -143,10 +143,10 @@ const items: FaqEntry[] = [
       <p>
         IAPreneurs forme les entrepreneurs qui veulent construire une activité en vendant
         l'intelligence artificielle. Sablia, c'est l'inverse : on intègre l'IA directement dans
-        votre PME existante. Les deux n'ont pas les mêmes clients, Brice exerce simplement les
-        deux rôles. IAPreneurs s'adresse à des freelances et consultants IA en construction.
-        Sablia s'adresse à des dirigeants de PME de 10 à 250 salariés avec des process
-        opérationnels déjà en place.
+        votre PME existante. Les deux n'ont pas les mêmes clients, Brice exerce simplement les deux
+        rôles. IAPreneurs s'adresse à des freelances et consultants IA en construction. Sablia
+        s'adresse à des dirigeants de PME de 10 à 250 salariés avec des process opérationnels déjà
+        en place.
       </p>
     ),
   },
@@ -184,8 +184,7 @@ export default function FaqSection() {
                   Les questions que
                   <br />
                   <em>vous n'osez pas poser</em>
-                  <br />
-                  à une agence.
+                  <br />à une agence.
                 </h2>
                 <p className="mt-6 max-w-[32ch] text-[color:var(--color-encre-70)]">
                   Réponses directes, sans langue de bois. Si une question manque, écrivez-nous ou

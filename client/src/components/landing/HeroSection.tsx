@@ -35,10 +35,9 @@ export default function HeroSection() {
 
             <div className="mt-10 max-w-[52ch] text-[1.0625rem] leading-relaxed text-[color:var(--color-encre-70)] md:text-[1.125rem]">
               <p>
-                Le{' '}
-                <span className="text-[color:var(--color-encre)]">Diagnostic Sablia</span>{' '}
-                cartographie vos process, identifie les automatisations qui valent vraiment le
-                coup, et signale celles à laisser de côté.{' '}
+                Le <span className="text-[color:var(--color-encre)]">Diagnostic Sablia</span>{' '}
+                cartographie vos process, identifie les automatisations qui valent vraiment le coup,
+                et signale celles à laisser de côté.{' '}
                 <span className="text-[color:var(--color-encre)]">490€ HT</span>, déduits de la
                 première facture si vous signez ensuite un contrat Développement ou Accompagnement.
               </p>
@@ -73,6 +72,7 @@ export default function HeroSection() {
                   strokeWidth="1.5"
                   aria-hidden
                 >
+                  <title>Arrow</title>
                   <path d="M3 10h14M12 5l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </ButtonLink>

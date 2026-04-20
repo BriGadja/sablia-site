@@ -14,11 +14,7 @@ type AccordionEditorialProps = {
   defaultOpenId?: string | null
 }
 
-export function AccordionEditorial({
-  items,
-  className,
-  defaultOpenId,
-}: AccordionEditorialProps) {
+export function AccordionEditorial({ items, className, defaultOpenId }: AccordionEditorialProps) {
   const initial = defaultOpenId === undefined ? (items[0]?.id ?? null) : defaultOpenId
   const [openId, setOpenId] = React.useState<string | null>(initial)
 
@@ -58,7 +54,8 @@ export function AccordionEditorial({
                     isOpen ? 'rotate-45' : 'rotate-0',
                   )}
                 >
-                  <svg viewBox="0 0 20 20" className="h-5 w-5">
+                  <svg viewBox="0 0 20 20" className="h-5 w-5" aria-hidden>
+                    <title>Toggle</title>
                     <path
                       d="M10 3v14M3 10h14"
                       stroke="currentColor"
@@ -69,9 +66,8 @@ export function AccordionEditorial({
                 </span>
               </button>
             </h3>
-            <div
+            <section
               id={panelId}
-              role="region"
               aria-labelledby={btnId}
               hidden={!isOpen}
               className={cn(
@@ -82,7 +78,7 @@ export function AccordionEditorial({
               <div className="max-w-prose text-[1rem] leading-relaxed text-[color:var(--color-encre-70)]">
                 {item.answer}
               </div>
-            </div>
+            </section>
           </div>
         )
       })}

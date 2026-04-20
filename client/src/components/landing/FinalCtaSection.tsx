@@ -30,8 +30,8 @@ export default function FinalCtaSection() {
             Prêt à voir ce qui est <em>automatisable</em> ?
           </h2>
           <p className="mx-auto mt-8 max-w-[48ch] text-[1.0625rem] leading-relaxed text-[color:var(--color-encre-70)] md:text-[1.125rem]">
-            Cinq jours, un PDF, une recommandation claire. Si le diagnostic conclut que l'IA n'a
-            pas sa place chez vous, c'est dit aussi.
+            Cinq jours, un PDF, une recommandation claire. Si le diagnostic conclut que l'IA n'a pas
+            sa place chez vous, c'est dit aussi.
           </p>
         </Reveal>
 
@@ -54,6 +54,7 @@ export default function FinalCtaSection() {
               strokeWidth="1.5"
               aria-hidden
             >
+              <title>Arrow</title>
               <path d="M3 10h14M12 5l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </ButtonLink>
@@ -112,6 +113,7 @@ function SignatureMark() {
       strokeLinejoin="round"
       aria-hidden
     >
+      <title>Signature</title>
       <path d="M6 32 Q14 8 24 24 T44 22 Q56 18 50 30 T74 24" />
       <path d="M82 30 Q92 10 102 26 Q108 32 116 20 Q122 12 130 28" />
       <path d="M138 28 Q146 14 154 24 Q162 30 172 18" />

@@ -11,6 +11,7 @@ function useCountUp(target: number, duration = 600) {
   const [value, setValue] = useState(0)
   const rafRef = useRef<number>(0)
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally snapshot `value` only when `target` changes — adding it would cause an infinite loop since the effect updates `value`.
   useEffect(() => {
     const start = value
     const diff = target - start

@@ -71,11 +71,7 @@ export default function ProofSection() {
       <Helmet>
         <script type="application/ld+json">{JSON.stringify(reviewSchema)}</script>
       </Helmet>
-      <section
-        id="preuves"
-        className="relative py-24 md:py-32"
-        aria-labelledby="proof-title"
-      >
+      <section id="preuves" className="relative py-24 md:py-32" aria-labelledby="proof-title">
         <div className="container-editorial">
           <div className="mb-14 grid grid-cols-12 gap-x-6 md:mb-20">
             <div className="col-span-12 lg:col-span-8">
