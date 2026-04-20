@@ -298,7 +298,20 @@ Deux repos ont évolué en parallèle :
 
 ---
 
-### Phase 7 — Bascule domaine sablia.io (irreversible-fast)
+### Phase 7 — Bascule domaine sablia.io (irreversible-fast) ✅ DONE 2026-04-20
+
+**Résultats exécution 2026-04-20 15:02 UTC** :
+- Pre-flight `vercel domains inspect sablia.io` : domaine owned team-level (OVH NS dns101/ns101), attaché via project-level Custom Domain sur `sablia-io-preview`. MX Google Workspace préservés (bascule alias ne touche pas DNS).
+- Rollback URL sauvée : `tmp/rollback-url.txt` → `https://sablia-io-preview-lhfsubvme-brices-projects-c5e1ba72.vercel.app`
+- Target deployment : `https://sablia-site-85bwaz4rf-brices-projects-c5e1ba72.vercel.app` (built from `main @ ce26955`, 56m old at cutover time).
+- SSL pré-généré dashboard Brice sur `sablia-site` project settings/domains avant cutover — cert prêt au switch (pas de délai Let's Encrypt 2-8h).
+- **Cutover** : `vercel alias set <target> sablia.io --scope brices-projects-c5e1ba72` → **Success 2s**. `--force` non nécessaire grâce au pré-staging dashboard (domaine déjà en Pending sur sablia-site).
+- Post-cutover `curl -sI https://sablia.io` : HTTP 200, `x-vercel-id: cdg1::6jfm4-1776697353352-933c60ddb3e4` (nouveau hash), `age: 0`, HSTS `max-age=63072000`, `x-vercel-cache: HIT`.
+- **Header-level confirmation de bascule** : absence de `x-nextjs-prerender`, `x-matched-path`, `x-nextjs-stale-time`, `vary: rsc,next-router-*` (tous présents pré-cutover côté Next.js sablia-io-preview). `content-length` 6684 (Vite SPA shell) vs 155850 (Next.js SSR pre-render).
+- HTML homepage référence `Fraunces` + `Geist` ✓. Title `Sablia - Automatisation IA pour PME | n8n & Make.com` ✓.
+- Webhook n8n `n8n.sablia.io/webhook/sablia-site-diagnostic` : endpoint reachable (HEAD → 404 normal pour webhooks n8n, POST-only). Live submit déféré assumé (évite pollution prod).
+
+**VERIMAP Phase 7** : 3/3 constraints PASS (`http-status 200`, `x-vercel-id` header, `rollback-url.txt` exists).
 
 **Objectif** : le domaine `sablia.io` pointe vers le projet Vercel sablia-site. Rollback possible en < 5 min.
 
