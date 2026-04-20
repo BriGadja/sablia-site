@@ -13,14 +13,23 @@ const buttonVariants = cva(
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
+        ghost:
+          'bg-transparent text-[color:var(--color-encre)] hover:text-[color:var(--color-tuile)]',
         link: 'text-primary underline-offset-4 hover:underline',
+        primary:
+          'bg-[color:var(--color-encre)] text-[color:var(--color-sable-50)] hover:bg-[color:var(--color-tuile)] hover:text-[color:var(--color-sable-50)] active:translate-y-[1px] rounded-none',
+        editorial:
+          'bg-transparent text-[color:var(--color-encre)] border border-[color:var(--color-encre)]/25 hover:border-[color:var(--color-encre)] hover:bg-[color:var(--color-encre)]/[0.03] active:translate-y-[1px] rounded-none',
+        tuile:
+          'bg-[color:var(--color-tuile)] text-[color:var(--color-sable-50)] hover:bg-[color:var(--color-tuile-dark)] active:translate-y-[1px] rounded-none',
       },
       size: {
         default: 'h-10 px-4 py-2',
         sm: 'h-9 rounded-md px-3',
         lg: 'h-11 rounded-md px-8',
         icon: 'h-10 w-10',
+        md: 'h-11 px-6',
+        xl: 'h-[3.25rem] px-8 text-[1rem]',
       },
     },
     defaultVariants: {
@@ -46,4 +55,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 )
 Button.displayName = 'Button'
 
-export { Button, buttonVariants }
+type ButtonLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> &
+  VariantProps<typeof buttonVariants>
+
+const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
+  ({ className, variant, size, ...props }, ref) => (
+    <a ref={ref} className={cn(buttonVariants({ variant, size, className }))} {...props} />
+  ),
+)
+ButtonLink.displayName = 'ButtonLink'
+
+export { Button, ButtonLink, buttonVariants }

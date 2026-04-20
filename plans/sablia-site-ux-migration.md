@@ -98,19 +98,19 @@ Deux repos ont évolué en parallèle :
 
 ---
 
-### Phase 2 — Primitives partagées
+### Phase 2 — Primitives partagées ✅ DONE 2026-04-20
 
 **Objectif** : les composants réutilisables (Reveal, ButtonLink CVA, Accordion, LogoMark, VoicePlayer, LogoWordmark) sont en place et testés.
 
 **Actions** :
-1. Créer `client/src/components/ui/reveal.tsx` : wrapper IntersectionObserver + classe `.reveal` + `--reveal-delay` CSS var. Props `as`, `delay`, `className`, `children`. Porter depuis `sablia-io/components/ui/reveal.tsx`.
-2. Créer `client/src/lib/use-reveal.ts` (hook pour cas où le wrapper composant n'est pas adapté).
-3. Étendre `client/src/components/ui/button.tsx` shadcn existant : ajouter variants `tuile` (bg-tuile) + `ghost` (text-encre → hover tuile). Ajouter `ButtonLink` (anchor version).
-4. Créer `client/src/components/ui/accordion-editorial.tsx` (ne pas écraser shadcn accordion existant) : open-one-at-a-time, icône +/× rotation 45°, `hidden` natif sans animation height.
-5. Créer `client/src/components/brand/logo-mark.tsx` : SVG sablier 2 triangles 80x80 viewBox, prop `size`, `label` (aria-label). Porter depuis sablia-io.
-6. Créer `client/src/components/brand/logo-wordmark.tsx` : LogoMark + "Sablia" en Fraunces.
-7. Créer `client/src/components/brand/voice-player.tsx` : audio ref + progress inline + play/pause toggle. Props `src`, `label`.
-8. Écrire tests Vitest minimum pour Reveal (IntersectionObserver mock) + ButtonLink (click + href + variants) + Accordion (open/close state).
+1. [x] Créer `client/src/components/ui/reveal.tsx` : wrapper IntersectionObserver + classe `.reveal` + `--reveal-delay` CSS var. Props `as`, `delay`, `className`, `children`. Porter depuis `sablia-io/components/ui/reveal.tsx`.
+2. [x] Créer `client/src/lib/use-reveal.ts` (hook pour cas où le wrapper composant n'est pas adapté).
+3. [x] Étendre `client/src/components/ui/button.tsx` shadcn existant : ajouter variants `tuile` (bg-tuile) + `ghost` (text-encre → hover tuile) + `primary` + `editorial`. Ajouter `ButtonLink` (anchor version) + sizes `md`/`xl`. Variants shadcn legacy (`default`, `destructive`, `outline`, `secondary`, `link`) conservés.
+4. [x] Créer `client/src/components/ui/accordion-editorial.tsx` (ne pas écraser shadcn accordion existant) : open-one-at-a-time, icône +/× rotation 45°, `hidden` natif sans animation height, prop `defaultOpenId` (default = premier item).
+5. [x] Créer `client/src/components/brand/logo-mark.tsx` : SVG sablier 2 triangles 80x80 viewBox, prop `size`, `label` (aria-label). Porter depuis sablia-io.
+6. [x] Créer `client/src/components/brand/logo-wordmark.tsx` : LogoMark + "Sablia" en Fraunces.
+7. [x] Créer `client/src/components/brand/voice-player.tsx` : audio ref + progress inline + play/pause toggle. Props `src`, `label`, `className`.
+8. [x] Écrire tests Vitest minimum pour Reveal (IntersectionObserver mock, 4 tests) + Button/ButtonLink (click + href + variants, 6 tests) + AccordionEditorial (open/close state + folio markers, 5 tests).
 
 **Verification Constraints** :
 
