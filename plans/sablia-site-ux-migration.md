@@ -126,7 +126,7 @@ Deux repos ont évolué en parallèle :
 
 ---
 
-### Phase 3 — Sections éditoriales (port un par un)
+### Phase 3 — Sections éditoriales (port un par un) ✅ DONE 2026-04-20
 
 **Objectif** : les 9 sections sablia-io sont portées dans `client/src/components/landing/` avec la palette sable/encre/tuile. Chaque section remplace sa contrepartie actuelle (ou ajout si absente).
 
