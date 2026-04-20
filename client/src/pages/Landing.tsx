@@ -14,7 +14,7 @@ import SEO from '@/components/SEO'
 const ProofSection = lazy(() => import('@/components/landing/ProofSection'))
 const CalculatorROI = lazy(() => import('@/components/landing/CalculatorROI'))
 const FaqSection = lazy(() => import('@/components/landing/FaqSection'))
-const FooterCTABand = lazy(() => import('@/components/landing/FooterCTABand'))
+const FinalCtaSection = lazy(() => import('@/components/landing/FinalCtaSection'))
 
 export default function Landing() {
   return (
@@ -90,7 +90,7 @@ export default function Landing() {
               <FaqSection />
 
               {/* §9 Footer CTA band */}
-              <FooterCTABand />
+              <FinalCtaSection />
             </Suspense>
           </ErrorBoundary>
         </main>
