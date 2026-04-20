@@ -20,7 +20,8 @@ Site is live at https://sablia.io. GA4 + Google Ads infrastructure deployed. Pre
 
 | Plan / Brief | Status | Next |
 |---|---|---|
-| `plans/site-completion-checklist.md` | **P0 + P1 + P2 DONE 2026-04-20**. Homepage v2 shipped (9-section stack, Diagnostic Sablia funnel, n8n workflow live). Cohérence globale propagée (navigation, about, /faq, /tarifs, /cas-clients, docs). Remaining: P3 (Google Ads manual — promo expires 2026-05-01), P4 (HITL + E2E), P5 (tech debt). | Brice: launch P3 (Google Ads UI) + trancher HITL P4.1-P4.4 |
+| `plans/sablia-site-ux-migration.md` | **CHALLENGED GO 2026-04-20** — 7 phases pour porter le design UX de sablia-io (Next.js) vers sablia-site (React/Vite) en gardant infra tracking/consent/ads/LPs/tests, puis bascule domaine sablia.io via Vercel. Challenge Round 1 : 2 BLOCKING résolus (shims tokens, slash opacity audit). Deadline dure 2026-05-01 (promo Ads). | `/execute sablia-site-ux-migration` dans nouvelle session (cwd sablia-site) |
+| `plans/site-completion-checklist.md` | **P0 + P1 + P2 DONE 2026-04-20**. Homepage v2 shipped (9-section stack, Diagnostic Sablia funnel, n8n workflow live). Cohérence globale propagée. SUPERSEDED par ux-migration — P3/P4/P5 reprennent après bascule. | Brice: launch P3 (Google Ads UI) + trancher HITL P4.1-P4.4 post-bascule |
 | `research/brainstorm/2026-04-17-sablia-acquisition-machine-v1-brief.md` | Amended 2026-04-18. Pre-design unit delivered (v2: 490€ HT + crédit post-audit). Units 3-6 (pricing page redesign, hub pages, case studies, content cadence) backlog | Post P1 completion |
 
 ---
