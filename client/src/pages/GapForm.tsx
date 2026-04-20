@@ -205,7 +205,11 @@ export default function GapForm() {
                                 Nom <span className="text-sablia-accent">*</span>
                               </FormLabel>
                               <FormControl>
-                                <Input {...field} placeholder="Dupont" className={gapInputClasses} />
+                                <Input
+                                  {...field}
+                                  placeholder="Dupont"
+                                  className={gapInputClasses}
+                                />
                               </FormControl>
                               <FormMessage className="text-red-500" />
                             </FormItem>
@@ -362,7 +366,9 @@ export default function GapForm() {
                               <input
                                 type="checkbox"
                                 checked={field.value === true}
-                                onChange={(e) => field.onChange(e.target.checked ? true : undefined)}
+                                onChange={(e) =>
+                                  field.onChange(e.target.checked ? true : undefined)
+                                }
                                 className="mt-1 w-4 h-4 accent-sablia-accent rounded"
                               />
                               <span className="text-sm text-sablia-text-secondary">

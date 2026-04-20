@@ -14,28 +14,6 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    name: 'Hélène',
-    role: 'Fondatrice',
-    company: 'GirlsGang',
-    avatar: 'HE',
-    quote:
-      "De 1h de conception par menu à 30 minutes de relecture pour toutes mes clientes. L'automatisation développée par Sablia m'a redonné du temps pour me concentrer sur l'essentiel : mes clientes.",
-    metric: 'Économie de 90% du temps',
-    project: 'Génération de menus',
-    before: '1h de conception manuelle par menu client',
-  },
-  {
-    name: 'Directeur',
-    role: 'Direction',
-    company: 'Entreprise anonyme',
-    avatar: 'DI',
-    quote:
-      "Une vision à 360° de notre marché et une longueur d'avance sur nos concurrents. Ce système de veille nous a permis de passer d'une position réactive à une stratégie proactive.",
-    metric: 'Avantage compétitif décisif',
-    project: 'Veille concurrentielle',
-    before: 'Veille manuelle, toujours en retard sur le marché',
-  },
-  {
     name: 'Yassine',
     role: 'Fondateur',
     company: 'Norloc',
@@ -78,7 +56,7 @@ const reviewSchema = {
   aggregateRating: {
     '@type': 'AggregateRating',
     ratingValue: '4.9',
-    reviewCount: '5',
+    reviewCount: '3',
     bestRating: '5',
     worstRating: '1',
   },
@@ -143,56 +121,19 @@ export default function TestimonialsSection() {
       <section id="testimonials" className="py-32 bg-sablia-surface">
         <div className="container mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-sm font-medium uppercase tracking-[0.15em] text-sablia-sienna mb-3"
-            >
-              Ils ont transformé leurs opérations
-            </motion.p>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.06 }}
               className="text-3xl lg:text-4xl font-display font-semibold text-sablia-text"
             >
-              Des résultats mesurables
+              Ce qu'en disent les dirigeants passés par là.
             </motion.h2>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.12 }}
-              className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-6 text-sm"
-            >
-              <span>
-                <strong className="text-sablia-sienna">15+</strong>{' '}
-                <span className="text-sablia-text-secondary">projets livrés</span>
-              </span>
-              <span className="text-sablia-border">·</span>
-              <span>
-                <strong className="text-sablia-sienna">4.9/5</strong>{' '}
-                <span className="text-sablia-text-secondary">satisfaction</span>
-              </span>
-              <span className="text-sablia-border">·</span>
-              <span>
-                <strong className="text-sablia-sienna">5</strong>{' '}
-                <span className="text-sablia-text-secondary">secteurs d'activité</span>
-              </span>
-            </motion.div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {testimonials.slice(0, 3).map((testimonial, index) => (
+            {testimonials.map((testimonial, index) => (
               <TestimonialCard key={testimonial.name} testimonial={testimonial} index={index} />
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mt-6">
-            {testimonials.slice(3).map((testimonial, index) => (
-              <TestimonialCard key={testimonial.name} testimonial={testimonial} index={index + 3} />
             ))}
           </div>
 

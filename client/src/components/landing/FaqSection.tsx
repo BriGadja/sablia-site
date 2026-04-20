@@ -12,51 +12,45 @@ interface FaqItem {
 const faqs: FaqItem[] = [
   {
     id: 1,
-    question: "Quels sont les outils d'automatisation que vous utilisez ?",
+    question: 'Combien coûte le Diagnostic Sablia ?',
     answer:
-      "Nous travaillons principalement avec n8n (auto-hébergeable) et Make.com, deux outils européens qui garantissent la souveraineté de vos données. Ces plateformes no-code/low-code permettent à vos équipes de devenir autonomes sur l'automatisation.",
+      "490€ HT. TVA non applicable (art. 293 B du CGI). Paiement upfront par Stripe ou virement. Ce prix couvre l'intake, la session de deep-dive de 3 heures, la rédaction du livrable PDF de 10 à 15 pages, et la restitution d'une heure. Pas de coût caché, pas de dépassement. Si, dans les 90 jours suivant la restitution, vous signez un contrat Développement ou Accompagnement avec Sablia, les 490€ sont intégralement déduits de votre première facture. Non applicable au path Formation d'équipes internes (qui reste facturé au plein tarif de sa fourchette).",
   },
   {
     id: 2,
-    question: 'Combien de temps faut-il pour automatiser un processus ?',
+    question: 'Combien de temps ça prend ?',
     answer:
-      "Un workflow simple peut être développé en 3-7 jours. Pour un système complet avec plusieurs processus interconnectés, comptez 2-4 semaines. Chaque projet inclut une phase d'audit pour vous donner un calendrier précis.",
+      "Cinq jours ouvrés entre la fin de l'intake et la restitution du PDF. L'intake lui-même dure 45 minutes (un formulaire asynchrone + un appel de 15 minutes pour clarifier). Le deep-dive synchrone dure 3 heures. La restitution dure 1 heure.",
   },
   {
     id: 3,
-    question: 'Mes équipes doivent-elles avoir des compétences techniques ?',
+    question: "Pour quel type d'entreprise ?",
     answer:
-      'Non. Notre approche Formation-First permet à vos équipes de maîtriser les outils, même sans background technique. Les formations sont adaptées au niveau de chacun et incluent des cas pratiques métier.',
+      "PME de 10 à 250 salariés avec au moins un process manuel qui coûte 5 heures ou plus par semaine à l'équipe. Le diagnostic est taillé pour les structures qui ont déjà des opérations en place, pas pour valider une idée de startup. Si votre process ne saigne pas encore 5h+/semaine, attendez.",
   },
   {
     id: 4,
-    question: "Quel est le ROI typique d'un projet d'automatisation ?",
+    question: 'Que se passe-t-il après le diagnostic ?',
     answer:
-      "En moyenne, nos clients économisent entre 50 000€ et 150 000€ par an pour une transformation complète. Le ROI se mesure en heures de travail économisées, réduction d'erreurs, et capacité à scaler sans recruter.",
+      "Le livrable PDF contient une recommandation claire parmi trois paths : formation d'équipes internes, accompagnement d'un sponsor interne, ou développement des automatisations par Sablia. Vous êtes libre de choisir n'importe lequel, de les combiner, ou de décliner, le diagnostic se tient seul, sans obligation de continuer.",
   },
   {
     id: 5,
-    question: 'Proposez-vous un support après la mise en production ?',
+    question: 'Quelle est la politique de remboursement ?',
     answer:
-      "Oui. Chaque projet inclut une période de support post-livraison (2 semaines à 3 mois selon l'offre). Nous proposons également des accompagnements continus via nos formules de retainer.",
+      "Jusqu'à 72 heures avant l'intake, annulation avec remboursement intégral sans justification. Une fois l'intake démarré, le diagnostic est non-remboursable, parce que le travail d'analyse commence immédiatement après.",
   },
   {
     id: 6,
-    question: "Peut-on commencer petit avant de transformer toute l'entreprise ?",
+    question: 'Pourquoi un diagnostic payant et pas un audit gratuit ?',
     answer:
-      "Absolument. Nous recommandons de démarrer par l'Audit Express (350€) ou un Workflow Simple (2 500-5 000€) pour valider l'approche. Vous pouvez ensuite scaler progressivement selon vos besoins.",
+      "Un audit gratuit dure 30 minutes et finit toujours par recommander ce que le prestataire vend. Un diagnostic payant de 5 jours cartographie réellement vos process et peut conclure qu'aucune implémentation IA n'est pertinente chez vous. On préfère qu'on vous dise ça plutôt qu'on vous vende une solution qui ne marchera pas. Le coût du diagnostic protège la qualité de la recommandation.",
   },
   {
     id: 7,
-    question: 'Travaillez-vous avec des entreprises de toutes tailles ?',
+    question: "En quoi Sablia est-il différent d'IAPreneurs ?",
     answer:
-      'Nous accompagnons principalement des PME et ETI (10-250 personnes). Notre expertise est particulièrement adaptée aux structures qui souhaitent gagner en efficacité sans déployer des solutions enterprise complexes.',
-  },
-  {
-    id: 8,
-    question: 'Quelle est la différence entre n8n et Make.com ?',
-    answer:
-      "N8n est auto-hébergeable (souveraineté totale) et open-source, idéal pour les entreprises sensibles à la data. Make.com (ex-Integromat) est un SaaS européen plus accessible pour débuter. Nous vous guidons vers l'outil le mieux adapté à votre contexte.",
+      "IAPreneurs forme les entrepreneurs qui veulent construire une activité en vendant l'intelligence artificielle. Sablia, c'est l'inverse : on intègre l'IA directement dans votre PME existante. Les deux n'ont pas les mêmes clients, Brice exerce simplement les deux rôles. IAPreneurs s'adresse à des freelances et consultants IA en construction. Sablia s'adresse à des dirigeants de PME de 10 à 250 salariés avec des process opérationnels déjà en place.",
   },
 ]
 
@@ -94,7 +88,7 @@ export default function FaqSection() {
               Questions fréquentes
             </h2>
             <p className="text-lg text-sablia-text-secondary text-center mb-16 max-w-2xl mx-auto">
-              Tout ce que vous devez savoir sur nos services d'automatisation
+              Tout ce que vous voulez savoir avant de démarrer votre diagnostic.
             </p>
           </motion.div>
 
@@ -144,15 +138,6 @@ export default function FaqSection() {
                 </AnimatePresence>
               </motion.div>
             ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <a
-              href="/faq"
-              className="inline-block text-sablia-accent hover:text-sablia-accent-hover font-medium text-base underline underline-offset-4 transition-colors"
-            >
-              Voir toutes les questions
-            </a>
           </div>
         </div>
       </section>

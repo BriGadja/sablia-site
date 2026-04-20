@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { Calculator } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
-const INVESTMENT = 1500
+const INVESTMENT = 490
 const EFFICIENCY = 0.7
 const WORK_WEEKS = 48
 const HOURS_PER_DAY = 7
@@ -63,11 +63,13 @@ export default function CalculatorROI() {
             <div className="flex items-center justify-center gap-3 mb-3">
               <Calculator size={28} className="text-sablia-accent" />
               <h2 className="text-3xl lg:text-4xl font-display font-semibold text-sablia-text">
-                Calculez vos économies en 30 secondes
+                Calculez le ROI de vos automatisations.
               </h2>
             </div>
             <p className="text-lg text-sablia-text-secondary max-w-2xl mx-auto">
-              Deux curseurs, un résultat concret
+              Entrez le nombre d'heures concernées, le coût horaire, l'efficacité attendue. Vous
+              obtenez instantanément l'économie annuelle estimée et le temps de retour sur 490€.
+              Chiffres indicatifs, le diagnostic produit l'estimation réelle pour votre cas.
             </p>
           </div>
         </motion.div>
@@ -177,15 +179,6 @@ export default function CalculatorROI() {
                 "Hélène a économisé 90% de son temps de conception de menus" — GirlsGang
               </p>
             </div>
-
-            <button
-              className="w-full py-3.5 rounded font-medium text-base bg-sablia-accent text-sablia-bg hover:bg-sablia-accent-hover transition-colors duration-200 mt-6"
-              onClick={() => {
-                document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })
-              }}
-            >
-              Discuter de mon projet
-            </button>
           </motion.div>
         </div>
 

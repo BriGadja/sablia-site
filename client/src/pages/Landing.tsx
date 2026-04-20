@@ -2,19 +2,18 @@ import { motion } from 'framer-motion'
 import { lazy, Suspense } from 'react'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import Footer from '@/components/Footer'
+import ClientLogosStrip from '@/components/landing/ClientLogosStrip'
+import DiagnosticSection from '@/components/landing/DiagnosticSection'
 import HeroSection from '@/components/landing/HeroSection'
-import LogosCloud from '@/components/landing/LogosCloud'
 import Navigation from '@/components/landing/Navigation'
-import PricingSection from '@/components/landing/PricingSection'
-import TestimonialsSection from '@/components/landing/TestimonialsSection'
-import ThreeStepProcess from '@/components/landing/ThreeStepProcess'
-import TransformationSection from '@/components/landing/TransformationSection'
+import ProblemSection from '@/components/landing/ProblemSection'
+import WhatRevealsSection from '@/components/landing/WhatRevealsSection'
 import SEO from '@/components/SEO'
 
-// Lazy load below-fold sections for better LCP
+const TestimonialsSection = lazy(() => import('@/components/landing/TestimonialsSection'))
 const CalculatorROI = lazy(() => import('@/components/landing/CalculatorROI'))
-const ContactFormSection = lazy(() => import('@/components/landing/ContactFormSection'))
 const FaqSection = lazy(() => import('@/components/landing/FaqSection'))
+const FooterCTABand = lazy(() => import('@/components/landing/FooterCTABand'))
 
 export default function Landing() {
   return (
@@ -30,24 +29,35 @@ export default function Landing() {
         <Navigation />
 
         <main>
+          {/* §1 Hero */}
           <HeroSection />
-          <TestimonialsSection />
-          <LogosCloud />
-          <TransformationSection />
-          <ThreeStepProcess />
-          <PricingSection />
 
-          {/* Lazy-loaded below-fold sections */}
+          {/* §2 Client logos strip */}
+          <ClientLogosStrip />
+
+          {/* §3 Le problème */}
+          <ProblemSection />
+
+          {/* §4 Le diagnostic + DiagnosticForm (#diagnostic-form) */}
+          <DiagnosticSection />
+
+          {/* §5 Ce que révèle votre diagnostic */}
+          <WhatRevealsSection />
+
           <ErrorBoundary>
             <Suspense
               fallback={
                 <div className="space-y-24 py-24">
-                  <div className="container mx-auto px-6 lg:px-8 max-w-4xl">
-                    <div className="h-10 w-64 bg-sablia-surface rounded-lg animate-pulse mx-auto mb-8" />
-                    <div className="h-64 bg-sablia-bg rounded-lg animate-pulse" />
-                  </div>
                   <div className="container mx-auto px-6 lg:px-8 max-w-6xl">
-                    <div className="h-10 w-48 bg-sablia-surface rounded-lg animate-pulse mx-auto mb-8" />
+                    <div className="h-10 w-64 bg-sablia-surface rounded-lg animate-pulse mx-auto mb-8" />
+                    <div className="grid md:grid-cols-3 gap-6">
+                      {[1, 2, 3].map((i) => (
+                        <div key={i} className="h-80 bg-sablia-bg rounded-lg animate-pulse" />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="container mx-auto px-6 lg:px-8 max-w-5xl">
+                    <div className="h-10 w-64 bg-sablia-surface rounded-lg animate-pulse mx-auto mb-8" />
                     <div className="grid md:grid-cols-2 gap-8">
                       <div className="h-96 bg-sablia-bg rounded-lg animate-pulse" />
                       <div className="h-96 bg-sablia-bg rounded-lg animate-pulse" />
@@ -64,9 +74,17 @@ export default function Landing() {
                 </div>
               }
             >
+              {/* §6 Témoignages (3 max, ≥2 ROI-quantified) */}
+              <TestimonialsSection />
+
+              {/* §7 ROI calculator */}
               <CalculatorROI />
-              <ContactFormSection />
+
+              {/* §8 FAQ (diagnostic-focused + Sablia vs IAPreneurs) */}
               <FaqSection />
+
+              {/* §9 Footer CTA band */}
+              <FooterCTABand />
             </Suspense>
           </ErrorBoundary>
         </main>
