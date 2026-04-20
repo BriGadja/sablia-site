@@ -5,7 +5,7 @@ declare global {
   }
 }
 
-type ConversionType = 'contact_form' | 'gap_form' | 'calendly_booking'
+type ConversionType = 'contact_form' | 'gap_form' | 'calendly_booking' | 'diagnostic_form'
 
 const CONSENT_KEY = 'analytics_consent'
 const GA4_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID as string | undefined
@@ -14,6 +14,7 @@ const GADS_LABELS: Record<ConversionType, string | undefined> = {
   contact_form: import.meta.env.VITE_GADS_LABEL_CONTACT as string | undefined,
   gap_form: import.meta.env.VITE_GADS_LABEL_GAP as string | undefined,
   calendly_booking: import.meta.env.VITE_GADS_LABEL_CALENDLY as string | undefined,
+  diagnostic_form: import.meta.env.VITE_GADS_LABEL_DIAGNOSTIC as string | undefined,
 }
 
 type ConsentState = 'accepted' | 'rejected' | null

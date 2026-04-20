@@ -25,6 +25,12 @@ const sourceConfig = {
       "Merci ! Vous recevrez vos recommandations d'automatisations personnalisees par email sous 24h.",
     conversionType: 'gap_form' as const,
   },
+  diagnostic: {
+    title: 'Demande de diagnostic enregistree !',
+    description:
+      "Merci ! Vous allez recevoir un email avec le lien de paiement (490\u20ac HT) et le questionnaire d'intake. Premier echange sous 48h.",
+    conversionType: 'diagnostic_form' as const,
+  },
   default: {
     title: 'Merci !',
     description: 'Votre demande a bien ete prise en compte.',
