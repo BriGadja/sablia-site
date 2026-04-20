@@ -1,6 +1,6 @@
 # Integrations — Sablia Site
 
-**Last updated**: 2026-03-02
+**Last updated**: 2026-04-20
 
 ---
 
@@ -8,25 +8,37 @@
 
 | Service | Method | Files | Env Var | Status |
 |---------|--------|-------|---------|--------|
-| n8n (contact) | POST webhook | ContactFormSection.tsx, LpAutomatisation.tsx | `VITE_CONTACT_WEBHOOK_URL` (fallback hardcoded) | Working |
-| n8n (GAP) | POST webhook | GapForm.tsx | `VITE_GAP_WEBHOOK_URL` (fallback hardcoded) | Working |
-| Calendly | react-calendly InlineWidget | ContactFormSection.tsx, ThankYou.tsx | Hardcoded URL | Working |
+| n8n (diagnostic) | POST webhook | DiagnosticForm.tsx | `VITE_DIAGNOSTIC_WEBHOOK_URL` (fallback hardcoded) | Working |
+| n8n (contact) | POST webhook | LpAutomatisation.tsx | `VITE_CONTACT_WEBHOOK_URL` (fallback hardcoded) | Working |
+| n8n (GAP) | POST webhook | GapForm.tsx, LpAuditGratuit.tsx | `VITE_GAP_WEBHOOK_URL` (fallback hardcoded) | Working |
+| Calendly | anchor text link (+ InlineWidget on /thank-you) | HeroSection.tsx, FooterCTABand.tsx, About.tsx, ThankYou.tsx | Hardcoded URL | Working |
 | GA4 | gtag.js dynamic load | analytics.ts, use-page-tracking.ts, CookieConsentBanner.tsx, App.tsx | `VITE_GA4_MEASUREMENT_ID` | Working (consent-gated) |
-| Google Ads | Conversion tracking via gtag | analytics.ts, form components, ThankYou.tsx | `VITE_GADS_CONVERSION_ID` + 3 labels | Working (consent-gated) |
+| Google Ads | Conversion tracking via gtag | analytics.ts, form components, ThankYou.tsx | `VITE_GADS_CONVERSION_ID` + 4 labels | Working (consent-gated) |
 | Supabase | Drizzle ORM + PostgreSQL | db/schema.ts, db/index.ts | `DATABASE_URL` | Connected but unused at runtime |
 
 ---
 
 ## n8n Webhooks
 
-Both webhooks are centralized in `client/src/lib/form-constants.ts` with env var overrides and hardcoded fallbacks.
+All webhooks are centralized in `client/src/lib/form-constants.ts` with env var overrides and hardcoded fallbacks.
 
-### Contact Form
+### Diagnostic Form (primary funnel, 2026-04-20+)
+
+- **URL**: `https://n8n.sablia.io/webhook/sablia-site-diagnostic`
+- **Env var**: `VITE_DIAGNOSTIC_WEBHOOK_URL` (optional override, constant: `WEBHOOK_DIAGNOSTIC`)
+- **Workflow**: `mu9odNA8y54Pb4or` ([PROD] sablia-site-diagnostic)
+- **webhookId**: `78ed4a4f-8daf-4309-8849-68b80e3392cd` (required for CORS preflight, see memory learning)
+- **Used by**: `DiagnosticForm.tsx` (homepage `#diagnostic-form`)
+- **Payload**: `{ nom, email, entreprise, processus_couteux?, rgpdConsent, ...utmParams }`
+- **Downstream (current)**: Gmail notification to brice@sablia.io
+- **Downstream (TODO)**: Stripe payment link (490€ HT), intake questionnaire email, 15-min booking slot
+
+### Contact Form (legacy, still used by LP automatisation)
 
 - **URL**: `https://n8n.sablia.io/webhook/sablia-site-formulaire`
 - **Env var**: `VITE_CONTACT_WEBHOOK_URL` (optional override, constant: `WEBHOOK_CONTACT`)
 - **Workflow**: `4GqFPLR750ms4GmI`
-- **Used by**: `ContactFormSection.tsx`, `LpAutomatisation.tsx`
+- **Used by**: `LpAutomatisation.tsx` (homepage ContactFormSection removed 2026-04-20)
 - **Payload**: `{ nom, email, entreprise, telephone?, message, rgpdConsent, source_page, ...utmParams }`
 
 ### GAP Analysis Form
@@ -34,7 +46,7 @@ Both webhooks are centralized in `client/src/lib/form-constants.ts` with env var
 - **URL**: `https://n8n.sablia.io/webhook/sablia-site-gap`
 - **Env var**: `VITE_GAP_WEBHOOK_URL` (optional override, constant: `WEBHOOK_GAP`)
 - **Workflow**: `fZwezgtYw9X5kUCd`
-- **Used by**: `GapForm.tsx`
+- **Used by**: `GapForm.tsx` (driven by `/lp/audit-gratuit`)
 - **Payload**: form data + UTM params + `rgpdConsent`
 
 ---
@@ -42,10 +54,9 @@ Both webhooks are centralized in `client/src/lib/form-constants.ts` with env var
 ## Calendly
 
 - **URL**: `https://calendly.com/brice-gachadoat/30min`
-- **Package**: `react-calendly` (InlineWidget)
-- **Used by**: `ContactFormSection.tsx` (right column), `ThankYou.tsx`
-- **Config**: `pageSettings: { primaryColor: "48d1cc", backgroundColor: "0a2463" }`
-- **Widget height**: 580px
+- **Package**: `react-calendly` (InlineWidget on `/thank-you`) / plain `<a>` link elsewhere
+- **Surfaces** (2026-04-20+): homepage Hero (secondary text link), FooterCTABand (secondary text link), About page, ThankYou page (InlineWidget link)
+- **Note**: InlineWidget removed from homepage `ContactFormSection` (component deleted in homepage v2 refonte)
 
 ---
 
@@ -81,7 +92,8 @@ Storage: `localStorage.analytics_consent` = `'accepted' | 'rejected'`
 
 | Type | Label | Env Var | Trigger |
 |------|-------|---------|---------|
-| contact_form | `v-CoCPq02YEcELq5iIFD` | `VITE_GADS_LABEL_CONTACT` | Contact form submit |
+| diagnostic_form | TBD (create when campaign refreshed) | `VITE_GADS_LABEL_DIAGNOSTIC` | Diagnostic form submit |
+| contact_form | `v-CoCPq02YEcELq5iIFD` | `VITE_GADS_LABEL_CONTACT` | Contact form submit (LP only) |
 | gap_form | `0t07CP202YEcELq5iIFD` | `VITE_GADS_LABEL_GAP` | GAP form submit |
 | calendly_booking | `sZJBCPi12YEcELq5iIFD` | `VITE_GADS_LABEL_CALENDLY` | Calendly booking |
 
@@ -98,8 +110,8 @@ Form submit → trackEvent('form_submit', { type }) → redirect /thank-you → 
 ## Anti-Spam
 
 - **Method**: Honeypot field `website` (hidden)
-- **Used by**: ContactFormSection.tsx, GapForm.tsx
-- **Logic**: If `website` field is filled, form submission is silently dropped
+- **Used by**: DiagnosticForm.tsx, GapForm.tsx, LpAutomatisation.tsx (internal form)
+- **Logic**: If `website` field is filled, form submission is silently dropped (fake-success redirect, no webhook POST)
 
 ---
 
@@ -107,7 +119,7 @@ Form submit → trackEvent('form_submit', { type }) → redirect /thank-you → 
 
 - **File**: `client/src/lib/utm.ts`
 - **Function**: `getUTMParams()` — extracts `utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, `utm_content` from URL search params
-- **Forwarded to**: All webhook submissions (contact form + GAP form)
+- **Forwarded to**: All webhook submissions (diagnostic form, contact form, GAP form)
 
 ---
 

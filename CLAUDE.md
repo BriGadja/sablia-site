@@ -60,7 +60,7 @@ docs/                 # All documentation
 | `/about` | About page |
 | `/tarifs` | Pricing |
 | `/roi` | ROI calculator |
-| `/faq` | FAQ (24 questions) |
+| `/faq` | FAQ (9 questions diagnostic-focused post-refonte 2026-04-20) |
 | `/cas-clients` | Case studies |
 | `/thank-you` | Post-form confirmation (noindex) |
 | `/mentions-legales` | Legal notice |
@@ -77,12 +77,12 @@ docs/                 # All documentation
 | `docs/INTEGRATIONS.md` | n8n, Calendly, GA4, Google Ads, Supabase, UTM, consent flow |
 | `docs/SEO.md` | Meta-tags, structured data, sitemap, manual tasks |
 | `docs/GOOGLE_ADS.md` | Ads IDs, conversion tracking, campaign strategy, keywords |
-| `docs/SITE_CONTENT.md` | All page text, CTAs, pricing (⚠️ SUPERSEDED post-2026-04-18 — homepage copy now in `docs/copy-v1.md`; doc will be rewritten when new homepage ships) |
-| `docs/OFFRES.md` | Service offerings detailed (⚠️ SUPERSEDED post-2026-04-18 — product SKU now in `docs/product-v1.md`; doc will be rewritten when new homepage ships) |
-| `docs/product-v1.md` | **Frozen SKU v2** (Diagnostic Sablia 490€ HT, crédit intégral si signature Dév/Accomp. dans 90 j, 3 post-audit paths) |
-| `docs/wireframe-v1.md` | **Frozen homepage wireframe** (9 sections, 2 CTAs, DiagnosticForm spec) |
-| `docs/copy-v1.md` | **Frozen homepage copy** (hero, narrative arc, cards, FAQ, tone glossaire §C8) |
-| `docs/FAQ.md` | FAQ questions/answers (24 questions, 8 categories) |
+| `docs/SITE_CONTENT.md` | ⚠️ **ARCHIVED 2026-04-20** — homepage copy now in `docs/copy-v1.md`. Kept for historical reference. |
+| `docs/OFFRES.md` | ⚠️ **ARCHIVED 2026-04-20** — product SKU now in `docs/product-v1.md`. Kept for historical reference. |
+| `docs/product-v1.md` | **Frozen SKU v2** (Diagnostic Sablia 490€ HT, crédit intégral si signature Dév/Accomp. dans 90 j, 3 post-audit paths) — authoritative |
+| `docs/wireframe-v1.md` | **Frozen homepage wireframe** (9 sections, 2 CTAs, DiagnosticForm spec) — authoritative |
+| `docs/copy-v1.md` | **Frozen homepage copy** (hero, narrative arc, cards, FAQ, tone glossaire §C8) — authoritative |
+| `docs/FAQ.md` | ⚠️ **ARCHIVED 2026-04-20** — 9 FAQs now in `copy-v1.md §C5-C6` + `FaqSection.tsx` + `Faq.tsx`. |
 | `docs/ROADMAP.md` | Future initiatives, tech debt backlog |
 | `docs/meta-tags.json` | SEO meta-tags per page |
 | `docs/content-index.json` | Structured JSON of all pages/sections |

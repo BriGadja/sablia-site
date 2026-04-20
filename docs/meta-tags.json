@@ -6,40 +6,40 @@
     "locale": "fr_FR",
     "twitterHandle": "@sablia_io",
     "defaultImage": "https://sablia.io/og-image.png",
-    "lastUpdated": "2026-03-02"
+    "lastUpdated": "2026-04-20"
   },
 
   "pages": {
     "/": {
-      "title": "Sablia - Automatisation IA pour PME | n8n & Make.com",
-      "titleTemplate": "%s | Formation + Développement d'Automatisations",
-      "description": "Automatisez vos processus métier avec Sablia. Formation de vos équipes + développement de workflows n8n/Make.com. ROI mesurable. Audit gratuit 30 min.",
+      "title": "Diagnostic Sablia — Intégrer l'IA dans votre PME, 490€ HT, 5 jours",
+      "titleTemplate": "%s | Coach-Implémenteur IA pour PME",
+      "description": "Intégrer l'intelligence artificielle dans votre PME, avec le Responsable Pédagogique IA d'IAPreneurs. Diagnostic en 5 jours ouvrés, 490€ HT, PDF de 10-15 pages.",
       "keywords": [
-        "automatisation business",
-        "n8n",
-        "Make.com",
+        "diagnostic IA PME",
+        "intégration IA entreprise",
         "automatisation PME",
-        "workflow automation",
-        "IA entreprise",
-        "transformation digitale",
-        "ROI automatisation",
-        "formation n8n",
-        "consultant automatisation"
+        "n8n consultant",
+        "coach implémentation IA",
+        "diagnostic automatisation",
+        "IA PME française",
+        "conseil IA PME",
+        "IAPreneurs",
+        "consultant IA entreprise"
       ],
       "canonical": "https://sablia.io/",
       "openGraph": {
         "type": "website",
-        "title": "Sablia - Automatisation IA pour PME françaises",
-        "description": "Formation de vos équipes + installation de workflows automatisés. Gardez le contrôle, économisez 50-150k€/an. n8n & Make.com.",
+        "title": "Diagnostic Sablia — IA pour PME, 490€ HT, 5 jours",
+        "description": "Cinq jours. Un PDF. Une décision claire. Cartographie de vos process + recommandation d'implémentation IA. 490€ HT, déduits si signature Développement ou Accompagnement sous 90 j.",
         "url": "https://sablia.io/",
         "image": "https://sablia.io/og-image-home.png",
-        "imageAlt": "Sablia - Automatisation business et IA pour PME",
+        "imageAlt": "Sablia — Diagnostic IA pour PME",
         "siteName": "Sablia"
       },
       "twitter": {
         "card": "summary_large_image",
-        "title": "Sablia - Automatisation IA pour PME",
-        "description": "Formation + développement d'automatisations. ROI mesurable. Audit gratuit.",
+        "title": "Diagnostic Sablia — IA pour PME, 490€ HT",
+        "description": "5 jours, 1 PDF, 1 décision claire. Le diagnostic qui vous dit aussi quand l'IA n'a pas sa place.",
         "image": "https://sablia.io/twitter-image-home.png",
         "creator": "@sablia_io"
       },
@@ -47,8 +47,8 @@
     },
 
     "/tarifs": {
-      "title": "Tarifs Automatisation - Offres & Packages | Sablia",
-      "description": "Découvrez nos offres d'automatisation : Audit (gratuit-2000€), Formations (1200-3000€), Solutions (2500-60000€). Paiement échelonné. Devis personnalisé gratuit.",
+      "title": "Tarifs Sablia — Diagnostic 490€ puis 3 paths post-audit",
+      "description": "Le Diagnostic Sablia à 490€ HT est le point d'entrée unique. Post-audit, 3 paths : Formation (dès 1 500€), Accompagnement (tarif en 1-to-1), Développement (tarif en 1-to-1).",
       "keywords": [
         "tarif automatisation",
         "prix n8n",
@@ -202,8 +202,8 @@
         "name": "Brice Gachadoat",
         "url": "https://sablia.io/about",
         "image": "https://sablia.io/brice-gachadoat.jpg",
-        "jobTitle": "Expert en Automatisation et Intelligence Artificielle",
-        "description": "Ingénieur informatique avec plus de 10 ans d'expérience dans l'IT, spécialisé en automatisation business avec n8n et Make.com.",
+        "jobTitle": "Responsable Pédagogique et Coach Développement IA chez IAPreneurs — Fondateur de Sablia",
+        "description": "Ingénieur informatique avec plus de 10 ans d'expérience dans l'IT, Responsable Pédagogique et Coach Développement IA chez IAPreneurs, spécialisé en intégration IA et automatisation business pour PME.",
         "worksFor": {
           "@type": "Organization",
           "name": "Sablia",
@@ -266,8 +266,8 @@
     },
 
     "/faq": {
-      "title": "FAQ - Questions fréquentes sur l'automatisation | Sablia",
-      "description": "Toutes les réponses à vos questions sur l'automatisation d'entreprise avec Sablia. Outils, délais, ROI, support, sécurité et tarification.",
+      "title": "FAQ — Diagnostic Sablia & intégration IA PME | Sablia",
+      "description": "Les réponses aux questions fréquentes sur le Diagnostic Sablia (490€ HT, 5 jours), les 3 paths post-audit, la différence avec IAPreneurs et la sécurité des données.",
       "keywords": [
         "FAQ automatisation",
         "questions fréquentes n8n",
