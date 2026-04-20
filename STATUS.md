@@ -1,20 +1,17 @@
 # Sablia Site - Status
 
-**Last Updated**: 2026-04-18
+**Last Updated**: 2026-04-20
 
 ---
 
 ## Current State
 
-Site is live at https://sablia.io. GA4 + Google Ads infrastructure deployed. Master refactor plan completed (3 units). **Strategic pivot pre-design package frozen 2026-04-18**: 3 deliverables (`docs/product-v1.md`, `docs/wireframe-v1.md`, `docs/copy-v1.md`) ready for claude.ai/design handoff. Next: external visual design pass, then `/frontend-design` to implement.
+Site is live at https://sablia.io. GA4 + Google Ads infrastructure deployed. Pre-design package frozen (product-v1 v2 / wireframe-v1 v2 / copy-v1 v2). **Homepage v2 implementation in progress** (see `plans/site-completion-checklist.md`). Build + tsc + tests all clean.
 
 ---
 
 ## Known Issues
 
-- Footer.test.tsx: "Documentation pour IA" test fails (link was removed, test not updated)
-- Footer.test.tsx: TS type errors (missing vitest type augmentation for toBeInTheDocument)
-- animations.ts: TS errors (framer-motion Variant type mismatch)
 - [ ] Import `generate_lead` conversion in Google Ads (Goals > Conversions > Import from GA4)
 
 ---
@@ -23,8 +20,8 @@ Site is live at https://sablia.io. GA4 + Google Ads infrastructure deployed. Mas
 
 | Plan / Brief | Status | Next |
 |---|---|---|
-| `research/brainstorm/2026-04-17-sablia-acquisition-machine-v1-brief.md` | Amended 2026-04-18. Pre-design unit delivered. Remaining units 3-6 (pricing page redesign, hub pages, case studies, content cadence) scheduled as separate /plan passes | Plan Unit 3+ or hand off pre-design docs to claude.ai/design |
-| `plans/archive/sablia-site-acquisition-predesign.md` | **COMPLETED 2026-04-18**. 3 docs frozen: `docs/product-v1.md` + `docs/wireframe-v1.md` + `docs/copy-v1.md`. Locked: product name "Diagnostic Sablia" @ 990€ HT, C1 positioning=B, C2 hero H1=E ("Cinq jours. Un PDF. Une décision claire."), Option 3 price display (1 price floor on Formation card only), IAPreneurs credential "500+ membres, 200k+ abonnés YouTube", title "Responsable Pédagogique et Coach Développement IA" | Hand off the 3 docs to claude.ai/design externally, then `/frontend-design` to build |
+| `plans/site-completion-checklist.md` | **IN PROGRESS 2026-04-20**. Homepage v2 + Google Ads launch + use cases validation. P0 done (build + STATUS clean). P1 in progress (n8n diagnostic workflow + components refonte) | Attack P1.A → P1.G |
+| `research/brainstorm/2026-04-17-sablia-acquisition-machine-v1-brief.md` | Amended 2026-04-18. Pre-design unit delivered (v2: 490€ HT + crédit post-audit). Units 3-6 (pricing page redesign, hub pages, case studies, content cadence) backlog | Post P1 completion |
 
 ---
 
