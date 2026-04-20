@@ -3,7 +3,8 @@ import { lazy, Suspense } from 'react'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import Footer from '@/components/Footer'
 import ClientLogosStrip from '@/components/landing/ClientLogosStrip'
-import DiagnosticSection from '@/components/landing/DiagnosticSection'
+import DiagnosticForm from '@/components/landing/DiagnosticForm'
+import OffersSection from '@/components/landing/OffersSection'
 import HeroSection from '@/components/landing/HeroSection'
 import Navigation from '@/components/landing/Navigation'
 import FrictionSection from '@/components/landing/FrictionSection'
@@ -38,8 +39,13 @@ export default function Landing() {
           {/* §3 Le constat */}
           <FrictionSection />
 
-          {/* §4 Le diagnostic + DiagnosticForm (#diagnostic-form) */}
-          <DiagnosticSection />
+          {/* §4 Le diagnostic (narratif, sans formulaire) */}
+          <OffersSection />
+
+          {/* §diagnostic-form anchor (Phase 4 final placement — temp inline) */}
+          <section id="diagnostic-form" className="container-editorial py-24">
+            <DiagnosticForm />
+          </section>
 
           {/* §5 Ce que révèle votre diagnostic */}
           <WhatRevealsSection />
