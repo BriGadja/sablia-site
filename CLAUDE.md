@@ -22,6 +22,7 @@
 2. Server always runs on port 5000
 3. Client routing uses Wouter (not React Router)
 4. Use `site_` prefix for all new DB tables (shared Supabase with n8n-intelligence)
+5. **Prod push verification MANDATORY** — every push to `main` auto-deploys to `https://sablia.io`. After push: wait propagation (new `x-vercel-id` hash via `curl -sI`), verify via Playwright MCP (`browser_navigate` → `browser_snapshot`; screenshot only if visual-specific), iterate if regressed (cap 3 attempts). Force `.reveal` → `.is-visible` via `browser_evaluate` before screenshotting Reveal-animated sections. Full protocol: `.claude/rules/browser-verification.md` (workspace-level).
 
 ## Architecture
 
