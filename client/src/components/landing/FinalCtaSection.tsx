@@ -83,6 +83,8 @@ export default function FinalCtaSection() {
                 alt="Brice Gachadoat"
                 width={160}
                 height={160}
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover"
               />
             </div>
