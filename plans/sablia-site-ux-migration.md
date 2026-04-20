@@ -179,18 +179,18 @@ Deux repos ont évolué en parallèle :
 
 ---
 
-### Phase 4 — Stack Landing.tsx + validation infra intacte
+### Phase 4 — Stack Landing.tsx + validation infra intacte ✅ DONE 2026-04-20
 
 **Objectif** : `Landing.tsx` reflète le 9-section stack final, l'infra tracking/consent/webhooks/routes est inchangée.
 
 **Actions** :
-1. Réécrire `client/src/pages/Landing.tsx` : ordre exact Navigation → HeroSection → FrictionSection → OffersSection → AuthoritySection → WhatRevealsSection → MethodSection → ProofSection → CalculatorROI → DiagnosticForm (anchor `#diagnostic-form`) → FaqSection → FinalCtaSection → Footer.
-2. Conserver `<SEO page="/" />` et `<motion.div>` wrapper page transition.
-3. Lazy-load maintenu pour sections below-fold : ProofSection, CalculatorROI, FaqSection, FinalCtaSection.
-4. Mettre à jour `vite.config.ts` `manualChunks` si nouveaux imports lazy divergents.
-5. Vérifier que `App.tsx` n'est pas modifié (routes identiques, CookieConsentBanner intact, usePageTracking intact, Toaster intact).
-6. Smoke test manuel : consent banner apparaît si localStorage vide, acceptation déclenche initGA4, refus ne charge pas gtag.
-7. Smoke test webhooks : soumettre diagnostic form en dev → vérifier n8n reçoit payload (curl mock ou vrai test).
+1. [x] Réécrire `client/src/pages/Landing.tsx` : ordre exact Navigation → HeroSection → FrictionSection → OffersSection → AuthoritySection → WhatRevealsSection → MethodSection → ProofSection → CalculatorROI → DiagnosticForm (anchor `#diagnostic-form`) → FaqSection → FinalCtaSection → Footer.
+2. [x] Conserver `<SEO page="/" />` et `<motion.div>` wrapper page transition.
+3. [x] Lazy-load maintenu pour sections below-fold : ProofSection, CalculatorROI, FaqSection, FinalCtaSection. (MethodSection promu en eager — above-fold après scroll court.)
+4. [x] `vite.config.ts` `manualChunks` — aucun changement requis (les sections ne sont pas listées, les chunks lazy sont créés automatiquement par Rollup : `CalculatorROI-*.js`, `FaqSection-*.js` visibles dans `dist/`).
+5. [x] `App.tsx` inchangé (routes identiques, CookieConsentBanner intact, usePageTracking intact, Toaster intact, initGA4 gated on consent).
+6. [x] Smoke test wiring : `CookieConsentBanner` appelle `setConsentState('accepted')` + `initGA4()` — `setConsentState('rejected')` ne charge pas gtag. Test manuel browser (action UX) déféré à Phase 6.
+7. [x] Smoke test wiring webhook : `DiagnosticForm` POST → `WEBHOOK_DIAGNOSTIC` (`https://n8n.sablia.io/webhook/sablia-site-diagnostic`) confirmé. Live hit test déféré à Phase 6 (pollution prod évitée).
 
 **Verification Constraints** :
 

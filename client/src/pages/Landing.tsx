@@ -4,18 +4,31 @@ import { ErrorBoundary } from '@/components/ErrorBoundary'
 import Footer from '@/components/Footer'
 import AuthoritySection from '@/components/landing/AuthoritySection'
 import DiagnosticForm from '@/components/landing/DiagnosticForm'
-import OffersSection from '@/components/landing/OffersSection'
-import HeroSection from '@/components/landing/HeroSection'
-import Navigation from '@/components/landing/Navigation'
 import FrictionSection from '@/components/landing/FrictionSection'
+import HeroSection from '@/components/landing/HeroSection'
+import MethodSection from '@/components/landing/MethodSection'
+import Navigation from '@/components/landing/Navigation'
+import OffersSection from '@/components/landing/OffersSection'
 import WhatRevealsSection from '@/components/landing/WhatRevealsSection'
 import SEO from '@/components/SEO'
 
-const MethodSection = lazy(() => import('@/components/landing/MethodSection'))
 const ProofSection = lazy(() => import('@/components/landing/ProofSection'))
 const CalculatorROI = lazy(() => import('@/components/landing/CalculatorROI'))
 const FaqSection = lazy(() => import('@/components/landing/FaqSection'))
 const FinalCtaSection = lazy(() => import('@/components/landing/FinalCtaSection'))
+
+function SectionSkeleton() {
+  return (
+    <div className="container mx-auto px-6 lg:px-8 max-w-6xl py-24">
+      <div className="h-10 w-64 bg-sablia-surface rounded-lg animate-pulse mx-auto mb-8" />
+      <div className="grid md:grid-cols-3 gap-6">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-80 bg-sablia-bg rounded-lg animate-pulse" />
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export default function Landing() {
   return (
@@ -34,66 +47,42 @@ export default function Landing() {
           {/* §1 Hero */}
           <HeroSection />
 
-          {/* §2 Le constat */}
+          {/* §2 Friction — le constat */}
           <FrictionSection />
 
-          {/* §3 Le diagnostic (narratif) */}
+          {/* §3 Offers — le diagnostic (narratif) */}
           <OffersSection />
 
-          {/* §4 Intermède · Autorité */}
+          {/* §4 Authority — intermède */}
           <AuthoritySection />
 
-          {/* §5 Ce que révèle votre diagnostic */}
+          {/* §5 WhatReveals — ce que révèle votre diagnostic */}
           <WhatRevealsSection />
 
-          {/* Diagnostic form anchor (Phase 4 final placement — temp inline post WhatReveals) */}
+          {/* §6 Method — la méthode Sablia */}
+          <MethodSection />
+
+          <ErrorBoundary>
+            <Suspense fallback={<SectionSkeleton />}>
+              {/* §7 Proof — terrain, preuves */}
+              <ProofSection />
+
+              {/* §7b ROI Calculator (garde sablia-site) */}
+              <CalculatorROI />
+            </Suspense>
+          </ErrorBoundary>
+
+          {/* §8 Diagnostic form — anchor target for hero/nav CTAs */}
           <section id="diagnostic-form" className="container-editorial py-24">
             <DiagnosticForm />
           </section>
 
           <ErrorBoundary>
-            <Suspense
-              fallback={
-                <div className="space-y-24 py-24">
-                  <div className="container mx-auto px-6 lg:px-8 max-w-6xl">
-                    <div className="h-10 w-64 bg-sablia-surface rounded-lg animate-pulse mx-auto mb-8" />
-                    <div className="grid md:grid-cols-3 gap-6">
-                      {[1, 2, 3].map((i) => (
-                        <div key={i} className="h-80 bg-sablia-bg rounded-lg animate-pulse" />
-                      ))}
-                    </div>
-                  </div>
-                  <div className="container mx-auto px-6 lg:px-8 max-w-5xl">
-                    <div className="h-10 w-64 bg-sablia-surface rounded-lg animate-pulse mx-auto mb-8" />
-                    <div className="grid md:grid-cols-2 gap-8">
-                      <div className="h-96 bg-sablia-bg rounded-lg animate-pulse" />
-                      <div className="h-96 bg-sablia-bg rounded-lg animate-pulse" />
-                    </div>
-                  </div>
-                  <div className="container mx-auto px-6 lg:px-8 max-w-3xl">
-                    <div className="h-10 w-32 bg-sablia-surface rounded-lg animate-pulse mx-auto mb-8" />
-                    <div className="space-y-4">
-                      {[1, 2, 3, 4].map((i) => (
-                        <div key={i} className="h-14 bg-sablia-bg rounded-lg animate-pulse" />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              }
-            >
-              {/* §6 La méthode Sablia */}
-              <MethodSection />
-
-              {/* §7 Terrain — preuves */}
-              <ProofSection />
-
-              {/* §7 ROI calculator */}
-              <CalculatorROI />
-
-              {/* §8 FAQ (diagnostic-focused + Sablia vs IAPreneurs) */}
+            <Suspense fallback={<SectionSkeleton />}>
+              {/* §9 FAQ */}
               <FaqSection />
 
-              {/* §9 Footer CTA band */}
+              {/* §10 Final CTA band */}
               <FinalCtaSection />
             </Suspense>
           </ErrorBoundary>
