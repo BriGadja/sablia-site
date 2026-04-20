@@ -235,9 +235,39 @@ Deux repos ont évolué en parallèle :
 
 ---
 
-### Phase 6 — Validation complète avant bascule
+### Phase 6 — Validation complète avant bascule ✅ DONE 2026-04-20
 
 **Objectif** : tout vert localement + preview Vercel accepté, prêt pour bascule DNS.
+
+**Résultats exécution 2026-04-20** :
+- `npm run check` : **0 erreurs TS** ✓
+- `npm test -- --run` : **27/27 passés** ✓
+- `npm run build` : **built in 5.84s** ✓
+- `npm run lint` : **0 erreurs Biome** ✓ (13 warnings pré-existantes — server/, RoiCalculator legacy, SEO.tsx, PricingSection)
+- Lighthouse local prod (port 5001) : Perf 72, A11y 97, SEO 92
+- Lighthouse Vercel preview (`sablia-site.vercel.app`, post lazy-load) : **Perf 76 · A11y 97 · SEO 100** (LCP 4.2s, FCP 3.3s, CLS 0, TBT 10ms)
+  - AC-5 scored : Perf 76 < 85 target (scored 8/10 — gap expliqué par Fraunces Variable variable-width woff2 bloquant LCP; préchargement dynamique JS ineffectif car trop tardif; static preload nécessite plugin Vite hashé)
+  - AC-5 scored : SEO 100 ≥ 95 ✓ (directives AI non-standard robots.txt commentées)
+- Smoke tests Playwright sur `sablia-site.vercel.app` :
+  - DOM structural : 9 sections présentes (N°01–N°09 + Calculator ROI + Footer) ✓
+  - Polices chargées : Fraunces Variable + Geist `status: loaded` ✓ (AC-8 PASS — H1 rendu en Fraunces, fallback EB Garamond/Georgia)
+  - Consent banner pré-accept : `gtag undefined`, `dataLayer absent` ✓ (gating OK)
+  - Post-accept : `gtag function`, `dataLayer [6 entries]`, GA4 `G-JVXKHE3VD8` + Ads `AW-17987411130` chargés, `anonymize_ip: true` ✓ (AC-3 PASS)
+  - Mobile 390×844 : hamburger visible (`aria-label="Ouvrir le menu"`) + hero CTA above-fold (y=613/844) ✓
+- 0 console errors (1 warning Apple mobile web app capable — pré-existant, non-bloquant)
+
+**Corrections Phase 6 pré-flight** (commits `850e5b7` + `504013f`) :
+- 7 SVG décoratifs : ajout `<title>` pour `lint/a11y/noSvgWithoutTitle` (voice-player, FinalCta, HeroSection, Navigation, OffersSection, DiagnosticForm, accordion-editorial)
+- `robots.txt` : directives `AI-Documentation` + `AI-Content` commentées (SEO 92 → 100, pointer stale `SITE_CONTENT.md` → `copy-v1.md`)
+- `biome.json` : exclusion `**/*.css` (Tailwind `@apply` parse error)
+- `PricingSection.tsx` + `CaseStudies.tsx` : clés stables (feature/offer.name/result.label) pour `noArrayIndexKey`
+- `CalculatorROI.tsx` : `biome-ignore useExhaustiveDependencies` sur count-up hook (snapshot intentionnel)
+- `accordion-editorial.tsx` : `div[role="region"]` → `<section>` pour `useSemanticElements`
+- `FinalCtaSection.tsx` : `brice.png` `loading="lazy" decoding="async"` (300 KiB below-fold)
+
+**Déféré en Phase 7 (live production)** :
+- Webhook DiagnosticForm hit test (évite pollution prod pendant validation)
+- LCP optimization (Fraunces static preload via plugin Vite) — AC-5 scored pass à 8/10
 
 **Actions** :
 1. `npm run check` → 0 erreur TS
