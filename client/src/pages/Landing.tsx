@@ -11,6 +11,7 @@ import FrictionSection from '@/components/landing/FrictionSection'
 import WhatRevealsSection from '@/components/landing/WhatRevealsSection'
 import SEO from '@/components/SEO'
 
+const MethodSection = lazy(() => import('@/components/landing/MethodSection'))
 const ProofSection = lazy(() => import('@/components/landing/ProofSection'))
 const CalculatorROI = lazy(() => import('@/components/landing/CalculatorROI'))
 const FaqSection = lazy(() => import('@/components/landing/FaqSection'))
@@ -80,7 +81,10 @@ export default function Landing() {
                 </div>
               }
             >
-              {/* §6 Témoignages (3 max, ≥2 ROI-quantified) */}
+              {/* §6 La méthode Sablia */}
+              <MethodSection />
+
+              {/* §7 Terrain — preuves */}
               <ProofSection />
 
               {/* §7 ROI calculator */}
