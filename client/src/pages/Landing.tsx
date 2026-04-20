@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { lazy, Suspense } from 'react'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import Footer from '@/components/Footer'
-import ClientLogosStrip from '@/components/landing/ClientLogosStrip'
+import AuthoritySection from '@/components/landing/AuthoritySection'
 import DiagnosticForm from '@/components/landing/DiagnosticForm'
 import OffersSection from '@/components/landing/OffersSection'
 import HeroSection from '@/components/landing/HeroSection'
@@ -33,22 +33,22 @@ export default function Landing() {
           {/* §1 Hero */}
           <HeroSection />
 
-          {/* §2 Client logos strip */}
-          <ClientLogosStrip />
-
-          {/* §3 Le constat */}
+          {/* §2 Le constat */}
           <FrictionSection />
 
-          {/* §4 Le diagnostic (narratif, sans formulaire) */}
+          {/* §3 Le diagnostic (narratif) */}
           <OffersSection />
 
-          {/* §diagnostic-form anchor (Phase 4 final placement — temp inline) */}
-          <section id="diagnostic-form" className="container-editorial py-24">
-            <DiagnosticForm />
-          </section>
+          {/* §4 Intermède · Autorité */}
+          <AuthoritySection />
 
           {/* §5 Ce que révèle votre diagnostic */}
           <WhatRevealsSection />
+
+          {/* Diagnostic form anchor (Phase 4 final placement — temp inline post WhatReveals) */}
+          <section id="diagnostic-form" className="container-editorial py-24">
+            <DiagnosticForm />
+          </section>
 
           <ErrorBoundary>
             <Suspense
