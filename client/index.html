@@ -11,9 +11,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Sablia" />
 
-    <!-- Primary Meta Tags -->
-    <title>Sablia - Automatisation IA pour PME | n8n & Make.com</title>
-    <meta name="title" content="Sablia - Automatisation IA pour PME | n8n & Make.com" />
+    <!-- Primary Meta Tags (default fallback — overridden per-route by react-helmet-async) -->
+    <title>Sablia - Automatisation IA pour PME | n8n, Claude Code et Voice Agents</title>
+    <meta name="title" content="Sablia - Automatisation IA pour PME | n8n, Claude Code et Voice Agents" />
     <meta name="description" content="Automatisez vos processus métier avec Sablia. Formation de vos équipes + développement de workflows n8n/Make.com. ROI mesurable. Audit gratuit 30 min." />
     <meta name="keywords" content="automatisation, IA, intelligence artificielle, transformation digitale, workflow automation, n8n, make, processus métier" />
     <meta name="author" content="Sablia" />
@@ -31,8 +31,9 @@
           href="https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/SITE_CONTENT.md"
           title="Site Content (LLM-friendly)">
 
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://sablia.io/" />
+    <!-- Canonical URL: intentionally omitted in static HTML.
+         react-helmet-async injects the per-route canonical from docs/meta-tags.json (see SEO.tsx).
+         Hardcoding `/` here caused GSC "duplicate canonical" errors on /tarifs, /gap, /roi, etc. -->
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
