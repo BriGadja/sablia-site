@@ -4,7 +4,8 @@ import { dirname, extname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { createReadStream } from 'node:fs'
 import { stat } from 'node:fs/promises'
-import puppeteer from 'puppeteer'
+import chromium from '@sparticuz/chromium'
+import puppeteer from 'puppeteer-core'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const DIST = resolve(__dirname, '..', 'dist', 'public')
@@ -78,10 +79,13 @@ async function prerender() {
   console.log(`[prerender] starting static server on :${PORT}`)
   const server = await startServer()
 
-  console.log('[prerender] launching puppeteer')
+  console.log('[prerender] launching puppeteer (sparticuz chromium)')
+  // @sparticuz/chromium ships its own libs (libnspr4, libnss3, libgbm…),
+  // bypassing Vercel's minimal build container missing those system deps.
   const browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless: chromium.headless,
+    args: [...chromium.args, '--no-sandbox', '--disable-setuid-sandbox'],
+    executablePath: await chromium.executablePath(),
   })
 
   const results = []
