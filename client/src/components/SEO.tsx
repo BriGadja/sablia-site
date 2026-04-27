@@ -125,42 +125,38 @@ export default function SEO({ page }: SEOProps) {
       )}
       <meta name="googlebot" content={metaTags.globalMetaTags.googlebot} />
 
-      {/* Open Graph / Facebook */}
+      {/* Open Graph / Facebook — flattened (react-helmet-async v2 ignores Fragment children) */}
+      {pageData.openGraph && <meta property="og:type" content={pageData.openGraph.type} />}
+      {pageData.openGraph && <meta property="og:url" content={pageData.openGraph.url} />}
+      {pageData.openGraph && <meta property="og:title" content={pageData.openGraph.title} />}
+      {pageData.openGraph?.description && (
+        <meta property="og:description" content={pageData.openGraph.description} />
+      )}
       {pageData.openGraph && (
-        <>
-          <meta property="og:type" content={pageData.openGraph.type} />
-          <meta property="og:url" content={pageData.openGraph.url} />
-          <meta property="og:title" content={pageData.openGraph.title} />
-          {pageData.openGraph.description && (
-            <meta property="og:description" content={pageData.openGraph.description} />
-          )}
-          <meta property="og:site_name" content={pageData.openGraph.siteName || meta.siteName} />
-          {pageData.openGraph.image && (
-            <>
-              <meta property="og:image" content={pageData.openGraph.image} />
-              {pageData.openGraph.imageAlt && (
-                <meta property="og:image:alt" content={pageData.openGraph.imageAlt} />
-              )}
-            </>
-          )}
-          <meta property="og:locale" content={meta.locale} />
-        </>
+        <meta property="og:site_name" content={pageData.openGraph.siteName || meta.siteName} />
       )}
+      {pageData.openGraph?.image && (
+        <meta property="og:image" content={pageData.openGraph.image} />
+      )}
+      {pageData.openGraph?.image && pageData.openGraph?.imageAlt && (
+        <meta property="og:image:alt" content={pageData.openGraph.imageAlt} />
+      )}
+      {pageData.openGraph && <meta property="og:locale" content={meta.locale} />}
 
-      {/* Twitter */}
+      {/* Twitter — flattened */}
+      {pageData.twitter && <meta name="twitter:card" content={pageData.twitter.card} />}
       {pageData.twitter && (
-        <>
-          <meta name="twitter:card" content={pageData.twitter.card} />
-          <meta name="twitter:url" content={pageData.openGraph?.url || meta.domain + page} />
-          <meta name="twitter:title" content={pageData.twitter.title} />
-          <meta name="twitter:description" content={pageData.twitter.description} />
-          {pageData.twitter.image && <meta name="twitter:image" content={pageData.twitter.image} />}
-          {pageData.twitter.creator && (
-            <meta name="twitter:creator" content={pageData.twitter.creator} />
-          )}
-          <meta name="twitter:site" content={meta.twitterHandle} />
-        </>
+        <meta name="twitter:url" content={pageData.openGraph?.url || meta.domain + page} />
       )}
+      {pageData.twitter && <meta name="twitter:title" content={pageData.twitter.title} />}
+      {pageData.twitter && (
+        <meta name="twitter:description" content={pageData.twitter.description} />
+      )}
+      {pageData.twitter?.image && <meta name="twitter:image" content={pageData.twitter.image} />}
+      {pageData.twitter?.creator && (
+        <meta name="twitter:creator" content={pageData.twitter.creator} />
+      )}
+      {pageData.twitter && <meta name="twitter:site" content={meta.twitterHandle} />}
 
       {/* Structured Data (JSON-LD) */}
       {pageData.structuredData && (
