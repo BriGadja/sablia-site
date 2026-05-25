@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analyse Meta Ads — Sablia CRM — 25 mai 2026</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface-2: #232734;
+    --border: #2e3344;
+    --text: #e4e5ea;
+    --text-muted: #8b8fa3;
+    --accent: #6366f1;
+    --accent-light: #818cf8;
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,.12);
+    --red: #ef4444;
+    --red-bg: rgba(239,68,68,.12);
+    --yellow: #eab308;
+    --yellow-bg: rgba(234,179,8,.12);
+    --blue: #3b82f6;
+    --blue-bg: rgba(59,130,246,.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  header h1 span { color: var(--accent-light); }
+
+  .date-badge {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: .4rem .8rem;
+    border-radius: 6px;
+    font-size: .85rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* KPI cards */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .kpi-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  .kpi-label {
+    font-size: .8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-top: .25rem;
+  }
+
+  .kpi-sub {
+    font-size: .75rem;
+    color: var(--text-muted);
+    margin-top: .35rem;
+  }
+
+  .green { color: var(--green); }
+  .red { color: var(--red); }
+  .yellow { color: var(--yellow); }
+  .blue { color: var(--blue); }
+  .accent { color: var(--accent-light); }
+
+  /* Sections */
+  section {
+    margin-bottom: 2.5rem;
+  }
+
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  h2 .num {
+    background: var(--accent);
+    color: white;
+    font-size: .7rem;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .85rem;
+  }
+
+  thead th {
+    background: var(--surface-2);
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: .7rem;
+    letter-spacing: .05em;
+    padding: .6rem .75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+  }
+
+  thead th:not(:first-child) { text-align: right; }
+
+  tbody td {
+    padding: .6rem .75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  tbody td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+
+  tbody tr:hover { background: var(--surface); }
+
+  .highlight-row { background: var(--green-bg) !important; }
+  .warn-row { background: var(--red-bg) !important; }
+
+  .badge {
+    display: inline-block;
+    padding: .15rem .5rem;
+    border-radius: 4px;
+    font-size: .7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+
+  .badge-green { background: var(--green-bg); color: var(--green); }
+  .badge-red { background: var(--red-bg); color: var(--red); }
+  .badge-yellow { background: var(--yellow-bg); color: var(--yellow); }
+  .badge-blue { background: var(--blue-bg); color: var(--blue); }
+
+  /* Bar charts */
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+  }
+
+  .bar-label {
+    width: 90px;
+    font-size: .8rem;
+    color: var(--text-muted);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 28px;
+    background: var(--surface-2);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding-left: .5rem;
+    font-size: .75rem;
+    font-weight: 600;
+    color: white;
+    transition: width .6s ease;
+  }
+
+  .bar-value {
+    width: 70px;
+    text-align: right;
+    font-size: .8rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+
+  /* Comparison */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .compare-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+
+  .compare-card h3 {
+    font-size: .9rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .compare-card .metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .75rem;
+  }
+
+  .metric-item { }
+
+  .metric-item .val {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .metric-item .lbl {
+    font-size: .7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+
+  /* Recommendations */
+  .reco-list {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+  }
+
+  .reco {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .reco-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: .1rem;
+  }
+
+  .reco-icon.urgent { background: var(--red-bg); }
+  .reco-icon.medium { background: var(--yellow-bg); }
+  .reco-icon.info { background: var(--blue-bg); }
+
+  .reco-content h4 {
+    font-size: .9rem;
+    font-weight: 600;
+    margin-bottom: .25rem;
+  }
+
+  .reco-content p {
+    font-size: .82rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .reco-tag {
+    margin-top: .4rem;
+    font-size: .7rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* Platform split */
+  .platform-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .platform-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .platform-card h4 {
+    font-size: .85rem;
+    color: var(--text-muted);
+    margin-bottom: .75rem;
+  }
+
+  .platform-card .big {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .platform-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: .5rem;
+    margin-top: .75rem;
+    font-size: .75rem;
+  }
+
+  .platform-metrics .val { font-weight: 600; }
+  .platform-metrics .lbl { color: var(--text-muted); }
+
+  /* Funnel */
+  .funnel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 1rem 0;
+  }
+
+  .funnel-step {
+    text-align: center;
+    padding: 1rem 1.5rem;
+    position: relative;
+  }
+
+  .funnel-step .funnel-val {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .funnel-step .funnel-lbl {
+    font-size: .75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+
+  .funnel-arrow {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    padding: 0 .5rem;
+  }
+
+  .funnel-rate {
+    font-size: .7rem;
+    color: var(--accent-light);
+    position: absolute;
+    bottom: -.2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: .75rem;
+  }
+
+  @media (max-width: 700px) {
+    body { padding: 1rem; }
+    .compare-grid, .platform-split { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    header { flex-direction: column; gap: .75rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Analyse Meta Ads — <span>Sablia CRM</span></h1>
+    <p style="color: var(--text-muted); margin-top: .25rem; font-size: .9rem;">
+      "Integrer Claude dans votre CRM" — 2 campagnes actives
+    </p>
+  </div>
+  <div class="date-badge">25 mai 2026</div>
+</header>
+
+<!-- KPI overview -->
+<div class="kpi-grid">
+  <div class="kpi">
+    <div class="kpi-value">189,41 &euro;</div>
+    <div class="kpi-label">Depense totale</div>
+    <div class="kpi-sub">20-25 mai (6 jours)</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value green">31</div>
+    <div class="kpi-label">Leads generes</div>
+    <div class="kpi-sub">~5,2 leads/jour</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value accent">6,11 &euro;</div>
+    <div class="kpi-label">CPL moyen</div>
+    <div class="kpi-sub">B2B France : excellent</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value">3,3%</div>
+    <div class="kpi-label">CTR moyen</div>
+    <div class="kpi-sub">Benchmark B2B : 1-2%</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value">9 636</div>
+    <div class="kpi-label">Impressions</div>
+    <div class="kpi-sub">Reach : 6 172</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-value">330</div>
+    <div class="kpi-label">Clics totaux</div>
+    <div class="kpi-sub">CPC moyen : 0,57 &euro;</div>
+  </div>
+</div>
+
+<!-- Funnel -->
+<section>
+  <h2><span class="num">1</span> Funnel de conversion (CBO 1)</h2>
+  <div class="funnel">
+    <div class="funnel-step">
+      <div class="funnel-val">7 390</div>
+      <div class="funnel-lbl">Impressions</div>
+    </div>
+    <div class="funnel-arrow">&rarr;</div>
+    <div class="funnel-step">
+      <div class="funnel-val">268</div>
+      <div class="funnel-lbl">Clics</div>
+      <div class="funnel-rate">CTR 3,63%</div>
+    </div>
+    <div class="funnel-arrow">&rarr;</div>
+    <div class="funnel-step">
+      <div class="funnel-val">93</div>
+      <div class="funnel-lbl">Link clicks</div>
+      <div class="funnel-rate">34,7% des clics</div>
+    </div>
+    <div class="funnel-arrow">&rarr;</div>
+    <div class="funnel-step">
+      <div class="funnel-val green">25</div>
+      <div class="funnel-lbl">Leads</div>
+      <div class="funnel-rate">27% conversion form</div>
+    </div>
+  </div>
+</section>
+
+<!-- Campaign comparison -->
+<section>
+  <h2><span class="num">2</span> Comparaison des campagnes</h2>
+  <div class="compare-grid">
+    <div class="compare-card" style="border-color: var(--green); border-width: 2px;">
+      <h3>
+        CBO / 20.05
+        <span class="badge badge-green">Winner</span>
+      </h3>
+      <div class="metrics">
+        <div class="metric-item">
+          <div class="val green">5,34 &euro;</div>
+          <div class="lbl">CPL</div>
+        </div>
+        <div class="metric-item">
+          <div class="val">133,50 &euro;</div>
+          <div class="lbl">Spend</div>
+        </div>
+        <div class="metric-item">
+          <div class="val green">25</div>
+          <div class="lbl">Leads</div>
+        </div>
+        <div class="metric-item">
+          <div class="val">3,63%</div>
+          <div class="lbl">CTR</div>
+        </div>
+        <div class="metric-item">
+          <div class="val">0,50 &euro;</div>
+          <div class="lbl">CPC</div>
+        </div>
+        <div class="metric-item">
+          <div class="val">18,06 &euro;</div>
+          <div class="lbl">CPM</div>
+        </div>
+      </div>
+    </div>
+    <div class="compare-card">
+      <h3>
+        CBO 2 / 23.05
+        <span class="badge badge-yellow">A surveiller</span>
+      </h3>
+      <div class="metrics">
+        <div class="metric-item">
+          <div class="val red">9,32 &euro;</div>
+          <div class="lbl">CPL (+74%)</div>
+        </div>
+        <div class="metric-item">
+          <div class="val">55,91 &euro;</div>
+          <div class="lbl">Spend</div>
+        </div>
+        <div class="metric-item">
+          <div class="val">6</div>
+          <div class="lbl">Leads</div>
+        </div>
+        <div class="metric-item">
+          <div class="val">2,76%</div>
+          <div class="lbl">CTR</div>
+        </div>
+        <div class="metric-item">
+          <div class="val red">0,90 &euro;</div>
+          <div class="lbl">CPC (+80%)</div>
+        </div>
+        <div class="metric-item">
+          <div class="val red">24,89 &euro;</div>
+          <div class="lbl">CPM (+38%)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Demographics -->
+<section>
+  <h2><span class="num">3</span> Performance par segment (CBO 1 — Hommes)</h2>
+  <p style="font-size: .82rem; color: var(--text-muted); margin-bottom: 1rem;">
+    Les hommes 35-64 ans concentrent <strong style="color: var(--green);">84% des leads (21/25)</strong> avec un CPL moyen de 4,50 &euro;.
+  </p>
+
+  <div class="bar-chart">
+    <div class="bar-row">
+      <div class="bar-label">H 45-54</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: 40%; background: var(--green);">10 leads</div>
+      </div>
+      <div class="bar-value green">4,40 &euro;</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">H 35-44</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: 24%; background: var(--green);">6 leads</div>
+      </div>
+      <div class="bar-value green">5,31 &euro;</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">H 55-64</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: 20%; background: var(--accent);">5 leads</div>
+      </div>
+      <div class="bar-value accent">4,05 &euro;</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">H 25-34</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: 8%; background: var(--yellow);">2 leads</div>
+      </div>
+      <div class="bar-value yellow">7,12 &euro;</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">H 65+</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: 4%; background: var(--text-muted);">1 lead</div>
+      </div>
+      <div class="bar-value">5,70 &euro;</div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">H 18-24</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width: 0%; background: var(--red);"></div>
+      </div>
+      <div class="bar-value red">0 lead</div>
+    </div>
+  </div>
+
+  <table style="margin-top: 1.5rem;">
+    <thead>
+      <tr>
+        <th>Segment</th>
+        <th>Spend</th>
+        <th>Leads</th>
+        <th>CPL</th>
+        <th>CTR</th>
+        <th>CPC</th>
+        <th>Verdict</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="highlight-row">
+        <td>H 45-54</td><td>43,95 &euro;</td><td>10</td><td>4,40 &euro;</td><td>4,37%</td><td>0,44 &euro;</td>
+        <td><span class="badge badge-green">Champion</span></td>
+      </tr>
+      <tr class="highlight-row">
+        <td>H 35-44</td><td>31,84 &euro;</td><td>6</td><td>5,31 &euro;</td><td>3,35%</td><td>0,46 &euro;</td>
+        <td><span class="badge badge-green">Excellent</span></td>
+      </tr>
+      <tr class="highlight-row">
+        <td>H 55-64</td><td>20,25 &euro;</td><td>5</td><td>4,05 &euro;</td><td>4,31%</td><td>0,46 &euro;</td>
+        <td><span class="badge badge-green">Meilleur CPL</span></td>
+      </tr>
+      <tr>
+        <td>H 25-34</td><td>14,23 &euro;</td><td>2</td><td>7,12 &euro;</td><td>2,54%</td><td>0,59 &euro;</td>
+        <td><span class="badge badge-yellow">Correct</span></td>
+      </tr>
+      <tr>
+        <td>F 35-44</td><td>2,95 &euro;</td><td>1</td><td>2,95 &euro;</td><td>4,65%</td><td>0,37 &euro;</td>
+        <td><span class="badge badge-blue">Peu de data</span></td>
+      </tr>
+      <tr>
+        <td>H 65+</td><td>5,70 &euro;</td><td>1</td><td>5,70 &euro;</td><td>4,62%</td><td>0,52 &euro;</td>
+        <td><span class="badge badge-yellow">Correct</span></td>
+      </tr>
+      <tr class="warn-row">
+        <td>F 45-54</td><td>3,86 &euro;</td><td>0</td><td>&mdash;</td><td>1,45%</td><td>1,29 &euro;</td>
+        <td><span class="badge badge-red">Budget gaspille</span></td>
+      </tr>
+      <tr class="warn-row">
+        <td>H 18-24</td><td>4,21 &euro;</td><td>0</td><td>&mdash;</td><td>2,07%</td><td>1,05 &euro;</td>
+        <td><span class="badge badge-red">Pas de conversion</span></td>
+      </tr>
+      <tr class="warn-row">
+        <td>F 55-64</td><td>1,90 &euro;</td><td>0</td><td>&mdash;</td><td>3,77%</td><td>0,95 &euro;</td>
+        <td><span class="badge badge-red">Pas de conversion</span></td>
+      </tr>
+      <tr class="warn-row">
+        <td>F 18-24</td><td>0,41 &euro;</td><td>0</td><td>&mdash;</td><td>0%</td><td>&mdash;</td>
+        <td><span class="badge badge-red">Nul</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Platform -->
+<section>
+  <h2><span class="num">4</span> Facebook vs Instagram (CBO 1)</h2>
+  <div class="platform-split">
+    <div class="platform-card" style="border-color: var(--blue); border-width: 2px;">
+      <h4>Facebook</h4>
+      <div class="big blue">14 leads</div>
+      <div style="font-size: .85rem; margin-top: .25rem;">CPL <strong>5,04 &euro;</strong></div>
+      <div class="platform-metrics">
+        <div><div class="val">70,57 &euro;</div><div class="lbl">Spend</div></div>
+        <div><div class="val">4,21%</div><div class="lbl">CTR</div></div>
+        <div><div class="val">14,07 &euro;</div><div class="lbl">CPM</div></div>
+      </div>
+    </div>
+    <div class="platform-card">
+      <h4>Instagram</h4>
+      <div class="big">11 leads</div>
+      <div style="font-size: .85rem; margin-top: .25rem;">CPL <strong>5,72 &euro;</strong></div>
+      <div class="platform-metrics">
+        <div><div class="val">62,93 &euro;</div><div class="lbl">Spend</div></div>
+        <div><div class="val">2,40%</div><div class="lbl">CTR</div></div>
+        <div><div class="val red">26,52 &euro;</div><div class="lbl">CPM</div></div>
+      </div>
+    </div>
+  </div>
+  <p style="font-size: .82rem; color: var(--text-muted); margin-top: .75rem;">
+    Facebook : CPM 2x moins cher, CTR 75% superieur. Instagram genere des leads mais coute plus cher par impression.
+  </p>
+</section>
+
+<!-- Adsets -->
+<section>
+  <h2><span class="num">5</span> Structure des adsets</h2>
+  <table>
+    <thead>
+      <tr><th>Adset (CBO 1)</th><th>Ciblage</th><th>Statut</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>SAP (progiciel) / 28-54 / FR</td><td>Interest: SAP</td><td><span class="badge badge-green">Actif</span></td></tr>
+      <tr><td>Salesforce.com / 28-54 / FR</td><td>Interest: Salesforce</td><td><span class="badge badge-green">Actif</span></td></tr>
+      <tr><td>Business Owner / 28-54 / FR</td><td>Employer: Business Owner</td><td><span class="badge badge-green">Actif</span></td></tr>
+      <tr><td>Marketo / 28-54 / FR</td><td>Interest: Marketo</td><td><span class="badge badge-green">Actif</span></td></tr>
+      <tr><td>Asana (logiciel) / 28-54 / FR</td><td>Interest: Asana</td><td><span class="badge badge-green">Actif</span></td></tr>
+      <tr class="warn-row"><td>HubSpot / 28-54 / FR</td><td>Interest: HubSpot</td><td><span class="badge badge-red">Pause</span></td></tr>
+      <tr class="warn-row"><td>Oracle CRM / 28-54 / FR</td><td>Interest: Oracle CRM</td><td><span class="badge badge-red">Pause</span></td></tr>
+    </tbody>
+  </table>
+  <p style="font-size: .82rem; color: var(--text-muted); margin-top: .75rem;">
+    <strong style="color: var(--yellow);">Alerte :</strong> 5-7 adsets actifs pour 15 &euro;/jour = ~2-3 &euro;/adset/jour.
+    Meta n'a pas assez de budget par adset pour sortir de la phase d'apprentissage.
+    Advantage Audience est active sur tous les adsets (Meta elargit au-dela du ciblage defini).
+  </p>
+</section>
+
+<!-- Recommendations -->
+<section>
+  <h2><span class="num">6</span> Recommandations</h2>
+  <div class="reco-list">
+    <div class="reco">
+      <div class="reco-icon urgent">!!</div>
+      <div class="reco-content">
+        <h4>Consolider les adsets (7 &rarr; 2-3 max)</h4>
+        <p>Fusionner les interets CRM : <strong>Adset 1</strong> = Salesforce + SAP + Oracle (enterprise),
+        <strong>Adset 2</strong> = HubSpot + Marketo (mid-market),
+        <strong>Adset 3</strong> = Business Owner (demographique).
+        15 &euro;/jour sur 7 adsets = trop dilue pour optimiser.</p>
+        <div class="reco-tag">Impact estime : -20% CPL par meilleure sortie de phase d'apprentissage</div>
+      </div>
+    </div>
+    <div class="reco">
+      <div class="reco-icon urgent">!!</div>
+      <div class="reco-content">
+        <h4>Couper femmes + 18-24 ans</h4>
+        <p>Ces segments consomment ~15 &euro; sur CBO 1 sans generer de leads. Avec Advantage Audience active,
+        Meta y alloue du budget automatiquement. Exclure pour concentrer sur H 35-64.</p>
+        <div class="reco-tag">Impact estime : +15% budget alloue aux segments qui convertissent</div>
+      </div>
+    </div>
+    <div class="reco">
+      <div class="reco-icon medium">&bull;</div>
+      <div class="reco-content">
+        <h4>Pauser CBO 2 ou attendre 7 jours</h4>
+        <p>CPL 74% plus cher que CBO 1. Possible cannibalisation d'audience.
+        Soit pauser maintenant pour concentrer le budget, soit attendre 4 jours de plus pour avoir des donnees fiables (sortie phase d'apprentissage).</p>
+        <div class="reco-tag">Decision a prendre avec Remi</div>
+      </div>
+    </div>
+    <div class="reco">
+      <div class="reco-icon medium">&bull;</div>
+      <div class="reco-content">
+        <h4>Augmenter budget CBO 1 a 20-25 &euro;/jour</h4>
+        <p>CPL prouve a 5,34 &euro;, campagne stable sur 6 jours. Plus de budget = plus de data = meilleure optimisation algorithmique.
+        Augmenter par paliers de 20% tous les 3-4 jours.</p>
+        <div class="reco-tag">Impact estime : +50% leads/jour sans degradation CPL</div>
+      </div>
+    </div>
+    <div class="reco">
+      <div class="reco-icon medium">&bull;</div>
+      <div class="reco-content">
+        <h4>Activer Dynamic Creative (DCO)</h4>
+        <p>Aucun adset n'utilise DCO (is_dynamic_creative: false). Creer un adset test avec 3-5 visuels + 3 titres + 3 textes
+        pour laisser Meta optimiser les combinaisons. Potentiel d'amelioration CTR significatif.</p>
+        <div class="reco-tag">Remi peut preparer les variantes creativs</div>
+      </div>
+    </div>
+    <div class="reco">
+      <div class="reco-icon info">?</div>
+      <div class="reco-content">
+        <h4>Mesurer la qualite des leads (taux R1)</h4>
+        <p>31 leads generes, mais combien passent en R1 avec Raphael ? Si le taux de qualification est &lt;30%,
+        le vrai CPL qualifie est &gt;20 &euro;. Point a verifier avec l'equipe commerciale.</p>
+        <div class="reco-tag">Donnees a recuperer aupres de Raphael</div>
+      </div>
+    </div>
+    <div class="reco">
+      <div class="reco-icon info">?</div>
+      <div class="reco-content">
+        <h4>Optimiser le formulaire (taux 27% &rarr; 35%+)</h4>
+        <p>93 link clicks pour 25 leads = 27% de conversion formulaire. Benchmark B2B = 30-40%.
+        Reduire le nombre de champs, ajouter preuve sociale, tester un formulaire natif Meta vs landing page.</p>
+        <div class="reco-tag">Test A/B formulaire a planifier</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Raw data -->
+<section>
+  <h2><span class="num">7</span> Donnees brutes — Tous les segments (CBO 1)</h2>
+  <table>
+    <thead>
+      <tr><th>Segment</th><th>Spend</th><th>Impr.</th><th>Clicks</th><th>CTR</th><th>CPC</th><th>Leads</th><th>CPL</th></tr>
+    </thead>
+    <tbody>
+      <tr class="highlight-row"><td>H 45-54</td><td>43,95 &euro;</td><td>2 266</td><td>99</td><td>4,37%</td><td>0,44 &euro;</td><td>10</td><td>4,40 &euro;</td></tr>
+      <tr class="highlight-row"><td>H 35-44</td><td>31,84 &euro;</td><td>2 057</td><td>69</td><td>3,35%</td><td>0,46 &euro;</td><td>6</td><td>5,31 &euro;</td></tr>
+      <tr class="highlight-row"><td>H 55-64</td><td>20,25 &euro;</td><td>1 020</td><td>44</td><td>4,31%</td><td>0,46 &euro;</td><td>5</td><td>4,05 &euro;</td></tr>
+      <tr><td>H 25-34</td><td>14,23 &euro;</td><td>946</td><td>24</td><td>2,54%</td><td>0,59 &euro;</td><td>2</td><td>7,12 &euro;</td></tr>
+      <tr><td>H 65+</td><td>5,70 &euro;</td><td>238</td><td>11</td><td>4,62%</td><td>0,52 &euro;</td><td>1</td><td>5,70 &euro;</td></tr>
+      <tr><td>H 18-24</td><td>4,21 &euro;</td><td>193</td><td>4</td><td>2,07%</td><td>1,05 &euro;</td><td>0</td><td>&mdash;</td></tr>
+      <tr><td>F 45-54</td><td>3,86 &euro;</td><td>207</td><td>3</td><td>1,45%</td><td>1,29 &euro;</td><td>0</td><td>&mdash;</td></tr>
+      <tr><td>F 35-44</td><td>2,95 &euro;</td><td>172</td><td>8</td><td>4,65%</td><td>0,37 &euro;</td><td>1</td><td>2,95 &euro;</td></tr>
+      <tr><td>F 55-64</td><td>1,90 &euro;</td><td>53</td><td>2</td><td>3,77%</td><td>0,95 &euro;</td><td>0</td><td>&mdash;</td></tr>
+      <tr><td>F 25-34</td><td>1,51 &euro;</td><td>71</td><td>1</td><td>1,41%</td><td>1,51 &euro;</td><td>0</td><td>&mdash;</td></tr>
+      <tr><td>unknown 35-44</td><td>1,02 &euro;</td><td>38</td><td>0</td><td>0%</td><td>&mdash;</td><td>0</td><td>&mdash;</td></tr>
+      <tr><td>unknown 45-54</td><td>0,96 &euro;</td><td>55</td><td>3</td><td>5,45%</td><td>0,32 &euro;</td><td>0</td><td>&mdash;</td></tr>
+      <tr><td>unknown 55-64</td><td>0,43 &euro;</td><td>36</td><td>0</td><td>0%</td><td>&mdash;</td><td>0</td><td>&mdash;</td></tr>
+      <tr><td>F 18-24</td><td>0,41 &euro;</td><td>18</td><td>0</td><td>0%</td><td>&mdash;</td><td>0</td><td>&mdash;</td></tr>
+      <tr><td>unknown 25-34</td><td>0,13 &euro;</td><td>7</td><td>0</td><td>0%</td><td>&mdash;</td><td>0</td><td>&mdash;</td></tr>
+      <tr><td>F 65+</td><td>0,09 &euro;</td><td>8</td><td>0</td><td>0%</td><td>&mdash;</td><td>0</td><td>&mdash;</td></tr>
+      <tr><td>unknown 65+</td><td>0,05 &euro;</td><td>2</td><td>0</td><td>0%</td><td>&mdash;</td><td>0</td><td>&mdash;</td></tr>
+      <tr><td>unknown 18-24</td><td>0,01 &euro;</td><td>3</td><td>0</td><td>0%</td><td>&mdash;</td><td>0</td><td>&mdash;</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  Rapport genere le 25 mai 2026 — Donnees Meta Ads API via MCP — Sablia CRM
+</footer>
+
+</body>
+</html>

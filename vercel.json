@@ -4,6 +4,10 @@
   "outputDirectory": "dist/public",
   "rewrites": [
     {
+      "source": "/ads",
+      "destination": "/ads.html"
+    },
+    {
       "source": "/((?!api/.*|\\.well-known/.*|robots\\.txt|sitemap\\.xml).*)",
       "destination": "/index.html"
     }
