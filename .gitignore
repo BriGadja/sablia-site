@@ -43,6 +43,11 @@ tmp/
 temp/
 *.tar.gz
 
+# Verification/debug screenshots (root-level artifacts, not content)
+/sablia-*.png
+/upwork_profile_pic_cropped.png
+/generated-icon.png
+
 # Vercel
 .vercel
 

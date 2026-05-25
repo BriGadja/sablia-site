@@ -1,6 +1,6 @@
 # Sablia Site - Status
 
-**Last Updated**: 2026-04-27
+**Last Updated**: 2026-05-07
 
 ---
 
@@ -14,6 +14,7 @@
 
 - [ ] Import `generate_lead` conversion in Google Ads (Goals > Conversions > Import from GA4)
 - [ ] **HITL Brice**: dans Google Search Console → Indexation → Pages, cliquer "Valider la correction" sur les 2 rapports "Page en double" reçus 2026-04-27 (concerne /tarifs, /gap, /roi, /about, /faq, /cas-clients). Re-crawl Google sous 1-2 sem.
+- [ ] **GSC validation en cours (relancée 2026-05-07)** : "Page avec redirection" sur 4 URLs (https://www.sablia.io/, http://www.sablia.io/, https://www.sablia.io/roi, http://sablia.io/). Cause initiale : Vercel renvoyait 307 (Temporary) sur www→apex car www.sablia.io n'était pas explicitement attaché au projet. Fix : domaine attaché au projet sablia-site via API Vercel avec `redirectStatusCode: 308`. Tous les redirects passent maintenant en 308 (Permanent). Re-crawl Google sous 7-14 j attendu.
 
 ---
 
@@ -38,6 +39,7 @@
 
 ## Completed (recent)
 
+- **2026-05-07 — Vercel www→apex redirect fix (308 Permanent)**. GSC validation des "Page avec redirection" avait échoué le 2026-05-05 sur 4 URLs www/http car Vercel auto-redirigeait www.sablia.io → sablia.io en 307 (Temporary) — Google n'accepte pas les 307 pour valider la canonisation. Fix : `www.sablia.io` attaché explicitement au projet sablia-site via API Vercel (`POST /v10/projects/sablia-site/domains` avec `redirectStatusCode: 308`). Vérifié : les 4 URLs renvoient maintenant 308. Aucun changement de code ni redéploiement nécessaire. Pattern sauvé en memory (`vercel_www_redirect_308.md`) — applicable aux autres projets Sablia hébergés sur Vercel (qwertys, vox, tasks).
 - **2026-04-27 — SEO prerender pipeline (commits 47e1922, 80f880a, f739d3c)**. Fixed GSC "Page en double" canonical errors. Added puppeteer-based prerender at build (`scripts/prerender.mjs` + `npm run build`). Each of 13 routes now ships its own static HTML with correct title/canonical/og/twitter — no JS rendering required for SEO. Sub-fixes: (a) stripped duplicate-prone meta from static `client/index.html` (Helmet now sole owner of per-page meta), (b) flattened SEO.tsx — replaced React Fragments with per-element conditionals (react-helmet-async v2 silently dropped Fragment children → og:* and twitter:* were absent in prod), (c) switched from `puppeteer` to `puppeteer-core + @sparticuz/chromium` so Vercel build env (no system Chromium libs) can launch headless.
 
 ---
