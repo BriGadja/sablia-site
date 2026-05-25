@@ -4,12 +4,9 @@
   "outputDirectory": "dist/public",
   "rewrites": [
     {
-      "source": "/ads",
-      "destination": "/ads.html"
-    },
-    {
-      "source": "/((?!api/.*|\\.well-known/.*|robots\\.txt|sitemap\\.xml).*)",
+      "source": "/((?!api/.*|\\.well-known/.*|robots\\.txt|sitemap\\.xml|ads\\.html|ads).*)",
       "destination": "/index.html"
     }
-  ]
+  ],
+  "cleanUrls": true
 }
