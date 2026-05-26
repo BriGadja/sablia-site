@@ -62,3 +62,6 @@ coverage/
 # Workspace symlinks (inherited skills & rules)
 .claude/skills
 .claude/rules
+
+# CRM business context (symlink to sablia-crm)
+docs/crm

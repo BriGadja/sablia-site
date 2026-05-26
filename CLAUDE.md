@@ -93,6 +93,14 @@ docs/                 # All documentation
 
 When modifying site content, update the corresponding doc (see `docs/README.md` for sync table).
 
+## CRM Business Context
+
+`docs/crm/` is a symlink to `projects/sablia-crm/` — the business context for the "Intégrer Claude dans votre CRM" offering. When redesigning the site for CRM focus, read:
+- `docs/crm/CLAUDE.md` — offering overview, team, architecture
+- `docs/crm/briefs/` — creative briefs, LP structure
+- `docs/crm/clients/` — client context (CRM type, needs, meetings)
+- `docs/crm/templates/` — proposal and email templates
+
 ## Database
 - Drizzle ORM + PostgreSQL (Supabase)
 - Schema: `db/schema.ts`
