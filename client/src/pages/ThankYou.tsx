@@ -71,7 +71,7 @@ export default function ThankYou() {
                 href="https://calendly.com/brice-gachadoat/30min"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="t-button inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-on-primary transition-shadow hover:shadow-glow-teal"
+                className="t-button inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-on-primary transition-shadow hover:shadow-glow-coral"
               >
                 <Calendar size={18} />
                 Réserver un call

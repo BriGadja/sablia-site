@@ -66,7 +66,7 @@ export default {
           active: "rgb(var(--color-primary-active) / <alpha-value>)",
           disabled: "rgb(var(--color-primary-disabled) / <alpha-value>)",
         },
-        "accent-coral": "rgb(var(--color-accent-coral) / <alpha-value>)",
+        "accent-teal": "rgb(var(--color-accent-teal) / <alpha-value>)",
         "accent-amber": "rgb(var(--color-accent-amber) / <alpha-value>)",
         hairline: {
           DEFAULT: "rgb(var(--color-hairline) / <alpha-value>)",
@@ -118,8 +118,8 @@ export default {
         standard: "cubic-bezier(0.2, 0, 0, 1)",
       },
       boxShadow: {
-        "glow-teal": "0 0 20px rgba(93, 184, 166, 0.15)",
-        "ring-teal": "0 0 0 3px rgba(93, 184, 166, 0.18)",
+        "glow-coral": "0 0 20px rgba(204, 120, 92, 0.2)",
+        "ring-coral": "0 0 0 3px rgba(204, 120, 92, 0.18)",
       },
       maxWidth: {
         editorial: "1200px",

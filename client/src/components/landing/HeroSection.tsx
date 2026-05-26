@@ -13,8 +13,8 @@ function Sparkline() {
   return (
     <svg className="mb-4 block h-14 w-full" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
       <title>Sparkline de pipeline</title>
-      <path d={fill} fill="rgba(93,184,166,0.14)" />
-      <path d={d} fill="none" stroke="#5db8a6" strokeWidth="1.75" strokeLinecap="round" />
+      <path d={fill} fill="rgba(204,120,92,0.14)" />
+      <path d={d} fill="none" stroke="#cc785c" strokeWidth="1.75" strokeLinecap="round" />
     </svg>
   )
 }
@@ -28,7 +28,7 @@ function DashboardMockup() {
   const rows = [
     { name: 'Mercier & Cie', amt: '€48,200', stage: 'Negotiation', color: 'text-success' },
     { name: 'Atelier Garnier', amt: '€36,500', stage: 'Qualified', color: 'text-primary' },
-    { name: 'Maison Lefèvre', amt: '€24,000', stage: 'Discovery', color: 'text-accent-coral' },
+    { name: 'Maison Lefèvre', amt: '€24,000', stage: 'Discovery', color: 'text-accent-teal' },
   ]
   return (
     <div className="rounded-xl border border-hairline-light bg-surface-light p-6">
@@ -100,7 +100,7 @@ export default function HeroSection() {
             <button
               type="button"
               onClick={openBooking}
-              className="t-button inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-on-primary transition-shadow duration-base hover:shadow-glow-teal"
+              className="t-button inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-on-primary transition-shadow duration-base hover:shadow-glow-coral"
             >
               Réserver un call <ArrowRight size={16} />
             </button>

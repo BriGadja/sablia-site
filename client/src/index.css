@@ -20,8 +20,8 @@
     --popover: 240 7% 8%;
     --popover-foreground: 38 18% 92%;
 
-    --primary: 166 35% 54%;
-    --primary-foreground: 240 7% 5%;
+    --primary: 15 52% 58%;
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 240 7% 12%;
     --secondary-foreground: 38 18% 92%;
@@ -37,7 +37,7 @@
 
     --border: 240 6% 17%;
     --input: 240 6% 17%;
-    --ring: 166 35% 54%;
+    --ring: 15 52% 58%;
 
     --radius: 0.5rem;
 
@@ -49,10 +49,10 @@
     --color-surface-light: 245 242 236;
     --color-surface-light-card: 235 230 221;
 
-    --color-primary: 93 184 166;
-    --color-primary-active: 74 158 142;
-    --color-primary-disabled: 42 58 55;
-    --color-accent-coral: 204 120 92;
+    --color-primary: 204 120 92;
+    --color-primary-active: 169 88 62;
+    --color-primary-disabled: 230 223 216;
+    --color-accent-teal: 93 184 166;
     --color-accent-amber: 232 165 90;
 
     --color-hairline: 42 42 48;
@@ -67,7 +67,7 @@
     --color-ink: 20 20 19;
     --color-body: 61 61 58;
     --color-muted-text: 108 106 100;
-    --color-on-primary: 15 15 18;
+    --color-on-primary: 255 255 255;
 
     --color-success: 93 184 114;
     --color-warning: 212 160 23;

@@ -1,14 +1,14 @@
 const KPIS = [
   { value: '15 h', label: 'par semaine, par commercial' },
   { value: '3 sem.', label: 'du diagnostic à la mise en production' },
-  { value: '0', label: "migration d'outil, jamais" },
+  { value: '100%', label: 'sur-mesure, toujours' },
 ]
 
 export default function ProofSection() {
   return (
     <section id="proof" className="on-light px-8 py-section">
       <div className="mx-auto max-w-[920px]">
-        <div className="eyebrow mb-6 text-center text-accent-coral">Ils ont sauté le pas</div>
+        <div className="eyebrow mb-6 text-center text-primary">Ils ont sauté le pas</div>
         <blockquote className="m-0 text-center font-display text-[clamp(1.75rem,3vw,2.25rem)] font-medium italic leading-[1.25] tracking-tight text-ink [text-wrap:pretty]">
           «&nbsp;Sablia a divisé par trois le temps que mes commerciaux passent dans Salesforce. On
           a récupéré une journée entière par semaine et par personne.&nbsp;»

@@ -34,7 +34,7 @@ export default function TopNav() {
         <button
           type="button"
           onClick={openBooking}
-          className="t-button ml-auto hidden h-10 items-center rounded-md bg-primary px-5 text-on-primary transition-shadow duration-base hover:shadow-glow-teal md:inline-flex"
+          className="t-button ml-auto hidden h-10 items-center rounded-md bg-primary px-5 text-on-primary transition-shadow duration-base hover:shadow-glow-coral md:inline-flex"
         >
           Réserver un call
         </button>
