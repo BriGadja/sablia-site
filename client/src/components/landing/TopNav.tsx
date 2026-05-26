@@ -16,7 +16,7 @@ export default function TopNav() {
     <nav className="sticky top-0 z-50 border-b border-hairline bg-canvas-soft/82 backdrop-blur-xl backdrop-saturate-[1.4]">
       <div className="mx-auto flex h-16 max-w-editorial items-center gap-10 px-8">
         <a href="/" className="flex shrink-0 items-center gap-2.5">
-          <img src="/wordmark-dark.svg" alt="Sablia" className="block h-7" />
+          <img src="/wordmark-dark.svg" alt="Sablia" className="block h-9" />
         </a>
 
         <div className="hidden flex-1 items-center gap-7 md:flex">
