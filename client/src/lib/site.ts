@@ -1,16 +1,10 @@
 /**
- * Canonical Sablia constants shared across landing sections.
- *
- * Ported from sablia-io with corrections for sablia-site :
- * - email = "brice@sablia.io" (canonical per plan Phase 3 item 12)
- * - privacy route = "/politique-confidentialite" (sablia-site route)
- * - diagnostic webhook stays in form-constants.ts (compat analytics flow)
+ * Canonical Sablia constants shared across landing + legal pages.
  */
 export const site = {
   name: 'Sablia',
   domain: 'sablia.io',
-  tagline:
-    "Intégrer l'intelligence artificielle dans votre PME, avec le Responsable Pédagogique IA d'IAPreneurs.",
+  tagline: "Agence d'intégration Claude AI × CRM",
   founder: 'Brice Gachadoat',
   email: 'brice@sablia.io',
 

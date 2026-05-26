@@ -8,7 +8,9 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 import type { Server } from 'http'
-import { nanoid } from 'nanoid'
+
+const nanoid = () => Math.random().toString(36).slice(2, 10)
+
 import viteConfig from '../vite.config'
 
 const viteLogger = createLogger()

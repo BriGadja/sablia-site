@@ -1,0 +1,268 @@
+/* ============================================================================
+   Sablia Design System — Colors + Typography Foundations
+   ----------------------------------------------------------------------------
+   Dark-first editorial system. Cormorant Garamond display + Inter body.
+   Anchor on `--canvas` (#0f0f12) and `--primary` (#5db8a6).
+   ============================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ============================ COLORS ============================ */
+
+  /* Brand & Accent */
+  --primary: #5db8a6;            /* Signature Sablia teal */
+  --primary-active: #4a9e8e;     /* Press / darker hover */
+  --primary-disabled: #2a3a37;   /* Desaturated dark-tinted */
+  --accent-coral: #cc785c;       /* Secondary warm accent — sparing */
+  --accent-amber: #e8a55a;       /* KPI / inline data callouts */
+
+  /* Brand legacy (logo gradient) */
+  --logo-navy: #1a2e4e;
+  --logo-coral: #c45a2c;
+
+  /* Surface — Dark */
+  --canvas: #0f0f12;             /* Page floor, warm dark */
+  --canvas-soft: #141418;        /* Nav bar, subtle elevation */
+  --surface-card: #1a1a1f;       /* Feature/use-case cards */
+  --surface-card-elevated: #222228; /* Hover / emphasized cards */
+
+  /* Surface — Light contrast bands */
+  --surface-light: #f5f2ec;      /* Cream contrast section */
+  --surface-light-card: #ebe6dd; /* Card within light section */
+
+  /* Hairlines */
+  --hairline: #2a2a30;           /* 1px border on dark */
+  --hairline-light: #e0dbd2;     /* 1px border on light */
+
+  /* Text — on dark */
+  --on-dark: #f0ede6;            /* Headlines / primary text */
+  --on-dark-strong: #ffffff;     /* Hero h1, key numbers */
+  --on-dark-body: #b8b5ae;       /* Default paragraph on dark */
+  --on-dark-muted: #7a7770;      /* Sub-headings, footer */
+  --on-dark-soft: #5a5852;       /* Captions, fine-print */
+
+  /* Text — on light */
+  --ink: #141413;                /* Headlines on light */
+  --body: #3d3d3a;               /* Paragraph on light */
+  --muted: #6c6a64;              /* Secondary on light */
+  --on-primary: #0f0f12;         /* Dark text on teal */
+
+  /* Semantic */
+  --success: #5db872;
+  --warning: #d4a017;
+  --error: #c64545;
+
+  /* ============================ TYPE FAMILIES ============================ */
+  --font-display: "Cormorant Garamond", Garamond, "Times New Roman", serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ============================ SPACING ============================ */
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+  --space-section: 96px;
+
+  /* ============================ RADII ============================ */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 9999px;
+  --radius-full: 9999px;
+
+  /* ============================ ELEVATION ============================ */
+  --shadow-glow-teal: 0 0 20px rgba(93, 184, 166, 0.15);
+  --shadow-ring-teal: 0 0 0 3px rgba(93, 184, 166, 0.18);
+
+  /* ============================ MOTION ============================ */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+}
+
+/* ============================================================================
+   BASE TYPE STYLES
+   ============================================================================ */
+
+html, body {
+  background: var(--canvas);
+  color: var(--on-dark-body);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ----- Display (Cormorant Garamond, weight 500, negative tracking) ----- */
+
+.t-display-xl {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 64px;
+  line-height: 1.05;
+  letter-spacing: -1.5px;
+  color: var(--on-dark);
+}
+
+.t-display-lg {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 48px;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: var(--on-dark);
+}
+
+.t-display-md {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  color: var(--on-dark);
+}
+
+.t-display-sm {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+  color: var(--on-dark);
+}
+
+/* ----- Title (Inter, weight 500) ----- */
+
+.t-title-lg {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1.3;
+  color: var(--on-dark);
+}
+
+.t-title-md {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--on-dark);
+}
+
+.t-title-sm {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--on-dark);
+}
+
+/* ----- Body (Inter, weight 400) ----- */
+
+.t-body-md {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--on-dark-body);
+}
+
+.t-body-sm {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--on-dark-body);
+}
+
+/* ----- Caption / Labels ----- */
+
+.t-caption {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--on-dark-muted);
+}
+
+.t-caption-uppercase {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--on-dark-muted);
+}
+
+/* ----- Data / Mono ----- */
+
+.t-data {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--on-dark);
+}
+
+/* ----- Button + Nav ----- */
+
+.t-button {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.t-nav-link {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--on-dark-body);
+}
+
+/* ============================================================================
+   SEMANTIC ELEMENT MAPPING (h1, h2, code, p, etc.)
+   ============================================================================ */
+
+h1 { font-family: var(--font-display); font-weight: 500; font-size: 64px; line-height: 1.05; letter-spacing: -1.5px; color: var(--on-dark); margin: 0; }
+h2 { font-family: var(--font-display); font-weight: 500; font-size: 48px; line-height: 1.1;  letter-spacing: -1px;   color: var(--on-dark); margin: 0; }
+h3 { font-family: var(--font-display); font-weight: 500; font-size: 36px; line-height: 1.15; letter-spacing: -0.5px; color: var(--on-dark); margin: 0; }
+h4 { font-family: var(--font-display); font-weight: 500; font-size: 28px; line-height: 1.2;  letter-spacing: -0.3px; color: var(--on-dark); margin: 0; }
+h5 { font-family: var(--font-body); font-weight: 500; font-size: 22px; line-height: 1.3; color: var(--on-dark); margin: 0; }
+h6 { font-family: var(--font-body); font-weight: 500; font-size: 18px; line-height: 1.4; color: var(--on-dark); margin: 0; }
+
+p  { font-family: var(--font-body); font-weight: 400; font-size: 16px; line-height: 1.55; color: var(--on-dark-body); margin: 0; }
+
+code, pre, kbd, samp {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--on-dark);
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* On light surfaces, text inverts */
+.on-light { color: var(--body); background: var(--surface-light); }
+.on-light h1, .on-light h2, .on-light h3, .on-light h4 { color: var(--ink); }
+.on-light p { color: var(--body); }

@@ -6,221 +6,42 @@
     "locale": "fr_FR",
     "twitterHandle": "@sablia_io",
     "defaultImage": "https://sablia.io/og-image.png",
-    "lastUpdated": "2026-04-20"
+    "lastUpdated": "2026-05-26"
   },
 
   "pages": {
     "/": {
-      "title": "Diagnostic Sablia — Intégrer l'IA dans votre PME, 490€ HT, 5 jours",
-      "titleTemplate": "%s | Coach-Implémenteur IA pour PME",
-      "description": "Intégrer l'intelligence artificielle dans votre PME, avec le Responsable Pédagogique IA d'IAPreneurs. Diagnostic en 5 jours ouvrés, 490€ HT, PDF de 10-15 pages.",
+      "title": "Sablia — Intégrez Claude AI dans votre CRM",
+      "titleTemplate": "%s | Agence d'intégration Claude AI × CRM",
+      "description": "Sablia connecte Claude AI à votre CRM pour automatiser vos processus commerciaux. Dashboards intelligents, nurturing automatisé, analyse de calls. Call discovery gratuit.",
       "keywords": [
-        "diagnostic IA PME",
-        "intégration IA entreprise",
-        "automatisation PME",
-        "n8n consultant",
-        "coach implémentation IA",
-        "diagnostic automatisation",
-        "IA PME française",
-        "conseil IA PME",
-        "IAPreneurs",
-        "consultant IA entreprise"
+        "intégration Claude AI CRM",
+        "automatisation CRM",
+        "Salesforce AI",
+        "HubSpot automatisation",
+        "Pipedrive Claude",
+        "agence IA CRM",
+        "automatisation processus commerciaux",
+        "Claude AI entreprise",
+        "CRM intelligence artificielle",
+        "Anthropic Claude intégration"
       ],
       "canonical": "https://sablia.io/",
       "openGraph": {
         "type": "website",
-        "title": "Diagnostic Sablia — IA pour PME, 490€ HT, 5 jours",
-        "description": "Cinq jours. Un PDF. Une décision claire. Cartographie de vos process + recommandation d'implémentation IA. 490€ HT, déduits si signature Développement ou Accompagnement sous 90 j.",
+        "title": "Sablia — Intégrez Claude AI dans votre CRM",
+        "description": "Gagnez 15h par semaine sur vos processus commerciaux. Sablia connecte Claude AI à Salesforce, HubSpot, Pipedrive — sans changer vos outils.",
         "url": "https://sablia.io/",
-        "image": "https://sablia.io/og-image-home.png",
-        "imageAlt": "Sablia — Diagnostic IA pour PME",
+        "image": "https://sablia.io/og-image.png",
         "siteName": "Sablia"
       },
       "twitter": {
         "card": "summary_large_image",
-        "title": "Diagnostic Sablia — IA pour PME, 490€ HT",
-        "description": "5 jours, 1 PDF, 1 décision claire. Le diagnostic qui vous dit aussi quand l'IA n'a pas sa place.",
-        "image": "https://sablia.io/twitter-image-home.png",
+        "title": "Sablia — Claude AI × votre CRM",
+        "description": "Dashboards intelligents, nurturing automatisé, analyse de calls. Call discovery gratuit, 45 min.",
         "creator": "@sablia_io"
       },
-      "_structuredDataNote": "Homepage JSON-LD is ProfessionalService in index.html — no duplicate here"
-    },
-
-    "/tarifs": {
-      "title": "Tarifs Sablia — Diagnostic 490€ puis 3 paths post-audit",
-      "description": "Le Diagnostic Sablia à 490€ HT est le point d'entrée unique. Post-audit, 3 paths : Formation (dès 1 500€), Accompagnement (tarif en 1-to-1), Développement (tarif en 1-to-1).",
-      "keywords": [
-        "tarif automatisation",
-        "prix n8n",
-        "coût Make.com",
-        "devis automatisation",
-        "prix formation n8n",
-        "tarif consultant automatisation",
-        "ROI automatisation",
-        "budget transformation digitale"
-      ],
-      "canonical": "https://sablia.io/tarifs",
-      "openGraph": {
-        "type": "website",
-        "title": "Tarifs & Offres d'Automatisation | Sablia",
-        "description": "Audit gratuit, formations 1200-3000€, solutions 2500-60000€. ROI 4-12 mois. Paiement échelonné disponible.",
-        "url": "https://sablia.io/tarifs",
-        "image": "https://sablia.io/og-image.png",
-        "siteName": "Sablia"
-      },
-      "twitter": {
-        "card": "summary_large_image",
-        "title": "Tarifs Automatisation | Sablia",
-        "description": "Offres modulaires : Audit, Formations, Solutions. ROI 4-12 mois.",
-        "image": "https://sablia.io/twitter-image.png"
-      },
-      "structuredData": {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        "name": "Offres Sablia",
-        "description": "Services d'automatisation pour PME",
-        "itemListElement": [
-          {
-            "@type": "Offer",
-            "name": "Appel Découverte",
-            "price": "0",
-            "priceCurrency": "EUR"
-          },
-          {
-            "@type": "Offer",
-            "name": "Audit Express",
-            "price": "350",
-            "priceCurrency": "EUR"
-          },
-          {
-            "@type": "Offer",
-            "name": "Diagnostic Complet",
-            "price": "2000",
-            "priceCurrency": "EUR"
-          }
-        ]
-      }
-    },
-
-    "/gap": {
-      "title": "Analyse GAP Gratuite - Évaluez votre Potentiel d'Automatisation",
-      "description": "Formulaire d'analyse GAP gratuit. Identifiez vos opportunités d'automatisation et estimez vos économies potentielles. Réponse sous 24h.",
-      "keywords": [
-        "analyse GAP",
-        "audit automatisation gratuit",
-        "diagnostic entreprise",
-        "évaluation processus",
-        "opportunités automatisation",
-        "audit digital gratuit"
-      ],
-      "canonical": "https://sablia.io/gap",
-      "openGraph": {
-        "type": "website",
-        "title": "Analyse GAP Gratuite | Sablia",
-        "description": "Formulaire gratuit pour identifier vos opportunités d'automatisation. Réponse personnalisée sous 24h.",
-        "url": "https://sablia.io/gap",
-        "image": "https://sablia.io/og-image.png",
-        "siteName": "Sablia"
-      },
-      "twitter": {
-        "card": "summary",
-        "title": "Analyse GAP Gratuite | Sablia",
-        "description": "Identifiez vos opportunités d'automatisation. Réponse sous 24h.",
-        "image": "https://sablia.io/twitter-image.png"
-      }
-    },
-
-    "/roi": {
-      "title": "Calculateur ROI Automatisation - Estimez vos Économies | Sablia",
-      "description": "Calculez le ROI de vos projets d'automatisation. Estimez vos économies en temps, argent, et productivité. Outil gratuit, résultats instantanés.",
-      "keywords": [
-        "calculateur ROI",
-        "ROI automatisation",
-        "calcul économies automatisation",
-        "retour sur investissement n8n",
-        "estimation gains automatisation",
-        "calculer ROI workflow"
-      ],
-      "canonical": "https://sablia.io/roi",
-      "openGraph": {
-        "type": "website",
-        "title": "Calculateur ROI Automatisation | Sablia",
-        "description": "Estimez vos économies en automatisant vos processus. Résultats instantanés. Gratuit.",
-        "url": "https://sablia.io/roi",
-        "image": "https://sablia.io/og-image.png",
-        "siteName": "Sablia"
-      },
-      "twitter": {
-        "card": "summary_large_image",
-        "title": "Calculateur ROI Automatisation | Sablia",
-        "description": "Estimez vos économies potentielles. Gratuit et instantané.",
-        "image": "https://sablia.io/twitter-image.png"
-      },
-      "structuredData": {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Calculateur ROI Automatisation Sablia",
-        "url": "https://sablia.io/roi",
-        "applicationCategory": "BusinessApplication",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "EUR"
-        }
-      }
-    },
-
-    "/about": {
-      "title": "À propos de Sablia - Experts en Automatisation Business",
-      "description": "Sablia accompagne les PME françaises dans leur transformation digitale avec n8n et Make.com. Approche Formation-First. Souveraineté des données garantie.",
-      "keywords": [
-        "Sablia",
-        "consultant automatisation",
-        "expert n8n France",
-        "formation Make.com",
-        "transformation digitale PME",
-        "automatisation souveraine"
-      ],
-      "canonical": "https://sablia.io/about",
-      "openGraph": {
-        "type": "website",
-        "title": "À propos de Sablia | Experts Automatisation PME",
-        "description": "Nous accompagnons les PME françaises dans leur transformation digitale. Formation + développement.",
-        "url": "https://sablia.io/about",
-        "image": "https://sablia.io/og-image.png",
-        "siteName": "Sablia"
-      },
-      "twitter": {
-        "card": "summary",
-        "title": "À propos de Sablia",
-        "description": "Experts en automatisation business pour PME françaises.",
-        "image": "https://sablia.io/twitter-image.png"
-      },
-      "structuredData": {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Brice Gachadoat",
-        "url": "https://sablia.io/about",
-        "image": "https://sablia.io/brice-gachadoat.jpg",
-        "jobTitle": "Responsable Pédagogique et Coach Développement IA chez IAPreneurs — Fondateur de Sablia",
-        "description": "Ingénieur informatique avec plus de 10 ans d'expérience dans l'IT, Responsable Pédagogique et Coach Développement IA chez IAPreneurs, spécialisé en intégration IA et automatisation business pour PME.",
-        "worksFor": {
-          "@type": "Organization",
-          "name": "Sablia",
-          "url": "https://sablia.io"
-        },
-        "knowsAbout": [
-          "Automatisation business",
-          "n8n",
-          "Make.com",
-          "Intelligence Artificielle",
-          "Transformation digitale"
-        ],
-        "sameAs": [
-          "https://linkedin.com/in/brice-gachadoat",
-          "https://calendly.com/brice-gachadoat"
-        ]
-      }
+      "_structuredDataNote": "Homepage JSON-LD is ProfessionalService in index.html"
     },
 
     "/mentions-legales": {
@@ -265,150 +86,21 @@
       }
     },
 
-    "/faq": {
-      "title": "FAQ — Diagnostic Sablia & intégration IA PME | Sablia",
-      "description": "Les réponses aux questions fréquentes sur le Diagnostic Sablia (490€ HT, 5 jours), les 3 paths post-audit, la différence avec IAPreneurs et la sécurité des données.",
-      "keywords": [
-        "FAQ automatisation",
-        "questions fréquentes n8n",
-        "aide Make.com",
-        "automatisation PME FAQ"
-      ],
-      "canonical": "https://sablia.io/faq",
-      "openGraph": {
-        "type": "website",
-        "title": "FAQ | Sablia - Automatisation IA pour PME",
-        "description": "30+ réponses à vos questions sur l'automatisation business avec n8n et Make.com.",
-        "url": "https://sablia.io/faq",
-        "siteName": "Sablia"
-      },
-      "twitter": {
-        "card": "summary",
-        "title": "FAQ | Sablia",
-        "description": "Toutes les réponses sur l'automatisation d'entreprise avec Sablia."
-      }
-    },
-
-    "/cas-clients": {
-      "title": "Cas clients - Exemples de transformations | Sablia",
-      "description": "Découvrez comment nos clients ont transformé leur entreprise grâce à l'automatisation. Études de cas e-commerce, conseil et associations.",
-      "keywords": [
-        "cas clients automatisation",
-        "études de cas n8n",
-        "témoignages Make.com",
-        "transformation digitale PME"
-      ],
-      "canonical": "https://sablia.io/cas-clients",
-      "openGraph": {
-        "type": "website",
-        "title": "Cas clients | Sablia - Automatisation IA pour PME",
-        "description": "Des transformations concrètes, des résultats mesurables. Découvrez nos études de cas.",
-        "url": "https://sablia.io/cas-clients",
-        "siteName": "Sablia"
-      },
-      "twitter": {
-        "card": "summary",
-        "title": "Cas clients | Sablia",
-        "description": "Études de cas : e-commerce, cabinet de conseil, association. Résultats mesurables."
-      },
-      "structuredData": {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        "name": "Cas clients Sablia",
-        "description": "Études de cas d'automatisation pour PME",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "E-commerce — Automatisation du pipeline de vente",
-            "description": "Pipeline de vente automatisé de A à Z. Résultat : 30h/semaine économisées."
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Cabinet de conseil — Automatisation des rapports clients",
-            "description": "Rapports clients générés automatiquement. Résultat : 85% de temps gagné."
-          },
-          {
-            "@type": "ListItem",
-            "position": 3,
-            "name": "Association — Gestion des adhérents et communications",
-            "description": "Gestion des adhérents et communications automatisée. Résultat : 0 erreur de suivi."
-          }
-        ]
-      }
-    },
-
     "/thank-you": {
       "title": "Merci - Sablia",
-      "description": "Votre demande a bien été prise en compte. Nous vous répondrons dans les 24 heures.",
+      "description": "Votre demande a bien été prise en compte. Nous vous recontactons sous 48h.",
       "robots": "noindex, nofollow"
-    },
-
-    "/lp/automatisation-pme": {
-      "title": "Automatisez vos processus répétitifs | Sablia",
-      "description": "Gagnez 20h par semaine en automatisant vos tâches répétitives. Formation + développement n8n/Make.com. ROI en 4-8 mois.",
-      "robots": "noindex, follow",
-      "_note": "Ad landing page — not in sitemap, noindex"
-    },
-
-    "/lp/audit-gratuit": {
-      "title": "Audit Automatisation Gratuit | Sablia",
-      "description": "Découvrez vos opportunités d'automatisation en 2 minutes. Recommandations personnalisées, réponse sous 24h, sans engagement.",
-      "robots": "noindex, follow",
-      "_note": "Ad landing page — not in sitemap, noindex"
     }
   },
 
   "globalMetaTags": {
     "viewport": "width=device-width, initial-scale=1.0",
     "charset": "utf-8",
-    "theme-color": "#1a2e4e",
+    "theme-color": "#0f0f12",
     "robots": "index, follow",
     "googlebot": "index, follow",
     "author": "Sablia",
     "language": "fr",
     "revisit-after": "7 days"
-  },
-
-  "implementation": {
-    "notes": [
-      "Utiliser react-helmet-async ou Next.js Head pour injecter les meta-tags",
-      "Générer les images Open Graph (og-image-*.png) avec dimensions 1200x630px",
-      "Générer les images Twitter Card (twitter-image-*.png) avec dimensions 1200x600px",
-      "Ajouter balise <link rel='canonical'> pour éviter duplicate content",
-      "Implémenter structured data (JSON-LD) dans <script type='application/ld+json'>",
-      "Tester avec Google Rich Results Test et Facebook Sharing Debugger",
-      "Mettre à jour lastmod dans sitemap.xml lors de changements de meta-tags"
-    ],
-    "priorityActions": [
-      "1. Créer les images Open Graph pour chaque page principale",
-      "2. Implémenter les meta-tags dans les composants de page",
-      "3. Valider avec Google Search Console",
-      "4. Tester les partages sociaux (Facebook, LinkedIn, Twitter)",
-      "5. Monitorer les CTR dans Google Search Console après déploiement"
-    ]
-  },
-
-  "seoRecommendations": {
-    "titleOptimization": {
-      "length": "50-60 caractères idéalement",
-      "structure": "Mot-clé principal | Bénéfice | Marque",
-      "example": "Automatisation IA pour PME | ROI Mesurable | Sablia"
-    },
-    "descriptionOptimization": {
-      "length": "150-160 caractères idéalement",
-      "structure": "Bénéfice + Détails + CTA",
-      "example": "Automatisez vos processus avec n8n/Make.com. Formation + développement. ROI 4-12 mois. Audit gratuit."
-    },
-    "keywordsStrategy": {
-      "primary": ["automatisation business", "n8n", "Make.com"],
-      "secondary": ["workflow automation", "transformation digitale PME", "ROI automatisation"],
-      "longTail": [
-        "formation n8n pour PME",
-        "consultant automatisation France",
-        "automatisation souveraine données"
-      ]
-    }
   }
 }

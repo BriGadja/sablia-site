@@ -6,12 +6,15 @@ export default {
   theme: {
     extend: {
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-        xs: "2px",
+        xs: "4px",
+        sm: "6px",
+        md: "8px",
+        lg: "12px",
+        xl: "16px",
+        pill: "9999px",
       },
       colors: {
+        // ─── shadcn/ui HSL tokens (preserved — Toaster, Card, not-found) ───
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -22,7 +25,7 @@ export default {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
-        primary: {
+        "shadcn-primary": {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
@@ -45,59 +48,44 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        chart: {
-          "1": "hsl(var(--chart-1))",
-          "2": "hsl(var(--chart-2))",
-          "3": "hsl(var(--chart-3))",
-          "4": "hsl(var(--chart-4))",
-          "5": "hsl(var(--chart-5))",
+        // ─── New design system tokens (space-separated RGB for alpha support) ───
+        canvas: {
+          DEFAULT: "rgb(var(--color-canvas) / <alpha-value>)",
+          soft: "rgb(var(--color-canvas-soft) / <alpha-value>)",
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
+        "surface-card": {
+          DEFAULT: "rgb(var(--color-surface-card) / <alpha-value>)",
+          elevated: "rgb(var(--color-surface-card-elevated) / <alpha-value>)",
         },
-        // ─── Sablia palette v2 — "Sable & Terre cuite" (sablia-io port) ───
-        sable: {
-          DEFAULT: "#F4EEDF",
-          "50": "#FBF8F2",
-          "100": "#F4EEDF",
-          "200": "#E9E0CB",
-          "300": "#D5C8A8",
-          "400": "#B7A780",
+        "surface-light": {
+          DEFAULT: "rgb(var(--color-surface-light) / <alpha-value>)",
+          card: "rgb(var(--color-surface-light-card) / <alpha-value>)",
         },
-        encre: {
-          DEFAULT: "#1A1613",
-          "30": "#9C948B",
-          "50": "#6F665F",
-          "70": "#4C4540",
-          "90": "#2A2420",
+        primary: {
+          DEFAULT: "rgb(var(--color-primary) / <alpha-value>)",
+          active: "rgb(var(--color-primary-active) / <alpha-value>)",
+          disabled: "rgb(var(--color-primary-disabled) / <alpha-value>)",
         },
-        tuile: {
-          DEFAULT: "#B84A1E",
-          dark: "#953A14",
-          soft: "#D97A4F",
+        "accent-coral": "rgb(var(--color-accent-coral) / <alpha-value>)",
+        "accent-amber": "rgb(var(--color-accent-amber) / <alpha-value>)",
+        hairline: {
+          DEFAULT: "rgb(var(--color-hairline) / <alpha-value>)",
+          light: "rgb(var(--color-hairline-light) / <alpha-value>)",
         },
-        foret: "#3B4A3A",
-        ocre: "#C9A461",
-        // ─── Shim layer — legacy sablia-* tokens remapped to new palette ───
-        // Active Phases 2-4 so LPs, /tarifs, /gap, legal pages keep compiling.
-        // Removed Phase 5 after manual propagation (see plan §risks).
-        "sablia-bg": "#F4EEDF",
-        "sablia-surface": "#FBF8F2",
-        "sablia-text": "#1A1613",
-        "sablia-text-secondary": "#4C4540",
-        "sablia-text-tertiary": "#9C948B",
-        "sablia-accent": "#B84A1E",
-        "sablia-accent-hover": "#953A14",
-        "sablia-sienna": "#B84A1E",
-        "sablia-alba": "#C9A461",
-        "sablia-border": "rgba(26, 22, 19, 0.12)",
+        "on-dark": {
+          DEFAULT: "rgb(var(--color-on-dark) / <alpha-value>)",
+          strong: "rgb(var(--color-on-dark-strong) / <alpha-value>)",
+          body: "rgb(var(--color-on-dark-body) / <alpha-value>)",
+          muted: "rgb(var(--color-on-dark-muted) / <alpha-value>)",
+          soft: "rgb(var(--color-on-dark-soft) / <alpha-value>)",
+        },
+        ink: "rgb(var(--color-ink) / <alpha-value>)",
+        body: "rgb(var(--color-body) / <alpha-value>)",
+        "muted-text": "rgb(var(--color-muted-text) / <alpha-value>)",
+        "on-primary": "rgb(var(--color-on-primary) / <alpha-value>)",
+        success: "rgb(var(--color-success) / <alpha-value>)",
+        warning: "rgb(var(--color-warning) / <alpha-value>)",
+        error: "rgb(var(--color-error) / <alpha-value>)",
       },
       keyframes: {
         "accordion-down": {
@@ -116,26 +104,25 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-in": "fade-in 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) forwards",
+        "fade-in": "fade-in 0.9s cubic-bezier(0.2, 0, 0, 1) forwards",
       },
       fontFamily: {
-        sans: ["Geist", "system-ui", "sans-serif"],
-        display: ["Fraunces Variable", "EB Garamond", "Georgia", "serif"],
-        mono: ["JetBrains Mono", "SF Mono", "monospace"],
-        "legacy-sans": ["Inter Tight", "Inter", "system-ui", "sans-serif"],
+        display: ["'Cormorant Garamond Variable'", "Garamond", "'Times New Roman'", "serif"],
+        sans: ["'Inter Variable'", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "sans-serif"],
+        mono: ["'JetBrains Mono Variable'", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
+      },
+      spacing: {
+        section: "96px",
       },
       transitionTimingFunction: {
-        editorial: "cubic-bezier(0.22, 0.61, 0.36, 1)",
+        standard: "cubic-bezier(0.2, 0, 0, 1)",
       },
       boxShadow: {
-        "warm-sm": "0 1px 3px rgba(26, 46, 78, 0.05), 0 1px 2px rgba(139, 115, 80, 0.04)",
-        warm: "0 4px 12px rgba(26, 46, 78, 0.06), 0 2px 4px rgba(139, 115, 80, 0.04)",
-        "warm-lg": "0 12px 32px rgba(26, 46, 78, 0.08), 0 4px 8px rgba(139, 115, 80, 0.04)",
-        paper: "0 1px 0 rgba(26, 22, 19, 0.04), 0 2px 8px -4px rgba(26, 22, 19, 0.08)",
-        elev: "0 2px 1px rgba(26, 22, 19, 0.03), 0 10px 30px -12px rgba(26, 22, 19, 0.18)",
+        "glow-teal": "0 0 20px rgba(93, 184, 166, 0.15)",
+        "ring-teal": "0 0 0 3px rgba(93, 184, 166, 0.18)",
       },
       maxWidth: {
-        editorial: "1280px",
+        editorial: "1200px",
       },
     },
   },

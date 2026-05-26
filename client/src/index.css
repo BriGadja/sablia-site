@@ -1,11 +1,8 @@
 /* ─── Fonts (self-hosted via @fontsource) ─────────────────────── */
-/* Fraunces "full" axes = wght + SOFT + WONK + opsz (vs "wght" only in root index). */
-@import "@fontsource-variable/fraunces/full.css";
-@import "@fontsource-variable/fraunces/full-italic.css";
-@import "@fontsource/geist/400.css";
-@import "@fontsource/geist/500.css";
-@import "@fontsource/geist/600.css";
-@import "@fontsource/jetbrains-mono/500.css";
+@import "@fontsource-variable/cormorant-garamond";
+@import "@fontsource-variable/cormorant-garamond/wght-italic.css";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
 
 @tailwind base;
 @tailwind components;
@@ -13,65 +10,79 @@
 
 @layer base {
   :root {
-    /* ─── shadcn/ui base tokens (preserved — Toast, Tooltip, etc. rely on these) ─── */
-    --background: 42 42% 92%;
-    --foreground: 216 50% 20%;
+    /* ─── shadcn/ui base tokens (preserved — Toast, Card, not-found rely on these) ─── */
+    --background: 240 7% 5%;
+    --foreground: 38 18% 92%;
 
-    --card: 42 42% 92%;
-    --card-foreground: 216 50% 20%;
+    --card: 240 7% 8%;
+    --card-foreground: 38 18% 92%;
 
-    --popover: 42 50% 95%;
-    --popover-foreground: 216 50% 20%;
+    --popover: 240 7% 8%;
+    --popover-foreground: 38 18% 92%;
 
-    --primary: 216 50% 20%;
-    --primary-foreground: 42 50% 95%;
+    --primary: 166 35% 54%;
+    --primary-foreground: 240 7% 5%;
 
-    --secondary: 40 35% 87%;
-    --secondary-foreground: 216 50% 20%;
+    --secondary: 240 7% 12%;
+    --secondary-foreground: 38 18% 92%;
 
-    --muted: 40 35% 87%;
-    --muted-foreground: 216 28% 38%;
+    --muted: 240 7% 12%;
+    --muted-foreground: 38 6% 46%;
 
-    --accent: 216 50% 20%;
-    --accent-foreground: 42 50% 95%;
+    --accent: 240 7% 12%;
+    --accent-foreground: 38 18% 92%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 56% 52%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 38 20% 82%;
-    --input: 38 20% 82%;
-    --ring: 216 50% 20%;
+    --border: 240 6% 17%;
+    --input: 240 6% 17%;
+    --ring: 166 35% 54%;
 
-    --radius: 0.375rem;
+    --radius: 0.5rem;
 
-    /* ─── Sablia palette v2 — "Sable & Terre cuite" ─── */
-    --color-sable: #f4eedf;
-    --color-sable-50: #fbf8f2;
-    --color-sable-100: #f4eedf;
-    --color-sable-200: #e9e0cb;
-    --color-sable-300: #d5c8a8;
-    --color-sable-400: #b7a780;
+    /* ─── New design system — dark-first editorial ─── */
+    --color-canvas: 15 15 18;
+    --color-canvas-soft: 20 20 24;
+    --color-surface-card: 26 26 31;
+    --color-surface-card-elevated: 34 34 40;
+    --color-surface-light: 245 242 236;
+    --color-surface-light-card: 235 230 221;
 
-    --color-encre: #1a1613;
-    --color-encre-90: #2a2420;
-    --color-encre-70: #4c4540;
-    --color-encre-50: #6f665f;
-    --color-encre-30: #9c948b;
+    --color-primary: 93 184 166;
+    --color-primary-active: 74 158 142;
+    --color-primary-disabled: 42 58 55;
+    --color-accent-coral: 204 120 92;
+    --color-accent-amber: 232 165 90;
 
-    --color-tuile: #b84a1e;
-    --color-tuile-dark: #953a14;
-    --color-tuile-soft: #d97a4f;
+    --color-hairline: 42 42 48;
+    --color-hairline-light: 224 219 210;
 
-    --color-foret: #3b4a3a;
-    --color-ocre: #c9a461;
+    --color-on-dark: 240 237 230;
+    --color-on-dark-strong: 255 255 255;
+    --color-on-dark-body: 184 181 174;
+    --color-on-dark-muted: 122 119 112;
+    --color-on-dark-soft: 90 88 82;
+
+    --color-ink: 20 20 19;
+    --color-body: 61 61 58;
+    --color-muted-text: 108 106 100;
+    --color-on-primary: 15 15 18;
+
+    --color-success: 93 184 114;
+    --color-warning: 212 160 23;
+    --color-error: 198 69 69;
 
     /* Typographie */
-    --font-display: "Fraunces Variable", "EB Garamond", Georgia, serif;
-    --font-sans: "Geist", system-ui, sans-serif;
-    --font-mono: "JetBrains Mono", "SF Mono", monospace;
+    --font-display: "Cormorant Garamond Variable", Garamond, "Times New Roman", serif;
+    --font-sans: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-    /* Easing éditorial (micro-interactions apparition + hover) */
-    --ease-editorial: cubic-bezier(0.22, 0.61, 0.36, 1);
+    /* Easing */
+    --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --duration-fast: 120ms;
+    --duration-base: 200ms;
+    --duration-slow: 320ms;
   }
 }
 
@@ -85,149 +96,182 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     font-family: var(--font-sans);
-    font-feature-settings: "ss01", "cv11", "kern";
-    font-synthesis: none;
-    position: relative;
-    /* Signature brand line — 2px terracotta at page top */
-    border-top: 2px solid var(--color-tuile);
-  }
-
-  /* Grain de papier — overlay SVG fractalNoise, opacity 0.35, multiply.
-     Fixed viewport (pas dans un wrapper motion) → évite stacking context artifacts. */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0.35;
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.10  0 0 0 0 0.08  0 0 0 0 0.07  0 0 0 0.35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-  }
-
-  /* Contenu au-dessus du grain */
-  main,
-  header,
-  footer {
-    position: relative;
-    z-index: 2;
+    background: rgb(var(--color-canvas));
+    color: rgb(var(--color-on-dark-body));
   }
 
   ::selection {
-    background: var(--color-tuile);
-    color: var(--color-sable-50);
+    background: rgb(var(--color-primary));
+    color: rgb(var(--color-on-primary));
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-tuile);
+    outline: 2px solid rgb(var(--color-primary));
     outline-offset: 3px;
     border-radius: 2px;
   }
 }
 
-/* ─── Typographie éditoriale ────────────────────────────────── */
+/* ─── Typography — new design system classes ─────────────────── */
 
 @layer components {
-  .display-xl {
+  .t-display-xl {
     font-family: var(--font-display);
-    font-variation-settings:
-      "SOFT" 50,
-      "opsz" 144;
-    font-weight: 350;
-    font-size: clamp(2.75rem, 6vw + 1rem, 5.75rem);
-    line-height: 0.96;
-    letter-spacing: -0.03em;
-  }
-
-  .display-lg {
-    font-family: var(--font-display);
-    font-variation-settings:
-      "SOFT" 40,
-      "opsz" 120;
-    font-weight: 380;
-    font-size: clamp(2.25rem, 4vw + 0.5rem, 3.75rem);
-    line-height: 1.02;
-    letter-spacing: -0.025em;
-  }
-
-  .display-md {
-    font-family: var(--font-display);
-    font-variation-settings:
-      "SOFT" 35,
-      "opsz" 72;
-    font-weight: 400;
-    font-size: clamp(1.5rem, 2vw + 0.75rem, 2.25rem);
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-  }
-
-  /* Italiques éditoriales — terracotta + sans WONK */
-  .font-display em,
-  .display-xl em,
-  .display-lg em,
-  .display-md em {
-    font-style: italic;
-    font-variation-settings:
-      "SOFT" 30,
-      "WONK" 0,
-      "opsz" 144;
-    color: var(--color-tuile);
-  }
-
-  /* Eyebrow — petites capitales espacées */
-  .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
     font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--color-encre-70);
-    font-feature-settings: "tnum", "zero";
+    font-size: clamp(2.5rem, 5vw + 1rem, 4rem);
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+    color: rgb(var(--color-on-dark));
   }
 
-  /* Numéro éditorial — "N° 01" */
-  .folio {
+  .t-display-lg {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(2rem, 3.5vw + 0.5rem, 3rem);
+    line-height: 1.1;
+    letter-spacing: -1px;
+    color: rgb(var(--color-on-dark));
+  }
+
+  .t-display-md {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.5rem, 2vw + 0.5rem, 2.25rem);
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    color: rgb(var(--color-on-dark));
+  }
+
+  .t-display-sm {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.75rem;
+    line-height: 1.2;
+    letter-spacing: -0.3px;
+    color: rgb(var(--color-on-dark));
+  }
+
+  .t-title-lg {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 1.375rem;
+    line-height: 1.3;
+    color: rgb(var(--color-on-dark));
+  }
+
+  .t-title-md {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.4;
+    color: rgb(var(--color-on-dark));
+  }
+
+  .t-title-sm {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.4;
+    color: rgb(var(--color-on-dark));
+  }
+
+  .t-body-md {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.55;
+    color: rgb(var(--color-on-dark-body));
+  }
+
+  .t-body-sm {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: rgb(var(--color-on-dark-body));
+  }
+
+  .t-caption {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: rgb(var(--color-on-dark-muted));
+  }
+
+  .t-caption-uppercase {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgb(var(--color-on-dark-muted));
+  }
+
+  .t-data {
     font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: rgb(var(--color-on-dark));
+  }
+
+  .t-button {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .t-nav-link {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: rgb(var(--color-on-dark-body));
+  }
+
+  /* Light surface class — inverts text for cream bands */
+  .on-light {
+    color: rgb(var(--color-body));
+    background: rgb(var(--color-surface-light));
+  }
+  .on-light h1,
+  .on-light h2,
+  .on-light h3,
+  .on-light h4 {
+    color: rgb(var(--color-ink));
+  }
+  .on-light p {
+    color: rgb(var(--color-body));
+  }
+
+  /* Eyebrow — small caps spaced mono */
+  .eyebrow {
+    font-family: var(--font-sans);
     font-size: 0.75rem;
     font-weight: 500;
-    letter-spacing: 0.14em;
-    color: var(--color-encre-50);
-    font-variant-numeric: tabular-nums;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgb(var(--color-on-dark-muted));
   }
 
-  /* Filet éditorial horizontal, gradient qui s'estompe */
-  .rule {
-    height: 1px;
-    background: linear-gradient(to right, var(--color-encre-30), transparent);
-    border: 0;
-  }
-
-  /* Container éditorial */
+  /* Container editorial */
   .container-editorial {
     width: 100%;
-    max-width: 1280px;
+    max-width: 1200px;
     margin-inline: auto;
     padding-inline: clamp(1.25rem, 4vw, 3rem);
   }
 
-  /* Filets fins — 1px encre à 12% opacity */
+  /* Hairlines */
   .hairline-t {
-    border-top: 1px solid rgba(26, 22, 19, 0.12);
+    border-top: 1px solid rgb(var(--color-hairline));
   }
   .hairline-b {
-    border-bottom: 1px solid rgba(26, 22, 19, 0.12);
-  }
-
-  /* Guillemets français en exergue */
-  .pull-quote::before {
-    content: "« ";
-    color: var(--color-tuile);
-    font-family: var(--font-display);
-  }
-  .pull-quote::after {
-    content: " »";
-    color: var(--color-tuile);
-    font-family: var(--font-display);
+    border-bottom: 1px solid rgb(var(--color-hairline));
   }
 }
 
@@ -237,8 +281,8 @@
   opacity: 0;
   transform: translateY(12px);
   transition:
-    opacity 0.9s var(--ease-editorial),
-    transform 0.9s var(--ease-editorial);
+    opacity 0.9s var(--ease-standard),
+    transform 0.9s var(--ease-standard);
   transition-delay: var(--reveal-delay, 0ms);
 }
 
@@ -258,13 +302,13 @@
 /* ─── Pages légales (mentions, confidentialité, CGV) ──────────── */
 
 .legal-prose {
-  font-family: var(--font-sans, "Geist", system-ui, sans-serif);
-  color: var(--color-encre-70);
+  font-family: var(--font-sans);
+  color: rgb(var(--color-on-dark-body));
 }
 
 .legal-section {
   padding-block: 2rem;
-  border-bottom: 1px solid rgba(26, 22, 19, 0.1);
+  border-bottom: 1px solid rgb(var(--color-hairline));
 }
 
 .legal-section:last-of-type {
@@ -272,14 +316,14 @@
 }
 
 .legal-section > h2 {
-  color: var(--color-encre);
+  color: rgb(var(--color-on-dark));
   margin-bottom: 1.25rem;
 }
 
 .legal-body p {
   font-size: 1rem;
   line-height: 1.7;
-  color: var(--color-encre-70);
+  color: rgb(var(--color-on-dark-body));
   margin-bottom: 1rem;
   max-width: 60ch;
 }
@@ -289,21 +333,20 @@
 }
 
 .legal-body strong {
-  color: var(--color-encre);
+  color: rgb(var(--color-on-dark));
   font-weight: 500;
 }
 
 .legal-body a {
-  color: var(--color-encre);
+  color: rgb(var(--color-primary));
   text-decoration: underline;
-  text-decoration-color: var(--color-tuile);
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
-  transition: color 200ms var(--ease-editorial);
+  transition: color var(--duration-fast) var(--ease-standard);
 }
 
 .legal-body a:hover {
-  color: var(--color-tuile);
+  color: rgb(var(--color-primary-active));
 }
 
 .legal-body ul {
@@ -320,7 +363,7 @@
   padding-left: 1.25rem;
   font-size: 1rem;
   line-height: 1.7;
-  color: var(--color-encre-70);
+  color: rgb(var(--color-on-dark-body));
   max-width: 60ch;
 }
 
@@ -331,18 +374,18 @@
   top: 0.7rem;
   width: 0.35rem;
   height: 0.35rem;
-  background: var(--color-tuile);
+  background: rgb(var(--color-primary));
   transform: rotate(45deg);
 }
 
 .legal-updated {
   margin-top: 3rem;
   padding-top: 1.5rem;
-  border-top: 1px solid rgba(26, 22, 19, 0.1);
-  font-family: var(--font-mono, "JetBrains Mono", monospace);
+  border-top: 1px solid rgb(var(--color-hairline));
+  font-family: var(--font-mono);
   font-size: 0.78rem;
   letter-spacing: 0.04em;
-  color: var(--color-encre-50);
+  color: rgb(var(--color-on-dark-muted));
 }
 
 /* Hide scrollbar for horizontal scroll containers */

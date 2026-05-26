@@ -1,139 +1,134 @@
-import { LogoMark } from '@/components/brand/logo-mark'
-import { ButtonLink } from '@/components/ui/button'
-import { trackEvent } from '@/lib/analytics'
-import { site } from '@/lib/site'
+import { motion } from 'framer-motion'
+import { ArrowRight, Check } from '@/components/icons/lucide-crm'
+import { openBooking } from './BookingModal'
 
-/**
- * Hero éditorial — N°01 Propos liminaire.
- * Copy figée docs/copy-v1.md §C2. Credential line attribue YouTube 200k+
- * à la chaîne de Yassine Sdiri via IAPreneurs (affilié).
- */
-export default function HeroSection() {
-  const scrollToForm = (e: React.MouseEvent) => {
-    e.preventDefault()
-    trackEvent('cta_start_diagnostic', { location: 'hero' })
-    document.querySelector('#diagnostic-form')?.scrollIntoView({ behavior: 'smooth' })
-  }
-
+function Sparkline() {
+  const points = [4, 12, 8, 18, 14, 26, 22, 30, 28, 24, 36, 32, 44, 40, 52, 46, 60, 50]
+  const W = 320
+  const H = 56
+  const xs = points.map((_, i) => (i / (points.length - 1)) * W)
+  const ys = points.map((p) => H - (p / 60) * (H - 8) - 4)
+  const d = xs.map((x, i) => `${i ? 'L' : 'M'}${x.toFixed(1)} ${ys[i].toFixed(1)}`).join(' ')
+  const fill = `${d} L${W} ${H} L0 ${H} Z`
   return (
-    <section
-      id="top"
-      className="relative overflow-hidden pb-20 pt-28 md:pb-32 md:pt-32 lg:pt-36"
-      aria-labelledby="hero-title"
-    >
-      <div className="container-editorial relative">
-        <div className="grid grid-cols-12 gap-x-6 gap-y-10 lg:gap-y-0">
-          {/* Colonne texte */}
-          <div className="col-span-12 lg:col-span-8">
-            <p className="folio mb-6">N° 01 · Propos liminaire</p>
+    <svg className="mb-4 block h-14 w-full" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
+      <title>Sparkline de pipeline</title>
+      <path d={fill} fill="rgba(93,184,166,0.14)" />
+      <path d={d} fill="none" stroke="#5db8a6" strokeWidth="1.75" strokeLinecap="round" />
+    </svg>
+  )
+}
 
-            <h1 id="hero-title" className="display-xl text-[color:var(--color-encre)]">
-              Cinq jours. Un PDF.
-              <br />
-              <em>Une décision claire.</em>
-            </h1>
-
-            <div className="mt-10 max-w-[52ch] text-[1.0625rem] leading-relaxed text-[color:var(--color-encre-70)] md:text-[1.125rem]">
-              <p>
-                Le <span className="text-[color:var(--color-encre)]">Diagnostic Sablia</span>{' '}
-                cartographie vos process, identifie les automatisations qui valent vraiment le coup,
-                et signale celles à laisser de côté.{' '}
-                <span className="text-[color:var(--color-encre)]">490€ HT</span>, déduits de la
-                première facture si vous signez ensuite un contrat Développement ou Accompagnement.
-              </p>
+function DashboardMockup() {
+  const kpis = [
+    { label: 'Volume', value: '€428k', delta: '+18.4%' },
+    { label: 'Deals actifs', value: '62', delta: '+9' },
+    { label: 'Cycle moyen', value: '21j', delta: '−3j', muted: true },
+  ]
+  const rows = [
+    { name: 'Mercier & Cie', amt: '€48,200', stage: 'Negotiation', color: 'text-success' },
+    { name: 'Atelier Garnier', amt: '€36,500', stage: 'Qualified', color: 'text-primary' },
+    { name: 'Maison Lefèvre', amt: '€24,000', stage: 'Discovery', color: 'text-accent-coral' },
+  ]
+  return (
+    <div className="rounded-xl border border-hairline-light bg-surface-light p-6">
+      <div className="mb-4 flex items-center justify-between">
+        <span className="text-[13px] font-medium text-ink">Pipeline commercial · Mars</span>
+        <span className="t-caption-uppercase rounded-full bg-surface-light-card px-2.5 py-1 text-muted-text">
+          Salesforce
+        </span>
+      </div>
+      <div className="mb-4 grid grid-cols-3 gap-2.5">
+        {kpis.map((k) => (
+          <div key={k.label} className="rounded-lg bg-surface-light-card px-3.5 py-3">
+            <div className="text-[10px] font-medium uppercase tracking-[1.2px] text-muted-text">
+              {k.label}
             </div>
-
-            <p className="mt-8 max-w-[58ch] font-display text-[1rem] italic leading-snug tracking-[-0.005em] text-[color:var(--color-encre-70)] md:text-[1.0625rem]">
-              Brice Gachadoat, Responsable Pédagogique et Coach Développement IA chez{' '}
-              <a
-                href={site.iapreneursUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="not-italic font-sans text-[color:var(--color-encre)] underline decoration-[color:var(--color-tuile)] decoration-1 underline-offset-4 transition-colors hover:text-[color:var(--color-tuile)]"
-              >
-                IAPreneurs
-              </a>{' '}
-              (500+ membres).
-            </p>
-
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <ButtonLink
-                href={site.diagnosticAnchor}
-                variant="primary"
-                size="lg"
-                onClick={scrollToForm}
-              >
-                Démarrer mon diagnostic, 490€
-                <svg
-                  viewBox="0 0 20 20"
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  aria-hidden
-                >
-                  <title>Arrow</title>
-                  <path d="M3 10h14M12 5l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </ButtonLink>
-
-              <a
-                href={site.bookingUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackEvent('cta_book_call', { location: 'hero' })}
-                className="inline-flex items-center gap-2 font-display text-[1.05rem] italic text-[color:var(--color-encre-70)] transition-colors hover:text-[color:var(--color-tuile)]"
-                aria-label="Réserver un créneau de discussion avec Brice sur Calendly"
-              >
-                Préférer en discuter d'abord
-                <span aria-hidden>→</span>
-              </a>
+            <div className="font-mono text-[22px] tracking-tight text-ink">{k.value}</div>
+            <div
+              className={`font-mono text-[11px] ${k.muted ? 'text-muted-text' : 'text-success'}`}
+            >
+              {k.delta}
             </div>
-
-            {/* Bandeau de confiance */}
-            <ul className="mt-14 grid grid-cols-3 gap-6 border-t border-[color:var(--color-encre)]/15 pt-8 md:max-w-xl">
-              {[
-                { value: '5 j', label: 'Turnaround diagnostic' },
-                { value: '490€', label: 'HT, crédités si signature' },
-                { value: '40+', label: 'PME déjà accompagnées' },
-              ].map((s) => (
-                <li key={s.label}>
-                  <p className="eyebrow mb-1">{s.label}</p>
-                  <p className="font-display text-[1.75rem] leading-none tracking-[-0.02em] text-[color:var(--color-encre)] md:text-[2rem]">
-                    {s.value}
-                  </p>
-                </li>
-              ))}
-            </ul>
           </div>
-
-          {/* Colonne marque — LogoMark oversized */}
-          <aside className="col-span-12 hidden lg:col-span-4 lg:block" aria-hidden>
-            <div className="sticky top-28 flex flex-col items-end gap-8">
-              <div className="relative">
-                <div className="absolute -inset-6 -z-10 bg-gradient-to-br from-[color:var(--color-tuile)]/8 via-transparent to-[color:var(--color-ocre)]/10 blur-2xl" />
-                <LogoMark size={260} className="text-[color:var(--color-tuile)]" />
-              </div>
-              <div className="w-full border-t border-[color:var(--color-encre)]/15 pt-5 text-right">
-                <p className="folio">Atelier Sablia</p>
-                <p className="mt-2 font-display text-lg italic leading-snug text-[color:var(--color-encre-70)]">
-                  « On ne vend pas un outil.
-                  <br />
-                  On diagnostique le goulot. »
-                </p>
-                <p className="eyebrow mt-4">Brice Gachadoat, fondateur</p>
-              </div>
-            </div>
-          </aside>
+        ))}
+      </div>
+      <Sparkline />
+      <div className="mb-2 text-[11px] font-medium uppercase tracking-[1.2px] text-muted-text">
+        Top opportunités
+      </div>
+      {rows.map((r) => (
+        <div
+          key={r.name}
+          className="mb-1.5 grid grid-cols-[1fr_auto_auto] items-center gap-2.5 rounded-lg bg-surface-light-card px-3 py-2.5"
+        >
+          <span className="text-[13px] text-ink">{r.name}</span>
+          <span className="font-mono text-xs text-body">{r.amt}</span>
+          <span
+            className={`rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-[1.2px] ${r.color} border-current`}
+          >
+            {r.stage}
+          </span>
         </div>
+      ))}
+    </div>
+  )
+}
 
-        {/* Signature basse mobile */}
-        <div className="mt-14 flex items-center gap-5 border-t border-[color:var(--color-encre)]/15 pt-6 lg:hidden">
-          <LogoMark size={44} className="text-[color:var(--color-tuile)]" />
-          <p className="font-display text-base italic leading-snug text-[color:var(--color-encre-70)]">
-            « On ne vend pas un outil. On diagnostique le goulot. »
+export default function HeroSection() {
+  return (
+    <section className="bg-canvas px-8 pb-20 pt-section">
+      <div className="mx-auto grid max-w-editorial items-center gap-14 lg:grid-cols-2">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.2, 0, 0, 1] }}
+        >
+          <div className="eyebrow mb-6 inline-flex items-center gap-2 text-primary">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
+            Agence d'intégration Claude AI
+          </div>
+          <h1 className="t-display-xl text-on-dark-strong">
+            Gagnez 15&nbsp;h par semaine sur vos{' '}
+            <em className="font-display italic text-primary">processus commerciaux.</em>
+          </h1>
+          <p className="mt-6 max-w-[520px] text-lg leading-relaxed text-on-dark-body">
+            Sablia connecte Claude AI à votre CRM pour automatiser vos tâches répétitives, sans
+            changer vos outils.
           </p>
-        </div>
+          <div className="mt-9 flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={openBooking}
+              className="t-button inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-on-primary transition-shadow duration-base hover:shadow-glow-teal"
+            >
+              Réserver un call <ArrowRight size={16} />
+            </button>
+            <a
+              href="#use-cases"
+              className="t-button inline-flex h-11 items-center rounded-md border border-hairline px-5 text-on-dark transition-colors hover:border-on-dark-muted"
+            >
+              Voir les cas d'usage
+            </a>
+          </div>
+          <div className="mt-7 flex gap-6 text-[13px] text-on-dark-muted">
+            <span className="inline-flex items-center gap-1.5">
+              <Check size={14} className="text-success" /> 45&nbsp;min, gratuit
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Check size={14} className="text-success" /> Sans engagement
+            </span>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.15, ease: [0.2, 0, 0, 1] }}
+          className="hidden lg:block"
+        >
+          <DashboardMockup />
+        </motion.div>
       </div>
     </section>
   )

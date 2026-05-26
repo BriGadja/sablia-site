@@ -1,9 +1,8 @@
-import { mkdir, writeFile } from 'node:fs/promises'
+import { createReadStream } from 'node:fs'
+import { mkdir, stat, writeFile } from 'node:fs/promises'
 import { createServer } from 'node:http'
 import { dirname, extname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { createReadStream } from 'node:fs'
-import { stat } from 'node:fs/promises'
 import chromium from '@sparticuz/chromium'
 import puppeteer from 'puppeteer-core'
 
@@ -15,18 +14,10 @@ const PORT = 4173
 // Pre-rendering noindex pages is fine — Helmet emits the right robots meta.
 const ROUTES = [
   '/',
-  '/tarifs',
-  '/gap',
-  '/about',
-  '/roi',
   '/mentions-legales',
   '/politique-confidentialite',
   '/cgv',
-  '/faq',
-  '/cas-clients',
   '/thank-you',
-  '/lp/automatisation-pme',
-  '/lp/audit-gratuit',
 ]
 
 const MIME = {

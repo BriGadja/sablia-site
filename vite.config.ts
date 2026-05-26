@@ -11,11 +11,8 @@ const __dirname = dirname(__filename);
 export default defineConfig({
   plugins: [
     react(),
-    // Generate fallback @font-face metrics (size-adjust, ascent/descent-override)
-    // so the initial paint with system serif/sans closely matches Fraunces/Geist
-    // → avoids CLS / FOUT jank on H1 64px+.
     FontaineTransform.vite({
-      fallbacks: ["Georgia", "EB Garamond", "system-ui", "Arial"],
+      fallbacks: ["Garamond", "Times New Roman", "system-ui", "Arial"],
       resolvePath: (id) => new URL(`.${id}`, import.meta.url),
     }),
     visualizer({
@@ -43,11 +40,9 @@ export default defineConfig({
       },
       output: {
         manualChunks: {
-          // Vendor chunks for better caching
           "react-vendor": ["react", "react-dom", "react/jsx-runtime"],
           router: ["wouter"],
           animation: ["framer-motion"],
-          forms: ["react-hook-form", "@hookform/resolvers", "zod"],
           ui: ["@radix-ui/react-toast"],
         },
       },

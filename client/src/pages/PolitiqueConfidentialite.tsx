@@ -91,10 +91,6 @@ export default function PolitiqueConfidentialite() {
                 PCI-DSS)
               </li>
               <li>
-                <strong>Google (Analytics 4, Ads)</strong> — mesure d'audience anonymisée (activé
-                uniquement après consentement bandeau)
-              </li>
-              <li>
                 <strong>Calendly</strong> — prise de rendez-vous (États-Unis, DPA signé)
               </li>
             </ul>
@@ -123,9 +119,9 @@ export default function PolitiqueConfidentialite() {
 
           <LegalSection title="Cookies">
             <p>
-              {site.domain} n'utilise aucun cookie avant consentement. Les mesures d'audience
-              (Google Analytics 4, Google Ads) ne sont chargées qu'après acceptation explicite via
-              le bandeau. Aucun cookie publicitaire de tiers n'est déposé.
+              {site.domain} n'utilise aucun cookie à des fins de mesure d'audience ou de publicité.
+              Seuls les cookies strictement nécessaires au fonctionnement du site (session Calendly)
+              sont déposés.
             </p>
           </LegalSection>
 

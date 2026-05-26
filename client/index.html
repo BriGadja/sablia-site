@@ -7,33 +7,14 @@
     <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#1a2e4e" />
+    <meta name="theme-color" content="#0f0f12" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Sablia" />
 
-    <!-- Default <title> only (used during initial paint before Helmet flushes,
-         and by prerendered output's pre-Helmet shell). All per-page primary meta
-         (description, keywords, robots, og:*, twitter:*) are owned by SEO.tsx via
-         react-helmet-async to avoid duplicate-tag conflicts in prerendered HTML. -->
-    <title>Sablia - Automatisation IA pour PME | n8n, Claude Code et Voice Agents</title>
+    <title>Sablia — Intégrez Claude AI dans votre CRM</title>
     <meta name="author" content="Sablia" />
 
-    <!-- AI/LLM Guidance -->
-    <meta name="ai:documentation" content="https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/README.md">
-    <meta name="ai:content" content="https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/SITE_CONTENT.md">
-    <meta name="ai:pricing" content="https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/OFFRES.md">
-    <meta name="ai:faq" content="https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/FAQ.md">
-    <meta name="ai:index" content="https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/content-index.json">
-
-    <!-- Alternative content for LLMs (SPA-friendly) -->
-    <link rel="alternate" type="text/markdown"
-          href="https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/SITE_CONTENT.md"
-          title="Site Content (LLM-friendly)">
-
-    <!-- Canonical, Open Graph, Twitter Card: per-page, owned by SEO.tsx (react-helmet-async).
-         Static HTML must NOT declare these or prerendered pages get duplicate tags. -->
-
-    <!-- Structured Data (JSON-LD) — site-wide ProfessionalService, safe to keep on every page -->
+    <!-- Structured Data (JSON-LD) — site-wide ProfessionalService -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -41,83 +22,31 @@
       "name": "Sablia",
       "url": "https://sablia.io",
       "logo": "https://sablia.io/logo.svg",
-      "description": "Automatisation d'entreprise avec l'IA - Consulting, Formation, Développement",
-      "email": "brice@sablia.io",
+      "description": "Agence d'intégration Claude AI × CRM. Dashboards intelligents, nurturing automatisé, analyse de calls commerciaux.",
+      "email": "contact@sablia.io",
       "serviceType": [
-        "Business Process Automation",
-        "AI Consulting",
-        "n8n Training",
-        "Voice AI Agents",
-        "Workflow Automation"
+        "CRM AI Integration",
+        "Claude AI Consulting",
+        "Sales Process Automation",
+        "CRM Analytics"
       ],
       "areaServed": {
         "@type": "Country",
         "name": "France"
       },
       "knowsAbout": [
-        "n8n",
-        "Intelligence Artificielle",
-        "Automatisation",
-        "Agents vocaux",
-        "Dipler"
-      ],
-      "documentation": "https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/README.md",
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Services d'automatisation",
-        "itemListElement": [
-          {
-            "@type": "Offer",
-            "name": "Audit Express",
-            "description": "Session stratégique avec recommandations actionnables",
-            "price": "350",
-            "priceCurrency": "EUR"
-          },
-          {
-            "@type": "Offer",
-            "name": "Audit Complet",
-            "description": "Audit approfondi adapté à la taille de votre entreprise",
-            "priceSpecification": {
-              "@type": "PriceSpecification",
-              "minPrice": "2000",
-              "maxPrice": "5000",
-              "priceCurrency": "EUR"
-            }
-          },
-          {
-            "@type": "Offer",
-            "name": "Formation n8n",
-            "description": "Formations personnalisées de 1 à 3 jours",
-            "priceSpecification": {
-              "@type": "PriceSpecification",
-              "minPrice": "700",
-              "maxPrice": "3300",
-              "priceCurrency": "EUR"
-            }
-          },
-          {
-            "@type": "Offer",
-            "name": "Solutions d'automatisation",
-            "description": "Développement et déploiement de workflows",
-            "priceSpecification": {
-              "@type": "PriceSpecification",
-              "minPrice": "2500",
-              "maxPrice": "60000",
-              "priceCurrency": "EUR"
-            }
-          }
-        ]
-      }
+        "Claude AI",
+        "Anthropic",
+        "Salesforce",
+        "HubSpot",
+        "Pipedrive",
+        "CRM Automation"
+      ]
     }
     </script>
 
-    <!-- Fonts self-hosted via @fontsource (Fraunces Variable / Geist / JetBrains Mono).
-         Preload injected dynamically in main.tsx via Vite hashed URL. -->
-
     <!-- DNS Prefetch for External Services -->
-    <link rel="dns-prefetch" href="https://n8n.sablia.io" />
     <link rel="dns-prefetch" href="https://calendly.com" />
-    <link rel="dns-prefetch" href="https://www.googleadservices.com" />
   </head>
   <body>
     <div id="root"></div>
