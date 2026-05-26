@@ -3,10 +3,7 @@
   "installCommand": "npm install",
   "outputDirectory": "dist/public",
   "rewrites": [
-    {
-      "source": "/((?!api/.*|\\.well-known/.*|robots\\.txt|sitemap\\.xml).*)",
-      "destination": "/index.html"
-    }
+    { "source": "/(.*)", "destination": "/index.html" }
   ],
   "cleanUrls": true
 }
