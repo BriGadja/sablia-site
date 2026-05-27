@@ -2,7 +2,7 @@
 
 Sablia.io is a dark-first, editorial B2B landing page for an AI integration agency. The base atmosphere is a **warm dark canvas** (`{colors.canvas}` — #0f0f12) — deliberately dark but not cold, with warm undertones that prevent it from feeling corporate-sterile. Headlines run a **serif display** (Cormorant Garamond) at weight 500 with negative letter-spacing, paired with **Inter** body sans. The combination feels like a premium consulting publication, not a generic SaaS marketing page.
 
-Brand voltage comes from the **dark + teal pairing** — teal (`{colors.primary}` — #5db8a6) is the signature Sablia accent, used on every primary CTA, on full-bleed callout cards, and on key data highlights. The teal is confident, slightly muted, never neon — a deliberate signal of technical trust and B2B seriousness.
+Brand voltage comes from the **dark + coral pairing** — coral (`{colors.primary}` — #cc785c) is the signature Sablia accent, used on every primary CTA, on callout cards, and on key data highlights. The coral is warm, confident, and distinctive — a deliberate departure from the cold blues and greens of generic SaaS, signaling craft and human presence.
 
 The system has three surface modes that alternate section-by-section:
 1. **Dark canvas** (`{colors.canvas}`) — default page floor
@@ -13,7 +13,8 @@ The light sections are where Sablia shows real-world output — dashboard screen
 
 **Key Characteristics:**
 - Warm dark canvas (`{colors.canvas}` — #0f0f12) with warm light text (`{colors.on-dark}` — #f0ede6). The brand's defining color choice — dark but never cold.
-- Teal primary CTA (`{colors.primary}` — #5db8a6). Used scarcely on individual buttons, generously on full-bleed teal callout cards.
+- Coral primary CTA (`{colors.primary}` — #cc785c). Used on primary buttons, callout cards, key data highlights, and inline accents.
+- Teal secondary accent (`{colors.accent-teal}` — #5db8a6). Reserved for success states, secondary data highlights, and contrast moments against coral — never as a primary CTA.
 - Serif display headlines via Cormorant Garamond at weight 500 with negative letter-spacing. Pairs with Inter humanist sans body for an editorial, premium voice.
 - Light cream contrast sections (`{colors.surface-light}` — #f5f2ec) carrying dashboard mockups, CRM screenshots, client results — Sablia shows real product output, not abstract marketing illustrations.
 - Dark elevated cards (`{colors.surface-card}` — #1a1a1f) — slightly lighter than canvas, used for feature cards and use case explanations.
@@ -23,10 +24,10 @@ The light sections are where Sablia shows real-world output — dashboard screen
 ## Colors
 
 ### Brand & Accent
-- **Teal / Primary** (`{colors.primary}` — #5db8a6): The signature Sablia teal. Used on every primary CTA background, on full-bleed teal callout cards, on key metrics and data highlights. Conveys technical confidence and trust.
-- **Teal Active** (`{colors.primary-active}` — #4a9e8e): The press / hover-darker variant.
-- **Teal Disabled** (`{colors.primary-disabled}` — #2a3a37): A desaturated dark-tinted disabled state.
-- **Accent Coral** (`{colors.accent-coral}` — #cc785c): Used sparingly as a secondary warm accent — notification dots, premium badges. A nod to the Claude ecosystem without being the primary brand color.
+- **Coral / Primary** (`{colors.primary}` — #cc785c): The signature Sablia coral. Used on every primary CTA background, on callout cards, on key metrics and data highlights. Warm, confident, distinctive — the brand's defining accent color.
+- **Coral Active** (`{colors.primary-active}` — #a9583e): The press / hover-darker variant.
+- **Coral Disabled** (`{colors.primary-disabled}` — #e6dfd8): A desaturated light-tinted disabled state.
+- **Accent Teal** (`{colors.accent-teal}` — #5db8a6): Secondary accent for success states, positive KPIs, data chart secondary lines, and contrast moments. Never used as a primary CTA.
 - **Accent Amber** (`{colors.accent-amber}` — #e8a55a): A companion warm-tone used on KPI highlights and inline data callouts.
 
 ### Surface
@@ -48,7 +49,7 @@ The light sections are where Sablia shows real-world output — dashboard screen
 - **Ink** (`{colors.ink}` — #141413): Headlines and primary text on light surfaces.
 - **Body** (`{colors.body}` — #3d3d3a): Default paragraph text on light surfaces.
 - **Muted** (`{colors.muted}` — #6c6a64): Secondary text on light surfaces.
-- **On Primary** (`{colors.on-primary}` — #0f0f12): Text on teal buttons — dark on teal for maximum contrast.
+- **On Primary** (`{colors.on-primary}` — #ffffff): Text on coral buttons — white on coral for maximum contrast.
 
 ### Semantic
 - **Success** (`{colors.success}` — #5db872): Positive KPIs, active indicators.
@@ -96,7 +97,7 @@ Body type stays at weight 400 for paragraphs, weight 500 for labels and emphasiz
 - **Tokens:** `{spacing.xxs}` 4px . `{spacing.xs}` 8px . `{spacing.sm}` 12px . `{spacing.md}` 16px . `{spacing.lg}` 24px . `{spacing.xl}` 32px . `{spacing.xxl}` 48px . `{spacing.section}` 96px.
 - **Section padding:** `{spacing.section}` (96px) — modern-SaaS rhythm.
 - **Card internal padding:** `{spacing.xl}` (32px) for feature cards, use case cards; `{spacing.lg}` (24px) for dashboard mockup cards and CRM tiles.
-- **Callout / CTA bands:** `{spacing.xxl}` (48px) inside teal callout cards; 64px inside the larger booking CTA band.
+- **Callout / CTA bands:** `{spacing.xxl}` (48px) inside coral callout cards; 64px inside the larger booking CTA band.
 
 ### Grid & Container
 - **Max content width:** ~1200px centered.
@@ -115,7 +116,7 @@ The dark canvas + serif display + generous internal padding create a premium pac
 | Subtle hairline | 1px `{colors.hairline}` border | Cards on dark surfaces, inputs |
 | Dark card | `{colors.surface-card}` background — no shadow | Feature cards, use case cards |
 | Light contrast section | `{colors.surface-light}` background — no shadow | Dashboard mockups, testimonials, CRM logo strip |
-| Subtle glow | Faint teal glow at low alpha | Primary CTA hover state (`0 0 20px rgba(93,184,166,0.15)`) |
+| Subtle glow | Faint coral glow at low alpha | Primary CTA hover state (`0 0 20px rgba(204,120,92,0.15)`) |
 
 The elevation philosophy is **color-block first, shadow rare**. Most depth comes from the dark-vs-light surface contrast. Shadows are minimal. The light contrast sections carry their own internal detail (dashboard screenshots, CRM pipeline views) which adds visual richness without needing external decoration.
 
@@ -142,18 +143,18 @@ The elevation philosophy is **color-block first, shadow rare**. Most depth comes
 Sablia's LP uses real product output, not stock photography or abstract illustrations:
 - Dashboard screenshots in light contrast sections (the hero's right-side "wow" element)
 - CRM pipeline views showing actual Salesforce/HubSpot/Pipedrive interfaces with Claude AI annotations
-- Clean iconography for use case cards (line-art style, teal + warm gray strokes on dark)
+- Clean iconography for use case cards (line-art style, coral + warm gray strokes on dark)
 - Team photos crop to perfect circles at 48px diameter if social proof section is active
 
 ## Components
 
 ### Top Navigation
 
-**`top-nav`** — Dark nav bar pinned to the top of every page. 64px tall, `{colors.canvas-soft}` background. Carries the Sablia wordmark at left, primary horizontal menu (Offre, Comment ca marche, Cas d'usage, A propos) center-left, right-side CTA "Reserver un call" `{component.button-primary}` (teal). Menu items in `{typography.nav-link}` (Inter 14px / 500) with `{colors.on-dark-body}` color, active state in `{colors.on-dark}`.
+**`top-nav`** — Dark nav bar pinned to the top of every page. 64px tall, `{colors.canvas-soft}` background. Carries the Sablia wordmark at left, primary horizontal menu (Offre, Comment ca marche, Cas d'usage, A propos) center-left, right-side CTA "Reserver un call" `{component.button-primary}` (coral). Menu items in `{typography.nav-link}` (Inter 14px / 500) with `{colors.on-dark-body}` color, active state in `{colors.on-dark}`.
 
 ### Buttons
 
-**`button-primary`** — The signature teal CTA. Background `{colors.primary}` (#5db8a6), text `{colors.on-primary}` (dark), type `{typography.button}` (Inter 14px / 500), padding 12px x 20px, height 40px, rounded `{rounded.md}` (8px). Active state `button-primary-active` darkens to `{colors.primary-active}` (#4a9e8e). Hover adds subtle teal glow.
+**`button-primary`** — The signature coral CTA. Background `{colors.primary}` (#cc785c), text `{colors.on-primary}` (white), type `{typography.button}` (Inter 14px / 500), padding 12px x 20px, height 40px, rounded `{rounded.md}` (8px). Active state `button-primary-active` darkens to `{colors.primary-active}` (#a9583e). Hover adds subtle coral glow.
 
 **`button-secondary`** — Dark card button with hairline outline. Background transparent, text `{colors.on-dark}`, 1px `{colors.hairline}` border, same padding + height + radius as primary.
 
@@ -163,7 +164,7 @@ Sablia's LP uses real product output, not stock photography or abstract illustra
 
 **`button-icon-circular`** — 36px circular icon button. Background `{colors.surface-card}`, hairline border, `{colors.on-dark}` icon.
 
-**`text-link`** — Inline body links in `{colors.primary}` (teal). Underlined on hover.
+**`text-link`** — Inline body links in `{colors.primary}` (coral). Underlined on hover.
 
 ### Cards & Containers
 
@@ -171,15 +172,15 @@ Sablia's LP uses real product output, not stock photography or abstract illustra
 
 **`dashboard-mockup-card`** — The hero's right-side artifact — a screenshot of a real Meta Ads dashboard or CRM analytics view inside a light cream card. Background `{colors.surface-light}`, rounded `{rounded.xl}` (16px), internal padding `{spacing.lg}` (24px). This is the "wow" element from the R2 presentation strategy.
 
-**`use-case-card`** — Used in 3-up use case grids. Background `{colors.surface-card}` (#1a1a1f), rounded `{rounded.lg}` (12px), internal padding `{spacing.xl}` (32px). Carries a clean icon at top in teal, a `{typography.title-md}` headline, and a body description in `{typography.body-md}`. Each card represents one CRM automation capability (dashboard analytics, nurturing automatise, analyse de calls).
+**`use-case-card`** — Used in 3-up use case grids. Background `{colors.surface-card}` (#1a1a1f), rounded `{rounded.lg}` (12px), internal padding `{spacing.xl}` (32px). Carries a clean icon at top in coral, a `{typography.title-md}` headline, and a body description in `{typography.body-md}`. Each card represents one CRM automation capability (dashboard analytics, nurturing automatise, analyse de calls).
 
 **`crm-logo-strip`** — Horizontal band showing supported CRM logos (Salesforce, HubSpot, Pipedrive, etc.). Background `{colors.surface-light}` for contrast, logos in grayscale at ~60% opacity, padding `{spacing.xxl}` (48px) vertical. The band signals compatibility without requiring text explanation. Caption-uppercase text "Compatible avec votre CRM" above the logo row.
 
-**`process-step-card`** — Used in a horizontal 3-4 step process flow ("Comment ca marche"). Background `{colors.surface-card}`, rounded `{rounded.lg}`, padding `{spacing.xl}`. Carries a step number in `{typography.display-sm}` (serif, teal color), a title, and a short description. Steps: Call discovery → Diagnostic CRM → Implementation sur-mesure → Suivi.
+**`process-step-card`** — Used in a horizontal 3-4 step process flow ("Comment ca marche"). Background `{colors.surface-card}`, rounded `{rounded.lg}`, padding `{spacing.xl}`. Carries a step number in `{typography.display-sm}` (serif, coral color), a title, and a short description. Steps: Call discovery → Diagnostic CRM → Implementation sur-mesure → Suivi.
 
-**`callout-card-teal`** — A full-bleed teal card carrying a major call-to-action. Background `{colors.primary}` (#5db8a6), text `{colors.on-primary}` (dark), rounded `{rounded.lg}`, padding `{spacing.xxl}` (48px). CTA inside uses an inverted dark button.
+**`callout-card-coral`** — A full-bleed coral card carrying a major call-to-action. Background `{colors.primary}` (#cc785c), text `{colors.on-primary}` (white), rounded `{rounded.lg}`, padding `{spacing.xxl}` (48px). CTA inside uses an inverted dark button.
 
-**`booking-cta-band`** — The primary conversion band, used as pre-footer CTA. Background `{colors.canvas-soft}` with a centered layout: h2 in serif ("Pret a optimiser votre CRM ?"), a sub-line describing the free discovery call, and a `{component.button-primary}` (teal). Can also appear mid-page after use cases.
+**`booking-cta-band`** — The primary conversion band, used as pre-footer CTA. Background `{colors.canvas-soft}` with a centered layout: h2 in serif ("Pret a optimiser votre CRM ?"), a sub-line describing the free discovery call, and a `{component.button-primary}` (coral). Can also appear mid-page after use cases.
 
 **`testimonial-card`** — Used in social proof section (when available). Background `{colors.surface-light}`, rounded `{rounded.lg}`, padding `{spacing.xl}`. Carries a quote in `{typography.body-md}` italic, client name + role + company in `{typography.caption}`, circular avatar photo. Shows on light contrast band.
 
@@ -187,13 +188,15 @@ Sablia's LP uses real product output, not stock photography or abstract illustra
 
 **`text-input`** — Standard text input. Background `{colors.canvas}`, text `{colors.on-dark}`, type `{typography.body-md}`, rounded `{rounded.md}` (8px), padding 10px x 14px, height 40px. 1px `{colors.hairline}` border.
 
-**`text-input-focused`** — Focus state. Border shifts to `{colors.primary}` (teal). Carries a 3px teal-at-15%-alpha outer ring.
+**`text-input-focused`** — Focus state. Border shifts to `{colors.primary}` (coral). Carries a 3px coral-at-15%-alpha outer ring.
 
 ### Tags / Badges
 
 **`badge-pill`** — Small pill label. Background `{colors.surface-card}`, text `{colors.on-dark-body}`, type `{typography.caption}` (13px / 500), rounded `{rounded.pill}`, padding 4px x 12px.
 
-**`badge-teal`** — Teal-fill badge for emphasis. Background `{colors.primary}`, text `{colors.on-primary}`, type `{typography.caption-uppercase}` (12px / 500 / 1.5px tracking), rounded `{rounded.pill}`, padding 4px x 12px.
+**`badge-coral`** — Coral-fill badge for emphasis. Background `{colors.primary}`, text `{colors.on-primary}`, type `{typography.caption-uppercase}` (12px / 500 / 1.5px tracking), rounded `{rounded.pill}`, padding 4px x 12px.
+
+**`badge-teal`** — Teal-fill badge for success/positive states. Background `{colors.accent-teal}`, text `{colors.canvas}`, same sizing as `{component.badge-coral}`.
 
 **`crm-name-tag`** — Small tag showing a CRM name (Salesforce, HubSpot, etc.). Background `{colors.surface-card-elevated}`, text `{colors.on-dark-body}`, type `{typography.caption-uppercase}`, rounded `{rounded.pill}`, padding 4px x 10px. Used in use case cards to show which CRM the use case applies to.
 
@@ -206,7 +209,8 @@ Sablia's LP uses real product output, not stock photography or abstract illustra
 ### Do
 - Anchor every section on the dark canvas. Pure black reads as aggressive; the warm dark tint (#0f0f12) is the brand differentiator.
 - Use Cormorant Garamond serif for every display headline. Pair with Inter sans body. Negative letter-spacing on display sizes is non-negotiable.
-- Reserve `{colors.primary}` (teal) for primary CTAs and full-bleed `{component.callout-card-teal}` moments. Don't scatter teal across every element.
+- Use `{colors.primary}` (coral) for primary CTAs and full-bleed `{component.callout-card-coral}` moments. Coral is the dominant brand accent.
+- Use `{colors.accent-teal}` sparingly as a secondary accent — success badges, positive data, chart contrast lines. Teal complements coral, never competes.
 - Use `{component.dashboard-mockup-card}` and CRM screenshots to show real product output. Don't use abstract AI illustrations or stock photos — show actual dashboards, actual CRM pipelines.
 - Alternate dark canvas bands with `{colors.surface-light}` contrast sections. The dark-to-light rhythm is the page's pacing mechanism.
 - Use generous whitespace on dark sections to prevent visual heaviness. Dark + cramped = oppressive. Dark + spacious = premium.
@@ -216,10 +220,10 @@ Sablia's LP uses real product output, not stock photography or abstract illustra
 ### Don't
 - Don't use pure black (#000000) for canvas. The warm dark tint is the brand.
 - Don't bold serif display weight. Cormorant Garamond at 700+ reads as heavy; the system stays at 500.
-- Don't use the coral accent (#cc785c) as a primary — it's reserved as a subtle secondary nod to the Claude ecosystem, never dominant.
-- Don't put teal everywhere. The teal is scarce on individual elements and generous only on full-bleed callout cards and the primary CTA.
+- Don't use teal as a primary CTA color — teal is a secondary accent for data and success states only. Coral is the primary.
+- Don't scatter coral across every element. Use it on primary CTAs, callout cards, and key highlights — not on every border or label.
 - Don't use Inter for display headlines. The serif character is the premium voice.
-- Don't repeat the same surface mode in two consecutive bands. The pacing alternates: dark → dark-card → light-contrast → dark → teal-callout → dark-footer.
+- Don't repeat the same surface mode in two consecutive bands. The pacing alternates: dark → dark-card → light-contrast → dark → coral-callout → dark-footer.
 - Don't list every capability on the LP. Maximum 3 use cases. The visitor should feel "these people are focused and expert", not "these people do everything".
 - Don't show pricing on the LP. The offer is custom — the CTA is always a discovery call.
 
@@ -252,6 +256,11 @@ Sablia's LP uses real product output, not stock photography or abstract illustra
 2. Variants of an existing component (`-active`, `-disabled`, `-focused`) live as separate entries.
 3. Use `{token.refs}` everywhere — never inline hex.
 4. Display headlines stay Cormorant Garamond serif 500 with negative tracking. Body stays Inter 400. The split is unbreakable.
-5. Dark canvas + teal accent + light contrast sections is the trinity. Don't introduce a fourth surface tone.
+5. Dark canvas + coral primary + teal accent + light contrast sections is the palette. Don't introduce colors outside this system.
 6. When in doubt about emphasis: bigger Cormorant Garamond serif before bolder weight.
 7. Every visual element on the page should be either a real product screenshot, a clean icon, or typography. No decorative illustrations, no gradients, no abstract shapes.
+
+## Changelog
+
+- **2026-05-26**: Primary color swapped from teal (#5db8a6) to coral (#cc785c). Teal demoted to secondary accent. Rationale: coral is warmer, more distinctive, better contrast against the dark canvas. Teal remains for success states and data accents.
+- **2026-05-27**: DESIGN.md updated to reflect the coral-primary reality already implemented in code.
