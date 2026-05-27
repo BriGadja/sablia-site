@@ -1,6 +1,6 @@
 # Documentation Sablia — Guide pour LLMs
 
-**Dernière mise à jour** : 2026-04-20
+**Dernière mise à jour** : 2026-05-27
 **Site web** : https://sablia.io
 
 ---
@@ -34,20 +34,8 @@ Toute contradiction entre ces 3 fichiers est résolue par `product-v1.md`.
 | [SEO.md](./SEO.md) | Meta-tags, structured data, sitemap, manual tasks | SEO audit, schema markup, indexing |
 | [GOOGLE_ADS.md](./GOOGLE_ADS.md) | Ads IDs, conversion tracking, campaign strategy, keywords, ad copy | Google Ads setup, campaign management |
 | [meta-tags.json](./meta-tags.json) | SEO metadata per page (title, description, OG, Twitter, structured data) | SEO implementation, new page creation |
-| [content-index.json](./content-index.json) | Structured JSON of pages/sections (partial — rebuild post-homepage-v2) | Programmatic access, data extraction |
-| [ROADMAP.md](./ROADMAP.md) | Future initiatives, tech debt backlog | Planning, prioritization |
 
 ---
-
-## Archived / superseded docs
-
-Ces docs sont **historiques** et conservés pour référence. Ne pas s'en servir comme source de vérité homepage :
-
-| File | Status | Replacement |
-|------|--------|-------------|
-| [SITE_CONTENT.md](./SITE_CONTENT.md) | Superseded 2026-04-18 | `copy-v1.md` for homepage copy |
-| [OFFRES.md](./OFFRES.md) | Superseded 2026-04-18 | `product-v1.md` for offer/pricing |
-| [FAQ.md](./FAQ.md) | Superseded 2026-04-20 | `copy-v1.md §C5-C6` + FaqSection component for the 7 homepage FAQs |
 
 ---
 

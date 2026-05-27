@@ -1,6 +1,6 @@
 # Google Ads — Sablia Site
 
-**Last updated**: 2026-03-02
+**Last updated**: 2026-05-27
 
 ---
 
@@ -17,11 +17,13 @@
 
 ### Conversion Labels
 
-| Conversion | Label | GA4 Event | Estimated Value |
-|------------|-------|-----------|-----------------|
-| contact_form | `v-CoCPq02YEcELq5iIFD` | `generate_lead` (label: contact_form) | 50 EUR |
-| gap_form | `0t07CP202YEcELq5iIFD` | `generate_lead` (label: gap_form) | 100 EUR |
-| calendly_booking | `sZJBCPi12YEcELq5iIFD` | `generate_lead` (label: calendly_booking) | 150 EUR |
+| Conversion | Label | GA4 Event | Estimated Value | Status |
+|------------|-------|-----------|-----------------|--------|
+| contact_form | `v-CoCPq02YEcELq5iIFD` | `generate_lead` (label: contact_form) | 50 EUR | Active (label preserved) |
+| gap_form | `0t07CP202YEcELq5iIFD` | — | — | **Removed** — /gap page deleted |
+| calendly_booking | `sZJBCPi12YEcELq5iIFD` | — | — | **Removed** — no conversion code |
+
+> **Warning**: GA4 and Google Ads conversion tracking have NO code implementation. The env vars exist but nothing reads them. This was lost during the 2026-04 site redesign. Needs re-implementation.
 
 ---
 
@@ -29,8 +31,8 @@
 
 - [x] Conversion actions created in Google Ads
 - [x] Conversion labels configured in `.env` (VITE_GADS_*)
-- [x] Landing pages deployed (`/lp/automatisation-pme`, `/lp/audit-gratuit`)
-- [x] Conversion tracking code in `analytics.ts` + form components
+- [ ] ~~Landing pages deployed~~ — `/lp/automatisation-pme` and `/lp/audit-gratuit` deleted (2026-05 redesign)
+- [ ] ~~Conversion tracking code~~ — `analytics.ts` removed (2026-05 redesign) — needs re-implementation
 - [x] GA4 <> Google Ads linked (metrics + audiences)
 - [ ] **Campaign creation** (NOT done)
 - [ ] **Budget/bidding/extensions** (NOT done)
@@ -291,12 +293,14 @@ Spend 400 EUR, get 400 EUR credit. **Expires May 1, 2026.**
 
 ## Landing Page Mapping
 
-| Ad Group | Landing Page | Conversion Action |
-|----------|-------------|-------------------|
-| Automatisation Entreprise | `/lp/automatisation-pme` | contact_form |
-| n8n / No-Code | `/lp/automatisation-pme` | contact_form |
-| Audit Gratuit | `/lp/audit-gratuit` > `/gap` | gap_form |
-| Formation IA | `/lp/automatisation-pme` | contact_form |
+> **All landing pages below were deleted during the 2026-05 redesign.** The site now has a single landing page at `/`. Campaign LPs need to be recreated before launching ads.
+
+| Ad Group | Former Landing Page | Conversion Action | Status |
+|----------|-------------------|-------------------|--------|
+| Automatisation Entreprise | `/lp/automatisation-pme` | contact_form | **Deleted** |
+| n8n / No-Code | `/lp/automatisation-pme` | contact_form | **Deleted** |
+| Audit Gratuit | `/lp/audit-gratuit` > `/gap` | gap_form | **Deleted** |
+| Formation IA | `/lp/automatisation-pme` | contact_form | **Deleted** |
 
 ### UTM Template
 
@@ -319,7 +323,7 @@ utm_source=google&utm_medium=cpc&utm_campaign=automatisation-pme&utm_term={keywo
 
 ### Recommended Ad Extensions
 
-**Sitelinks**: Calculateur ROI (`/roi`), Nos Tarifs (`/tarifs`), Cas Clients (`/cas-clients`), FAQ (`/faq`)
+**Sitelinks**: _(need updating — /roi, /tarifs, /cas-clients, /faq pages deleted)_
 
 **Callouts**: Audit Gratuit 30 min, ROI en 4-8 Mois, Expert n8n France, Sans Engagement
 
@@ -331,4 +335,3 @@ utm_source=google&utm_medium=cpc&utm_campaign=automatisation-pme&utm_term={keywo
 
 - [INTEGRATIONS.md](./INTEGRATIONS.md) — Conversion tracking implementation
 - [SEO.md](./SEO.md) — GA4 setup, analytics consent flow
-- [SITE_CONTENT.md](./SITE_CONTENT.md) — Landing page content
