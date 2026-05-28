@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portail authentifié unifié pour l&#x27;écosystème web Sablia — Sablia</title>
+<style>
+:root {
+  --bg: #0f1117;
+  --bg-surface: #161922;
+  --bg-surface-2: #1c1f2e;
+  --border: #2a2d3e;
+  --text: #e1e4ed;
+  --text-dim: #8b8fa3;
+  --accent: #7c6df0;
+  --accent-dim: #5a4fc4;
+  --green: #3ecf8e;
+  --yellow: #f0c246;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --orange: #f97316;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --radius: 8px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 15px;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+/* ── Sidebar / TOC ── */
+nav.toc {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 24px 16px;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+nav.toc .toc-header {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+  padding: 0 8px;
+}
+
+nav.toc a {
+  display: block;
+  padding: 5px 8px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13px;
+  border-radius: 4px;
+  transition: all 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+nav.toc a:hover { color: var(--text); background: var(--bg-surface-2); }
+nav.toc a.toc-l1 { font-weight: 600; color: var(--text); }
+nav.toc a.toc-l2 { font-weight: 500; }
+nav.toc a.toc-l3, nav.toc a.toc-l4 { font-size: 12px; }
+
+/* ── Main ── */
+main {
+  max-width: 900px;
+  padding: 40px 48px 80px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── Header ── */
+.report-header {
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.report-header .type-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  background: rgba(124, 109, 240, 0.12);
+  padding: 3px 10px;
+  border-radius: 99px;
+  margin-bottom: 12px;
+}
+.report-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+.report-header .subtitle {
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+/* ── Sections (details/summary) ── */
+details {
+  margin-bottom: 4px;
+}
+details > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 8px 0;
+  user-select: none;
+}
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before {
+  content: "▸";
+  display: inline-block;
+  width: 20px;
+  color: var(--text-dim);
+  font-size: 12px;
+  transition: transform 0.15s;
+}
+details[open] > summary::before { content: "▾"; }
+
+details > summary h1,
+details > summary h2,
+details > summary h3,
+details > summary h4 { display: inline; }
+
+.section-body { padding: 4px 0 16px 20px; }
+
+h1 { font-size: 24px; font-weight: 700; }
+h2 { font-size: 20px; font-weight: 600; color: var(--accent); }
+h3 { font-size: 16px; font-weight: 600; }
+h4 { font-size: 14px; font-weight: 600; color: var(--text-dim); }
+
+/* ── Content ── */
+p { margin: 8px 0; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+blockquote {
+  border-left: 3px solid var(--accent-dim);
+  padding: 8px 16px;
+  margin: 12px 0;
+  color: var(--text-dim);
+  background: var(--bg-surface);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-style: italic;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 13px;
+  background: var(--bg-surface-2);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+pre {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin: 12px 0;
+  overflow-x: auto;
+}
+pre code { background: none; padding: 0; font-size: 13px; }
+
+/* ── Tables ── */
+.table-wrap {
+  overflow-x: auto;
+  margin: 12px 0;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th {
+  text-align: left;
+  padding: 10px 14px;
+  background: var(--bg-surface);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+}
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(124, 109, 240, 0.04); }
+
+/* ── Lists ── */
+ul, ol { padding-left: 20px; margin: 8px 0; }
+li { margin: 4px 0; }
+li.task { list-style: none; margin-left: -20px; }
+li.task input { margin-right: 8px; accent-color: var(--accent); }
+
+/* ── Badges ── */
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  vertical-align: middle;
+}
+.badge.high { background: rgba(239,68,68,0.15); color: var(--red); }
+.badge.medium { background: rgba(249,115,22,0.15); color: var(--orange); }
+.badge.low { background: rgba(59,130,246,0.15); color: var(--blue); }
+.badge.info { background: rgba(139,143,163,0.15); color: var(--text-dim); }
+.badge.done, .badge.pass { background: rgba(62,207,142,0.12); color: var(--green); }
+.badge.pending { background: rgba(240,194,70,0.15); color: var(--yellow); }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 24px 0;
+}
+
+/* ── Footer ── */
+.report-footer {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-dim);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  body { grid-template-columns: 1fr; }
+  nav.toc {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 12px;
+  }
+  nav.toc .toc-header { width: 100%; margin-bottom: 8px; }
+  main { padding: 24px 20px 60px; }
+}
+
+@media print {
+  body { grid-template-columns: 1fr; }
+  nav.toc { display: none; }
+  details { break-inside: avoid; }
+  details > summary::before { display: none; }
+  .badge { border: 1px solid; }
+}
+</style>
+</head>
+<body>
+
+<nav class="toc">
+  <div class="toc-header">Table of contents</div>
+  <a href="#sec-brainstorm-portail-authentifi-unifi-pour-l-cosyst-me-web-sablia" style="padding-left:0px" class="toc-l1">Brainstorm: Portail authentifié unifié pour l&#x27;écosystème web Sablia</a>
+<a href="#sec-executive-summary" style="padding-left:16px" class="toc-l2">Executive Summary</a>
+<a href="#sec-problem-statement" style="padding-left:16px" class="toc-l2">Problem Statement</a>
+<a href="#sec-context-bootstrap" style="padding-left:16px" class="toc-l2">Context Bootstrap</a>
+<a href="#sec-key-findings" style="padding-left:16px" class="toc-l2">Key Findings</a>
+<a href="#sec-decision-matrix" style="padding-left:16px" class="toc-l2">Decision Matrix</a>
+<a href="#sec-d-cision-1-architecture-d-h-bergement" style="padding-left:32px" class="toc-l3">Décision 1 — Architecture d&#x27;hébergement</a>
+<a href="#sec-d-cision-2-quel-projet-supabase-comme-identit-de-plateforme-le-point-dur" style="padding-left:32px" class="toc-l3">Décision 2 — Quel projet Supabase comme identité de plateforme (le point dur)</a>
+<a href="#sec-d-cision-3-mod-le-d-autorisation" style="padding-left:32px" class="toc-l3">Décision 3 — Modèle d&#x27;autorisation</a>
+<a href="#sec-prior-art-inspiration" style="padding-left:16px" class="toc-l2">Prior Art / Inspiration</a>
+<a href="#sec-proposed-scope" style="padding-left:16px" class="toc-l2">Proposed Scope</a>
+<a href="#sec-technical-reference-sheet" style="padding-left:16px" class="toc-l2">Technical Reference Sheet</a>
+<a href="#sec-implementation-patterns" style="padding-left:16px" class="toc-l2">Implementation Patterns</a>
+<a href="#sec-config-cookie-cross-sous-domaines-supabase-ssr" style="padding-left:32px" class="toc-l3">Config cookie cross-sous-domaines (`@supabase/ssr`)</a>
+<a href="#sec-lecture-des-claims-en-middleware-z-ro-round-trip-db" style="padding-left:32px" class="toc-l3">Lecture des claims en middleware (zéro round-trip DB)</a>
+<a href="#sec-trigger-n8n-s-curis-route-handler-secret-server-only" style="padding-left:32px" class="toc-l3">Trigger n8n sécurisé (Route Handler, secret server-only)</a>
+<a href="#sec-registre-d-apps-entitlement-app-launcher" style="padding-left:32px" class="toc-l3">Registre d&#x27;apps + entitlement (app-launcher)</a>
+<a href="#sec-cost-performance-baseline" style="padding-left:16px" class="toc-l2">Cost &amp; Performance Baseline</a>
+<a href="#sec-constraints-decisions" style="padding-left:16px" class="toc-l2">Constraints &amp; Decisions</a>
+<a href="#sec-open-questions" style="padding-left:16px" class="toc-l2">Open Questions</a>
+<a href="#sec-research-archive" style="padding-left:16px" class="toc-l2">Research Archive</a>
+<a href="#sec-top-10-findings" style="padding-left:32px" class="toc-l3">Top 10 Findings</a>
+<a href="#sec-by-research-angle" style="padding-left:32px" class="toc-l3">By Research Angle</a>
+<a href="#sec-supabase-cross-subdomain-sso-multi-tenant-auth" style="padding-left:48px" class="toc-l4">Supabase cross-subdomain SSO &amp; multi-tenant auth</a>
+<a href="#sec-federated-frontend-portal-hosting-architecture" style="padding-left:48px" class="toc-l4">Federated frontend / portal hosting architecture</a>
+<a href="#sec-internal-rbac-entitlements-app-launcher-patterns" style="padding-left:48px" class="toc-l4">Internal RBAC, entitlements &amp; app-launcher patterns</a>
+<a href="#sec-secure-webhook-trigger-uis-from-authenticated-web-apps" style="padding-left:48px" class="toc-l4">Secure webhook-trigger UIs from authenticated web apps</a>
+<a href="#sec-sablia-cross-domain-map" style="padding-left:32px" class="toc-l3">Sablia Cross-Domain Map</a>
+<a href="#sec-unconventional-takes" style="padding-left:32px" class="toc-l3">Unconventional Takes</a>
+<a href="#sec-other-next-steps" style="padding-left:32px" class="toc-l3">Other Next Steps</a>
+</nav>
+
+<main>
+  <header class="report-header">
+    <div class="type-badge">brainstorm</div>
+    <h1>Portail authentifié unifié pour l&#x27;écosystème web Sablia</h1>
+    <div class="subtitle">2026-05-28 · 4 agents · 37 findings · 28 sources</div>
+  </header>
+
+  <article>
+    <details open id="sec-brainstorm-portail-authentifi-unifi-pour-l-cosyst-me-web-sablia"><summary><h1>Brainstorm: Portail authentifié unifié pour l&#x27;écosystème web Sablia</h1></summary><div class="section-body">
+<blockquote>Generated 2026-05-28 | 4 agents | ~28 sources consulted | 37 findings</blockquote>
+<details open id="sec-executive-summary"><summary><h2>Executive Summary</h2></summary><div class="section-body">
+<p>Sablia veut un point d&#x27;entrée unique authentifié (« comme vox ») : depuis le site, un login donne accès — selon les droits — à toutes les fenêtres web internes (dashboard ads, futurs dashboards, UIs de lancement n8n) présentes et futures. La recherche converge fortement : pour une petite équipe, <strong>un seul projet Supabase + cookie <code>.sablia.io</code> + monorepo Turborepo</strong> est le bon socle ; micro-frontends / Module Federation sont du sur-dimensionnement (&lt; 50 devs). Le RBAC natif Supabase (hook JWT + RLS + table <code>apps</code>) mappe directement sur le problème d&#x27;app-launcher, et le modèle multi-tenant de vox (<code>user_org_memberships</code> + <code>custom_access_token_hook</code>) est réutilisable tel quel. <strong>Le point dur n&#x27;est pas technique mais un choix de consolidation Supabase</strong> : le SSO par cookie exige UN projet, or les données ads/CRM/n8n vivent dans la base <code>Sablia</code> tandis que le modèle d&#x27;auth éprouvé vit dans <code>sablia-voice</code>.</p>
+</div></details>
+<details open id="sec-problem-statement"><summary><h2>Problem Statement</h2></summary><div class="section-body">
+<p>Le site <code>sablia.io</code> est aujourd&#x27;hui une LP marketing (React 18 + Vite SPA, sans auth). En parallèle, Sablia accumule des apps web indépendantes (dashboard ads, autoresearch-dashboard, sablia-crm/dashboard, board) toutes déjà en Next.js 16 + Supabase, plus vox (vox.sablia.io) qui possède l&#x27;auth multi-tenant de référence. Il manque une <strong>couche d&#x27;identité + d&#x27;autorisation unifiée</strong> permettant à l&#x27;équipe (puis, à terme, à des démos/POC clients) de se connecter une fois et d&#x27;accéder uniquement aux apps autorisées — sans dupliquer le login dans chaque repo.</p>
+</div></details>
+<details open id="sec-context-bootstrap"><summary><h2>Context Bootstrap</h2></summary><div class="section-body">
+<p>Pour <code>/architect</code>, charger :</p>
+<ul>
+<li>Ce brief (intégralité).</li>
+<li><code>projects/internal/websites/sablia-vox/middleware.ts</code>, <code>lib/auth.ts</code>, <code>supabase/migrations/20260402120000_admin_multiorg_access.sql</code> — modèle d&#x27;auth de référence (hook JWT + RLS multi-org).</li>
+<li><code>projects/internal/websites/sablia-site/CLAUDE.md</code> (stack Vite SPA actuelle) + <code>docs/crm/</code> (offre CRM cible).</li>
+<li>Bases Supabase : <code>Sablia</code> (<code>qlxoitzdxjqhljjoeqoq</code>, données ads <code>sabcrm_*</code> + CRM + n8n + cold email, <strong>auth vide</strong>) et <code>sablia-voice</code> (<code>mgsfrhirsvqbyjagrswt</code>, auth/org + voix). Les deux créées après mai 2025 → probablement déjà clés JWT asymétriques (à vérifier).</li>
+</ul>
+</div></details>
+<details open id="sec-key-findings"><summary><h2>Key Findings</h2></summary><div class="section-body">
+<ul>
+<li><strong>Un seul projet Supabase est obligatoire pour le SSO par cookie</strong> — le cookie référence le secret/clé JWT d&#x27;un projet unique ; deux projets = deux silos d&#x27;auth non mutuellement vérifiables. Source: github.com/supabase/supabase/discussions/5742. Relevance: HIGH.</li>
+<li><strong>Le levier exact = <code>cookieOptions.domain: &quot;.sablia.io&quot;</code></strong> sur les clients serveur ET navigateur (<code>@supabase/ssr</code> ≥ 0.6.1), point de dot initial requis ; cohérent sur toutes les apps. Source: micheleong.com/blog/share-sessions-subdomains-supabase. Relevance: HIGH.</li>
+<li><strong>Consensus anti-fragmentation pour petite équipe</strong> — monolithe / monorepo Turborepo l&#x27;emportent sauf &gt; 50 devs ou builds &gt; 30 min. Module Federation = O(N²) de complexité pour zéro bénéfice ici. Source: news.ycombinator.com/item?id=37929711 + feature-sliced.design. Relevance: HIGH.</li>
+<li><strong>Le RBAC natif Supabase mappe directement sur l&#x27;app-launcher</strong> — enum <code>app_permission</code> = clés du registre d&#x27;apps ; <code>authorize(required_permission)</code> dans une policy RLS répond à « quel user voit quelle tuile ». Source: supabase.com/docs/.../custom-claims-and-role-based-access-control-rbac. Relevance: HIGH.</li>
+<li><strong>Trigger n8n sécurisé = Route Handler (pas Server Action) + Header Auth</strong> — secret uniquement en <code>process.env</code> serveur, jamais dans le bundle ; timeout sync 64s → pattern async <code>jobId</code> + polling pour les workflows longs. Source: docs.n8n.io + makerkit.dev. Relevance: HIGH.</li>
+</ul>
+</div></details>
+<details open id="sec-decision-matrix"><summary><h2>Decision Matrix</h2></summary><div class="section-body">
+<details id="sec-d-cision-1-architecture-d-h-bergement"><summary><h3>Décision 1 — Architecture d&#x27;hébergement</h3></summary><div class="section-body">
+<div class="table-wrap"><table>
+<tr><th>Option</th><th>Maturité</th><th>Lock-in</th><th>Complexité</th><th>Sablia Fit</th><th>Effort</th></tr>
+<tr><td>Monorepo Turborepo (apps séparées, <code>packages/auth</code>+<code>packages/ui</code> partagés, chaque app = projet Vercel)</td><td>Élevée</td><td>Faible</td><td>Moyenne</td><td><strong>Excellent</strong> — apps déjà Next.js+Supabase</td><td>Moyen</td></tr>
+<tr><td>Monolithe Next.js unique (route groups)</td><td>Élevée</td><td>Faible</td><td>Faible</td><td>Bon mais fusion big-bang des repos</td><td>Élevé (migration)</td></tr>
+<tr><td>Next.js Multi-Zones</td><td>Moyenne</td><td>Faible</td><td>Moyenne</td><td>Possible, mais hard-navigation entre zones</td><td>Moyen</td></tr>
+<tr><td>Micro-frontends / Module Federation</td><td>Élevée</td><td>Moyen</td><td><strong>Élevée</strong></td><td>Mauvais (&lt; 50 devs)</td><td>Élevé</td></tr>
+<tr><td>Gateway Vercel pur (rewrites path-based)</td><td>Élevée</td><td>Faible</td><td>Faible</td><td>Bon pour garder le site marketing intact</td><td>Faible</td></tr>
+</table></div>
+<p><strong>Recommandation</strong>: <strong>Monorepo Turborepo</strong> avec <code>packages/auth</code> (client Supabase + config cookie) et <code>packages/ui</code> (design system <code>@sablia/ui</code>). Portail = app <code>app.sablia.io</code> hébergeant les dashboards légers en routes internes, + tuiles-liens vers les apps lourdes autonomes (vox.sablia.io). Site marketing Vite <strong>laissé tel quel</strong>, bouton « Espace / Connexion » → <code>app.sablia.io</code>.</p>
+</div></details>
+<details id="sec-d-cision-2-quel-projet-supabase-comme-identit-de-plateforme-le-point-dur"><summary><h3>Décision 2 — Quel projet Supabase comme identité de plateforme (le point dur)</h3></summary><div class="section-body">
+<div class="table-wrap"><table>
+<tr><th>Option</th><th>Données déjà en place</th><th>Modèle auth</th><th>Migration vox</th><th>Risque</th></tr>
+<tr><td><strong>A. Base <code>Sablia</code></strong> (<code>qlxoitzdxjqhljjoeqoq</code>)</td><td>Ads <code>sabcrm_*</code>, CRM, n8n, cold email (réel) ; <code>auth.users</code> vide</td><td>À porter depuis vox (artefact SQL migratable)</td><td>Différée (Phase 2)</td><td>Faible MVP / vox reste séparé un temps</td></tr>
+<tr><td>B. Base <code>sablia-voice</code> (<code>mgsfrhirsvqbyjagrswt</code>)</td><td>Auth/org + RLS éprouvés ; données voix</td><td>Déjà là, vox reste en place</td><td>Nulle</td><td>Déplacer ads/CRM/n8n cross-projet (RLS impossible)</td></tr>
+<tr><td>C. Nouveau projet dédié</td><td>Rien</td><td>À construire</td><td>Totale</td><td>Coût migration max</td></tr>
+</table></div>
+<p><strong>Recommandation</strong>: <strong>Option A — la base <code>Sablia</code> devient l&#x27;identité de plateforme.</strong> Justification : (1) les données que les dashboards exposent (ads, CRM, n8n) y sont déjà — la RLS doit vivre dans le même projet que les données ; (2) <code>auth.users</code> y est <strong>vide</strong> → port du modèle d&#x27;auth de vox sans migration d&#x27;utilisateurs ; (3) Brice la pressentait. <strong>vox reste sur <code>sablia-voice</code> en Phase 1</strong> (login distinct, audience différente — acceptable court terme) ; sa consolidation SSO devient une unité dédiée de Phase 2, dé-risquée et non bloquante. ⚠️ Contrainte dure à acter : la RLS ne traverse pas les projets — toute donnée à filtrer par l&#x27;utilisateur connecté doit, à terme, vivre dans la base <code>Sablia</code>.</p>
+</div></details>
+<details id="sec-d-cision-3-mod-le-d-autorisation"><summary><h3>Décision 3 — Modèle d&#x27;autorisation</h3></summary><div class="section-body">
+<div class="table-wrap"><table>
+<tr><th>Option</th><th>Infra</th><th>Complexité</th><th>Sablia Fit</th></tr>
+<tr><td><strong>Postgres RBAC + hook JWT + RLS</strong> (natif Supabase)</td><td>Aucune</td><td>Faible</td><td><strong>Excellent</strong></td></tr>
+<tr><td>CASL (lib JS, filtrage UI) en complément</td><td>Aucune</td><td>Faible</td><td>Bon (couche UI au-dessus de RLS)</td></tr>
+<tr><td>OpenFGA / Permify / SpiceDB (Zanzibar)</td><td>Sidecar + store</td><td>Élevée</td><td>Overkill (&lt; 20 apps, 4 users)</td></tr>
+<tr><td>Retool / Appsmith (SaaS)</td><td>Externe</td><td>Faible</td><td>Mauvais ($260/mo + lock-in)</td></tr>
+</table></div>
+<p><strong>Recommandation</strong>: <strong>RBAC Postgres natif</strong> — étendre <code>user_org_memberships</code> avec une table <code>apps</code> (registre) + <code>role_permissions</code> + clés dot-namespacées (<code>app.ads</code>, <code>feature.crm.bulk_import</code>). JWT porte le rôle → le front filtre les tuiles, la RLS enforce. Multi-tenant-ready via <code>org_id</code> (MVP : org unique <code>sablia-internal</code>).</p>
+</div></details>
+</div></details>
+<details open id="sec-prior-art-inspiration"><summary><h2>Prior Art / Inspiration</h2></summary><div class="section-body">
+<ul>
+<li><strong>Modèle d&#x27;auth vox</strong> — <code>sablia-vox/lib/auth.ts</code> + migration <code>20260402120000</code> — <code>custom_access_token_hook</code> injecte <code>org_id</code>/<code>is_admin</code>/<code>org_ids</code>, RLS via <code>auth.jwt() -&gt; &#x27;app_metadata&#x27;</code>. Réutilisable tel quel.</li>
+<li><strong>Supabase RBAC officiel</strong> — supabase.com/docs/guides/database/postgres/custom-claims-and-role-based-access-control-rbac — <code>app_permission</code> enum + <code>authorize()</code> + RLS.</li>
+<li><strong>SAP Fiori Launchpad</strong> — heflo.com/blog/sap-fiori-launchpad-explained — sépare catalogue (apps existantes) / entitlement (rôle) / layout (préférences UX) ; modèle de référence app-launcher.</li>
+<li><strong>Vercel microfrontends / gateway</strong> — vercel.com/kb/guide/how-can-i-serve-multiple-projects-under-a-single-domain — routage CDN &lt; 1ms, apps indépendantes sous un domaine.</li>
+</ul>
+</div></details>
+<details open id="sec-proposed-scope"><summary><h2>Proposed Scope</h2></summary><div class="section-body">
+<p><strong>Phase 1 — Socle (MVP équipe interne)</strong></p>
+<ul>
+<li>Choisir + préparer la base <code>Sablia</code> comme identité plateforme : porter <code>user_org_memberships</code>, <code>custom_access_token_hook</code>, RLS ; vérifier clés JWT asymétriques ; activer <code>getClaims()</code>.</li>
+<li>Monorepo Turborepo : <code>apps/portal</code> (= <code>app.sablia.io</code>) + <code>packages/auth</code> (client Supabase, cookie <code>.sablia.io</code>, middleware) + <code>packages/ui</code> (<code>@sablia/ui</code>).</li>
+<li>Schéma RBAC : tables <code>apps</code>, <code>role_permissions</code>, enum <code>app_permission</code>/<code>app_role</code>, fonction <code>authorize()</code>, org <code>sablia-internal</code> + 4 users.</li>
+<li>Portail shell + app-launcher : login, grille de tuiles filtrée par claim JWT (CASL ou check direct), RLS en double rideau.</li>
+</ul>
+<p><strong>Phase 1b — Première fédération de valeur</strong></p>
+<ul>
+<li>Intégrer le dashboard <strong>ads</strong> (<code>sabcrm_*</code> déjà dans la base) comme route interne du portail ou tuile.</li>
+<li>Package réutilisable « trigger n8n » : Route Handler + Header Auth (secret server-only) + pattern async <code>jobId</code>/polling + clé d&#x27;idempotence ; durcir n8n.sablia.io (IP allowlist egress Vercel).</li>
+</ul>
+<p><strong>Phase 2 — Extension (différée)</strong></p>
+<ul>
+<li>Bouton « Connexion » sur le site marketing Vite → <code>app.sablia.io</code>.</li>
+<li>Consolidation vox dans le SSO : migrer auth + données voix de <code>sablia-voice</code> vers la base plateforme (unité dédiée, dé-risquée).</li>
+<li>Ouverture multi-tenant : nouvelles orgs pour démos / POC clients (insertions, zéro changement de schéma).</li>
+</ul>
+</div></details>
+<details open id="sec-technical-reference-sheet"><summary><h2>Technical Reference Sheet</h2></summary><div class="section-body">
+<div class="table-wrap"><table>
+<tr><th>Package</th><th>Version</th><th>Context7 ID</th><th>Link</th><th>Notes</th></tr>
+<tr><td>@supabase/ssr</td><td>≥ 0.6.1 (prod 0.10.2)</td><td>N/A (quota)</td><td>npmjs.com/package/@supabase/ssr</td><td>Cookie cross-domain ; pin &gt; PR #30424 (bug domaine OAuth)</td></tr>
+<tr><td>@supabase/supabase-js</td><td>2.105.0</td><td>N/A</td><td>npmjs.com/package/@supabase/supabase-js</td><td><code>getClaims()</code> (juil. 2025)</td></tr>
+<tr><td>Turborepo</td><td>—</td><td>N/A</td><td>turbo.build</td><td>Monorepo, cache incrémental, ~10 packages</td></tr>
+<tr><td>CASL</td><td>— (gratuit OSS)</td><td>N/A</td><td>casl.js.org</td><td>Filtrage authz UI optionnel, zéro infra</td></tr>
+<tr><td>n8n (Webhook node)</td><td>2.17.8</td><td>—</td><td>docs.n8n.io/integrations/builtin/credentials/webhook</td><td>Header Auth ; pas de HMAC natif (code node)</td></tr>
+</table></div>
+<p>Key URLs:</p>
+<ul>
+<li>github.com/supabase/supabase/discussions/5742 — SSO cross-sous-domaines, config cookie, mainteneur confirme « 1 projet »</li>
+<li>supabase.com/blog/jwt-signing-keys — clés asymétriques + JWKS, vérif locale du JWT</li>
+<li>supabase.com/docs/.../custom-access-token-hook — injection claims org/rôle</li>
+<li>docs.n8n.io/.../respondtowebhook — sync vs async, timeout 64s</li>
+<li>vercel.com/kb/.../multiple-projects-under-a-single-domain — gateway / cookie <code>.sablia.io</code></li>
+</ul>
+</div></details>
+<details open id="sec-implementation-patterns"><summary><h2>Implementation Patterns</h2></summary><div class="section-body">
+<details id="sec-config-cookie-cross-sous-domaines-supabase-ssr"><summary><h3>Config cookie cross-sous-domaines (<code>@supabase/ssr</code>)</h3></summary><div class="section-body">
+<p>À appliquer identiquement côté serveur ET navigateur — un mismatch crée un cookie plus étroit qui masque le partagé.</p>
+<pre><code class="language-typescript">
+createServerClient(url, anonKey, {
+  cookieOptions: {
+    domain: process.env.NODE_ENV === &quot;production&quot; ? &quot;.sablia.io&quot; : &quot;localhost&quot;,
+    path: &quot;/&quot;, sameSite: &quot;lax&quot;, secure: true,
+  },
+  cookies: { getAll, setAll },
+});
+</code></pre>
+<p>Source: github.com/supabase/supabase/discussions/5742</p>
+</div></details>
+<details id="sec-lecture-des-claims-en-middleware-z-ro-round-trip-db"><summary><h3>Lecture des claims en middleware (zéro round-trip DB)</h3></summary><div class="section-body">
+<pre><code class="language-typescript">
+const { data: { claims } } = await supabase.auth.getClaims();
+const orgId = claims?.app_metadata?.org_id;
+const role  = claims?.app_metadata?.org_role;
+if (!orgId) return NextResponse.redirect(&#x27;/login&#x27;);
+</code></pre>
+<p>Source: supabase.com/docs/reference/javascript/auth-getclaims</p>
+</div></details>
+<details id="sec-trigger-n8n-s-curis-route-handler-secret-server-only"><summary><h3>Trigger n8n sécurisé (Route Handler, secret server-only)</h3></summary><div class="section-body">
+<pre><code class="language-typescript">
+// app/api/trigger-workflow/route.ts
+const { data: { user } } = await supabase.auth.getUser();
+if (!user) return NextResponse.json({ error: &#x27;Unauthorized&#x27; }, { status: 401 });
+const res = await fetch(process.env.N8N_WEBHOOK_URL!, {
+  method: &#x27;POST&#x27;,
+  headers: { &#x27;X-API-Key&#x27;: process.env.N8N_WEBHOOK_SECRET!, &#x27;X-Idempotency-Key&#x27;: key },
+  body: JSON.stringify({ ...body, userId: user.id }),
+});
+</code></pre>
+<p>Source: makerkit.dev/blog/tutorials/nextjs-api-best-practices</p>
+</div></details>
+<details id="sec-registre-d-apps-entitlement-app-launcher"><summary><h3>Registre d&#x27;apps + entitlement (app-launcher)</h3></summary><div class="section-body">
+<pre><code class="language-sql">
+create type public.app_permission as enum (&#x27;app.ads&#x27;, &#x27;app.crm&#x27;, &#x27;app.voice&#x27;);
+create table public.apps (
+  id uuid primary key default gen_random_uuid(),
+  slug text unique not null, label text not null, icon_url text,
+  launch_url text not null, required_permission text not null,
+  org_id uuid references organizations(id)  -- NULL = toutes orgs
+);
+create policy &quot;only permitted apps&quot; on public.apps
+  for select using (authorize(apps.required_permission));
+</code></pre>
+<p>Source: supabase.com/docs/.../custom-claims-and-role-based-access-control-rbac</p>
+</div></details>
+</div></details>
+<details open id="sec-cost-performance-baseline"><summary><h2>Cost &amp; Performance Baseline</h2></summary><div class="section-body">
+<div class="table-wrap"><table>
+<tr><th>Metric</th><th>Value</th><th>Source</th><th>Notes</th></tr>
+<tr><td>Build custom vs Retool</td><td>$0 vs $260/mo (4×$65)</td><td>retool.com/blog/ai-build-vs-buy-report-2026</td><td>+ lock-in évité ; devient asset démo client</td></tr>
+<tr><td>Timeout sync webhook n8n</td><td>64 s</td><td>docs.n8n.io</td><td>&gt; 30s → async jobId+poll obligatoire</td></tr>
+<tr><td>Expiry JWT Supabase</td><td>3600 s (1h, min 60s)</td><td>supabase docs</td><td>Fenêtre de staleness révocation org</td></tr>
+<tr><td>Propagation rotation JWKS</td><td>~20 min (10 edge + 10 client)</td><td>supabase.com/blog/jwt-signing-keys</td><td>Clés asymétriques</td></tr>
+<tr><td>Seuil monolithe → split</td><td>&gt; 50 devs / &gt; 30 min build</td><td>HN / feature-sliced</td><td>Sablia très en-dessous</td></tr>
+<tr><td>Latence rewrites Vercel</td><td>&lt; 1 ms</td><td>vercel.com/kb</td><td>Gateway path-based</td></tr>
+</table></div>
+</div></details>
+<details open id="sec-constraints-decisions"><summary><h2>Constraints &amp; Decisions</h2></summary><div class="section-body">
+<ul>
+<li><strong>Stack imposée</strong> : Next.js 16 + React 19 + @supabase/ssr + Tailwind v4 + shadcn (STACK.md). Apps à fédérer déjà conformes ; seul le site marketing est Vite (laissé tel quel).</li>
+<li><strong>Invariant dur</strong> : SSO par cookie ⇒ UN projet Supabase ; RLS ne traverse pas les projets ⇒ données filtrées par user et auth dans le même projet.</li>
+<li><strong>MVP</strong> = équipe interne (Brice, Rémi, Raphaël, Pablo), org unique <code>sablia-internal</code> ; archi multi-tenant-ready (FK <code>org_id</code>), extension = insertions.</li>
+<li><strong>Sécurité</strong> : secret n8n jamais côté client ; Route Handler valide session+permission avant tout appel ; IP allowlist sur n8n.sablia.io.</li>
+<li><strong>Décidé</strong> : Turborepo + RBAC Postgres natif + base <code>Sablia</code> comme identité plateforme ; vox SSO différé Phase 2.</li>
+</ul>
+</div></details>
+<details open id="sec-open-questions"><summary><h2>Open Questions</h2></summary><div class="section-body">
+<li>Vérifier que la base <code>Sablia</code> (créée 2025-09-06) utilise bien les clés JWT <strong>asymétriques</strong> (sinon migration avant <code>getClaims()</code> local).</li>
+<li>La base <code>Sablia</code> est très sollicitée par les crons (heartbeats, autofix queue, cold email) — l&#x27;ajout de l&#x27;auth + RLS y pose-t-il un problème de charge / d&#x27;isolation ? Faut-il un schéma dédié <code>platform</code>/<code>auth_app</code> ?</li>
+<li>Dashboards à fédérer : routes internes du portail (monolithe-léger) OU sous-domaines autonomes (<code>ads.sablia.io</code>) ? Critère = poids/cadence de release de chaque app.</li>
+<li>OAuth Google déjà utilisé : confirmer la version <code>@supabase/ssr</code> post-PR #30424 (bug propagation domaine sur le callback OAuth).</li>
+<li>Périmètre exact du MVP : quelles apps en Phase 1 (portail + ads seulement, ou +autoresearch-dashboard/board) ?</li>
+<li>vox : migration complète vers la base plateforme en Phase 2, ou vox reste un silo et on accepte un double login durablement ?</li>
+<hr>
+</div></details>
+<details open id="sec-research-archive"><summary><h2>Research Archive</h2></summary><div class="section-body">
+<details id="sec-top-10-findings"><summary><h3>Top 10 Findings</h3></summary><div class="section-body">
+<div class="table-wrap"><table>
+<tr><th>#</th><th>Finding</th><th>Source</th><th>Relevance</th><th>Domains</th></tr>
+<tr><td>1</td><td>Un seul projet Supabase requis pour SSO cookie</td><td>discussions/5742</td><td>HIGH</td><td>Web Dev &amp; SaaS</td></tr>
+<tr><td>2</td><td>Config <code>cookieOptions.domain: &quot;.sablia.io&quot;</code> (serveur+nav)</td><td>micheleong.com</td><td>HIGH</td><td>Web Dev &amp; SaaS</td></tr>
+<tr><td>3</td><td>Anti-fragmentation : monolithe/Turborepo &lt; 50 devs</td><td>HN 37929711</td><td>HIGH</td><td>Web Dev &amp; SaaS</td></tr>
+<tr><td>4</td><td>RBAC natif Supabase mappe sur app-launcher (<code>authorize()</code>)</td><td>supabase docs RBAC</td><td>HIGH</td><td>Web Dev &amp; SaaS, AI Agents &amp; LLM</td></tr>
+<tr><td>5</td><td>Trigger n8n = Route Handler + Header Auth, secret server-only</td><td>docs.n8n.io</td><td>HIGH</td><td>n8n &amp; Automation, Web Dev &amp; SaaS</td></tr>
+<tr><td>6</td><td><code>getClaims()</code> + clés asymétriques = vérif JWT locale</td><td>supabase.com/blog/jwt-signing-keys</td><td>HIGH</td><td>Web Dev &amp; SaaS</td></tr>
+<tr><td>7</td><td><code>custom_access_token_hook</code> injecte org/rôle dans <code>app_metadata</code></td><td>supabase docs</td><td>HIGH</td><td>Web Dev &amp; SaaS</td></tr>
+<tr><td>8</td><td>Timeout sync n8n 64s → async jobId+poll</td><td>community.n8n.io/125678</td><td>HIGH</td><td>n8n &amp; Automation</td></tr>
+<tr><td>9</td><td>Build custom $0 vs Retool $260/mo + asset démo</td><td>retool.com 2026</td><td>MEDIUM</td><td>Business &amp; Services</td></tr>
+<tr><td>10</td><td>Registre <code>apps</code> découplé des grants (Fiori) + idempotence clé client</td><td>heflo.com / n8n 275249</td><td>MEDIUM</td><td>Web Dev &amp; SaaS, n8n &amp; Automation</td></tr>
+</table></div>
+</div></details>
+<details id="sec-by-research-angle"><summary><h3>By Research Angle</h3></summary><div class="section-body">
+<details id="sec-supabase-cross-subdomain-sso-multi-tenant-auth"><summary><h4>Supabase cross-subdomain SSO &amp; multi-tenant auth</h4></summary><div class="section-body">
+<p><strong>Agent stats</strong>: 8 queries | 9 fetches | 9 findings | 0 failed queries | 1 failed fetch</p>
+<ul>
+<li><strong>Cookie domain <code>.sablia.io</code></strong> — sur serveur+nav, <code>@supabase/ssr</code> ≥ 0.6.1. Source: discussions/5742. HIGH. Web Dev &amp; SaaS.</li>
+<li><strong>1 projet = condition du SSO cookie</strong> — projets séparés = silos JWT. Source: discussions/5742. HIGH.</li>
+<li><strong>Bug OAuth callback ignore <code>domain</code></strong> (issue #30279, fixé PR #30424) — pin la version. Source: github issue 30279. MEDIUM.</li>
+<li><strong><code>custom_access_token_hook</code></strong> — query <code>user_org_memberships</code>, <code>jsonb_set</code> dans <code>app_metadata</code> (safe, non user-writable). Source: supabase docs. HIGH.</li>
+<li><strong><code>auth.jwt()</code> en RLS vs <code>getClaims()</code> en middleware</strong> — lecture claim sans round-trip. Source: supabase docs. HIGH.</li>
+<li><strong>Clés JWT asymétriques (juil. 2025)</strong> — JWKS public, vérif locale ; défaut RSA depuis mai 2025. Source: supabase blog. HIGH.</li>
+<li><strong>RLS claim JWT vs join</strong> — claim = rapide mais stale 1h (révocation org en différé, mitiger via refresh n8n). Source: supabase docs. MEDIUM.</li>
+<li><strong>Localhost ne respecte pas <code>Domain</code></strong> — <code>/etc/hosts</code> + <code>.sablia.local</code> ou reverse-proxy dev. Source: discussions/5742. MEDIUM.</li>
+<li><strong>httpOnly split-cookie par défaut</strong> — ne pas override sauf nécessité. Source: discussions/5742. MEDIUM.</li>
+</ul>
+</div></details>
+<details id="sec-federated-frontend-portal-hosting-architecture"><summary><h4>Federated frontend / portal hosting architecture</h4></summary><div class="section-body">
+<p><strong>Agent stats</strong>: 8 queries | 6 fetches | 10 findings | 0 failed queries | 0 failed fetches</p>
+<ul>
+<li><strong>Next.js Multi-Zones</strong> — <code>assetPrefix</code> + rewrites, mais hard-navigation entre zones, UI partagée à packager. Source: nextjs.org/docs. MEDIUM. Web Dev &amp; SaaS.</li>
+<li><strong>Gateway Vercel path-based</strong> — ~5 lignes <code>vercel.json</code>, &lt; 1ms, apps indépendantes. Source: vercel.com/kb. HIGH.</li>
+<li><strong>Cookie cross-projets Vercel non automatique</strong> — scoper <code>.sablia.io</code>. Source: vercel.com/kb. HIGH.</li>
+<li><strong>Sous-domaines + cookie parent</strong> — isolation max, mais wildcard TLS + CORS. Source: github PHAC/183. MEDIUM.</li>
+<li><strong>Module Federation justifié à grande échelle seulement</strong> — O(N²) deps. Source: HN 37929711. HIGH.</li>
+<li><strong>Monolithe = plus rapide &lt; 20 devs / &lt; 15 min build</strong>. Source: dailydevpost. HIGH.</li>
+<li><strong>Turborepo = voie médiane</strong> — apps séparées + <code>packages/</code> partagés, pas de big-bang. Source: feature-sliced. HIGH.</li>
+<li><strong>Multi-Zones ne partage pas les layouts</strong> — extraire <code>@sablia/ui</code>. Source: nextjs.org. MEDIUM.</li>
+<li><strong>Garder le SPA marketing via gateway</strong> — code intact. Source: dev.to/ianmacartney. HIGH.</li>
+<li><strong>FSD : poser les frontières dans le monolithe d&#x27;abord</strong> — extraction sûre plus tard. Source: feature-sliced. MEDIUM.</li>
+</ul>
+</div></details>
+<details id="sec-internal-rbac-entitlements-app-launcher-patterns"><summary><h4>Internal RBAC, entitlements &amp; app-launcher patterns</h4></summary><div class="section-body">
+<p><strong>Agent stats</strong>: 8 queries | 5 fetches | 9 findings | 0 failed queries | 0 failed fetches</p>
+<ul>
+<li><strong>RBAC pur = bon départ ; hybride RBAC→ReBAC→ABAC plus tard</strong>. Source: caduh.com. HIGH. Web Dev &amp; SaaS.</li>
+<li><strong>RBAC natif Supabase</strong> — enums + hook JWT + <code>authorize()</code> RLS. Source: supabase docs. HIGH.</li>
+<li><strong>Table <code>apps</code> découplée des grants</strong> — nouvelle app = une ligne. Source: inference/Fiori. HIGH.</li>
+<li><strong>Schéma multi-tenant = <code>org_id</code> FK partout</strong> — <code>user_org_memberships</code> déjà compatible. Source: permit.io. HIGH.</li>
+<li><strong>Clés dot-namespacées</strong> <code>app.crm</code>/<code>feature.crm.bulk_import</code> — pas de système de flags séparé. Source: schematichq. MEDIUM.</li>
+<li><strong>OpenFGA/Permify/SpiceDB overkill</strong> &lt; 20 apps. Source: pkgpulse. MEDIUM.</li>
+<li><strong>CASL = authz JS zéro infra</strong> — filtrage UI + RLS. Source: sph.sh. MEDIUM.</li>
+<li><strong>Custom &gt; Retool ($260/mo) / Appsmith</strong> pour équipe dev. Source: retool.com. MEDIUM. Business.</li>
+<li><strong>SAP Fiori Launchpad</strong> — sépare catalogue/entitlement/layout. Source: heflo.com. MEDIUM.</li>
+</ul>
+</div></details>
+<details id="sec-secure-webhook-trigger-uis-from-authenticated-web-apps"><summary><h4>Secure webhook-trigger UIs from authenticated web apps</h4></summary><div class="section-body">
+<p><strong>Agent stats</strong>: 7 queries | 6 fetches | 9 findings | 0 failed queries | 0 failed fetches</p>
+<ul>
+<li><strong>Route Handler + secret header server-only</strong> — jamais <code>NEXT_PUBLIC_*</code>. Source: makerkit.dev. HIGH. n8n &amp; Automation.</li>
+<li><strong>n8n Header Auth</strong> = bon choix service-to-service. Source: docs.n8n.io. HIGH.</li>
+<li><strong>HMAC</strong> plus fort mais pas natif n8n (code node + <code>timingSafeEqual</code>). Source: rapidevelopers. MEDIUM.</li>
+<li><strong>Sync vs async : limite 64s</strong> — <code>Respond: Immediately</code> + <code>{jobId}</code>. Source: docs.n8n.io. HIGH.</li>
+<li><strong>Async = jobId + poll/callback</strong> ; <code>$execution.id</code> dispo tôt ; Wait node après 65s. Source: community.n8n.io. HIGH.</li>
+<li><strong>Idempotence = UUID client stable</strong> + <code>SET NX</code> Redis / unique Supabase. Source: community.n8n.io. HIGH.</li>
+<li><strong>JWT Auth Supabase possible</strong> mais n8n ne vérifie pas <code>exp</code>/<code>iss</code>/<code>aud</code> auto. Source: community.n8n.io. MEDIUM.</li>
+<li><strong>Erreurs : n8n renvoie 200 même en échec</strong> — envelope <code>{success,error,data}</code> explicite. Source: inference. MEDIUM.</li>
+<li><strong>Durcissement réseau : IP allowlist egress Vercel</strong> sur n8n.sablia.io. Source: logicworkflow.com. MEDIUM.</li>
+</ul>
+</div></details>
+</div></details>
+<details id="sec-sablia-cross-domain-map"><summary><h3>Sablia Cross-Domain Map</h3></summary><div class="section-body">
+<div class="table-wrap"><table>
+<tr><th>Domain</th><th>Relevant Findings</th><th>Actionable Ideas</th></tr>
+<tr><td>Voice Agents &amp; Telephony</td><td>2</td><td>Consolider vox dans le SSO plateforme (Phase 2) ; modèle auth vox = source de vérité</td></tr>
+<tr><td>n8n &amp; Automation</td><td>8</td><td>Package « trigger n8n » réutilisable (Route Handler + Header Auth + async) ; durcir n8n.sablia.io</td></tr>
+<tr><td>Web Dev &amp; SaaS</td><td>24</td><td>Turborepo + cookie <code>.sablia.io</code> + RBAC natif Supabase ; portail <code>app.sablia.io</code></td></tr>
+<tr><td>Cold Email &amp; Outreach</td><td>0</td><td>None found</td></tr>
+<tr><td>AI Agents &amp; LLM</td><td>1</td><td>UIs de lancement d&#x27;automatisations IA via n8n (préparer le CRM)</td></tr>
+<tr><td>Business &amp; Services</td><td>2</td><td>Portail custom = $0 + asset démo client ; brique vers l&#x27;offre CRM</td></tr>
+</table></div>
+</div></details>
+<details id="sec-unconventional-takes"><summary><h3>Unconventional Takes</h3></summary><div class="section-body">
+<li><strong>Le vrai sujet n&#x27;est pas l&#x27;auth, c&#x27;est la consolidation des données.</strong> On part de « faire un login comme vox », mais le login est trivial (cookie <code>.sablia.io</code>, hook JWT — déjà fait dans vox). Le coût réel et le risque sont dans le choix « quel projet Supabase héberge l&#x27;identité », parce que la RLS ne traverse pas les projets : la décision force, à terme, à rapatrier toutes les données filtrées-par-user dans une base unique. Le brainstorm a déplacé la question de « comment authentifier » vers « où vit la donnée ».</li>
+<li><strong>Construire le portail interne est un acte commercial, pas seulement technique.</strong> Un portail RBAC multi-tenant fait maison devient une démo vivante pour les prospects CRM (« voilà comment on modéliserait les accès de votre équipe »). Le MVP interne et l&#x27;asset de vente sont le même livrable — argument fort contre Retool/Appsmith au-delà du simple coût.</li>
+<li><strong>La tentation micro-frontend est un piège de maturité.</strong> « Plusieurs apps indépendantes » évoque instinctivement Module Federation / micro-frontends, mais tout le signal 2025-2026 dit : à &lt; 50 devs c&#x27;est de la dette pure. La bonne réponse « avancée » est en fait la plus simple — un monorepo Turborepo avec des packages partagés. Résister à la sur-ingénierie est ici la décision d&#x27;architecture la plus rentable.</li>
+</div></details>
+<details id="sec-other-next-steps"><summary><h3>Other Next Steps</h3></summary><div class="section-body">
+<ul>
+<li><code>/architect portail-auth-unifie</code> — découper en unités (socle identité, RBAC, portail shell, fédération ads, package n8n-trigger, Phase 2 vox/marketing).</li>
+<li><code>/n8n-create</code> — workflow de refresh de session sur changement de membership org (mitigation staleness JWT 1h), quand le RBAC sera en place.</li>
+</ul>
+</div></details>
+</div></details>
+</div></details>
+  </article>
+
+  <footer class="report-footer">
+    <span>Source: 2026-05-28-portail-auth-unifie-ecosysteme-sablia.md</span>
+    <span>Sablia · Generated by Claude Code</span>
+  </footer>
+</main>
+
+</body>
+</html>
