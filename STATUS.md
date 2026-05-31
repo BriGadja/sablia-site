@@ -1,6 +1,6 @@
 # Sablia Site - Status
 
-**Last Updated**: 2026-05-07
+**Last Updated**: 2026-05-31
 
 ---
 
@@ -39,6 +39,7 @@
 
 ## Completed (recent)
 
+- **2026-05-31 — Portail button in TopNav → app.sablia.io (commit 7020024)**. Added an outlined "Portail" link (LogIn icon from `lucide-crm.tsx`) in `client/src/components/landing/TopNav.tsx`, desktop + mobile, left of the coral "Réserver un call" CTA so the booking CTA stays primary. Links to the new Sablia Portal (SSO/RBAC app-launcher, `sablia-portal` project) — visitors without an account land on `app.sablia.io/login`. tsc + Biome clean; prod-verified live on https://sablia.io (Portail href = https://app.sablia.io, 0 console errors). Note: an unrelated pre-existing uncommitted edit to `docs/INTEGRATIONS.md` was left untouched (not mine).
 - **2026-05-07 — Vercel www→apex redirect fix (308 Permanent)**. GSC validation des "Page avec redirection" avait échoué le 2026-05-05 sur 4 URLs www/http car Vercel auto-redirigeait www.sablia.io → sablia.io en 307 (Temporary) — Google n'accepte pas les 307 pour valider la canonisation. Fix : `www.sablia.io` attaché explicitement au projet sablia-site via API Vercel (`POST /v10/projects/sablia-site/domains` avec `redirectStatusCode: 308`). Vérifié : les 4 URLs renvoient maintenant 308. Aucun changement de code ni redéploiement nécessaire. Pattern sauvé en memory (`vercel_www_redirect_308.md`) — applicable aux autres projets Sablia hébergés sur Vercel (qwertys, vox, tasks).
 - **2026-04-27 — SEO prerender pipeline (commits 47e1922, 80f880a, f739d3c)**. Fixed GSC "Page en double" canonical errors. Added puppeteer-based prerender at build (`scripts/prerender.mjs` + `npm run build`). Each of 13 routes now ships its own static HTML with correct title/canonical/og/twitter — no JS rendering required for SEO. Sub-fixes: (a) stripped duplicate-prone meta from static `client/index.html` (Helmet now sole owner of per-page meta), (b) flattened SEO.tsx — replaced React Fragments with per-element conditionals (react-helmet-async v2 silently dropped Fragment children → og:* and twitter:* were absent in prod), (c) switched from `puppeteer` to `puppeteer-core + @sparticuz/chromium` so Vercel build env (no system Chromium libs) can launch headless.
 
