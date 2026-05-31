@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Menu, X } from '@/components/icons/lucide-crm'
+import { LogIn, Menu, X } from '@/components/icons/lucide-crm'
 import { openBooking } from './BookingModal'
 
 const NAV_ITEMS = [
@@ -31,13 +31,22 @@ export default function TopNav() {
           ))}
         </div>
 
-        <button
-          type="button"
-          onClick={openBooking}
-          className="t-button ml-auto hidden h-10 items-center rounded-md bg-primary px-5 text-on-primary transition-shadow duration-base hover:shadow-glow-coral md:inline-flex"
-        >
-          Réserver un call
-        </button>
+        <div className="ml-auto hidden items-center gap-3 md:flex">
+          <a
+            href="https://app.sablia.io"
+            className="t-button inline-flex h-10 items-center gap-2 rounded-md border border-hairline px-4 text-on-dark-body transition-colors duration-base hover:border-primary/60 hover:text-on-dark"
+          >
+            <LogIn size={16} />
+            Portail
+          </a>
+          <button
+            type="button"
+            onClick={openBooking}
+            className="t-button inline-flex h-10 items-center rounded-md bg-primary px-5 text-on-primary transition-shadow duration-base hover:shadow-glow-coral"
+          >
+            Réserver un call
+          </button>
+        </div>
 
         <button
           type="button"
@@ -62,13 +71,21 @@ export default function TopNav() {
                 {item.label}
               </a>
             ))}
+            <a
+              href="https://app.sablia.io"
+              onClick={() => setMobileOpen(false)}
+              className="t-button mt-2 inline-flex h-10 items-center justify-center gap-2 rounded-md border border-hairline px-5 text-on-dark-body"
+            >
+              <LogIn size={16} />
+              Portail
+            </a>
             <button
               type="button"
               onClick={() => {
                 setMobileOpen(false)
                 openBooking()
               }}
-              className="t-button mt-2 h-10 rounded-md bg-primary px-5 text-on-primary"
+              className="t-button h-10 rounded-md bg-primary px-5 text-on-primary"
             >
               Réserver un call
             </button>

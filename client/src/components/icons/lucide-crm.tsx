@@ -3,6 +3,7 @@ export {
   Calendar,
   Check,
   LineChart,
+  LogIn,
   Mail,
   Menu,
   PhoneCall,
