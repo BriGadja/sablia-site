@@ -22,6 +22,7 @@
 
 | Plan / Brief | Status | Next |
 |---|---|---|
+| `plans/sablia-site-landing-refonte-crm.md` | **New — 5 phases — challenging** (refonte landing focus CRM, brief collègues : 6 blocs, 3 sections neuves problématiques/équipe/FAQ, Calendly→Raph, retrait Powered-by-Claude). Photos équipe détourées prêtes (`sablia-crm/assets/pictures/processed/`). | Challenge → `/execute` (deploy direct prod main) |
 | `plans/site-completion-checklist.md` | **P0 + P1 + P2 DONE 2026-04-20**. Homepage v2 shipped (9-section stack, Diagnostic Sablia funnel, n8n workflow live). Cohérence globale propagée. UX migration completée post-bascule 2026-04-20 15:02 UTC. | Brice: launch P3 (Google Ads UI) + trancher HITL P4.1-P4.4 |
 | `research/brainstorm/2026-04-17-sablia-acquisition-machine-v1-brief.md` | Amended 2026-04-18. Pre-design unit delivered (v2: 490€ HT + crédit post-audit). Units 3-6 (pricing page redesign, hub pages, case studies, content cadence) backlog | Post P1 completion |
 
