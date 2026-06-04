@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portal dashboard: Claude conversation themes/summaries + cron health — Sablia</title>
+<style>
+:root {
+  --bg: #0f1117;
+  --bg-surface: #161922;
+  --bg-surface-2: #1c1f2e;
+  --border: #2a2d3e;
+  --text: #e1e4ed;
+  --text-dim: #8b8fa3;
+  --accent: #7c6df0;
+  --accent-dim: #5a4fc4;
+  --green: #3ecf8e;
+  --yellow: #f0c246;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --orange: #f97316;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --radius: 8px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  font-size: 15px;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+/* ── Sidebar / TOC ── */
+nav.toc {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 24px 16px;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+nav.toc .toc-header {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+  padding: 0 8px;
+}
+
+nav.toc a {
+  display: block;
+  padding: 5px 8px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13px;
+  border-radius: 4px;
+  transition: all 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+nav.toc a:hover { color: var(--text); background: var(--bg-surface-2); }
+nav.toc a.toc-l1 { font-weight: 600; color: var(--text); }
+nav.toc a.toc-l2 { font-weight: 500; }
+nav.toc a.toc-l3, nav.toc a.toc-l4 { font-size: 12px; }
+
+/* ── Main ── */
+main {
+  max-width: 900px;
+  padding: 40px 48px 80px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── Header ── */
+.report-header {
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.report-header .type-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  background: rgba(124, 109, 240, 0.12);
+  padding: 3px 10px;
+  border-radius: 99px;
+  margin-bottom: 12px;
+}
+.report-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+.report-header .subtitle {
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+/* ── Sections (details/summary) ── */
+details {
+  margin-bottom: 4px;
+}
+details > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 8px 0;
+  user-select: none;
+}
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before {
+  content: "▸";
+  display: inline-block;
+  width: 20px;
+  color: var(--text-dim);
+  font-size: 12px;
+  transition: transform 0.15s;
+}
+details[open] > summary::before { content: "▾"; }
+
+details > summary h1,
+details > summary h2,
+details > summary h3,
+details > summary h4 { display: inline; }
+
+.section-body { padding: 4px 0 16px 20px; }
+
+h1 { font-size: 24px; font-weight: 700; }
+h2 { font-size: 20px; font-weight: 600; color: var(--accent); }
+h3 { font-size: 16px; font-weight: 600; }
+h4 { font-size: 14px; font-weight: 600; color: var(--text-dim); }
+
+/* ── Content ── */
+p { margin: 8px 0; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+blockquote {
+  border-left: 3px solid var(--accent-dim);
+  padding: 8px 16px;
+  margin: 12px 0;
+  color: var(--text-dim);
+  background: var(--bg-surface);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-style: italic;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 13px;
+  background: var(--bg-surface-2);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+pre {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin: 12px 0;
+  overflow-x: auto;
+}
+pre code { background: none; padding: 0; font-size: 13px; }
+
+/* ── Tables ── */
+.table-wrap {
+  overflow-x: auto;
+  margin: 12px 0;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+th {
+  text-align: left;
+  padding: 10px 14px;
+  background: var(--bg-surface);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+}
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(124, 109, 240, 0.04); }
+
+/* ── Lists ── */
+ul, ol { padding-left: 20px; margin: 8px 0; }
+li { margin: 4px 0; }
+li.task { list-style: none; margin-left: -20px; }
+li.task input { margin-right: 8px; accent-color: var(--accent); }
+
+/* ── Badges ── */
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  vertical-align: middle;
+}
+.badge.high { background: rgba(239,68,68,0.15); color: var(--red); }
+.badge.medium { background: rgba(249,115,22,0.15); color: var(--orange); }
+.badge.low { background: rgba(59,130,246,0.15); color: var(--blue); }
+.badge.info { background: rgba(139,143,163,0.15); color: var(--text-dim); }
+.badge.done, .badge.pass { background: rgba(62,207,142,0.12); color: var(--green); }
+.badge.pending { background: rgba(240,194,70,0.15); color: var(--yellow); }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 24px 0;
+}
+
+/* ── Footer ── */
+.report-footer {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-dim);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  body { grid-template-columns: 1fr; }
+  nav.toc {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 12px;
+  }
+  nav.toc .toc-header { width: 100%; margin-bottom: 8px; }
+  main { padding: 24px 20px 60px; }
+}
+
+@media print {
+  body { grid-template-columns: 1fr; }
+  nav.toc { display: none; }
+  details { break-inside: avoid; }
+  details > summary::before { display: none; }
+  .badge { border: 1px solid; }
+}
+</style>
+</head>
+<body>
+
+<nav class="toc">
+  <div class="toc-header">Table of contents</div>
+  <a href="#sec-brainstorm-portal-dashboard-claude-conversation-themes-summaries-cron-health" style="padding-left:0px" class="toc-l1">Brainstorm: Portal dashboard — Claude conversation themes/summaries + cron health</a>
+<a href="#sec-executive-summary" style="padding-left:16px" class="toc-l2">Executive Summary</a>
+<a href="#sec-problem-statement" style="padding-left:16px" class="toc-l2">Problem Statement</a>
+<a href="#sec-key-findings" style="padding-left:16px" class="toc-l2">Key Findings</a>
+<a href="#sec-decision-matrix-conversation-ingestion-trigger" style="padding-left:16px" class="toc-l2">Decision Matrix — conversation ingestion trigger</a>
+<a href="#sec-decision-matrix-theme-extraction-approach" style="padding-left:16px" class="toc-l2">Decision Matrix — theme extraction approach</a>
+<a href="#sec-prior-art-inspiration" style="padding-left:16px" class="toc-l2">Prior Art / Inspiration</a>
+<a href="#sec-proposed-scope" style="padding-left:16px" class="toc-l2">Proposed Scope</a>
+<a href="#sec-technical-reference-sheet" style="padding-left:16px" class="toc-l2">Technical Reference Sheet</a>
+<a href="#sec-implementation-patterns" style="padding-left:16px" class="toc-l2">Implementation Patterns</a>
+<a href="#sec-close-structured-theme-tagging-the-v1-core" style="padding-left:32px" class="toc-l3">`/close` structured theme-tagging (the v1 core)</a>
+<a href="#sec-append-only-event-session-schema-supabase-audit-pattern" style="padding-left:32px" class="toc-l3">Append-only event/session schema (Supabase audit pattern)</a>
+<a href="#sec-cron-heartbeat-if-extending-vps-cron-coverage" style="padding-left:32px" class="toc-l3">Cron heartbeat (if extending VPS-cron coverage)</a>
+<a href="#sec-cost-performance-baseline" style="padding-left:16px" class="toc-l2">Cost &amp; Performance Baseline</a>
+<a href="#sec-constraints-decisions" style="padding-left:16px" class="toc-l2">Constraints &amp; Decisions</a>
+<a href="#sec-open-questions" style="padding-left:16px" class="toc-l2">Open Questions</a>
+<a href="#sec-research-archive" style="padding-left:16px" class="toc-l2">Research Archive</a>
+<a href="#sec-top-10-findings" style="padding-left:32px" class="toc-l3">Top 10 Findings</a>
+<a href="#sec-by-research-angle" style="padding-left:32px" class="toc-l3">By Research Angle</a>
+<a href="#sec-claude-code-observability-mechanisms" style="padding-left:48px" class="toc-l4">Claude Code observability mechanisms</a>
+<a href="#sec-existing-oss-tools-dashboards-for-claude-code" style="padding-left:48px" class="toc-l4">Existing OSS tools &amp; dashboards for Claude Code</a>
+<a href="#sec-conversation-theme-extraction-summarization" style="padding-left:48px" class="toc-l4">Conversation theme extraction &amp; summarization</a>
+<a href="#sec-dashboard-architecture-ingestion" style="padding-left:48px" class="toc-l4">Dashboard architecture &amp; ingestion</a>
+<a href="#sec-cron-scheduled-job-monitoring" style="padding-left:48px" class="toc-l4">Cron &amp; scheduled-job monitoring</a>
+<a href="#sec-sablia-cross-domain-map" style="padding-left:32px" class="toc-l3">Sablia Cross-Domain Map</a>
+<a href="#sec-unconventional-takes" style="padding-left:32px" class="toc-l3">Unconventional Takes</a>
+<a href="#sec-other-next-steps" style="padding-left:32px" class="toc-l3">Other Next Steps</a>
+</nav>
+
+<main>
+  <header class="report-header">
+    <div class="type-badge">brainstorm</div>
+    <h1>Portal dashboard: Claude conversation themes/summaries + cron health</h1>
+    <div class="subtitle">2026-06-04 · 5 agents · 46 findings · 30 sources</div>
+  </header>
+
+  <article>
+    <details open id="sec-brainstorm-portal-dashboard-claude-conversation-themes-summaries-cron-health"><summary><h1>Brainstorm: Portal dashboard — Claude conversation themes/summaries + cron health</h1></summary><div class="section-body">
+<blockquote>Generated 2026-06-04 | 5 research agents + 1 workspace-map agent | ~30 sources consulted | 46 raw findings</blockquote>
+<details open id="sec-executive-summary"><summary><h2>Executive Summary</h2></summary><div class="section-body">
+<p>The idea — a new app in the sablia.io portal that visually tracks the <strong>themes/summaries of our Claude Code conversations</strong> plus <strong>cron health</strong> — splits cleanly into one solved half and one net-new half. The cron half is <strong>largely already built</strong>: <code>cron_runs</code> + <code>cron_heartbeats</code> tables already exist and are populated in the <code>sablia</code> Supabase project; the dashboard just <em>reads</em> them. The conversation half is the real work and is a <strong>genuinely under-served niche</strong>: usage/cost is solved first-party (native Claude Code analytics, <code>ccusage</code>) and session-viewing is solved a dozen times over, but <em>cross-session theme tracking + AI summaries in a DB-backed dashboard</em> is done by essentially no forkable tool (the closest, <code>claude-mem</code>, stores local SQLite/Chroma). The unexpectedly strong recommendation across three independent angles: <strong>don&#x27;t use a fragile lifecycle hook — have <code>/close</code> itself write the row.</strong> Sablia owns <code>/close</code>, it already has the themes + files + git diff in context, and this sidesteps a documented bug (#41577) that kills <code>SessionEnd</code> hooks mid-write.</p>
+</div></details>
+<details open id="sec-problem-statement"><summary><h2>Problem Statement</h2></summary><div class="section-body">
+<p>Today, &quot;what have Brice and Claude been working on, and which themes recur over time?&quot; is only answerable by grepping <code>memory/daily/<em>.md</code> and reading <code>STATUS.md</code>; cron health is scattered across an <code>infra-health</code> STATUS.md anchor and Telegram pings. There is no single visual surface. The opportunity: a portal dashboard that turns the conversation stream into trackable themes + summaries and unifies cron health beside it — directly serving Principle 7 (</em>la compréhension ne se délègue pas*: a visual surface of what we did grows Brice&#x27;s understanding, vs a passive text dump).</p>
+</div></details>
+<details open id="sec-key-findings"><summary><h2>Key Findings</h2></summary><div class="section-body">
+<ul>
+<li><strong><code>/close</code> should write the summary row, not a hook.</strong> SessionEnd is semantically correct but a documented bug (#41577) SIGKILLs async hooks mid-write; Stop fires per-turn (wrong granularity). Sablia owns the <code>/close</code> skill, which already holds themes + files + git diff — the most robust ingestion point. Source: https://code.claude.com/docs/en/hooks. Relevance: HIGH.</li>
+<li><strong>The cron half already exists at the data layer.</strong> <code>cron_runs</code> + <code>cron_heartbeats</code> tables are present and populated in the <code>sablia</code> Supabase project (service-role RLS). The dashboard reads them — no new ingestion to build for crons. Source: workspace map (CRONS.md / HEALTH-MODEL.md). Relevance: HIGH.</li>
+<li><strong>The conversation-theme dashboard is an unserved gap.</strong> <code>claude-mem</code> (80.5K★, Apache-2.0) is the only close prior art (hooks + Agent-SDK summarization + viewer) but stores <strong>local-only</strong> SQLite/ChromaDB. Fork its capture+summarization <em>idea</em>, swap storage to Supabase, build a fresh Next.js viewer. Source: https://github.com/thedotmack/claude-mem. Relevance: HIGH.</li>
+<li><strong>For this data size, skip embeddings/clustering.</strong> The Clio method (LLM facet-extract → optional embed/cluster → LLM name clusters) is canonical, but clustering needs volume (HDBSCAN labels up to 90% of a small corpus as outliers). Have Claude emit a structured <code>{summary, primary_theme, themes[]}</code> at <code>/close</code>; defer pgvector to phase 3. Source: https://www.anthropic.com/research/clio. Relevance: HIGH.</li>
+<li><strong>Don&#x27;t rebuild usage/cost.</strong> Native Claude Code analytics + Grafana dashboard #25052 + <code>ccusage</code> own tokens/cost via OpenTelemetry. Spend build effort on the theme layer; optionally pipe OTel for cost panels later. Source: https://code.claude.com/docs/en/analytics. Relevance: MEDIUM.</li>
+</ul>
+</div></details>
+<details open id="sec-decision-matrix-conversation-ingestion-trigger"><summary><h2>Decision Matrix — conversation ingestion trigger</h2></summary><div class="section-body">
+<p>2+ viable triggers emerged and the choice drives the whole architecture.</p>
+<div class="table-wrap"><table>
+<tr><th>Option</th><th>Reliability</th><th>Granularity</th><th>Has full context</th><th>Effort</th><th>Sablia Fit</th></tr>
+<tr><td><strong><code>/close</code> in-skill Supabase write</strong></td><td>High (runs while Claude alive)</td><td>1 row/session</td><td>Yes (themes, files, diff)</td><td>Low</td><td><strong>Best — Sablia owns the skill</strong></td></tr>
+<tr><td><code>UserPromptExpansion</code> hook (matcher <code>close</code>)</td><td>High (deterministic)</td><td>1 row/session</td><td>No (must re-read transcript)</td><td>Med</td><td>Good backstop</td></tr>
+<tr><td><code>SessionEnd</code> hook (sync/detached)</td><td>Med (bug #41577 kills async)</td><td>1 row/session</td><td>No</td><td>Med</td><td>Backstop for non-<code>/close</code> sessions only</td></tr>
+<tr><td><code>Stop</code> hook</td><td>Low (fires every turn)</td><td>1 row/turn</td><td>Partial</td><td>High</td><td>Poor for session summary</td></tr>
+<tr><td>OpenTelemetry export</td><td>High</td><td>metrics only</td><td>No (prompts redacted)</td><td>Low</td><td>Cost/token panels only, not themes</td></tr>
+</table></div>
+<p><strong>Recommendation</strong>: <code>/close</code> in-skill write as the <strong>primary</strong> path for themes+summaries; <strong>OTel</strong> (later) for cost/token/session-count panels; a <strong>SessionEnd backstop</strong> only if we want to capture sessions that never run <code>/close</code>. The two channels join on <code>session_id</code>.</p>
+</div></details>
+<details open id="sec-decision-matrix-theme-extraction-approach"><summary><h2>Decision Matrix — theme extraction approach</h2></summary><div class="section-body">
+<div class="table-wrap"><table>
+<tr><th>Option</th><th>Min. data size</th><th>Interpretable labels</th><th>Emergent themes</th><th>v1 fit</th></tr>
+<tr><td><strong>LLM tags at <code>/close</code> (structured output)</strong></td><td>none</td><td>Yes (free)</td><td>Via free-text <code>themes[]</code></td><td><strong>Yes — v1</strong></td></tr>
+<tr><td>pgvector + k-means (in-DB)</td><td>~hundreds</td><td>No (needs LLM naming)</td><td>Yes</td><td>Phase 3</td></tr>
+<tr><td>BERTopic / Kura (offline batch)</td><td>100–1,000+</td><td>Partial</td><td>Yes</td><td>Overkill until scale</td></tr>
+</table></div>
+<p><strong>Recommendation</strong>: hybrid — a small <strong>fixed <code>primary_theme</code> enum</strong> (clean weekly stacked-area chart) + a <strong>free-text <code>themes[]</code></strong> array (novelty), with a monthly LLM &quot;taxonomy review&quot; promoting recurring free-text labels into the enum. No embeddings for v1.</p>
+</div></details>
+<details open id="sec-prior-art-inspiration"><summary><h2>Prior Art / Inspiration</h2></summary><div class="section-body">
+<ul>
+<li><strong>claude-mem</strong> — https://github.com/thedotmack/claude-mem — 80.5K★ Apache-2.0; hooks + Agent-SDK summarization + local viewer. Closest prior art; storage is local SQLite/Chroma (swap to Supabase).</li>
+<li><strong>claude-memory-compiler</strong> — https://github.com/coleam00/claude-memory-compiler — capture→refine→consolidate into themed knowledge; argues against embeddings at small scale. ⚠️ <strong>No license</strong> — can&#x27;t fork, study only.</li>
+<li><strong>ccusage</strong> — https://github.com/ryoppippi/ccusage — 15.5K★; reference JSONL parser + cost math (license reads NOASSERTION — verify before reuse).</li>
+<li><strong>claude-code-otel</strong> — https://github.com/ColeMurray/claude-code-otel — 419★ MIT; OTel→Prometheus/Loki→Grafana. Don&#x27;t fork into Next.js; the OTel <em>config</em> is the takeaway.</li>
+<li><strong>healthchecks.io</strong> — https://github.com/healthchecks/healthchecks — BSD; gold-standard heartbeat/dead-man&#x27;s-switch ping contract + grace logic to replicate.</li>
+<li><strong>Kura</strong> — https://github.com/jxnl/kura — MIT Clio reproduction (summarize→cluster→hierarchy→2D map); reference for a phase-3 emergent-theme batch run.</li>
+</ul>
+</div></details>
+<details open id="sec-proposed-scope"><summary><h2>Proposed Scope</h2></summary><div class="section-body">
+<p><strong>Phase 1 — MVP (the differentiator)</strong></p>
+<ul>
+<li>Create a <code>cc_sessions</code> table in the <code>sablia</code> Supabase project: <code>session_id</code>, <code>ts</code>, <code>cwd/project</code>, <code>summary</code>, <code>primary_theme</code> (enum), <code>themes text[]</code>, <code>artifacts</code>, <code>git_sha</code>, plus a JSONB <code>payload</code>. BRIN(ts) + GIN(themes) indexes.</li>
+<li>Add a structured-output step to <code>/close</code>: Claude emits <code>{summary, primary_theme, themes[], artifacts}</code>, then a small script writes one row using the <strong>service-role key</strong> (from <code>.credentials/</code>, never client-shipped).</li>
+<li>New portal route <code>apps/portal/src/app/(app)/observatory/</code> (name TBD), gated by existing <code>@sablia/auth</code> + <code>platform.user_app_permissions</code>. Three panels: (a) <strong>weekly stacked-area &quot;themes per week&quot;</strong> from <code>primary_theme</code>, (b) <strong>recent-sessions feed</strong> with summaries, (c) <strong>cron-health grid</strong> reading the existing <code>cron_runs</code> + <code>cron_heartbeats</code>.</li>
+<li>Charts: shadcn <code>chart</code> over <strong>recharts 2.15.4</strong> (the pinned <code>react-is</code> 19 override already in the portal from Unit 4 — reuse, do NOT upgrade to 3.x).</li>
+</ul>
+<p><strong>Phase 2 — depth</strong></p>
+<ul>
+<li>Backfill historical sessions by parsing <code>memory/daily/*.md</code> frontmatter (one-off cron).</li>
+<li><code>SessionEnd</code> backstop hook (sync/detached write) for sessions that never run <code>/close</code>.</li>
+<li>Telegram alert on cron down-transition (reuse <code>telegram_notification_log</code>).</li>
+<li>Supabase Realtime (<code>postgres_changes</code>) for a live-updating feed.</li>
+</ul>
+<p><strong>Phase 3 — emergent + cost</strong></p>
+<ul>
+<li>pgvector embedding column on <code>cc_sessions</code> → &quot;similar past sessions&quot; semantic search + offline k-means for emergent themes; monthly LLM taxonomy review.</li>
+<li>OTel → cost/token/session panels (or just link native analytics).</li>
+<li>Consume the learning-layer <code>learning_topics</code> table as an &quot;À apprendre&quot; tile.</li>
+</ul>
+</div></details>
+<details open id="sec-technical-reference-sheet"><summary><h2>Technical Reference Sheet</h2></summary><div class="section-body">
+<div class="table-wrap"><table>
+<tr><th>Package</th><th>Version</th><th>Context7 ID</th><th>Link</th><th>Notes</th></tr>
+<tr><td>@supabase/ssr</td><td>0.10.2</td><td>/supabase/ssr</td><td>supabase.com/docs</td><td>Read side (Server Component + client)</td></tr>
+<tr><td>recharts</td><td>2.15.4 (exact)</td><td>/recharts/recharts</td><td>recharts.org</td><td>Needs <code>react-is</code> 19 override; do NOT use 3.x</td></tr>
+<tr><td>pg_cron</td><td>—</td><td>/citusdata/pg_cron</td><td>supabase.com/docs/guides/cron</td><td><code>cron.job_run_details</code> for DB-side schedules</td></tr>
+<tr><td>pgvector</td><td>—</td><td>/pgvector/pgvector</td><td>supabase.com/docs/guides/ai</td><td>Phase 3 semantic search (+ /pgvector/pgvector-node)</td></tr>
+<tr><td>healthchecks</td><td>—</td><td>/websites/healthchecks_io</td><td>healthchecks.io/docs</td><td>Ping-contract reference to replicate</td></tr>
+<tr><td>runitor</td><td>—</td><td>/bdd/runitor</td><td>github.com/bdotdub/runitor</td><td>Wraps a cron command → auto start/exit/duration ping</td></tr>
+<tr><td>bertopic</td><td>—</td><td>/maartengr/bertopic</td><td>maartengr.github.io/BERTopic</td><td>Phase 3 only; overkill at small scale</td></tr>
+<tr><td>sentence-transformers</td><td>—</td><td>/huggingface/sentence-transformers</td><td>sbert.net</td><td>Local embeddings if avoiding paid API</td></tr>
+<tr><td>claude-mem</td><td>—</td><td>/thedotmack/claude-mem</td><td>github.com/thedotmack/claude-mem</td><td>Pipeline to study/fork</td></tr>
+<tr><td>kura</td><td>N/A</td><td>N/A (Context7 match is unrelated Eclipse IoT)</td><td>usekura.xyz</td><td>Phase-3 emergent-theme batch reference</td></tr>
+</table></div>
+<p>Key URLs:</p>
+<ul>
+<li>https://code.claude.com/docs/en/hooks — hook events, payloads, <code>type:&quot;http&quot;</code>/<code>command</code></li>
+<li>https://code.claude.com/docs/en/monitoring-usage — OTel metrics, attributes, <code>session.id</code> join key</li>
+<li>https://supabase.com/blog/postgres-audit — append-only JSONB event-log schema template</li>
+<li>https://healthchecks.io/docs/http_api/ — start/fail/exit-code ping contract + duration</li>
+<li>https://www.anthropic.com/research/clio — facet-extract → cluster → name pipeline</li>
+</ul>
+</div></details>
+<details open id="sec-implementation-patterns"><summary><h2>Implementation Patterns</h2></summary><div class="section-body">
+<details id="sec-close-structured-theme-tagging-the-v1-core"><summary><h3><code>/close</code> structured theme-tagging (the v1 core)</h3></summary><div class="section-body">
+<p>Claude emits this at <code>/close</code>; validate with Zod, write one <code>cc_sessions</code> row.</p>
+<pre><code class="language-jsonc">
+{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;properties&quot;: {
+    &quot;summary&quot;:      { &quot;type&quot;: &quot;string&quot;, &quot;description&quot;: &quot;2-3 sentence recap, &#x27;why&#x27; not &#x27;what&#x27;&quot; },
+    &quot;primary_theme&quot;:{ &quot;type&quot;: &quot;string&quot;, &quot;enum&quot;: [&quot;n8n&quot;,&quot;voice&quot;,&quot;frontend&quot;,&quot;infra&quot;,&quot;cold-email&quot;,&quot;planning&quot;,&quot;docs&quot;,&quot;other&quot;] },
+    &quot;themes&quot;:       { &quot;type&quot;: &quot;array&quot;, &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }, &quot;maxItems&quot;: 4 },
+    &quot;artifacts&quot;:    { &quot;type&quot;: &quot;array&quot;, &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; } }
+  },
+  &quot;required&quot;: [&quot;summary&quot;,&quot;primary_theme&quot;,&quot;themes&quot;]
+}
+</code></pre>
+<p>Source: https://www.anthropic.com/research/clio (facet pattern) + Anthropic tool-use docs.</p>
+</div></details>
+<details id="sec-append-only-event-session-schema-supabase-audit-pattern"><summary><h3>Append-only event/session schema (Supabase audit pattern)</h3></summary><div class="section-body">
+<pre><code class="language-sql">
+create table cc_sessions (
+  id          bigserial primary key,
+  session_id  uuid,
+  ts          timestamptz not null default now(),
+  project     text,
+  summary     text,
+  primary_theme text,
+  themes      text[] default &#x27;{}&#x27;,
+  payload     jsonb
+);
+create index cc_sessions_ts on cc_sessions using brin(ts);          -- ~100s× smaller than btree
+create index cc_sessions_themes on cc_sessions using gin(themes);   -- theme = ANY(...) / @&gt;
+-- weekly theme time-series for the stacked-area chart:
+select date_trunc(&#x27;week&#x27;, ts) wk, primary_theme, count(*)
+from cc_sessions group by 1,2 order by 1;
+</code></pre>
+<p>Source: https://supabase.com/blog/postgres-audit.</p>
+</div></details>
+<details id="sec-cron-heartbeat-if-extending-vps-cron-coverage"><summary><h3>Cron heartbeat (if extending VPS-cron coverage)</h3></summary><div class="section-body">
+<pre><code class="language-bash">
+URL=&quot;$SUPABASE_FUNCTIONS_URL/cron-ping/&lt;job&gt;&quot;
+curl -fsS -m 10 --retry 5 &quot;$URL/start&quot;
+out=$(/path/to/job.py 2&gt;&amp;1); code=$?
+curl -fsS -m 10 --retry 5 --data-raw &quot;$out&quot; &quot;$URL/$code&quot;   # 0=ok, 1-255=fail; duration auto-computed
+</code></pre>
+<p>Source: https://healthchecks.io/docs/http_api/.</p>
+</div></details>
+</div></details>
+<details open id="sec-cost-performance-baseline"><summary><h2>Cost &amp; Performance Baseline</h2></summary><div class="section-body">
+<div class="table-wrap"><table>
+<tr><th>Metric</th><th>Value</th><th>Source</th><th>Notes</th></tr>
+<tr><td>claude-mem</td><td>80,582★, Apache-2.0</td><td>github.com/thedotmack/claude-mem</td><td>Dominant prior art (local storage)</td></tr>
+<tr><td>ccusage</td><td>15,527★, NOASSERTION</td><td>github.com/ryoppippi/ccusage</td><td>Verify license before reuse</td></tr>
+<tr><td>claude-memory-compiler</td><td>1,122★, NO license</td><td>github.com/coleam00</td><td>Study only — can&#x27;t fork</td></tr>
+<tr><td>Supabase Realtime (free)</td><td>200 conns / 2M msgs/mo / 256 KB</td><td>supabase.com/docs/guides/realtime/limits</td><td>Non-issue at single-user scale</td></tr>
+<tr><td>Supabase DB (free)</td><td>~500 MB</td><td>supabase docs</td><td>Only long-term ceiling → add retention cron</td></tr>
+<tr><td>BRIN vs BTREE</td><td>~100s× smaller</td><td>supabase.com/blog/postgres-audit</td><td>On monotonic <code>ts</code></td></tr>
+<tr><td>OTel export interval</td><td>metrics 60s / logs 5s</td><td>code.claude.com/docs/en/monitoring-usage</td><td>Phase-3 cost panels</td></tr>
+<tr><td>Cronitor (hosted)</td><td>$2/monitor/mo, free=5</td><td>cronitor.io/pricing</td><td>Stopgap; keeps data off-VPS</td></tr>
+<tr><td>Clio study scale</td><td>1M conversations</td><td>anthropic.com/research/clio</td><td>Why clustering needs volume</td></tr>
+<tr><td>HDBSCAN small-corpus</td><td>up to 90% outliers</td><td>chrisellis.dev</td><td>Why skip clustering for v1</td></tr>
+<tr><td>recharts pin</td><td>2.15.4 + react-is 19.2.6</td><td>STACK.md / recharts#6857</td><td>Confirmed; 3.x reintroduces blank-render</td></tr>
+</table></div>
+</div></details>
+<details open id="sec-constraints-decisions"><summary><h2>Constraints &amp; Decisions</h2></summary><div class="section-body">
+<ul>
+<li><strong>Host</strong>: single-app <code>apps/portal</code>, add route <code>(app)/observatory/</code> (not a new monorepo app). Next 16.2.6 + React 19 + Tailwind v4 + shadcn + <code>@sablia/auth</code>.</li>
+<li><strong>Supabase</strong>: <code>sablia</code> project (<code>qlxoitzdxjqhljjoeqoq</code>) — same project as <code>cron_runs</code>/<code>cron_heartbeats</code>/<code>telegram_notification_log</code> and the planned <code>learning_topics</code>. Keeps all infra data co-located.</li>
+<li><strong>Charts</strong>: recharts 2.15.4 exact + <code>react-is</code> 19 override (already present in the portal from Unit 4) — reuse, do NOT upgrade to 3.x.</li>
+<li><strong>Security</strong>: service-role key for the hook/<code>/close</code> writer (server-side only, <code>.credentials/</code>, never committed/client-shipped). Anon write-only RLS only if a writer could ever leak client-side (has a returning-representation gotcha).</li>
+<li><strong>Realtime</strong>: <code>postgres_changes</code> is correct at single-user scale; Broadcast-from-triggers is the escape hatch only if viewers multiply.</li>
+<li><strong>Relationship to Learning Layer</strong>: complementary, not duplicative. <code>learning_topics</code> = <em>external resources to understand</em> (surfaced via <code>/prime</code>+Telegram); <code>cc_sessions</code> = <em>what we actually did together</em>. The dashboard can render <code>learning_topics</code> as one tile.</li>
+<li><strong>Don&#x27;t rebuild usage/cost</strong> — native analytics/<code>ccusage</code> solve it; theme layer is the build.</li>
+</ul>
+</div></details>
+<details open id="sec-open-questions"><summary><h2>Open Questions</h2></summary><div class="section-body">
+<li><strong>Exact schema of the existing <code>cron_runs</code> + <code>cron_heartbeats</code></strong> — verify columns before the dashboard reads them (and whether a retention/purge job already exists; pg_cron never auto-purges).</li>
+<li><strong>Schema placement</strong> for <code>cc_sessions</code> — <code>sablia</code> <code>public</code> with a prefix, a dedicated <code>observ</code> schema, or the portal&#x27;s <code>platform</code> schema?</li>
+<li><strong>Which skills write rows</strong> — only <code>/close</code>, or also <code>/execute</code>/<code>/validate</code>/<code>/plan</code> (richer but noisier; risk of multi-row-per-session)?</li>
+<li><strong>Starter <code>primary_theme</code> enum</strong> — derive from existing <code>memory/topics/</code> filenames, or hand-pick?</li>
+<li><strong>Backfill</strong> — parse <code>memory/daily/*.md</code> history into <code>cc_sessions</code>, or start fresh from 2026-06-04?</li>
+<li><strong>App naming</strong> — &quot;Observatory&quot; / &quot;Cockpit&quot; / &quot;Suivi&quot; / other?</li>
+<li><strong>Ship independently or fold into the learning-layer roadmap</strong> (which is pending <code>/challenge</code>)?</li>
+<hr>
+</div></details>
+<details open id="sec-research-archive"><summary><h2>Research Archive</h2></summary><div class="section-body">
+<details id="sec-top-10-findings"><summary><h3>Top 10 Findings</h3></summary><div class="section-body">
+<div class="table-wrap"><table>
+<tr><th>#</th><th>Finding</th><th>Source</th><th>Relevance</th><th>Domains</th></tr>
+<tr><td>1</td><td><code>/close</code> in-skill write is the most robust ingestion trigger (avoids SessionEnd bug #41577)</td><td>code.claude.com/docs/en/hooks</td><td>HIGH</td><td>AI Agents &amp; LLM</td></tr>
+<tr><td>2</td><td>Cron half already built: <code>cron_runs</code> + <code>cron_heartbeats</code> exist in sablia Supabase</td><td>workspace map (CRONS.md)</td><td>HIGH</td><td>n8n &amp; Automation; Web Dev</td></tr>
+<tr><td>3</td><td>Theme-tracking DB-backed dashboard is an unserved gap; claude-mem (80.5K★) closest but local-only</td><td>github.com/thedotmack/claude-mem</td><td>HIGH</td><td>AI Agents &amp; LLM</td></tr>
+<tr><td>4</td><td>Clio pipeline: LLM facet-extract first, embed/cluster optional</td><td>anthropic.com/research/clio</td><td>HIGH</td><td>AI Agents &amp; LLM</td></tr>
+<tr><td>5</td><td>Small dataset → LLM-tags-at-write-time beats clustering; skip embeddings v1</td><td>chrisellis.dev</td><td>HIGH</td><td>AI Agents &amp; LLM</td></tr>
+<tr><td>6</td><td>Service-role key from server-side hook = least-effort secure ingestion</td><td>supabase.com/docs/guides/api/securing-your-api</td><td>HIGH</td><td>Web Dev &amp; SaaS</td></tr>
+<tr><td>7</td><td>Append-only JSONB + <code>text[]</code> themes (GIN) + BRIN(ts) schema</td><td>supabase.com/blog/postgres-audit</td><td>HIGH</td><td>Web Dev &amp; SaaS</td></tr>
+<tr><td>8</td><td>Heartbeat dead-man&#x27;s-switch catches silent no-show in-script logging can&#x27;t</td><td>healthchecks.io/docs/monitoring_cron_jobs</td><td>HIGH</td><td>n8n &amp; Automation</td></tr>
+<tr><td>9</td><td>recharts 2.15.4 + react-is 19 pin confirmed correct; don&#x27;t upgrade to 3.x</td><td>recharts#6857</td><td>MED</td><td>Web Dev &amp; SaaS</td></tr>
+<tr><td>10</td><td>Transcript JSONL has full conversation; <code>sessions-index.json</code> already has auto-summaries</td><td>code.claude.com/docs/en/hooks</td><td>MED</td><td>AI Agents &amp; LLM</td></tr>
+</table></div>
+</div></details>
+<details id="sec-by-research-angle"><summary><h3>By Research Angle</h3></summary><div class="section-body">
+<details id="sec-claude-code-observability-mechanisms"><summary><h4>Claude Code observability mechanisms</h4></summary><div class="section-body">
+<p><strong>Agent stats</strong>: 6 queries | 2 fetches | 9 findings | 0 failed queries | 0 failed fetches</p>
+<ul>
+<li><strong>SessionEnd fires once at exit but bug #41577 kills async hooks mid-write</strong> — write must be sync/fast or detached (<code>nohup … &amp; disown</code>). Source: github.com/anthropics/claude-code/issues/41577. HIGH. Domains: AI Agents &amp; LLM.</li>
+<li><strong>Stop fires per-turn</strong> — wrong granularity for one-summary-per-session; suited to incremental deltas. Source: code.claude.com/docs/en/hooks. MED. AI Agents &amp; LLM.</li>
+<li><strong><code>/close</code> surfaces as <code>UserPromptExpansion</code></strong> (<code>command_name:&quot;close&quot;</code>) — cleanest to write from inside the skill while Claude is alive. HIGH. AI Agents &amp; LLM.</li>
+<li><strong>Every hook gets <code>session_id</code> + <code>transcript_path</code> + <code>cwd</code> via stdin</strong> — hand the path to a downstream parser. HIGH. AI Agents &amp; LLM.</li>
+<li><strong>Hooks run arbitrary shell (<code>type:&quot;command&quot;</code>) OR POST directly (<code>type:&quot;http&quot;</code>)</strong> — curl-to-Supabase natively supported. HIGH. Web Dev; AI Agents &amp; LLM.</li>
+<li><strong>Transcript JSONL = complete conversation</strong> at <code>~/.claude/projects/&lt;enc&gt;/&lt;session&gt;.jsonl</code> (text/thinking/tool_use/tool_result + per-message <code>usage</code>). HIGH. AI Agents &amp; LLM.</li>
+<li><strong><code>sessions-index.json</code> already holds auto-generated per-session summaries</strong> (undocumented — verify on machine). MED. AI Agents &amp; LLM.</li>
+<li><strong>OTel export</strong> (<code>CLAUDE_CODE_ENABLE_TELEMETRY=1</code>): <code>claude_code.cost.usage</code>, <code>token.usage</code>, <code>session.count</code>, etc.; prompts redacted unless <code>OTEL_LOG_USER_PROMPTS=1</code>. HIGH (cost half). n8n &amp; Automation; AI Agents &amp; LLM.</li>
+<li><strong><code>session.id</code> is the shared join key</strong> between OTel metrics and hook-written rows; <code>tool_use_id</code> cross-links at tool granularity. MED. Web Dev; AI Agents &amp; LLM.</li>
+</ul>
+</div></details>
+<details id="sec-existing-oss-tools-dashboards-for-claude-code"><summary><h4>Existing OSS tools &amp; dashboards for Claude Code</h4></summary><div class="section-body">
+<p><strong>Agent stats</strong>: 6 queries | 4 fetches | 9 findings | 0 failed queries | 0 failed fetches</p>
+<ul>
+<li><strong>claude-mem</strong> (80.5K★, Apache-2.0) — hooks + Agent-SDK summarization + local viewer; swap storage to Supabase. HIGH. AI Agents &amp; LLM.</li>
+<li><strong>ccusage</strong> (15.5K★, NOASSERTION) — JSONL parser + cost; terminal-only, lift the parsing lib. MED. AI Agents &amp; LLM; Business.</li>
+<li><strong>claude-memory-compiler</strong> (1.1K★, NO license) — capture→refine→consolidate themed knowledge; no-embeddings argument. Study only. MED. AI Agents &amp; LLM.</li>
+<li><strong>claude-code-otel</strong> (419★, MIT) — OTel→Prometheus/Loki→Grafana; metrics only, don&#x27;t fork into Next.js. MED. Web Dev.</li>
+<li><strong>vibe-log</strong> (328★, MIT) — productivity insights + summaries; polished dashboard is the proprietary cloud tier. MED. AI Agents &amp; LLM; Business.</li>
+<li><strong>Session-viewer cluster</strong> — many JSONL browsers; all confirm <code>~/.claude/projects/*<em>/</em>.jsonl</code> is canonical; none do cross-session theme clustering. MED. AI Agents &amp; LLM.</li>
+<li><strong>Real-time multi-session monitors</strong> (Stargx/claude-code-dashboard, ccgauge, MyCCusage) — &quot;what&#x27;s running now&quot;; orthogonal. LOW. Web Dev.</li>
+<li><strong>Native Claude Code analytics + Grafana #25052</strong> — usage/cost is first-party solved; don&#x27;t rebuild. MED. Web Dev; Business.</li>
+<li><strong>awesome-claude-code</strong> — watch-list directory where new tools surface (claude-mem featured). LOW. AI Agents &amp; LLM.</li>
+</ul>
+</div></details>
+<details id="sec-conversation-theme-extraction-summarization"><summary><h4>Conversation theme extraction &amp; summarization</h4></summary><div class="section-body">
+<p><strong>Agent stats</strong>: 8 queries | 3 fetches | 10 findings | 0 failed queries | 0 failed fetches</p>
+<ul>
+<li><strong>Clio pipeline</strong> (Anthropic) — facet-extract → semantic cluster → LLM name → hierarchy; LLM bookends a cheap embed step. HIGH. AI Agents &amp; LLM.</li>
+<li><strong>Kura</strong> (MIT) — OSS Clio reproduction; tuned for 100/1,000/10,000+ conversations — overkill for one user. MED. AI Agents &amp; LLM.</li>
+<li><strong>LLM-tags-at-write-time beats clustering at small scale</strong> — HDBSCAN up to 90% outliers; no min-size for LLM labels. HIGH. AI Agents &amp; LLM.</li>
+<li><strong>Cost negligible at single-user volume</strong> — theme tag rides the already-running <code>/close</code> turn; embeddings add capability, not savings. MED. AI Agents &amp; LLM; Business.</li>
+<li><strong>Structured output enforces stable theme schema</strong> — enum = fixed taxonomy, free-text = emergent; the single fixed-vs-emergent lever. HIGH. AI Agents &amp; LLM.</li>
+<li><strong>Fixed vs emergent is the core decision</strong> — hybrid (enum spine + free-text + monthly taxonomy review) wins for a personal dashboard. HIGH. AI Agents &amp; LLM.</li>
+<li><strong>pgvector</strong> is the right home for embeddings when added (HNSW &lt; 1M rows, no new vendor). MED. Web Dev; AI Agents &amp; LLM.</li>
+<li><strong>BERTopic</strong> — heavyweight; small-dataset remedies (seed topics) = re-introducing a taxonomy by hand. LOW. AI Agents &amp; LLM.</li>
+<li><strong>Viz: SparkClouds + stacked-area beat plain tag clouds</strong> — stacked-area &quot;themes per week&quot; is highest signal. MED. Web Dev.</li>
+<li><strong>WildVis / 2D bubble map</strong> — embedding-space view; meaningful only at hundreds+ points. LOW. Web Dev; AI Agents &amp; LLM.</li>
+</ul>
+</div></details>
+<details id="sec-dashboard-architecture-ingestion"><summary><h4>Dashboard architecture &amp; ingestion</h4></summary><div class="section-body">
+<p><strong>Agent stats</strong>: 9 queries | 5 fetches | 9 findings | 0 failed queries | 2 failed fetches</p>
+<ul>
+<li><strong>Service-role from server-side hook beats scoped anon insert</strong> — trusted environment, documented pattern. HIGH. Web Dev.</li>
+<li><strong>Anon write-only RLS gotcha</strong> — needs <code>returning:&#x27;minimal&#x27;</code> or a SELECT policy or the insert read-back fails. MED. Web Dev.</li>
+<li><strong>Append-only JSONB + real columns + BRIN(ts)</strong> — Supabase&#x27;s own audit pattern; don&#x27;t filter inside JSONB on hot paths. HIGH. Web Dev.</li>
+<li><strong><code>text[]</code> + GIN for themes</strong> beats a join table at this scale; <code>unnest(themes)</code> feeds categorical charts. HIGH. Web Dev.</li>
+<li><strong>Server Component initial fetch + client <code>postgres_changes</code> subscription</strong> (with <code>removeChannel</code> cleanup). HIGH. Web Dev.</li>
+<li><strong>Broadcast-from-triggers</strong> is the scale escape hatch; <code>postgres_changes</code> fine for single-user. MED. Web Dev.</li>
+<li><strong>Realtime free-tier (200 conns / 2M msgs/mo)</strong> a non-issue; DB storage (~500 MB) is the only ceiling. MED. Web Dev.</li>
+<li><strong>recharts 2.15.4 + react-is 19 override CONFIRMED</strong> under React 19; 3.x reintroduces blank-render (#6857). MED. Web Dev.</li>
+<li><strong>shadcn <code>chart</code></strong> wraps recharts, Tailwind-v4/React-19 ready (<code>var(--chart-1)</code> token syntax). MED. Web Dev.</li>
+</ul>
+</div></details>
+<details id="sec-cron-scheduled-job-monitoring"><summary><h4>Cron &amp; scheduled-job monitoring</h4></summary><div class="section-body">
+<p><strong>Agent stats</strong>: 6 queries | 3 fetches | 9 findings | 0 failed queries | 1 failed fetch</p>
+<ul>
+<li><strong>Passive heartbeat (push) beats active polling</strong> — one curl at job end, no inbound network, captures real exit code. HIGH. n8n &amp; Automation.</li>
+<li><strong>Heartbeat catches failures in-script logging can&#x27;t</strong> — machine down, bad crontab, never-started (the most dangerous). HIGH. n8n &amp; Automation.</li>
+<li><strong>Ping contract</strong>: <code>/start</code>, <code>/fail</code>, <code>/&lt;exitcode&gt;</code>, body=output (≤100 kB), duration auto-computed. HIGH. n8n &amp; Automation.</li>
+<li><strong>Grace Time + Period</strong> make &quot;missed&quot; deterministic: <code>now &gt; last_ping + period + grace</code> — fits Karpathy deterministic-metric principle. MED. n8n &amp; Automation.</li>
+<li><strong>Healthchecks (BSD)</strong> — reference to copy (ping semantics + grace), but a whole Django app to self-host. MED. n8n &amp; Automation.</li>
+<li><strong>Runitor</strong> (Go) — wraps any command → auto start/exit/duration ping, no script edits. MED. n8n &amp; Automation.</li>
+<li><strong>pg_cron <code>cron.job_run_details</code></strong> — ready-made cron_runs schema for DB-side schedules. MED. n8n &amp; Automation; Web Dev.</li>
+<li><strong>pg_cron never auto-purges</strong> — schedule a retention DELETE or it bloats. MED. n8n &amp; Automation; Web Dev.</li>
+<li><strong>Cronitor</strong> ($2/monitor/mo, free=5) — valid stopgap but data lives off-VPS (conflicts with single-portal goal). LOW. Business; n8n &amp; Automation.</li>
+</ul>
+</div></details>
+</div></details>
+<details id="sec-sablia-cross-domain-map"><summary><h3>Sablia Cross-Domain Map</h3></summary><div class="section-body">
+<div class="table-wrap"><table>
+<tr><th>Domain</th><th>Relevant Findings</th><th>Actionable Ideas</th></tr>
+<tr><td>Voice Agents &amp; Telephony</td><td>1</td><td><code>voice-health-check</code> / <code>voice-weekly-report</code> crons appear in the cron-health grid (reuse existing tables)</td></tr>
+<tr><td>n8n &amp; Automation</td><td>9</td><td>n8n workflows are crons too — extend the heartbeat/<code>cron_runs</code> model to cover them; alert on down-transition via Telegram</td></tr>
+<tr><td>Web Dev &amp; SaaS</td><td>11</td><td>The whole dashboard: portal route + append-only schema + recharts/shadcn + Realtime — all standard Sablia stack</td></tr>
+<tr><td>Cold Email &amp; Outreach</td><td>1</td><td><code>cold-brain</code> cron (currently cut) surfaces in the health grid when re-enabled</td></tr>
+<tr><td>AI Agents &amp; LLM</td><td>13</td><td><code>/close</code> structured-output theme tagging → <code>cc_sessions</code>; study claude-mem/Clio; pgvector phase 3</td></tr>
+<tr><td>Business &amp; Services</td><td>3</td><td>Serves Principle 7 — a visual surface of &quot;what we did&quot; grows Brice&#x27;s understanding vs a text dump</td></tr>
+</table></div>
+</div></details>
+<details id="sec-unconventional-takes"><summary><h3>Unconventional Takes</h3></summary><div class="section-body">
+<li><strong>Don&#x27;t use a hook at all for the primary path — use the skill you already own.</strong> Every OSS tool reaches for lifecycle hooks because they don&#x27;t control the agent. Sablia <em>does</em> control <code>/close</code>. Writing the summary row from inside <code>/close</code> (while Claude is alive, with full themes+diff context) is more robust <em>and</em> simpler than any hook, and dodges the documented <code>SessionEnd</code> async-kill bug entirely. The hook is the fallback, not the foundation.</li>
+<li><strong>The &quot;cron dashboard&quot; is 70% already built and nobody noticed.</strong> The instinct was to design a cron-monitoring system; the workspace already has <code>cron_runs</code> + <code>cron_heartbeats</code> populated. The work isn&#x27;t building monitoring — it&#x27;s <em>rendering</em> what&#x27;s already collected. Verify the existing schema before writing a single new table.</li>
+<li><strong>Embeddings are a trap at this scale.</strong> The impressive 2D bubble maps and BERTopic clusters everyone reaches for <em>require</em> volume; on a single user&#x27;s tens-to-hundreds of sessions they produce scattered noise (HDBSCAN: up to 90% outliers). The &quot;boring&quot; answer — Claude emits 1-4 theme labels per session — is not a compromise, it&#x27;s the <em>correct</em> method at this scale, and it&#x27;s free because <code>/close</code> is already paying for an LLM turn.</li>
+<li><strong>Resist rebuilding usage/cost.</strong> It&#x27;s the most tempting panel (numbers go up!) and the most wasteful — native analytics + <code>ccusage</code> + a free Grafana dashboard already own it. Every hour spent on a token chart is an hour not spent on the theme layer, which is the only thing no tool does.</li>
+</div></details>
+<details id="sec-other-next-steps"><summary><h3>Other Next Steps</h3></summary><div class="section-body">
+<ul>
+<li><code>/architect research/brainstorm/2026-06-04-dashboard-conversations-claude-cron.md</code> — if this ships as its own portal unit (3+ domains: skill change + Supabase + portal frontend).</li>
+<li><code>/plan</code> (single unit) — if scoped tight to Phase 1 MVP only.</li>
+<li><code>/brainstorm n8n workflow runs in the cron-health model</code> — adjacent unknown: unifying n8n execution status into the same <code>cron_runs</code> view.</li>
+</ul>
+</div></details>
+</div></details>
+</div></details>
+  </article>
+
+  <footer class="report-footer">
+    <span>Source: 2026-06-04-dashboard-conversations-claude-cron.md</span>
+    <span>Sablia · Generated by Claude Code</span>
+  </footer>
+</main>
+
+</body>
+</html>
