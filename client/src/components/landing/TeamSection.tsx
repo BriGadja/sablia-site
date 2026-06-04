@@ -8,19 +8,19 @@ const TEAM = [
   {
     slug: 'raphael',
     name: 'Raphaël',
-    role: 'Commercial',
+    role: 'Sales Strategy',
     bio: "Il qualifie, cadre et oriente. Apporte une vision business et CRM tout au long de l'accompagnement.",
   },
   {
     slug: 'pablo',
     name: 'Pablo',
-    role: 'Commercial',
+    role: 'Account / Pipeline',
     bio: "Il assure le suivi, l'orchestration commerciale et l'accompagnement de proximité. Vision CRM côté pipeline.",
   },
   {
     slug: 'remi',
     name: 'Rémi',
-    role: 'Acquisition / Stratégie',
+    role: 'Growth / Acquisition',
     bio: 'Cinq ans de Meta Ads et de génération de leads B2B. Si vous souhaitez également que nous générions vos propres opportunités.',
   },
 ]
