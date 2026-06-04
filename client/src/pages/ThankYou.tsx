@@ -5,6 +5,7 @@ import { Link } from 'wouter'
 import FooterSection from '@/components/landing/FooterSection'
 import TopNav from '@/components/landing/TopNav'
 import SEO from '@/components/SEO'
+import { site } from '@/lib/site'
 
 const sourceConfig = {
   contact: {
@@ -64,11 +65,11 @@ export default function ThankYou() {
                 <h2 className="t-title-md">Prochaine étape</h2>
               </div>
               <p className="mb-6 text-on-dark-body">
-                Réservez un call discovery gratuit de 45 minutes pour cartographier votre CRM et
+                Réservez un call audit gratuit de 30 minutes pour cartographier votre CRM et
                 identifier les automatisations les plus rentables.
               </p>
               <a
-                href="https://calendly.com/brice-gachadoat/30min"
+                href={site.bookingUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="t-button inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-on-primary transition-shadow hover:shadow-glow-coral"

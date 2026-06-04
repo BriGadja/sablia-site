@@ -48,7 +48,7 @@ docs/                 # All documentation
 ### Key Integrations
 | Integration | Details |
 |-------------|---------|
-| Calendly | `openBooking()` from `BookingModal.tsx` — opens `https://calendly.com/brice-gachadoat/30min` in popup window |
+| Calendly | `openBooking()` from `BookingModal.tsx` — opens `site.bookingUrl` in popup window. URL centralized in `client/src/lib/site.ts` = `https://calendly.com/raphael-espo-pro/30min` (Raph, depuis refonte CRM 2026-06). `ThankYou.tsx` uses the same `site.bookingUrl`. |
 | Supabase | `qlxoitzdxjqhljjoeqoq` — `site_*` tables (**connected but unused at runtime**) |
 | GA4 / Google Ads | ⚠️ Env vars exist (`VITE_GA4_MEASUREMENT_ID`, `VITE_GADS_*`) but **NO code implementation** — tracking was lost during 2026-04 redesign. Needs re-implementation. Account IDs in `docs/GOOGLE_ADS.md`. |
 
@@ -60,6 +60,8 @@ docs/                 # All documentation
 | `/politique-confidentialite` | Privacy policy |
 | `/cgv` | Terms of service |
 | `/thank-you` | Post-booking confirmation (noindex) |
+
+**Homepage sections** (anchors, not routes — `client/src/pages/Landing.tsx`, refonte CRM 2026-06): Hero → CRMStrip → `#problemes` (ProblemsSection) → UseCases → `#process` (ProcessSection) → `#equipe` (TeamSection, 4 portraits `/team/*.webp`) → `#proof` (ProofSection, Valentin/VB Mobilier réel + 3 placeholders) → CalloutSection → `#faq` (FaqSection, accordéon 5 Q + FAQPage JSON-LD). ⚠️ FAQ Q5 (sécurité données) = formulation tier-safe « API commerciale » — à confirmer avec Brice si offre = Anthropic Enterprise.
 
 ## Documentation
 

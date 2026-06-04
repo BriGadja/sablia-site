@@ -13,7 +13,7 @@ export const site = {
   diagnosticTurnaround: '5 jours ouvrés',
   diagnosticCreditWindow: '90 jours',
 
-  bookingUrl: 'https://calendly.com/brice-gachadoat/30min',
+  bookingUrl: 'https://calendly.com/raphael-espo-pro/30min',
   iapreneursUrl: 'https://www.iapreneurs.com/?affiliate_code=8b6eda',
 
   privacyUrl: '/politique-confidentialite',

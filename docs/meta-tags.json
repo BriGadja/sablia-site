@@ -6,14 +6,14 @@
     "locale": "fr_FR",
     "twitterHandle": "@sablia_io",
     "defaultImage": "https://sablia.io/og-image.png",
-    "lastUpdated": "2026-05-26"
+    "lastUpdated": "2026-06-04"
   },
 
   "pages": {
     "/": {
-      "title": "Sablia — Intégrez Claude AI dans votre CRM",
+      "title": "Sablia — Exploitez 100 % du potentiel de votre CRM",
       "titleTemplate": "%s | Agence d'intégration Claude AI × CRM",
-      "description": "Sablia connecte Claude AI à votre CRM pour automatiser vos processus commerciaux. Dashboards intelligents, nurturing automatisé, analyse de calls. Call discovery gratuit.",
+      "description": "Nous intégrons Claude AI au cœur de vos processus commerciaux : dashboards intelligents, nurturing automatisé, analyse de calls. Call audit gratuit de 30 min.",
       "keywords": [
         "intégration Claude AI CRM",
         "automatisation CRM",
@@ -29,8 +29,8 @@
       "canonical": "https://sablia.io/",
       "openGraph": {
         "type": "website",
-        "title": "Sablia — Intégrez Claude AI dans votre CRM",
-        "description": "Gagnez 15h par semaine sur vos processus commerciaux. Sablia connecte Claude AI à Salesforce, HubSpot, Pipedrive — sans changer vos outils.",
+        "title": "Sablia — Exploitez 100 % du potentiel de votre CRM",
+        "description": "Exploitez 100 % du potentiel de votre CRM. Nous intégrons Claude AI à Salesforce, HubSpot, Pipedrive, Sellsy — sans changer vos outils.",
         "url": "https://sablia.io/",
         "image": "https://sablia.io/og-image.png",
         "siteName": "Sablia"
@@ -38,7 +38,7 @@
       "twitter": {
         "card": "summary_large_image",
         "title": "Sablia — Claude AI × votre CRM",
-        "description": "Dashboards intelligents, nurturing automatisé, analyse de calls. Call discovery gratuit, 45 min.",
+        "description": "Dashboards intelligents, nurturing automatisé, analyse de calls. Call audit gratuit, 30 min.",
         "creator": "@sablia_io"
       },
       "_structuredDataNote": "Homepage JSON-LD is ProfessionalService in index.html"

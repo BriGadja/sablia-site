@@ -27,12 +27,10 @@ export default function UseCases() {
       <div className="mx-auto max-w-editorial">
         <div className="mx-auto mb-14 max-w-[720px] text-center">
           <div className="eyebrow mb-4 text-primary">Cas d'usage</div>
-          <h2 className="t-display-lg">
-            Trois automatisations qui paient leur intégration en un trimestre.
-          </h2>
+          <h2 className="t-display-lg">Trois automatisations conçues sur mesure.</h2>
           <p className="mt-4 text-on-dark-body">
-            Pas de solution générique. Chaque déploiement est calibré sur votre CRM, vos processus,
-            vos équipes.
+            Pas de template, pas de solution générique. Chaque déploiement est calibré sur votre
+            outil, vos processus, vos équipes.
           </p>
         </div>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">

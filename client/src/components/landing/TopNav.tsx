@@ -3,10 +3,11 @@ import { LogIn, Menu, X } from '@/components/icons/lucide-crm'
 import { openBooking } from './BookingModal'
 
 const NAV_ITEMS = [
-  { label: 'Offre', href: '#use-cases' },
-  { label: 'Comment ça marche', href: '#process' },
-  { label: "Cas d'usage", href: '#use-cases' },
-  { label: 'À propos', href: '#proof' },
+  { label: 'Problématiques', href: '#problemes' },
+  { label: 'Accompagnement', href: '#process' },
+  { label: 'Équipe', href: '#equipe' },
+  { label: 'Témoignages', href: '#proof' },
+  { label: 'FAQ', href: '#faq' },
 ]
 
 export default function TopNav() {
@@ -44,7 +45,7 @@ export default function TopNav() {
             onClick={openBooking}
             className="t-button inline-flex h-10 items-center rounded-md bg-primary px-5 text-on-primary transition-shadow duration-base hover:shadow-glow-coral"
           >
-            Réserver un call
+            Réserver un call audit
           </button>
         </div>
 
@@ -87,7 +88,7 @@ export default function TopNav() {
               }}
               className="t-button h-10 rounded-md bg-primary px-5 text-on-primary"
             >
-              Réserver un call
+              Réserver un call audit
             </button>
           </div>
         </div>

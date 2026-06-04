@@ -1,34 +1,49 @@
-const KPIS = [
-  { value: '15 h', label: 'par semaine, par commercial' },
-  { value: '3 sem.', label: 'du diagnostic à la mise en production' },
-  { value: '100%', label: 'sur-mesure, toujours' },
-]
+const PLACEHOLDERS = ['qwertys', 'Norloc', 'Nesten']
 
 export default function ProofSection() {
   return (
     <section id="proof" className="on-light px-8 py-section">
-      <div className="mx-auto max-w-[920px]">
-        <div className="eyebrow mb-6 text-center text-primary">Ils ont sauté le pas</div>
-        <blockquote className="m-0 text-center font-display text-[clamp(1.75rem,3vw,2.25rem)] font-medium italic leading-[1.25] tracking-tight text-ink [text-wrap:pretty]">
-          «&nbsp;Sablia a divisé par trois le temps que mes commerciaux passent dans Salesforce. On
-          a récupéré une journée entière par semaine et par personne.&nbsp;»
-        </blockquote>
-        <div className="mt-8 flex items-center justify-center gap-3.5">
-          <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#1a2e4e] to-[#c45a2c] font-display text-xl font-medium tracking-tight text-white">
-            CM
-          </div>
-          <div className="text-sm">
-            <div className="font-medium text-ink">Camille Marchand</div>
-            <div className="mt-0.5 text-muted-text">Directrice commerciale · Atelier Garnier</div>
-          </div>
+      <div className="mx-auto max-w-editorial">
+        <div className="mx-auto mb-14 max-w-[640px] text-center">
+          <div className="eyebrow mb-4 text-primary">Témoignages</div>
+          <h2 className="font-display text-[clamp(1.9rem,3vw,2.5rem)] font-medium leading-tight tracking-tight text-ink">
+            Ils ont franchi le pas.
+          </h2>
         </div>
-        <div className="mt-16 grid grid-cols-1 gap-6 border-t border-hairline-light pt-10 md:grid-cols-3">
-          {KPIS.map((k) => (
-            <div key={k.label} className="text-center">
-              <div className="font-display text-5xl font-medium leading-none tracking-tight text-ink">
-                {k.value}
+        <div className="grid gap-6 sm:grid-cols-2">
+          {/* Carte réelle — Valentin / VB Mobilier. Citation confirmée par le brief (OK à publier).
+              Logo/photo VB Mobilier = autorisation à recueillir → avatar initiales en attendant. */}
+          <figure className="m-0 flex flex-col gap-5 rounded-xl border border-hairline-light bg-surface-light p-8">
+            <blockquote className="m-0 text-[15px] leading-relaxed text-body">
+              «&nbsp;Nous avons intégré un agent vocal dans notre CRM. Il traite automatiquement et
+              fait le setting des leads entrants issus de nos campagnes Meta. Nos commerciaux se
+              concentrent uniquement sur ce qu'ils savent faire : closer les prospects chauds et
+              envoyer les devis qui valent vraiment le coup.&nbsp;»
+            </blockquote>
+            <div className="inline-flex w-fit items-center rounded-full bg-primary/10 px-3 py-1 font-mono text-[13px] font-medium text-primary">
+              +30 % de CA sur prospects entrants
+            </div>
+            <figcaption className="mt-auto flex items-center gap-3 pt-2">
+              <div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary font-display text-base font-medium text-white">
+                VB
               </div>
-              <div className="mt-2 text-[13px] text-muted-text">{k.label}</div>
+              <div className="text-sm">
+                <div className="font-medium text-ink">Valentin</div>
+                <div className="mt-0.5 text-muted-text">VB Mobilier</div>
+              </div>
+            </figcaption>
+          </figure>
+
+          {/* TODO: citation qwertys à recueillir */}
+          {/* TODO: citation Norloc à recueillir */}
+          {/* TODO: citation Nesten à recueillir */}
+          {PLACEHOLDERS.map((client) => (
+            <div
+              key={client}
+              className="flex min-h-[180px] flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-hairline-light bg-surface-light-card p-8 text-center"
+            >
+              <span className="font-display text-lg font-medium text-ink/70">{client}</span>
+              <span className="text-[13px] text-muted-text">Témoignage à venir</span>
             </div>
           ))}
         </div>

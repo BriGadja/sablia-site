@@ -41,6 +41,8 @@
       "!**/out",
       "!**/dist",
       "!**/public",
+      "!**/tmp",
+      "!**/docs/crm",
       "!**/.claude",
       "!**/*.config.js",
       "!**/*.config.ts",

@@ -39,11 +39,6 @@ export default function FooterSection() {
       </div>
       <div className="mx-auto mt-12 flex max-w-editorial items-center justify-between border-t border-hairline pt-6">
         <span className="text-xs text-on-dark-soft">© 2026 Sablia · Tous droits réservés</span>
-        <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[1.5px] text-on-dark-soft">
-          Powered by
-          <img src="/anthropic.svg" alt="Anthropic" className="h-3.5 opacity-60" />
-          Claude
-        </div>
       </div>
     </footer>
   )

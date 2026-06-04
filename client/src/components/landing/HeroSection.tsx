@@ -26,9 +26,9 @@ function DashboardMockup() {
     { label: 'Cycle moyen', value: '21j', delta: '−3j', muted: true },
   ]
   const rows = [
-    { name: 'Mercier & Cie', amt: '€48,200', stage: 'Negotiation', color: 'text-success' },
-    { name: 'Atelier Garnier', amt: '€36,500', stage: 'Qualified', color: 'text-primary' },
-    { name: 'Maison Lefèvre', amt: '€24,000', stage: 'Discovery', color: 'text-accent-teal' },
+    { name: 'Client industriel', amt: '€48,200', stage: 'Negotiation', color: 'text-success' },
+    { name: 'PME services', amt: '€36,500', stage: 'Qualified', color: 'text-primary' },
+    { name: 'Cabinet conseil', amt: '€24,000', stage: 'Discovery', color: 'text-accent-teal' },
   ]
   return (
     <div className="rounded-xl border border-hairline-light bg-surface-light p-6">
@@ -89,12 +89,12 @@ export default function HeroSection() {
             Agence d'intégration Claude AI
           </div>
           <h1 className="t-display-xl text-on-dark-strong">
-            Gagnez 15&nbsp;h par semaine sur vos{' '}
-            <em className="font-display italic text-primary">processus commerciaux.</em>
+            Exploitez <em className="font-display italic text-primary">100&nbsp;%</em> du potentiel
+            de votre CRM.
           </h1>
           <p className="mt-6 max-w-[520px] text-lg leading-relaxed text-on-dark-body">
-            Sablia connecte Claude AI à votre CRM pour automatiser vos tâches répétitives, sans
-            changer vos outils.
+            Nous vous accompagnons dans l'intégration de Claude AI au cœur de vos processus
+            commerciaux. Vos équipes gagnent du temps, votre outil révèle tout son potentiel.
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <button
@@ -102,7 +102,7 @@ export default function HeroSection() {
               onClick={openBooking}
               className="t-button inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-on-primary transition-shadow duration-base hover:shadow-glow-coral"
             >
-              Réserver un call <ArrowRight size={16} />
+              Réserver un call audit — 30&nbsp;min <ArrowRight size={16} />
             </button>
             <a
               href="#use-cases"
@@ -111,12 +111,15 @@ export default function HeroSection() {
               Voir les cas d'usage
             </a>
           </div>
-          <div className="mt-7 flex gap-6 text-[13px] text-on-dark-muted">
+          <div className="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-[13px] text-on-dark-muted">
             <span className="inline-flex items-center gap-1.5">
-              <Check size={14} className="text-success" /> 45&nbsp;min, gratuit
+              <Check size={14} className="text-success" /> Gratuit
             </span>
             <span className="inline-flex items-center gap-1.5">
               <Check size={14} className="text-success" /> Sans engagement
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Check size={14} className="text-success" /> Équipe en France
             </span>
           </div>
         </motion.div>

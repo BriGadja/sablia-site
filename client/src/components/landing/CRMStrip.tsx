@@ -1,13 +1,13 @@
-const CRMS = ['salesforce', 'hubspot', 'pipedrive', 'zoho', 'monday', 'notion']
+const CRMS = ['salesforce', 'hubspot', 'pipedrive', 'zoho', 'monday', 'notion', 'sellsy']
 
 export default function CRMStrip() {
   return (
     <section className="on-light px-8 py-16">
       <div className="mx-auto max-w-editorial">
         <div className="t-caption-uppercase mb-7 text-center text-muted-text">
-          Compatible avec votre CRM
+          Compatible avec votre stack. Pas de migration. Pas de double saisie.
         </div>
-        <div className="scrollbar-hide grid grid-cols-3 items-center justify-items-center gap-6 md:grid-cols-6">
+        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
           {CRMS.map((name) => (
             <img
               key={name}

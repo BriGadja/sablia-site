@@ -1,27 +1,27 @@
 const STEPS = [
   {
     n: '01',
-    title: 'Call discovery',
-    desc: '45 min pour comprendre votre pipeline et identifier les automatisations à plus fort impact.',
-    dur: '45 min',
+    title: 'Call audit',
+    desc: "Partage d'écran. Nous étudions votre CRM, vos processus, vos points de friction.",
+    dur: '30 min',
   },
   {
     n: '02',
-    title: 'Diagnostic CRM',
-    desc: 'Audit technique de votre stack. Cartographie des workflows à automatiser.',
+    title: 'Diagnostic',
+    desc: 'Roadmap claire : quels workflows, dans quel ordre, avec quel ROI estimé.',
     dur: '5 jours',
   },
   {
     n: '03',
     title: 'Implémentation',
-    desc: 'Intégration sur-mesure de Claude dans votre CRM. Pas de plugin, pas de migration.',
+    desc: 'Nous concevons, testons et déployons. Vous validez chaque étape.',
     dur: '2–4 semaines',
   },
   {
     n: '04',
-    title: 'Suivi',
-    desc: 'Itérations mensuelles. On mesure le temps gagné. On ajuste.',
-    dur: 'En continu',
+    title: 'Suivi & formation',
+    desc: 'Optimisation continue, formation de vos équipes, reporting mensuel.',
+    dur: '1–3 mois',
   },
 ]
 
@@ -31,16 +31,13 @@ export default function ProcessSection() {
       <div className="mx-auto max-w-editorial">
         <div className="mb-12 grid items-end gap-14 lg:grid-cols-[auto_1fr]">
           <div>
-            <div className="eyebrow mb-4 text-primary">Comment ça marche</div>
-            <h2 className="t-display-lg">
-              Quatre étapes,
-              <br />
-              zéro friction sur votre stack.
-            </h2>
+            <div className="eyebrow mb-4 text-primary">Méthode</div>
+            <h2 className="t-display-lg">Comment nous vous accompagnons.</h2>
           </div>
           <p className="max-w-[460px] pb-2 text-on-dark-body">
-            Notre approche n'impose ni nouveau CRM, ni nouveau workflow. Nous connectons Claude à
-            vos outils existants, là où il a le plus d'impact mesurable.
+            Utiliser l'IA, tout le monde le fait. L'intégrer au cœur de vos processus, c'est notre
+            métier. Nous bâtissons avec vous, nous déployons, nous formons vos équipes — afin que
+            l'IA tourne chez vous, sans dépendance à notre intervention.
           </p>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -58,6 +55,9 @@ export default function ProcessSection() {
             </div>
           ))}
         </div>
+        <p className="mt-8 text-center text-[15px] text-on-dark-muted">
+          Vous validez à chaque étape. Aucun engagement avant la signature de la mission.
+        </p>
       </div>
     </section>
   )

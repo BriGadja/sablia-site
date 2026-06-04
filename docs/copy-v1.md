@@ -18,6 +18,8 @@ locked_decisions:
   hero_h1: "Cinq jours. Un PDF. Une décision claire."
 ---
 
+> ⚠️ **Divergence assumée (2026-06-04)** — La refonte CRM `sablia-site-landing-refonte-crm` (brief collègues, structure 6 blocs) a remplacé la copy live de la homepage : nouveau H1 « Exploitez 100 % du potentiel de votre CRM », sections Problématiques/Équipe/FAQ, CTA « call audit 30 min », Calendly Raph. Ce document `copy-v1` (positionnement v1 « coach-implémenteur / IAPreneurs ») n'est **plus la source de vérité de la homepage live** ; il est conservé comme archive du package acquisition v1. Copy live de référence : `client/src/components/landing/*.tsx` + `memory/landing-refonte-2026-06.md`.
+
 # Copy Package v1, Homepage sablia.io
 
 All homepage copy, in the order the visitor reads it. Vouvoiement throughout. "Intelligence artificielle" preferred on first mention, "IA" thereafter. Verbatim strings to be pasted into components at implementation time.
