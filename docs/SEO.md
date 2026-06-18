@@ -92,7 +92,7 @@ From PRD audit (sections 3.3-3.7):
 - [x] **Canonical trailing slash inconsistency** — Fixed: index.html canonical now has trailing slash
 - [x] **Homepage has 2 JSON-LD blocks** — Fixed: removed duplicate Organization from meta-tags.json, keeping ProfessionalService in index.html
 - [x] **`/cas-clients` missing structured data** — Fixed: added ItemList schema to meta-tags.json
-- [ ] **www vs non-www redirect** — `sablia.io` redirects 307 to `www.sablia.io` but all canonicals say `https://sablia.io`. Fix via Vercel DNS settings.
+- [x] **www vs non-www redirect** — Resolved: `www.sablia.io` now 308-redirects (permanent, path-preserving) to apex `https://sablia.io`, matching canonicals. Verified live 2026-06-18.
 - [x] **Stale sitemap lastmod dates** — Fixed: updated to 2026-03-02
 
 ---
@@ -104,9 +104,19 @@ Migrated from former `SEO-MANUAL-TASKS.md`:
 - [x] GA4 setup — property created, tracking code in analytics.ts, consent-gated
 - [x] Google Ads conversion tracking — 3 conversion actions, labels in .env
 - [x] GA4 <> Google Ads linked
-- [ ] **Fix www redirect** — Vercel DNS: make `sablia.io` primary, `www.sablia.io` redirect to non-www
-- [ ] **Google Search Console** — verify domain, submit sitemap, request indexing for key pages
-- [ ] **Bing Webmaster Tools** — register, verify (import from GSC), submit sitemap
+- [x] **Fix www redirect** — Done: `www.sablia.io` → apex 308 (verified live 2026-06-18)
+- [ ] **Google Search Console** — verify domain, submit sitemap (`https://sablia.io/sitemap.xml`), request indexing for `/` + `/guides/integrer-l-ia-dans-votre-entreprise`
+- [ ] **Bing Webmaster Tools** — register, verify (import from GSC), submit sitemap. ⚠️ Priority: ChatGPT Search reads Bing's index — required for ChatGPT visibility.
+
+### GEO / AI-search assets (added 2026-06-18)
+
+For LLM citation ("intégrateur Claude/CRM", "comment intégrer l'IA dans son entreprise"):
+
+- `client/public/llms.txt` — self-contained markdown summary (2026 LLM-sitemap standard), calibrated on the live site
+- `client/public/.well-known/ai.txt` — points to llms.txt (old version had 4 broken GitHub-raw refs)
+- `client/public/robots.txt` — allows ClaudeBot, OAI-SearchBot (ChatGPT Search), PerplexityBot
+- `index.html` ProfessionalService schema — `@id` entity, founder + LinkedIn `sameAs`, PostalAddress, `hasOfferCatalog`
+- **NEW indexable route** `/guides/integrer-l-ia-dans-votre-entreprise` — cornerstone guide (Article + FAQPage schema, prerendered, in sitemap)
 - [ ] **Social sharing validation** — test OG previews (Facebook Debugger), Twitter Card Validator, Rich Results Test
 - [ ] **Backlink strategy** — n8n forum post, Make.com community, French startup directories, LinkedIn profile link
 
