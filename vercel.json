@@ -3,6 +3,7 @@
   "installCommand": "npm install",
   "outputDirectory": "dist/public",
   "rewrites": [
+    { "source": "/escalier-modeles", "destination": "/escalier-modeles.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

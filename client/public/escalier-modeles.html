@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>L'escalier des modèles Claude</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;--ink:#0a0a0a;--muted:#737186;--faint:#a7a4bb;
+    --violet:#6855F8;--violet-ink:#4a37d6;
+    --violet-soft:rgba(104,85,248,.09);--violet-line:rgba(104,85,248,.26);
+    --track:#eeedf6;--line:#ebeaf3;--radius:16px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:'Poppins',system-ui,sans-serif;line-height:1.4;
+    padding:20px 14px 40px;max-width:680px;margin:0 auto;-webkit-font-smoothing:antialiased;
+  }
+  .eyebrow{font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--violet);margin:0 0 6px}
+  h1{font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.05;margin:0 0 14px}
+  h1 em{font-style:normal;color:var(--violet)}
+
+  .rule{display:flex;gap:10px;align-items:center;background:var(--violet-soft);border:1px solid var(--violet-line);border-radius:var(--radius);padding:12px 14px;margin:0 0 16px}
+  .rule b{font-weight:800;color:var(--violet-ink);font-size:14px;line-height:1.25}
+  .rule .star{font-size:20px;line-height:1;flex:0 0 auto}
+
+  .controls{display:flex;gap:8px;margin:0 0 12px;flex-wrap:wrap}
+  .btn{font-family:inherit;font-weight:600;font-size:12.5px;border-radius:999px;padding:9px 14px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);transition:transform .12s,border-color .12s,background .12s}
+  .btn:hover{border-color:var(--violet-line)}
+  .btn:active{transform:scale(.97)}
+  .btn.primary{background:var(--violet);border-color:var(--violet);color:#fff}
+  .btn:focus-visible{outline:3px solid var(--violet-line);outline-offset:2px}
+
+  .axis-cap{font-size:9.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);text-align:center;margin:4px 0}
+
+  /* ---------- escalier ---------- */
+  .stairs{display:flex;flex-direction:column;gap:8px}
+  .step{
+    display:flex;gap:12px;align-items:stretch;text-align:left;cursor:pointer;width:100%;
+    font-family:inherit;color:var(--ink);background:#fff;border:1px solid var(--line);
+    border-radius:14px;padding:12px;
+    transition:opacity .35s,visibility .35s,transform .12s,box-shadow .15s,border-color .15s;
+  }
+  .step:hover{border-color:var(--violet-line);box-shadow:0 6px 22px rgba(104,85,248,.10)}
+  .step:hover .act svg{color:var(--violet)}
+  .step:active{transform:scale(.99)}
+  .step:focus-visible{outline:3px solid var(--violet-line);outline-offset:2px}
+  .step.hidden{opacity:0;visibility:hidden;pointer-events:none}
+
+  /* cost cell : barre qui monte + multiplicateur */
+  .cost{flex:0 0 46px;display:flex;flex-direction:column;align-items:center;gap:6px}
+  .track{position:relative;width:12px;height:48px;background:var(--track);border-radius:6px;overflow:hidden}
+  .fill{position:absolute;left:0;right:0;bottom:0;background:var(--violet);border-radius:6px}
+  .step[data-key="fable"] .fill{background:repeating-linear-gradient(var(--violet) 0 5px,transparent 5px 9px)}
+  .mult{font-size:13px;font-weight:800;color:var(--violet-ink);line-height:1}
+
+  .body{flex:1;min-width:0;display:flex;flex-direction:column;gap:9px}
+  .head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .name{font-size:16px;font-weight:800;letter-spacing:-.01em;line-height:1}
+  .ribbon{background:var(--violet);color:#fff;border-radius:6px;font-size:8px;font-weight:800;letter-spacing:.14em;padding:2px 6px}
+  .hint{margin-left:auto;font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--faint)}
+
+  .acts{display:flex;gap:6px}
+  .act{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+  .act svg{width:25px;height:25px;color:var(--ink);transition:color .15s}
+  .act span{font-size:9.5px;font-weight:600;color:#2a2a32;line-height:1.1}
+
+  .step[data-key="fable"]{border-style:dashed;border-color:var(--violet-line);opacity:.6}
+
+  /* ---------- devoirs ---------- */
+  .devoirs{margin:22px 0 0;background:var(--violet);color:#fff;border-radius:var(--radius);padding:18px 16px}
+  .devoirs h2{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin:0 0 8px;opacity:.85}
+  .devoirs p{font-size:13.5px;font-weight:500;margin:0 0 14px;line-height:1.45}
+  .devoirs pre{background:rgba(0,0,0,.22);border-radius:12px;padding:12px;margin:0 0 12px;font-family:ui-monospace,Menlo,monospace;font-size:10.5px;line-height:1.5;color:#f1efff;white-space:pre-wrap;max-height:170px;overflow:auto}
+  .copy-btn{width:100%;background:#fff;color:var(--violet-ink);font-weight:800;font-size:14px;border:none;border-radius:10px;padding:13px;cursor:pointer;font-family:inherit;transition:transform .12s,background .2s}
+  .copy-btn:active{transform:scale(.98)}
+  .copy-btn.done{background:#1ec98a;color:#fff}
+  footer{margin-top:18px;text-align:center;font-size:10px;color:var(--faint);font-weight:500}
+
+  /* ---------- modal ---------- */
+  .modal{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(10,8,24,.45);backdrop-filter:blur(3px);padding:18px}
+  .modal.open{display:flex}
+  .modal-card{background:#fff;border-radius:20px;width:100%;max-width:340px;padding:18px 16px 20px;position:relative;box-shadow:0 30px 80px rgba(40,20,120,.30);animation:pop .22s cubic-bezier(.2,.9,.3,1.2)}
+  @keyframes pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:14px;color:var(--muted);line-height:1;font-family:inherit}
+  .modal-card h3{font-size:20px;font-weight:800;margin:2px 0 0;letter-spacing:-.01em}
+  .r-desc{font-size:12px;font-weight:500;color:var(--muted);margin:3px 0 0}
+  .r-price{display:inline-block;margin-top:8px;background:var(--violet-soft);color:var(--violet-ink);font-weight:700;font-size:12.5px;border-radius:8px;padding:5px 10px}
+  #radar-svg{display:block;width:100%;height:auto;margin:4px 0 0}
+  .r-note{font-size:10px;font-weight:500;color:var(--muted);line-height:1.35;border-top:1px dashed var(--line);padding-top:8px;margin:6px 0 0}
+  .disclaimer{font-size:10px;color:var(--faint);text-align:center;margin:6px 0 0;font-weight:600}
+  .grid{fill:none;stroke:var(--line);stroke-width:1}
+  .axis{stroke:var(--line);stroke-width:1}
+  .data{fill:rgba(104,85,248,.16);stroke:var(--violet);stroke-width:2;stroke-linejoin:round}
+  .data.dashed{fill:rgba(104,85,248,.07);stroke-dasharray:5 4}
+  .dot{fill:var(--violet)}
+  .r-label{font-family:'Poppins',sans-serif;font-size:10.5px;font-weight:700;fill:var(--ink)}
+  .r-val{font-family:'Poppins',sans-serif;font-size:10px;font-weight:700;fill:var(--violet-ink);paint-order:stroke;stroke:#fff;stroke-width:3px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  @media (min-width:560px){h1{font-size:32px}.name{font-size:18px}.act span{font-size:11px}.act svg{width:28px;height:28px}}
+</style>
+</head>
+<body>
+
+  <p class="eyebrow">Claude · aide-mémoire</p>
+  <h1>Trouve ton action.<br><em>Reste en bas.</em></h1>
+
+  <div class="rule">
+    <span class="star">⬇</span>
+    <b>Reste sur la marche la plus basse qui fait le travail.</b>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="stepBtn">Révéler marche par marche</button>
+    <button class="btn primary" id="allBtn">Tout afficher</button>
+  </div>
+
+  <p class="axis-cap">↑ plus complexe</p>
+  <div class="stairs" id="stairs"></div>
+  <p class="axis-cap">↓ plus simple · moins cher</p>
+
+  <section class="devoirs">
+    <h2>Vos devoirs</h2>
+    <p>Collez ce prompt dans Claude Code pour que chacun de vos skills lance le bon modèle par défaut — et arrêtez de faire tourner Opus pour de la recherche web.</p>
+    <pre id="promptText"></pre>
+    <button class="copy-btn" id="copyBtn">Copier le prompt</button>
+  </section>
+
+  <footer>Coût relatif (×) basé sur Haïku · identique en entrée &amp; sortie · valeurs radar = estimation pédagogique</footer>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="r-name">
+    <div class="modal-card">
+      <button class="modal-close" id="modalClose" aria-label="Fermer">✕</button>
+      <h3 id="r-name">—</h3>
+      <p class="r-desc" id="r-desc">—</p>
+      <span class="r-price" id="r-price">—</span>
+      <svg id="radar-svg" viewBox="-46 0 352 268" role="img" aria-label="Radar du modèle"></svg>
+      <p class="r-note" id="r-note" hidden></p>
+      <p class="disclaimer">Estimation pédagogique — pas un benchmark officiel</p>
+    </div>
+  </div>
+
+<script>
+  /* ---------- icônes SVG (inline, géométriques) ---------- */
+  const S='stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"';
+  const ICONS = {
+    classer:  `<g ${S}><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="15" y2="12"/><line x1="4" y1="17" x2="10" y2="17"/></g>`,
+    resumer:  `<g ${S}><rect x="5" y="3.5" width="14" height="17" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></g>`,
+    extraire: `<g ${S}><path d="M13 4 H6.5 a2 2 0 0 0-2 2 V18 a2 2 0 0 0 2 2 H13"/><line x1="10" y1="12" x2="20.5" y2="12"/><polyline points="16.5 8 20.5 12 16.5 16"/></g>`,
+    longdoc:  `<g ${S}><path d="M7 3 H14 L19 8 V21 H7 Z"/><polyline points="14 3 14 8 19 8"/><line x1="9.5" y1="12" x2="16.5" y2="12"/><line x1="9.5" y1="15" x2="16.5" y2="15"/><line x1="9.5" y1="18" x2="14" y2="18"/></g>`,
+    web:      `<g ${S}><circle cx="12" cy="12" r="8.5"/><line x1="3.5" y1="12" x2="20.5" y2="12"/><ellipse cx="12" cy="12" rx="4" ry="8.5"/></g>`,
+    rediger:  `<g ${S}><path d="M5 19 L7 13.5 L16 4.5 a1.9 1.9 0 0 1 2.7 2.7 L9.7 16 Z"/><line x1="13.3" y1="7.2" x2="16" y2="9.9"/></g>`,
+    raisonner:`<g ${S}><circle cx="6" cy="8" r="2.4"/><circle cx="18" cy="6.5" r="2.4"/><circle cx="12.5" cy="18" r="2.4"/><line x1="7.9" y1="9.3" x2="11" y2="16"/><line x1="16.3" y1="7.9" x2="13.6" y2="16.1"/><line x1="8.3" y1="7.2" x2="15.6" y2="6.7"/></g>`,
+    coder:    `<g ${S}><polyline points="8.5 8 4 12 8.5 16"/><polyline points="15.5 8 20 12 15.5 16"/><line x1="13" y1="6" x2="11" y2="18"/></g>`,
+    agent:    `<g ${S}><rect x="5" y="8" width="14" height="11" rx="2.5"/><line x1="12" y1="4" x2="12" y2="8"/><circle cx="12" cy="3.5" r="1.2"/><circle cx="9.6" cy="13" r="1.1"/><circle cx="14.4" cy="13" r="1.1"/><line x1="9.8" y1="16.4" x2="14.2" y2="16.4"/></g>`,
+    plan:`<g ${S}><circle cx="12" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="19" r="2"/><path d="M12 7 V13 M6 13 H18 M6 13 V17 M18 13 V17"/></g>`,
+    marathon: `<g ${S}><line x1="7.5" y1="4" x2="16.5" y2="4"/><line x1="7.5" y1="20" x2="16.5" y2="20"/><path d="M8.5 4 C8.5 9 15.5 10 15.5 12 C15.5 14 8.5 15 8.5 20"/><path d="M15.5 4 C15.5 9 8.5 10 8.5 12 C8.5 14 15.5 15 15.5 20"/></g>`
+  };
+
+  /* ---------- données ---------- */
+  const AXES = ['Raisonnement','Vitesse','Économie','Contexte','Autonomie'];
+  const MODELS = [
+    { key:'fable', order:4, name:'Fable 5', desc:'le plus capable — théorique',
+      price:'10$ / 50$ par M tokens · entrée / sortie', mult:'×10', fill:100, dashed:true, ribbon:true,
+      note:"Suspendu le 12 juin 2026 — directive d'export US visant les ressortissants étrangers (risque de jailbreak). Coupé pour tous les clients par conformité. Inaccessible en France aujourd'hui. On suit l'actu.",
+      values:[5,3,1,4,5],
+      acts:[['plan','planification complexe'],['marathon','exécution longue durée']] },
+    { key:'opus', order:3, name:'Opus 4.8', desc:'le raisonneur · cheval de trait agentique',
+      price:'5$ / 25$ par M tokens · entrée / sortie', mult:'×5', fill:56, dashed:false, ribbon:false,
+      note:'Inclut la vision (images, scans) et le raisonnement difficile.',
+      values:[5,2,2,4,5],
+      acts:[['raisonner','raisonner'],['coder','coder'],['agent','agent']] },
+    { key:'sonnet', order:2, name:'Sonnet 4.6', desc:"l'équilibré · gros volume",
+      price:'3$ / 15$ par M tokens · entrée / sortie', mult:'×3', fill:34, dashed:false, ribbon:false,
+      note:'', values:[4,4,3,5,4],
+      acts:[['longdoc','long doc'],['web','web'],['rediger','rédiger']] },
+    { key:'haiku', order:1, name:'Haïku 4.5', desc:'le plus rapide & économique',
+      price:'1$ / 5$ par M tokens · entrée / sortie', mult:'×1', fill:16, dashed:false, ribbon:false,
+      note:'', values:[2,5,5,3,2],
+      acts:[['classer','classer'],['resumer','résumer'],['extraire','extraire data']] }
+  ];
+
+  /* ---------- rendu escalier ---------- */
+  const stairs=document.getElementById('stairs');
+  MODELS.forEach(m=>{
+    const acts=m.acts.map(([ic,lab])=>`<div class="act"><svg viewBox="0 0 24 24">${ICONS[ic]}</svg><span>${lab}</span></div>`).join('');
+    const btn=document.createElement('button');
+    btn.className='step'; btn.dataset.key=m.key; btn.dataset.order=m.order;
+    btn.setAttribute('aria-label', m.name+' — voir la fiche');
+    btn.innerHTML=`
+      <div class="cost"><div class="track"><div class="fill" style="height:${m.fill}%"></div></div><div class="mult">${m.mult}</div></div>
+      <div class="body">
+        <div class="head"><span class="name">${m.name}</span>${m.ribbon?'<span class="ribbon">THÉORIQUE</span>':''}<span class="hint">fiche ↗</span></div>
+        <div class="acts">${acts}</div>
+      </div>`;
+    btn.addEventListener('click',()=>openCard(m.key));
+    stairs.appendChild(btn);
+  });
+
+  /* ---------- radar ---------- */
+  function buildRadar(values,dashed){
+    const cx=130,cy=128,R=82,N=5;
+    const ang=i=>(-90+i*72)*Math.PI/180;
+    const pt=(i,r)=>[cx+r*Math.cos(ang(i)),cy+r*Math.sin(ang(i))];
+    let s='';
+    for(let lvl=1;lvl<=5;lvl++){const r=R*lvl/5;s+=`<polygon points="${[...Array(N)].map((_,i)=>pt(i,r).map(n=>n.toFixed(1)).join(',')).join(' ')}" class="grid"/>`;}
+    for(let i=0;i<N;i++){const[x,y]=pt(i,R);s+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" class="axis"/>`;}
+    s+=`<polygon points="${values.map((v,i)=>pt(i,R*v/5).map(n=>n.toFixed(1)).join(',')).join(' ')}" class="data ${dashed?'dashed':''}"/>`;
+    values.forEach((v,i)=>{const[x,y]=pt(i,R*v/5);s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" class="dot"/>`;});
+    AXES.forEach((lab,i)=>{
+      const[lx,ly]=pt(i,R+22);let a='middle';if(lx>cx+6)a='start';else if(lx<cx-6)a='end';
+      const dy=ly<cy?-3:12;
+      s+=`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${a}" dy="${dy}" class="r-label">${lab}</text>`;
+      s+=`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${a}" dy="${dy+12}" class="r-val">${values[i]}/5</text>`;
+    });
+    return s;
+  }
+
+  /* ---------- fiche modèle ---------- */
+  const modal=document.getElementById('modal');
+  function openCard(key){
+    const m=MODELS.find(x=>x.key===key); if(!m) return;
+    document.getElementById('r-name').textContent=m.name;
+    document.getElementById('r-desc').textContent=m.desc;
+    document.getElementById('r-price').textContent=m.price;
+    document.getElementById('radar-svg').innerHTML=buildRadar(m.values,m.dashed);
+    const note=document.getElementById('r-note');
+    if(m.note){note.textContent=m.note;note.hidden=false;}else{note.hidden=true;}
+    modal.classList.add('open');
+  }
+  function closeCard(){modal.classList.remove('open');}
+  document.getElementById('modalClose').addEventListener('click',closeCard);
+  modal.addEventListener('click',e=>{if(e.target===modal)closeCard();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCard();});
+
+  /* ---------- révélation marche par marche ---------- */
+  const steps=[...document.querySelectorAll('.step')];
+  let step=4;
+  const stepBtn=document.getElementById('stepBtn'),allBtn=document.getElementById('allBtn');
+  const apply=()=>steps.forEach(t=>t.classList.toggle('hidden',(+t.dataset.order)>step));
+  const label=()=>stepBtn.textContent= step>=4?'Révéler marche par marche':`Révéler — ${step}/4`;
+  stepBtn.addEventListener('click',()=>{step=(step>=4)?1:step+1;apply();label();});
+  allBtn.addEventListener('click',()=>{step=4;apply();label();});
+
+  /* ---------- prompt à copier ---------- */
+  const PROMPT=`Tu es mon assistant d'optimisation de coûts Claude Code. Objectif : réduire ma consommation de tokens sans perdre en qualité, en réglant le bon modèle et le bon effort pour chacun de mes skills.
+
+1. Parcours tous mes skills (les fichiers SKILL.md dans .claude/skills/) et lis le frontmatter + le rôle de chacun.
+2. Pour chaque skill, classe la tâche : MÉCANIQUE (lecture, recherche web, résumé, classification, extraction, statut, parking de notes) ou RAISONNEMENT (planification, architecture, debug de cause racine, écriture/revue de code, décisions stratégiques).
+3. Propose pour chacun :
+   - model: → "haiku" pour les skills purement mécaniques. Laisse SANS champ model (= hérite du modèle de session) pour les skills de raisonnement. N'épingle JAMAIS un gros modèle vers le haut : ça se périme à chaque nouvelle sortie.
+   - effort: → "low" pour les skills mécaniques (verrouillé bas, quelle que soit la session). Laisse SANS champ effort pour le raisonnement : le skill hérite alors de l'effort de la session (xhigh si tu lances ta session en xhigh). N'écris un effort en dur que pour forcer un niveau coûte que coûte — y compris "medium", qui paraît neutre mais écrase en réalité un effort de session relevé à la main.
+4. Montre-moi d'abord un TABLEAU récap (skill | type de tâche | model proposé | effort proposé | pourquoi) AVANT toute modification.
+5. Après ma validation seulement, applique les changements dans les frontmatters.`;
+  document.getElementById('promptText').textContent=PROMPT;
+  const copyBtn=document.getElementById('copyBtn');
+  copyBtn.addEventListener('click',async()=>{
+    let ok=false;
+    try{await navigator.clipboard.writeText(PROMPT);ok=true;}
+    catch(e){const ta=document.createElement('textarea');ta.value=PROMPT;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();try{ok=document.execCommand('copy');}catch(_){}document.body.removeChild(ta);}
+    copyBtn.textContent=ok?'Copié ✓':'Copie manuelle : sélectionnez le texte';
+    copyBtn.classList.toggle('done',ok);
+    setTimeout(()=>{copyBtn.textContent='Copier le prompt';copyBtn.classList.remove('done');},2200);
+  });
+</script>
+</body>
+</html>
