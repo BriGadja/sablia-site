@@ -2,7 +2,14 @@ import metaTags from '@docs/meta-tags.json'
 import { Helmet } from 'react-helmet-async'
 
 interface SEOProps {
-  page: '/' | '/mentions-legales' | '/politique-confidentialite' | '/cgv' | '/thank-you' | 'home'
+  page:
+    | '/'
+    | '/mentions-legales'
+    | '/politique-confidentialite'
+    | '/cgv'
+    | '/guides/integrer-l-ia-dans-votre-entreprise'
+    | '/thank-you'
+    | 'home'
 }
 
 const breadcrumbConfig: Record<string, { name: string; position: number }[]> = {
@@ -18,6 +25,10 @@ const breadcrumbConfig: Record<string, { name: string; position: number }[]> = {
   '/cgv': [
     { name: 'Accueil', position: 1 },
     { name: 'CGV', position: 2 },
+  ],
+  '/guides/integrer-l-ia-dans-votre-entreprise': [
+    { name: 'Accueil', position: 1 },
+    { name: "Intégrer l'IA dans votre entreprise", position: 2 },
   ],
 }
 

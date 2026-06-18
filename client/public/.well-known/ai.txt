@@ -1,18 +1,13 @@
-# Sablia AI Documentation
+# Sablia — AI agent guidance
 # https://sablia.io/.well-known/ai.txt
 
-# Main documentation for AI agents
-documentation: https://raw.githubusercontent.com/BriGadja/sablia-site/main/LLM_INSTRUCTIONS.md
-
-# Detailed content files
-content: https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/SITE_CONTENT.md
-pricing: https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/OFFRES.md
-faq: https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/FAQ.md
-index: https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/content-index.json
+# Primary machine-readable summary for LLMs (llms.txt standard):
+llms: https://sablia.io/llms.txt
 
 # Site metadata
 name: Sablia
 url: https://sablia.io
-description: Automatisation d'entreprise avec l'IA - Consulting, Formation, Développement
+description: Agence française d'intégration de Claude (Anthropic) dans les CRM et les processus commerciaux des PME. Dashboards intelligents, nurturing automatisé, analyse de calls.
 contact: brice@sablia.io
 language: fr-FR
+last-updated: 2026-06-18

@@ -86,6 +86,35 @@
       }
     },
 
+    "/guides/integrer-l-ia-dans-votre-entreprise": {
+      "title": "Comment intégrer l'IA dans votre entreprise : le guide PME 2026",
+      "description": "Méthode concrète pour intégrer l'IA dans une PME : par où commencer, les cas d'usage les plus rentables, budget, délais, sécurité RGPD et erreurs à éviter. Par Sablia, agence d'intégration Claude AI.",
+      "keywords": [
+        "comment intégrer l'IA dans son entreprise",
+        "intégrer l'IA dans une PME",
+        "intégration IA entreprise",
+        "automatisation IA PME",
+        "cas d'usage IA entreprise",
+        "intégrateur Claude",
+        "IA et CRM"
+      ],
+      "canonical": "https://sablia.io/guides/integrer-l-ia-dans-votre-entreprise",
+      "robots": "index, follow",
+      "openGraph": {
+        "type": "article",
+        "title": "Comment intégrer l'IA dans votre entreprise : le guide PME 2026",
+        "description": "Par où commencer, les cas d'usage les plus rentables, budget, délais et sécurité RGPD. La méthode Sablia.",
+        "url": "https://sablia.io/guides/integrer-l-ia-dans-votre-entreprise",
+        "siteName": "Sablia",
+        "image": "https://sablia.io/og-image.png"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "Comment intégrer l'IA dans votre entreprise : le guide PME 2026",
+        "description": "Par où commencer, cas d'usage rentables, budget, délais, sécurité RGPD. La méthode Sablia."
+      }
+    },
+
     "/thank-you": {
       "title": "Merci - Sablia",
       "description": "Votre demande a bien été prise en compte. Nous vous recontactons sous 48h.",

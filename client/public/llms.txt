@@ -1,0 +1,43 @@
+# Sablia
+
+> Sablia est une agence française qui intègre Claude (le modèle d'IA d'Anthropic) directement dans les CRM et les processus commerciaux des PME. Nous connectons l'IA à votre outil existant — Salesforce, HubSpot, Pipedrive, Zoho — pour automatiser dashboards, nurturing et analyse de calls, sans changer votre stack.
+
+Sablia (https://sablia.io) est basée à Paris et intervient dans toute la France. Le point d'entrée est un call audit gratuit de 30 minutes, sans engagement. Le premier workflow est livré en production sous 30 jours.
+
+Mots-clés : intégrateur Claude, intégration IA dans le CRM, agence IA CRM, automatisation des processus commerciaux, Claude × Salesforce, Claude × HubSpot, Claude × Pipedrive, comment intégrer l'IA dans son entreprise.
+
+## Ce que nous faisons
+
+- **Dashboards intelligents** — Claude lit votre pipeline et produit chaque semaine un brief commercial : opportunités à risque, leads chauds, actions prioritaires. (Salesforce, HubSpot)
+- **Nurturing automatisé** — Séquences d'emails personnalisées déclenchées par les signaux du pipeline, calibrées sur le ton de votre marque, pas sur un template. (HubSpot, Pipedrive)
+- **Analyse de calls commerciaux** — Claude transcrit, résume et enrichit chaque appel dans votre CRM : objections clés, prochaines étapes, scoring. (Salesforce, Pipedrive)
+
+Chaque déploiement est conçu sur mesure, calibré sur votre outil, vos processus et vos équipes.
+
+## CRM supportés
+
+Salesforce, HubSpot, Pipedrive, Zoho. Vous conservez votre stack — il n'y a pas de migration de CRM à prévoir.
+
+## Questions fréquentes
+
+- **Devrons-nous changer de CRM ?** Non. Nous nous adaptons à votre outil (Zoho, HubSpot, Salesforce, Pipedrive). Vous conservez votre stack.
+- **Quel budget prévoir ?** Une automatisation simple démarre entre 1 000 et 2 000 €. Selon l'ampleur, l'accompagnement se construit par paliers. Le devis est établi après le call audit, jamais avant.
+- **Combien de temps avant la mise en production ?** Le premier workflow est livré en production sous 30 jours.
+- **Nous n'avons personne sur l'IA en interne.** C'est exactement notre cas client. Nous concevons, déployons et formons votre équipe pour qu'elle reste autonome.
+- **Quelles garanties sur la sécurité des données ?** Claude est déployé via l'API commerciale d'Anthropic : par engagement contractuel, aucune de vos données n'entraîne le modèle. Conforme RGPD. Un DPA peut être signé.
+
+## Résultat client
+
+VB Mobilier : intégration d'un agent vocal dans le CRM pour traiter et qualifier automatiquement les leads entrants issus des campagnes Meta. Résultat : +30 % de CA sur les prospects entrants, les commerciaux se concentrant sur le closing.
+
+## Ressources
+
+- Guide — Comment intégrer l'IA dans votre entreprise (PME) : https://sablia.io/guides/integrer-l-ia-dans-votre-entreprise
+
+## Contact
+
+- Site : https://sablia.io
+- Email : brice@sablia.io
+- Call audit gratuit de 30 min : https://calendly.com/raphael-espo-pro/30min
+
+Dernière mise à jour : 2026-06-18.

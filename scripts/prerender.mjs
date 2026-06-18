@@ -17,6 +17,7 @@ const ROUTES = [
   '/mentions-legales',
   '/politique-confidentialite',
   '/cgv',
+  '/guides/integrer-l-ia-dans-votre-entreprise',
   '/thank-you',
 ]
 

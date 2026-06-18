@@ -4,20 +4,28 @@ Allow: /
 # Standard sitemap
 Sitemap: https://sablia.io/sitemap.xml
 
-# AI Agent guidance (non-standard directives kept as comments for discoverability)
-# LLMs should read structured documentation instead of crawling SPA
-# AI-Documentation: https://raw.githubusercontent.com/BriGadja/sablia-site/main/LLM_INSTRUCTIONS.md
-# AI-Content: https://raw.githubusercontent.com/BriGadja/sablia-site/main/docs/copy-v1.md
+# Machine-readable summary for LLMs (llms.txt standard)
+# https://sablia.io/llms.txt
 
-# OpenAI GPTBot
+# OpenAI — training crawler + ChatGPT Search crawler
 User-agent: GPTBot
 Allow: /
 Crawl-delay: 10
 
-# Anthropic Claude-Web
+User-agent: OAI-SearchBot
+Allow: /
+
+# Anthropic — Claude crawler
+User-agent: ClaudeBot
+Allow: /
+
 User-agent: Claude-Web
 Allow: /
 
-# Google Bard/Gemini
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+# Google Gemini / Vertex
 User-agent: Google-Extended
 Allow: /
