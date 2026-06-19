@@ -105,8 +105,8 @@ Migrated from former `SEO-MANUAL-TASKS.md`:
 - [x] Google Ads conversion tracking — 3 conversion actions, labels in .env
 - [x] GA4 <> Google Ads linked
 - [x] **Fix www redirect** — Done: `www.sablia.io` → apex 308 (verified live 2026-06-18)
-- [ ] **Google Search Console** — verify domain, submit sitemap (`https://sablia.io/sitemap.xml`), request indexing for `/` + `/guides/integrer-l-ia-dans-votre-entreprise`
-- [ ] **Bing Webmaster Tools** — register, verify (import from GSC), submit sitemap. ⚠️ Priority: ChatGPT Search reads Bing's index — required for ChatGPT visibility.
+- [x] **Google Search Console** — Done 2026-06-19: domain property `sc-domain:sablia.io` was already verified (account brice@sablia.io); sitemap resubmitted + indexing requested for the guide URL.
+- [x] **Bing Webmaster Tools** — Done 2026-06-19: site `https://sablia.io/` imported from GSC (Google sign-in, no DNS verification needed) + sitemap `https://sablia.io/sitemap.xml` submitted (Processing). ChatGPT Search reads Bing's index → ChatGPT visibility path now open.
 
 ### GEO / AI-search assets (added 2026-06-18)
 
