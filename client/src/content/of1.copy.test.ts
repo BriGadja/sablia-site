@@ -27,7 +27,7 @@ const META_TAGS_FILE = resolve(HERE, '../../../docs/meta-tags.json')
  * Every entity and every exotic space becomes a plain space before any assertion runs.
  */
 function normalise(text: string): string {
-  return text.replace(/&nbsp;|&#160;|&#xa0;/gi, ' ').replace(/[   ]/g, ' ')
+  return text.replace(/&nbsp;|&#160;|&#xa0;/gi, ' ').replace(/[\u00A0\u202F\u2009]/g, ' ')
 }
 
 /** Every string and number the module carries, plus the two exported constants. */
@@ -105,7 +105,6 @@ const REQUIRED_IN_PAGE = [
   '1 490',
   '149',
   'remier mois offert',
-  '7 jours',
   'intégralement remboursé',
   'https://calendly.com/brice-gachadoat/30min',
 ]
@@ -172,6 +171,17 @@ describe('OF-1 copy guard: what the page must say', () => {
     for (const required of REQUIRED_IN_PAGE) {
       expect(haystack).toContain(required)
     }
+  })
+
+  it('derives the price and the delay from the module, never hard-coded', () => {
+    // The literal "7 jours" is assembled from of1.delay.days at render time, so a source
+    // grep cannot see it: OffreHero.test.tsx asserts it on the RENDERED pills. What this
+    // guard proves is that the page READS the module instead of restating a number that
+    // would then drift away from OF-1.
+    const joined = SOURCES.map((source) => source.text).join('\n')
+    expect(SOURCES.length).toBeGreaterThan(0)
+    expect(joined).toContain('of1.price.oneShotHt')
+    expect(joined).toContain('of1.delay.days')
   })
 
   it('offers exactly one booking URL', () => {
