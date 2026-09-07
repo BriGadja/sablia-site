@@ -239,3 +239,34 @@ describe('OF-1 copy guard: structured data', () => {
     expect(faqSchema.mainEntity[0].name).toBe(of1.faq[0].q)
   })
 })
+
+/**
+ * Two sentences on this page state something OF-1 does not: the closing line of the n8n objection
+ * (a paraphrase of IDEATION §9 T3) and the callout's delivery-date promise. Brice kept both on
+ * 2026-09-07 and asked that they stay traceable, so no future session mistakes one for a clause of
+ * the offer and goes looking for it in OF-1. Each carries an `@off-source` marker; this counts them.
+ * A third one appearing unmarked is beyond what a test can see -- what it CAN do is make adding or
+ * removing a marked line a deliberate act rather than a silent one.
+ */
+describe('OF-1 copy guard: lines that deliberately go beyond the offer', () => {
+  const OFF_SOURCE_MARKER = '@off-source'
+  const EXPECTED = ['ObjectionSection.tsx', 'OffreCallout.tsx'] as const
+
+  it('carries exactly two marked out-of-source lines, in the two known components', () => {
+    const marked = pageSources()
+      .filter((source) => source.text.includes(OFF_SOURCE_MARKER))
+      .map((source) => source.path.split('/').at(-1))
+      .sort()
+    expect(marked).toEqual([...EXPECTED])
+  })
+
+  it('still shows the exact sentence each marker vouches for', () => {
+    const byName = new Map(pageSources().map((s) => [s.path.split('/').at(-1), normalise(s.text)]))
+    expect(byName.get('OffreCallout.tsx')).toContain(
+      'une date de livraison, que nous travaillions ensemble ou non.',
+    )
+    expect(byName.get('ObjectionSection.tsx')).toContain(
+      "c'est la peur de l'installer, et l'inconnu qui va avec.",
+    )
+  })
+})

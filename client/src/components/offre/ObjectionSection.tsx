@@ -1,9 +1,10 @@
 import { of1 } from '@/content/of1'
 
 /**
+ * @off-source Not a clause of OF-1: do not look for it there.
  * Paraphrase of IDEATION §9 T3, whose literal words are « la majorité des acheteurs ne sait pas
  * installer, même gratuit ; la peur et l'inconnu sont le frein, pas le prix du template ».
- * Brice validates or rewrites this line at the validation point. No figure, no implied study.
+ * Brice kept this line as it stands on 2026-09-07. No figure, no implied study.
  */
 const CLOSING_LINE =
   "Ce n'est pas le prix du modèle qui bloque : c'est la peur de l'installer, et l'inconnu qui va avec."

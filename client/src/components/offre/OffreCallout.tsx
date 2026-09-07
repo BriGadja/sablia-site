@@ -2,6 +2,16 @@ import { ArrowRight } from '@/components/icons/lucide-crm'
 import { openBookingUrl } from '@/components/landing/BookingModal'
 import { OF1_BOOKING_URL } from '@/content/of1'
 
+/**
+ * @off-source Not a clause of OF-1: do not look for it there, and do not let it drift into the
+ * offer by copy-paste. It is a risk reversal Brice validated on 2026-09-07, consistent with the
+ * refund guarantee and free to honour (giving a date at the end of a call costs nothing).
+ * Second and last line of the page that states something OF-1 does not; the other is the closing
+ * line of ObjectionSection. `of1.copy.test.ts` counts them and fails if a third appears unmarked.
+ */
+const OFF_SOURCE_PROMISE =
+  "30 minutes en partage d'écran avec Brice. Vous repartez avec la variante qui colle à votre terrain et une date de livraison, que nous travaillions ensemble ou non."
+
 export default function OffreCallout() {
   return (
     <section className="bg-canvas px-8 py-16">
@@ -13,10 +23,7 @@ export default function OffreCallout() {
             <h2 className="font-display text-[clamp(1.75rem,3.5vw,2.75rem)] font-medium leading-[1.1] tracking-tight text-on-primary [text-wrap:balance]">
               On regarde votre CRM et votre téléphonie ensemble.
             </h2>
-            <p className="mt-4 max-w-[560px] text-on-primary/75">
-              30 minutes en partage d'écran avec Brice. Vous repartez avec la variante qui colle à
-              votre terrain et une date de livraison, que nous travaillions ensemble ou non.
-            </p>
+            <p className="mt-4 max-w-[560px] text-on-primary/75">{OFF_SOURCE_PROMISE}</p>
           </div>
           <button
             type="button"

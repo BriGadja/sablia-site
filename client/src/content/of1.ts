@@ -49,7 +49,6 @@ export interface Of1Offer {
   price: Of1Price
   guarantee: string
   recurring: { covers: readonly string[]; terms: string; exit: string }
-  hosting: readonly { title: string; body: string }[]
   objectionN8n: { q: string; answer: readonly string[] }
   faq: readonly Of1Faq[]
 }
@@ -129,21 +128,6 @@ export const of1: Of1Offer = {
       "Sans engagement, mensuel, résiliable par simple mail avant le 20 du mois pour le mois suivant. L'astreinte et les interventions hors heures ouvrées ne sont pas comprises.",
     exit: "Quand vous l'arrêtez, la chaîne continue de tourner. Vous créez votre propre clé Anthropic, nous la remplaçons dans le flux, et nous vous montrons où tout se trouve. Trente minutes de passation sont incluses.",
   },
-
-  hosting: [
-    {
-      title: 'Vous avez déjà n8n.',
-      body: 'Nous y déposons le flux. Rien à payer de plus.',
-    },
-    {
-      title: "Vous n'en avez pas.",
-      body: "Vous ouvrez un compte n8n Cloud Starter, 20 €/mois, à votre nom, et vous nous donnez une clé API. Si l'API n'est pas ouverte sur votre offre, nous déposons le flux à la main par l'interface : le résultat est le même.",
-    },
-    {
-      title: "Vous voulez l'héberger vous-même.",
-      body: "Installation sur un VPS Hostinger à votre nom : 390 € HT d'installation, une fois. L'hébergement reste à votre nom et à votre charge.",
-    },
-  ],
 
   objectionN8n: {
     q: "C'est gratuit sur n8n, non ?",
