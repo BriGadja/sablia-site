@@ -1,6 +1,6 @@
 # Sablia Site - Status
 
-**Last Updated**: 2026-06-04
+**Last Updated**: 2026-09-07
 
 ---
 
@@ -23,6 +23,7 @@
 | Plan / Brief | Status | Next |
 |---|---|---|
 | `plans/site-completion-checklist.md` | **P0 + P1 + P2 DONE 2026-04-20**. Homepage v2 shipped (9-section stack, Diagnostic Sablia funnel, n8n workflow live). Cohérence globale propagée. UX migration completée post-bascule 2026-04-20 15:02 UTC. | Brice: launch P3 (Google Ads UI) + trancher HITL P4.1-P4.4 |
+| `plans/sablia-page-produit-of1.md` (hub) | **Page produit OF-1 construite le 2026-09-07** sur la branche `autopilot/2026-09-07-page-produit-of1`, route `/offres/compte-rendu-appel`, prix affiches. Gates verts (tsc, lint, 47 tests, build + prerender 7/7), verification navigateur locale a 1280 et 390. **Rien n'est en ligne.** | Brice : valider la copie rendue (`state/autopilot/runs/2026-09-07-page-produit-of1/rendu-page-of1.md`), puis merge vers `main` = mise en ligne automatique. En attente de mise en ligne par Brice. |
 | `research/brainstorm/2026-04-17-sablia-acquisition-machine-v1-brief.md` | Amended 2026-04-18. Pre-design unit delivered (v2: 490€ HT + crédit post-audit). Units 3-6 (pricing page redesign, hub pages, case studies, content cadence) backlog | Post P1 completion |
 
 ---
