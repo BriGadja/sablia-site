@@ -184,6 +184,10 @@ Sablia's LP uses real product output, not stock photography or abstract illustra
 
 **`testimonial-card`** — Used in social proof section (when available). Background `{colors.surface-light}`, rounded `{rounded.lg}`, padding `{spacing.xl}`. Carries a quote in `{typography.body-md}` italic, client name + role + company in `{typography.caption}`, circular avatar photo. Shows on light contrast band.
 
+**`price-card`** — Carries a displayed price on a product page (`/offres/*`). Lives on a light contrast band: background `{colors.surface-light-card}` (#ebe6dd), 1px `{colors.hairline-light}` border, `{rounded.lg}`, padding `{spacing.xl}`. The label sits in `{typography.caption-uppercase}` muted; the price itself is Cormorant Garamond 500 at `clamp(2.5rem, 4vw, 3.5rem)` with negative tracking in `{colors.ink}`; the unit ("€ HT", "€/mois") is Inter `{typography.title-sm}` muted, baseline-aligned with the price. A `{component.badge-teal}` carries a free-period mention. Body bullets `{typography.body-md}`, fine print `{typography.body-sm}` muted. Two cards side by side ≥ 768px, stacked below. Never coral-filled — coral stays on CTAs and the callout, so the price reads as a fact, not as a button.
+
+**`flow-diagram`** — Hand-made inline SVG showing a chain of steps (e.g. appel → transcript → Claude → fiche CRM). Nodes are `{rounded.lg}` rectangles, labels in Inter 13px / 500, arrows at 1.5px with an arrowhead marker. The AI step is filled `{colors.primary}` with `{colors.on-primary}` text; the outcome step is stroked `{colors.accent-teal}`; every other stroke, fill and label is `currentColor`, so the diagram inherits the text colour of its band and reads on dark and on cream without a second asset. Node backgrounds are `currentColor` at 5% rather than a fixed surface token — that is what makes the light band work. **No hex literal ever enters the file** (enforced by `FlowDiagram.test.tsx`). Horizontal viewBox 720×180 on desktop, vertical 280×420 on mobile; always `role="img"` with a `<title>` and `<desc>` in French.
+
 ### Inputs & Forms
 
 **`text-input`** — Standard text input. Background `{colors.canvas}`, text `{colors.on-dark}`, type `{typography.body-md}`, rounded `{rounded.md}` (8px), padding 10px x 14px, height 40px. 1px `{colors.hairline}` border.
@@ -225,7 +229,7 @@ Sablia's LP uses real product output, not stock photography or abstract illustra
 - Don't use Inter for display headlines. The serif character is the premium voice.
 - Don't repeat the same surface mode in two consecutive bands. The pacing alternates: dark → dark-card → light-contrast → dark → coral-callout → dark-footer.
 - Don't list every capability on the LP. Maximum 3 use cases. The visitor should feel "these people are focused and expert", not "these people do everything".
-- Don't show pricing on the LP. The offer is custom — the CTA is always a discovery call.
+- Don't show pricing on the LP homepage. Product pages (`/offres/*`) DO show prices: decision 2026-09-01 (catalogue client-facing, prix affichés). Use `{component.price-card}`. The homepage CTA stays a discovery call.
 
 ## Responsive Behavior
 
@@ -264,3 +268,4 @@ Sablia's LP uses real product output, not stock photography or abstract illustra
 
 - **2026-05-26**: Primary color swapped from teal (#5db8a6) to coral (#cc785c). Teal demoted to secondary accent. Rationale: coral is warmer, more distinctive, better contrast against the dark canvas. Teal remains for success states and data accents.
 - **2026-05-27**: DESIGN.md updated to reflect the coral-primary reality already implemented in code.
+- **2026-09-07**: Added `{component.price-card}` and `{component.flow-diagram}` for the product pages under `/offres/*`. The "no pricing" Don't is now scoped to the LP homepage: product pages display prices (catalogue client-facing decision, 2026-09-01). First consumer: `/offres/compte-rendu-appel`.
