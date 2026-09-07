@@ -54,6 +54,11 @@ function pageSources(): { path: string; text: string }[] {
     }
   }
   if (existsSync(PAGE_FILE)) files.push(PAGE_FILE)
+  // The content module's OWN source too: an em dash in one of its comments is still an em dash
+  // in a file this plan owns, and scanning only the components let one through (2026-09-07).
+  for (const name of readdirSync(HERE)) {
+    if (name.endsWith('.ts') && !name.endsWith('.test.ts')) files.push(join(HERE, name))
+  }
   return files.map((path) => ({ path, text: normalise(readFileSync(path, 'utf8')) }))
 }
 
@@ -109,14 +114,14 @@ const REQUIRED_IN_PAGE = [
   'https://calendly.com/brice-gachadoat/30min',
 ]
 
-/** French words that lost their accents — the module is client-facing copy, not code. */
+/** French words that lost their accents : the module is client-facing copy, not code. */
 const UNACCENTED =
   /\b(donnees|equipe|equipes|telephonie|apres|deja|delai|premiere|etape|etapes|synthese|controle|resiliable|cree|creee|remplacons)\b/i
 
 describe('OF-1 copy guard: characters and figures', () => {
   it('uses no em dash anywhere in the copy or the page sources', () => {
     for (const text of ALL_TEXT) {
-      expect(text).not.toMatch(/[—―]/)
+      expect(text).not.toMatch(/[\u2014\u2015]/)
     }
   })
 

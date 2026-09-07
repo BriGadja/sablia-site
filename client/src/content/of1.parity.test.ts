@@ -27,7 +27,7 @@ if (!existsSync(OF1_PATH)) {
 
 const RAW = readFileSync(OF1_PATH, 'utf8')
 
-/** Minimal `key: value` frontmatter reader — no new dependency for ten flat lines. */
+/** Minimal `key: value` frontmatter reader : no new dependency for ten flat lines. */
 function frontmatter(source: string): Record<string, string> {
   const block = source.match(/^---\r?\n([\s\S]*?)\r?\n---/)
   if (block === null) throw new Error(`OF-1 at ${OF1_PATH} has no YAML frontmatter`)

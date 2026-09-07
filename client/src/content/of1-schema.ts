@@ -1,5 +1,5 @@
 /**
- * JSON-LD built from `of1` — never hand-written, so a price can only ever be the module's price.
+ * JSON-LD built from `of1` : never hand-written, so a price can only ever be the module's price.
  *
  * Hygiene, not a SERP promise: Google dropped FAQ rich results on 2026-05-07, and its price rich
  * results are documented for `Product`, not `Service`. Both blocks are valid schema.org and cost

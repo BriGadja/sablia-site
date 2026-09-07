@@ -1,5 +1,5 @@
 /**
- * OF-1 content module — the single place in code that carries the offer's words.
+ * OF-1 content module : the single place in code that carries the offer's words.
  *
  * Source of truth: `projects/sablia/offre/of-1-compte-rendu-appel.md` on the hub (grilled
  * 2026-09-03). This module RENDERS that file, it never reinvents it: `of1.parity.test.ts` reads
