@@ -137,3 +137,82 @@ describe('OF-1 parity: body', () => {
     expect(bulletCount(section(RAW, 'Ce qui est EXCLU'))).toBe(of1.excluded.length)
   })
 })
+
+/**
+ * The assertions above compare NUMBERS and COUNTS. They leave the offer's displayed PROSE
+ * unguarded: rewriting the eight EXCLU bullets, or moving the VPS install price from 390 to
+ * 490 €, kept the suite green while the page went on serving the old promise (measured
+ * 2026-09-07, /validate). What follows closes that gap — the page shows this text, so the
+ * page must go red when OF-1 changes it.
+ */
+
+/** Bullets of a section, continuation lines folded in, bold markers and spacing normalised. */
+function bullets(body: string): string[] {
+  const items: string[] = []
+  for (const line of body.split(/\r?\n/)) {
+    if (line.startsWith('- ')) items.push(line.slice(2))
+    else if (line.trim().length > 0 && items.length > 0)
+      items[items.length - 1] += ` ${line.trim()}`
+  }
+  return items.map((item) => item.replaceAll('**', '').replace(/\s+/g, ' ').trim())
+}
+
+describe('OF-1 parity: the prose the page displays', () => {
+  it('renders the included items word for word', () => {
+    expect(bullets(section(RAW, 'Ce qui est inclus'))).toEqual([...of1.included])
+  })
+
+  it('renders the excluded items word for word', () => {
+    expect(bullets(section(RAW, 'Ce qui est EXCLU'))).toEqual([...of1.excluded])
+  })
+
+  /**
+   * Prices and delays that exist ONLY in OF-1's prose — no frontmatter key carries them, so
+   * nothing else can catch their drift. Each row captures the value from OF-1 and demands the
+   * module string that shows it on the page still contains that same value.
+   */
+  const PROSE_ANCHORS: readonly { what: string; pattern: RegExp; shown: () => string }[] = [
+    {
+      what: 'the n8n Cloud Starter monthly price',
+      pattern: /n8n Cloud Starter, (\d+ €\/mois)/,
+      shown: () => of1.faq[0].a,
+    },
+    {
+      what: 'the self-hosted VPS install price',
+      pattern: /(\d+ € HT) d'installation/,
+      shown: () => of1.faq[0].a,
+    },
+    {
+      what: 'the outage recovery delay',
+      pattern: /Reprise (sous un jour ouvré)/,
+      shown: () => of1.faq[2].a,
+    },
+    {
+      what: 'the cancellation notice',
+      pattern: /résiliable par simple mail (avant le \d+ du mois)/,
+      shown: () => of1.recurring.terms,
+    },
+    {
+      what: 'the handover duration',
+      pattern: /(Trente minutes) de passation/,
+      shown: () => of1.recurring.exit,
+    },
+    {
+      what: 'the quote confirmation delay',
+      pattern: /le chiffre exact est confirmé \*\*(sous \d+ heures)\*\*/,
+      shown: () => of1.faq[4].a,
+    },
+    {
+      what: 'the VoIP systems named in variant A',
+      pattern: /\((Ringover, Aircall)/,
+      shown: () => of1.variants[0].body,
+    },
+  ]
+
+  for (const anchor of PROSE_ANCHORS) {
+    it(`keeps ${anchor.what} identical to OF-1`, () => {
+      const value = capture(RAW, anchor.pattern, anchor.what)[1]
+      expect(anchor.shown()).toContain(value)
+    })
+  }
+})
