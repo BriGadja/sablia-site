@@ -14,7 +14,7 @@
 | Lint | `npm run lint` (Biome) |
 | Format | `npm run format` (Biome) |
 | Type-check | `npm run check` |
-| Test | `npm test` (Vitest) |
+| Test | `npx vitest run` (Vitest, run once; bare `npm test` = watch mode in a TTY) |
 | Build | `npm run build` (Vite + prerender) |
 
 ## Critical Rules
@@ -48,7 +48,7 @@ docs/                 # All documentation
 ### Key Integrations
 | Integration | Details |
 |-------------|---------|
-| Calendly | `openBooking()` from `BookingModal.tsx` — opens `site.bookingUrl` in popup window. URL centralized in `client/src/lib/site.ts` = `https://calendly.com/raphael-espo-pro/30min` (Raph, depuis refonte CRM 2026-06). `ThankYou.tsx` uses the same `site.bookingUrl`. |
+| Calendly | `openBooking()` from `BookingModal.tsx` — opens `site.bookingUrl` in popup window. URL centralized in `client/src/lib/site.ts` = `https://calendly.com/raphael-espo-pro/30min` (Raph, depuis refonte CRM 2026-06). `ThankYou.tsx` uses the same `site.bookingUrl`. Product page OF-1 uses `OF1_BOOKING_URL` (Brice) via `openBookingUrl`; the Landing keeps `site.bookingUrl`. |
 | Supabase | `qlxoitzdxjqhljjoeqoq` — `site_*` tables (**connected but unused at runtime**) |
 | GA4 / Google Ads | ⚠️ Env vars exist (`VITE_GA4_MEASUREMENT_ID`, `VITE_GADS_*`) but **NO code implementation** — tracking was lost during 2026-04 redesign. Needs re-implementation. Account IDs in `docs/GOOGLE_ADS.md`. |
 
@@ -60,6 +60,7 @@ docs/                 # All documentation
 | `/politique-confidentialite` | Privacy policy |
 | `/cgv` | Terms of service |
 | `/thank-you` | Post-booking confirmation (noindex) |
+| `/offres/compte-rendu-appel` | Offre n°1 product page (OF-1, prices displayed; content module client/src/content/of1.ts, parity test against the hub OF-1 file) |
 
 **Homepage sections** (anchors, not routes — `client/src/pages/Landing.tsx`, refonte CRM 2026-06): Hero → CRMStrip → `#problemes` (ProblemsSection) → UseCases → `#process` (ProcessSection) → `#equipe` (TeamSection, 4 portraits `/team/*.webp`) → `#proof` (ProofSection, Valentin/VB Mobilier réel + 3 placeholders) → CalloutSection → `#faq` (FaqSection, accordéon 5 Q + FAQPage JSON-LD). ⚠️ FAQ Q5 (sécurité données) = formulation tier-safe « API commerciale » — à confirmer avec Brice si offre = Anthropic Enterprise.
 

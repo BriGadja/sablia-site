@@ -6,7 +6,7 @@
     "locale": "fr_FR",
     "twitterHandle": "@sablia_io",
     "defaultImage": "https://sablia.io/og-image.png",
-    "lastUpdated": "2026-06-04"
+    "lastUpdated": "2026-09-07"
   },
 
   "pages": {
@@ -112,6 +112,34 @@
         "card": "summary_large_image",
         "title": "Comment intégrer l'IA dans votre entreprise : le guide PME 2026",
         "description": "Par où commencer, cas d'usage rentables, budget, délais, sécurité RGPD. La méthode Sablia."
+      }
+    },
+
+    "/offres/compte-rendu-appel": {
+      "title": "Le CRM qui se remplit tout seul après chaque appel : 1 490 € HT, livré en 7 jours",
+      "description": "Compte rendu d'appel automatique dans HubSpot, Zoho, Pipedrive, Salesforce ou Airtable. Deux variantes, VoIP ou débrief vocal de 30 secondes. 1 490 € HT, supervision 149 €/mois, premier mois offert. Remboursé si ça ne tourne pas.",
+      "keywords": [
+        "compte rendu d'appel CRM",
+        "CRM automatique après appel",
+        "résumé d'appel HubSpot",
+        "Ringover CRM",
+        "Aircall CRM",
+        "n8n Claude CRM"
+      ],
+      "canonical": "https://sablia.io/offres/compte-rendu-appel",
+      "robots": "index, follow",
+      "openGraph": {
+        "type": "website",
+        "title": "Le CRM qui se remplit tout seul après chaque appel : 1 490 € HT, livré en 7 jours",
+        "description": "Compte rendu d'appel automatique dans HubSpot, Zoho, Pipedrive, Salesforce ou Airtable. Deux variantes, VoIP ou débrief vocal de 30 secondes. 1 490 € HT, supervision 149 €/mois, premier mois offert. Remboursé si ça ne tourne pas.",
+        "url": "https://sablia.io/offres/compte-rendu-appel",
+        "siteName": "Sablia",
+        "image": "https://sablia.io/og-image.png"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "Le CRM qui se remplit tout seul après chaque appel : 1 490 € HT, livré en 7 jours",
+        "description": "Compte rendu d'appel automatique dans HubSpot, Zoho, Pipedrive, Salesforce ou Airtable. Deux variantes, VoIP ou débrief vocal de 30 secondes. 1 490 € HT, supervision 149 €/mois, premier mois offert. Remboursé si ça ne tourne pas."
       }
     },
 

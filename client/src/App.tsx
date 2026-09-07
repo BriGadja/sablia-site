@@ -3,11 +3,13 @@ import { HelmetProvider } from 'react-helmet-async'
 import { Route, Switch } from 'wouter'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { Toaster } from '@/components/ui/toaster'
+import { OF1_ROUTE } from '@/content/of1'
 import CGV from '@/pages/CGV'
 import GuideIaEntreprise from '@/pages/GuideIaEntreprise'
 import Landing from '@/pages/Landing'
 import MentionsLegales from '@/pages/MentionsLegales'
 import NotFound from '@/pages/not-found'
+import OffreCompteRenduAppel from '@/pages/OffreCompteRenduAppel'
 import PolitiqueConfidentialite from '@/pages/PolitiqueConfidentialite'
 import ThankYou from '@/pages/ThankYou'
 
@@ -20,6 +22,7 @@ function Router() {
         <Route path="/politique-confidentialite" component={PolitiqueConfidentialite} />
         <Route path="/cgv" component={CGV} />
         <Route path="/guides/integrer-l-ia-dans-votre-entreprise" component={GuideIaEntreprise} />
+        <Route path={OF1_ROUTE} component={OffreCompteRenduAppel} />
         <Route path="/thank-you" component={ThankYou} />
         <Route component={NotFound} />
       </Switch>

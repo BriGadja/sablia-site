@@ -8,6 +8,7 @@ interface SEOProps {
     | '/politique-confidentialite'
     | '/cgv'
     | '/guides/integrer-l-ia-dans-votre-entreprise'
+    | '/offres/compte-rendu-appel'
     | '/thank-you'
     | 'home'
 }
@@ -30,6 +31,10 @@ const breadcrumbConfig: Record<string, { name: string; position: number }[]> = {
     { name: 'Accueil', position: 1 },
     { name: "Intégrer l'IA dans votre entreprise", position: 2 },
   ],
+  '/offres/compte-rendu-appel': [
+    { name: 'Accueil', position: 1 },
+    { name: 'Le CRM qui se remplit tout seul après chaque appel', position: 2 },
+  ],
 }
 
 function generateBreadcrumbSchema(page: string) {
@@ -50,76 +55,53 @@ function generateBreadcrumbSchema(page: string) {
 
 export default function SEO({ page }: SEOProps) {
   const key = page === 'home' ? '/' : page
-  const pageData = (metaTags.pages as Record<string, Record<string, any>>)[key]
+  const pageData = (metaTags.pages as Record<string, Record<string, unknown>>)[key]
   const meta = metaTags.meta
 
   if (!pageData) return null
 
-  const title = pageData.titleTemplate
-    ? (pageData.titleTemplate as string).replace('%s', pageData.title as string)
-    : (pageData.title as string)
+  // meta-tags.json is untyped JSON: narrow once here rather than casting at every use site.
+  const titleTemplate = pageData.titleTemplate as string | undefined
+  const rawTitle = pageData.title as string
+  const description = pageData.description as string
+  const keywords = pageData.keywords as string[] | undefined
+  const canonical = pageData.canonical as string | undefined
+  const robots = pageData.robots as string | undefined
+  const openGraph = pageData.openGraph as Record<string, string> | undefined
+  const twitter = pageData.twitter as Record<string, string> | undefined
+  const structuredData = pageData.structuredData as Record<string, unknown> | undefined
+  const breadcrumbSchema = generateBreadcrumbSchema(key)
+
+  const title = titleTemplate ? titleTemplate.replace('%s', rawTitle) : rawTitle
 
   return (
     <Helmet>
       <title>{title}</title>
       <meta name="title" content={title} />
-      <meta name="description" content={pageData.description as string} />
-      {pageData.keywords && (
-        <meta name="keywords" content={(pageData.keywords as string[]).join(', ')} />
-      )}
-      {pageData.canonical && <link rel="canonical" href={pageData.canonical as string} />}
-      {pageData.robots ? (
-        <meta name="robots" content={pageData.robots as string} />
-      ) : (
-        <meta name="robots" content={metaTags.globalMetaTags.robots} />
-      )}
+      <meta name="description" content={description} />
+      {keywords && <meta name="keywords" content={keywords.join(', ')} />}
+      {canonical && <link rel="canonical" href={canonical} />}
+      <meta name="robots" content={robots ?? metaTags.globalMetaTags.robots} />
       <meta name="googlebot" content={metaTags.globalMetaTags.googlebot} />
 
-      {pageData.openGraph && (
-        <meta property="og:type" content={(pageData.openGraph as Record<string, string>).type} />
-      )}
-      {pageData.openGraph && (
-        <meta property="og:url" content={(pageData.openGraph as Record<string, string>).url} />
-      )}
-      {pageData.openGraph && (
-        <meta property="og:title" content={(pageData.openGraph as Record<string, string>).title} />
-      )}
-      {pageData.openGraph && (pageData.openGraph as Record<string, string>).description && (
-        <meta
-          property="og:description"
-          content={(pageData.openGraph as Record<string, string>).description}
-        />
-      )}
-      {pageData.openGraph && (
-        <meta
-          property="og:site_name"
-          content={(pageData.openGraph as Record<string, string>).siteName || meta.siteName}
-        />
-      )}
-      {pageData.openGraph && (pageData.openGraph as Record<string, string>).image && (
-        <meta property="og:image" content={(pageData.openGraph as Record<string, string>).image} />
-      )}
-      {pageData.openGraph && <meta property="og:locale" content={meta.locale} />}
+      {openGraph && <meta property="og:type" content={openGraph.type} />}
+      {openGraph && <meta property="og:url" content={openGraph.url} />}
+      {openGraph && <meta property="og:title" content={openGraph.title} />}
+      {openGraph?.description && <meta property="og:description" content={openGraph.description} />}
+      {openGraph && <meta property="og:site_name" content={openGraph.siteName || meta.siteName} />}
+      {openGraph?.image && <meta property="og:image" content={openGraph.image} />}
+      {openGraph && <meta property="og:locale" content={meta.locale} />}
 
-      {pageData.twitter && (
-        <meta name="twitter:card" content={(pageData.twitter as Record<string, string>).card} />
-      )}
-      {pageData.twitter && (
-        <meta name="twitter:title" content={(pageData.twitter as Record<string, string>).title} />
-      )}
-      {pageData.twitter && (
-        <meta
-          name="twitter:description"
-          content={(pageData.twitter as Record<string, string>).description}
-        />
-      )}
-      {pageData.twitter && <meta name="twitter:site" content={meta.twitterHandle} />}
+      {twitter && <meta name="twitter:card" content={twitter.card} />}
+      {twitter && <meta name="twitter:title" content={twitter.title} />}
+      {twitter && <meta name="twitter:description" content={twitter.description} />}
+      {twitter && <meta name="twitter:site" content={meta.twitterHandle} />}
 
-      {pageData.structuredData && (
-        <script type="application/ld+json">{JSON.stringify(pageData.structuredData)}</script>
+      {structuredData && (
+        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
       )}
-      {generateBreadcrumbSchema(key) && (
-        <script type="application/ld+json">{JSON.stringify(generateBreadcrumbSchema(key))}</script>
+      {breadcrumbSchema && (
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
       )}
 
       <meta name="author" content={meta.author} />

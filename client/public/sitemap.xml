@@ -15,6 +15,13 @@
   </url>
 
   <url>
+    <loc>https://sablia.io/offres/compte-rendu-appel</loc>
+    <lastmod>2026-09-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
     <loc>https://sablia.io/mentions-legales</loc>
     <lastmod>2026-05-26</lastmod>
     <changefreq>yearly</changefreq>

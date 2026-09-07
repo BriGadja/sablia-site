@@ -32,6 +32,7 @@ Global overlays rendered alongside Router: `Toaster`, `CookieConsentBanner`
 | `/cgv` | CGV | No | Terms of service |
 | `/lp/automatisation-pme` | LpAutomatisation | Yes | Ad landing page (noindex) |
 | `/lp/audit-gratuit` | LpAuditGratuit | Yes | Ad landing page (noindex) |
+| `/offres/compte-rendu-appel` | OffreCompteRenduAppel | No | Offre n°1 product page (prices displayed) |
 | `*` | NotFound | No | 404 catch-all |
 
 **Total**: 14 routes (13 static + 1 catch-all)

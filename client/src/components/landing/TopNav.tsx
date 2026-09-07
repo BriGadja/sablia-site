@@ -1,6 +1,13 @@
 import { useState } from 'react'
 import { LogIn, Menu, X } from '@/components/icons/lucide-crm'
-import { openBooking } from './BookingModal'
+import { site } from '@/lib/site'
+import { openBookingUrl } from './BookingModal'
+
+interface TopNavProps {
+  items?: readonly { label: string; href: string }[]
+  bookingUrl?: string
+  ctaLabel?: string
+}
 
 const NAV_ITEMS = [
   { label: 'Problématiques', href: '#problemes' },
@@ -10,7 +17,11 @@ const NAV_ITEMS = [
   { label: 'FAQ', href: '#faq' },
 ]
 
-export default function TopNav() {
+export default function TopNav({
+  items = NAV_ITEMS,
+  bookingUrl = site.bookingUrl,
+  ctaLabel = 'Réserver un call audit',
+}: TopNavProps = {}) {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
@@ -21,7 +32,7 @@ export default function TopNav() {
         </a>
 
         <div className="hidden flex-1 items-center gap-7 md:flex">
-          {NAV_ITEMS.map((item) => (
+          {items.map((item) => (
             <a
               key={item.label}
               href={item.href}
@@ -42,10 +53,10 @@ export default function TopNav() {
           </a>
           <button
             type="button"
-            onClick={openBooking}
+            onClick={() => openBookingUrl(bookingUrl)}
             className="t-button inline-flex h-10 items-center rounded-md bg-primary px-5 text-on-primary transition-shadow duration-base hover:shadow-glow-coral"
           >
-            Réserver un call audit
+            {ctaLabel}
           </button>
         </div>
 
@@ -62,7 +73,7 @@ export default function TopNav() {
       {mobileOpen && (
         <div className="absolute inset-x-0 top-16 z-40 border-b border-hairline bg-canvas-soft p-6 md:hidden">
           <div className="flex flex-col gap-4">
-            {NAV_ITEMS.map((item) => (
+            {items.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
@@ -84,11 +95,11 @@ export default function TopNav() {
               type="button"
               onClick={() => {
                 setMobileOpen(false)
-                openBooking()
+                openBookingUrl(bookingUrl)
               }}
               className="t-button h-10 rounded-md bg-primary px-5 text-on-primary"
             >
-              Réserver un call audit
+              {ctaLabel}
             </button>
           </div>
         </div>

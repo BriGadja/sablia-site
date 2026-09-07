@@ -18,6 +18,7 @@ const ROUTES = [
   '/politique-confidentialite',
   '/cgv',
   '/guides/integrer-l-ia-dans-votre-entreprise',
+  '/offres/compte-rendu-appel',
   '/thank-you',
 ]
 

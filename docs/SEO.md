@@ -29,6 +29,7 @@ All meta-tags are defined in `docs/meta-tags.json` and applied via `react-helmet
 | `/cgv` | Conditions Generales de Vente | Yes | Yes | - | noindex, follow |
 | `/lp/automatisation-pme` | Automatisez vos processus repetitifs | Yes | - | - | noindex, follow |
 | `/lp/audit-gratuit` | Audit Automatisation Gratuit | Yes | - | - | noindex, follow |
+| `/offres/compte-rendu-appel` | Le CRM qui se remplit tout seul après chaque appel : 1 490 € HT, livré en 7 jours | Yes | Yes (website) | summary_large_image | - |
 
 ---
 
@@ -54,14 +55,15 @@ All meta-tags are defined in `docs/meta-tags.json` and applied via `react-helmet
 ## Sitemap
 
 **File**: `client/public/sitemap.xml`
-**Routes**: 10 public routes (landing pages and thank-you excluded)
-**Last modified**: 2026-03-02
+**Routes**: 11 public routes (landing pages and thank-you excluded)
+**Last modified**: 2026-09-07
 
 | Route | Priority | Change Freq |
 |-------|----------|-------------|
 | `/` | 1.0 | weekly |
 | `/tarifs` | 0.9 | monthly |
 | `/gap` | 0.9 | monthly |
+| `/offres/compte-rendu-appel` | 0.9 | monthly |
 | `/roi` | 0.8 | monthly |
 | `/about` | 0.7 | monthly |
 | `/faq` | 0.7 | monthly |

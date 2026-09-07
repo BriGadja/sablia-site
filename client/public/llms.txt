@@ -34,6 +34,17 @@ VB Mobilier : intégration d'un agent vocal dans le CRM pour traiter et qualifie
 
 - Guide — Comment intégrer l'IA dans votre entreprise (PME) : https://sablia.io/guides/integrer-l-ia-dans-votre-entreprise
 
+## Offre n°1 : le CRM qui se remplit tout seul après chaque appel
+
+Compte rendu d'appel automatique enregistré directement dans votre CRM (HubSpot, Zoho, Pipedrive, Salesforce ou Airtable), sans ressaisie manuelle après chaque appel commercial.
+
+- URL : https://sablia.io/offres/compte-rendu-appel
+- Installation : 1 490 € HT
+- Supervision : 149 €/mois, premier mois offert
+- Délai de livraison : 7 jours
+- Deux variantes : téléphonie VoIP (Ringover, Aircall) ou débrief vocal de 30 secondes après chaque appel
+- Garantie : remboursé si le compte rendu ne tourne pas sur les 5 appels de test
+
 ## Contact
 
 - Site : https://sablia.io
