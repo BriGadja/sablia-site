@@ -47,7 +47,12 @@
       "!**/*.config.js",
       "!**/*.config.ts",
       "!**/*.config.mjs",
-      "!**/*.css"
+      "!**/*.css",
+      "!**/research",
+      "!**/attached_assets",
+      "!**/plans",
+      "!**/memory",
+      "!**/examples"
     ]
   }
 }
