@@ -6,9 +6,11 @@ export default function OffreCallout() {
   return (
     <section className="bg-canvas px-8 py-16">
       <div className="mx-auto max-w-editorial">
-        <div className="grid items-center gap-14 rounded-xl bg-primary p-14 lg:grid-cols-[1fr_auto]">
+        <div className="grid items-center gap-10 rounded-xl bg-primary p-8 sm:p-12 lg:gap-14 lg:p-14 lg:grid-cols-[1fr_auto]">
           <div className="min-w-0">
-            <h2 className="font-display text-[clamp(2rem,3.5vw,2.75rem)] font-medium leading-[1.1] tracking-tight text-on-primary [text-wrap:balance]">
+            {/* clamp floor at 1.75rem: at 375px the card's inner width is ~247px, and a 2rem
+                display line overflowed it by 24px (measured 2026-09-07). */}
+            <h2 className="font-display text-[clamp(1.75rem,3.5vw,2.75rem)] font-medium leading-[1.1] tracking-tight text-on-primary [text-wrap:balance]">
               On regarde votre CRM et votre téléphonie ensemble.
             </h2>
             <p className="mt-4 max-w-[560px] text-on-primary/75">

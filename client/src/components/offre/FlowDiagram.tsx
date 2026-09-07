@@ -26,8 +26,10 @@ const NODES: readonly FlowNode[] = [
   { id: 'resultat', lines: ['Fiche CRM à jour', '+ tâche de relance'], tone: 'outcome' },
 ]
 
+/** `offset` is the start of the flow ALONG its axis (x when horizontal, y when vertical);
+    the cross axis is centred. Node extents must stay inside the viewBox (FlowDiagram.test). */
 const LAYOUT = {
-  horizontal: { width: 720, height: 180, nodeW: 150, nodeH: 88, gap: 40, offset: 46 },
+  horizontal: { width: 724, height: 180, nodeW: 150, nodeH: 88, gap: 40, offset: 2 },
   vertical: { width: 280, height: 420, nodeW: 240, nodeH: 68, gap: 40, offset: 20 },
 } as const
 

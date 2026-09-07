@@ -16,7 +16,7 @@ describe('FlowDiagram', () => {
   it('exposes an image role with an accessible name, in both orientations', () => {
     const { unmount } = render(<FlowDiagram orientation="horizontal" />)
     const horizontal = screen.getByRole('img')
-    expect(horizontal.getAttribute('viewBox')).toBe('0 0 720 180')
+    expect(horizontal.getAttribute('viewBox')).toBe('0 0 724 180')
     expect(horizontal.textContent).toContain("Le trajet d'un appel")
     expect(horizontal.getAttribute('aria-labelledby')).toBeTruthy()
     unmount()
@@ -39,6 +39,27 @@ describe('FlowDiagram', () => {
     const { container } = render(<FlowDiagram orientation="vertical" />)
     expect(container.querySelectorAll('path')).toHaveLength(3)
     expect(container.querySelectorAll('rect')).toHaveLength(4)
+  })
+
+  it.each([
+    'horizontal',
+    'vertical',
+  ] as const)('keeps every node inside the %s viewBox, so nothing is clipped', (orientation) => {
+    const { container } = render(<FlowDiagram orientation={orientation} />)
+    const svg = container.querySelector('svg')
+    const [, , viewWidth, viewHeight] = (svg?.getAttribute('viewBox') ?? '').split(' ').map(Number)
+    const rects = Array.from(container.querySelectorAll('rect'))
+    expect(rects).toHaveLength(4)
+    for (const rect of rects) {
+      const x = Number(rect.getAttribute('x'))
+      const y = Number(rect.getAttribute('y'))
+      const width = Number(rect.getAttribute('width'))
+      const height = Number(rect.getAttribute('height'))
+      expect(x).toBeGreaterThanOrEqual(0)
+      expect(y).toBeGreaterThanOrEqual(0)
+      expect(x + width).toBeLessThanOrEqual(viewWidth)
+      expect(y + height).toBeLessThanOrEqual(viewHeight)
+    }
   })
 
   it('hard-codes no colour: the source carries no hex literal', () => {
