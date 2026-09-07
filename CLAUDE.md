@@ -62,6 +62,8 @@ docs/                 # All documentation
 | `/thank-you` | Post-booking confirmation (noindex) |
 | `/offres/compte-rendu-appel` | Offre n°1 product page (OF-1, prices displayed; content module client/src/content/of1.ts, parity test against the hub OF-1 file) |
 
+**Shared TopNav**: `NAV_ITEMS` opens with **Offres** -> `/offres/compte-rendu-appel` (a real route, rendered with wouter `Link`; the other entries are in-page anchors and stay `<a>`). It is the default nav, so the entry also shows on ThankYou and the legal pages via `LegalShell`. A page can override `items` (the OF-1 page does). `TopNav.test.tsx` pins both: the default keeps every Landing anchor plus Offres, and an overriding page gets none of them.
+
 **Homepage sections** (anchors, not routes — `client/src/pages/Landing.tsx`, refonte CRM 2026-06): Hero → CRMStrip → `#problemes` (ProblemsSection) → UseCases → `#process` (ProcessSection) → `#equipe` (TeamSection, 4 portraits `/team/*.webp`) → `#proof` (ProofSection, Valentin/VB Mobilier réel + 3 placeholders) → CalloutSection → `#faq` (FaqSection, accordéon 5 Q + FAQPage JSON-LD). ⚠️ FAQ Q5 (sécurité données) = formulation tier-safe « API commerciale » — à confirmer avec Brice si offre = Anthropic Enterprise.
 
 ## Documentation

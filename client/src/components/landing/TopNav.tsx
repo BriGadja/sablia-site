@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import { Link } from 'wouter'
 import { LogIn, Menu, X } from '@/components/icons/lucide-crm'
+import { OF1_ROUTE } from '@/content/of1'
 import { site } from '@/lib/site'
 import { openBookingUrl } from './BookingModal'
 
@@ -10,12 +12,38 @@ interface TopNavProps {
 }
 
 const NAV_ITEMS = [
+  { label: 'Offres', href: OF1_ROUTE },
   { label: 'Problématiques', href: '#problemes' },
   { label: 'Accompagnement', href: '#process' },
   { label: 'Équipe', href: '#equipe' },
   { label: 'Témoignages', href: '#proof' },
   { label: 'FAQ', href: '#faq' },
 ]
+
+function NavItem({
+  href,
+  className,
+  onNavigate,
+  children,
+}: {
+  href: string
+  className: string
+  onNavigate?: () => void
+  children: React.ReactNode
+}) {
+  if (href.startsWith('/')) {
+    return (
+      <Link href={href} className={className} onClick={onNavigate}>
+        {children}
+      </Link>
+    )
+  }
+  return (
+    <a href={href} className={className} onClick={onNavigate}>
+      {children}
+    </a>
+  )
+}
 
 export default function TopNav({
   items = NAV_ITEMS,
@@ -33,13 +61,13 @@ export default function TopNav({
 
         <div className="hidden flex-1 items-center gap-7 md:flex">
           {items.map((item) => (
-            <a
+            <NavItem
               key={item.label}
               href={item.href}
               className="t-nav-link transition-colors duration-fast hover:text-on-dark"
             >
               {item.label}
-            </a>
+            </NavItem>
           ))}
         </div>
 
@@ -74,14 +102,14 @@ export default function TopNav({
         <div className="absolute inset-x-0 top-16 z-40 border-b border-hairline bg-canvas-soft p-6 md:hidden">
           <div className="flex flex-col gap-4">
             {items.map((item) => (
-              <a
+              <NavItem
                 key={item.label}
                 href={item.href}
-                onClick={() => setMobileOpen(false)}
+                onNavigate={() => setMobileOpen(false)}
                 className="t-title-sm text-on-dark-body transition-colors hover:text-on-dark"
               >
                 {item.label}
-              </a>
+              </NavItem>
             ))}
             <a
               href="https://app.sablia.io"
