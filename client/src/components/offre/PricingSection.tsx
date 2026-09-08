@@ -56,7 +56,6 @@ function PriceCard({ label, amount, unit, badge, intro, bullets, fine }: PriceCa
 
 export default function PricingSection() {
   const { price, delay, recurring, guarantee } = of1
-  const deposit = Math.round((price.oneShotHt * price.depositPct) / 100)
 
   return (
     <section id="prix" className="on-light px-8 py-section">
@@ -72,7 +71,7 @@ export default function PricingSection() {
             amount={euros(price.oneShotHt)}
             unit="€ HT"
             bullets={[
-              `Acompte de ${price.depositPct} % à la commande (${euros(deposit)} € HT), solde à la recette.`,
+              price.terms,
               `Livré sous ${delay.days} jours calendaires à compter de la réception de vos accès.`,
             ]}
             fine={['TVA non applicable, art. 293 B du CGI.']}

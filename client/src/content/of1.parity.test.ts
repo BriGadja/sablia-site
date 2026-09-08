@@ -49,6 +49,24 @@ function section(source: string, heading: string): string {
   return found[1]
 }
 
+/** The § Prix paragraph that states the payment schedule, folded to one line. */
+function paymentParagraph(): string {
+  const found = section(RAW, 'Prix')
+    .split(/\r?\n\s*\r?\n/)
+    .map((block) =>
+      block
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .join(' ')
+        .replaceAll('**', '')
+        .trim(),
+    )
+    .find((block) => block.includes('% à la commande'))
+  if (found === undefined)
+    throw new Error(`OF-1 § Prix no longer states a "% à la commande" schedule at ${OF1_PATH}`)
+  return found
+}
+
 function bulletCount(body: string): number {
   return body.split(/\r?\n/).filter((line) => line.startsWith('- ')).length
 }
@@ -89,9 +107,27 @@ describe('OF-1 parity: frontmatter', () => {
 })
 
 describe('OF-1 parity: body', () => {
-  it('states the same deposit percentage', () => {
-    const found = capture(RAW, /Acompte de (\d+) %/, 'Acompte de N %')
-    expect(Number(found[1])).toBe(of1.price.depositPct)
+  it('states the same payment scheme and the same share due on order', () => {
+    expect(FM.schema_paiement).toBe(of1.price.scheme)
+    expect(Number(FM.paiement_a_la_commande_pct)).toBe(of1.price.upfrontPct)
+    const found = capture(RAW, /\*\*(\d+) % à la commande\.\*\*/, 'N % à la commande')
+    expect(Number(found[1])).toBe(of1.price.upfrontPct)
+  })
+
+  it('carries the payment terms sentence word for word', () => {
+    expect(paymentParagraph()).toBe(of1.price.terms)
+  })
+
+  /**
+   * A catalogue product is paid in ONE go (decision of 2026-09-08): the § Prix must offer no
+   * instalment at all. This assertion is not a zero-count on an empty population — `section()`
+   * throws when § Prix disappears, and the assertion above proves the paragraph it reads is the
+   * live payment sentence. Re-introducing "acompte", "solde" or a 15-day term turns it RED.
+   */
+  it('offers no instalment and no payment term on the catalogue path', () => {
+    const prix = section(RAW, 'Prix')
+    expect(prix).toMatch(/% à la commande/)
+    expect(prix).not.toMatch(/acompte|solde|15 jours/i)
   })
 
   it('states the same included bricks and extra-brick price', () => {

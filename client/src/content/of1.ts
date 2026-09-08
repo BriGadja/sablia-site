@@ -12,7 +12,11 @@ export const OF1_BOOKING_URL = 'https://calendly.com/brice-gachadoat/30min' as c
 
 export interface Of1Price {
   oneShotHt: number
-  depositPct: number
+  /** Catalogue scheme (decided 2026-09-08): the whole price is due on order, before kickoff. */
+  scheme: 'catalogue' | 'specifique'
+  upfrontPct: number
+  /** OF-1's payment paragraph, word for word. The parity guard compares it to the offer file. */
+  terms: string
   monthlyHt: number
   firstMonthFree: boolean
   claudeCallsPerMonth: number
@@ -104,7 +108,10 @@ export const of1: Of1Offer = {
   delay: { days: 7, sabliaWorkDaysMax: 2 },
   price: {
     oneShotHt: 1490,
-    depositPct: 50,
+    scheme: 'catalogue',
+    upfrontPct: 100,
+    terms:
+      '100 % à la commande. Une seule facture de 1 490 € HT, payable à réception, avant le lancement. La garantie ci-dessous porte donc sur la totalité de la somme.',
     monthlyHt: 149,
     firstMonthFree: true,
     claudeCallsPerMonth: 1000,
@@ -114,7 +121,7 @@ export const of1: Of1Offer = {
     brickFloorHt: 990,
   },
   guarantee:
-    "Si à la recette le compte rendu ne tourne pas sur vos 5 appels de test, vous ne payez rien : le solde n'est pas dû et l'acompte vous est intégralement remboursé.",
+    'Si à la recette le compte rendu ne tourne pas sur vos 5 appels de test, vous ne payez rien : les 1 490 € HT versés à la commande vous sont intégralement remboursés.',
 
   recurring: {
     covers: [
