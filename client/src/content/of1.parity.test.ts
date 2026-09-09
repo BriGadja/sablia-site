@@ -187,8 +187,11 @@ function bullets(body: string): string[] {
   const items: string[] = []
   for (const line of body.split(/\r?\n/)) {
     if (line.startsWith('- ')) items.push(line.slice(2))
-    else if (line.trim().length > 0 && items.length > 0)
-      items[items.length - 1] += ` ${line.trim()}`
+    // A blank line closes the list: the prose that follows a section's bullets is not a
+    // continuation of the last one. Needed to read § Récurrent, which ends in paragraphs.
+    else if (line.trim().length === 0) {
+      if (items.length > 0) break
+    } else if (items.length > 0) items[items.length - 1] += ` ${line.trim()}`
   }
   return items.map((item) => item.replaceAll('**', '').replace(/\s+/g, ' ').trim())
 }
@@ -243,6 +246,31 @@ describe('OF-1 parity: the prose the page displays', () => {
       pattern: /\((Ringover, Aircall)/,
       shown: () => of1.variants[0].body,
     },
+    {
+      what: 'the voice-debrief duration of variant B',
+      pattern: /débrief vocal de (\d+ secondes)/,
+      shown: () => `${of1.variants[1].title} ${of1.variants[1].body}`,
+    },
+    {
+      what: 'the Claude call allowance as the FAQ states it',
+      pattern: /Le récurrent inclut \*\*jusqu'à ([\d ]+) appels Claude par mois\*\*/,
+      shown: () => of1.faq[1].a,
+    },
+    {
+      what: 'the simple-brick floor price',
+      pattern: /au plancher de\s+\*\*(\d+ € HT)\*\*/,
+      shown: () => of1.faq[4].a,
+    },
+    {
+      what: 'the work-day ceiling that defines a brick',
+      pattern: /livrable en \*\*(deux jours) de travail Sablia au plus\*\*/,
+      shown: () => of1.faq[4].a,
+    },
+    {
+      what: 'the durability claim answering the free-template objection',
+      pattern: /tourne encore dans (\d+ mois)/,
+      shown: () => of1.objectionN8n.answer.join(' '),
+    },
   ]
 
   for (const anchor of PROSE_ANCHORS) {
@@ -251,4 +279,61 @@ describe('OF-1 parity: the prose the page displays', () => {
       expect(anchor.shown()).toContain(value)
     })
   }
+})
+
+/** Paragraphs of a section, continuation lines folded, bold markers and spacing normalised. */
+function paragraphs(body: string): string[] {
+  return body
+    .split(/\r?\n\s*\r?\n/)
+    .map((block) =>
+      block
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .join(' ')
+        .replaceAll('**', '')
+        .replace(/\s+/g, ' ')
+        .trim(),
+    )
+    .filter((block) => block.length > 0)
+}
+
+/**
+ * The prose above is guarded bullet by bullet and number by number. The paragraphs below were
+ * not: a falsification bench run on 2026-09-09 rewrote the promise, the audience sentence, the
+ * consent paragraph and the recurring bullets on a COPY of OF-1, and the suite stayed green on
+ * all four while the page went on displaying the old words. Same failure shape as 2026-09-07,
+ * one layer further out. Each assertion here is word-for-word; where the page legitimately
+ * adapts a word, the licence is declared in the assertion itself, so nothing else can drift
+ * under it.
+ */
+describe('OF-1 parity: the paragraphs the page displays', () => {
+  it('renders the promise word for word', () => {
+    // The hero subtitle spells OF-1's « recap + tâche » out as « recap et tâche ». That is the
+    // only licence: any other rewriting of the promise turns this RED.
+    expect(paragraphs(section(RAW, 'Promesse'))[0].replace(' + ', ' et ')).toBe(of1.promise)
+  })
+
+  it('renders the audience sentence word for word', () => {
+    // The audience strip renders the sentence as a heading, so it opens with « Pour ».
+    expect(of1.audience.replace(/^Pour l/, 'L')).toBe(paragraphs(section(RAW, 'Pour qui'))[0])
+  })
+
+  it('renders the no-recording paragraph word for word', () => {
+    const heading = 'Deux variantes, vous choisissez celle qui colle à votre terrain'
+    const found = paragraphs(section(RAW, heading)).find((block) =>
+      block.startsWith('Dans les deux cas'),
+    )
+    if (found === undefined)
+      throw new Error(`OF-1 no longer carries the « Dans les deux cas » consent paragraph`)
+    expect(found).toBe(of1.noRecording)
+  })
+
+  it('renders the recurring coverage bullets word for word', () => {
+    // OF-1 sends the reader to another section on one bullet (« (voir « Claude » plus bas) »);
+    // the page has no such section, so that cross-reference — and only that shape — is dropped.
+    const covers = bullets(section(RAW, 'Récurrent optionnel : supervision et maintenance')).map(
+      (item) => item.replace(/\s*\(voir[^)]*\)/, ''),
+    )
+    expect(covers).toEqual([...of1.recurring.covers])
+  })
 })
