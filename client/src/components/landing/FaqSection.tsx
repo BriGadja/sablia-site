@@ -112,6 +112,9 @@ export default function FaqSection() {
                         {' '}
                         <Link
                           href={item.href}
+                          // A collapsed panel is aria-hidden and clipped, yet a link inside it stays
+                          // keyboard-reachable: keep it out of the tab order until the panel opens.
+                          tabIndex={isOpen ? 0 : -1}
                           className="text-primary underline-offset-4 hover:underline"
                         >
                           {item.hrefLabel ?? "Voir l'offre"}
