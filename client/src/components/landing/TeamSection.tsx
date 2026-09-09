@@ -1,54 +1,49 @@
-const TEAM = [
-  {
-    slug: 'brice',
-    name: 'Brice',
-    role: 'Tech / Delivery',
-    bio: 'Ingénieur. Il plonge dans votre CRM, conçoit les automatisations, déploie et forme vos équipes. Joignable directement durant la mission.',
-  },
-  {
-    slug: 'raphael',
-    name: 'Raphaël',
-    role: 'Sales Strategy',
-    bio: "Il qualifie, cadre et oriente. Apporte une vision business et CRM tout au long de l'accompagnement.",
-  },
-  {
-    slug: 'pablo',
-    name: 'Pablo',
-    role: 'Account / Pipeline',
-    bio: "Il assure le suivi, l'orchestration commerciale et l'accompagnement de proximité. Vision CRM côté pipeline.",
-  },
-  {
-    slug: 'remi',
-    name: 'Rémi',
-    role: 'Growth / Acquisition',
-    bio: 'Cinq ans de Meta Ads et de génération de leads B2B. Si vous souhaitez également que nous générions vos propres opportunités.',
-  },
+import { site } from '@/lib/site'
+
+/**
+ * One person on the page, decided by Brice on 2026-09-09: he runs the call, the install, the test
+ * and the follow-up alone. The four-portrait grid described a team that was not in the cycle.
+ */
+const FACTS = [
+  'Le call de 30 minutes, avec lui',
+  'L’installation sur votre CRM, par lui',
+  'Les 5 appels de test, avec vous',
+  'Joignable directement pendant la mission',
 ]
 
 export default function TeamSection() {
   return (
     <section id="equipe" className="bg-canvas px-8 py-section">
-      <div className="mx-auto max-w-editorial">
-        <div className="mx-auto mb-14 max-w-[640px] text-center">
-          <div className="eyebrow mb-4 text-primary">Équipe</div>
-          <h2 className="t-display-lg">Une équipe à taille humaine pour vous accompagner.</h2>
-        </div>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {TEAM.map((m) => (
-            <div key={m.slug} className="flex flex-col">
-              <img
-                src={`/team/${m.slug}.webp`}
-                alt={`${m.name}, ${m.role}`}
-                width={800}
-                height={800}
-                loading="lazy"
-                className="mb-4 w-full rounded-xl border border-hairline"
-              />
-              <h3 className="t-title-md text-on-dark-strong">{m.name}</h3>
-              <div className="eyebrow mb-2 text-primary">{m.role}</div>
-              <p className="text-[14px] leading-relaxed text-on-dark-body">{m.bio}</p>
-            </div>
-          ))}
+      <div className="mx-auto grid max-w-editorial items-center gap-12 lg:grid-cols-[minmax(0,320px)_1fr] lg:gap-16">
+        <img
+          src="/team/brice.webp"
+          alt={`${site.founder}, fondateur de Sablia`}
+          width={800}
+          height={800}
+          loading="lazy"
+          className="w-full max-w-[320px] rounded-xl border border-hairline"
+        />
+        <div>
+          <div className="eyebrow mb-4 text-primary">Votre interlocuteur</div>
+          <h2 className="t-display-lg [text-wrap:balance]">
+            Une seule personne, de l'appel à la mise en service.
+          </h2>
+          <p className="mt-5 max-w-[560px] text-[15px] leading-relaxed text-on-dark-body">
+            {site.founder}, ingénieur, a fondé Sablia pour brancher Claude sur les outils que les
+            équipes commerciales utilisent déjà. Il n'y a pas de commercial entre vous et la
+            personne qui fait le travail : celui qui vous écoute au call est celui qui installe,
+            teste et répond ensuite.
+          </p>
+          <ul className="mt-6 grid gap-2.5 sm:grid-cols-2">
+            {FACTS.map((fact) => (
+              <li
+                key={fact}
+                className="rounded-md border border-hairline bg-surface-card px-4 py-3 text-[14px] text-on-dark"
+              >
+                {fact}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

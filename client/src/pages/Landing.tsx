@@ -1,4 +1,5 @@
 import CalloutSection from '@/components/landing/CalloutSection'
+import CatalogueSection from '@/components/landing/CatalogueSection'
 import CRMStrip from '@/components/landing/CRMStrip'
 import FaqSection from '@/components/landing/FaqSection'
 import FooterSection from '@/components/landing/FooterSection'
@@ -8,7 +9,6 @@ import ProcessSection from '@/components/landing/ProcessSection'
 import ProofSection from '@/components/landing/ProofSection'
 import TeamSection from '@/components/landing/TeamSection'
 import TopNav from '@/components/landing/TopNav'
-import UseCases from '@/components/landing/UseCases'
 import SEO from '@/components/SEO'
 
 export default function Landing() {
@@ -19,8 +19,8 @@ export default function Landing() {
       <main>
         <HeroSection />
         <CRMStrip />
+        <CatalogueSection />
         <ProblemsSection />
-        <UseCases />
         <ProcessSection />
         <TeamSection />
         <ProofSection />

@@ -17,6 +17,7 @@ import { OF1_BOOKING_URL, OF1_ROUTE } from '@/content/of1'
 import { faqSchema, serviceSchema } from '@/content/of1-schema'
 
 const NAV_ITEMS = [
+  { label: 'Accueil', href: '/' },
   { label: 'Deux variantes', href: '#variantes' },
   { label: 'Ce qui est inclus', href: '#inclus' },
   { label: 'Prix', href: '#prix' },

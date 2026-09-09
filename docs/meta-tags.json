@@ -8,12 +8,11 @@
     "defaultImage": "https://sablia.io/og-image.png",
     "lastUpdated": "2026-09-07"
   },
-
   "pages": {
     "/": {
-      "title": "Sablia — Exploitez 100 % du potentiel de votre CRM",
+      "title": "Sablia — Le CRM qui se remplit tout seul après chaque appel",
       "titleTemplate": "%s | Agence d'intégration Claude AI × CRM",
-      "description": "Nous intégrons Claude AI au cœur de vos processus commerciaux : dashboards intelligents, nurturing automatisé, analyse de calls. Call audit gratuit de 30 min.",
+      "description": "Le commercial raccroche, le compte rendu et la tâche de relance sont déjà dans votre CRM, écrits par Claude. Installé sur HubSpot, Pipedrive, Zoho ou Salesforce en 7 jours. Call audit gratuit de 30 min.",
       "keywords": [
         "intégration Claude AI CRM",
         "automatisation CRM",
@@ -29,25 +28,27 @@
       "canonical": "https://sablia.io/",
       "openGraph": {
         "type": "website",
-        "title": "Sablia — Exploitez 100 % du potentiel de votre CRM",
-        "description": "Exploitez 100 % du potentiel de votre CRM. Nous intégrons Claude AI à Salesforce, HubSpot, Pipedrive, Sellsy — sans changer vos outils.",
+        "title": "Sablia — Le CRM qui se remplit tout seul après chaque appel",
+        "description": "Compte rendu d'appel et tâche de relance écrits automatiquement dans votre CRM par Claude, livrés en 7 jours. Équipes commerciales de 2 à 20 personnes.",
         "url": "https://sablia.io/",
         "image": "https://sablia.io/og-image.png",
         "siteName": "Sablia"
       },
       "twitter": {
         "card": "summary_large_image",
-        "title": "Sablia — Claude AI × votre CRM",
-        "description": "Dashboards intelligents, nurturing automatisé, analyse de calls. Call audit gratuit, 30 min.",
+        "title": "Sablia — Le CRM qui se remplit tout seul après chaque appel",
+        "description": "Compte rendu d'appel et tâche de relance écrits automatiquement dans votre CRM par Claude, livrés en 7 jours. Équipes commerciales de 2 à 20 personnes.",
         "creator": "@sablia_io"
       },
       "_structuredDataNote": "Homepage JSON-LD is ProfessionalService in index.html"
     },
-
     "/mentions-legales": {
       "title": "Mentions Légales - Sablia",
       "description": "Mentions légales du site Sablia.io. Informations légales, hébergement, propriété intellectuelle.",
-      "keywords": ["mentions légales", "informations légales Sablia"],
+      "keywords": [
+        "mentions légales",
+        "informations légales Sablia"
+      ],
       "canonical": "https://sablia.io/mentions-legales",
       "robots": "noindex, follow",
       "openGraph": {
@@ -57,11 +58,14 @@
         "siteName": "Sablia"
       }
     },
-
     "/politique-confidentialite": {
       "title": "Politique de Confidentialité - Sablia",
       "description": "Politique de confidentialité et gestion des données personnelles de Sablia.io. Conformité RGPD.",
-      "keywords": ["politique confidentialité", "RGPD", "données personnelles Sablia"],
+      "keywords": [
+        "politique confidentialité",
+        "RGPD",
+        "données personnelles Sablia"
+      ],
       "canonical": "https://sablia.io/politique-confidentialite",
       "robots": "noindex, follow",
       "openGraph": {
@@ -71,11 +75,14 @@
         "siteName": "Sablia"
       }
     },
-
     "/cgv": {
       "title": "Conditions Générales de Vente - Sablia",
       "description": "Conditions générales de vente des services Sablia. Modalités de paiement, livraison, garanties.",
-      "keywords": ["CGV", "conditions générales vente Sablia", "modalités paiement"],
+      "keywords": [
+        "CGV",
+        "conditions générales vente Sablia",
+        "modalités paiement"
+      ],
       "canonical": "https://sablia.io/cgv",
       "robots": "noindex, follow",
       "openGraph": {
@@ -85,7 +92,6 @@
         "siteName": "Sablia"
       }
     },
-
     "/guides/integrer-l-ia-dans-votre-entreprise": {
       "title": "Comment intégrer l'IA dans votre entreprise : le guide PME 2026",
       "description": "Méthode concrète pour intégrer l'IA dans une PME : par où commencer, les cas d'usage les plus rentables, budget, délais, sécurité RGPD et erreurs à éviter. Par Sablia, agence d'intégration Claude AI.",
@@ -114,7 +120,6 @@
         "description": "Par où commencer, cas d'usage rentables, budget, délais, sécurité RGPD. La méthode Sablia."
       }
     },
-
     "/offres/compte-rendu-appel": {
       "title": "Le CRM qui se remplit tout seul après chaque appel : 1 490 € HT, livré en 7 jours",
       "description": "Compte rendu d'appel automatique dans HubSpot, Zoho, Pipedrive, Salesforce ou Airtable. Deux variantes, VoIP ou débrief vocal de 30 secondes. 1 490 € HT, supervision 149 €/mois, premier mois offert. Remboursé si ça ne tourne pas.",
@@ -142,14 +147,12 @@
         "description": "Compte rendu d'appel automatique dans HubSpot, Zoho, Pipedrive, Salesforce ou Airtable. Deux variantes, VoIP ou débrief vocal de 30 secondes. 1 490 € HT, supervision 149 €/mois, premier mois offert. Remboursé si ça ne tourne pas."
       }
     },
-
     "/thank-you": {
       "title": "Merci - Sablia",
       "description": "Votre demande a bien été prise en compte. Nous vous recontactons sous 48h.",
       "robots": "noindex, nofollow"
     }
   },
-
   "globalMetaTags": {
     "viewport": "width=device-width, initial-scale=1.0",
     "charset": "utf-8",

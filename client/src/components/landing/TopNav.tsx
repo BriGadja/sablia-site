@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'wouter'
-import { LogIn, Menu, X } from '@/components/icons/lucide-crm'
+import { Menu, X } from '@/components/icons/lucide-crm'
 import { OF1_ROUTE } from '@/content/of1'
 import { site } from '@/lib/site'
 import { openBookingUrl } from './BookingModal'
@@ -15,7 +15,7 @@ const NAV_ITEMS = [
   { label: 'Offres', href: OF1_ROUTE },
   { label: 'Problématiques', href: '#problemes' },
   { label: 'Accompagnement', href: '#process' },
-  { label: 'Équipe', href: '#equipe' },
+  { label: 'Votre interlocuteur', href: '#equipe' },
   { label: 'Témoignages', href: '#proof' },
   { label: 'FAQ', href: '#faq' },
 ]
@@ -72,13 +72,6 @@ export default function TopNav({
         </div>
 
         <div className="ml-auto hidden items-center gap-3 md:flex">
-          <a
-            href="https://app.sablia.io"
-            className="t-button inline-flex h-10 items-center gap-2 rounded-md border border-hairline px-4 text-on-dark-body transition-colors duration-base hover:border-primary/60 hover:text-on-dark"
-          >
-            <LogIn size={16} />
-            Portail
-          </a>
           <button
             type="button"
             onClick={() => openBookingUrl(bookingUrl)}
@@ -111,14 +104,6 @@ export default function TopNav({
                 {item.label}
               </NavItem>
             ))}
-            <a
-              href="https://app.sablia.io"
-              onClick={() => setMobileOpen(false)}
-              className="t-button mt-2 inline-flex h-10 items-center justify-center gap-2 rounded-md border border-hairline px-5 text-on-dark-body"
-            >
-              <LogIn size={16} />
-              Portail
-            </a>
             <button
               type="button"
               onClick={() => {

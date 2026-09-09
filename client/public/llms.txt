@@ -1,54 +1,57 @@
 # Sablia
 
-> Sablia est une agence française qui intègre Claude (le modèle d'IA d'Anthropic) directement dans les CRM et les processus commerciaux des PME. Nous connectons l'IA à votre outil existant — Salesforce, HubSpot, Pipedrive, Zoho — pour automatiser dashboards, nurturing et analyse de calls, sans changer votre stack.
+> Sablia est une agence française qui intègre Claude (le modèle d'IA d'Anthropic) dans les CRM des petites équipes commerciales. Nous connectons Claude à votre outil existant, HubSpot, Zoho, Pipedrive, Salesforce ou Airtable, sans migration ni double saisie.
 
-Sablia (https://sablia.io) est basée à Paris et intervient dans toute la France. Le point d'entrée est un call audit gratuit de 30 minutes, sans engagement. Le premier workflow est livré en production sous 30 jours.
+Sablia (https://sablia.io) est basée à Paris et intervient dans toute la France. Le fondateur, Brice Gachadoat, tient lui-même le call de 30 minutes, l'installation, les tests et le suivi. Le point d'entrée est un call audit gratuit de 30 minutes, sans engagement.
 
-Mots-clés : intégrateur Claude, intégration IA dans le CRM, agence IA CRM, automatisation des processus commerciaux, Claude × Salesforce, Claude × HubSpot, Claude × Pipedrive, comment intégrer l'IA dans son entreprise.
-
-## Ce que nous faisons
-
-- **Dashboards intelligents** — Claude lit votre pipeline et produit chaque semaine un brief commercial : opportunités à risque, leads chauds, actions prioritaires. (Salesforce, HubSpot)
-- **Nurturing automatisé** — Séquences d'emails personnalisées déclenchées par les signaux du pipeline, calibrées sur le ton de votre marque, pas sur un template. (HubSpot, Pipedrive)
-- **Analyse de calls commerciaux** — Claude transcrit, résume et enrichit chaque appel dans votre CRM : objections clés, prochaines étapes, scoring. (Salesforce, Pipedrive)
-
-Chaque déploiement est conçu sur mesure, calibré sur votre outil, vos processus et vos équipes.
-
-## CRM supportés
-
-Salesforce, HubSpot, Pipedrive, Zoho. Vous conservez votre stack — il n'y a pas de migration de CRM à prévoir.
-
-## Questions fréquentes
-
-- **Devrons-nous changer de CRM ?** Non. Nous nous adaptons à votre outil (Zoho, HubSpot, Salesforce, Pipedrive). Vous conservez votre stack.
-- **Quel budget prévoir ?** Une automatisation simple démarre entre 1 000 et 2 000 €. Selon l'ampleur, l'accompagnement se construit par paliers. Le devis est établi après le call audit, jamais avant.
-- **Combien de temps avant la mise en production ?** Le premier workflow est livré en production sous 30 jours.
-- **Nous n'avons personne sur l'IA en interne.** C'est exactement notre cas client. Nous concevons, déployons et formons votre équipe pour qu'elle reste autonome.
-- **Quelles garanties sur la sécurité des données ?** Claude est déployé via l'API commerciale d'Anthropic : par engagement contractuel, aucune de vos données n'entraîne le modèle. Conforme RGPD. Un DPA peut être signé.
-
-## Résultat client
-
-VB Mobilier : intégration d'un agent vocal dans le CRM pour traiter et qualifier automatiquement les leads entrants issus des campagnes Meta. Résultat : +30 % de CA sur les prospects entrants, les commerciaux se concentrant sur le closing.
-
-## Ressources
-
-- Guide — Comment intégrer l'IA dans votre entreprise (PME) : https://sablia.io/guides/integrer-l-ia-dans-votre-entreprise
+Mots-clés : intégrateur Claude, intégration IA dans le CRM, compte rendu d'appel automatique CRM, agence IA CRM, automatisation des processus commerciaux, Claude × HubSpot, Claude × Pipedrive, Claude × Salesforce.
 
 ## Offre n°1 : le CRM qui se remplit tout seul après chaque appel
 
-Compte rendu d'appel automatique enregistré directement dans votre CRM (HubSpot, Zoho, Pipedrive, Salesforce ou Airtable), sans ressaisie manuelle après chaque appel commercial.
+Le commercial raccroche, le CRM est déjà à jour : compte rendu et tâche de relance créés automatiquement, sans qu'il tape une ligne. Pour les équipes commerciales de 2 à 20 personnes qui ont déjà un CRM en place.
 
 - URL : https://sablia.io/offres/compte-rendu-appel
-- Installation : 1 490 € HT
-- Supervision : 149 €/mois, premier mois offert
-- Délai de livraison : 7 jours
-- Deux variantes : téléphonie VoIP (Ringover, Aircall) ou débrief vocal de 30 secondes après chaque appel
-- Garantie : remboursé si le compte rendu ne tourne pas sur les 5 appels de test
+- Prix : 1 490 € HT, 100 % à la commande, prix affiché avant tout paiement
+- Supervision : 149 €/mois, premier mois offert, optionnel, sans engagement
+- Délai : livré en 7 jours à compter de la réception des accès, après un test sur 5 appels réels
+- Deux variantes : téléphonie VoIP (Ringover, Aircall ou tout système qui produit un transcript) ou débrief vocal de 30 secondes dicté par le commercial après l'appel
+- Garantie : si le compte rendu ne tourne pas sur les 5 appels de test, les 1 490 € HT sont intégralement remboursés
+- Nous ne faisons jamais enregistrer un appel à votre place
+- Hors périmètre : licences CRM et téléphonie, astreinte, agent vocal, refonte ou migration de CRM
+
+## Offre n°2 : relance personnalisée (en préparation)
+
+Une relance déclenchée par les signaux du CRM, rédigée par Claude sur le vocabulaire de l'entreprise, validée par le commercial avant envoi. Prix non publié à ce jour.
+
+## Hors catalogue
+
+Règle de chiffrage publique : la brique, un automatisme livrable en 2 jours de travail Sablia au plus, coûte 1 490 € HT ; une brique d'une journée est au plancher de 990 € HT. Le chiffre exact est confirmé sous 24 heures après le call.
+
+## Questions fréquentes
+
+- **Devrons-nous changer de CRM ?** Non. Nous nous adaptons à votre outil (HubSpot, Zoho, Pipedrive, Salesforce, Airtable). Le CRM doit exister et être utilisé : nous ne vendons pas le CRM, nous le remplissons.
+- **Quel budget prévoir ?** L'offre n°1 est à 1 490 € HT, avec un récurrent optionnel de 149 €/mois. Un besoin hors catalogue est chiffré par brique, confirmé sous 24 heures.
+- **Combien de temps avant la mise en production ?** 7 jours pour l'offre n°1, avec un test sur 5 appels réels avant la mise en service.
+- **Où tourne l'automatisation ?** Chez vous, sur n8n, sur un compte à votre nom. Si vous partez, le flux reste là où il est.
+- **Qui paie Claude ?** Sablia. La synthèse tourne sur la clé API de Sablia ; le récurrent inclut jusqu'à 1 000 appels Claude par mois.
+- **Quelles garanties sur la sécurité des données ?** Claude est déployé via l'API commerciale d'Anthropic : par engagement contractuel, aucune de vos données n'entraîne le modèle. Conforme RGPD. Un DPA peut être signé.
+
+## Cas clients
+
+- VB Mobilier : leads entrants des campagnes Meta qualifiés automatiquement dans le CRM, +30 % de CA sur prospects entrants (témoignage de Valentin).
+- Nestenn Chalon : assistant vocal sur les appels manqués de l'agence, 287 appels rattrapés en 3 mois, 82 % avec un résultat concret.
+- Norloc : rendez-vous des conseillers posés dans Pipedrive par un assistant vocal, 44 rendez-vous d'avril à août 2026.
+- Qwertys : application de veille concurrentielle livrée et remise en autonomie, code hébergé chez le client.
+
+## Ressources
+
+- Guide : comment intégrer l'IA dans votre entreprise (PME) : https://sablia.io/guides/integrer-l-ia-dans-votre-entreprise
+- Questionnaire de cadrage (3 minutes) : https://app.sablia.io/questionnaire
 
 ## Contact
 
 - Site : https://sablia.io
 - Email : brice@sablia.io
-- Call audit gratuit de 30 min : https://calendly.com/raphael-espo-pro/30min
+- Call audit gratuit de 30 min : https://calendly.com/brice-gachadoat/30min
 
-Dernière mise à jour : 2026-06-18.
+Dernière mise à jour : 2026-09-09.

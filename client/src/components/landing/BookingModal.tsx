@@ -1,6 +1,8 @@
+import { track } from '@vercel/analytics'
 import { site } from '@/lib/site'
 
 export function openBookingUrl(url: string) {
+  track('book_call', { url, path: window.location.pathname })
   const w = 600
   const h = 700
   const left = (window.innerWidth - w) / 2 + window.screenX

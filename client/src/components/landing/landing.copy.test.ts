@@ -13,6 +13,7 @@ import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { OF1_ROUTE, of1 } from '../../content/of1'
 import { eurHt } from '../../lib/format'
+import { site } from '../../lib/site'
 import { FAQ } from './FaqSection'
 import { STEPS } from './ProcessSection'
 
@@ -22,9 +23,12 @@ const SOURCES = [
   resolve(HERE, 'ProcessSection.tsx'),
   resolve(HERE, 'CalloutSection.tsx'),
   resolve(HERE, 'HeroSection.tsx'),
-  resolve(HERE, 'UseCases.tsx'),
+  resolve(HERE, 'CatalogueSection.tsx'),
+  resolve(HERE, 'TeamSection.tsx'),
+  resolve(HERE, 'ProofSection.tsx'),
   resolve(HERE, 'ProblemsSection.tsx'),
   resolve(HERE, '../../pages/GuideIaEntreprise.tsx'),
+  resolve(HERE, '../../../public/llms.txt'),
 ].map((path) => ({ path, text: readFileSync(path, 'utf8') }))
 
 /** Claims of the pre-catalogue discourse. Each one was displayed on sablia.io on 2026-09-09. */
@@ -34,6 +38,9 @@ const STALE_CLAIMS: RegExp[] = [
   /2[–-]4 semaines/,
   /chiffrés? sous 5 jours/,
   /apr[èe]s (le call )?audit, jamais avant/,
+  /calendly\.com\/raphael/,
+  /sur mesure\./,
+  /Témoignage à venir/,
 ]
 
 const faqText = FAQ.map((item) => `${item.q} ${item.a}`).join('\n')
@@ -76,5 +83,23 @@ describe('landing copy: the figures are the offer figures', () => {
     const guide = SOURCES.find((s) => s.path.endsWith('GuideIaEntreprise.tsx'))
     expect(guide?.text).toContain('of1.price.oneShotHt')
     expect(guide?.text).toContain('of1.delay.days')
+  })
+})
+
+describe('home: the product is on the surface (audit 2026-09-09)', () => {
+  const hero = SOURCES.find((s) => s.path.endsWith('HeroSection.tsx'))
+  const llms = SOURCES.find((s) => s.path.endsWith('llms.txt'))
+
+  it('the hero renders the OF-1 title and no mock dashboard figure', () => {
+    expect(hero?.text).toContain('of1.title')
+    expect(hero?.text).not.toMatch(/€428k|48,200|Pipeline commercial · Mars/)
+  })
+
+  it('llms.txt states the offer price, delay, guarantee and the booking link of the site', () => {
+    expect(llms?.text).toContain(eurHt(of1.price.oneShotHt))
+    expect(llms?.text).toContain(`${of1.delay.days} jours`)
+    expect(llms?.text).toContain(`${of1.price.monthlyHt} €/mois`)
+    expect(llms?.text).toContain(site.bookingUrl)
+    expect(llms?.text).toContain(`${of1.teamSize.min} à ${of1.teamSize.max}`)
   })
 })
