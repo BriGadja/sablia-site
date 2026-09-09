@@ -19,7 +19,7 @@ There are currently **no forms and no n8n webhooks** wired in the site. Lead cap
 
 ## Calendly
 
-- **URL**: `https://calendly.com/raphael-espo-pro/30min` (Raph, depuis refonte CRM 2026-06 — centralisée dans `client/src/lib/site.ts` = `site.bookingUrl`)
+- **URL**: `https://calendly.com/brice-gachadoat/30min` (Brice, depuis le 2026-09-09 ; Raph du 2026-06 au 2026-09-09 — centralisée dans `client/src/lib/site.ts` = `site.bookingUrl`)
 - **Implementation**: `client/src/components/landing/BookingModal.tsx` — exports `openBooking()` which opens `site.bookingUrl` in a centered popup window (600×700) via `window.open()`. No `react-calendly` dependency.
 - **Surfaces**: All "book a call" CTAs call `openBooking()`:
   - `HeroSection.tsx` — primary hero CTA

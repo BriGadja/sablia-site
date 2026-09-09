@@ -48,7 +48,7 @@ docs/                 # All documentation
 ### Key Integrations
 | Integration | Details |
 |-------------|---------|
-| Calendly | `openBooking()` from `BookingModal.tsx` — opens `site.bookingUrl` in popup window. URL centralized in `client/src/lib/site.ts` = `https://calendly.com/raphael-espo-pro/30min` (Raph, depuis refonte CRM 2026-06). `ThankYou.tsx` uses the same `site.bookingUrl`. Product page OF-1 uses `OF1_BOOKING_URL` (Brice) via `openBookingUrl`; the Landing keeps `site.bookingUrl`. |
+| Calendly | `openBooking()` from `BookingModal.tsx` — opens `site.bookingUrl` in popup window. URL centralized in `client/src/lib/site.ts` = `https://calendly.com/brice-gachadoat/30min` (Brice, since 2026-09-09; it was Raphaël's from the 2026-06 CRM refonte until Brice took acquisition and sales alone on 2026-09-01). `ThankYou.tsx` uses the same `site.bookingUrl`. Product page OF-1 uses `OF1_BOOKING_URL` (same Brice link) via `openBookingUrl`. |
 | Supabase | `qlxoitzdxjqhljjoeqoq` — `site_*` tables (**connected but unused at runtime**) |
 | GA4 / Google Ads | ⚠️ Env vars exist (`VITE_GA4_MEASUREMENT_ID`, `VITE_GADS_*`) but **NO code implementation** — tracking was lost during 2026-04 redesign. Needs re-implementation. Account IDs in `docs/GOOGLE_ADS.md`. |
 
