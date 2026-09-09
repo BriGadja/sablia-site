@@ -1,20 +1,35 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
+import { Link } from 'wouter'
 import { ChevronDown } from '@/components/icons/lucide-crm'
+import { OF1_ROUTE, of1 } from '@/content/of1'
+import { eurHt } from '@/lib/format'
 
-const FAQ = [
+interface FaqItem {
+  q: string
+  a: string
+  /** Optional page the answer opens onto (kept out of the FAQPage schema: plain text there). */
+  href?: string
+  hrefLabel?: string
+}
+
+// Figures come from the OF-1 module, never typed here: on 2026-09-09 the home still quoted the
+// pre-catalogue price range and delay one click away from a page selling 1 490 € HT in 7 days.
+export const FAQ: readonly FaqItem[] = [
   {
     q: 'Devrons-nous changer de CRM ?',
-    a: 'Non. Nous nous adaptons à votre outil (Zoho, HubSpot, Salesforce, Pipedrive). Vous conservez votre stack.',
+    a: `Non. Nous nous adaptons à votre outil (${of1.crms.join(', ')}). Vous conservez votre stack.`,
   },
   {
     q: 'Quel budget prévoir ?',
-    a: "Une automatisation simple démarre entre 1 000 et 2 000 €. Selon l'ampleur, l'accompagnement se construit par paliers. Le devis est établi après le call audit, jamais avant.",
+    a: `Nos offres cadrées ont un prix affiché, avant tout paiement. Le CRM qui se remplit tout seul après chaque appel est à ${eurHt(of1.price.oneShotHt)}, avec un récurrent de ${of1.price.monthlyHt} € HT par mois, premier mois offert. Un besoin hors catalogue est chiffré par brique : ${eurHt(of1.price.brickHt)} pour au plus ${of1.delay.sabliaWorkDaysMax} jours de travail, plancher ${eurHt(of1.price.brickFloorHt)}, confirmé sous 24 heures.`,
+    href: OF1_ROUTE,
+    hrefLabel: "Voir l'offre et son prix",
   },
   {
     q: 'Combien de temps avant la mise en production ?',
-    a: 'Le premier workflow est livré en production sous 30 jours.',
+    a: `${of1.delay.days} jours pour une offre cadrée, avec un test sur 5 appels réels avec vous avant la mise en service. Un besoin spécifique est planifié dans son devis.`,
   },
   {
     q: "Nous n'avons personne sur l'IA en interne.",
@@ -90,7 +105,20 @@ export default function FaqSection() {
                   }
                   className="overflow-hidden"
                 >
-                  <p className="pb-5 text-[15px] leading-relaxed text-on-dark-body">{item.a}</p>
+                  <p className="pb-5 text-[15px] leading-relaxed text-on-dark-body">
+                    {item.a}
+                    {item.href ? (
+                      <>
+                        {' '}
+                        <Link
+                          href={item.href}
+                          className="text-primary underline-offset-4 hover:underline"
+                        >
+                          {item.hrefLabel ?? "Voir l'offre"}
+                        </Link>
+                      </>
+                    ) : null}
+                  </p>
                 </motion.div>
               </div>
             )

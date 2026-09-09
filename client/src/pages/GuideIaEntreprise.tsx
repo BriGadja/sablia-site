@@ -6,6 +6,8 @@ import { openBooking } from '@/components/landing/BookingModal'
 import LegalShell, { LegalSection } from '@/components/landing/LegalShell'
 import ScrollToTop from '@/components/ScrollToTop'
 import SEO from '@/components/SEO'
+import { OF1_ROUTE, of1 } from '@/content/of1'
+import { eurHt } from '@/lib/format'
 
 const FAQ = [
   {
@@ -18,11 +20,11 @@ const FAQ = [
   },
   {
     q: 'Combien de temps avant un premier résultat ?',
-    a: "Un premier workflow utile est livrable en production sous 30 jours. L'erreur est de viser une transformation globale d'un coup : on déploie un cas d'usage, on le mesure, puis on étend.",
+    a: `Une offre cadrée comme le compte rendu d'appel écrit dans le CRM est livrée en ${of1.delay.days} jours. L'erreur est de viser une transformation globale d'un coup : on déploie un cas d'usage, on le mesure, puis on étend.`,
   },
   {
     q: 'Quel budget prévoir pour un premier projet IA ?',
-    a: "Une automatisation simple démarre entre 1 000 et 2 000 €. Le coût dépend du nombre d'intégrations et de la complexité des règles métier, pas d'un abonnement par siège. Le chiffrage se fait après un audit, jamais avant.",
+    a: `Une offre cadrée est affichée à ${eurHt(of1.price.oneShotHt)}, prix visible avant tout paiement, avec un récurrent de ${of1.price.monthlyHt} € HT par mois. Un besoin spécifique est chiffré par brique, ${eurHt(of1.price.brickHt)} pour au plus ${of1.delay.sabliaWorkDaysMax} jours de travail, plancher ${eurHt(of1.price.brickFloorHt)}, confirmé sous 24 heures. Le coût dépend du nombre d'intégrations et de la complexité des règles métier, pas d'un abonnement par siège.`,
   },
   {
     q: "Mes données sont-elles en sécurité avec l'IA ?",
@@ -102,7 +104,10 @@ export default function GuideIaEntreprise() {
                 automatisées, analyse des appels.
               </li>
               <li>Gardez votre CRM et vos logiciels : l'IA se branche par-dessus.</li>
-              <li>Visez un premier workflow en production sous 30 jours, puis étendez.</li>
+              <li>
+                Visez une première automatisation en production en {of1.delay.days} jours, puis
+                étendez.
+              </li>
               <li>Utilisez l'API commerciale du fournisseur pour rester conforme au RGPD.</li>
             </ul>
           </LegalSection>
@@ -159,13 +164,18 @@ export default function GuideIaEntreprise() {
             <p>
               Le bon réflexe est d'avancer par paliers. Plutôt que de viser une transformation
               globale, on déploie un premier cas d'usage, on le mesure, puis on étend ce qui
-              fonctionne. Un premier workflow utile est livrable en production sous 30 jours.
+              fonctionne. Une offre cadrée comme le compte rendu d'appel écrit dans le CRM est
+              livrée en {of1.delay.days} jours.
             </p>
             <p>
-              Côté budget, une automatisation simple démarre entre 1 000 et 2 000 €. Le coût dépend
-              du nombre d'intégrations et de la complexité des règles métier, pas d'un abonnement
-              par utilisateur. Le chiffrage se fait après l'audit, une fois le périmètre clair —
-              jamais à l'aveugle.
+              Côté budget, une offre cadrée est affichée à {eurHt(of1.price.oneShotHt)}, prix
+              visible avant tout paiement, avec un récurrent de {of1.price.monthlyHt} € HT par mois.
+              Un besoin spécifique est chiffré par brique ({eurHt(of1.price.brickHt)} pour au plus{' '}
+              {of1.delay.sabliaWorkDaysMax} jours de travail, plancher{' '}
+              {eurHt(of1.price.brickFloorHt)}), confirmé sous 24 heures. Le coût dépend du nombre
+              d'intégrations et de la complexité des règles métier, pas d'un abonnement par
+              utilisateur. Le détail de l'offre et son prix sont sur{' '}
+              <a href={OF1_ROUTE}>la page de l'offre</a>.
             </p>
           </LegalSection>
 
