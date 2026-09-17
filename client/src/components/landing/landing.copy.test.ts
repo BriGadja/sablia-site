@@ -27,6 +27,7 @@ const SOURCES = [
   resolve(HERE, 'TeamSection.tsx'),
   resolve(HERE, 'ProofSection.tsx'),
   resolve(HERE, 'ProblemsSection.tsx'),
+  resolve(HERE, 'TopNav.tsx'),
   resolve(HERE, '../../pages/GuideIaEntreprise.tsx'),
   resolve(HERE, '../../../public/llms.txt'),
 ].map((path) => ({ path, text: readFileSync(path, 'utf8') }))
@@ -43,6 +44,27 @@ const STALE_CLAIMS: RegExp[] = [
   /Témoignage à venir/,
 ]
 
+/**
+ * Names that may only appear once their owner has validated a testimonial in writing (decision A4,
+ * 2026-09-17). The home named four clients and quoted one by first name; none of them had signed
+ * anything. Brice went further on 2026-09-17: no person name at all, anywhere. A published
+ * signature is a role and a company, and the company is named only once it has validated.
+ * `landing.copy.test.ts` guards the home; `of1.copy.test.ts` already guards the product page.
+ */
+const NAMES_PENDING_CONSENT = ['Nestenn', 'Norloc', 'Qwertys', 'VB Mobilier', 'Valentin']
+
+/** Names that never reach a public surface, validated or not: contract, or internal role. */
+const NEVER_PUBLIC = ['MASSA', 'Chatflow', 'Raphaël', 'Raphael']
+
+const CONSENT_SCOPED = ['ProofSection.tsx', 'llms.txt']
+
+/**
+ * The home's proof section stopped being a testimonials section on 2026-09-17, and the nav label
+ * kept promising testimonials for a while. A label that describes a section it no longer matches
+ * is the cheap half of the same defect the name guard exists for.
+ */
+const PROOF_NAV_LABEL = 'Cas clients'
+
 const faqText = FAQ.map((item) => `${item.q} ${item.a}`).join('\n')
 const stepsText = STEPS.map((step) => `${step.title} ${step.desc} ${step.dur}`).join('\n')
 
@@ -54,6 +76,34 @@ describe('landing copy: no claim of the pre-catalogue discourse survives', () =>
       }
     })
   }
+})
+
+describe('home: no name is published before its owner validated it', () => {
+  for (const name of CONSENT_SCOPED) {
+    const source = SOURCES.find((s) => s.path.endsWith(name))
+    it(`${name} names no client whose consent is not traced`, () => {
+      expect(source).toBeDefined()
+      for (const client of NAMES_PENDING_CONSENT) {
+        expect(source?.text.toLowerCase()).not.toContain(client.toLowerCase())
+      }
+    })
+  }
+
+  for (const source of SOURCES) {
+    it(`${source.path.split('/').slice(-1)[0]} names nobody who never goes public`, () => {
+      for (const name of NEVER_PUBLIC) {
+        expect(source.text.toLowerCase()).not.toContain(name.toLowerCase())
+      }
+    })
+  }
+})
+
+describe('home: the nav describes the section it points at', () => {
+  it('labels the proof anchor by what the section actually shows', () => {
+    const nav = SOURCES.find((s) => s.path.endsWith('TopNav.tsx'))
+    expect(nav?.text).toContain(`{ label: '${PROOF_NAV_LABEL}', href: '#proof' }`)
+    expect(nav?.text).not.toMatch(/label: 'T[ée]moignages'/)
+  })
 })
 
 describe('landing copy: the figures are the offer figures', () => {

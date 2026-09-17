@@ -10,6 +10,7 @@ import OffreCallout from '@/components/offre/OffreCallout'
 import OffreFaq from '@/components/offre/OffreFaq'
 import OffreHero from '@/components/offre/OffreHero'
 import PricingSection from '@/components/offre/PricingSection'
+import ProofStrip from '@/components/offre/ProofStrip'
 import VariantsSection from '@/components/offre/VariantsSection'
 import ScrollToTop from '@/components/ScrollToTop'
 import SEO from '@/components/SEO'
@@ -21,6 +22,7 @@ const NAV_ITEMS = [
   { label: 'Deux variantes', href: '#variantes' },
   { label: 'Ce qui est inclus', href: '#inclus' },
   { label: 'Prix', href: '#prix' },
+  { label: 'Ce qui vous protège', href: '#preuve' },
   { label: 'FAQ', href: '#faq' },
 ]
 
@@ -47,6 +49,7 @@ export default function OffreCompteRenduAppel() {
           <IncludedExcludedSection />
           <PricingSection />
           <ObjectionSection />
+          <ProofStrip />
           <OffreFaq />
           <OffreCallout />
         </main>

@@ -1,10 +1,15 @@
 /**
- * One testimonial in the client's words (VB Mobilier, cleared to publish), then three deliveries
- * described in ours with figures read from our own logs. No quote is invented: a client who has
- * not written one gets a case card, never a sentence between quotation marks.
+ * Two neighbouring deliveries, described in our words, with figures read from our own execution
+ * logs. No client is named and no sentence is put between quotation marks.
+ *
+ * Why nothing is named (decision A4 then the 2026-09-17 ruling): consent to be named was never
+ * traced for any of the four clients this section used to list, and the one quote it carried was
+ * cleared only by a code comment. A name goes back up here when its owner has validated, in
+ * writing, the sentence written about them. The figures are frozen queries, one per card:
+ * see projects/sablia/offre/preuve/dossier-de-preuve.md (P-7, P-8) in the hub.
  */
 interface CaseCard {
-  client: string
+  sector: string
   kind: string
   what: string
   figure: string
@@ -13,25 +18,18 @@ interface CaseCard {
 
 export const CASES: readonly CaseCard[] = [
   {
-    client: 'Nestenn Chalon',
-    kind: 'Agence immobilière',
-    what: "Un assistant vocal décroche quand les lignes sont occupées ou l'agence fermée : il oriente l'appelant vers le bon conseiller, prend le rappel ou répond directement.",
-    figure: '287 appels rattrapés en 3 mois, 82 % avec un résultat concret',
+    sector: 'Agence immobilière',
+    kind: 'Saône-et-Loire',
+    what: "Un assistant vocal décroche quand les lignes sont occupées ou l'agence fermée : il oriente l'appelant vers le bon conseiller, prend le rappel ou répond directement. Une suite concrète, c'est un transfert abouti, un rappel demandé ou une information donnée.",
+    figure: '289 appels sur 326 décrochés ont eu une suite concrète, soit 89 %',
     since: 'Mars à juin 2026',
   },
   {
-    client: 'Norloc',
-    kind: 'Investissement locatif',
-    what: 'Un assistant vocal qualifie les investisseurs entrants, pose les rendez-vous des conseillers dans Pipedrive et relance par SMS ceux qui ne répondent pas.',
-    figure: "44 rendez-vous posés dans Pipedrive d'avril à août 2026",
-    since: 'En production depuis avril 2026',
-  },
-  {
-    client: 'Qwertys',
-    kind: 'Cashback et bons plans',
-    what: "Une application de veille concurrentielle alimentée chaque jour par des automatisations n8n, livrée puis remise à l'équipe : le code est chez eux, ils sont autonomes.",
-    figure: 'Remise en autonomie complète, code hébergé chez le client',
-    since: 'En production depuis août 2026',
+    sector: 'Investissement locatif clé en main',
+    kind: 'France entière',
+    what: "Un assistant vocal qualifie les investisseurs entrants, pose les rendez-vous des conseillers dans le CRM et relance par SMS ceux qui ne répondent pas. Un rendez-vous compté, c'est un rendez-vous réellement posé dans un agenda.",
+    figure: '68 rendez-vous posés sans un seul appel manuel',
+    since: 'Avril à août 2026',
   },
 ]
 
@@ -40,44 +38,24 @@ export default function ProofSection() {
     <section id="proof" className="on-light px-8 py-section">
       <div className="mx-auto max-w-editorial">
         <div className="mx-auto mb-14 max-w-[640px] text-center">
-          <div className="eyebrow mb-4 text-primary">Témoignages et cas clients</div>
+          <div className="eyebrow mb-4 text-primary">Ce qui tourne déjà</div>
           <h2 className="font-display text-[clamp(1.9rem,3vw,2.5rem)] font-medium leading-tight tracking-tight text-ink [text-wrap:balance]">
-            Ils ont franchi le pas.
+            Deux chantiers, et les chiffres qui vont avec.
           </h2>
           <p className="mt-4 text-[15px] text-body">
-            Un témoignage dans les mots du client, trois chantiers décrits dans les nôtres. Les
-            chiffres sont relevés dans nos propres journaux d'exécution.
+            Décrits dans nos mots, chiffrés dans nos propres journaux d'exécution, avec la
+            définition de ce que compte chaque nombre. Nous ne nommons aucun client tant qu'il n'a
+            pas validé lui-même ce qui est écrit sur lui.
           </p>
         </div>
         <div className="grid gap-6 sm:grid-cols-2">
-          <figure className="m-0 flex flex-col gap-5 rounded-xl border border-hairline-light bg-surface-light p-8">
-            <blockquote className="m-0 text-[15px] leading-relaxed text-body">
-              «&nbsp;Nous avons intégré un agent vocal dans notre CRM. Il traite automatiquement et
-              fait le setting des leads entrants issus de nos campagnes Meta. Nos commerciaux se
-              concentrent uniquement sur ce qu'ils savent faire : closer les prospects chauds et
-              envoyer les devis qui valent vraiment le coup.&nbsp;»
-            </blockquote>
-            <div className="inline-flex w-fit items-center rounded-full bg-primary/10 px-3 py-1 font-mono text-[13px] font-medium text-primary">
-              +30 % de CA sur prospects entrants
-            </div>
-            <figcaption className="mt-auto flex items-center gap-3 pt-2">
-              <div className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary font-display text-base font-medium text-white">
-                VB
-              </div>
-              <div className="text-sm">
-                <div className="font-medium text-ink">Valentin</div>
-                <div className="mt-0.5 text-muted-text">VB Mobilier</div>
-              </div>
-            </figcaption>
-          </figure>
-
           {CASES.map((c) => (
             <article
-              key={c.client}
+              key={c.sector}
               className="flex flex-col gap-4 rounded-xl border border-hairline-light bg-surface-light-card p-8"
             >
               <div className="flex items-baseline justify-between gap-3">
-                <h3 className="font-display text-xl font-medium text-ink">{c.client}</h3>
+                <h3 className="font-display text-xl font-medium text-ink">{c.sector}</h3>
                 <span className="t-caption-uppercase text-muted-text">{c.kind}</span>
               </div>
               <p className="text-[15px] leading-relaxed text-body">{c.what}</p>

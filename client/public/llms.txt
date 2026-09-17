@@ -38,10 +38,10 @@ Règle de chiffrage publique : la brique, un automatisme livrable en 2 jours de 
 
 ## Cas clients
 
-- VB Mobilier : leads entrants des campagnes Meta qualifiés automatiquement dans le CRM, +30 % de CA sur prospects entrants (témoignage de Valentin).
-- Nestenn Chalon : assistant vocal sur les appels manqués de l'agence, 287 appels rattrapés en 3 mois, 82 % avec un résultat concret.
-- Norloc : rendez-vous des conseillers posés dans Pipedrive par un assistant vocal, 44 rendez-vous d'avril à août 2026.
-- Qwertys : application de veille concurrentielle livrée et remise en autonomie, code hébergé chez le client.
+Aucun client n'est nommé ici : nous ne publions un nom qu'une fois que son porteur a validé par écrit la phrase écrite sur lui. Les deux chiffres ci-dessous sont comptés dans nos propres journaux d'exécution, avec la définition de ce qu'ils comptent.
+
+- Agence immobilière en Saône-et-Loire : assistant vocal sur les appels que l'agence ne peut pas prendre, 289 appels sur 326 décrochés ont eu une suite concrète, soit 89 %, de mars à juin 2026. Une suite concrète est un transfert abouti, un rappel demandé ou une information donnée.
+- Société d'investissement locatif clé en main : assistant vocal qui qualifie les investisseurs entrants et pose les rendez-vous des conseillers dans le CRM, 68 rendez-vous posés sans un seul appel manuel, d'avril à août 2026.
 
 ## Ressources
 

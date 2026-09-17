@@ -30,10 +30,14 @@
 
 ## TODO — Strategic Pivot
 
+- [ ] **NS-15, branche `ns15-preuve-sociale`** : section preuve de la home en secteur seul, bloc
+  preuve sur la page produit, `llms.txt` aligné. Gates verts (112 tests, build 7/7, navigateur
+  1440 et 390). **Mise en ligne = geste de Brice**, jamais par une session.
+
 - [x] ~~Brice ↔ Yassine Sdiri validation~~ — **DONE 2026-04-18**: validated + affiliate link provided (`https://www.iapreneurs.com/?affiliate_code=8b6eda`).
 - [ ] Confirm SASU vs auto-entrepreneur status (impact: capacity model, TVA, invoice legitimacy at 990€).
 - [ ] Capacity model: lock monthly diagnostic limit (hypothesis: 4-6/mo given existing Qwertys 6j/mo retainer).
-- [ ] Case study consent: Nestenn, Qwertys, Stefano, Norloc, CER — named vs anonymized.
+- [x] ~~Case study consent: named vs anonymized~~ — **TRANCHÉ 2026-09-17 (NS-15)** : on ne nomme que qui a validé par écrit, et aucun nom de personne nulle part ; une signature publiée est un rôle et une société. La home passe en secteur seul, la citation nommée sort du site. Règle et sources : `projects/sablia/offre/preuve/dossier-de-preuve.md` (hub), contrôlée par `check-preuve.py` et par `landing.copy.test.ts`.
 - [ ] Elorri / Formation IA Normandie overlap with Sablia "formation d'équipes internes" — clarify boundaries.
 
 ---

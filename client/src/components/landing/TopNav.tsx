@@ -16,7 +16,7 @@ const NAV_ITEMS = [
   { label: 'Problématiques', href: '#problemes' },
   { label: 'Accompagnement', href: '#process' },
   { label: 'Votre interlocuteur', href: '#equipe' },
-  { label: 'Témoignages', href: '#proof' },
+  { label: 'Cas clients', href: '#proof' },
   { label: 'FAQ', href: '#faq' },
 ]
 

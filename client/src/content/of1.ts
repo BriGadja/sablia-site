@@ -121,7 +121,7 @@ export const of1: Of1Offer = {
     brickFloorHt: 990,
   },
   guarantee:
-    'Si à la recette le compte rendu ne tourne pas sur vos 5 appels de test, vous ne payez rien : les 1 490 € HT versés à la commande vous sont intégralement remboursés.',
+    "Si à la recette le compte rendu ne tourne pas sur vos 5 appels de test, vous ne payez rien : les 1 490 € HT versés à la commande vous sont intégralement remboursés. Le remboursement intervient sous 15 jours : c'est écrit à l'article 6 du contrat que vous signez.",
 
   recurring: {
     covers: [
