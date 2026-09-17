@@ -30,14 +30,14 @@
 
 ## TODO — Strategic Pivot
 
-- [ ] **NS-15, branche `ns15-preuve-sociale`, 2026-09-17 soir : une citation sur la home, section
+- [x] **NS-15 EN LIGNE le 2026-09-17 à 21:07 UTC (go de Brice, fast-forward `f823d56` + `ba06423` sur `main`, `x-vercel-id` renouvelé, vérifié au navigateur partagé : 1 blockquote, 0 nom de client, 0 débordement, 0 erreur console). Ci-dessous l'état tel qu'il était avant la mise en ligne.** Une citation sur la home, section
   « Votre interlocuteur »** (`TeamSection.tsx` + `llms.txt`). Texte écrit par Denis, membre de la
   formation, prénom publié sur décision de Brice ; source et statut dans le hub
   (`projects/sablia/offre/preuve/temoignages/iapreneurs.md`, ligne P-14), parité gardée par
   `landing.copy.test.ts`. Gates : vitest 115/115, tsc 0, Biome vert sur les fichiers touchés, build
-  7/7, rendu vérifié à 1440 et 390 px. **Mise en ligne = geste de Brice, après le oui écrit de Denis
-  sur la formulation retouchée.**
-- [ ] **NS-15, branche `ns15-preuve-sociale`** : section preuve de la home en secteur seul, bloc
+  7/7, rendu vérifié à 1440 et 390 px. Mise en ligne décidée par Brice le soir même, avant le oui écrit de Denis sur la
+  formulation retouchée : ce oui reste à classer a posteriori.
+- [x] ~~**NS-15, branche `ns15-preuve-sociale`**~~ EN LIGNE le 2026-09-17 avec la citation ci-dessus : section preuve de la home en secteur seul, bloc
   preuve sur la page produit, `llms.txt` aligné. Gates verts (112 tests, build 7/7, navigateur
   1440 et 390). **Mise en ligne = geste de Brice**, jamais par une session.
 
