@@ -43,6 +43,10 @@ Aucun client n'est nommé ici : nous ne publions un nom qu'une fois que son port
 - Agence immobilière en Saône-et-Loire : assistant vocal sur les appels que l'agence ne peut pas prendre, 289 appels sur 326 décrochés ont eu une suite concrète, soit 89 %, de mars à juin 2026. Une suite concrète est un transfert abouti, un rappel demandé ou une information donnée.
 - Société d'investissement locatif clé en main : assistant vocal qui qualifie les investisseurs entrants et pose les rendez-vous des conseillers dans le CRM, 68 rendez-vous posés sans un seul appel manuel, d'avril à août 2026.
 
+## Témoignage
+
+- « J'ai englouti tout son tutoriel en un mois. Je pensais avoir atteint mon plafond dans ma façon de travailler ; en fait j'ai tout remis à plat, la technique, la méthode, et surtout la rigueur que je m'imposais. Ça m'a ouvert des portes que je n'avais même pas imaginées. » Denis, développeur d'une application de devis pour artisans, formé par Brice en 2026. Texte écrit par son auteur, publié avec son accord.
+
 ## Ressources
 
 - Guide : comment intégrer l'IA dans votre entreprise (PME) : https://sablia.io/guides/integrer-l-ia-dans-votre-entreprise
@@ -54,4 +58,4 @@ Aucun client n'est nommé ici : nous ne publions un nom qu'une fois que son port
 - Email : brice@sablia.io
 - Call audit gratuit de 30 min : https://calendly.com/brice-gachadoat/30min
 
-Dernière mise à jour : 2026-09-09.
+Dernière mise à jour : 2026-09-17.

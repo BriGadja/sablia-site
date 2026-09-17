@@ -16,6 +16,7 @@ import { eurHt } from '../../lib/format'
 import { site } from '../../lib/site'
 import { FAQ } from './FaqSection'
 import { STEPS } from './ProcessSection'
+import { TESTIMONIAL } from './TeamSection'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const SOURCES = [
@@ -151,5 +152,32 @@ describe('home: the product is on the surface (audit 2026-09-09)', () => {
     expect(llms?.text).toContain(`${of1.price.monthlyHt} €/mois`)
     expect(llms?.text).toContain(site.bookingUrl)
     expect(llms?.text).toContain(`${of1.teamSize.min} à ${of1.teamSize.max}`)
+  })
+})
+
+/**
+ * The home's one quote is the text its author validated, kept in the hub's proof dossier
+ * (temoignages/iapreneurs.md, row P-14). The site never carries a wording the hub does not: a
+ * retouch made on one side only is exactly the drift this run was opened to close.
+ */
+describe('home: the testimonial is the hub text, word for word', () => {
+  const HUB_TESTIMONIAL = resolve(HERE, '../../../../../../offre/preuve/temoignages/iapreneurs.md')
+  /** Whitespace and Markdown blockquote markers collapse, so a wrapped `> ` line still matches. */
+  const flat = (text: string) => text.replace(/^>\s?/gm, '').replace(/\s+/g, ' ').trim()
+
+  it('the hub testimonial file exists next to this satellite', () => {
+    expect(() => readFileSync(HUB_TESTIMONIAL, 'utf8')).not.toThrow()
+  })
+
+  it('quote and signature match the retained text of the hub file', () => {
+    const hub = flat(readFileSync(HUB_TESTIMONIAL, 'utf8'))
+    expect(hub).toContain(flat(TESTIMONIAL.quote))
+    expect(hub).toContain(flat(TESTIMONIAL.who))
+  })
+
+  it('llms.txt carries the same quote', () => {
+    const llms = SOURCES.find((s) => s.path.endsWith('llms.txt'))
+    expect(flat(llms?.text ?? '')).toContain(flat(TESTIMONIAL.quote))
+    expect(flat(llms?.text ?? '')).toContain(flat(TESTIMONIAL.who))
   })
 })

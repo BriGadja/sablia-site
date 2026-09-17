@@ -30,6 +30,13 @@
 
 ## TODO — Strategic Pivot
 
+- [ ] **NS-15, branche `ns15-preuve-sociale`, 2026-09-17 soir : une citation sur la home, section
+  « Votre interlocuteur »** (`TeamSection.tsx` + `llms.txt`). Texte écrit par Denis, membre de la
+  formation, prénom publié sur décision de Brice ; source et statut dans le hub
+  (`projects/sablia/offre/preuve/temoignages/iapreneurs.md`, ligne P-14), parité gardée par
+  `landing.copy.test.ts`. Gates : vitest 115/115, tsc 0, Biome vert sur les fichiers touchés, build
+  7/7, rendu vérifié à 1440 et 390 px. **Mise en ligne = geste de Brice, après le oui écrit de Denis
+  sur la formulation retouchée.**
 - [ ] **NS-15, branche `ns15-preuve-sociale`** : section preuve de la home en secteur seul, bloc
   preuve sur la page produit, `llms.txt` aligné. Gates verts (112 tests, build 7/7, navigateur
   1440 et 390). **Mise en ligne = geste de Brice**, jamais par une session.
