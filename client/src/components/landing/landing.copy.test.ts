@@ -241,9 +241,13 @@ describe('home: the Formations section (A3/A4/A5)', () => {
   ]
 
   it('carries the accroche Brice wrote, word for word', () => {
-    expect(flatNbsp(formations?.text ?? '')).toContain(
-      "Vous préparez un séminaire ? Nous animons l'intervention IA.",
+    const text = flatNbsp(formations?.text ?? '')
+    expect(text).toContain(
+      "Nous formons votre entreprise à l'IA, du comité de direction aux équipes.",
     )
+    for (const title of ['Comex et Codir', 'Vos équipes', "Séminaires et journées d'entreprise"]) {
+      expect(text).toContain(title)
+    }
   })
 
   it('carries the proof Brice wrote, word for word', () => {

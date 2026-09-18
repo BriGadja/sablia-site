@@ -38,9 +38,9 @@ export default function ProofSection() {
     <section id="proof" className="on-light px-8 py-section">
       <div className="mx-auto max-w-editorial">
         <div className="mx-auto mb-14 max-w-[640px] text-center">
-          <div className="eyebrow mb-4 text-primary">Ce qui tourne déjà</div>
+          <div className="eyebrow mb-4 text-primary">Exemples de chantiers qui tournent</div>
           <h2 className="font-display text-[clamp(1.9rem,3vw,2.5rem)] font-medium leading-tight tracking-tight text-ink [text-wrap:balance]">
-            Deux chantiers, et les chiffres qui vont avec.
+            Deux exemples parmi ce que nous installons, et les chiffres qui vont avec.
           </h2>
           <p className="mt-4 text-[15px] text-body">
             Décrits dans nos mots, chiffrés dans nos propres journaux d'exécution, avec la

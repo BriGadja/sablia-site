@@ -8,15 +8,23 @@ import ContactForm from './ContactForm'
  * stay out of a public surface until their owner has said yes in writing.
  */
 
-/** The two things Brice actually does, in his words (A4). */
+/**
+ * What we deliver, in Brice's words (A4, widened on 2026-09-18: the first accroche reduced the
+ * offer to the seminar; the training work spans the executive committee, the teams and the
+ * seminar, always built for the client's sector, with exercises).
+ */
 const OFFERS = [
   {
-    title: "Comprendre ce que l'IA change pour votre équipe",
-    desc: "Un état de l'art concret, sur vos métiers, en séminaire ou en réunion de direction.",
+    title: 'Comex et Codir',
+    desc: "Comprendre ce que l'IA change pour votre secteur, et décider où investir : une intervention en réunion de direction, sur vos enjeux.",
   },
   {
-    title: 'Former vos équipes',
-    desc: "Des ateliers pratiques sur vos outils, pour que l'usage reste après notre passage.",
+    title: 'Vos équipes',
+    desc: "Des ateliers pratiques sur vos outils et vos cas réels, avec des exercices, pour que l'usage reste après notre passage.",
+  },
+  {
+    title: "Séminaires et journées d'entreprise",
+    desc: "Nous préparons et animons l'intervention IA, construite pour votre secteur d'activité.",
   },
 ] as const
 
@@ -41,7 +49,7 @@ export default function FormationsSection() {
         <div className="min-w-0">
           <div className="eyebrow mb-4 text-primary">Formations</div>
           <h2 className="t-display-lg [text-wrap:balance]">
-            Vous préparez un séminaire&nbsp;? Nous animons l'intervention IA.
+            Nous formons votre entreprise à l'IA, du comité de direction aux équipes.
           </h2>
 
           <ul className="mt-8 grid gap-4">
