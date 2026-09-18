@@ -13,9 +13,9 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 ## US-1 — Voir la section Formations sur la home [chemin-critique]
 - Surface : / (section `#formations`, après Cas clients, avant l'appel à l'action)
 - Parcours : (cible) ouvrir sablia.io → défiler après « Cas clients »
-- Oracle : la section porte l'accroche « Vous préparez un séminaire ? Nous animons l'intervention IA. », la preuve « responsable pédagogique d'une académie de plus de 1 400 entrepreneurs », la citation de Denis ; aucun prix ; aucun des mots interdits (IAPreneurs, MASSA, Chatflow, Madeca, OPCO, Qualiopi, Elorri, convention de formation) dans le HTML rendu
-- Statut : VALIDÉE 2026-09-18 @88fd143
-- Source : brief D10 2026-09-18, A1/A3/A4/A5, AC-1/AC-3
+- Oracle : la section porte l'accroche « Nous formons votre entreprise à l'IA, du comité de direction aux équipes. » et les trois lignes Comex et Codir · Vos équipes · Séminaires et journées d'entreprise, la preuve « responsable pédagogique d'une académie de plus de 1 400 entrepreneurs », la citation de Denis ; aucun prix ; aucun des mots interdits (IAPreneurs, MASSA, Chatflow, Madeca, OPCO, Qualiopi, Elorri, convention de formation) dans le HTML rendu
+- Statut : VALIDÉE 2026-09-18 @bc1ad63
+- Source : brief D10 2026-09-18, A1/A3/A4/A5, AC-1/AC-3 ; accroche élargie au-delà du séminaire — validée par Brice le 2026-09-18 (preview puis prod, 1440 et 390)
 
 ## US-2 — Naviguer avec 5 items
 - Surface : / (TopNav, 1440 et 390)
