@@ -3,6 +3,7 @@ import CatalogueSection from '@/components/landing/CatalogueSection'
 import CRMStrip from '@/components/landing/CRMStrip'
 import FaqSection from '@/components/landing/FaqSection'
 import FooterSection from '@/components/landing/FooterSection'
+import FormationsSection from '@/components/landing/FormationsSection'
 import HeroSection from '@/components/landing/HeroSection'
 import ProblemsSection from '@/components/landing/ProblemsSection'
 import ProcessSection from '@/components/landing/ProcessSection'
@@ -24,6 +25,7 @@ export default function Landing() {
         <ProcessSection />
         <TeamSection />
         <ProofSection />
+        <FormationsSection />
         <CalloutSection />
         <FaqSection />
       </main>

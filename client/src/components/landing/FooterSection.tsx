@@ -12,6 +12,9 @@ export default function FooterSection() {
         </div>
         <div className="flex flex-col items-start gap-1.5">
           <span className="t-caption-uppercase text-on-dark-muted">Contact</span>
+          <a href="/#contact" className="text-sm text-on-dark">
+            Nous écrire
+          </a>
           <a href="mailto:contact@sablia.io" className="text-sm text-on-dark">
             contact@sablia.io
           </a>

@@ -15,8 +15,8 @@ import { OF1_ROUTE, of1 } from '../../content/of1'
 import { eurHt } from '../../lib/format'
 import { site } from '../../lib/site'
 import { FAQ } from './FaqSection'
+import { TESTIMONIAL } from './FormationsSection'
 import { STEPS } from './ProcessSection'
-import { TESTIMONIAL } from './TeamSection'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const SOURCES = [
@@ -29,6 +29,9 @@ const SOURCES = [
   resolve(HERE, 'ProofSection.tsx'),
   resolve(HERE, 'ProblemsSection.tsx'),
   resolve(HERE, 'TopNav.tsx'),
+  resolve(HERE, 'FormationsSection.tsx'),
+  resolve(HERE, 'ContactForm.tsx'),
+  resolve(HERE, 'FooterSection.tsx'),
   resolve(HERE, '../../pages/GuideIaEntreprise.tsx'),
   resolve(HERE, '../../../public/llms.txt'),
 ].map((path) => ({ path, text: readFileSync(path, 'utf8') }))
@@ -102,7 +105,7 @@ describe('home: no name is published before its owner validated it', () => {
 describe('home: the nav describes the section it points at', () => {
   it('labels the proof anchor by what the section actually shows', () => {
     const nav = SOURCES.find((s) => s.path.endsWith('TopNav.tsx'))
-    expect(nav?.text).toContain(`{ label: '${PROOF_NAV_LABEL}', href: '#proof' }`)
+    expect(nav?.text).toContain(`{ label: '${PROOF_NAV_LABEL}', href: '/#proof' }`)
     expect(nav?.text).not.toMatch(/label: 'T[ée]moignages'/)
   })
 })
@@ -179,5 +182,123 @@ describe('home: the testimonial is the hub text, word for word', () => {
     const llms = SOURCES.find((s) => s.path.endsWith('llms.txt'))
     expect(flat(llms?.text ?? '')).toContain(flat(TESTIMONIAL.quote))
     expect(flat(llms?.text ?? '')).toContain(flat(TESTIMONIAL.who))
+  })
+})
+
+/**
+ * The home speaks as « nous » since Brice's decision of 2026-09-18 (D10). The founder section is
+ * included: the visitor never reads the size of the team, and the founder is named, not counted.
+ * Nothing on the page may suggest employees that do not exist — which is why the guard is a ban on
+ * the singular third person in that one section, not a demand for a plural noun somewhere.
+ */
+describe('home: the voice is « nous » (A6)', () => {
+  const team = SOURCES.find((s) => s.path.endsWith('TeamSection.tsx'))
+  const llms = SOURCES.find((s) => s.path.endsWith('llms.txt'))
+
+  it('the founder section presents « Notre fondateur », never « lui »', () => {
+    expect(team?.text).toContain('Notre fondateur')
+    expect(team?.text).not.toMatch(/\blui\b/)
+    expect(team?.text).not.toMatch(/par lui|avec lui/)
+  })
+
+  it('the founder section promises one reachable interlocutor', () => {
+    expect(team?.text).toContain('joignable directement pendant la mission')
+  })
+
+  it('llms.txt drops « tient lui-même » and speaks of « Notre fondateur »', () => {
+    expect(llms?.text).not.toContain('tient lui-même')
+    expect(llms?.text).toContain('Notre fondateur')
+  })
+})
+
+/**
+ * The Formations section (A3/A4/A5). Its words are Brice's, so they are asserted verbatim, and the
+ * forbidden list is page-wide: the academy, the training company and the client whose seminar is
+ * not delivered yet may not be named on a public surface, whatever the sentence around them.
+ */
+describe('home: the Formations section (A3/A4/A5)', () => {
+  /**
+   * The copy carries `&nbsp;` in JSX and U+00A0 once rendered, and JSX wraps a sentence across
+   * source lines; assertions read one flat line of plain spaces, like the hub-parity guard above.
+   */
+  const flatNbsp = (text: string) =>
+    text
+      .replace(/&nbsp;/g, ' ')
+      .replace(/\u00a0/g, ' ')
+      .replace(/\s+/g, ' ')
+  const formations = SOURCES.find((s) => s.path.endsWith('FormationsSection.tsx'))
+  const llms = SOURCES.find((s) => s.path.endsWith('llms.txt'))
+
+  const FORBIDDEN = [
+    'IAPreneurs',
+    'MASSA',
+    'Chatflow',
+    'Madeca',
+    'OPCO',
+    'Qualiopi',
+    'Elorri',
+    'convention de formation',
+  ]
+
+  it('carries the accroche Brice wrote, word for word', () => {
+    expect(flatNbsp(formations?.text ?? '')).toContain(
+      "Vous préparez un séminaire ? Nous animons l'intervention IA.",
+    )
+  })
+
+  it('carries the proof Brice wrote, word for word', () => {
+    const text = flatNbsp(formations?.text ?? '')
+    expect(text).toContain(
+      "Notre fondateur est responsable pédagogique d'une académie de plus de 1 400 entrepreneurs",
+    )
+    expect(text).toContain("formés à l'IA et à l'automatisation")
+  })
+
+  it('renders the one quote of the home, and the form anchor', () => {
+    expect(formations?.text).toContain('TESTIMONIAL')
+    expect(formations?.text).toContain('id="contact"')
+  })
+
+  it('shows no price (A3)', () => {
+    expect(formations?.text).not.toContain('€')
+  })
+
+  for (const source of SOURCES) {
+    it(`${source.path.split('/').slice(-1)[0]} names none of the forbidden references`, () => {
+      for (const word of FORBIDDEN) {
+        expect(source.text.toLowerCase()).not.toContain(word.toLowerCase())
+      }
+    })
+  }
+
+  it('llms.txt states the offer is on request, without a published price (A9)', () => {
+    expect(llms?.text).toContain('Séminaires et formations : sur demande, prix non publié')
+  })
+})
+
+/**
+ * AC-1 reads the Landing source, not the rendered page: a rendered count would also count
+ * `CRMStrip`, which the brief's section list does not. The order is the brief's, and the only way
+ * to change it is to change this list on purpose.
+ */
+describe('home: the sections come in the brief order (AC-1)', () => {
+  const EXPECTED = [
+    'HeroSection',
+    'CRMStrip',
+    'CatalogueSection',
+    'ProblemsSection',
+    'ProcessSection',
+    'TeamSection',
+    'ProofSection',
+    'FormationsSection',
+    'CalloutSection',
+    'FaqSection',
+  ]
+
+  it('Landing.tsx renders them in that order inside <main>', () => {
+    const landing = readFileSync(resolve(HERE, '../../pages/Landing.tsx'), 'utf8')
+    const main = landing.slice(landing.indexOf('<main>'), landing.indexOf('</main>'))
+    const rendered = Array.from(main.matchAll(/<([A-Z][A-Za-z0-9]*)\s*\/>/g)).map((m) => m[1])
+    expect(rendered).toEqual(EXPECTED)
   })
 })

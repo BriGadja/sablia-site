@@ -34,3 +34,6 @@ Thumbs.db
 # Git (garder seulement les logs)
 .git/logs/
 .git/refs/logs/
+
+# Unit tests under api/ must never be deployed as functions
+api/**/*.test.ts

@@ -13,11 +13,10 @@ interface TopNavProps {
 
 const NAV_ITEMS = [
   { label: 'Offres', href: OF1_ROUTE },
-  { label: 'Problématiques', href: '#problemes' },
-  { label: 'Accompagnement', href: '#process' },
-  { label: 'Votre interlocuteur', href: '#equipe' },
-  { label: 'Cas clients', href: '#proof' },
-  { label: 'FAQ', href: '#faq' },
+  { label: 'Méthode', href: '/#process' },
+  { label: 'Cas clients', href: '/#proof' },
+  { label: 'Formations', href: '/#formations' },
+  { label: 'Contact', href: '/#contact' },
 ]
 
 function NavItem({
@@ -31,7 +30,8 @@ function NavItem({
   onNavigate?: () => void
   children: React.ReactNode
 }) {
-  if (href.startsWith('/')) {
+  // wouter's navigate() does not scroll to a hash, so a '/#…' anchor must render a plain <a>
+  if (href.startsWith('/') && !href.includes('#')) {
     return (
       <Link href={href} className={className} onClick={onNavigate}>
         {children}

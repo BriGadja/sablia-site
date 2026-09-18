@@ -2,7 +2,7 @@
 
 > Sablia est une agence française qui intègre Claude (le modèle d'IA d'Anthropic) dans les CRM des petites équipes commerciales. Nous connectons Claude à votre outil existant, HubSpot, Zoho, Pipedrive, Salesforce ou Airtable, sans migration ni double saisie.
 
-Sablia (https://sablia.io) est basée à Paris et intervient dans toute la France. Le fondateur, Brice Gachadoat, tient lui-même le call de 30 minutes, l'installation, les tests et le suivi. Le point d'entrée est un call audit gratuit de 30 minutes, sans engagement.
+Sablia (https://sablia.io) est basée à Paris et intervient dans toute la France. Notre fondateur, Brice Gachadoat, ingénieur, a fondé l'agence pour brancher Claude sur les outils que les équipes commerciales utilisent déjà : vous avez un interlocuteur unique, joignable directement pendant la mission. Le point d'entrée est un call audit gratuit de 30 minutes, sans engagement, ou le formulaire de contact : https://sablia.io/#contact.
 
 Mots-clés : intégrateur Claude, intégration IA dans le CRM, compte rendu d'appel automatique CRM, agence IA CRM, automatisation des processus commerciaux, Claude × HubSpot, Claude × Pipedrive, Claude × Salesforce.
 
@@ -26,6 +26,10 @@ Une relance déclenchée par les signaux du CRM, rédigée par Claude sur le voc
 ## Hors catalogue
 
 Règle de chiffrage publique : la brique, un automatisme livrable en 2 jours de travail Sablia au plus, coûte 1 490 € HT ; une brique d'une journée est au plancher de 990 € HT. Le chiffre exact est confirmé sous 24 heures après le call.
+
+## Séminaires et formations
+
+Séminaires et formations : sur demande, prix non publié. Vous préparez un séminaire ? Nous animons l'intervention IA : comprendre ce que l'IA change pour votre équipe, former vos équipes. Notre fondateur est responsable pédagogique d'une académie de plus de 1 400 entrepreneurs formés à l'IA et à l'automatisation (ateliers toutes les deux semaines, module Claude Code de 10 heures). Demande : https://sablia.io/#contact.
 
 ## Questions fréquentes
 
@@ -55,7 +59,8 @@ Aucun client n'est nommé ici : nous ne publions un nom qu'une fois que son port
 ## Contact
 
 - Site : https://sablia.io
+- Formulaire de contact : https://sablia.io/#contact
 - Email : brice@sablia.io
 - Call audit gratuit de 30 min : https://calendly.com/brice-gachadoat/30min
 
-Dernière mise à jour : 2026-09-17.
+Dernière mise à jour : 2026-09-18.
