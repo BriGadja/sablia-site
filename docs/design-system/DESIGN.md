@@ -194,6 +194,8 @@ Sablia's LP uses real product output, not stock photography or abstract illustra
 
 **`text-input-focused`** — Focus state. Border shifts to `{colors.primary}` (coral). Carries a 3px coral-at-15%-alpha outer ring.
 
+**`contact-form-card`** — The home's contact form, in the right column of the Formations band. Background `{colors.surface-card}`, 1px `{colors.hairline}` border, rounded `{rounded.xl}`, internal padding `{spacing.xl}` (32px), capped at 460px on desktop and full width below `lg`. Title in `{typography.title-lg}`, sub-line in `{colors.on-dark-body}`. Five stacked fields (nom, société, email, taille d'équipe, demande) each a label in 13px/500 `{colors.on-dark-body}` over a `{component.text-input}`; the textarea keeps the same box with a 120px minimum height. Submit is a full-width `{component.button-primary}` at 44px. Three states, never two booleans: pending disables the button and reads « Envoi en cours… », success REPLACES the form with a `role="status"` line, error appends a `{colors.error}` line under the button. A visually-hidden honeypot field sits off-canvas at -9999px, `tabindex="-1"`, inside an `aria-hidden` wrapper — it must stay invisible AND unreachable.
+
 ### Tags / Badges
 
 **`badge-pill`** — Small pill label. Background `{colors.surface-card}`, text `{colors.on-dark-body}`, type `{typography.caption}` (13px / 500), rounded `{rounded.pill}`, padding 4px x 12px.
@@ -269,3 +271,4 @@ Sablia's LP uses real product output, not stock photography or abstract illustra
 - **2026-05-26**: Primary color swapped from teal (#5db8a6) to coral (#cc785c). Teal demoted to secondary accent. Rationale: coral is warmer, more distinctive, better contrast against the dark canvas. Teal remains for success states and data accents.
 - **2026-05-27**: DESIGN.md updated to reflect the coral-primary reality already implemented in code.
 - **2026-09-07**: Added `{component.price-card}` and `{component.flow-diagram}` for the product pages under `/offres/*`. The "no pricing" Don't is now scoped to the LP homepage: product pages display prices (catalogue client-facing decision, 2026-09-01). First consumer: `/offres/compte-rendu-appel`.
+- **2026-09-18**: Added `{component.contact-form-card}` for the home's new Formations band (decision D10). First form on the site, so `{component.text-input}` gets its first real consumer; the band itself is `{colors.canvas-soft}` to keep the dark→cream→dark alternation intact after the cream proof section.
