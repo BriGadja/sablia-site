@@ -1,11 +1,12 @@
 # SEO — Sablia Site
 
-**Last updated**: 2026-04-20
+**Last updated**: 2026-09-22
 
 ---
 
 ## Recent Changes
 
+- **2026-09-22 (NS-19, décision D7 — machine de contenu)**: Two new routes, `/ressources` (list, prerendered) and `/ressources/:slug` (detail, NOT prerendered — parametric, client-side fetch against Supabase). `/ressources` meta-tags added to `docs/meta-tags.json` and applied via `SEO.tsx`; `/ressources/:slug` carries its own `<Helmet>` directly in `Ressource.tsx` (title = resource title, canonical `/ressources/{slug}`, `noindex` when the slug is unknown or unpublished — never enters an index). `client/public/sitemap.xml` gains `/ressources` (weekly, 0.8, `lastmod` 2026-09-22) — the detail route is deliberately excluded, same reasoning as the prerender skip. `client/public/llms.txt`'s existing `## Ressources` heading gains a first line pointing at `/ressources`. `scripts/prerender.mjs`'s `ROUTES` array gains `/ressources` with an inline comment noting `/ressources/:slug` is skipped.
 - **2026-04-20 (ux-migration Phase 5)**: Homepage H1 shifts from Inter Tight to Fraunces Variable (display serif). Palette moves navy/parchment → encre/sable. Legal pages (/cgv, /politique-confidentialite, /mentions-legales) restructured via `LegalShell` with updated editorial body copy (SIREN/APE lifted into /mentions-legales, art. 293 B CGI disclosed in /cgv §3, n8n self-host + Data Privacy Framework disclosed in /politique-confidentialite). `/faq` reviewCount on FAQPage schema unchanged (9 Q, JSON-LD via Helmet). Sitemap `lastmod` bumped to 2026-04-20 on 3 legal routes + `/gap` + `/roi`.
 
 ---
@@ -30,6 +31,8 @@ All meta-tags are defined in `docs/meta-tags.json` and applied via `react-helmet
 | `/lp/automatisation-pme` | Automatisez vos processus repetitifs | Yes | - | - | noindex, follow |
 | `/lp/audit-gratuit` | Audit Automatisation Gratuit | Yes | - | - | noindex, follow |
 | `/offres/compte-rendu-appel` | Le CRM qui se remplit tout seul après chaque appel : 1 490 € HT, livré en 7 jours | Yes | Yes (website) | summary_large_image | - |
+| `/ressources` | Ressources : les templates et schémas de nos vidéos — Sablia | Yes | Yes (website) | summary_large_image | - |
+| `/ressources/:slug` | dynamique (titre de la ressource) — `<Helmet>` propre dans `Ressource.tsx`, PAS dans `meta-tags.json` | - | - | - | `noindex` si slug inconnu ou non publié |
 
 ---
 
@@ -55,8 +58,12 @@ All meta-tags are defined in `docs/meta-tags.json` and applied via `react-helmet
 ## Sitemap
 
 **File**: `client/public/sitemap.xml`
-**Routes**: 11 public routes (landing pages and thank-you excluded)
-**Last modified**: 2026-09-07
+**Routes**: 7 URLs live in the file today (`/ressources/:slug` is deliberately excluded — parametric, not prerendered)
+**Last modified**: 2026-09-22
+
+⚠️ The table below predates this session and lists routes (`/tarifs`, `/gap`, `/roi`, `/about`,
+`/faq`, `/cas-clients`) that are **not** in the current `sitemap.xml` nor in `App.tsx`'s routes —
+flagged, not fixed, here (T35 only adds `/ressources`; see report).
 
 | Route | Priority | Change Freq |
 |-------|----------|-------------|
@@ -64,6 +71,7 @@ All meta-tags are defined in `docs/meta-tags.json` and applied via `react-helmet
 | `/tarifs` | 0.9 | monthly |
 | `/gap` | 0.9 | monthly |
 | `/offres/compte-rendu-appel` | 0.9 | monthly |
+| `/ressources` | 0.8 | weekly |
 | `/roi` | 0.8 | monthly |
 | `/about` | 0.7 | monthly |
 | `/faq` | 0.7 | monthly |
