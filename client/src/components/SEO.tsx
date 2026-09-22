@@ -9,6 +9,7 @@ interface SEOProps {
     | '/cgv'
     | '/guides/integrer-l-ia-dans-votre-entreprise'
     | '/offres/compte-rendu-appel'
+    | '/ressources'
     | '/thank-you'
     | 'home'
 }
@@ -34,6 +35,10 @@ const breadcrumbConfig: Record<string, { name: string; position: number }[]> = {
   '/offres/compte-rendu-appel': [
     { name: 'Accueil', position: 1 },
     { name: 'Le CRM qui se remplit tout seul après chaque appel', position: 2 },
+  ],
+  '/ressources': [
+    { name: 'Accueil', position: 1 },
+    { name: 'Ressources', position: 2 },
   ],
 }
 

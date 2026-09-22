@@ -13,7 +13,7 @@ interface TopNavProps {
 
 const NAV_ITEMS = [
   { label: 'Offres', href: OF1_ROUTE },
-  { label: 'Méthode', href: '/#process' },
+  { label: 'Ressources', href: '/ressources' },
   { label: 'Cas clients', href: '/#proof' },
   { label: 'Formations', href: '/#formations' },
   { label: 'Contact', href: '/#contact' },

@@ -20,9 +20,30 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 ## US-2 — Naviguer avec 5 items
 - Surface : / (TopNav, 1440 et 390)
 - Parcours : (cible) ouvrir sablia.io → lire la nav ; à 390 ouvrir le menu
-- Oracle : exactement 5 items dans l'ordre Offres · Méthode · Cas clients · Formations · Contact, plus le bouton rendez-vous
-- Statut : VALIDÉE 2026-09-18 @88fd143
-- Source : brief D10 2026-09-18, A2, AC-2
+- Oracle : exactement 5 items dans l'ordre Offres · Ressources · Cas clients · Formations · Contact, plus le bouton rendez-vous
+- Statut : À REVALIDER en prod
+- Source : brief D10 2026-09-18, A2, AC-2 ; amendée le 2026-09-22 (NS-19, décision D7) — « Méthode » (`/#process`) remplacé par « Ressources » (`/ressources`, route réelle) dans `TopNav.tsx` `LANDING_ITEMS` et `TopNav.test.tsx` ; marchée en preview @9cda586, prod = geste de Brice (Règle 15)
+
+## US-6 — Lister les ressources
+- Surface : /ressources
+- Parcours : (cible) ouvrir sablia.io/ressources → lire la liste
+- Oracle : une ressource `published=true` s'affiche en carte titre/résumé/date, triée `published_at desc` ; liste vide → « Les premières ressources arrivent avec la première vidéo » ; clé Supabase absente ou lecture en échec → « La bibliothèque est momentanément indisponible. Réessayez dans un instant. » ; nav 5 items au-dessus
+- Statut : JAMAIS-PASSÉE
+- Source : plan `sablia-machine-de-contenu.md` T24/T25/T34 (NS-19, décision D7) ; marchée en preview le 2026-09-22 avec une ressource témoin publiée puis retirée, prod = geste de Brice (Règle 15)
+
+## US-7 — Ouvrir une ressource et la recevoir par mail [chemin-critique]
+- Surface : /ressources/:slug (page détail + `RessourceForm` → `POST /api/ressources-request`)
+- Parcours : (cible) ouvrir une carte de /ressources → lire le détail (vidéo YouTube si présente, corps, fichiers derrière le formulaire) → remplir prénom + email, case décochée → envoyer
+- Oracle : réponse `200 { ok, files, lead }` ; les liens des fichiers s'affichent à l'écran (« C'est à vous », « Le lien vous est aussi envoyé par mail ») ; ligne `sabcrm_leads` relue avec `source='contenu'`, `owner='Brice'`, `stage='nouveau'` ; mail Resend reçu par le visiteur (« Votre ressource Sablia : {titre} ») ; slug inconnu ou `published=false` → 404 « Ressource introuvable », page en `noindex`
+- Statut : JAMAIS-PASSÉE
+- Source : plan `sablia-machine-de-contenu.md` T25-T28/T34 (NS-19, décision D7) ; marchée en preview le 2026-09-22 (POST réel relu en base et mail Gmail confirmé), prod = geste de Brice (Règle 15)
+
+## US-8 — Demander à être contacté depuis une ressource
+- Surface : /ressources/:slug (case « Je souhaite être contacté par Sablia », décochée par défaut) → `POST /api/ressources-request`
+- Parcours : (cible) ouvrir une ressource → remplir le formulaire, cocher la case → envoyer
+- Oracle : ligne `sabcrm_leads` relue avec `stage='a_contacter'`, `owner='Raphael'` (sans accent), `next_action` = « Rappeler : a demandé à être contacté depuis /ressources/{slug} » ; second mail interne envoyé à brice@sablia.io (+ Raphaël dès confirmation V3) ; case décochée → aucun de ces deux effets, `stage='nouveau'`, `owner='Brice'`
+- Statut : JAMAIS-PASSÉE
+- Source : plan `sablia-machine-de-contenu.md` T27/T28/T34 (NS-19, décision D7) ; marchée en preview le 2026-09-22, prod = geste de Brice (Règle 15)
 
 ## US-3 — Lire la home à la voix « nous »
 - Surface : / (toutes sections, dont `#equipe`) et `/llms.txt`

@@ -53,6 +53,7 @@ Aucun client n'est nommé ici : nous ne publions un nom qu'une fois que son port
 
 ## Ressources
 
+- Bibliothèque des ressources de nos vidéos (templates n8n, schémas, guides) : https://sablia.io/ressources
 - Guide : comment intégrer l'IA dans votre entreprise (PME) : https://sablia.io/guides/integrer-l-ia-dans-votre-entreprise
 - Questionnaire de cadrage (3 minutes) : https://app.sablia.io/questionnaire
 

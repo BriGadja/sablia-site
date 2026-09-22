@@ -19,6 +19,8 @@ const ROUTES = [
   '/cgv',
   '/guides/integrer-l-ia-dans-votre-entreprise',
   '/offres/compte-rendu-appel',
+  // '/ressources/:slug' is parametric and read client-side: it is not prerenderable.
+  '/ressources',
   '/thank-you',
 ]
 

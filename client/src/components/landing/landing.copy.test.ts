@@ -33,6 +33,9 @@ const SOURCES = [
   resolve(HERE, 'ContactForm.tsx'),
   resolve(HERE, 'FooterSection.tsx'),
   resolve(HERE, '../../pages/GuideIaEntreprise.tsx'),
+  resolve(HERE, '../ressources/RessourceForm.tsx'),
+  resolve(HERE, '../../pages/Ressources.tsx'),
+  resolve(HERE, '../../pages/Ressource.tsx'),
   resolve(HERE, '../../../public/llms.txt'),
 ].map((path) => ({ path, text: readFileSync(path, 'utf8') }))
 
