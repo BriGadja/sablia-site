@@ -11,6 +11,8 @@ import MentionsLegales from '@/pages/MentionsLegales'
 import NotFound from '@/pages/not-found'
 import OffreCompteRenduAppel from '@/pages/OffreCompteRenduAppel'
 import PolitiqueConfidentialite from '@/pages/PolitiqueConfidentialite'
+import Ressource from '@/pages/Ressource'
+import Ressources from '@/pages/Ressources'
 import ThankYou from '@/pages/ThankYou'
 
 function Router() {
@@ -23,6 +25,8 @@ function Router() {
         <Route path="/cgv" component={CGV} />
         <Route path="/guides/integrer-l-ia-dans-votre-entreprise" component={GuideIaEntreprise} />
         <Route path={OF1_ROUTE} component={OffreCompteRenduAppel} />
+        <Route path="/ressources" component={Ressources} />
+        <Route path="/ressources/:slug">{(p) => <Ressource slug={p.slug} />}</Route>
         <Route path="/thank-you" component={ThankYou} />
         <Route component={NotFound} />
       </Switch>

@@ -147,6 +147,26 @@
         "description": "Compte rendu d'appel automatique dans HubSpot, Zoho, Pipedrive, Salesforce ou Airtable. Deux variantes, VoIP ou débrief vocal de 30 secondes. 1 490 € HT, supervision 149 €/mois, premier mois offert. Remboursé si ça ne tourne pas."
       }
     },
+    "/ressources": {
+      "title": "Ressources : les templates et schémas de nos vidéos — Sablia",
+      "description": "Les workflows n8n, les schémas et les guides montrés dans nos vidéos, à récupérer gratuitement. Automatisation du CRM, comptes rendus d'appel, relances : ce qu'on montre à l'écran, vous repartez avec.",
+      "keywords": ["template n8n gratuit", "workflow n8n CRM", "automatisation CRM template"],
+      "canonical": "https://sablia.io/ressources",
+      "robots": "index, follow",
+      "openGraph": {
+        "type": "website",
+        "title": "Ressources : les templates et schémas de nos vidéos — Sablia",
+        "description": "Les workflows n8n, les schémas et les guides montrés dans nos vidéos, à récupérer gratuitement.",
+        "url": "https://sablia.io/ressources",
+        "siteName": "Sablia",
+        "image": "https://sablia.io/og-image.png"
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "title": "Ressources : les templates et schémas de nos vidéos — Sablia",
+        "description": "Les workflows n8n, les schémas et les guides montrés dans nos vidéos, à récupérer gratuitement."
+      }
+    },
     "/thank-you": {
       "title": "Merci - Sablia",
       "description": "Votre demande a bien été prise en compte. Nous vous recontactons sous 48h.",

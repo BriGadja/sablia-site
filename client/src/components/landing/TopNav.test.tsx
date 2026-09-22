@@ -7,12 +7,15 @@ import TopNav from './TopNav'
 /**
  * The nav the Landing (and the legal pages) get when no props are passed. Five items since Brice's
  * decision of 2026-09-18 (A2): Problèmes, Fondateur and FAQ stay on the page and leave the menu.
+ * Since 2026-09-22 (NS-19, D7) « Ressources » takes the slot « Méthode » held: the `#process`
+ * section is still on the home, it simply no longer has a menu entry. That makes TWO real routes
+ * in the bar, so the plain-`<a>` / wouter-Link branch of NavItem is exercised by both.
  * The anchors are ROOT-relative (`/#…`) because this nav is also rendered on ThankYou and on the
  * three legal pages through `LegalShell`, where a bare `#contact` pointed at nothing.
  */
 const LANDING_ITEMS: readonly (readonly [string, string])[] = [
   ['Offres', OF1_ROUTE],
-  ['Méthode', '/#process'],
+  ['Ressources', '/ressources'],
   ['Cas clients', '/#proof'],
   ['Formations', '/#formations'],
   ['Contact', '/#contact'],
@@ -62,8 +65,8 @@ describe('TopNav', () => {
     const { container } = render(<TopNav />)
     const labels = Array.from(container.querySelectorAll('a'))
       .map((a) => (a.textContent ?? '').trim())
-      .filter((label) => label === 'Offres' || label === 'Méthode')
-    expect(labels.slice(0, 2)).toEqual(['Offres', 'Méthode'])
+      .filter((label) => label === 'Offres' || label === 'Ressources')
+    expect(labels.slice(0, 2)).toEqual(['Offres', 'Ressources'])
   })
 
   it('leaves a page that supplies its own items untouched', () => {
