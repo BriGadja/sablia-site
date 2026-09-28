@@ -24,13 +24,13 @@ const title = readFileSync(resolve(ROOT, 'client', 'src', 'content', 'of1.ts'), 
 if (!title) throw new Error('of1.title not found in client/src/content/of1.ts')
 
 const template = readFileSync(resolve(ROOT, 'scripts', 'og-image.html'), 'utf8')
-for (const slot of ['{{FONTS}}', '{{SYMBOL}}', '{{TITLE}}']) {
+for (const slot of ['/*FONTS*/', '<!--SYMBOL-->', '<!--TITLE-->']) {
   if (template.split(slot).length !== 2)
     throw new Error(`og-image.html must hold ${slot} exactly once`)
 }
 const html = template
   .replace(
-    '{{FONTS}}',
+    '/*FONTS*/',
     [
       font(
         'Cormorant Garamond Variable',
@@ -39,8 +39,8 @@ const html = template
       font('Inter Variable', 'inter/files/inter-latin-wght-normal.woff2'),
     ].join('\n'),
   )
-  .replace('{{SYMBOL}}', readFileSync(resolve(PUBLIC, 'brand', 'symbol.svg'), 'utf8'))
-  .replace('{{TITLE}}', title)
+  .replace('<!--SYMBOL-->', readFileSync(resolve(PUBLIC, 'brand', 'symbol.svg'), 'utf8'))
+  .replace('<!--TITLE-->', title)
 
 const browser = await puppeteer.launch({
   headless: chromium.headless,
@@ -55,7 +55,7 @@ try {
   const png = await page.screenshot({ type: 'png', clip: { x: 0, y: 0, width: 1200, height: 630 } })
   for (const name of OUTPUTS) {
     writeFileSync(resolve(PUBLIC, name), png)
-    console.log(`client/public/${name} ${png.length} bytes`)
+    process.stdout.write(`client/public/${name} ${png.length} bytes\n`)
   }
 } finally {
   await browser.close()

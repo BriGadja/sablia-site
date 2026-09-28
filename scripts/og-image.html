@@ -1,7 +1,7 @@
 <!doctype html>
 <!--
   OG / Twitter image template (1200x630), rendered by scripts/og-image.mjs.
-  The three double-brace placeholders below are filled in by the script: the fonts are the site's own
+  The three marker comments below (FONTS, SYMBOL, TITLE) are filled in by the script: the fonts are the site's own
   (@fontsource files inlined as data URIs), the symbol is client/public/brand/symbol.svg, the title
   is of1.title read from client/src/content/of1.ts.
 -->
@@ -9,7 +9,7 @@
   <head>
     <meta charset="utf-8" />
     <style>
-      {{FONTS}}
+      /*FONTS*/
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1200px; height: 630px; }
       body {
@@ -54,8 +54,8 @@
     </style>
   </head>
   <body>
-    <div class="lockup">{{SYMBOL}}<span class="wordmark">Sablia</span></div>
-    <h1>{{TITLE}}.</h1>
+    <div class="lockup"><!--SYMBOL--><span class="wordmark">Sablia</span></div>
+    <h1><!--TITLE-->.</h1>
     <div class="foot"><span>Agence d'intégration Claude AI × CRM</span><strong>sablia.io</strong></div>
   </body>
 </html>
