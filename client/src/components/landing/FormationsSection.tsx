@@ -51,12 +51,12 @@ export default function FormationsSection() {
     >
       {/* 1440: photo · text · form on one row. 1024: photo above the text, form beside both.
           390: photo, text, then the form, stacked (grill 2026-09-28, decision 3). */}
-      <div className="mx-auto grid max-w-editorial gap-10 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[300px_1fr_400px] xl:gap-10">
+      <div className="mx-auto grid max-w-editorial gap-10 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[280px_1fr_380px] xl:gap-10">
         <figure className="min-w-0 lg:col-start-1 lg:row-start-1">
           <img
             src={FORMATIONS_PHOTO.src}
             srcSet={FORMATIONS_PHOTO.srcSet}
-            sizes="(min-width: 1280px) 300px, (min-width: 1024px) 560px, 100vw"
+            sizes="(min-width: 1280px) 280px, (min-width: 1024px) 560px, 100vw"
             width={FORMATIONS_PHOTO.width}
             height={FORMATIONS_PHOTO.height}
             alt={FORMATIONS_PHOTO.alt}

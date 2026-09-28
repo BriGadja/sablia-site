@@ -34,7 +34,8 @@ const TONES = {
     sheetLink: 't-title-sm text-on-dark-body transition-colors hover:text-on-dark',
   },
   light: {
-    bar: 'border-hairline-light bg-surface-light/85',
+    // Opaque: at the top of the page the bar sits over the dark body, a translucent cream reads grey.
+    bar: 'border-hairline-light bg-surface-light',
     wordmark: '/wordmark-light.svg',
     link: 't-nav-link text-body transition-colors duration-fast hover:text-ink',
     toggle: 'border-hairline-light bg-white text-ink',

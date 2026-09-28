@@ -12,6 +12,9 @@ import { eurHt } from '@/lib/format'
  * it). No monthly fee, no « Bientôt » card, no off-catalogue card: they left the home (decision 4).
  */
 
+/** French typography: a no-break space before « : » and « % », so « 89 % » never splits. */
+const frenchSpacing = (text: string) => text.replace(/ ([:%])/g, '\u00a0$1')
+
 /**
  * Click-to-play facade: before the click the visitor loads a local thumbnail and no byte from
  * YouTube; the click mounts the privacy-enhanced player, whose `autoplay=1` then follows a user
@@ -53,9 +56,6 @@ function VideoFacade() {
           <path d="M7 4.5v15l13-7.5z" />
         </svg>
       </span>
-      <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-4 pb-3 pt-8 text-left text-[14px] font-medium text-white">
-        Voir la démo en direct ({HOME_VIDEO.durationLabel})
-      </span>
     </button>
   )
 }
@@ -92,12 +92,16 @@ export default function OffreSection() {
 
         <div className="order-1 min-w-0 lg:order-2">
           <VideoFacade />
+          {/* Under the player, not over it: the thumbnail carries its own title. */}
+          <p className="mt-3 text-[14px] text-muted-text">
+            Voir la démo en direct ({HOME_VIDEO.durationLabel})
+          </p>
         </div>
 
         {/* The sentence opens on « Déjà en production chez nos clients » itself: an eyebrow repeating
             it would print the phrase twice, so a coral rule marks the block instead. */}
         <p className="order-3 min-w-0 max-w-[900px] border-l-2 border-primary pl-5 text-[16px] leading-relaxed text-ink sm:text-lg lg:col-span-2">
-          {PROOF_LINE}
+          {frenchSpacing(PROOF_LINE)}
         </p>
       </div>
     </section>
