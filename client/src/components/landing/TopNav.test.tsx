@@ -5,20 +5,18 @@ import { site } from '@/lib/site'
 import TopNav from './TopNav'
 
 /**
- * The nav the Landing (and the legal pages) get when no props are passed. Five items since Brice's
- * decision of 2026-09-18 (A2): Problèmes, Fondateur and FAQ stay on the page and leave the menu.
- * Since 2026-09-22 (NS-19, D7) « Ressources » takes the slot « Méthode » held: the `#process`
- * section is still on the home, it simply no longer has a menu entry. That makes TWO real routes
- * in the bar, so the plain-`<a>` / wouter-Link branch of NavItem is exercised by both.
- * The anchors are ROOT-relative (`/#…`) because this nav is also rendered on ThankYou and on the
- * three legal pages through `LegalShell`, where a bare `#contact` pointed at nothing.
+ * The nav every page gets when no props are passed. Three items since the grill of 2026-09-28
+ * (decision 3): Offre · Formations · Ressources, plus « Réserver 30 min ». « Cas clients » and
+ * « Contact » left the bar with the sections they pointed at; the footer keeps `/#contact`. The
+ * 3-item nav is SITE-WIDE on purpose: LegalShell, ThankYou, Ressources and Ressource render
+ * `<TopNav />` without `items`. Two real routes and one hash stay in the bar, so the plain-`<a>` /
+ * wouter-Link branch of NavItem is still exercised both ways. The hash is ROOT-relative (`/#…`)
+ * because a bare `#formations` points at nothing on the pages that are not the home.
  */
 const LANDING_ITEMS: readonly (readonly [string, string])[] = [
-  ['Offres', OF1_ROUTE],
-  ['Ressources', '/ressources'],
-  ['Cas clients', '/#proof'],
+  ['Offre', OF1_ROUTE],
   ['Formations', '/#formations'],
-  ['Contact', '/#contact'],
+  ['Ressources', '/ressources'],
 ]
 
 /** Every anchor of the bar except the wordmark, which links the site root. */
@@ -29,7 +27,7 @@ describe('TopNav', () => {
   it('CTA opens site.bookingUrl by default', () => {
     const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null)
     render(<TopNav />)
-    fireEvent.click(screen.getByRole('button', { name: 'Réserver un call audit' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Réserver 30 min' }))
     expect(openSpy.mock.calls[0][0]).toBe(site.bookingUrl)
     openSpy.mockRestore()
   })
@@ -42,7 +40,7 @@ describe('TopNav', () => {
     openSpy.mockRestore()
   })
 
-  it('renders exactly the five items of A2, in order, in the desktop menu', () => {
+  it('renders exactly the three items of decision 3, in order, in the desktop menu', () => {
     const { container } = render(<TopNav />)
     const rendered = navAnchors(container).map((a) => [
       (a.textContent ?? '').trim(),
@@ -51,7 +49,7 @@ describe('TopNav', () => {
     expect(rendered).toEqual(LANDING_ITEMS.map(([label, href]) => [label, href]))
   })
 
-  it('renders the same five in the mobile sheet once it is opened', () => {
+  it('renders the same three in the mobile sheet once it is opened', () => {
     const { container } = render(<TopNav />)
     fireEvent.click(screen.getByRole('button', { name: 'Ouvrir le menu' }))
     const rendered = navAnchors(container)
@@ -61,12 +59,17 @@ describe('TopNav', () => {
     )
   })
 
-  it('puts Offres before the section anchors, in both menus', () => {
+  it('puts Offre first, in both menus', () => {
     const { container } = render(<TopNav />)
-    const labels = Array.from(container.querySelectorAll('a'))
-      .map((a) => (a.textContent ?? '').trim())
-      .filter((label) => label === 'Offres' || label === 'Ressources')
-    expect(labels.slice(0, 2)).toEqual(['Offres', 'Ressources'])
+    fireEvent.click(screen.getByRole('button', { name: 'Ouvrir le menu' }))
+    const labels = navAnchors(container).map((a) => (a.textContent ?? '').trim())
+    expect(labels[0]).toBe('Offre')
+    expect(labels[LANDING_ITEMS.length]).toBe('Offre')
+  })
+
+  it('renders the light wordmark in the light tone (the home)', () => {
+    const { container } = render(<TopNav tone="light" />)
+    expect(container.querySelector('nav img')?.getAttribute('src')).toBe('/wordmark-light.svg')
   })
 
   it('leaves a page that supplies its own items untouched', () => {
@@ -79,16 +82,16 @@ describe('TopNav', () => {
   })
 
   /**
-   * Runs last: the Offres probe navigates the shared happy-dom location through wouter.
+   * Runs last: the Offre probe navigates the shared happy-dom location through wouter.
    * `fireEvent.click` returns false when a handler called `preventDefault()`. Wouter's Link always
    * does (it navigates through the history API and never scrolls to a hash), a plain `<a>` never
-   * does — which is the whole difference between a working « Contact » entry and a dead one.
+   * does — which is the whole difference between a working « Formations » entry and a dead one.
    */
   it('renders a root-relative hash item as a plain <a>, and the product page as a wouter Link', () => {
     const { container } = render(<TopNav />)
-    const contact = container.querySelector('a[href="/#contact"]')
-    expect(contact).not.toBeNull()
-    expect(fireEvent.click(contact as Element)).toBe(true)
+    const formations = container.querySelector('a[href="/#formations"]')
+    expect(formations).not.toBeNull()
+    expect(fireEvent.click(formations as Element)).toBe(true)
 
     const offres = container.querySelector(`a[href="${OF1_ROUTE}"]`)
     expect(offres).not.toBeNull()

@@ -11,27 +11,31 @@ import { readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
-import { OF1_ROUTE, of1 } from '../../content/of1'
+import { FAQ_CARRIED } from '../../content/faq-carried'
+import { FINAL_CALL_TITLE, PROOF_LINE } from '../../content/home'
+import { of1 } from '../../content/of1'
 import { eurHt } from '../../lib/format'
 import { site } from '../../lib/site'
-import { FAQ } from './FaqSection'
 import { TESTIMONIAL } from './FormationsSection'
-import { STEPS } from './ProcessSection'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
+/**
+ * Every source of the home (2026-09-28: the five sections, the record card, the nav, the footer,
+ * the home content module), plus the pages the nav and the callout open onto, plus llms.txt.
+ * Problems, Process, Team, Proof, Catalogue and FAQ left the home that day (decision 4).
+ */
 const SOURCES = [
-  resolve(HERE, 'FaqSection.tsx'),
-  resolve(HERE, 'ProcessSection.tsx'),
-  resolve(HERE, 'CalloutSection.tsx'),
   resolve(HERE, 'HeroSection.tsx'),
-  resolve(HERE, 'CatalogueSection.tsx'),
-  resolve(HERE, 'TeamSection.tsx'),
-  resolve(HERE, 'ProofSection.tsx'),
-  resolve(HERE, 'ProblemsSection.tsx'),
+  resolve(HERE, 'RecordCard.tsx'),
+  resolve(HERE, 'CRMStrip.tsx'),
+  resolve(HERE, 'OffreSection.tsx'),
+  resolve(HERE, 'CalloutSection.tsx'),
   resolve(HERE, 'TopNav.tsx'),
   resolve(HERE, 'FormationsSection.tsx'),
   resolve(HERE, 'ContactForm.tsx'),
   resolve(HERE, 'FooterSection.tsx'),
+  resolve(HERE, '../../content/home.ts'),
+  resolve(HERE, '../../pages/Landing.tsx'),
   resolve(HERE, '../../pages/GuideIaEntreprise.tsx'),
   resolve(HERE, '../ressources/RessourceForm.tsx'),
   resolve(HERE, '../../pages/Ressources.tsx'),
@@ -63,17 +67,27 @@ const NAMES_PENDING_CONSENT = ['Nestenn', 'Norloc', 'Qwertys', 'VB Mobilier', 'V
 /** Names that never reach a public surface, validated or not: contract, or internal role. */
 const NEVER_PUBLIC = ['MASSA', 'Chatflow', 'Raphaël', 'Raphael']
 
-const CONSENT_SCOPED = ['ProofSection.tsx', 'llms.txt']
+/** Where the proof figures live since 2026-09-28: the offer section and its content module. */
+const CONSENT_SCOPED = ['OffreSection.tsx', 'home.ts', 'llms.txt']
 
-/**
- * The home's proof section stopped being a testimonials section on 2026-09-17, and the nav label
- * kept promising testimonials for a while. A label that describes a section it no longer matches
- * is the cheap half of the same defect the name guard exists for.
- */
-const PROOF_NAV_LABEL = 'Cas clients'
+/** The sources that render the home itself (llms.txt and the linked pages are not the home). */
+const HOME_SOURCE_NAMES = [
+  'HeroSection.tsx',
+  'RecordCard.tsx',
+  'CRMStrip.tsx',
+  'OffreSection.tsx',
+  'FormationsSection.tsx',
+  'ContactForm.tsx',
+  'CalloutSection.tsx',
+  'TopNav.tsx',
+  'FooterSection.tsx',
+  'home.ts',
+  'Landing.tsx',
+]
+const HOME_SOURCES = SOURCES.filter((s) => HOME_SOURCE_NAMES.some((n) => s.path.endsWith(n)))
+const byName = (name: string) => SOURCES.find((s) => s.path.endsWith(name))
 
-const faqText = FAQ.map((item) => `${item.q} ${item.a}`).join('\n')
-const stepsText = STEPS.map((step) => `${step.title} ${step.desc} ${step.dur}`).join('\n')
+const faqText = FAQ_CARRIED.map((item) => `${item.q} ${item.a}`).join('\n')
 
 describe('landing copy: no claim of the pre-catalogue discourse survives', () => {
   for (const source of SOURCES) {
@@ -105,35 +119,12 @@ describe('home: no name is published before its owner validated it', () => {
   }
 })
 
-describe('home: the nav describes the section it points at', () => {
-  it('labels the proof anchor by what the section actually shows', () => {
-    const nav = SOURCES.find((s) => s.path.endsWith('TopNav.tsx'))
-    expect(nav?.text).toContain(`{ label: '${PROOF_NAV_LABEL}', href: '/#proof' }`)
-    expect(nav?.text).not.toMatch(/label: 'T[ée]moignages'/)
-  })
-})
-
 describe('landing copy: the figures are the offer figures', () => {
-  it('the FAQ prices the catalogue offer at OF-1 price and delay, and names the brick floor', () => {
+  it('the carried FAQ prices the catalogue offer at OF-1 price and delay, and names the brick floor', () => {
     expect(faqText).toContain(eurHt(of1.price.oneShotHt))
     expect(faqText).toContain(`${of1.price.monthlyHt} € HT`)
     expect(faqText).toContain(`${of1.delay.days} jours`)
     expect(faqText).toContain(eurHt(of1.price.brickFloorHt))
-  })
-
-  it('the FAQ links to the product page', () => {
-    expect(FAQ.some((item) => item.href === OF1_ROUTE)).toBe(true)
-  })
-
-  it('the process states the offer delay and the recurring fee', () => {
-    expect(stepsText).toContain(`${of1.delay.days} jours`)
-    expect(stepsText).toContain(`${of1.price.monthlyHt} €`)
-  })
-
-  it('the process no longer promises training beyond what OF-1 includes', () => {
-    expect(stepsText.toLowerCase()).not.toContain('formation')
-    const processSource = SOURCES.find((s) => s.path.endsWith('ProcessSection.tsx'))
-    expect(processSource?.text.toLowerCase()).not.toContain('formons')
   })
 
   it('the guide states the same price and delay as the offer', () => {
@@ -189,24 +180,23 @@ describe('home: the testimonial is the hub text, word for word', () => {
 })
 
 /**
- * The home speaks as « nous » since Brice's decision of 2026-09-18 (D10). The founder section is
- * included: the visitor never reads the size of the team, and the founder is named, not counted.
- * Nothing on the page may suggest employees that do not exist — which is why the guard is a ban on
- * the singular third person in that one section, not a demand for a plural noun somewhere.
+ * The home speaks as « nous » since Brice's decision of 2026-09-18 (D10). The founder section left
+ * the home on 2026-09-28 (decision 4); the founder is still named, never counted, in the Formations
+ * proof line (« Notre fondateur est responsable pédagogique… »). Nothing on the page may suggest
+ * employees that do not exist, nor fall back to the singular third person.
  */
 describe('home: the voice is « nous » (A6)', () => {
-  const team = SOURCES.find((s) => s.path.endsWith('TeamSection.tsx'))
-  const llms = SOURCES.find((s) => s.path.endsWith('llms.txt'))
+  const llms = byName('llms.txt')
 
-  it('the founder section presents « Notre fondateur », never « lui »', () => {
-    expect(team?.text).toContain('Notre fondateur')
-    expect(team?.text).not.toMatch(/\blui\b/)
-    expect(team?.text).not.toMatch(/par lui|avec lui/)
+  it('the Formations section presents « Notre fondateur »', () => {
+    expect(byName('FormationsSection.tsx')?.text).toContain('Notre fondateur')
   })
 
-  it('the founder section promises one reachable interlocutor', () => {
-    expect(team?.text).toContain('joignable directement pendant la mission')
-  })
+  for (const home of HOME_SOURCES) {
+    it(`${home.path.split('/').slice(-1)[0]} never falls back to « lui »`, () => {
+      expect(home.text).not.toMatch(/par lui|avec lui|tient lui-même/)
+    })
+  }
 
   it('llms.txt drops « tient lui-même » and speaks of « Notre fondateur »', () => {
     expect(llms?.text).not.toContain('tient lui-même')
@@ -284,22 +274,17 @@ describe('home: the Formations section (A3/A4/A5)', () => {
 })
 
 /**
- * AC-1 reads the Landing source, not the rendered page: a rendered count would also count
- * `CRMStrip`, which the brief's section list does not. The order is the brief's, and the only way
- * to change it is to change this list on purpose.
+ * AC-1 reads the Landing source, not the rendered page. The order is the grill's (2026-09-28,
+ * decision 3: first screen, CRM strip, offer, Formations, final call), and the only way to change
+ * it is to change this list on purpose.
  */
 describe('home: the sections come in the brief order (AC-1)', () => {
   const EXPECTED = [
     'HeroSection',
     'CRMStrip',
-    'CatalogueSection',
-    'ProblemsSection',
-    'ProcessSection',
-    'TeamSection',
-    'ProofSection',
+    'OffreSection',
     'FormationsSection',
     'CalloutSection',
-    'FaqSection',
   ]
 
   it('Landing.tsx renders them in that order inside <main>', () => {
@@ -307,5 +292,63 @@ describe('home: the sections come in the brief order (AC-1)', () => {
     const main = landing.slice(landing.indexOf('<main>'), landing.indexOf('</main>'))
     const rendered = Array.from(main.matchAll(/<([A-Z][A-Za-z0-9]*)\s*\/>/g)).map((m) => m[1])
     expect(rendered).toEqual(EXPECTED)
+  })
+})
+
+/**
+ * The home of 2026-09-28 (grill decisions 3 to 6). Decision 5 was reversed by Brice the same day:
+ * the offer card SHOWS the delivery delay, but only as `of1.delay.days`, so the day the offer's
+ * delay changes the home follows or this goes red. A delay typed by hand on the home is the defect.
+ */
+describe('home: the offer section of 2026-09-28', () => {
+  const offre = byName('OffreSection.tsx')
+  const home = byName('home.ts')
+  const nav = byName('TopNav.tsx')
+
+  it('the home delay comes from the module, never a literal', () => {
+    // Built from the module (and never spelled out here, so the plan's AC-3 grep over this folder
+    // does not match its own guard): a typed « N jours » is caught whatever the delay becomes.
+    const TYPED_DELAY = new RegExp(`${of1.delay.days}(\\s|&nbsp;|\\u00a0)jours|sept\\s+jours`)
+    expect(offre?.text).toContain('of1.delay.days')
+    for (const s of HOME_SOURCES) {
+      expect(s.text, s.path).not.toMatch(TYPED_DELAY)
+    }
+  })
+
+  it('carries the two proof figures and renders the guarantee from the module', () => {
+    expect(home?.text).toContain('289 appels sur 326')
+    expect(home?.text).toContain('89 %')
+    expect(home?.text).toContain('68 rendez-vous')
+    expect(offre?.text).toContain('{of1.guarantee}')
+  })
+
+  it('embeds the video on youtube-nocookie, mounted only after a click', () => {
+    expect(offre?.text).toContain('youtube-nocookie.com/embed/')
+    expect(offre?.text).toContain('useState')
+  })
+
+  it('sells nothing the grill took off the home', () => {
+    for (const s of HOME_SOURCES) {
+      expect(s.text, s.path).not.toMatch(/Bientôt : la relance|€\/mois|par mois/)
+    }
+  })
+
+  it('the nav has the three items of decision 3, in order, and none of the old ones', () => {
+    const text = nav?.text ?? ''
+    const offer = text.indexOf("{ label: 'Offre', href: OF1_ROUTE }")
+    const formations = text.indexOf("{ label: 'Formations', href: '/#formations' }")
+    const ressources = text.indexOf("{ label: 'Ressources', href: '/ressources' }")
+    expect(offer).toBeGreaterThan(-1)
+    expect(formations).toBeGreaterThan(offer)
+    expect(ressources).toBeGreaterThan(formations)
+    expect(text).not.toMatch(/label: '(Cas clients|Contact|Offres)'/)
+  })
+
+  it('the two new sentences exist once, in home.ts, and nowhere else', () => {
+    for (const sentence of [PROOF_LINE, FINAL_CALL_TITLE]) {
+      const holders = SOURCES.filter((s) => s.text.includes(sentence))
+      expect(holders.map((s) => s.path.split('/').slice(-1)[0])).toEqual(['home.ts'])
+      expect(home?.text.split(sentence)).toHaveLength(2)
+    }
   })
 })
