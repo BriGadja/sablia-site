@@ -273,6 +273,99 @@
   .hairline-b {
     border-bottom: 1px solid rgb(var(--color-hairline));
   }
+
+  /*
+   * The CRM record that fills itself over the hero photo (grill 2026-09-28, decision 2; animation of
+   * mockup 2, 2026-09-25): the ONLY animated moment of the home. Pure CSS so the prerendered HTML
+   * and reduced motion behave without JavaScript. `--d` staggers the four bars (RecordCard.tsx).
+   */
+  .record-card {
+    animation:
+      record-pop 0.8s 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both,
+      record-float 5s ease-in-out 1.3s infinite;
+  }
+
+  .record-bar {
+    position: relative;
+    display: block;
+    height: 10px;
+    overflow: hidden;
+    border-radius: 5px;
+    background: rgb(var(--color-primary) / 0.16);
+  }
+
+  .record-bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgb(var(--color-primary));
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: record-fill 5s ease-in-out infinite;
+    animation-delay: calc(var(--d) * 0.35s);
+  }
+
+  @keyframes record-fill {
+    0%,
+    8% {
+      transform: scaleX(0);
+    }
+    40%,
+    88% {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scaleX(1);
+      opacity: 0;
+    }
+  }
+
+  @keyframes record-pop {
+    from {
+      transform: scale(0.7) rotate(-6deg);
+      opacity: 0;
+    }
+  }
+
+  /* `translate`, not `transform`: it composes with record-pop instead of overriding it. */
+  @keyframes record-float {
+    50% {
+      translate: 0 -10px;
+    }
+  }
+
+  /* The compatible-CRM strip scrolls: two identical lists, the track slides by one of them. */
+  .strip-track {
+    display: flex;
+    width: max-content;
+    animation: strip-scroll 30s linear infinite;
+  }
+
+  @keyframes strip-scroll {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .record-card,
+    .record-bar::after,
+    .strip-track {
+      animation: none;
+    }
+    .record-bar::after {
+      transform: scaleX(1);
+    }
+    .strip-track {
+      width: auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .strip-copy {
+      display: none;
+    }
+  }
 }
 
 /* ─── Apparition au scroll (IntersectionObserver + CSS) ───────── */

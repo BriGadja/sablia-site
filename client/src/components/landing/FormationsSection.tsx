@@ -1,3 +1,4 @@
+import { FORMATIONS_PHOTO } from '@/content/home'
 import ContactForm from './ContactForm'
 
 /**
@@ -44,9 +45,27 @@ export const TESTIMONIAL = {
 
 export default function FormationsSection() {
   return (
-    <section id="formations" className="border-y border-hairline bg-canvas-soft px-8 py-section">
-      <div className="mx-auto grid max-w-editorial gap-14 lg:grid-cols-[1fr_minmax(0,460px)] lg:gap-16">
-        <div className="min-w-0">
+    <section
+      id="formations"
+      className="on-light border-t border-hairline-light px-4 py-section sm:px-8"
+    >
+      {/* 1440: photo · text · form on one row. 1024: photo above the text, form beside both.
+          390: photo, text, then the form, stacked (grill 2026-09-28, decision 3). */}
+      <div className="mx-auto grid max-w-editorial gap-10 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[300px_1fr_400px] xl:gap-10">
+        <figure className="min-w-0 lg:col-start-1 lg:row-start-1">
+          <img
+            src={FORMATIONS_PHOTO.src}
+            srcSet={FORMATIONS_PHOTO.srcSet}
+            sizes="(min-width: 1280px) 300px, (min-width: 1024px) 560px, 100vw"
+            width={FORMATIONS_PHOTO.width}
+            height={FORMATIONS_PHOTO.height}
+            alt={FORMATIONS_PHOTO.alt}
+            loading="lazy"
+            className="block aspect-[4/5] w-full rounded-xl object-cover object-[65%_30%] lg:aspect-[16/10] xl:sticky xl:top-24 xl:aspect-[2/3]"
+          />
+        </figure>
+
+        <div className="min-w-0 lg:col-start-1 lg:row-start-2 xl:col-start-2 xl:row-start-1">
           <div className="eyebrow mb-4 text-primary">Formations</div>
           <h2 className="t-display-lg [text-wrap:balance]">
             Nous formons votre entreprise à l'IA, du comité de direction aux équipes.
@@ -56,22 +75,22 @@ export default function FormationsSection() {
             {OFFERS.map((offer) => (
               <li
                 key={offer.title}
-                className="rounded-lg border border-hairline bg-surface-card p-6"
+                className="rounded-lg border border-hairline-light bg-surface-light-card p-6"
               >
-                <h3 className="t-title-sm text-on-dark">{offer.title}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-on-dark-body">{offer.desc}</p>
+                <h3 className="t-title-sm">{offer.title}</h3>
+                <p className="mt-2 text-[15px] leading-relaxed">{offer.desc}</p>
               </li>
             ))}
           </ul>
 
-          <p className="mt-8 max-w-[600px] text-[15px] leading-relaxed text-on-dark-body">
+          <p className="mt-8 max-w-[600px] text-[15px] leading-relaxed">
             Notre fondateur est responsable pédagogique d'une académie de plus de 1&nbsp;400
             entrepreneurs formés à l'IA et à l'automatisation (ateliers toutes les deux semaines,
             module Claude Code de 10&nbsp;heures).
           </p>
 
-          <figure className="mt-8 max-w-[620px] border-t border-hairline pt-6">
-            <blockquote className="font-display text-[clamp(1.25rem,2.2vw,1.6rem)] leading-[1.35] text-on-dark">
+          <figure className="mt-8 max-w-[620px] border-t border-hairline-light pt-6">
+            <blockquote className="font-display text-[clamp(1.25rem,2.2vw,1.6rem)] leading-[1.35] text-ink">
               <span aria-hidden="true" className="text-primary">
                 «&nbsp;
               </span>
@@ -81,13 +100,16 @@ export default function FormationsSection() {
               </span>
             </blockquote>
             <figcaption className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[13px]">
-              <span className="font-medium text-on-dark-body">{TESTIMONIAL.who}</span>
-              <span className="text-on-dark-muted">{TESTIMONIAL.context}</span>
+              <span className="font-medium text-body">{TESTIMONIAL.who}</span>
+              <span className="text-muted-text">{TESTIMONIAL.context}</span>
             </figcaption>
           </figure>
         </div>
 
-        <div id="contact" className="min-w-0 scroll-mt-24">
+        <div
+          id="contact"
+          className="min-w-0 scroll-mt-24 lg:col-start-2 lg:row-span-2 lg:row-start-1 xl:col-start-3 xl:row-span-1"
+        >
           <ContactForm />
         </div>
       </div>

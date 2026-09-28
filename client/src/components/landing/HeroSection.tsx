@@ -1,12 +1,15 @@
-import { motion } from 'framer-motion'
 import { ArrowRight, Check } from '@/components/icons/lucide-crm'
-import FlowDiagram from '@/components/offre/FlowDiagram'
+import { BOOKING_LABEL, HERO_PHOTO } from '@/content/home'
 import { of1 } from '@/content/of1'
 import { openBooking } from './BookingModal'
+import RecordCard from './RecordCard'
 
 /**
- * The home opens on the product the site sells (audit of 2026-09-09: the concrete promise lived
- * one click away, behind a slogan and a mock dashboard). Words come from the OF-1 module.
+ * The first screen (grill 2026-09-28, decision 2): the offer's own title and one booking button,
+ * beside a real photo of Brice at work with the CRM record filling itself over it. Light background.
+ * The photo's QR code and slide text are blurred in the asset (`scripts/prepare-photos.py`), and the
+ * record card covers that corner as well. Words come from the OF-1 module; the delay check is
+ * `of1.delay.days`, never typed (decision 5, reversed by Brice the same day: the home shows it).
  */
 const CHECKS = [
   'Call audit gratuit, sans engagement',
@@ -14,61 +17,57 @@ const CHECKS = [
   'Remboursé si ça ne tourne pas',
 ]
 
+/**
+ * `fetchpriority` goes through a spread, lowercase: react-dom 18.3.1 maps neither casing, so the
+ * camelCase prop (the only one the React types know) would warn and the lowercase one would not
+ * type-check as a JSX attribute. Revisit on a React 19 upgrade, which maps `fetchPriority`.
+ */
+const HIGH_PRIORITY = { fetchpriority: 'high' }
+
 export default function HeroSection() {
   return (
-    <section className="bg-canvas px-8 pb-20 pt-section">
-      <div className="mx-auto grid max-w-editorial items-center gap-14 lg:grid-cols-2">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.2, 0, 0, 1] }}
-        >
-          <div className="eyebrow mb-6 inline-flex items-center gap-2 text-primary">
+    <section className="on-light px-4 pb-16 pt-10 sm:px-8 lg:pb-20 lg:pt-16">
+      <div className="mx-auto grid max-w-editorial items-center gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-14">
+        <div className="min-w-0">
+          <div className="eyebrow mb-5 inline-flex items-center gap-2 text-primary">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
             Agence d'intégration Claude AI × CRM
           </div>
-          <h1 className="t-display-xl text-on-dark-strong [text-wrap:balance]">{of1.title}.</h1>
-          <p className="mt-6 max-w-[540px] text-lg leading-relaxed text-on-dark-body">
+          <h1 className="t-display-xl [text-wrap:balance]">{of1.title}.</h1>
+          <p className="mt-5 max-w-[540px] text-[15px] leading-relaxed sm:text-lg">
             {of1.promise} Pour les équipes commerciales de {of1.teamSize.min} à {of1.teamSize.max}{' '}
             personnes qui ont déjà un CRM.
           </p>
-          <div className="mt-9 flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={openBooking}
-              className="t-button inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-on-primary transition-shadow duration-base hover:shadow-glow-coral"
-            >
-              Réserver un call audit — 30&nbsp;min <ArrowRight size={16} />
-            </button>
-            <a
-              href="#catalogue"
-              className="t-button inline-flex h-11 items-center rounded-md border border-hairline px-5 text-on-dark transition-colors hover:border-on-dark-muted"
-            >
-              Voir le catalogue
-            </a>
-          </div>
-          <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-[13px] text-on-dark-muted">
+          <button
+            type="button"
+            onClick={openBooking}
+            className="t-button mt-8 inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-primary px-6 text-[15px] text-on-primary transition-shadow duration-base hover:shadow-glow-coral sm:w-auto"
+          >
+            {BOOKING_LABEL} <ArrowRight size={16} />
+          </button>
+          <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[13px] text-muted-text">
             {CHECKS.map((check) => (
               <li key={check} className="inline-flex items-center gap-1.5">
                 <Check size={14} className="shrink-0 text-success" /> {check}
               </li>
             ))}
           </ul>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.15, ease: [0.2, 0, 0, 1] }}
-          className="hidden lg:block"
-        >
-          <div className="rounded-xl border border-hairline bg-surface-card/60 p-8">
-            <div className="t-caption-uppercase mb-6 text-on-dark-muted">
-              Ce qui se passe quand votre commercial raccroche
-            </div>
-            <FlowDiagram orientation="horizontal" className="block w-full text-on-dark-body" />
-          </div>
-        </motion.div>
+        <figure className="relative mx-auto w-full max-w-[560px]">
+          <img
+            src={HERO_PHOTO.src}
+            srcSet={HERO_PHOTO.srcSet}
+            sizes="(min-width: 1024px) 560px, 100vw"
+            width={HERO_PHOTO.width}
+            height={HERO_PHOTO.height}
+            alt={HERO_PHOTO.alt}
+            loading="eager"
+            {...HIGH_PRIORITY}
+            className="block aspect-[4/5] w-full rounded-xl object-cover object-[60%_30%] lg:aspect-[5/6] lg:max-h-[640px] lg:rounded-2xl"
+          />
+          <RecordCard className="absolute left-3 top-3 w-[72%] sm:left-6 sm:top-6 sm:w-[260px]" />
+        </figure>
       </div>
     </section>
   )

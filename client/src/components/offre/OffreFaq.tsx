@@ -1,7 +1,14 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { useState } from 'react'
 import { ChevronDown } from '@/components/icons/lucide-crm'
+import { FAQ_CARRIED } from '@/content/faq-carried'
 import { of1 } from '@/content/of1'
+
+/**
+ * The OF-1 questions, then the five that lived on the home until 2026-09-28 (grill decision 4).
+ * Appended AFTER `of1.faq`: `of1.parity.test.ts` anchors indices 0/1/2/4 of the OF-1 list.
+ */
+const ENTRIES = [...of1.faq, ...FAQ_CARRIED]
 
 export default function OffreFaq() {
   const [open, setOpen] = useState<number | null>(null)
@@ -16,7 +23,7 @@ export default function OffreFaq() {
         </div>
 
         <div className="border-y border-hairline">
-          {of1.faq.map((item, index) => {
+          {ENTRIES.map((item, index) => {
             const isOpen = open === index
             const btnId = `offre-faq-btn-${index}`
             const panelId = `offre-faq-panel-${index}`

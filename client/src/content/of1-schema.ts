@@ -5,6 +5,7 @@
  * results are documented for `Product`, not `Service`. Both blocks are valid schema.org and cost
  * nothing; neither is sold as a search feature.
  */
+import { FAQ_CARRIED } from './faq-carried'
 import { OF1_ROUTE, of1 } from './of1'
 
 const SITE = 'https://sablia.io'
@@ -36,7 +37,8 @@ export const serviceSchema = {
 export const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: of1.faq.map((entry) => ({
+  // The same list the page renders: OF-1's questions, then the ones carried from the home (2026-09-28).
+  mainEntity: [...of1.faq, ...FAQ_CARRIED].map((entry) => ({
     '@type': 'Question',
     name: entry.q,
     acceptedAnswer: { '@type': 'Answer', text: entry.a },

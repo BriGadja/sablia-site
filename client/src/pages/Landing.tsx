@@ -1,33 +1,28 @@
 import CalloutSection from '@/components/landing/CalloutSection'
-import CatalogueSection from '@/components/landing/CatalogueSection'
 import CRMStrip from '@/components/landing/CRMStrip'
-import FaqSection from '@/components/landing/FaqSection'
 import FooterSection from '@/components/landing/FooterSection'
 import FormationsSection from '@/components/landing/FormationsSection'
 import HeroSection from '@/components/landing/HeroSection'
-import ProblemsSection from '@/components/landing/ProblemsSection'
-import ProcessSection from '@/components/landing/ProcessSection'
-import ProofSection from '@/components/landing/ProofSection'
-import TeamSection from '@/components/landing/TeamSection'
+import OffreSection from '@/components/landing/OffreSection'
 import TopNav from '@/components/landing/TopNav'
 import SEO from '@/components/SEO'
 
+/**
+ * The home of 2026-09-28 (grill decisions 1 to 4): five light sections that sell the CRM offer and
+ * the trainings. Problems, Process, Team, Proof, Catalogue and FAQ left the page that day; the FAQ
+ * questions moved to the offer page (`content/faq-carried.ts`), the proof figures to `home.ts`.
+ */
 export default function Landing() {
   return (
     <>
       <SEO page="home" />
-      <TopNav />
+      <TopNav tone="light" />
       <main>
         <HeroSection />
         <CRMStrip />
-        <CatalogueSection />
-        <ProblemsSection />
-        <ProcessSection />
-        <TeamSection />
-        <ProofSection />
+        <OffreSection />
         <FormationsSection />
         <CalloutSection />
-        <FaqSection />
       </main>
       <FooterSection />
     </>
