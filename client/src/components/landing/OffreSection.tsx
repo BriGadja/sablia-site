@@ -62,12 +62,12 @@ function VideoFacade() {
 
 export default function OffreSection() {
   return (
-    <section id="offre" className="on-light scroll-mt-20 px-4 py-section sm:px-8">
+    <section id="offre" className="scroll-mt-20 bg-surface-light px-4 py-section sm:px-8">
       <div className="mx-auto grid max-w-editorial items-center gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
         <div className="order-2 min-w-0 rounded-2xl border border-hairline-light bg-white p-6 sm:p-9 lg:order-1">
           <div className="eyebrow mb-4 text-primary">Offre n°1 · Compte rendu d'appel</div>
-          <h2 className="t-display-lg [text-wrap:balance]">{of1.title}</h2>
-          <p className="mt-4 text-[15px] leading-relaxed sm:text-base">{of1.promise}</p>
+          <h2 className="t-display-lg text-ink [text-wrap:balance]">{of1.title}</h2>
+          <p className="mt-4 text-[15px] leading-relaxed text-body sm:text-base">{of1.promise}</p>
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <span className="rounded-full bg-primary px-4 py-1.5 text-[15px] font-semibold text-on-primary">
               {eurHt(of1.price.oneShotHt)}
@@ -80,7 +80,7 @@ export default function OffreSection() {
             <div className="text-[13px] font-semibold uppercase tracking-[1.5px] text-ink">
               Si ça ne tourne pas, vous ne payez rien
             </div>
-            <p className="mt-2 text-[14px] leading-relaxed">{of1.guarantee}</p>
+            <p className="mt-2 text-[14px] leading-relaxed text-body">{of1.guarantee}</p>
           </div>
           <Link
             href={OF1_ROUTE}

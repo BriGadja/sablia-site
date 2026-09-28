@@ -47,8 +47,10 @@ export default function FormationsSection() {
   return (
     <section
       id="formations"
-      className="on-light border-t border-hairline-light px-4 py-section sm:px-8"
+      className="border-t border-hairline-light bg-surface-light px-4 py-section sm:px-8"
     >
+      {/* Light band WITHOUT `on-light`: its `h3`/`p` colour rules outrank utilities and would paint
+          the dark contact card's own text dark on dark (preview walk, 2026-09-28). */}
       {/* 1440: photo · text · form on one row. 1024: photo above the text, form beside both.
           390: photo, text, then the form, stacked (grill 2026-09-28, decision 3). */}
       <div className="mx-auto grid max-w-editorial gap-10 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[280px_1fr_380px] xl:gap-10">
@@ -67,7 +69,7 @@ export default function FormationsSection() {
 
         <div className="min-w-0 lg:col-start-1 lg:row-start-2 xl:col-start-2 xl:row-start-1">
           <div className="eyebrow mb-4 text-primary">Formations</div>
-          <h2 className="t-display-lg [text-wrap:balance]">
+          <h2 className="t-display-lg text-ink [text-wrap:balance]">
             Nous formons votre entreprise à l'IA, du comité de direction aux équipes.
           </h2>
 
@@ -77,13 +79,13 @@ export default function FormationsSection() {
                 key={offer.title}
                 className="rounded-lg border border-hairline-light bg-surface-light-card p-6"
               >
-                <h3 className="t-title-sm">{offer.title}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed">{offer.desc}</p>
+                <h3 className="t-title-sm text-ink">{offer.title}</h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-body">{offer.desc}</p>
               </li>
             ))}
           </ul>
 
-          <p className="mt-8 max-w-[600px] text-[15px] leading-relaxed">
+          <p className="mt-8 max-w-[600px] text-[15px] leading-relaxed text-body">
             Notre fondateur est responsable pédagogique d'une académie de plus de 1&nbsp;400
             entrepreneurs formés à l'IA et à l'automatisation (ateliers toutes les deux semaines,
             module Claude Code de 10&nbsp;heures).

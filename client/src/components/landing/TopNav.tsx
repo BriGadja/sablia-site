@@ -26,7 +26,9 @@ const NAV_ITEMS = [
 
 const TONES = {
   dark: {
-    bar: 'border-hairline bg-canvas-soft/82',
+    // `/82` is not in Tailwind v3's opacity scale and compiled to nothing: the dark bar had no
+    // background at all until 2026-09-28. The arbitrary value keeps the intended 82 %.
+    bar: 'border-hairline bg-canvas-soft/[0.82]',
     wordmark: '/wordmark-dark.svg',
     link: 't-nav-link transition-colors duration-fast hover:text-on-dark',
     toggle: 'border-hairline bg-surface-card text-on-dark',

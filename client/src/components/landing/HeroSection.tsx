@@ -26,15 +26,15 @@ const HIGH_PRIORITY = { fetchpriority: 'high' }
 
 export default function HeroSection() {
   return (
-    <section className="on-light px-4 pb-16 pt-10 sm:px-8 lg:pb-20 lg:pt-16">
+    <section className="bg-surface-light px-4 pb-16 pt-10 sm:px-8 lg:pb-20 lg:pt-16">
       <div className="mx-auto grid max-w-editorial items-center gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-14">
         <div className="min-w-0">
           <div className="eyebrow mb-5 inline-flex items-center gap-2 text-primary">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
             Agence d'intégration Claude AI × CRM
           </div>
-          <h1 className="t-display-xl [text-wrap:balance]">{of1.title}.</h1>
-          <p className="mt-5 max-w-[540px] text-[15px] leading-relaxed sm:text-lg">
+          <h1 className="t-display-xl text-ink [text-wrap:balance]">{of1.title}.</h1>
+          <p className="mt-5 max-w-[540px] text-[15px] leading-relaxed text-body sm:text-lg">
             {of1.promise} Pour les équipes commerciales de {of1.teamSize.min} à {of1.teamSize.max}{' '}
             personnes qui ont déjà un CRM.
           </p>
