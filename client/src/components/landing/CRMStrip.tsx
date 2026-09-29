@@ -1,4 +1,15 @@
-const CRMS = ['salesforce', 'hubspot', 'pipedrive', 'zoho', 'monday', 'notion', 'sellsy']
+// CRMs, then the call notetakers whose transcripts feed the call report (Brice, 2026-09-29).
+const CRMS = [
+  'salesforce',
+  'hubspot',
+  'pipedrive',
+  'zoho',
+  'monday',
+  'notion',
+  'sellsy',
+  'fireflies',
+  'fathom',
+]
 
 /**
  * The compatible-CRM strip scrolls (grill 2026-09-28, decision 3): the list is rendered twice and
