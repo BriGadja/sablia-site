@@ -1,7 +1,7 @@
 {
-  "name": "Sablia - Automatisation IA pour PME",
+  "name": "Sablia",
   "short_name": "Sablia",
-  "description": "Automatisez vos processus métier avec Sablia",
+  "description": "Agence d'intégration Claude AI × CRM",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

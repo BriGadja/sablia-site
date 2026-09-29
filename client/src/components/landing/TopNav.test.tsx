@@ -19,7 +19,7 @@ const LANDING_ITEMS: readonly (readonly [string, string])[] = [
   ['Ressources', '/ressources'],
 ]
 
-/** Every anchor of the bar except the wordmark, which links the site root. */
+/** Every anchor of the bar except the logo, which links the site root. */
 const navAnchors = (container: HTMLElement) =>
   Array.from(container.querySelectorAll('a')).filter((a) => a.getAttribute('href') !== '/')
 
@@ -67,9 +67,20 @@ describe('TopNav', () => {
     expect(labels[LANDING_ITEMS.length]).toBe('Offre')
   })
 
-  it('renders the light wordmark in the light tone (the home)', () => {
+  // US-12: the bar carries the <Logo> (mark 3, picked by Brice on 2026-09-29), not an <img> of
+  // the old wordmark derived from a client's brand.
+  it('renders the Sablia logo in the root link, ink on the light bar (the home)', () => {
     const { container } = render(<TopNav tone="light" />)
-    expect(container.querySelector('nav img')?.getAttribute('src')).toBe('/wordmark-light.svg')
+    const logo = container.querySelector('a[href="/"] [role="img"][aria-label="Sablia"]')
+    expect(logo).not.toBeNull()
+    expect(logo?.className).toContain('text-ink')
+    expect(container.querySelector('nav img')).toBeNull()
+  })
+
+  it('renders the same logo in the on-dark colour on the dark bar', () => {
+    const { container } = render(<TopNav />)
+    const logo = container.querySelector('a[href="/"] [role="img"][aria-label="Sablia"]')
+    expect(logo?.className).toContain('text-on-dark')
   })
 
   it('leaves a page that supplies its own items untouched', () => {

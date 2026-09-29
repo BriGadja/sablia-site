@@ -9,6 +9,8 @@ This check exits 0 only when:
   - brand/symbol.svg is paths only (no <image>, no <text>) and is not empty nor a solid block:
     rasterised at 64 px, it shows >= 2 distinct RGBA values among its visible pixels and covers
     between 8 % and 70 % of the square;
+  - brand/badge.svg (favicon and app icons, Brice's mark 12) cuts the symbol's OWN path out of its
+    square: same `d`, and the cut-out is real (covers 40-80 %: a badge with no hole reads ~84 %);
   - the schema.org "logo" of client/index.html points to a file that exists under client/public/.
 
 Usage: python3 scripts/brand-check.py [--public client/public]
@@ -135,6 +137,35 @@ def check_symbol(public: Path) -> list[str]:
     return errors
 
 
+def raster_coverage(path: Path) -> float | None:
+    png = subprocess.run(
+        ["rsvg-convert", "-w", "64", "-h", "64", str(path)], capture_output=True, check=False
+    )
+    if png.returncode != 0:
+        return None
+    data = Image.open(io.BytesIO(png.stdout)).convert("RGBA").getchannel("A").tobytes()
+    return sum(1 for alpha in data if alpha > 0) / (64 * 64)
+
+
+def check_badge(public: Path) -> list[str]:
+    symbol, badge = public / "brand" / "symbol.svg", public / "brand" / "badge.svg"
+    if not badge.is_file() or not symbol.is_file():
+        return ["brand/badge.svg or brand/symbol.svg missing"]
+    text = badge.read_text(encoding="utf-8")
+    errors = []
+    if "<image" in text or "<text" in text:
+        errors.append("badge.svg is not paths only")
+    path_d = re.search(r'<path[^>]* d="([^"]+)"', symbol.read_text(encoding="utf-8"))
+    if not path_d or f'd="{path_d.group(1)}"' not in text:
+        errors.append("badge.svg does not cut out the symbol's own path")
+    coverage = raster_coverage(badge)
+    if coverage is None:
+        errors.append("rsvg-convert failed on badge.svg")
+    elif not 0.40 <= coverage <= 0.80:
+        errors.append(f"badge raster covers {coverage:.0%} of the square (expected 40-80 %)")
+    return errors
+
+
 def check_schema_logo(public: Path) -> list[str]:
     html = (public.parent / "index.html").read_text(encoding="utf-8")
     match = re.search(r'"logo":\s*"https://sablia\.io/([^"]+)"', html)
@@ -161,6 +192,7 @@ def main() -> int:
         ("favicon.ico = 16/32/48", check_ico),
         ("OG and Twitter images 1200x630", check_og),
         ("symbol.svg paths only, visible, not a block", check_symbol),
+        ("badge.svg cuts out the symbol's path", check_badge),
         ("schema.org logo resolves", check_schema_logo),
         ("manifest icons exist", check_manifest),
     ]
