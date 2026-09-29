@@ -9,15 +9,42 @@ interface TopNavProps {
   items?: readonly { label: string; href: string }[]
   bookingUrl?: string
   ctaLabel?: string
+  /** `light` on the home (light since 2026-09-28), `dark` everywhere else. */
+  tone?: 'dark' | 'light'
 }
 
+/**
+ * Three items since the grill of 2026-09-28 (decision 3): « Cas clients » and « Contact » left the
+ * bar with the sections they pointed at, and the footer keeps `/#contact`. The default is SITE-WIDE
+ * on purpose: LegalShell, ThankYou, Ressources and Ressource render `<TopNav />` without `items`.
+ */
 const NAV_ITEMS = [
-  { label: 'Offres', href: OF1_ROUTE },
-  { label: 'Ressources', href: '/ressources' },
-  { label: 'Cas clients', href: '/#proof' },
+  { label: 'Offre', href: OF1_ROUTE },
   { label: 'Formations', href: '/#formations' },
-  { label: 'Contact', href: '/#contact' },
+  { label: 'Ressources', href: '/ressources' },
 ]
+
+const TONES = {
+  dark: {
+    // `/82` is not in Tailwind v3's opacity scale and compiled to nothing: the dark bar had no
+    // background at all until 2026-09-28. The arbitrary value keeps the intended 82 %.
+    bar: 'border-hairline bg-canvas-soft/[0.82]',
+    wordmark: '/wordmark-dark.svg',
+    link: 't-nav-link transition-colors duration-fast hover:text-on-dark',
+    toggle: 'border-hairline bg-surface-card text-on-dark',
+    sheet: 'border-hairline bg-canvas-soft',
+    sheetLink: 't-title-sm text-on-dark-body transition-colors hover:text-on-dark',
+  },
+  light: {
+    // Opaque: at the top of the page the bar sits over the dark body, a translucent cream reads grey.
+    bar: 'border-hairline-light bg-surface-light',
+    wordmark: '/wordmark-light.svg',
+    link: 't-nav-link text-body transition-colors duration-fast hover:text-ink',
+    toggle: 'border-hairline-light bg-white text-ink',
+    sheet: 'border-hairline-light bg-surface-light',
+    sheetLink: 't-title-sm text-body transition-colors hover:text-ink',
+  },
+} as const
 
 function NavItem({
   href,
@@ -48,24 +75,22 @@ function NavItem({
 export default function TopNav({
   items = NAV_ITEMS,
   bookingUrl = site.bookingUrl,
-  ctaLabel = 'Réserver un call audit',
+  ctaLabel = 'Réserver 30 min',
+  tone = 'dark',
 }: TopNavProps = {}) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const t = TONES[tone]
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-hairline bg-canvas-soft/82 backdrop-blur-xl backdrop-saturate-[1.4]">
+    <nav className={`sticky top-0 z-50 border-b ${t.bar} backdrop-blur-xl backdrop-saturate-[1.4]`}>
       <div className="mx-auto flex h-16 max-w-editorial items-center gap-10 px-8">
         <a href="/" className="flex shrink-0 items-center gap-2.5">
-          <img src="/wordmark-dark.svg" alt="Sablia" className="block h-12" />
+          <img src={t.wordmark} alt="Sablia" className="block h-12" />
         </a>
 
         <div className="hidden flex-1 items-center gap-7 md:flex">
           {items.map((item) => (
-            <NavItem
-              key={item.label}
-              href={item.href}
-              className="t-nav-link transition-colors duration-fast hover:text-on-dark"
-            >
+            <NavItem key={item.label} href={item.href} className={t.link}>
               {item.label}
             </NavItem>
           ))}
@@ -84,7 +109,7 @@ export default function TopNav({
         <button
           type="button"
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-md border border-hairline bg-surface-card text-on-dark md:hidden"
+          className={`ml-auto inline-flex h-9 w-9 items-center justify-center rounded-md border md:hidden ${t.toggle}`}
           aria-label={mobileOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
         >
           {mobileOpen ? <X size={18} /> : <Menu size={18} />}
@@ -92,14 +117,14 @@ export default function TopNav({
       </div>
 
       {mobileOpen && (
-        <div className="absolute inset-x-0 top-16 z-40 border-b border-hairline bg-canvas-soft p-6 md:hidden">
+        <div className={`absolute inset-x-0 top-16 z-40 border-b p-6 md:hidden ${t.sheet}`}>
           <div className="flex flex-col gap-4">
             {items.map((item) => (
               <NavItem
                 key={item.label}
                 href={item.href}
                 onNavigate={() => setMobileOpen(false)}
-                className="t-title-sm text-on-dark-body transition-colors hover:text-on-dark"
+                className={t.sheetLink}
               >
                 {item.label}
               </NavItem>

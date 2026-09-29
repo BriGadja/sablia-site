@@ -275,3 +275,34 @@ CLAUDE.md                            # Index — quick reference + links to ever
 - [ ] `npm run check` passes
 - [ ] `npm test` passes
 - [ ] All Biome lint checks pass
+
+## 8. Home 2026-09-28 (grill decisions)
+
+Source: the /grill-me of 2026-09-28 (14 questions, autopilot run `2026-09-28-refonte-accueil-sablia`,
+hub `state/autopilot/runs/2026-09-28-refonte-accueil-sablia/00-run.md`). Stories: `specs/REGISTRY.md`
+US-1, US-2, US-3, US-9 to US-13.
+
+1. The home sells the CRM offer and the trainings; websites stay off the site.
+2. First screen: the real photo of Brice pointing at the screen (QR and slide text blurred), the CRM record
+   that fills itself over it (the only animated moment, mockup 2's animation), `of1.title` as the headline,
+   one « Réserver 30 min » button. Light background.
+3. Five sections, in order: first screen · scrolling compatible-CRM strip · offer (OF-1 card 1 490 € HT with
+   its guarantee, the YouTube demo `d5fo00AFqVM` beside it as a click-to-play facade on
+   `youtube-nocookie.com`, the proof line, since 2026-09-29 « Plus de 20 clients accompagnés depuis 2025. »
+   on Brice's written word, which replaced the call figures 289/326 and 68 rendez-vous) · Formations
+   (vertical photo, the accroche validated on 2026-09-18, the Denis quote plus two training quotes of
+   2026-09-29, the existing `#contact` form) · final call. Nav, site-wide:
+   Offre · Formations · Ressources + « Réserver 30 min ».
+4. Left the home: Problems, Process, Team, Proof (long case cards), Catalogue (with the « Bientôt : la
+   relance » card) and the FAQ, whose five questions moved to the offer page after the OF-1 ones.
+5. The delivery delay: first « never shown », REVERSED by Brice the same day. The offer card shows
+   « Livré en 7 jours », rendered from `of1.delay.days`, never as a literal.
+6. Words: reused validated copy (`of1.ts`, the Formations accroche of 2026-09-18). Two new sentences only,
+   shown to Brice on the preview: the proof line and the final-call title. On 2026-09-29 Brice kept the
+   title, rejected the proof line (« ne parle pas d'appels ») and gave its replacement, plus two
+   testimonials written by their authors (first names only); all three are rows P-15 to P-17 of the hub's
+   proof dossier, and `landing.copy.test.ts` pins each to its row.
+7. Logo: designed from scratch in Claude Design, chosen by Brice among ≥ 3 tracks, colour #D97757 (the
+   previous mark was derived from a client's brand). Favicon live before 2026-10-22; the site ships before
+   2026-10-09 even if the logo lags.
+8. Go-live criterion: the site is presentable enough for the school partner to redirect its traffic to it.

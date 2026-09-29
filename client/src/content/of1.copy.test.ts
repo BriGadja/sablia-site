@@ -10,6 +10,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
+import { FAQ_CARRIED } from './faq-carried'
 import { OF1_BOOKING_URL, OF1_ROUTE, of1 } from './of1'
 import { faqSchema, serviceSchema } from './of1-schema'
 
@@ -234,9 +235,10 @@ describe('OF-1 copy guard: structured data', () => {
     expect(serviceSchema.offers.priceSpecification.valueAddedTaxIncluded).toBe(false)
   })
 
-  it('publishes every FAQ entry the page renders', () => {
-    expect(faqSchema.mainEntity).toHaveLength(of1.faq.length)
+  it('publishes every FAQ entry the page renders, the carried home questions included', () => {
+    expect(faqSchema.mainEntity).toHaveLength(of1.faq.length + FAQ_CARRIED.length)
     expect(faqSchema.mainEntity[0].name).toBe(of1.faq[0].q)
+    expect(faqSchema.mainEntity[of1.faq.length].name).toBe(FAQ_CARRIED[0].q)
   })
 })
 

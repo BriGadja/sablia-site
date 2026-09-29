@@ -41,7 +41,7 @@ export default function OffreCompteRenduAppel() {
       {/* Enter fade only: with Wouter Routes as direct AnimatePresence children, exit
           animations do not fire (molefrog/wouter#414). Pre-existing, site-wide. */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }}>
-        <TopNav items={NAV_ITEMS} bookingUrl={OF1_BOOKING_URL} ctaLabel="Réserver 30 minutes" />
+        <TopNav items={NAV_ITEMS} bookingUrl={OF1_BOOKING_URL} ctaLabel="Réserver 30 min" />
         <main>
           <OffreHero />
           <AudienceStrip />

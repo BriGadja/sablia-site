@@ -1,3 +1,6 @@
+import { useState } from 'react'
+import { FORMATION_QUOTES, FORMATIONS_PHOTO, type HomeQuote } from '@/content/home'
+import { frenchSpacing } from '@/lib/format'
 import ContactForm from './ContactForm'
 
 /**
@@ -29,7 +32,7 @@ const OFFERS = [
 ] as const
 
 /**
- * The one quote on the home. It moved here from the founder section on 2026-09-18: it is a
+ * The first quote of the section. It moved here from the founder section on 2026-09-18: it is a
  * TRAINING testimonial (A5), and a quote printed twice on one page is noise. Received as a written
  * comment from its author on 2026-09-17; the first name is published on Brice's ruling of the same
  * day. The hub keeps the text and its status (P-14 in the proof dossier), and `landing.copy.test.ts`
@@ -42,13 +45,75 @@ export const TESTIMONIAL = {
   context: 'Formé par Brice, 2026',
 } as const
 
+/**
+ * A training testimonial as a sober card (2026-09-29). The full text stays in the DOM, so screen
+ * readers and the copy guards read every word; the clamp to three lines is visual only, lifted by
+ * the « Lire la suite » button, which carries its state in `aria-expanded`.
+ */
+function QuoteCard({ item, id }: { item: HomeQuote; id: string }) {
+  const [open, setOpen] = useState(false)
+  const firstName = item.who.split(',')[0]
+
+  return (
+    <li className="rounded-lg border border-hairline-light bg-surface-light-card p-6">
+      <figure>
+        <blockquote
+          id={id}
+          className={`text-[15px] leading-relaxed text-body ${open ? '' : 'line-clamp-3'}`}
+        >
+          <span aria-hidden="true" className="text-primary">
+            «&nbsp;
+          </span>
+          {frenchSpacing(item.quote)}
+          <span aria-hidden="true" className="text-primary">
+            &nbsp;»
+          </span>
+        </blockquote>
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls={id}
+          onClick={() => setOpen((value) => !value)}
+          className="mt-2 text-[13px] font-medium text-ink underline decoration-primary underline-offset-4 hover:text-primary-active"
+        >
+          {open ? 'Réduire' : 'Lire la suite'}
+          <span className="sr-only">
+            {open ? ` le témoignage de ${firstName}` : ` du témoignage de ${firstName}`}
+          </span>
+        </button>
+        <figcaption className="mt-3 text-[13px] font-medium text-body">{item.who}</figcaption>
+      </figure>
+    </li>
+  )
+}
+
 export default function FormationsSection() {
   return (
-    <section id="formations" className="border-y border-hairline bg-canvas-soft px-8 py-section">
-      <div className="mx-auto grid max-w-editorial gap-14 lg:grid-cols-[1fr_minmax(0,460px)] lg:gap-16">
-        <div className="min-w-0">
+    <section
+      id="formations"
+      className="border-t border-hairline-light bg-surface-light px-4 py-section sm:px-8"
+    >
+      {/* Light band WITHOUT `on-light`: its `h3`/`p` colour rules outrank utilities and would paint
+          the dark contact card's own text dark on dark (preview walk, 2026-09-28). */}
+      {/* 1440: photo · text · form on one row. 1024: photo above the text, form beside both.
+          390: photo, text, then the form, stacked (grill 2026-09-28, decision 3). */}
+      <div className="mx-auto grid max-w-editorial gap-10 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[280px_1fr_380px] xl:gap-10">
+        <figure className="min-w-0 lg:col-start-1 lg:row-start-1">
+          <img
+            src={FORMATIONS_PHOTO.src}
+            srcSet={FORMATIONS_PHOTO.srcSet}
+            sizes="(min-width: 1280px) 280px, (min-width: 1024px) 560px, 100vw"
+            width={FORMATIONS_PHOTO.width}
+            height={FORMATIONS_PHOTO.height}
+            alt={FORMATIONS_PHOTO.alt}
+            loading="lazy"
+            className="block aspect-[4/5] w-full rounded-xl object-cover object-[65%_30%] lg:aspect-[16/10] xl:sticky xl:top-24 xl:aspect-[2/3]"
+          />
+        </figure>
+
+        <div className="min-w-0 lg:col-start-1 lg:row-start-2 xl:col-start-2 xl:row-start-1">
           <div className="eyebrow mb-4 text-primary">Formations</div>
-          <h2 className="t-display-lg [text-wrap:balance]">
+          <h2 className="t-display-lg text-ink [text-wrap:balance]">
             Nous formons votre entreprise à l'IA, du comité de direction aux équipes.
           </h2>
 
@@ -56,22 +121,22 @@ export default function FormationsSection() {
             {OFFERS.map((offer) => (
               <li
                 key={offer.title}
-                className="rounded-lg border border-hairline bg-surface-card p-6"
+                className="rounded-lg border border-hairline-light bg-surface-light-card p-6"
               >
-                <h3 className="t-title-sm text-on-dark">{offer.title}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-on-dark-body">{offer.desc}</p>
+                <h3 className="t-title-sm text-ink">{offer.title}</h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-body">{offer.desc}</p>
               </li>
             ))}
           </ul>
 
-          <p className="mt-8 max-w-[600px] text-[15px] leading-relaxed text-on-dark-body">
+          <p className="mt-8 max-w-[600px] text-[15px] leading-relaxed text-body">
             Notre fondateur est responsable pédagogique d'une académie de plus de 1&nbsp;400
             entrepreneurs formés à l'IA et à l'automatisation (ateliers toutes les deux semaines,
             module Claude Code de 10&nbsp;heures).
           </p>
 
-          <figure className="mt-8 max-w-[620px] border-t border-hairline pt-6">
-            <blockquote className="font-display text-[clamp(1.25rem,2.2vw,1.6rem)] leading-[1.35] text-on-dark">
+          <figure className="mt-8 max-w-[620px] border-t border-hairline-light pt-6">
+            <blockquote className="font-display text-[clamp(1.25rem,2.2vw,1.6rem)] leading-[1.35] text-ink">
               <span aria-hidden="true" className="text-primary">
                 «&nbsp;
               </span>
@@ -81,13 +146,22 @@ export default function FormationsSection() {
               </span>
             </blockquote>
             <figcaption className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[13px]">
-              <span className="font-medium text-on-dark-body">{TESTIMONIAL.who}</span>
-              <span className="text-on-dark-muted">{TESTIMONIAL.context}</span>
+              <span className="font-medium text-body">{TESTIMONIAL.who}</span>
+              <span className="text-muted-text">{TESTIMONIAL.context}</span>
             </figcaption>
           </figure>
+
+          <ul className="mt-6 grid max-w-[620px] gap-4">
+            {FORMATION_QUOTES.map((item, index) => (
+              <QuoteCard key={item.who} item={item} id={`formation-quote-${index + 1}`} />
+            ))}
+          </ul>
         </div>
 
-        <div id="contact" className="min-w-0 scroll-mt-24">
+        <div
+          id="contact"
+          className="min-w-0 scroll-mt-24 lg:col-start-2 lg:row-span-2 lg:row-start-1 xl:col-start-3 xl:row-span-1"
+        >
           <ContactForm />
         </div>
       </div>
