@@ -51,6 +51,9 @@
 
     --color-primary: 204 120 92;
     --color-primary-active: 169 88 62;
+    /* Filled coral buttons rest on primary-active (white text 5.06:1) and darken to this on hover
+       and press (6.41:1). White on primary itself reads 3.28:1: not for text (2026-09-29). */
+    --color-primary-hover: 146 75 52;
     --color-primary-disabled: 230 223 216;
     --color-accent-teal: 93 184 166;
     --color-accent-amber: 232 165 90;

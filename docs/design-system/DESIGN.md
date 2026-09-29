@@ -25,7 +25,8 @@ The light sections are where Sablia shows real-world output — dashboard screen
 
 ### Brand & Accent
 - **Coral / Primary** (`{colors.primary}` — #cc785c): The signature Sablia coral. Used on every primary CTA background, on callout cards, on key metrics and data highlights. Warm, confident, distinctive — the brand's defining accent color.
-- **Coral Active** (`{colors.primary-active}` — #a9583e): The press / hover-darker variant.
+- **Coral Active** (`{colors.primary-active}` — #a9583e): Since 2026-09-29 (Brice), the RESTING fill of every filled coral button and of the callout cards, i.e. every coral surface that carries white text: white on it reads 5.06:1 (WCAG AA). White on `{colors.primary}` reads 3.28:1, so the brand coral stays for accents, rules, bars and decoration, never under text.
+- **Coral Hover** (`{colors.primary-hover}` — #924b34): The hover and press fill of those buttons. White on it reads 6.41:1. Guard: `client/src/components/coral-contrast.test.tsx` (computed from the tokens).
 - **Coral Disabled** (`{colors.primary-disabled}` — #e6dfd8): A desaturated light-tinted disabled state.
 - **Accent Teal** (`{colors.accent-teal}` — #5db8a6): Secondary accent for success states, positive KPIs, data chart secondary lines, and contrast moments. Never used as a primary CTA.
 - **Accent Amber** (`{colors.accent-amber}` — #e8a55a): A companion warm-tone used on KPI highlights and inline data callouts.
@@ -154,7 +155,7 @@ Sablia's LP uses real product output, not stock photography or abstract illustra
 
 ### Buttons
 
-**`button-primary`** — The signature coral CTA. Background `{colors.primary}` (#cc785c), text `{colors.on-primary}` (white), type `{typography.button}` (Inter 14px / 500), padding 12px x 20px, height 40px, rounded `{rounded.md}` (8px). Active state `button-primary-active` darkens to `{colors.primary-active}` (#a9583e). Hover adds subtle coral glow.
+**`button-primary`** — The signature coral CTA. Background `{colors.primary-active}` (#a9583e; white 5.06:1), text `{colors.on-primary}` (white), type `{typography.button}` (Inter 14px / 500), padding 12px x 20px, height 40px, rounded `{rounded.md}` (8px). Hover and press darken to `{colors.primary-hover}` (#924b34; white 6.41:1); hover also adds the subtle coral glow. Until 2026-09-29 it rested on `{colors.primary}`, where the white label read 3.28:1, under AA.
 
 **`button-secondary`** — Dark card button with hairline outline. Background transparent, text `{colors.on-dark}`, 1px `{colors.hairline}` border, same padding + height + radius as primary.
 
@@ -178,7 +179,7 @@ Sablia's LP uses real product output, not stock photography or abstract illustra
 
 **`process-step-card`** — Used in a horizontal 3-4 step process flow ("Comment ca marche"). Background `{colors.surface-card}`, rounded `{rounded.lg}`, padding `{spacing.xl}`. Carries a step number in `{typography.display-sm}` (serif, coral color), a title, and a short description. Steps: Call discovery → Diagnostic CRM → Implementation sur-mesure → Suivi.
 
-**`callout-card-coral`** — A full-bleed coral card carrying a major call-to-action. Background `{colors.primary}` (#cc785c), text `{colors.on-primary}` (white), rounded `{rounded.lg}`, padding `{spacing.xxl}` (48px). CTA inside uses an inverted dark button.
+**`callout-card-coral`** — A full-bleed coral card carrying a major call-to-action. Background `{colors.primary-active}` (#a9583e; since 2026-09-29, when the paragraph at 70 % white read 2.4:1 on `{colors.primary}`), text `{colors.on-primary}` at full opacity (title and paragraph 5.06:1), rounded `{rounded.lg}`, padding `{spacing.xxl}` (48px). CTA inside uses an inverted dark button.
 
 **`booking-cta-band`** — The primary conversion band, used as pre-footer CTA. Background `{colors.canvas-soft}` with a centered layout: h2 in serif ("Pret a optimiser votre CRM ?"), a sub-line describing the free discovery call, and a `{component.button-primary}` (coral). Can also appear mid-page after use cases.
 

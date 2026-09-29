@@ -54,7 +54,7 @@ export default function ProofStrip() {
               CRM qui se remplit.
             </p>
             <a
-              className="t-button mt-5 inline-flex h-[52px] items-center justify-center rounded-md bg-primary px-7 text-[15px] text-on-primary transition-transform duration-base hover:translate-x-0.5"
+              className="t-button mt-5 inline-flex h-[52px] items-center justify-center rounded-md bg-primary-active px-7 text-[15px] text-on-primary hover:bg-primary-hover active:bg-primary-hover transition-transform duration-base hover:translate-x-0.5"
               href={PROOF_DEMO_URL}
               rel="noreferrer"
               target="_blank"

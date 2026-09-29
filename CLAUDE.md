@@ -7,7 +7,7 @@
 |-----|-------|
 | Domain | sablia.io |
 | Stack | React 18 / TypeScript / Vite / Express / Drizzle ORM / Tailwind v3 |
-| Palette | Dark canvas #0f0f12 / Coral primary #cc785c / Teal accent #5db8a6 / Light cream #f5f2ec — full spec in `docs/design-system/DESIGN.md` |
+| Palette | Dark canvas #0f0f12 / Coral primary #cc785c / Teal accent #5db8a6 / Light cream #f5f2ec — full spec in `docs/design-system/DESIGN.md`. **Filled coral buttons and the callout cards rest on `primary-active` #a9583e and darken to `primary-hover` #924b34** (white 5.06:1 / 6.41:1, AA; Brice, 2026-09-29): white on #cc785c reads 3.28:1, so the brand coral never sits under text. Guard `client/src/components/coral-contrast.test.tsx` |
 | Typography | Cormorant Garamond Variable (display serif) / Inter Variable (body sans) / JetBrains Mono Variable (mono) |
 | Animations | Framer Motion (whileInView + variants) |
 | Dev | `npm run dev` → http://localhost:5000 |

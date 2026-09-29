@@ -48,7 +48,7 @@ export default function OffreHero() {
             <button
               type="button"
               onClick={() => openBookingUrl(OF1_BOOKING_URL)}
-              className="t-button inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-on-primary transition-shadow duration-base hover:shadow-glow-coral"
+              className="t-button inline-flex h-11 items-center gap-2 rounded-md bg-primary-active px-5 text-on-primary hover:bg-primary-hover active:bg-primary-hover transition-shadow duration-base hover:shadow-glow-coral"
             >
               Réserver 30 minutes avec Brice <ArrowRight size={16} />
             </button>

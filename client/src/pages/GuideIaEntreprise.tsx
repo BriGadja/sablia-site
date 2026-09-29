@@ -62,7 +62,7 @@ function CtaAudit() {
     <button
       type="button"
       onClick={openBooking}
-      className="t-button inline-flex h-11 items-center gap-2 rounded-md bg-primary px-5 text-on-primary transition-shadow duration-base hover:shadow-glow-coral"
+      className="t-button inline-flex h-11 items-center gap-2 rounded-md bg-primary-active px-5 text-on-primary hover:bg-primary-hover active:bg-primary-hover transition-shadow duration-base hover:shadow-glow-coral"
     >
       Réserver un call audit — 30&nbsp;min <ArrowRight size={16} />
     </button>
