@@ -14,7 +14,7 @@ const OFF_SOURCE_PROMISE =
 
 export default function OffreCallout() {
   return (
-    <section className="bg-canvas px-8 py-16">
+    <section className="bg-surface-light px-8 py-16">
       <div className="mx-auto max-w-editorial">
         <div className="grid items-center gap-10 rounded-xl bg-primary p-8 sm:p-12 lg:gap-14 lg:p-14 lg:grid-cols-[1fr_auto]">
           <div className="min-w-0">
@@ -25,10 +25,12 @@ export default function OffreCallout() {
             </h2>
             <p className="mt-4 max-w-[560px] text-on-primary/75">{OFF_SOURCE_PROMISE}</p>
           </div>
+          {/* Wraps below `sm`, like the home's final call: an unconditional nowrap sized the grid
+              track to the label, and at 390 px the card's content ran 32 px past its edge. */}
           <button
             type="button"
             onClick={() => openBookingUrl(OF1_BOOKING_URL)}
-            className="t-button inline-flex h-[52px] w-full items-center justify-center gap-2.5 whitespace-nowrap rounded-md bg-canvas px-7 text-[15px] text-on-dark transition-transform duration-base hover:translate-x-0.5 lg:w-auto"
+            className="t-button inline-flex min-h-[52px] w-full items-center justify-center gap-2.5 rounded-md bg-canvas px-7 py-3 text-center text-[15px] text-on-dark transition-transform duration-base hover:translate-x-0.5 sm:whitespace-nowrap lg:w-auto"
           >
             Réserver 30 minutes avec Brice <ArrowRight size={18} />
           </button>

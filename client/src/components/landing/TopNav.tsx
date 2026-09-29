@@ -7,7 +7,8 @@ import { site } from '@/lib/site'
 import { openBookingUrl } from './BookingModal'
 
 interface TopNavProps {
-  items?: readonly { label: string; href: string }[]
+  /** The href of the item for the page being viewed: `aria-current="page"` + a visible state. */
+  current?: string
   bookingUrl?: string
   ctaLabel?: string
   /** `light` on the home (light since 2026-09-28), `dark` everywhere else. */
@@ -16,8 +17,9 @@ interface TopNavProps {
 
 /**
  * Three items since the grill of 2026-09-28 (decision 3): « Cas clients » and « Contact » left the
- * bar with the sections they pointed at, and the footer keeps `/#contact`. The default is SITE-WIDE
- * on purpose: LegalShell, ThankYou, Ressources and Ressource render `<TopNav />` without `items`.
+ * bar with the sections they pointed at, and the footer keeps `/#contact`. SITE-WIDE: every page
+ * renders these three. The offer page had its own in-page bar (« Accueil » + five anchors) until
+ * 2026-09-29, when Brice found the way back to the home too hard to see; it now marks « Offre ».
  */
 const NAV_ITEMS = [
   { label: 'Offre', href: OF1_ROUTE },
@@ -31,48 +33,61 @@ const TONES = {
     // background at all until 2026-09-28. The arbitrary value keeps the intended 82 %.
     bar: 'border-hairline bg-canvas-soft/[0.82]',
     link: 't-nav-link transition-colors duration-fast hover:text-on-dark',
+    linkCurrent:
+      't-nav-link text-on-dark underline decoration-primary decoration-2 underline-offset-8',
     toggle: 'border-hairline bg-surface-card text-on-dark',
     sheet: 'border-hairline bg-canvas-soft',
     sheetLink: 't-title-sm text-on-dark-body transition-colors hover:text-on-dark',
+    sheetLinkCurrent:
+      't-title-sm text-on-dark underline decoration-primary decoration-2 underline-offset-8',
   },
   light: {
     // Opaque: at the top of the page the bar sits over the dark body, a translucent cream reads grey.
     bar: 'border-hairline-light bg-surface-light',
     link: 't-nav-link text-body transition-colors duration-fast hover:text-ink',
+    // primary-active, not primary: a current-page mark is a state and needs 3:1 on the cream bar
+    // (#CC785C reads 2.93:1 there, #A9583E 4.53:1).
+    linkCurrent:
+      't-nav-link text-ink underline decoration-primary-active decoration-2 underline-offset-8',
     toggle: 'border-hairline-light bg-white text-ink',
     sheet: 'border-hairline-light bg-surface-light',
     sheetLink: 't-title-sm text-body transition-colors hover:text-ink',
+    sheetLinkCurrent:
+      't-title-sm text-ink underline decoration-primary-active decoration-2 underline-offset-8',
   },
 } as const
 
 function NavItem({
   href,
   className,
+  current,
   onNavigate,
   children,
 }: {
   href: string
   className: string
+  current: boolean
   onNavigate?: () => void
   children: React.ReactNode
 }) {
+  const ariaCurrent = current ? 'page' : undefined
   // wouter's navigate() does not scroll to a hash, so a '/#…' anchor must render a plain <a>
   if (href.startsWith('/') && !href.includes('#')) {
     return (
-      <Link href={href} className={className} onClick={onNavigate}>
+      <Link href={href} className={className} aria-current={ariaCurrent} onClick={onNavigate}>
         {children}
       </Link>
     )
   }
   return (
-    <a href={href} className={className} onClick={onNavigate}>
+    <a href={href} className={className} aria-current={ariaCurrent} onClick={onNavigate}>
       {children}
     </a>
   )
 }
 
 export default function TopNav({
-  items = NAV_ITEMS,
+  current,
   bookingUrl = site.bookingUrl,
   ctaLabel = 'Réserver 30 min',
   tone = 'dark',
@@ -88,8 +103,13 @@ export default function TopNav({
         </a>
 
         <div className="hidden flex-1 items-center gap-7 md:flex">
-          {items.map((item) => (
-            <NavItem key={item.label} href={item.href} className={t.link}>
+          {NAV_ITEMS.map((item) => (
+            <NavItem
+              key={item.label}
+              href={item.href}
+              current={item.href === current}
+              className={item.href === current ? t.linkCurrent : t.link}
+            >
               {item.label}
             </NavItem>
           ))}
@@ -118,12 +138,13 @@ export default function TopNav({
       {mobileOpen && (
         <div className={`absolute inset-x-0 top-16 z-40 border-b p-6 md:hidden ${t.sheet}`}>
           <div className="flex flex-col gap-4">
-            {items.map((item) => (
+            {NAV_ITEMS.map((item) => (
               <NavItem
                 key={item.label}
                 href={item.href}
+                current={item.href === current}
                 onNavigate={() => setMobileOpen(false)}
-                className={t.sheetLink}
+                className={item.href === current ? t.sheetLinkCurrent : t.sheetLink}
               >
                 {item.label}
               </NavItem>

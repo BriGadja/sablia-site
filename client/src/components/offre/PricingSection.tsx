@@ -13,8 +13,9 @@ interface PriceCardProps {
 
 function PriceCard({ label, amount, unit, badge, intro, bullets, fine }: PriceCardProps) {
   return (
-    <article className="flex flex-col rounded-lg border border-hairline-light bg-surface-light-card p-8">
-      <div className="flex items-start justify-between gap-4">
+    <article className="flex flex-col rounded-lg border border-hairline-light bg-white p-8">
+      {/* Wraps: at 390 px a `shrink-0` badge beside the label ran 32 px past the card. */}
+      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
         <span className="t-caption-uppercase text-muted-text">{label}</span>
         {badge ? (
           <span className="t-caption-uppercase shrink-0 rounded-pill bg-accent-teal px-3 py-1 text-canvas">
@@ -58,10 +59,10 @@ export default function PricingSection() {
   const { price, delay, recurring, guarantee } = of1
 
   return (
-    <section id="prix" className="on-light px-8 py-section">
+    <section id="prix" className="border-t border-hairline-light bg-surface-light px-8 py-section">
       <div className="mx-auto max-w-editorial">
         <div className="eyebrow mb-4 text-muted-text">Prix</div>
-        <h2 className="t-display-lg max-w-[720px] [text-wrap:balance]">
+        <h2 className="t-display-lg max-w-[720px] text-ink [text-wrap:balance]">
           Le prix est affiché. Vous savez ce que vous payez avant de nous parler.
         </h2>
 
@@ -88,7 +89,7 @@ export default function PricingSection() {
           />
         </div>
 
-        <div className="mt-8 rounded-lg border border-hairline-light border-l-4 border-l-primary bg-surface-light-card p-8">
+        <div className="mt-8 rounded-lg border border-hairline-light border-l-4 border-l-primary bg-white p-8">
           <div className="t-caption-uppercase mb-3 text-muted-text">Notre garantie</div>
           <p className="max-w-[900px] font-display text-[clamp(1.35rem,2vw,1.75rem)] font-medium leading-snug tracking-tight text-ink">
             {guarantee}

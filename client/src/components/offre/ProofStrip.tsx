@@ -20,13 +20,16 @@ export function keepPricesWhole(text: string): string {
 
 export default function ProofStrip() {
   return (
-    <section id="preuve" className="border-t border-hairline bg-canvas px-8 py-section">
+    <section
+      id="preuve"
+      className="border-t border-hairline-light bg-surface-light px-8 py-section"
+    >
       <div className="mx-auto max-w-[820px]">
-        <div className="eyebrow mb-4 text-primary">Ce qui vous protège</div>
-        <h2 className="font-display text-[clamp(1.75rem,3vw,2.5rem)] font-medium leading-tight tracking-tight text-on-dark [text-wrap:balance]">
+        <div className="eyebrow mb-4 text-primary-active">Ce qui vous protège</div>
+        <h2 className="font-display text-[clamp(1.75rem,3vw,2.5rem)] font-medium leading-tight tracking-tight text-ink [text-wrap:balance]">
           Vous seriez le premier client de cette offre.
         </h2>
-        <p className="mt-4 max-w-[62ch] text-[17px] leading-relaxed text-on-dark-body">
+        <p className="mt-4 max-w-[62ch] text-[17px] leading-relaxed text-body">
           Alors voici ce sur quoi vous pouvez vous appuyer à la place d'une liste de références :
           une garantie qui porte sur la totalité de la somme, une chaîne que nous branchons sur nos
           propres rendez-vous, et une seule personne en face de vous.
@@ -35,8 +38,8 @@ export default function ProofStrip() {
         <dl className="mt-10 flex flex-col gap-8">
           {PROOF_ITEMS.map((item) => (
             <div key={item.key} className="border-l-2 border-primary pl-6">
-              <dt className="t-caption-uppercase text-primary">{item.label}</dt>
-              <dd className="mt-2.5 ml-0 text-[17px] leading-relaxed text-on-dark">
+              <dt className="t-caption-uppercase text-primary-active">{item.label}</dt>
+              <dd className="mt-2.5 ml-0 text-[17px] leading-relaxed text-ink">
                 {keepPricesWhole(item.body)}
               </dd>
             </div>
@@ -44,14 +47,14 @@ export default function ProofStrip() {
         </dl>
 
         {PROOF_DEMO_URL !== null && (
-          <div className="mt-10 rounded-xl border border-hairline bg-surface-card p-6">
-            <div className="t-caption-uppercase text-primary">La chaîne, filmée</div>
-            <p className="mt-2.5 text-[17px] leading-relaxed text-on-dark">
+          <div className="mt-10 rounded-xl border border-hairline-light bg-white p-6">
+            <div className="t-caption-uppercase text-primary-active">La chaîne, filmée</div>
+            <p className="mt-2.5 text-[17px] leading-relaxed text-ink">
               Quarante-cinq secondes : une note vocale dictée depuis un téléphone, et la fiche du
               CRM qui se remplit.
             </p>
             <a
-              className="t-button mt-5 inline-flex h-[52px] items-center justify-center rounded-md bg-primary px-7 text-[15px] text-on-dark transition-transform duration-base hover:translate-x-0.5"
+              className="t-button mt-5 inline-flex h-[52px] items-center justify-center rounded-md bg-primary px-7 text-[15px] text-on-primary transition-transform duration-base hover:translate-x-0.5"
               href={PROOF_DEMO_URL}
               rel="noreferrer"
               target="_blank"
