@@ -278,49 +278,26 @@
   }
 
   /*
-   * The CRM record that fills itself over the hero photo (grill 2026-09-28, decision 2; animation of
-   * mockup 2, 2026-09-25): the ONLY animated moment of the home. Pure CSS so the prerendered HTML
-   * and reduced motion behave without JavaScript. `--d` staggers the four bars (RecordCard.tsx).
+   * The CRM contact record over the hero photo (Brice's pick of 2026-09-29, option A « La fiche
+   * contact »; it replaced the four filling bars of grill decision 2): the ONLY animated moment of
+   * the home. Pure CSS so the prerendered HTML and reduced motion behave without JavaScript. The
+   * card pops in then floats; `--d` (RecordCard.tsx) staggers the four values, each typed in by a
+   * stepped clip-path, held, faded, then typed again: a 7 s loop, clip-path and opacity only.
+   *
+   * Every animation is declared UNDER `no-preference` and nowhere else, so reduced motion gets the
+   * static, complete card by construction: no override has to win a cascade fight. Tailwind v3
+   * emits this layer before the utilities, which is how `.strip-copy` below loses to `flex`
+   * (03-validate, 2026-09-29). `RecordCard.test.tsx` pins that no record animation leaks out of it.
    */
-  .record-card {
-    animation:
-      record-pop 0.8s 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both,
-      record-float 5s ease-in-out 1.3s infinite;
-  }
-
-  .record-bar {
-    position: relative;
-    display: block;
-    height: 10px;
-    overflow: hidden;
-    border-radius: 5px;
-    background: rgb(var(--color-primary) / 0.16);
-  }
-
-  .record-bar::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgb(var(--color-primary));
-    transform: scaleX(0);
-    transform-origin: left;
-    animation: record-fill 5s ease-in-out infinite;
-    animation-delay: calc(var(--d) * 0.35s);
-  }
-
-  @keyframes record-fill {
-    0%,
-    8% {
-      transform: scaleX(0);
+  @media (prefers-reduced-motion: no-preference) {
+    .record-card {
+      animation:
+        record-pop 0.8s 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both,
+        record-float 5s ease-in-out 1.3s infinite;
     }
-    40%,
-    88% {
-      transform: scaleX(1);
-      opacity: 1;
-    }
-    100% {
-      transform: scaleX(1);
-      opacity: 0;
+
+    .record-value {
+      animation: record-type 7s calc(1.3s + var(--d) * 0.9s) infinite backwards;
     }
   }
 
@@ -338,6 +315,24 @@
     }
   }
 
+  /* Typed in over 1 s (26 steps, the mockup's), held, faded out. */
+  @keyframes record-type {
+    0% {
+      clip-path: inset(0 100% 0 0);
+      animation-timing-function: steps(26, end);
+    }
+    14%,
+    92% {
+      clip-path: inset(0 0 0 0);
+      opacity: 1;
+      animation-timing-function: ease-out;
+    }
+    100% {
+      clip-path: inset(0 0 0 0);
+      opacity: 0;
+    }
+  }
+
   /* The compatible-CRM strip scrolls: two identical lists, the track slides by one of them. */
   .strip-track {
     display: flex;
@@ -352,15 +347,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .record-card,
-    .record-bar::after,
     .strip-track {
       animation: none;
-    }
-    .record-bar::after {
-      transform: scaleX(1);
-    }
-    .strip-track {
       width: auto;
       flex-wrap: wrap;
       justify-content: center;
