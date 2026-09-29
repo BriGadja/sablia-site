@@ -102,6 +102,17 @@ describe('offer page: one light tone', () => {
     expect(offenders).toEqual([])
   })
 
+  it('lets the booking button on the coral card wrap on a phone', () => {
+    // An unconditional `whitespace-nowrap` sized the card's grid track to the button's text: at
+    // 390 px the button, title and paragraph ran 32 px past the card (measured on sablia.io and on
+    // the preview, 2026-09-29), and on the cream band the white words past the edge disappear.
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined)
+    const { container } = renderPage()
+    const button = container.querySelector('main .bg-primary button') as Element
+    expect(button.textContent).toContain('Réserver 30 minutes avec Brice')
+    expect(button.className).not.toMatch(/(^|\s)whitespace-nowrap(\s|$)/)
+  })
+
   it('keeps the section ids that deep links point at', () => {
     vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined)
     renderPage()
