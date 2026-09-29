@@ -151,7 +151,7 @@ def check_manifest(public: Path) -> list[str]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser = argparse.ArgumentParser(description="Brand guard (US-12): every brand slot carries the new logo.")
     parser.add_argument("--public", default=str(ROOT / "client" / "public"))
     args = parser.parse_args()
     public = Path(args.public)

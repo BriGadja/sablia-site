@@ -55,7 +55,7 @@ def blur_region(im: Image.Image, box_frac: tuple[float, float, float, float], ra
 def save_width(im: Image.Image, width: int, out_path: Path) -> None:
     w, h = im.size
     height = round(width * h / w)
-    resized = im.resize((width, height), Image.LANCZOS)
+    resized = im.resize((width, height), Image.Resampling.LANCZOS)
     resized.save(out_path, format="WEBP", quality=WEBP_QUALITY, method=WEBP_METHOD)
     print(f"{out_path} {os.path.getsize(out_path)} bytes")
 
