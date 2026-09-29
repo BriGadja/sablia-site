@@ -6,10 +6,16 @@ import RecordCard from './RecordCard'
 
 /**
  * The first screen (grill 2026-09-28, decision 2): the offer's own title and one booking button,
- * beside a real photo of Brice at work with the CRM record filling itself over it. Light background.
- * The photo's QR code and slide text are blurred in the asset (`scripts/prepare-photos.py`), and the
- * record card covers that corner as well. Words come from the OF-1 module; the delay check is
+ * beside a real photo of Brice at work with the CRM contact record writing itself over it (option A,
+ * Brice 2026-09-29). Light background. The photo's QR code and slide text are blurred in the asset
+ * (`scripts/prepare-photos.py`). Words come from the OF-1 module; the delay check is
  * `of1.delay.days`, never typed (decision 5, reversed by Brice the same day: the home shows it).
+ *
+ * The record sits on the photo's bottom-left corner, over the audience, and hangs past it into the
+ * section's bottom padding. From `lg` it also breaks the left edge by 48 px, into the 56 px column
+ * gap, so that from 1264 px (the 1200 px container) it ends left of Brice's legs: face, arm and
+ * body clear (measured at 1440 in the run's 06-fiche-contact report). Below `sm` it spans the
+ * photo, clear of his face and torso, over his lower legs.
  */
 const CHECKS = [
   'Call audit gratuit, sans engagement',
@@ -66,7 +72,7 @@ export default function HeroSection() {
             {...HIGH_PRIORITY}
             className="block aspect-[4/5] w-full rounded-xl object-cover object-[60%_30%] lg:aspect-[5/6] lg:max-h-[640px] lg:rounded-2xl"
           />
-          <RecordCard className="absolute left-3 top-3 w-[72%] sm:left-6 sm:top-6 sm:w-[260px]" />
+          <RecordCard className="absolute inset-x-3 -bottom-10 sm:inset-x-auto sm:-bottom-8 sm:-left-6 sm:w-[288px] lg:-left-12" />
         </figure>
       </div>
     </section>
