@@ -36,9 +36,9 @@ export default function OffreCompteRenduAppel() {
       return
     }
     target.scrollIntoView()
-    // The webfonts swap in 20 to 110 ms later and reflow the text above the target (up to 207 px
-    // off at 390, measured on the preview): land again once they are in, unless the visitor has
-    // already moved.
+    // The webfonts swap in right after and reflow the text above the target (up to 166 px off at
+    // 390 on the preview, with scroll anchoring off): land again once they are in, unless the
+    // visitor has already moved.
     let moved = false
     const stop = () => {
       moved = true
@@ -62,7 +62,15 @@ export default function OffreCompteRenduAppel() {
       </Helmet>
       {/* Enter fade only: with Wouter Routes as direct AnimatePresence children, exit
           animations do not fire (molefrog/wouter#414). Pre-existing, site-wide. */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }}>
+      {/* No scroll anchoring on this page: after the landing above, Chrome's anchoring moved a
+          deep link 98 to 207 px off its section in 6 of 6 trials at 390 px; off, 15 of 15 landed
+          at 0 (preview, 2026-09-29). */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.35 }}
+        className="[overflow-anchor:none]"
+      >
         <TopNav
           tone="light"
           current={OF1_ROUTE}

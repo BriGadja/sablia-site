@@ -156,8 +156,8 @@ function scrollHarness() {
 
 describe('offer page: where it opens', () => {
   it('lands a deep link on its section, and again once the webfonts are in', async () => {
-    // The swap reflows the text above the target 20 to 110 ms after the first landing: at 390 px
-    // the section ended up to 207 px off (measured on the preview, 2026-09-29).
+    // The swap reflows the text above the target right after the first landing: with scroll
+    // anchoring off, the section ended up to 166 px off at 390 px (preview, 2026-09-29).
     window.history.replaceState(null, '', `${OF1_ROUTE}#prix`)
     const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined)
     const h = scrollHarness()
@@ -172,6 +172,16 @@ describe('offer page: where it opens', () => {
       h.restore()
     }
     expect(scrollTo).not.toHaveBeenCalled()
+  })
+
+  it('turns scroll anchoring off on the page', () => {
+    // With it on, Chrome moved a deep link 98 to 207 px off its section after the landing, in 6 of
+    // 6 trials at 390 px; with it off, 15 of 15 landed at 0 (preview, 2026-09-29).
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined)
+    const { container } = renderPage()
+    const page = (container.querySelector('nav') as Element).parentElement as Element
+    expect(page.contains(container.querySelector('main'))).toBe(true)
+    expect(page.className).toContain('[overflow-anchor:none]')
   })
 
   it('does not pull the visitor back once they have started to scroll', async () => {

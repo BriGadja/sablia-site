@@ -63,7 +63,7 @@ docs/                 # All documentation
 | `/politique-confidentialite` | Privacy policy |
 | `/cgv` | Terms of service |
 | `/thank-you` | Post-booking confirmation (noindex) |
-| `/offres/compte-rendu-appel` | Offre n°1 product page (OF-1, prices displayed; content module client/src/content/of1.ts, parity test against the hub OF-1 file). **Light like the home since 2026-09-29** (every section `bg-surface-light` + explicit text colours, no `.on-light`; white cards; coral TEXT and small coral fills use `primary-active` for WCAG AA; footer dark). A deep link (`#prix`, `#faq`…) lands on its section: the mount effect scrolls to the hash target, and to the top only without one |
+| `/offres/compte-rendu-appel` | Offre n°1 product page (OF-1, prices displayed; content module client/src/content/of1.ts, parity test against the hub OF-1 file). **Light like the home since 2026-09-29** (every section `bg-surface-light` + explicit text colours, no `.on-light`; white cards; coral TEXT and small coral fills use `primary-active` for WCAG AA; footer dark). A deep link (`#prix`, `#faq`…) lands on its section: the mount effect scrolls to the hash target (again once `document.fonts.ready`, unless the visitor moved), and to the top only without one; the page wrapper has `[overflow-anchor:none]` because Chrome's scroll anchoring moved the landing 98 to 207 px off at 390 |
 | `/ressources` | Resource library, read live from Supabase (`client/src/lib/contenu.ts`) — no rebuild needed to publish a resource |
 | `/ressources/:slug` | One resource (YouTube embed, body, files behind `RessourceForm`) — NOT prerendered (parametric, client-side fetch); own `<Helmet>`, `noindex` on an unknown/unpublished slug |
 
