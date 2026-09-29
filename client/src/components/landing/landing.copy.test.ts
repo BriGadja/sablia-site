@@ -12,7 +12,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { FAQ_CARRIED } from '../../content/faq-carried'
-import { FINAL_CALL_TITLE, PROOF_LINE } from '../../content/home'
+import { FINAL_CALL_TITLE, FORMATION_QUOTES, PROOF_LINE } from '../../content/home'
 import { of1 } from '../../content/of1'
 import { eurHt } from '../../lib/format'
 import { site } from '../../lib/site'
@@ -180,6 +180,39 @@ describe('home: the testimonial is the hub text, word for word', () => {
 })
 
 /**
+ * The proof line and the two training quotes Brice supplied on 2026-09-29 are rows P-15, P-16 and
+ * P-17 of the hub's proof dossier. Each is compared to its dossier cell as a WHOLE: a word changed
+ * on either side, a quote cut short or a credit that grows a surname goes red.
+ */
+describe('home: the proof line and the Formations quotes are the dossier rows, word for word', () => {
+  const DOSSIER = resolve(HERE, '../../../../../../offre/preuve/dossier-de-preuve.md')
+  /** The « Formulation publique » cell of a `| P-N | … |` row, whitespace collapsed. */
+  const publicCell = (id: string) => {
+    const row = readFileSync(DOSSIER, 'utf8')
+      .split('\n')
+      .find((line) => line.startsWith(`| ${id} |`))
+    return (row?.split('|')[3] ?? '').replace(/\s+/g, ' ').trim()
+  }
+
+  it('the proof line is row P-15', () => {
+    expect(publicCell('P-15')).toBe(PROOF_LINE)
+  })
+
+  it('the two quotes and their credits are rows P-16 and P-17', () => {
+    expect(FORMATION_QUOTES).toHaveLength(2)
+    const [vassili, franky] = FORMATION_QUOTES
+    expect(publicCell('P-16')).toBe(`« ${vassili.quote} » ${vassili.who}.`)
+    expect(publicCell('P-17')).toBe(`« ${franky.quote} » ${franky.who}.`)
+  })
+
+  it('a credit is a first name and a role, never a surname (dossier rule 6)', () => {
+    for (const { who } of FORMATION_QUOTES) {
+      expect(who).toMatch(/^[A-ZÀ-Ý][a-zà-ÿ]+, [a-zà-ÿ]/)
+    }
+  })
+})
+
+/**
  * The home speaks as « nous » since Brice's decision of 2026-09-18 (D10). The founder section left
  * the home on 2026-09-28 (decision 4); the founder is still named, never counted, in the Formations
  * proof line (« Notre fondateur est responsable pédagogique… »). Nothing on the page may suggest
@@ -251,8 +284,9 @@ describe('home: the Formations section (A3/A4/A5)', () => {
     expect(text).toContain("formés à l'IA et à l'automatisation")
   })
 
-  it('renders the one quote of the home, and the form anchor', () => {
+  it('renders the quotes of the home, and the form anchor', () => {
     expect(formations?.text).toContain('TESTIMONIAL')
+    expect(formations?.text).toContain('FORMATION_QUOTES.map')
     expect(formations?.text).toContain('id="contact"')
   })
 
@@ -315,10 +349,14 @@ describe('home: the offer section of 2026-09-28', () => {
     }
   })
 
-  it('carries the two proof figures and renders the guarantee from the module', () => {
-    expect(home?.text).toContain('289 appels sur 326')
-    expect(home?.text).toContain('89 %')
-    expect(home?.text).toContain('68 rendez-vous')
+  it('carries the one-sentence proof line, no call figure, and renders the guarantee from the module', () => {
+    // Brice, 2026-09-29, on the preview: « ne parle pas d'appels ». The call and meeting figures
+    // (dossier rows P-7, P-8) left the home; the line is row P-15, pinned in the block below.
+    expect(home?.text).toContain('PROOF_LINE')
+    expect(offre?.text).toContain('frenchSpacing(PROOF_LINE)')
+    for (const s of HOME_SOURCES) {
+      expect(s.text, s.path).not.toMatch(/289|326|68 rendez-vous|Déjà en production/)
+    }
     expect(offre?.text).toContain('{of1.guarantee}')
   })
 

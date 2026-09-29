@@ -3,17 +3,15 @@ import { Link } from 'wouter'
 import { ArrowRight } from '@/components/icons/lucide-crm'
 import { HOME_VIDEO, PROOF_LINE } from '@/content/home'
 import { OF1_ROUTE, of1 } from '@/content/of1'
-import { eurHt } from '@/lib/format'
+import { eurHt, frenchSpacing } from '@/lib/format'
 
 /**
  * The offer on the home (grill 2026-09-28, decisions 3 to 5): the OF-1 card, the demo video Brice
- * published that day, and the two proof figures. Every word of the card is the OF-1 module's; the
- * delay is `of1.delay.days`, never typed (decision 5, reversed by Brice the same day: the home shows
- * it). No monthly fee, no « Bientôt » card, no off-catalogue card: they left the home (decision 4).
+ * published that day, and the proof line (one sentence since 2026-09-29, `PROOF_LINE`). Every word
+ * of the card is the OF-1 module's; the delay is `of1.delay.days`, never typed (decision 5, reversed
+ * by Brice the same day: the home shows it). No monthly fee, no « Bientôt » card, no off-catalogue
+ * card: they left the home (decision 4).
  */
-
-/** French typography: a no-break space before « : » and « % », so « 89 % » never splits. */
-const frenchSpacing = (text: string) => text.replace(/ ([:%])/g, '\u00a0$1')
 
 /**
  * Click-to-play facade: before the click the visitor loads a local thumbnail and no byte from
@@ -98,8 +96,8 @@ export default function OffreSection() {
           </p>
         </div>
 
-        {/* The sentence opens on « Déjà en production chez nos clients » itself: an eyebrow repeating
-            it would print the phrase twice, so a coral rule marks the block instead. */}
+        {/* One sentence, marked by a coral rule rather than an eyebrow (Brice, 2026-09-29: no call
+            figures on the home). */}
         <p className="order-3 min-w-0 max-w-[900px] border-l-2 border-primary pl-5 text-[16px] leading-relaxed text-ink sm:text-lg lg:col-span-2">
           {frenchSpacing(PROOF_LINE)}
         </p>

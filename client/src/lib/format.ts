@@ -6,3 +6,8 @@
 export function eurHt(amount: number): string {
   return `${amount.toLocaleString('fr-FR').replace(/ /g, ' ')} € HT`
 }
+
+/** French typography: a no-break space before « : » and « % », so « 89 % » never splits. */
+export function frenchSpacing(text: string): string {
+  return text.replace(/ ([:%])/g, ' $1')
+}
