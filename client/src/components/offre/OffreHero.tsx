@@ -19,27 +19,25 @@ export default function OffreHero() {
   ]
 
   return (
-    <section className="bg-canvas px-8 pb-20 pt-section">
+    <section className="bg-surface-light px-8 pb-20 pt-section">
       <div className="mx-auto grid max-w-editorial items-center gap-14 lg:grid-cols-2">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.2, 0, 0, 1] }}
         >
-          <div className="eyebrow mb-6 inline-flex items-center gap-2 text-primary">
+          <div className="eyebrow mb-6 inline-flex items-center gap-2 text-primary-active">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
             Offre n°1 · Compte rendu d'appel
           </div>
-          <h1 className="t-display-xl text-on-dark-strong [text-wrap:balance]">{of1.title}</h1>
-          <p className="mt-6 max-w-[540px] text-lg leading-relaxed text-on-dark-body">
-            {of1.promise}
-          </p>
+          <h1 className="t-display-xl text-ink [text-wrap:balance]">{of1.title}</h1>
+          <p className="mt-6 max-w-[540px] text-lg leading-relaxed text-body">{of1.promise}</p>
 
           <ul className="mt-8 flex flex-wrap gap-2.5">
             {pills.map((pill) => (
               <li
                 key={pill}
-                className="t-caption whitespace-nowrap rounded-pill border border-hairline bg-surface-card px-3.5 py-2 text-on-dark"
+                className="t-caption whitespace-nowrap rounded-pill border border-hairline-light bg-white px-3.5 py-2 text-ink"
               >
                 {pill}
               </li>
@@ -56,13 +54,13 @@ export default function OffreHero() {
             </button>
             <a
               href="#variantes"
-              className="t-button inline-flex h-11 items-center rounded-md border border-hairline px-5 text-on-dark transition-colors hover:border-on-dark-muted"
+              className="t-button inline-flex h-11 items-center rounded-md border border-hairline-light bg-white px-5 text-ink transition-colors hover:border-muted-text"
             >
               Voir les deux variantes
             </a>
           </div>
 
-          <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-[13px] text-on-dark-muted">
+          <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-[13px] text-muted-text">
             {CHECKS.map((check) => (
               <li key={check} className="inline-flex items-center gap-1.5">
                 <Check size={14} className="shrink-0 text-accent-teal" />
@@ -73,7 +71,7 @@ export default function OffreHero() {
 
           <FlowDiagram
             orientation="vertical"
-            className="mx-auto mt-12 block h-[300px] w-full max-w-[280px] text-on-dark-body lg:hidden"
+            className="mx-auto mt-12 block h-[300px] w-full max-w-[280px] text-body lg:hidden"
           />
         </motion.div>
 
@@ -83,11 +81,11 @@ export default function OffreHero() {
           transition={{ duration: 0.8, delay: 0.15, ease: [0.2, 0, 0, 1] }}
           className="hidden lg:block"
         >
-          <div className="rounded-xl border border-hairline bg-surface-card/60 p-8">
-            <div className="t-caption-uppercase mb-6 text-on-dark-muted">
+          <div className="rounded-xl border border-hairline-light bg-white p-8">
+            <div className="t-caption-uppercase mb-6 text-muted-text">
               Ce qui se passe quand votre commercial raccroche
             </div>
-            <FlowDiagram orientation="horizontal" className="block w-full text-on-dark-body" />
+            <FlowDiagram orientation="horizontal" className="block w-full text-body" />
           </div>
         </motion.div>
       </div>

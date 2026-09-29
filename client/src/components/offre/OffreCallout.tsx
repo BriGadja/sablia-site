@@ -14,7 +14,7 @@ const OFF_SOURCE_PROMISE =
 
 export default function OffreCallout() {
   return (
-    <section className="bg-canvas px-8 py-16">
+    <section className="bg-surface-light px-8 py-16">
       <div className="mx-auto max-w-editorial">
         <div className="grid items-center gap-10 rounded-xl bg-primary p-8 sm:p-12 lg:gap-14 lg:p-14 lg:grid-cols-[1fr_auto]">
           <div className="min-w-0">

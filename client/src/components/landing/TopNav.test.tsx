@@ -8,8 +8,8 @@ import TopNav from './TopNav'
  * The nav every page gets when no props are passed. Three items since the grill of 2026-09-28
  * (decision 3): Offre · Formations · Ressources, plus « Réserver 30 min ». « Cas clients » and
  * « Contact » left the bar with the sections they pointed at; the footer keeps `/#contact`. The
- * 3-item nav is SITE-WIDE on purpose: LegalShell, ThankYou, Ressources and Ressource render
- * `<TopNav />` without `items`. Two real routes and one hash stay in the bar, so the plain-`<a>` /
+ * 3-item nav is SITE-WIDE: every page renders it, the offer page included since 2026-09-29 (its own
+ * anchor bar hid the way back to the home). Two real routes and one hash stay in the bar, so the plain-`<a>` /
  * wouter-Link branch of NavItem is still exercised both ways. The hash is ROOT-relative (`/#…`)
  * because a bare `#formations` points at nothing on the pages that are not the home.
  */
@@ -83,13 +83,26 @@ describe('TopNav', () => {
     expect(logo?.className).toContain('text-on-dark')
   })
 
-  it('leaves a page that supplies its own items untouched', () => {
-    const { container } = render(
-      <TopNav items={[{ label: 'Prix', href: '#prix' }]} bookingUrl="https://x/y" ctaLabel="Go" />,
-    )
-    const hrefs = Array.from(container.querySelectorAll('a')).map((a) => a.getAttribute('href'))
-    expect(hrefs).toContain('#prix')
-    expect(hrefs).not.toContain(OF1_ROUTE)
+  it('marks the current page, and only it, in both menus', () => {
+    const { container } = render(<TopNav tone="light" current={OF1_ROUTE} />)
+    fireEvent.click(screen.getByRole('button', { name: 'Ouvrir le menu' }))
+    const current = container.querySelectorAll('a[aria-current="page"]')
+    expect(current).toHaveLength(2)
+    for (const a of Array.from(current)) {
+      expect(a.getAttribute('href')).toBe(OF1_ROUTE)
+      // the visible state: ink word + an underline, where the other items are body grey
+      expect(a.className).toMatch(/\btext-ink\b/)
+      expect(a.className).toMatch(/(^|\s)underline(\s|$)/)
+    }
+    for (const a of navAnchors(container).filter((a) => a.getAttribute('href') !== OF1_ROUTE)) {
+      expect(a.hasAttribute('aria-current')).toBe(false)
+      expect(a.className).not.toMatch(/(^|\s)underline(\s|$)/)
+    }
+  })
+
+  it('marks nothing when the page is not one of the three', () => {
+    const { container } = render(<TopNav tone="light" />)
+    expect(container.querySelector('[aria-current]')).toBeNull()
   })
 
   /**

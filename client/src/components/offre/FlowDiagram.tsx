@@ -33,15 +33,16 @@ const LAYOUT = {
   vertical: { width: 280, height: 420, nodeW: 240, nodeH: 68, gap: 40, offset: 20 },
 } as const
 
+/** The « Claude » node is primary-active: its white 13 px label reads 3.28:1 on primary, 5.06:1 here. */
 const TONE_FILL: Record<FlowNode['tone'], string> = {
   default: 'currentColor',
-  ai: 'rgb(var(--color-primary))',
+  ai: 'rgb(var(--color-primary-active))',
   outcome: 'currentColor',
 }
 
 const TONE_STROKE: Record<FlowNode['tone'], string> = {
   default: 'currentColor',
-  ai: 'rgb(var(--color-primary))',
+  ai: 'rgb(var(--color-primary-active))',
   outcome: 'rgb(var(--color-accent-teal))',
 }
 

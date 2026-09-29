@@ -17,18 +17,22 @@ import SEO from '@/components/SEO'
 import { OF1_BOOKING_URL, OF1_ROUTE } from '@/content/of1'
 import { faqSchema, serviceSchema } from '@/content/of1-schema'
 
-const NAV_ITEMS = [
-  { label: 'Accueil', href: '/' },
-  { label: 'Deux variantes', href: '#variantes' },
-  { label: 'Ce qui est inclus', href: '#inclus' },
-  { label: 'Prix', href: '#prix' },
-  { label: 'Ce qui vous protège', href: '#preuve' },
-  { label: 'FAQ', href: '#faq' },
-]
-
+/**
+ * Light from end to end since 2026-09-29, like the home (Brice: « toutes les fenêtres de l'offre
+ * sur le même ton »); the footer stays dark. The bar is the site-wide one with « Offre » marked:
+ * the page's own anchor bar made the way back to the home hard to find. The section ids
+ * (#variantes, #inclus, #prix, #preuve, #faq) stay, for the links that point into the page.
+ */
 export default function OffreCompteRenduAppel() {
   useEffect(() => {
-    window.scrollTo(0, 0)
+    // createRoot re-renders the prerendered page, and an unconditional scrollTo(0, 0) sent every
+    // deep link (#prix, #faq…) back to the top (measured on sablia.io, 2026-09-29). Without a hash
+    // the page still opens at the top: a wouter navigation would keep the previous page's offset.
+    const target = window.location.hash
+      ? document.getElementById(window.location.hash.slice(1))
+      : null
+    if (target) target.scrollIntoView()
+    else window.scrollTo(0, 0)
   }, [])
 
   return (
@@ -41,7 +45,12 @@ export default function OffreCompteRenduAppel() {
       {/* Enter fade only: with Wouter Routes as direct AnimatePresence children, exit
           animations do not fire (molefrog/wouter#414). Pre-existing, site-wide. */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }}>
-        <TopNav items={NAV_ITEMS} bookingUrl={OF1_BOOKING_URL} ctaLabel="Réserver 30 min" />
+        <TopNav
+          tone="light"
+          current={OF1_ROUTE}
+          bookingUrl={OF1_BOOKING_URL}
+          ctaLabel="Réserver 30 min"
+        />
         <main>
           <OffreHero />
           <AudienceStrip />

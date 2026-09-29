@@ -11,21 +11,24 @@ const CLOSING_LINE =
 
 export default function ObjectionSection() {
   return (
-    <section id="objection" className="bg-canvas px-8 py-section">
+    <section
+      id="objection"
+      className="border-t border-hairline-light bg-surface-light px-8 py-section"
+    >
       <div className="mx-auto max-w-[820px]">
-        <h2 className="font-display text-[clamp(1.75rem,3vw,2.5rem)] font-medium italic leading-tight tracking-tight text-on-dark">
+        <h2 className="font-display text-[clamp(1.75rem,3vw,2.5rem)] font-medium italic leading-tight tracking-tight text-ink">
           « {of1.objectionN8n.q} »
         </h2>
 
         <div className="mt-8 flex flex-col gap-5 border-l-2 border-primary pl-6">
           {of1.objectionN8n.answer.map((paragraph) => (
-            <p key={paragraph} className="text-[17px] leading-relaxed text-on-dark-body">
+            <p key={paragraph} className="text-[17px] leading-relaxed text-body">
               {paragraph}
             </p>
           ))}
         </div>
 
-        <p className="mt-8 text-[17px] leading-relaxed text-on-dark">{CLOSING_LINE}</p>
+        <p className="mt-8 text-[17px] leading-relaxed text-ink">{CLOSING_LINE}</p>
       </div>
     </section>
   )

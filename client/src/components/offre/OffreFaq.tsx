@@ -15,20 +15,20 @@ export default function OffreFaq() {
   const reduce = useReducedMotion()
 
   return (
-    <section id="faq" className="border-t border-hairline bg-canvas-soft px-8 py-section">
+    <section id="faq" className="border-t border-hairline-light bg-surface-light px-8 py-section">
       <div className="mx-auto max-w-[760px]">
         <div className="mb-12 text-center">
-          <div className="eyebrow mb-4 text-primary">FAQ</div>
-          <h2 className="t-display-lg">Les questions que vous vous posez.</h2>
+          <div className="eyebrow mb-4 text-primary-active">FAQ</div>
+          <h2 className="t-display-lg text-ink">Les questions que vous vous posez.</h2>
         </div>
 
-        <div className="border-y border-hairline">
+        <div className="border-y border-hairline-light">
           {ENTRIES.map((item, index) => {
             const isOpen = open === index
             const btnId = `offre-faq-btn-${index}`
             const panelId = `offre-faq-panel-${index}`
             return (
-              <div key={item.q} className="border-b border-hairline last:border-b-0">
+              <div key={item.q} className="border-b border-hairline-light last:border-b-0">
                 <h3>
                   <button
                     id={btnId}
@@ -36,13 +36,13 @@ export default function OffreFaq() {
                     aria-expanded={isOpen}
                     aria-controls={panelId}
                     onClick={() => setOpen(isOpen ? null : index)}
-                    className="flex w-full items-center justify-between gap-4 py-5 text-left transition-colors hover:text-on-dark"
+                    className="flex w-full items-center justify-between gap-4 py-5 text-left"
                   >
-                    <span className="t-title-sm text-on-dark">{item.q}</span>
+                    <span className="t-title-sm text-ink">{item.q}</span>
                     <motion.span
                       animate={{ rotate: isOpen ? 180 : 0 }}
                       transition={reduce ? { duration: 0 } : { duration: 0.2 }}
-                      className="shrink-0 text-primary"
+                      className="shrink-0 text-primary-active"
                     >
                       <ChevronDown size={20} />
                     </motion.span>
@@ -60,7 +60,7 @@ export default function OffreFaq() {
                   }
                   className="overflow-hidden"
                 >
-                  <p className="pb-5 text-[15px] leading-relaxed text-on-dark-body">{item.a}</p>
+                  <p className="pb-5 text-[15px] leading-relaxed text-body">{item.a}</p>
                 </motion.div>
               </div>
             )
