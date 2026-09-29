@@ -1,11 +1,12 @@
 import { Link } from 'wouter'
+import Logo from '@/components/Logo'
 
 export default function FooterSection() {
   return (
     <footer className="border-t border-hairline bg-canvas px-8 pb-10 pt-16">
       <div className="mx-auto grid max-w-editorial gap-8 md:grid-cols-3 md:items-start">
         <div className="flex flex-col gap-3">
-          <img src="/wordmark-dark.svg" alt="Sablia" className="h-7" />
+          <Logo tone="dark" size="footer" />
           <p className="max-w-[280px] text-[13px] leading-relaxed text-on-dark-muted">
             Agence d'intégration AI. On connecte Claude à votre CRM, depuis Paris.
           </p>

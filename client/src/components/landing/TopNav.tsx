@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'wouter'
 import { Menu, X } from '@/components/icons/lucide-crm'
+import Logo from '@/components/Logo'
 import { OF1_ROUTE } from '@/content/of1'
 import { site } from '@/lib/site'
 import { openBookingUrl } from './BookingModal'
@@ -29,7 +30,6 @@ const TONES = {
     // `/82` is not in Tailwind v3's opacity scale and compiled to nothing: the dark bar had no
     // background at all until 2026-09-28. The arbitrary value keeps the intended 82 %.
     bar: 'border-hairline bg-canvas-soft/[0.82]',
-    wordmark: '/wordmark-dark.svg',
     link: 't-nav-link transition-colors duration-fast hover:text-on-dark',
     toggle: 'border-hairline bg-surface-card text-on-dark',
     sheet: 'border-hairline bg-canvas-soft',
@@ -38,7 +38,6 @@ const TONES = {
   light: {
     // Opaque: at the top of the page the bar sits over the dark body, a translucent cream reads grey.
     bar: 'border-hairline-light bg-surface-light',
-    wordmark: '/wordmark-light.svg',
     link: 't-nav-link text-body transition-colors duration-fast hover:text-ink',
     toggle: 'border-hairline-light bg-white text-ink',
     sheet: 'border-hairline-light bg-surface-light',
@@ -84,8 +83,8 @@ export default function TopNav({
   return (
     <nav className={`sticky top-0 z-50 border-b ${t.bar} backdrop-blur-xl backdrop-saturate-[1.4]`}>
       <div className="mx-auto flex h-16 max-w-editorial items-center gap-10 px-8">
-        <a href="/" className="flex shrink-0 items-center gap-2.5">
-          <img src={t.wordmark} alt="Sablia" className="block h-12" />
+        <a href="/" className="flex shrink-0 items-center">
+          <Logo tone={tone} />
         </a>
 
         <div className="hidden flex-1 items-center gap-7 md:flex">

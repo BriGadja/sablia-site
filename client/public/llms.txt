@@ -40,12 +40,11 @@ Séminaires et formations : sur demande, prix non publié. Nous formons votre en
 - **Qui paie Claude ?** Sablia. La synthèse tourne sur la clé API de Sablia ; le récurrent inclut jusqu'à 1 000 appels Claude par mois.
 - **Quelles garanties sur la sécurité des données ?** Claude est déployé via l'API commerciale d'Anthropic : par engagement contractuel, aucune de vos données n'entraîne le modèle. Conforme RGPD. Un DPA peut être signé.
 
-## Cas clients
+## Clients
 
-Aucun client n'est nommé ici : nous ne publions un nom qu'une fois que son porteur a validé par écrit la phrase écrite sur lui. Les deux chiffres ci-dessous sont comptés dans nos propres journaux d'exécution, avec la définition de ce qu'ils comptent.
+Plus de 20 clients accompagnés depuis 2025.
 
-- Agence immobilière en Saône-et-Loire : assistant vocal sur les appels que l'agence ne peut pas prendre, 289 appels sur 326 décrochés ont eu une suite concrète, soit 89 %, de mars à juin 2026. Une suite concrète est un transfert abouti, un rappel demandé ou une information donnée.
-- Société d'investissement locatif clé en main : assistant vocal qui qualifie les investisseurs entrants et pose les rendez-vous des conseillers dans le CRM, 68 rendez-vous posés sans un seul appel manuel, d'avril à août 2026.
+Aucun client n'est nommé ici : nous ne publions un nom qu'une fois que son porteur a validé par écrit la phrase écrite sur lui.
 
 ## Témoignage
 
@@ -64,4 +63,4 @@ Aucun client n'est nommé ici : nous ne publions un nom qu'une fois que son port
 - Email : brice@sablia.io
 - Call audit gratuit de 30 min : https://calendly.com/brice-gachadoat/30min
 
-Dernière mise à jour : 2026-09-18.
+Dernière mise à jour : 2026-09-29.

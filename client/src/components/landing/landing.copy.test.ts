@@ -143,6 +143,11 @@ describe('home: the product is on the surface (audit 2026-09-09)', () => {
     expect(hero?.text).not.toMatch(/€428k|48,200|Pipeline commercial · Mars/)
   })
 
+  it('llms.txt carries the home proof line and no call or meeting figure (Brice, 2026-09-29)', () => {
+    expect(llms?.text).toContain(PROOF_LINE)
+    expect(llms?.text).not.toMatch(/289|326|89 %|68 rendez-vous|Déjà en production/)
+  })
+
   it('llms.txt states the offer price, delay, guarantee and the booking link of the site', () => {
     expect(llms?.text).toContain(eurHt(of1.price.oneShotHt))
     expect(llms?.text).toContain(`${of1.delay.days} jours`)
@@ -382,10 +387,15 @@ describe('home: the offer section of 2026-09-28', () => {
     expect(text).not.toMatch(/label: '(Cas clients|Contact|Offres)'/)
   })
 
-  it('the two new sentences exist once, in home.ts, and nowhere else', () => {
-    for (const sentence of [PROOF_LINE, FINAL_CALL_TITLE]) {
+  it('the two new sentences exist once in home.ts; only the proof line is echoed, by llms.txt', () => {
+    // Brice, 2026-09-29: llms.txt drops its call figures and carries the home's proof line instead.
+    const expected = new Map([
+      [PROOF_LINE, ['home.ts', 'llms.txt']],
+      [FINAL_CALL_TITLE, ['home.ts']],
+    ])
+    for (const [sentence, where] of expected) {
       const holders = SOURCES.filter((s) => s.text.includes(sentence))
-      expect(holders.map((s) => s.path.split('/').slice(-1)[0])).toEqual(['home.ts'])
+      expect(holders.map((s) => s.path.split('/').slice(-1)[0])).toEqual(where)
       expect(home?.text.split(sentence)).toHaveLength(2)
     }
   })
