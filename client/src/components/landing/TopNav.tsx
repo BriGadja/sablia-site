@@ -119,7 +119,7 @@ export default function TopNav({
           <button
             type="button"
             onClick={() => openBookingUrl(bookingUrl)}
-            className="t-button inline-flex h-10 items-center rounded-md bg-primary px-5 text-on-primary transition-shadow duration-base hover:shadow-glow-coral"
+            className="t-button inline-flex h-10 items-center rounded-md bg-primary-active px-5 text-on-primary hover:bg-primary-hover active:bg-primary-hover transition-shadow duration-base hover:shadow-glow-coral"
           >
             {ctaLabel}
           </button>
@@ -155,7 +155,7 @@ export default function TopNav({
                 setMobileOpen(false)
                 openBookingUrl(bookingUrl)
               }}
-              className="t-button h-10 rounded-md bg-primary px-5 text-on-primary"
+              className="t-button h-10 rounded-md bg-primary-active px-5 text-on-primary hover:bg-primary-hover active:bg-primary-hover"
             >
               {ctaLabel}
             </button>

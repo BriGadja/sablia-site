@@ -182,7 +182,7 @@ export default function RessourceForm({ slug, titre }: RessourceFormProps) {
         <button
           type="submit"
           disabled={state.kind === 'pending'}
-          className="t-button mt-2 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-primary px-5 text-on-primary transition-shadow duration-base hover:shadow-glow-coral disabled:opacity-60"
+          className="t-button mt-2 inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-primary-active px-5 text-on-primary hover:bg-primary-hover active:bg-primary-hover transition-shadow duration-base hover:shadow-glow-coral disabled:opacity-60"
         >
           {state.kind === 'pending' ? 'Envoi en cours…' : `Recevoir ${titre}`}
         </button>

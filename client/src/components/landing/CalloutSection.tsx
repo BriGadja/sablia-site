@@ -12,12 +12,14 @@ export default function CalloutSection() {
   return (
     <section className="bg-surface-light px-4 py-16 sm:px-8">
       <div className="mx-auto max-w-editorial">
-        <div className="grid items-center gap-8 rounded-xl bg-primary p-8 sm:p-14 lg:grid-cols-[1fr_auto] lg:gap-14">
+        {/* primary-active, not primary: white on the site coral reads 3.28:1, and the paragraph
+            needs 4.5 (2026-09-29, coral-contrast.test.tsx). */}
+        <div className="grid items-center gap-8 rounded-xl bg-primary-active p-8 sm:p-14 lg:grid-cols-[1fr_auto] lg:gap-14">
           <div className="min-w-0">
             <h2 className="font-display text-[clamp(2rem,3.5vw,2.75rem)] font-medium leading-[1.1] tracking-tight text-on-primary [text-wrap:balance]">
               {FINAL_CALL_TITLE}
             </h2>
-            <p className="mt-4 max-w-[560px] text-on-primary/70">
+            <p className="mt-4 max-w-[560px] text-on-primary">
               30&nbsp;minutes en partage d'écran. Vous nous montrez votre CRM. Vous repartez avec ce
               qui rentre dans une offre cadrée, à prix affiché, et un chiffrage sous 24 heures pour
               le reste, que nous travaillions ensemble ou non.

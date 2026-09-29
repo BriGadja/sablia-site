@@ -97,7 +97,7 @@ describe('offer page: one light tone', () => {
     const offenders = Array.from(main.querySelectorAll('*'))
       .filter((el) => DARK_OR_TRAP.test(el.getAttribute('class') ?? ''))
       // the home's final call does the same: a dark button on the coral card
-      .filter((el) => !(el.tagName === 'BUTTON' && el.closest('.bg-primary') !== null))
+      .filter((el) => !(el.tagName === 'BUTTON' && el.closest('.bg-primary-active') !== null))
       .map((el) => `${el.tagName.toLowerCase()}.${el.getAttribute('class')}`)
     expect(offenders).toEqual([])
   })
@@ -108,7 +108,7 @@ describe('offer page: one light tone', () => {
     // the preview, 2026-09-29), and on the cream band the white words past the edge disappear.
     vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined)
     const { container } = renderPage()
-    const button = container.querySelector('main .bg-primary button') as Element
+    const button = container.querySelector('main .bg-primary-active button') as Element
     expect(button.textContent).toContain('Réserver 30 minutes avec Brice')
     expect(button.className).not.toMatch(/(^|\s)whitespace-nowrap(\s|$)/)
   })

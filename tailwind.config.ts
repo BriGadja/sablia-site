@@ -64,6 +64,7 @@ export default {
         primary: {
           DEFAULT: "rgb(var(--color-primary) / <alpha-value>)",
           active: "rgb(var(--color-primary-active) / <alpha-value>)",
+          hover: "rgb(var(--color-primary-hover) / <alpha-value>)",
           disabled: "rgb(var(--color-primary-disabled) / <alpha-value>)",
         },
         "accent-teal": "rgb(var(--color-accent-teal) / <alpha-value>)",

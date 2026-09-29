@@ -41,7 +41,7 @@ export default function HeroSection() {
           <button
             type="button"
             onClick={openBooking}
-            className="t-button mt-8 inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-primary px-6 text-[15px] text-on-primary transition-shadow duration-base hover:shadow-glow-coral sm:w-auto"
+            className="t-button mt-8 inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-primary-active px-6 text-[15px] text-on-primary hover:bg-primary-hover active:bg-primary-hover transition-shadow duration-base hover:shadow-glow-coral sm:w-auto"
           >
             {BOOKING_LABEL} <ArrowRight size={16} />
           </button>
