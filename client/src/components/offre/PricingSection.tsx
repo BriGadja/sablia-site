@@ -14,7 +14,8 @@ interface PriceCardProps {
 function PriceCard({ label, amount, unit, badge, intro, bullets, fine }: PriceCardProps) {
   return (
     <article className="flex flex-col rounded-lg border border-hairline-light bg-white p-8">
-      <div className="flex items-start justify-between gap-4">
+      {/* Wraps: at 390 px a `shrink-0` badge beside the label ran 32 px past the card. */}
+      <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
         <span className="t-caption-uppercase text-muted-text">{label}</span>
         {badge ? (
           <span className="t-caption-uppercase shrink-0 rounded-pill bg-accent-teal px-3 py-1 text-canvas">

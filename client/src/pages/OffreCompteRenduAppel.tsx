@@ -31,8 +31,26 @@ export default function OffreCompteRenduAppel() {
     const target = window.location.hash
       ? document.getElementById(window.location.hash.slice(1))
       : null
-    if (target) target.scrollIntoView()
-    else window.scrollTo(0, 0)
+    if (!target) {
+      window.scrollTo(0, 0)
+      return
+    }
+    target.scrollIntoView()
+    // The webfonts swap in 20 to 110 ms later and reflow the text above the target (up to 207 px
+    // off at 390, measured on the preview): land again once they are in, unless the visitor has
+    // already moved.
+    let moved = false
+    const stop = () => {
+      moved = true
+    }
+    const gestures = ['wheel', 'touchstart', 'keydown'] as const
+    for (const gesture of gestures) window.addEventListener(gesture, stop, { passive: true })
+    document.fonts?.ready.then(() => {
+      if (!moved) target.scrollIntoView()
+    })
+    return () => {
+      for (const gesture of gestures) window.removeEventListener(gesture, stop)
+    }
   }, [])
 
   return (

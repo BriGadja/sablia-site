@@ -113,6 +113,16 @@ describe('offer page: one light tone', () => {
     expect(button.className).not.toMatch(/(^|\s)whitespace-nowrap(\s|$)/)
   })
 
+  it('lets the free-month badge go under its label on a phone', () => {
+    // A `shrink-0` badge beside a label in a row that could not wrap: at 390 px « Premier mois
+    // offert » ran 32 px past its price card (187 to 375 px for a card ending at 343, on
+    // sablia.io and on the preview, 2026-09-29).
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined)
+    renderPage()
+    const badge = screen.getByText('Premier mois offert')
+    expect((badge.parentElement as Element).className).toMatch(/(^|\s)flex-wrap(\s|$)/)
+  })
+
   it('keeps the section ids that deep links point at', () => {
     vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined)
     renderPage()
@@ -122,22 +132,62 @@ describe('offer page: one light tone', () => {
   })
 })
 
+/**
+ * Records which elements were scrolled into view, and lets a test decide when the webfonts are in.
+ * happy-dom has no `document.fonts`; the page reads it through `?.`.
+ */
+function scrollHarness() {
+  const scrolled: string[] = []
+  const original = HTMLElement.prototype.scrollIntoView
+  HTMLElement.prototype.scrollIntoView = function scrollIntoView(this: HTMLElement) {
+    scrolled.push(this.id)
+  }
+  let fontsIn: () => void = () => undefined
+  const ready = new Promise<void>((resolve) => {
+    fontsIn = resolve
+  })
+  Object.defineProperty(document, 'fonts', { value: { ready }, configurable: true })
+  const restore = () => {
+    HTMLElement.prototype.scrollIntoView = original
+    Reflect.deleteProperty(document, 'fonts')
+  }
+  return { scrolled, fontsIn, restore }
+}
+
 describe('offer page: where it opens', () => {
-  it('lands a deep link on its section instead of the top of the page', () => {
+  it('lands a deep link on its section, and again once the webfonts are in', async () => {
+    // The swap reflows the text above the target 20 to 110 ms after the first landing: at 390 px
+    // the section ended up to 207 px off (measured on the preview, 2026-09-29).
     window.history.replaceState(null, '', `${OF1_ROUTE}#prix`)
     const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined)
-    const scrolled: string[] = []
-    const original = HTMLElement.prototype.scrollIntoView
-    HTMLElement.prototype.scrollIntoView = function scrollIntoView(this: HTMLElement) {
-      scrolled.push(this.id)
-    }
+    const h = scrollHarness()
     try {
       renderPage()
+      expect(h.scrolled).toEqual(['prix'])
+      h.fontsIn()
+      await Promise.resolve()
+      await Promise.resolve()
+      expect(h.scrolled).toEqual(['prix', 'prix'])
     } finally {
-      HTMLElement.prototype.scrollIntoView = original
+      h.restore()
     }
-    expect(scrolled).toEqual(['prix'])
     expect(scrollTo).not.toHaveBeenCalled()
+  })
+
+  it('does not pull the visitor back once they have started to scroll', async () => {
+    window.history.replaceState(null, '', `${OF1_ROUTE}#faq`)
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => undefined)
+    const h = scrollHarness()
+    try {
+      renderPage()
+      window.dispatchEvent(new Event('wheel'))
+      h.fontsIn()
+      await Promise.resolve()
+      await Promise.resolve()
+      expect(h.scrolled).toEqual(['faq'])
+    } finally {
+      h.restore()
+    }
   })
 
   it('opens at the top without a hash', () => {
