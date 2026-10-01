@@ -103,8 +103,13 @@ export function decide(body: unknown): Decision {
   return { kind: 'accept', value }
 }
 
+/**
+ * `?download=<name>` makes Supabase Storage answer with `Content-Disposition: attachment`, so a
+ * click downloads the file instead of opening raw JSON or text in a tab (Brice, 2026-10-01).
+ */
 export function fileUrl(path: string): string {
-  return `${BUCKET_PUBLIC}/${path}`
+  const name = path.split('/').pop() ?? path
+  return `${BUCKET_PUBLIC}/${path}?download=${encodeURIComponent(name)}`
 }
 
 /**

@@ -138,6 +138,22 @@ describe('leadRow', () => {
   })
 })
 
+describe('fileUrl', () => {
+  // Brice, 2026-10-01: a resource link must DOWNLOAD the file, not open it raw in a tab.
+  // Supabase Storage answers `?download=<name>` with `Content-Disposition: attachment`.
+  it('asks the bucket for a download, named after the file', () => {
+    expect(fileUrl('ressources/demo-of1/uuid4/template-of1.json')).toBe(
+      'https://qlxoitzdxjqhljjoeqoq.supabase.co/storage/v1/object/public/contenu-ressources/ressources/demo-of1/uuid4/template-of1.json?download=template-of1.json',
+    )
+  })
+
+  it('encodes a file name the URL cannot carry as is', () => {
+    expect(fileUrl('ressources/x/uuid4/aperçu mail.png')).toContain(
+      '?download=aper%C3%A7u%20mail.png',
+    )
+  })
+})
+
 describe('mailPayload', () => {
   it('lists every file as a public URL and adds the video and the booking link', () => {
     const mail = mailPayload(accepted(), RESSOURCE)
@@ -251,6 +267,7 @@ describe('handler', () => {
     expect(body.lead).toBe(true)
     expect(body.files).toHaveLength(2)
     expect(body.files[0].url).toContain('/storage/v1/object/public/contenu-ressources/')
+    expect(body.files[0].url).toContain('?download=')
 
     const mails = calls.filter((c) => c.url.includes('resend.com'))
     expect(mails).toHaveLength(1)
