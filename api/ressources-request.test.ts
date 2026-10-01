@@ -164,6 +164,29 @@ describe('mailPayload', () => {
     expect(mail.text).toContain('calendly.com/brice-gachadoat')
   })
 
+  // Brice, 2026-10-01: Gmail linkified the plain-text mail itself and glued the first URL to the
+  // next file name (`…template.jsonmail-nouveau-lead.txt` → « Object not found »). An HTML part
+  // with real anchors leaves nothing for Gmail to guess.
+  it('carries an HTML part with one real anchor per file', () => {
+    const mail = mailPayload(accepted(), RESSOURCE)
+    for (const f of RESSOURCE.fichiers) {
+      expect(mail.html).toContain(`<a href="${fileUrl(f.path)}">`)
+    }
+  })
+
+  it('escapes the visitor-typed first name in the HTML part', () => {
+    const mail = mailPayload(accepted({ prenom: '<b>Camille</b>' }), RESSOURCE)
+    expect(mail.html).toContain('&lt;b&gt;Camille&lt;/b&gt;')
+    expect(mail.html).not.toContain('<b>Camille</b>')
+  })
+
+  it('keeps every URL alone on its line in the text part, a blank line between files', () => {
+    const mail = mailPayload(accepted(), RESSOURCE)
+    for (const f of RESSOURCE.fichiers) {
+      expect(mail.text).toContain(`\n${fileUrl(f.path)}\n\n`)
+    }
+  })
+
   it('omits the video line when the resource has no video yet', () => {
     const mail = mailPayload(accepted(), { ...RESSOURCE, youtube_id: null })
     expect(mail.text).not.toContain('youtube.com')

@@ -83,6 +83,7 @@ export interface MailPayload {
   reply_to: string
   subject: string
   text: string
+  html?: string
 }
 
 /** Parse, then honeypot, then delay. A malformed payload never reaches the spam checks. */
@@ -139,21 +140,42 @@ export function leadRow(
   }
 }
 
+const escapeHtml = (value: string) =>
+  value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+
+/**
+ * Text AND html (Brice, 2026-10-01): sent as text only, Gmail linkified the mail itself and glued
+ * the first URL to the next file name, so the first link hit « Object not found ». The html part
+ * carries real anchors; the text part keeps each URL alone on its line, a blank line between files.
+ */
 export function mailPayload(value: RessourceRequest, ressource: RessourceRow): MailPayload {
-  const links = ressource.fichiers.map((f) => `${f.nom} : ${fileUrl(f.path)}`)
   const text = [
     `Bonjour ${value.prenom},`,
     '',
     `Voici la ressource « ${ressource.titre} » :`,
-    ...links,
-    ...(ressource.youtube_id
-      ? ['', `La vidéo : https://www.youtube.com/watch?v=${ressource.youtube_id}`]
-      : []),
     '',
+    ...ressource.fichiers.flatMap((f) => [f.nom, fileUrl(f.path), '']),
+    ...(ressource.youtube_id
+      ? [`La vidéo : https://www.youtube.com/watch?v=${ressource.youtube_id}`, '']
+      : []),
     `Voir si ça marche chez vous, 30 min : ${BOOKING_URL}`,
     '',
     'Sablia',
   ].join('\n')
+
+  const items = ressource.fichiers
+    .map((f) => `<li><a href="${fileUrl(f.path)}">${escapeHtml(f.nom)}</a></li>`)
+    .join('')
+  const html = [
+    `<p>Bonjour ${escapeHtml(value.prenom)},</p>`,
+    `<p>Voici la ressource « ${escapeHtml(ressource.titre)} » :</p>`,
+    `<ul>${items}</ul>`,
+    ressource.youtube_id
+      ? `<p>La vidéo : <a href="https://www.youtube.com/watch?v=${encodeURIComponent(ressource.youtube_id)}">la regarder sur YouTube</a></p>`
+      : '',
+    `<p>Voir si ça marche chez vous, 30 min : <a href="${BOOKING_URL}">réserver un créneau</a></p>`,
+    '<p>Sablia</p>',
+  ].join('')
 
   return {
     from: SENDER,
@@ -161,6 +183,7 @@ export function mailPayload(value: RessourceRequest, ressource: RessourceRow): M
     reply_to: INTERNAL_RECIPIENT,
     subject: `Votre ressource Sablia : ${ressource.titre}`,
     text,
+    html,
   }
 }
 
