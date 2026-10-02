@@ -1,5 +1,6 @@
 import { Link } from 'wouter'
 import Logo from '@/components/Logo'
+import { site } from '@/lib/site'
 
 export default function FooterSection() {
   return (
@@ -16,8 +17,8 @@ export default function FooterSection() {
           <a href="/#contact" className="text-sm text-on-dark">
             Nous écrire
           </a>
-          <a href="mailto:contact@sablia.io" className="text-sm text-on-dark">
-            contact@sablia.io
+          <a href={`mailto:${site.email}`} className="text-sm text-on-dark">
+            {site.email}
           </a>
         </div>
         <div className="flex flex-col items-start gap-2">

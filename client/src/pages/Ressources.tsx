@@ -1,8 +1,11 @@
+import { cva } from 'class-variance-authority'
 import { useEffect, useState } from 'react'
+import { ArrowRight } from '@/components/icons/lucide-crm'
 import FooterSection from '@/components/landing/FooterSection'
 import TopNav from '@/components/landing/TopNav'
 import ScrollToTop from '@/components/ScrollToTop'
 import SEO from '@/components/SEO'
+import VideoFacade from '@/components/VideoFacade'
 import { fetchRessources, type RessourceSummary } from '@/lib/contenu'
 
 /**
@@ -23,6 +26,56 @@ function formatDate(iso: string | null): string | null {
   const date = new Date(iso)
   if (Number.isNaN(date.getTime())) return null
   return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+}
+
+const card = cva(
+  'grid gap-4 rounded-xl border border-hairline bg-surface-card p-3 transition-colors duration-base hover:border-primary sm:gap-5 sm:p-4',
+  { variants: { video: { true: 'sm:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]', false: '' } } },
+)
+
+/**
+ * One resource: its video on the left, so a visitor who lands here without having seen the videos
+ * finds them (Brice, 2026-10-02), and on the right the title, the summary and the way in. The
+ * thumbnail comes from YouTube's image server: resources are published without a deploy, so there
+ * is no local copy to serve. Without a video the card keeps its text alone.
+ */
+function RessourceCard({ row }: { row: RessourceSummary }) {
+  const date = formatDate(row.published_at)
+  return (
+    <li className={card({ video: row.youtube_id !== null })}>
+      {row.youtube_id && (
+        <div className="min-w-0 self-center">
+          <VideoFacade
+            youtubeId={row.youtube_id}
+            title={row.titre}
+            thumbnail={{
+              src: `https://i.ytimg.com/vi/${row.youtube_id}/sddefault.jpg`,
+              width: 640,
+              height: 480,
+            }}
+            size="compact"
+          />
+        </div>
+      )}
+      <a
+        href={`/ressources/${row.slug}`}
+        className="group flex min-w-0 flex-col px-2 py-1 sm:px-1 sm:pr-2"
+      >
+        <h2 className="text-[1.125rem] font-medium leading-snug text-on-dark">{row.titre}</h2>
+        {row.resume && (
+          <p className="mt-2 line-clamp-3 text-[14px] leading-relaxed text-on-dark-body">
+            {row.resume}
+          </p>
+        )}
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-4">
+          {date && <span className="t-caption-uppercase text-on-dark-muted">{date}</span>}
+          <span className="t-button ml-auto inline-flex h-9 items-center gap-1.5 rounded-md bg-primary-active px-4 text-on-primary hover:bg-primary-hover active:bg-primary-hover group-hover:bg-primary-hover transition-shadow duration-base hover:shadow-glow-coral">
+            Voir la ressource <ArrowRight size={15} />
+          </span>
+        </div>
+      </a>
+    </li>
+  )
 }
 
 export default function Ressources() {
@@ -83,27 +136,9 @@ export default function Ressources() {
 
               {state.kind === 'ready' && state.rows.length > 0 && (
                 <ul className="flex flex-col gap-4">
-                  {state.rows.map((row) => {
-                    const date = formatDate(row.published_at)
-                    return (
-                      <li key={row.slug}>
-                        <a
-                          href={`/ressources/${row.slug}`}
-                          className="block rounded-xl border border-hairline bg-surface-card p-6 transition-colors duration-base hover:border-primary"
-                        >
-                          <h2 className="t-title-lg text-on-dark">{row.titre}</h2>
-                          {row.resume && (
-                            <p className="mt-2 text-[15px] leading-relaxed text-on-dark-body">
-                              {row.resume}
-                            </p>
-                          )}
-                          {date && (
-                            <p className="t-caption-uppercase mt-4 text-on-dark-muted">{date}</p>
-                          )}
-                        </a>
-                      </li>
-                    )
-                  })}
+                  {state.rows.map((row) => (
+                    <RessourceCard key={row.slug} row={row} />
+                  ))}
                 </ul>
               )}
             </div>
