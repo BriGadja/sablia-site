@@ -99,6 +99,21 @@ describe('landing copy: no claim of the pre-catalogue discourse survives', () =>
   }
 })
 
+describe('site: the contact address is one that exists (Brice, 2026-10-02)', () => {
+  // contact@sablia.io was never created: the footer and the JSON-LD sent visitors to a dead box.
+  const INDEX_HTML = readFileSync(resolve(HERE, '../../../index.html'), 'utf8')
+
+  it('no source and no structured data shows contact@sablia.io', () => {
+    for (const text of [...SOURCES.map((s) => s.text), INDEX_HTML]) {
+      expect(text).not.toContain('contact@sablia.io')
+    }
+  })
+
+  it('the JSON-LD organisation mail is the site address', () => {
+    expect(INDEX_HTML).toContain(`"email": "${site.email}"`)
+  })
+})
+
 describe('home: no name is published before its owner validated it', () => {
   for (const name of CONSENT_SCOPED) {
     const source = SOURCES.find((s) => s.path.endsWith(name))
@@ -366,8 +381,11 @@ describe('home: the offer section of 2026-09-28', () => {
   })
 
   it('embeds the video on youtube-nocookie, mounted only after a click', () => {
-    expect(offre?.text).toContain('youtube-nocookie.com/embed/')
-    expect(offre?.text).toContain('useState')
+    // The facade is shared with the /ressources cards since 2026-10-02.
+    const facade = readFileSync(resolve(HERE, '../VideoFacade.tsx'), 'utf8')
+    expect(offre?.text).toContain('<VideoFacade')
+    expect(facade).toContain('youtube-nocookie.com/embed/')
+    expect(facade).toContain('useState')
   })
 
   it('sells nothing the grill took off the home', () => {

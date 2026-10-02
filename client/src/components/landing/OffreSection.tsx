@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import { Link } from 'wouter'
 import { ArrowRight } from '@/components/icons/lucide-crm'
+import VideoFacade from '@/components/VideoFacade'
 import { HOME_VIDEO, PROOF_LINE } from '@/content/home'
 import { OF1_ROUTE, of1 } from '@/content/of1'
 import { eurHt, frenchSpacing } from '@/lib/format'
@@ -12,51 +12,6 @@ import { eurHt, frenchSpacing } from '@/lib/format'
  * by Brice the same day: the home shows it). No monthly fee, no « Bientôt » card, no off-catalogue
  * card: they left the home (decision 4).
  */
-
-/**
- * Click-to-play facade: before the click the visitor loads a local thumbnail and no byte from
- * YouTube; the click mounts the privacy-enhanced player, whose `autoplay=1` then follows a user
- * gesture. Browsers may still keep it paused on a session they do not trust with sound.
- */
-function VideoFacade() {
-  const [playing, setPlaying] = useState(false)
-
-  if (playing) {
-    return (
-      <iframe
-        src={`https://www.youtube-nocookie.com/embed/${HOME_VIDEO.youtubeId}?autoplay=1&rel=0`}
-        title={HOME_VIDEO.title}
-        allow="autoplay; encrypted-media; picture-in-picture"
-        allowFullScreen
-        loading="lazy"
-        className="aspect-video w-full rounded-xl border-0 bg-ink"
-      />
-    )
-  }
-
-  return (
-    <button
-      type="button"
-      onClick={() => setPlaying(true)}
-      aria-label={`Lire la vidéo : ${HOME_VIDEO.title}`}
-      className="group relative block aspect-video w-full overflow-hidden rounded-xl bg-ink"
-    >
-      <img
-        src="/photos/video-demo-of1.webp"
-        alt=""
-        width={960}
-        height={540}
-        loading="lazy"
-        className="h-full w-full object-cover transition-transform duration-base group-hover:scale-[1.02]"
-      />
-      <span className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-primary shadow-lg transition-transform duration-base group-hover:scale-105">
-        <svg viewBox="0 0 24 24" aria-hidden="true" className="ml-1 h-7 w-7 fill-on-primary">
-          <path d="M7 4.5v15l13-7.5z" />
-        </svg>
-      </span>
-    </button>
-  )
-}
 
 export default function OffreSection() {
   return (
@@ -89,7 +44,11 @@ export default function OffreSection() {
         </div>
 
         <div className="order-1 min-w-0 lg:order-2">
-          <VideoFacade />
+          <VideoFacade
+            youtubeId={HOME_VIDEO.youtubeId}
+            title={HOME_VIDEO.title}
+            thumbnail={{ src: '/photos/video-demo-of1.webp', width: 960, height: 540 }}
+          />
           {/* Under the player, not over it: the thumbnail carries its own title. */}
           <p className="mt-3 text-[14px] text-muted-text">
             Voir la démo en direct ({HOME_VIDEO.durationLabel})
