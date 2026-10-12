@@ -38,5 +38,9 @@
   "/offres/compte-rendu-appel/salesforce": {
     "lastmod": "2026-10-12",
     "hash": "sha256:4afaa2129802de1fd2fb71d07423e9482a228f52db21aa22f6fe46c5ba183408"
+  },
+  "/offres/compte-rendu-appel/hubspot": {
+    "lastmod": "2026-10-12",
+    "hash": "sha256:bbf295af20c92b4e1e403f19fb4e36c833b0c7d293aa987fed8130052d623ae3"
   }
 }
