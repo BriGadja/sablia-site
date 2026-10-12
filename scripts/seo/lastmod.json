@@ -34,5 +34,9 @@
   "/offres/compte-rendu-appel/pipedrive": {
     "lastmod": "2026-10-12",
     "hash": "sha256:5b1df5ea8cd696caeb8da824744d3f5fd4ba4bed864a2084b8a577294a639f2d"
+  },
+  "/offres/compte-rendu-appel/salesforce": {
+    "lastmod": "2026-10-12",
+    "hash": "sha256:4afaa2129802de1fd2fb71d07423e9482a228f52db21aa22f6fe46c5ba183408"
   }
 }
