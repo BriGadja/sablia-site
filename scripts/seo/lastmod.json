@@ -1,0 +1,30 @@
+{
+  "/": {
+    "lastmod": "2026-06-18",
+    "hash": "sha256:22887d8dea64b27bedc1366598b10b2bdb7c7c8472bfc3897fe53cfbd3ae794d"
+  },
+  "/mentions-legales": {
+    "lastmod": "2026-05-26",
+    "hash": "sha256:cda1ea3af63b5649a639389d8054ee662ce722dc5a9be0a4ba759bb8ca25c2e0"
+  },
+  "/politique-confidentialite": {
+    "lastmod": "2026-05-26",
+    "hash": "sha256:68ed851599acfba13d37220c88ee5c3720b8335f72f44bf810c59761092f0485"
+  },
+  "/cgv": {
+    "lastmod": "2026-05-26",
+    "hash": "sha256:6ac9b31c4fa405ba9bff86a05b3017ab16003c10a6f71f3a891e004a08a3d15a"
+  },
+  "/guides/integrer-l-ia-dans-votre-entreprise": {
+    "lastmod": "2026-06-18",
+    "hash": "sha256:bb13171d0508940bdbf4c7f435f8f94396d841ce2b3d99a7ca9ab607730d8fb3"
+  },
+  "/offres/compte-rendu-appel": {
+    "lastmod": "2026-09-07",
+    "hash": "sha256:65f68923c1d4686d9761ca3621a4754ad4acdfe8ad2d14944e722f23400e1297"
+  },
+  "/ressources": {
+    "lastmod": "2026-09-22",
+    "hash": "sha256:4d663b08db6bbbca6d348ff6a3ac38d81d17d9f65ed9b9d2e8e0ceebb9ea89b7"
+  }
+}

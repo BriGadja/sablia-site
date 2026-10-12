@@ -16,6 +16,7 @@
 | Type-check | `npm run check` |
 | Test | `npx vitest run` (Vitest, run once; bare `npm test` = watch mode in a TTY) |
 | Build | `npm run build` (Vite + prerender) |
+| SEO | Before a PR that touches a page's content: `npm run seo:stamp-check`, then `node scripts/seo/stamp-lastmod.mjs --write` if it fails; `npm run test:seo` is the SEO suite. |
 
 ## Critical Rules
 1. NEVER use `any` type — define proper interfaces
