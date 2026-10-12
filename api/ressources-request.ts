@@ -13,6 +13,10 @@ import { z } from 'zod'
  * already in the table spell it that way), and Brice gets a second mail. No sequence is ever
  * enrolled: nothing on this path can open one.
  *
+ * A ticked box may carry a phone (optional, Brice 2026-10-12: a lead had asked to be contacted and
+ * Raphaël had nothing to call). It is stored in E.164 like the rest of `sabcrm_leads.phone`, and
+ * dropped when the box is unticked — nobody asked to be called.
+ *
  * Anti-spam is the honeypot plus a minimum delay of `api/contact.ts`, answering 204 BEFORE any I/O.
  */
 
@@ -30,17 +34,50 @@ const MIN_ELAPSED_MS = 3000
 const DEDUP_WINDOW_MS = 10 * 60 * 1000
 const TIMEOUT_MS = 4000
 
-const RequestSchema = z.object({
-  prenom: z.string().trim().min(2).max(80),
-  email: z.string().trim().max(200).email().toLowerCase(),
-  slug: z
-    .string()
-    .trim()
-    .regex(/^[a-z0-9-]{3,80}$/, 'slug invalide'),
-  contact: z.boolean(),
-  website: z.string().max(200).optional().default(''),
-  elapsedMs: z.number().int().min(0),
-})
+const PHONE_ERROR = 'Numéro de téléphone invalide (exemple : 06 12 34 56 78)'
+
+/**
+ * `null` = not a phone number. French numbers (`06…`, `+33 (0)6…`, `0033 6…`) come out as
+ * `+33` + 9 digits; any other `+` or `00` number is kept if it has 8 to 15 digits (E.164).
+ */
+export function normalizePhone(input: string): string | null {
+  let digits = input.replace(/[\s.()-]/g, '')
+  if (digits.startsWith('00')) digits = `+${digits.slice(2)}`
+  if (/^0\d{9}$/.test(digits)) return `+33${digits.slice(1)}`
+  if (/^\+330\d{9}$/.test(digits)) return `+33${digits.slice(4)}`
+  if (digits.startsWith('+33')) return /^\+33\d{9}$/.test(digits) ? digits : null
+  return /^\+[1-9]\d{7,14}$/.test(digits) ? digits : null
+}
+
+/** How a French reader types their own number; a foreign one stays international. */
+export function displayPhone(e164: string): string {
+  const french = /^\+33(\d{9})$/.exec(e164)
+  if (!french) return e164
+  return `0${french[1]}`.replace(/(\d{2})(?=\d)/g, '$1 ')
+}
+
+const RequestSchema = z
+  .object({
+    prenom: z.string().trim().min(2).max(80),
+    email: z.string().trim().max(200).email().toLowerCase(),
+    slug: z
+      .string()
+      .trim()
+      .regex(/^[a-z0-9-]{3,80}$/, 'slug invalide'),
+    contact: z.boolean(),
+    telephone: z.string().trim().max(40).optional().default(''),
+    website: z.string().max(200).optional().default(''),
+    elapsedMs: z.number().int().min(0),
+  })
+  .superRefine((value, ctx) => {
+    if (value.contact && value.telephone !== '' && normalizePhone(value.telephone) === null) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['telephone'], message: PHONE_ERROR })
+    }
+  })
+  .transform((value) => ({
+    ...value,
+    telephone: value.contact && value.telephone !== '' ? normalizePhone(value.telephone) : null,
+  }))
 
 export type RessourceRequest = z.infer<typeof RequestSchema>
 
@@ -66,6 +103,7 @@ export interface RessourceRow {
 export interface LeadRow {
   full_name: string
   email: string
+  phone: string | null
   source: 'contenu'
   owner: 'Brice' | 'Raphael'
   stage: 'nouveau' | 'a_contacter'
@@ -93,7 +131,8 @@ export function decide(body: unknown): Decision {
     const field = parsed.error.issues[0]?.path.join('.') || 'inconnu'
     return {
       kind: 'invalid',
-      error: `Formulaire incomplet ou invalide (champ : ${field})`,
+      error:
+        field === 'telephone' ? PHONE_ERROR : `Formulaire incomplet ou invalide (champ : ${field})`,
       code: 'invalid_payload',
     }
   }
@@ -123,16 +162,20 @@ export function leadRow(
   now = new Date(),
 ): LeadRow {
   const wantsContact = value.contact
+  const contactAction = value.telephone
+    ? `Rappeler au ${displayPhone(value.telephone)}`
+    : 'Écrire (aucun numéro laissé)'
   return {
     full_name: value.prenom,
     email: value.email,
+    phone: value.telephone,
     source: 'contenu',
     owner: wantsContact ? 'Raphael' : 'Brice',
     stage: wantsContact ? 'a_contacter' : 'nouveau',
     lead_date: now.toISOString().slice(0, 10),
     project_details: `Ressource : ${ressource.titre}`,
     next_action: wantsContact
-      ? `Rappeler : a demandé à être contacté depuis /ressources/${value.slug}`
+      ? `${contactAction} : a demandé à être contacté depuis /ressources/${value.slug}`
       : 'Aucun contact (téléchargement de ressource)',
     updated_by: 'sablia-site/api/ressources-request',
     updated_at: now.toISOString(),
@@ -148,7 +191,19 @@ const escapeHtml = (value: string) =>
  * the first URL to the next file name, so the first link hit « Object not found ». The html part
  * carries real anchors; the text part keeps each URL alone on its line, a blank line between files.
  */
+/**
+ * Brice, 2026-10-12: the mail was the same whether the box was ticked or not, so a visitor who had
+ * asked to be contacted got no sign the request was heard.
+ */
+function contactLine(value: RessourceRequest): string | null {
+  if (!value.contact) return null
+  return value.telephone
+    ? `Vous avez demandé à être contacté : on vous appelle au ${displayPhone(value.telephone)} sous 24 h ouvrées.`
+    : 'Vous avez demandé à être contacté : on vous répond par mail sous 24 h ouvrées.'
+}
+
 export function mailPayload(value: RessourceRequest, ressource: RessourceRow): MailPayload {
+  const promise = contactLine(value)
   const text = [
     `Bonjour ${value.prenom},`,
     '',
@@ -158,6 +213,7 @@ export function mailPayload(value: RessourceRequest, ressource: RessourceRow): M
     ...(ressource.youtube_id
       ? [`La vidéo : https://www.youtube.com/watch?v=${ressource.youtube_id}`, '']
       : []),
+    ...(promise ? [promise, ''] : []),
     `Voir si ça marche chez vous, 30 min : ${BOOKING_URL}`,
     '',
     'Sablia',
@@ -173,6 +229,7 @@ export function mailPayload(value: RessourceRequest, ressource: RessourceRow): M
     ressource.youtube_id
       ? `<p>La vidéo : <a href="https://www.youtube.com/watch?v=${encodeURIComponent(ressource.youtube_id)}">la regarder sur YouTube</a></p>`
       : '',
+    promise ? `<p>${escapeHtml(promise)}</p>` : '',
     `<p>Voir si ça marche chez vous, 30 min : <a href="${BOOKING_URL}">réserver un créneau</a></p>`,
     '<p>Sablia</p>',
   ].join('')
@@ -196,6 +253,7 @@ export function internalMailPayload(
 ): MailPayload {
   const text = [
     `${value.prenom} <${value.email}> a demandé à être contacté.`,
+    `Téléphone : ${value.telephone ? displayPhone(value.telephone) : 'aucun, répondre par mail'}`,
     `Ressource : ${ressource.titre} (/ressources/${value.slug})`,
     '',
     leadId ? `Fiche CRM : ${leadId}` : 'Fiche CRM : ligne CRM non créée',
