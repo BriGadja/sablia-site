@@ -68,6 +68,23 @@ describe('CrmPage template: a published page (fixture)', () => {
     }
   })
 
+  it('fixture: below sm each fact is a stacked card with its source host, and nothing breaks mid-word', () => {
+    const { container } = renderPage(published)
+    const cards = within(screen.getByTestId('facts-cards')).getAllByRole('listitem')
+    expect(cards).toHaveLength(published.facts.length)
+    published.facts.forEach((fact, i) => {
+      const card = cards[i]
+      expect(card.textContent).toContain(fact.label)
+      expect(card.textContent).toContain(fact.value)
+      const host = new URL(fact.sourceUrl).host
+      expect(card.textContent).toContain(`Source : ${host}`)
+      const link = within(card).getByRole('link')
+      expect(link.getAttribute('href')).toBe(fact.sourceUrl)
+      expect(link.textContent).toBe(host)
+    })
+    expect(container.querySelectorAll('.break-all')).toHaveLength(0)
+  })
+
   it('fixture: price, delay and guarantee are rendered from the offer module', () => {
     const { container } = renderPage(published)
     const text = (container.textContent ?? '').replace(/ /g, ' ')
