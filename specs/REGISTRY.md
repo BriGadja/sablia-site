@@ -150,7 +150,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Oracle : le HTML brut de chaque ressource publiée porte `<title>` = « {titre} — Sablia », `<link rel="canonical" href="https://sablia.io/ressources/{slug}">`, la meta description = le résumé, le titre en `<h1>` et le corps visibles ; il ne contient aucune URL de fichier du bucket `contenu-ressources` (les fichiers restent derrière le formulaire, décision D8) ; une ressource non publiée n'a aucun dossier prérendu ; une lecture Supabase en échec fait échouer le build (jamais une page vide publiée en silence)
 - Exemple : Étant donné les lignes publiées `pipedrive-nouveau-lead` (publiée le 2026-10-01) et `skill-devis` (le 2026-10-08), et `demo-of1` non publiée / Quand le build prérend / Alors `dist/public/ressources/pipedrive-nouveau-lead/index.html` et `…/skill-devis/index.html` existent avec leur titre et leur canonique propres, `…/demo-of1/` n'existe pas, et aucun des deux fichiers ne contient `storage/v1/object/public/contenu-ressources`
 - Test : [script] node --test scripts/seo/prerender-ressources.test.mjs (dans `sablia-site`) + `python3 scripts/site-check.py --base <aperçu> --preview` (hub) rouge avant, vert après
-- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Statut : VALIDÉE 2026-10-12 @d00d89d (prod sablia.io, PR #16 fa76f80 + #17 d00d89d, `site-check --canonical-host sablia.io` 15/15 exit 0 : le défaut `/ressources/pipedrive-nouveau-lead` rouge avant est vert ; les robots voient le titre et la canonique propres de chaque ressource et page CRM ; limite connue : la vérification du premier paragraphe du corps (`corps_md`) est volontairement dormante dans le build, titre/résumé/h1/description prouvent le rendu ; l'échec de lecture Supabase → build en échec n'est prouvé que par le test unitaire)
 - Source : brief `research/brainstorm/2026-10-12-visibilite-llm-sablia.md` § Décisions du grill (faits trouvés, Q2a) ; défaut mesuré par curl UA `OAI-SearchBot` le 12/10 : titre et canonique de l'ACCUEIL servis pour `/ressources/pipedrive-nouveau-lead` et `/ressources/skill-devis`
 
 ## US-55 — Le plan du site liste toutes les pages indexables, avec la vraie date de modification [script]
@@ -159,7 +159,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Oracle : le plan liste les pages publiques, les ressources publiées et les pages CRM publiées (brouillons exclus) ; chaque `<lastmod>` est la date de la dernière modification du CONTENU de la page (registre `lastmod.json` : date + empreinte des fichiers sources, valable sur le clone peu profond de Vercel), jamais la date du déploiement ; une page dont l'empreinte a changé sans que sa date ait bougé fait échouer le test ; une ressource prend la date de sa ligne
 - Exemple : Étant donné l'accueil modifié le 2026-10-13 et `/cgv` inchangé depuis le 2026-05-26 / Quand le plan est généré le 2026-10-20 / Alors `/` porte `2026-10-13`, `/cgv` porte `2026-05-26`, `/ressources/skill-devis` porte la date de sa ligne, et la liste compte les 7 pages d'aujourd'hui + 2 ressources + les pages CRM publiées
 - Test : [script] node --test scripts/seo/sitemap.test.mjs (dans `sablia-site`)
-- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Statut : VALIDÉE 2026-10-12 @d00d89d (prod sablia.io, PR #16 fa76f80 + #17 d00d89d, sitemap prod à 10 URL dont les ressources publiées et les 4 pages CRM, brouillons et pages légales exclus ; test:seo 50 pass et stamp-check exit 0 ; la valeur de chaque `lastmod` en prod n'a pas été relue ligne à ligne)
 - Source : brief § Décisions du grill, Q2a et Q2c ; `lastmod` de l'accueil figé au 2026-06-18 et ressources absentes du plan (mesuré le 12/10) ; documentation Vercel : clone Git peu profond (`--depth=10`) pendant le build, donc pas de `git log` fiable
 
 ## US-56 — Les robots de recherche des IA sont accueillis par leur nom actuel, et la description du site dit l'offre actuelle [script]
@@ -168,7 +168,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Oracle : `robots.txt` autorise explicitement `ClaudeBot`, `Claude-User`, `Claude-SearchBot`, `OAI-SearchBot`, `PerplexityBot` et ne nomme plus `Claude-Web` ; la `description` JSON-LD de l'accueil dit « 7 jours » et ne contient plus « 30 jours » ni « dashboards intelligents »
 - Exemple : Étant donné le `robots.txt` du 12/10 (entrée `Claude-Web`) et la description « …Premier workflow en production sous 30 jours. » / Quand l'hygiène est appliquée / Alors le fichier nomme `ClaudeBot`, `Claude-User` et `Claude-SearchBot` en `Allow: /`, et la description cite « 7 jours »
 - Test : [script] node --test scripts/seo/head-hygiene.test.mjs (dans `sablia-site`)
-- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Statut : VALIDÉE 2026-10-12 @d00d89d (prod sablia.io, relu ~23:27Z cache-busted : `robots.txt` liste `ClaudeBot`, `Claude-User`, `Claude-SearchBot` avec un commentaire citant https://support.claude.com/en/articles/8896518, aucun `Claude-Web` ; description JSON-LD `ProfessionalService` de l'accueil terminée par « …livrés en 7 jours. », sans « 30 jours » ; test head-hygiene vert)
 - Source : brief § Décisions du grill, Q2b et Q2d ; doc Anthropic des robots (ClaudeBot, Claude-User, Claude-SearchBot) https://support.claude.com/en/articles/8896518
 
 ## US-57 — Chaque mise en ligne réussie en production prévient IndexNow [script]
@@ -177,7 +177,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Oracle : la clé est servie à `https://sablia.io/{clé}.txt` et son contenu est la clé ; l'action ne s'exécute que pour la production en `success` ; la liste envoyée = les URL NOUVELLES ou dont le `lastmod` a changé entre le plan du déploiement de production précédent et celui du déploiement qui vient de réussir (jamais tout le site à chaque déploiement ; une option `--all` sert à la première soumission), au plus 10 000, hôte `sablia.io` ; une réponse 200 ou 202 est un succès, 422 et 429 sont signalées sans faire échouer l'action, 400 et 403 la font échouer
 - Exemple : Étant donné deux fichiers de plan, l'ancien à 9 URL et le nouveau à 10 URL dont 1 ajoutée et 1 au `lastmod` changé / Quand le script tourne à blanc avec `--sitemap nouveau.xml --previous-sitemap ancien.xml` / Alors il imprime une liste de 2 URL, l'hôte `sablia.io`, la clé et l'emplacement de sa clé, sans aucun appel réseau
 - Test : [script] node --test scripts/seo/indexnow.test.mjs (dans `sablia-site`)
-- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Statut : VALIDÉE 2026-10-12 @d00d89d (prod sablia.io, PR #16 fa76f80 + #17 d00d89d, clé servie en 200 ; action `indexnow.yml` run 38320526302 : 8 URL nouvelles envoyées, réponse 202, `/` + guide soumis à la main, 200 ; défaut du redéploiement à l'identique corrigé par #17 : run 38321234118 après correctif = `urls: 0`, « nothing to submit » ; INFRA.md `2c536674`)
 - Source : brief § Décisions du grill, Q2e ; protocole https://www.indexnow.org/documentation (fichier de clé à la racine, codes 200/202) ; IndexNow jamais activé (Bing Webmaster, mesuré le 12/10)
 
 ## US-58 — Le visiteur peut dire comment il nous a trouvés, sur le formulaire de contact et celui des ressources
@@ -186,7 +186,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Oracle : champ FACULTATIF « Comment nous avez-vous trouvés ? » avec exactement les six réponses Google · ChatGPT ou une autre IA · YouTube · LinkedIn · Bouche-à-oreille · Autre (clés `google`, `ia`, `youtube`, `linkedin`, `bouche_a_oreille`, `autre`), vide par défaut ; une valeur hors liste → 400 et rien d'écrit ; sans réponse → colonne `NULL` et l'envoi réussit comme avant ; la réponse est écrite dans la ligne `sabcrm_leads` créée par l'envoi
 - Exemple : Étant donné le formulaire de la ressource `skill-devis` / Quand le visiteur choisit « ChatGPT ou une autre IA » et envoie / Alors la ligne créée porte `found_via = 'ia'` ; avec « pirate » → 400 ; sans choix → `found_via` NULL
 - Test : vitest `api/contact.test.ts -t found_via`, `api/ressources-request.test.ts -t found_via`, `client/src/components/ressources/RessourceForm.test.tsx -t found_via`, `client/src/components/landing/ContactForm.test.tsx -t found_via` ; marche aperçu Vercel 390 (libellé lisible)
-- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Statut : VALIDÉE 2026-10-12 @d00d89d (prod sablia.io, PR #16 fa76f80 + #17 d00d89d, E2E en production, formulaire ressource réel : « ChatGPT ou une autre IA » → API 200 → ligne `found_via='ia'`, `intention='ressource_seule'`, lead de test supprimé ensuite ; navigateur 390/1440 sur l'accueil `#contact` et `/ressources/skill-devis` : libellé « Comment nous avez-vous trouvés ? », 7 options dans l'ordre voulu, aucun défilement horizontal ; valeur hors liste → 400 et envoi sans réponse → NULL prouvés par vitest seulement)
 - Source : brief § Décisions du grill, Q5 (libellé et six options décidés mot pour mot par Brice)
 
 ## US-59 — La page « Claude dans HubSpot » dit ce qui est propre à HubSpot
@@ -195,7 +195,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Oracle : titre et canonique propres à l'URL ; la page dit où atterrit le compte rendu dans HubSpot (objet d'appel et note rattachés au contact et à l'affaire), comment la tâche de relance y est créée, quel abonnement ou quel accès API la chaîne exige, et une particularité HubSpot — chaque fait sourcé par une page officielle citée dans `research/visibilite-llm/crm-sources/hubspot.md` ; le prix, le délai et la garantie viennent du module `of1` ; ni « partenaire », ni « certifié », ni aucun nom de client ; aucun chiffre de la liste bannie
 - Exemple : Étant donné l'URL de l'aperçu / Quand j'ouvre la page / Alors je lis un titre « Claude dans HubSpot : … », une section « Ce qui est propre à HubSpot » avec au moins 4 faits sourcés, 1 490 € HT et 7 jours repris de la page d'offre, et un seul bouton de réservation
 - Test : vitest `client/src/pages/CrmPage.test.tsx -t hubspot` ; marche aperçu 390 et 1440 par Brice (point de validation)
-- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Statut : VALIDÉE 2026-10-12 @d00d89d (prod sablia.io, PR #16 fa76f80 + #17 d00d89d, page prod à 390 et 1440 : 1 h1, cartes à 390 / tableau à 1440, aucun hôte coupé, aucun débordement ; 8 citations du registre de sources relues en direct, `crm-ledger-check.py hubspot.md` 8 PASS ; garde « doorway » 31 pass avec 4 pages ; `site-check` prod 15/15 ; point de validation de Brice le 2026-10-12)
 - Source : brief § Décisions du grill, Q7 (4 pages, contenu propre au CRM sinon pas de page : règle « doorway » https://developers.google.com/search/docs/essentials/spam-policies) ; demande réelle `sabcrm_leads` 12/10 : HubSpot 31, Zoho 15, Salesforce 7, Pipedrive 5
 
 ## US-60 — La page « Claude dans Zoho CRM » dit ce qui est propre à Zoho
@@ -204,7 +204,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Oracle : mêmes exigences que US-59, avec les objets Zoho (module Appels, notes rattachées, tâche de relance) ; au moins 4 faits propres sourcés dans `research/visibilite-llm/crm-sources/zoho.md`, sinon la page reste en brouillon (`noindex`, hors plan du site) avec la raison écrite (règle « pas de contenu propre, pas de page ») ; aucun passage de 8 mots consécutifs identique à une autre page CRM hors des modules communs `of1` (garde « doorway »)
 - Exemple : Étant donné l'aperçu / Quand j'ouvre la page / Alors elle nomme le module Appels de Zoho CRM et sa propre exigence d'édition pour l'API, et sa section propre diffère de celle de HubSpot
 - Test : vitest `client/src/pages/CrmPage.test.tsx -t zoho` et `client/src/content/crm/crm.doorway.test.ts`
-- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Statut : VALIDÉE 2026-10-12 @d00d89d (prod sablia.io, PR #16 fa76f80 + #17 d00d89d, page prod à 390 et 1440 sans débordement ; `crm-ledger-check.py zoho.md` 15 PASS, 9 faits sourcés, page `published` ; garde « doorway » verte avec 4 pages ; `site-check` prod 15/15)
 - Source : brief § Décisions du grill, Q7
 
 ## US-61 — La page « Claude dans Salesforce » dit ce qui est propre à Salesforce
@@ -213,7 +213,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Oracle : mêmes exigences que US-59, avec les objets Salesforce (tâche d'activité de sous-type appel rattachée au contact ou au lead et à l'opportunité) et l'exigence d'édition pour l'accès API (documentation officielle) ; au moins 4 faits propres sourcés dans `research/visibilite-llm/crm-sources/salesforce.md`, sinon la page reste en brouillon avec la raison écrite
 - Exemple : Étant donné l'aperçu / Quand j'ouvre la page / Alors elle dit sur quelles éditions l'accès API est inclus, en citant la page officielle, et nomme l'objet Tâche
 - Test : vitest `client/src/pages/CrmPage.test.tsx -t salesforce` et `client/src/content/crm/crm.doorway.test.ts`
-- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Statut : VALIDÉE 2026-10-12 @d00d89d (prod sablia.io, PR #16 fa76f80 + #17 d00d89d, page prod à 390 et 1440 sans débordement ; registre de sources 9/9 citations relues à l'écran dans le navigateur partagé (`developer.salesforce.com` 403, `help.salesforce.com` coquille JS) ; garde « doorway » verte ; `site-check` prod 15/15)
 - Source : brief § Décisions du grill, Q7
 
 ## US-62 — La page « Claude dans Pipedrive » dit ce qui est propre à Pipedrive, et porte la preuve anonyme
@@ -222,5 +222,5 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Oracle : mêmes exigences que US-59, avec les objets Pipedrive (activité de type appel, note rattachée à l'affaire ou à la personne) ; au moins 4 faits propres sourcés dans `research/visibilite-llm/crm-sources/pipedrive.md` (sinon la page reste en brouillon avec la raison écrite) ; UNE ligne de preuve, anonyme : « en production depuis avril 2026 chez une société d'investissement locatif : chaque appel est écrit dans son Pipedrive (étape, note, attribution) » ; le mot « Norloc » n'apparaît nulle part dans le code ni dans le HTML construit ; cette ligne n'existe que sur cette page
 - Exemple : Étant donné l'aperçu / Quand j'ouvre la page / Alors la ligne de preuve anonyme est présente une fois, sans nom de société, et les pages HubSpot, Zoho et Salesforce n'en portent aucune
 - Test : vitest `client/src/pages/CrmPage.test.tsx -t pipedrive` et `client/src/content/crm/crm.doorway.test.ts`
-- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Statut : VALIDÉE 2026-10-12 @d00d89d (prod sablia.io, PR #16 fa76f80 + #17 d00d89d, page prod à 390 et 1440 sans débordement ; `crm-ledger-check.py pipedrive.md` 8 PASS ; ligne de preuve anonyme verbatim, `grep -ril norloc client api scripts` vide ; garde « doorway » verte ; `site-check` prod 15/15 ; la matérialité du fait « en production depuis avril 2026 » est une décision de Brice (grill Q9), non vérifiée par le relecteur)
 - Source : brief § Décisions du grill, Q7 et Q9 (cas réel jamais nommé sans accord écrit)
