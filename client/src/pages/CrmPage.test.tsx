@@ -132,6 +132,9 @@ describe('CrmPage template: a published page (fixture)', () => {
     const faq = blocks.find((b) => b['@type'] === 'FAQPage')
     expect(service.offers.price).toBe(String(of1.price.oneShotHt))
     expect(service.url).toBe(`https://sablia.io${published.path}`)
+    // site-check's jsonld-names-visible: the Service name must be text a reader sees (the h1).
+    expect(service.name).toBe(published.hero.title)
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(service.name)
     expect(faq.mainEntity.map((q: { name: string }) => q.name)).toEqual(
       published.faq.map((f) => f.q),
     )

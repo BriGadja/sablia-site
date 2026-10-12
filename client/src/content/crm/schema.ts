@@ -100,7 +100,7 @@ export function crmServiceSchema(page: PublishedCrmPage) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: `Compte rendu d'appel dans ${page.crm}`,
+    name: page.hero.title,
     description: page.seo.description,
     serviceType: `Automatisation de compte rendu d'appel dans ${page.crm}`,
     url: `${SITE}${page.path}`,
