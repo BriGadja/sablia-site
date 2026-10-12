@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { type FoundVia, FoundViaField, namesFoundVia, withFoundVia } from './_found-via.js'
 
 /**
  * `POST /api/ressources-request` — the download form of `/ressources/{slug}` (NS-19, decision D7).
@@ -70,6 +71,7 @@ const RequestSchema = z
       .regex(/^[a-z0-9-]{3,80}$/, 'slug invalide'),
     contact: z.boolean(),
     telephone: z.string().trim().max(40).optional().default(''),
+    foundVia: FoundViaField,
     website: z.string().max(200).optional().default(''),
     elapsedMs: z.number().int().min(0),
   })
@@ -119,6 +121,8 @@ export interface LeadRow {
   updated_by: string
   updated_at: string
   raw: { origin: string; slug: string; contact: boolean }
+  /** Present only when the visitor answered (contract C1). */
+  found_via?: FoundVia
 }
 
 export interface MailPayload {
@@ -189,24 +193,27 @@ export function leadRow(
   const contactAction = value.telephone
     ? `Rappeler au ${displayPhone(value.telephone)}`
     : 'Écrire (aucun numéro laissé)'
-  return {
-    full_name: value.prenom,
-    email: value.email,
-    phone: value.telephone,
-    source: 'contenu',
-    owner: wantsContact ? 'Raphael' : 'Brice',
-    stage: wantsContact ? 'a_contacter' : 'nouveau',
-    intention: wantsContact ? 'veut_un_echange' : 'ressource_seule',
-    relance_date: wantsContact ? nextBusinessDay(now) : null,
-    lead_date: now.toISOString().slice(0, 10),
-    project_details: `Ressource : ${ressource.titre}`,
-    next_action: wantsContact
-      ? `${contactAction} : a demandé à être contacté depuis /ressources/${value.slug}`
-      : 'Aucun contact (téléchargement de ressource)',
-    updated_by: 'sablia-site/api/ressources-request',
-    updated_at: now.toISOString(),
-    raw: { origin: 'sablia.io/ressources', slug: value.slug, contact: wantsContact },
-  }
+  return withFoundVia(
+    {
+      full_name: value.prenom,
+      email: value.email,
+      phone: value.telephone,
+      source: 'contenu',
+      owner: wantsContact ? 'Raphael' : 'Brice',
+      stage: wantsContact ? 'a_contacter' : 'nouveau',
+      intention: wantsContact ? 'veut_un_echange' : 'ressource_seule',
+      relance_date: wantsContact ? nextBusinessDay(now) : null,
+      lead_date: now.toISOString().slice(0, 10),
+      project_details: `Ressource : ${ressource.titre}`,
+      next_action: wantsContact
+        ? `${contactAction} : a demandé à être contacté depuis /ressources/${value.slug}`
+        : 'Aucun contact (téléchargement de ressource)',
+      updated_by: 'sablia-site/api/ressources-request',
+      updated_at: now.toISOString(),
+      raw: { origin: 'sablia.io/ressources', slug: value.slug, contact: wantsContact },
+    },
+    value.foundVia,
+  )
 }
 
 const escapeHtml = (value: string) =>
@@ -355,8 +362,11 @@ async function findRecentLead(
   }
 }
 
-/** Never throws: a CRM that refuses the row must not cost the visitor their resource. */
-async function insertLead(row: LeadRow, key: string): Promise<string | null> {
+/**
+ * Never throws: a CRM that refuses the row must not cost the visitor their resource. `found_via` is an
+ * optional field: when the refusal names it, the row is retried ONCE without it so the lead is kept.
+ */
+async function insertLead(row: LeadRow, key: string, retried = false): Promise<string | null> {
   try {
     const response = await fetch(LEADS_ENDPOINT, {
       method: 'POST',
@@ -370,7 +380,12 @@ async function insertLead(row: LeadRow, key: string): Promise<string | null> {
       signal: AbortSignal.timeout(TIMEOUT_MS),
     })
     if (!response.ok) {
+      const refusal = await response.text().catch(() => '')
       console.error('[ressources] lead insert failed', response.status)
+      if (!retried && row.found_via && namesFoundVia(refusal)) {
+        const { found_via: _dropped, ...withoutKey } = row
+        return await insertLead(withoutKey, key, true)
+      }
       return null
     }
     const rows = (await response.json()) as { id?: string }[] | null

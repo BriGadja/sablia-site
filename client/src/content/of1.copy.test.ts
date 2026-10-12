@@ -6,7 +6,9 @@
  * (zero client delivered on this offer), one CTA URL, and a route registered in every place that
  * must agree. It reads the component sources when they exist, so it grows teeth as the page lands.
  */
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { execFileSync } from 'node:child_process'
+import { existsSync, mkdtempSync, readdirSync, readFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
@@ -19,8 +21,8 @@ const OFFRE_COMPONENTS_DIR = resolve(HERE, '../components/offre')
 const PAGE_FILE = resolve(HERE, '../pages/OffreCompteRenduAppel.tsx')
 const APP_FILE = resolve(HERE, '../App.tsx')
 const SEO_FILE = resolve(HERE, '../components/SEO.tsx')
-const PRERENDER_FILE = resolve(HERE, '../../../scripts/prerender.mjs')
-const SITEMAP_FILE = resolve(HERE, '../../public/sitemap.xml')
+const ROUTES_FILE = resolve(HERE, '../../../scripts/seo/routes.mjs')
+const SITEMAP_GENERATOR = resolve(HERE, '../../../scripts/seo/generate-sitemap.mjs')
 const META_TAGS_FILE = resolve(HERE, '../../../docs/meta-tags.json')
 
 /**
@@ -207,12 +209,22 @@ describe('OF-1 copy guard: route coherence', () => {
     expect(app).toContain('<Route path={OF1_ROUTE}')
   })
 
-  it('registers the route in the prerender script', () => {
-    expect(readFileSync(PRERENDER_FILE, 'utf8')).toContain(OF1_ROUTE)
+  it('registers the route in the prerender route manifest', () => {
+    expect(readFileSync(ROUTES_FILE, 'utf8')).toContain(OF1_ROUTE)
   })
 
   it('registers the route in the sitemap', () => {
-    expect(readFileSync(SITEMAP_FILE, 'utf8')).toContain(`https://sablia.io${OF1_ROUTE}`)
+    // The sitemap is generated at build time: run the generator as the local build does (no
+    // Supabase key, so no resources) and read what it writes.
+    const out = join(mkdtempSync(join(tmpdir(), 'of1-sitemap-')), 'sitemap.xml')
+    const env = { ...process.env }
+    env.VITE_SUPABASE_ANON_KEY = undefined
+    env.VERCEL = undefined
+    execFileSync('node', [SITEMAP_GENERATOR, '--out', out], {
+      env: Object.fromEntries(Object.entries(env).filter(([, v]) => v !== undefined)),
+      stdio: 'pipe',
+    })
+    expect(readFileSync(out, 'utf8')).toContain(`https://sablia.io${OF1_ROUTE}`)
   })
 
   it('registers the route in meta-tags.json', () => {

@@ -5,24 +5,25 @@ import { dirname, extname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import chromium from '@sparticuz/chromium'
 import puppeteer from 'puppeteer-core'
+import { assertRessourceHtml, listPublishedSlugs } from './seo/ressources.mjs'
+import { resolveRoutes } from './seo/routes.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const DIST = resolve(__dirname, '..', 'dist', 'public')
 const PORT = 4173
 
-// Routes mirror App.tsx <Route path="..."> declarations.
-// Pre-rendering noindex pages is fine — Helmet emits the right robots meta.
-const ROUTES = [
-  '/',
-  '/mentions-legales',
-  '/politique-confidentialite',
-  '/cgv',
-  '/guides/integrer-l-ia-dans-votre-entreprise',
-  '/offres/compte-rendu-appel',
-  // '/ressources/:slug' is parametric and read client-side: it is not prerenderable.
-  '/ressources',
-  '/thank-you',
-]
+// Static pages come from the route manifest (scripts/seo/routes.mjs, mirrors App.tsx).
+// Pre-rendering noindex pages is fine — Helmet emits the right robots meta. A draft page (status
+// read from its JSON) is not prerenderable: no static file may exist for it.
+const STATIC_ROUTES = resolveRoutes()
+  .filter((r) => !r.draft)
+  .map((r) => r.path)
+
+// '/ressources/:slug' is parametric and read client-side from Supabase: its routes are listed at
+// build time from the published rows (decision D7, "no redeploy per resource", is superseded by
+// Q2a: publishing a resource now means a redeploy). The browser that renders the page reads the row.
+const YOUTUBE_HOSTS = ['youtube-nocookie.com', 'youtube.com', 'ytimg.com']
+const READY = 'main[data-ready="true"]'
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -70,7 +71,65 @@ function startServer() {
   })
 }
 
+function isYoutube(url) {
+  try {
+    const host = new URL(url).hostname
+    return YOUTUBE_HOSTS.some((h) => host === h || host.endsWith(`.${h}`))
+  } catch {
+    return false
+  }
+}
+
+// The page reads its row in the browser: one failed read (no `data-ready`) is retried once by
+// reloading before the build is failed. A bad slug never sets `data-ready` and fails here.
+async function loadResource(page, url) {
+  for (let attempt = 1; ; attempt++) {
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 })
+    try {
+      await page.waitForSelector(READY, { timeout: 15000 })
+      return
+    } catch (err) {
+      if (attempt >= 2) throw err
+      console.warn(`  ! ${url} not ready after 15s, reloading once`)
+    }
+  }
+}
+
+// Helmet flushes asynchronously: let the canonical settle, then read the DECODED DOM values.
+async function readDom(page) {
+  await page
+    .waitForFunction(
+      () =>
+        document
+          .querySelector('link[rel="canonical"]')
+          ?.getAttribute('href')
+          ?.includes('/ressources/'),
+      { timeout: 5000 },
+    )
+    .catch(() => {})
+  return page.evaluate(() => {
+    const attr = (selector, name) => document.querySelector(selector)?.getAttribute(name) ?? null
+    const h1 = document.querySelector('main h1')
+    return {
+      title: document.title,
+      canonical:
+        attr('link[rel="canonical"][data-rh="true"]', 'href') ??
+        attr('link[rel="canonical"]', 'href'),
+      description:
+        attr('meta[name="description"][data-rh="true"]', 'content') ??
+        attr('meta[name="description"]', 'content'),
+      h1: h1 ? h1.textContent.trim() : null,
+      text: document.querySelector('main')?.textContent.replace(/\s+/g, ' ').trim() ?? '',
+      html: document.documentElement.outerHTML,
+    }
+  })
+}
+
 async function prerender() {
+  // Listed first: a missing key on Vercel or a failed read must stop the build before Chromium.
+  const rows = await listPublishedSlugs()
+  console.log(`[prerender] ${rows.length} published resource(s)`)
+
   console.log(`[prerender] starting static server on :${PORT}`)
   const server = await startServer()
 
@@ -83,9 +142,13 @@ async function prerender() {
     executablePath: await chromium.executablePath(),
   })
 
+  const jobs = [
+    ...STATIC_ROUTES.map((route) => ({ route })),
+    ...rows.map((row) => ({ route: `/ressources/${row.slug}`, row })),
+  ]
   const results = []
   try {
-    for (const route of ROUTES) {
+    for (const { route, row } of jobs) {
       const url = `http://localhost:${PORT}${route}`
       const page = await browser.newPage()
       // Skip downloading webfonts/images — we only need the rendered HTML
@@ -94,16 +157,24 @@ async function prerender() {
         const type = req.resourceType()
         if (type === 'image' || type === 'font' || type === 'media') {
           req.abort()
+        } else if (row && (req.frame() !== page.mainFrame() || isYoutube(req.url()))) {
+          // A ready resource mounts a YouTube iframe (a `document` request): never load it.
+          req.abort()
         } else {
           req.continue()
         }
       })
 
       try {
-        await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 })
-        // Helmet flushes asynchronously and tags itself with data-rh="true".
-        // Wait until at least one Helmet-managed tag exists — proves React mounted + flushed.
-        await page.waitForSelector('[data-rh="true"]', { timeout: 10000 })
+        if (row) {
+          await loadResource(page, url)
+          assertRessourceHtml(await readDom(page), row)
+        } else {
+          await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 })
+          // Helmet flushes asynchronously and tags itself with data-rh="true".
+          // Wait until at least one Helmet-managed tag exists — proves React mounted + flushed.
+          await page.waitForSelector('[data-rh="true"]', { timeout: 10000 })
+        }
         const html = await page.content()
         const canonical = await page
           .$eval('link[rel="canonical"]', (el) => el.getAttribute('href'))

@@ -5,8 +5,10 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx server/index.ts",
-    "build": "vite build && node scripts/prerender.mjs && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+    "build": "vite build && node scripts/prerender.mjs && node scripts/seo/generate-sitemap.mjs && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
     "prerender": "node scripts/prerender.mjs",
+    "test:seo": "node --test scripts/seo/*.test.mjs",
+    "seo:stamp-check": "node scripts/seo/stamp-lastmod.mjs --check",
     "build:client": "vite build --config ../vite.config.ts",
     "start": "NODE_ENV=production node dist/index.js",
     "check": "tsc",

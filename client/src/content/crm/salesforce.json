@@ -1,0 +1,108 @@
+{
+  "status": "published",
+  "slug": "salesforce",
+  "crm": "Salesforce",
+  "path": "/offres/compte-rendu-appel/salesforce",
+  "seo": {
+    "title": "Compte rendu d'appel dans Salesforce : tâche d'appel et relance",
+    "description": "Le compte rendu de chaque appel déposé dans Salesforce comme tâche d'appel liée au contact, avec sa relance. Ce que l'édition de votre abonnement doit autoriser."
+  },
+  "hero": {
+    "title": "Le compte rendu de chaque appel, déposé dans Salesforce sans que votre commercial ouvre la fiche",
+    "lead": "Dans Salesforce, un appel est une tâche. La chaîne en crée une par appel, rattachée au bon contact et au bon dossier, puis une seconde pour la relance. Reste une question à régler avant tout : l'édition de votre abonnement ouvre-t-elle l'accès par l'API ?"
+  },
+  "where": {
+    "heading": "Où atterrit le compte rendu dans Salesforce",
+    "body": "Salesforce n'a pas de module d'appels à part : l'objet Task décrit une activité professionnelle comme un appel téléphonique ou une simple chose à faire. La chaîne crée donc une tâche par appel et la marque du sous-type Call. Ce sous-type sert à retrouver les appels dans vos rapports, et la documentation précise qu'il ne peut plus être modifié ensuite : il est posé à la création ou jamais. Le texte de la synthèse va dans la description de la tâche, que vos commerciaux lisent dans le champ des commentaires de la fiche. La tâche est rattachée à deux endroits. Le champ WhoId désigne la personne, un contact ou un prospect. Le champ WhatId désigne l'objet métier, comme le compte, l'opportunité ou la campagne. Nous renseignons les deux, pour que l'appel apparaisse aussi bien sur la fiche du contact que sur l'opportunité en cours."
+  },
+  "followUp": {
+    "heading": "Comment la relance est créée dans Salesforce",
+    "body": "La relance est une seconde tâche, créée dans le même geste que la première, avec le même WhoId et le même WhatId. Son échéance est une date, sans heure : Salesforce enregistre ce champ à minuit en temps universel et demande de ne pas chercher à corriger le fuseau horaire. Nous calculons donc le jour de relance côté chaîne, en jour calendaire, plutôt que de promettre un rappel à 9 h 30. Le propriétaire de la tâche est celui du commercial qui a passé l'appel, de sorte que la relance tombe dans sa liste de tâches du jour et pas dans celle d'un administrateur."
+  },
+  "prerequisites": {
+    "heading": "Ce que votre édition Salesforce doit permettre",
+    "body": "La chaîne écrit dans Salesforce par son API, et toutes les éditions n'y donnent pas accès. D'après la page d'aide de l'éditeur, Enterprise, Unlimited, Developer et Performance l'incluent par défaut. L'édition Professional ne l'inclut pas mais peut l'acheter en option. Les éditions Essentials et Group n'en offrent aucune, même en option. Si vous êtes en Professional, la question à poser à votre interlocuteur Salesforce se règle avant notre intervention, car elle conditionne tout le reste. Nous vérifions votre édition lors de l'appel de cadrage de 30 minutes, avant de parler de planning."
+  },
+  "pitfall": {
+    "heading": "Le piège à connaître avant de commander",
+    "body": "Deux pièges, tous deux dans la documentation de l'éditeur. Premier piège : en Professional, le produit nommé Additional API Calls n'ouvre pas l'accès. Il ne fait qu'augmenter le quota d'une organisation qui l'a déjà, alors que l'ouverture passe par l'option Web Services API. Commander le premier en pensant obtenir le second ne débloque rien. Second piège : les champs de la tâche propres aux appels, comme la durée ou le résultat de l'appel, sont réservés à Salesforce CRM Call Center. Sans lui, la durée et le résultat sont écrits dans la description de la tâche, pas dans un champ dédié."
+  },
+  "facts": [
+    {
+      "label": "Un appel est un objet Task",
+      "value": "L'objet Task représente une activité comme un appel téléphonique ou une tâche à faire.",
+      "sourceId": "F1",
+      "sourceUrl": "https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_task.htm"
+    },
+    {
+      "label": "Le sous-type Call n'est pas modifiable",
+      "value": "Le champ TaskSubtype sert à classer et rechercher les tâches, et ne peut pas être mis à jour après coup.",
+      "sourceId": "F2",
+      "sourceUrl": "https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_task.htm"
+    },
+    {
+      "label": "WhoId pour la personne",
+      "value": "WhoId désigne un humain, contact ou prospect.",
+      "sourceId": "F3",
+      "sourceUrl": "https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_task.htm"
+    },
+    {
+      "label": "WhatId pour l'objet métier",
+      "value": "WhatId désigne un objet non humain : compte, opportunité, campagne, dossier ou objet personnalisé.",
+      "sourceId": "F4",
+      "sourceUrl": "https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_task.htm"
+    },
+    {
+      "label": "L'échéance est une date, pas une heure",
+      "value": "L'horodatage de ce champ est toujours fixé à minuit en temps universel.",
+      "sourceId": "F5",
+      "sourceUrl": "https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_task.htm"
+    },
+    {
+      "label": "Champs d'appel réservés à Call Center",
+      "value": "Les champs de tâche liés aux appels sont exclusifs à Salesforce CRM Call Center.",
+      "sourceId": "F6",
+      "sourceUrl": "https://developer.salesforce.com/docs/atlas.en-us.object_reference.meta/object_reference/sforce_api_objects_task.htm"
+    },
+    {
+      "label": "Professional : API en option",
+      "value": "L'édition Professional n'inclut pas l'API par défaut, elle peut l'acheter en option.",
+      "sourceId": "F7",
+      "sourceUrl": "https://help.salesforce.com/s/articleView?id=000385436&language=en_US&type=1"
+    },
+    {
+      "label": "Additional API Calls n'ouvre rien",
+      "value": "Ce produit n'active pas l'accès API en édition Professional.",
+      "sourceId": "F8",
+      "sourceUrl": "https://help.salesforce.com/s/articleView?id=000385436&language=en_US&type=1"
+    },
+    {
+      "label": "Essentials : pas d'API",
+      "value": "L'API n'est pas disponible en édition Essentials, même en option.",
+      "sourceId": "F9",
+      "sourceUrl": "https://help.salesforce.com/s/articleView?id=000385436&language=en_US&type=1"
+    }
+  ],
+  "faq": [
+    {
+      "q": "Mon Salesforce est en édition Professional : puis-je commander ?",
+      "a": "Oui, à condition que l'accès par l'API soit acheté. L'éditeur le vend en option, et c'est l'option Web Services API qui l'ouvre, pas le produit Additional API Calls. Nous le vérifions à l'appel de cadrage, avant tout engagement de votre part."
+    },
+    {
+      "q": "Le compte rendu apparaît-il sur la fiche du contact et sur l'opportunité ?",
+      "a": "Oui, quand les deux identifiants existent. La tâche porte le contact dans WhoId et l'objet métier dans WhatId, ce qui la fait remonter sur les deux fiches. Sans opportunité en cours, elle ne se rattache qu'au contact."
+    },
+    {
+      "q": "La durée de l'appel a-t-elle son propre champ ?",
+      "a": "Seulement si votre organisation utilise Salesforce CRM Call Center. Sinon, la durée et le résultat sont écrits en tête de la description de la tâche, où vos commerciaux les lisent."
+    },
+    {
+      "q": "Pouvez-vous régler l'heure exacte de la relance ?",
+      "a": "Non, pas dans le champ d'échéance : c'est une date. Nous choisissons le jour de relance avec vous pendant la mise au point du prompt. Un rappel à heure fixe relève d'un autre mécanisme, à chiffrer à part s'il vous est utile."
+    },
+    {
+      "q": "Faut-il une intervention de votre administrateur Salesforce ?",
+      "a": "Peu. Nous avons besoin d'un utilisateur dédié à la chaîne, avec le droit d'écrire des tâches, et de la confirmation de votre édition. Le reste se fait côté chaîne."
+    }
+  ]
+}
