@@ -168,7 +168,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Oracle : `robots.txt` autorise explicitement `ClaudeBot`, `Claude-User`, `Claude-SearchBot`, `OAI-SearchBot`, `PerplexityBot` et ne nomme plus `Claude-Web` ; la `description` JSON-LD de l'accueil dit « 7 jours » et ne contient plus « 30 jours » ni « dashboards intelligents »
 - Exemple : Étant donné le `robots.txt` du 12/10 (entrée `Claude-Web`) et la description « …Premier workflow en production sous 30 jours. » / Quand l'hygiène est appliquée / Alors le fichier nomme `ClaudeBot`, `Claude-User` et `Claude-SearchBot` en `Allow: /`, et la description cite « 7 jours »
 - Test : [script] node --test scripts/seo/head-hygiene.test.mjs (dans `sablia-site`)
-- Statut : JAMAIS-PASSÉE — livrée (P6, PR #16) et verte en test (`head-hygiene.test.mjs`) mais l'Oracle n'a pas été relu en production : manque un `curl https://sablia.io/robots.txt` (ClaudeBot, Claude-User, Claude-SearchBot, plus de Claude-Web) et la description JSON-LD de l'accueil « 7 jours »
+- Statut : VALIDÉE 2026-10-12 @d00d89d (prod sablia.io, relu ~23:27Z cache-busted : `robots.txt` liste `ClaudeBot`, `Claude-User`, `Claude-SearchBot` avec un commentaire citant https://support.claude.com/en/articles/8896518, aucun `Claude-Web` ; description JSON-LD `ProfessionalService` de l'accueil terminée par « …livrés en 7 jours. », sans « 30 jours » ; test head-hygiene vert)
 - Source : brief § Décisions du grill, Q2b et Q2d ; doc Anthropic des robots (ClaudeBot, Claude-User, Claude-SearchBot) https://support.claude.com/en/articles/8896518
 
 ## US-57 — Chaque mise en ligne réussie en production prévient IndexNow [script]
