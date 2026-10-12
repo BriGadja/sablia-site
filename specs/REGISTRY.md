@@ -143,3 +143,84 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Test : vitest api/ressources-request.test.ts -t "lendemain ouvré"
 - Statut : VALIDÉE 2026-10-12 @17c1fd1e (prod : relance posée au 2026-10-13 pour un envoi du lundi 12/10 16:40 ; tests vendredi/samedi/dimanche/mardi + 00:30 Paris + férié)
 - Source : brief du 2026-10-12 (Q7, Q13 : lendemain ouvré = week-ends seulement, pas les fériés) — plan `sablia-crm-canal-intention`
+
+## US-54 — Une ressource publiée se lit sans JavaScript, avec son propre titre et sa propre canonique [script]
+- Surface : `/ressources/:slug` pour chaque ligne `contenu_ressources` publiée (HTML servi tel quel, vu par un robot qui n'exécute pas le JavaScript) ; `scripts/prerender.mjs`, `scripts/seo/ressources.mjs`
+- Parcours : (cible) `curl -A "OAI-SearchBot/1.0" https://sablia.io/ressources/pipedrive-nouveau-lead` puis `python3 scripts/site-check.py --base https://sablia.io` (dépôt hub)
+- Oracle : le HTML brut de chaque ressource publiée porte `<title>` = « {titre} — Sablia », `<link rel="canonical" href="https://sablia.io/ressources/{slug}">`, la meta description = le résumé, le titre en `<h1>` et le corps visibles ; il ne contient aucune URL de fichier du bucket `contenu-ressources` (les fichiers restent derrière le formulaire, décision D8) ; une ressource non publiée n'a aucun dossier prérendu ; une lecture Supabase en échec fait échouer le build (jamais une page vide publiée en silence)
+- Exemple : Étant donné les lignes publiées `pipedrive-nouveau-lead` (publiée le 2026-10-01) et `skill-devis` (le 2026-10-08), et `demo-of1` non publiée / Quand le build prérend / Alors `dist/public/ressources/pipedrive-nouveau-lead/index.html` et `…/skill-devis/index.html` existent avec leur titre et leur canonique propres, `…/demo-of1/` n'existe pas, et aucun des deux fichiers ne contient `storage/v1/object/public/contenu-ressources`
+- Test : [script] node --test scripts/seo/prerender-ressources.test.mjs (dans `sablia-site`) + `python3 scripts/site-check.py --base <aperçu>` (hub) rouge avant, vert après
+- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Source : brief `research/brainstorm/2026-10-12-visibilite-llm-sablia.md` § Décisions du grill (faits trouvés, Q2a) ; défaut mesuré par curl UA `OAI-SearchBot` le 12/10 : titre et canonique de l'ACCUEIL servis pour `/ressources/pipedrive-nouveau-lead` et `/ressources/skill-devis`
+
+## US-55 — Le plan du site liste toutes les pages indexables, avec la vraie date de modification [script]
+- Surface : `https://sablia.io/sitemap.xml` (généré au build : `scripts/seo/generate-sitemap.mjs`, registre de dates `scripts/seo/lastmod.json`)
+- Parcours : (cible) `curl https://sablia.io/sitemap.xml` ; `node --test scripts/seo/sitemap.test.mjs`
+- Oracle : le plan liste les pages publiques, les ressources publiées et les pages CRM publiées (brouillons exclus) ; chaque `<lastmod>` est la date de la dernière modification du CONTENU de la page (registre `lastmod.json` : date + empreinte des fichiers sources, valable sur le clone peu profond de Vercel), jamais la date du déploiement ; une page dont l'empreinte a changé sans que sa date ait bougé fait échouer le test ; une ressource prend la date de sa ligne
+- Exemple : Étant donné l'accueil modifié le 2026-10-13 et `/cgv` inchangé depuis le 2026-05-26 / Quand le plan est généré le 2026-10-20 / Alors `/` porte `2026-10-13`, `/cgv` porte `2026-05-26`, `/ressources/skill-devis` porte la date de sa ligne, et la liste compte les 7 pages d'aujourd'hui + 2 ressources + les pages CRM publiées
+- Test : [script] node --test scripts/seo/sitemap.test.mjs (dans `sablia-site`)
+- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Source : brief § Décisions du grill, Q2a et Q2c ; `lastmod` de l'accueil figé au 2026-06-18 et ressources absentes du plan (mesuré le 12/10) ; documentation Vercel : clone Git peu profond (`--depth=10`) pendant le build, donc pas de `git log` fiable
+
+## US-56 — Les robots de recherche des IA sont accueillis par leur nom actuel, et la description du site dit l'offre actuelle [script]
+- Surface : `client/public/robots.txt`, JSON-LD de `client/index.html`
+- Parcours : (cible) `curl https://sablia.io/robots.txt` ; `node --test scripts/seo/head-hygiene.test.mjs`
+- Oracle : `robots.txt` autorise explicitement `ClaudeBot`, `Claude-User`, `Claude-SearchBot`, `OAI-SearchBot`, `PerplexityBot` et ne nomme plus `Claude-Web` ; la `description` JSON-LD de l'accueil dit « 7 jours » et ne contient plus « 30 jours » ni « dashboards intelligents »
+- Exemple : Étant donné le `robots.txt` du 12/10 (entrée `Claude-Web`) et la description « …Premier workflow en production sous 30 jours. » / Quand l'hygiène est appliquée / Alors le fichier nomme `ClaudeBot`, `Claude-User` et `Claude-SearchBot` en `Allow: /`, et la description cite « 7 jours »
+- Test : [script] node --test scripts/seo/head-hygiene.test.mjs (dans `sablia-site`)
+- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Source : brief § Décisions du grill, Q2b et Q2d ; doc Anthropic des robots (ClaudeBot, Claude-User, Claude-SearchBot) https://support.claude.com/en/articles/8896518
+
+## US-57 — Chaque mise en ligne réussie en production prévient IndexNow [script]
+- Surface : clé publique `client/public/{clé}.txt` ; `scripts/seo/indexnow.mjs` ; action GitHub `indexnow.yml` (dossier des workflows du dépôt) sur `deployment_status` (production, état `success`)
+- Parcours : (cible) fusion d'une PR → déploiement Vercel réussi → l'action s'exécute ; `node scripts/seo/indexnow.mjs --dry-run --sitemap <fichier>`
+- Oracle : la clé est servie à `https://sablia.io/{clé}.txt` et son contenu est la clé ; l'action ne s'exécute que pour la production en `success` ; la liste envoyée = les URL du plan dont `lastmod` est d'aujourd'hui ou d'hier (jamais tout le site à chaque déploiement), au plus 10 000, hôte `sablia.io` ; une réponse 200 ou 202 est un succès, toute autre fait échouer l'action
+- Exemple : Étant donné un plan à 9 URL dont 2 modifiées hier / Quand le script tourne à blanc le 2026-10-14 / Alors il imprime une liste de 2 URL, l'hôte `sablia.io`, la clé et l'emplacement de sa clé, sans aucun appel réseau
+- Test : [script] node --test scripts/seo/indexnow.test.mjs (dans `sablia-site`)
+- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Source : brief § Décisions du grill, Q2e ; protocole https://www.indexnow.org/documentation (fichier de clé à la racine, codes 200/202) ; IndexNow jamais activé (Bing Webmaster, mesuré le 12/10)
+
+## US-58 — Le visiteur peut dire comment il nous a trouvés, sur le formulaire de contact et celui des ressources
+- Surface : `/#contact` (`ContactForm.tsx`) et `/ressources/:slug` (`RessourceForm.tsx`) ; `POST /api/contact`, `POST /api/ressources-request` ; colonne `sabcrm_leads.found_via`
+- Parcours : (cible) ouvrir le formulaire, choisir une réponse (ou aucune), envoyer
+- Oracle : champ FACULTATIF « Comment nous avez-vous trouvés ? » avec exactement les six réponses Google · ChatGPT ou une autre IA · YouTube · LinkedIn · Bouche-à-oreille · Autre (clés `google`, `ia`, `youtube`, `linkedin`, `bouche_a_oreille`, `autre`), vide par défaut ; une valeur hors liste → 400 et rien d'écrit ; sans réponse → colonne `NULL` et l'envoi réussit comme avant ; la réponse est écrite dans la ligne `sabcrm_leads` créée par l'envoi
+- Exemple : Étant donné le formulaire de la ressource `skill-devis` / Quand le visiteur choisit « ChatGPT ou une autre IA » et envoie / Alors la ligne créée porte `found_via = 'ia'` ; avec « pirate » → 400 ; sans choix → `found_via` NULL
+- Test : vitest `api/contact.test.ts -t found_via`, `api/ressources-request.test.ts -t found_via`, `client/src/components/ressources/RessourceForm.test.tsx -t found_via`, `client/src/components/landing/ContactForm.test.tsx -t found_via` ; marche aperçu Vercel 390 (libellé lisible)
+- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Source : brief § Décisions du grill, Q5 (libellé et six options décidés mot pour mot par Brice)
+
+## US-59 — La page « Claude dans HubSpot » dit ce qui est propre à HubSpot
+- Surface : `/offres/compte-rendu-appel/hubspot` (page prérendue, dans le plan du site)
+- Parcours : (cible) ouvrir la page depuis l'aperçu Vercel, à 390 et à 1440
+- Oracle : titre et canonique propres à l'URL ; la page dit où atterrit le compte rendu dans HubSpot (objet d'appel et note rattachés au contact et à l'affaire), comment la tâche de relance y est créée, quel abonnement ou quel accès API la chaîne exige, et une particularité HubSpot — chaque fait sourcé par une page officielle citée dans `research/visibilite-llm/crm-sources/hubspot.md` ; le prix, le délai et la garantie viennent du module `of1` ; ni « partenaire », ni « certifié », ni aucun nom de client ; aucun chiffre de la liste bannie
+- Exemple : Étant donné l'URL de l'aperçu / Quand j'ouvre la page / Alors je lis un titre « Claude dans HubSpot : … », une section « Ce qui est propre à HubSpot » avec au moins 4 faits sourcés, 1 490 € HT et 7 jours repris de la page d'offre, et un seul bouton de réservation
+- Test : vitest `client/src/pages/CrmPage.test.tsx -t hubspot` ; marche aperçu 390 et 1440 par Brice (point de validation)
+- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Source : brief § Décisions du grill, Q7 (4 pages, contenu propre au CRM sinon pas de page : règle « doorway » https://developers.google.com/search/docs/essentials/spam-policies) ; demande réelle `sabcrm_leads` 12/10 : HubSpot 31, Zoho 15, Salesforce 7, Pipedrive 5
+
+## US-60 — La page « Claude dans Zoho CRM » dit ce qui est propre à Zoho
+- Surface : `/offres/compte-rendu-appel/zoho`
+- Parcours : (cible) ouvrir la page depuis l'aperçu Vercel
+- Oracle : mêmes exigences que US-59, avec les objets Zoho (module Appels, notes rattachées, tâche de relance) ; au moins 4 faits propres sourcés dans `research/visibilite-llm/crm-sources/zoho.md` ; aucun passage de 8 mots consécutifs identique à une autre page CRM hors des modules communs `of1` (garde « doorway »)
+- Exemple : Étant donné l'aperçu / Quand j'ouvre la page / Alors elle nomme le module Appels de Zoho CRM et sa propre exigence d'édition pour l'API, et sa section propre diffère de celle de HubSpot
+- Test : vitest `client/src/pages/CrmPage.test.tsx -t zoho` et `client/src/content/crm/crm.doorway.test.ts`
+- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Source : brief § Décisions du grill, Q7
+
+## US-61 — La page « Claude dans Salesforce » dit ce qui est propre à Salesforce
+- Surface : `/offres/compte-rendu-appel/salesforce`
+- Parcours : (cible) ouvrir la page depuis l'aperçu Vercel
+- Oracle : mêmes exigences que US-59, avec les objets Salesforce (tâche d'activité de sous-type appel rattachée au contact ou au lead et à l'opportunité) et l'exigence d'édition pour l'accès API (documentation officielle) ; au moins 4 faits propres sourcés dans `research/visibilite-llm/crm-sources/salesforce.md`
+- Exemple : Étant donné l'aperçu / Quand j'ouvre la page / Alors elle dit sur quelles éditions l'accès API est inclus, en citant la page officielle, et nomme l'objet Tâche
+- Test : vitest `client/src/pages/CrmPage.test.tsx -t salesforce` et `client/src/content/crm/crm.doorway.test.ts`
+- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Source : brief § Décisions du grill, Q7
+
+## US-62 — La page « Claude dans Pipedrive » dit ce qui est propre à Pipedrive, et porte la preuve anonyme
+- Surface : `/offres/compte-rendu-appel/pipedrive`
+- Parcours : (cible) ouvrir la page depuis l'aperçu Vercel
+- Oracle : mêmes exigences que US-59, avec les objets Pipedrive (activité de type appel, note rattachée à l'affaire ou à la personne) ; au moins 4 faits propres sourcés dans `research/visibilite-llm/crm-sources/pipedrive.md` ; UNE ligne de preuve, anonyme : « en production depuis avril 2026 chez une société d'investissement locatif : chaque appel est écrit dans son Pipedrive (étape, note, attribution) » ; le mot « Norloc » n'apparaît nulle part dans le code ni dans le HTML construit ; cette ligne n'existe que sur cette page
+- Exemple : Étant donné l'aperçu / Quand j'ouvre la page / Alors la ligne de preuve anonyme est présente une fois, sans nom de société, et les pages HubSpot, Zoho et Salesforce n'en portent aucune
+- Test : vitest `client/src/pages/CrmPage.test.tsx -t pipedrive` et `client/src/content/crm/crm.doorway.test.ts`
+- Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
+- Source : brief § Décisions du grill, Q7 et Q9 (cas réel jamais nommé sans accord écrit)
