@@ -1,7 +1,104 @@
 {
-  "status": "draft",
+  "status": "published",
   "slug": "zoho",
   "crm": "Zoho",
   "path": "/offres/compte-rendu-appel/zoho",
-  "draftReason": "contenu à rédiger (P10b-P13)"
+  "seo": {
+    "title": "Compte rendu d'appel dans Zoho CRM : module Appels, note, tâche",
+    "description": "Chaque appel devient un enregistrement du module Appels de Zoho CRM, avec sa note et sa tâche de relance, sans saisie. Les points propres à Zoho, sourcés."
+  },
+  "hero": {
+    "title": "Le compte rendu de chaque appel, écrit dans votre Zoho CRM",
+    "lead": "Dans Zoho, un appel est un enregistrement à part entière du module Appels. Nous y déposons le compte rendu, puis nous créons la tâche de relance : votre commercial raccroche, Zoho est déjà à jour."
+  },
+  "where": {
+    "heading": "Où l'appel et son compte rendu se rangent dans Zoho",
+    "body": "Zoho CRM possède un module Appels distinct des contacts et des affaires. L'appel y est créé comme un enregistrement : un sujet, un type (entrant, sortant ou manqué), une heure de début et une durée. Le texte du compte rendu, lui, n'est pas un champ de l'appel : c'est une note, rattachée à cet enregistrement par son identifiant. Le commercial retrouve donc l'appel dans la fiche du contact, et sa note juste en dessous."
+  },
+  "followUp": {
+    "heading": "Comment la relance apparaît dans votre liste de tâches",
+    "body": "La relance est un enregistrement du module Tâches de Zoho, créé juste après l'appel et la note. Zoho n'impose par défaut qu'un champ à la création d'une tâche : l'objet. La date d'échéance et le propriétaire ne sont pas exigés par l'interface de programmation, nous les renseignons nous-mêmes à partir de ce qui s'est dit au téléphone, pour que la tâche tombe dans la liste du bon commercial, au bon jour."
+  },
+  "prerequisites": {
+    "heading": "Ce que la chaîne demande à votre abonnement Zoho",
+    "body": "Zoho décompte l'usage de son interface de programmation en crédits sur 24 heures glissantes, et ce décompte existe jusque dans l'édition gratuite. Un appel, sa note et sa tâche représentent trois enregistrements : un volume minuscule face à ces enveloppes. L'accès se donne par une connexion OAuth dont les droits peuvent se limiter module par module, par exemple aux appels, aux notes et aux tâches, sans ouvrir tout votre CRM. Nous confirmons votre édition et vos droits au premier échange."
+  },
+  "pitfall": {
+    "heading": "Le piège propre à Zoho : vos automatisations se déclenchent aussi",
+    "body": "Quand un enregistrement arrive par l'interface de programmation, Zoho exécute par défaut les règles que vous avez configurées : workflows, approbations, blueprints. Une règle pensée pour la saisie manuelle d'un appel (une notification, un changement de statut) se déclenchera donc pour chaque compte rendu automatique. Nous relevons ces règles avant la mise en service et décidons avec vous, une par une, de les laisser agir ou de les neutraliser. Autre refus classique : un appel entrant ou sortant dont la durée vaut zéro est rejeté par Zoho."
+  },
+  "facts": [
+    {
+      "label": "Champs obligatoires d'un appel",
+      "value": "Objet, type d'appel, heure de début et durée : ce sont les quatre champs que Zoho exige pour créer un enregistrement dans le module Appels.",
+      "sourceId": "F1",
+      "sourceUrl": "https://www.zoho.com/crm/developer/docs/api/v8/insert-records.html"
+    },
+    {
+      "label": "Format de la durée",
+      "value": "La durée d'un appel terminé s'écrit en heures et minutes (HH:mm), et elle est obligatoire pour un appel terminé.",
+      "sourceId": "F3",
+      "sourceUrl": "https://www.zoho.com/crm/developer/docs/api/v8/insert-records.html"
+    },
+    {
+      "label": "Durée nulle refusée",
+      "value": "Pour un appel entrant ou sortant, Zoho refuse une durée égale à zéro.",
+      "sourceId": "F4",
+      "sourceUrl": "https://www.zoho.com/crm/developer/docs/api/v8/insert-records.html"
+    },
+    {
+      "label": "Lien avec le contact",
+      "value": "Le contact associé à l'appel se désigne par son identifiant (Who_Id), obligatoire lorsque l'appel est planifié.",
+      "sourceId": "F5",
+      "sourceUrl": "https://www.zoho.com/crm/developer/docs/api/v8/insert-records.html"
+    },
+    {
+      "label": "La note se rattache à l'appel",
+      "value": "Le module Appels figure parmi ceux qui acceptent une note : on l'ajoute sur la route /Calls/{identifiant}/Notes.",
+      "sourceId": "F6",
+      "sourceUrl": "https://www.zoho.com/crm/developer/docs/api/v8/create-notes.html"
+    },
+    {
+      "label": "Droit OAuth pour les notes",
+      "value": "Sans le droit ZohoCRM.modules.notes.CREATE, Zoho répond 401 : la création de notes a son propre droit, distinct de celui du module Appels.",
+      "sourceId": "F9",
+      "sourceUrl": "https://www.zoho.com/crm/developer/docs/api/v8/create-notes.html"
+    },
+    {
+      "label": "Tâche de relance",
+      "value": "Dans le module Tâches, l'objet est le seul champ que Zoho impose à la création.",
+      "sourceId": "F10",
+      "sourceUrl": "https://www.zoho.com/crm/developer/docs/api/v8/insert-records.html"
+    },
+    {
+      "label": "Crédits d'API par édition",
+      "value": "L'édition gratuite dispose de 5 000 crédits par période de 24 heures, l'édition Standard d'un socle de 50 000 crédits plus un apport par utilisateur.",
+      "sourceId": "F11",
+      "sourceUrl": "https://www.zoho.com/crm/developer/docs/api/v8/api-limits.html"
+    },
+    {
+      "label": "Automatisations déclenchées",
+      "value": "Sauf consigne contraire, les workflows et autres automatisations de votre Zoho s'exécutent aussi lors d'une insertion par l'interface de programmation.",
+      "sourceId": "F13",
+      "sourceUrl": "https://www.zoho.com/crm/developer/docs/api/v8/insert-records.html"
+    }
+  ],
+  "faq": [
+    {
+      "q": "Mon Zoho est en édition gratuite : la chaîne peut-elle fonctionner ?",
+      "a": "La documentation des limites d'API de Zoho prévoit une enveloppe de crédits pour l'édition gratuite comme pour les éditions payantes. Le volume d'un compte rendu par appel est très en deçà. Nous vérifions malgré tout votre édition et vos droits avant de commencer."
+    },
+    {
+      "q": "Le compte rendu écrase-t-il les notes que mes commerciaux ont déjà saisies ?",
+      "a": "Non. L'interface de notes de Zoho sert à ajouter de nouvelles notes. Le compte rendu automatique s'ajoute à l'appel, il ne modifie aucune note existante."
+    },
+    {
+      "q": "Faut-il donner un accès administrateur complet à Sablia ?",
+      "a": "Pas nécessairement. Zoho permet de limiter une connexion OAuth module par module et par type d'opération. Nous demandons les droits strictement utiles aux appels, aux notes et aux tâches."
+    },
+    {
+      "q": "Mes workflows Zoho existants vont-ils réagir aux appels automatiques ?",
+      "a": "Oui, par défaut : Zoho exécute les automatisations associées à une insertion venue de l'interface de programmation. Nous les inventorions avec vous avant la mise en service, pour garder celles qui sont utiles et neutraliser celles qui feraient doublon."
+    }
+  ]
 }
