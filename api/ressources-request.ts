@@ -17,6 +17,10 @@ import { z } from 'zod'
  * Raphaël had nothing to call). It is stored in E.164 like the rest of `sabcrm_leads.phone`, and
  * dropped when the box is unticked — nobody asked to be called.
  *
+ * The box also sets the intention (canal/intention, Brice 2026-10-12): ticked is `veut_un_echange`
+ * with a due date of the next business day (Paris), unticked is `ressource_seule` with none — the
+ * Monday review and the J+14 metric skip those.
+ *
  * Anti-spam is the honeypot plus a minimum delay of `api/contact.ts`, answering 204 BEFORE any I/O.
  */
 
@@ -30,7 +34,7 @@ const INTERNAL_RECIPIENT = 'brice@sablia.io'
 const SENDER = 'Sablia <site@send.sablia.io>'
 const BOOKING_URL = 'https://calendly.com/brice-gachadoat/30min'
 const MIN_ELAPSED_MS = 3000
-/** Same address, same source, same resource, inside this window: a retry, not a second request. */
+/** Same address, source, resource and contact flag, inside this window: a retry, not a second request. */
 const DEDUP_WINDOW_MS = 10 * 60 * 1000
 const TIMEOUT_MS = 4000
 
@@ -107,6 +111,8 @@ export interface LeadRow {
   source: 'contenu'
   owner: 'Brice' | 'Raphael'
   stage: 'nouveau' | 'a_contacter'
+  intention: 'ressource_seule' | 'veut_un_echange'
+  relance_date: string | null
   lead_date: string
   project_details: string
   next_action: string
@@ -153,6 +159,24 @@ export function fileUrl(path: string): string {
 }
 
 /**
+ * The Paris civil date after `now`, Saturday and Sunday skipped (Friday → Monday). Public holidays
+ * are NOT skipped. The Paris date is read from `formatToParts`, then +1 day is computed at 12:00 UTC
+ * so a DST switch cannot move it.
+ */
+export function nextBusinessDay(now: Date): string {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Europe/Paris',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(now)
+  const part = (type: string) => Number(parts.find((p) => p.type === type)?.value)
+  const next = new Date(Date.UTC(part('year'), part('month') - 1, part('day') + 1, 12))
+  while (next.getUTCDay() === 0 || next.getUTCDay() === 6) next.setUTCDate(next.getUTCDate() + 1)
+  return next.toISOString().slice(0, 10)
+}
+
+/**
  * The checkbox decides the stage, the owner and the next action. Unchecked leads still exist in
  * the CRM — that is deliberate, they are the measure of what the content brings in.
  */
@@ -172,6 +196,8 @@ export function leadRow(
     source: 'contenu',
     owner: wantsContact ? 'Raphael' : 'Brice',
     stage: wantsContact ? 'a_contacter' : 'nouveau',
+    intention: wantsContact ? 'veut_un_echange' : 'ressource_seule',
+    relance_date: wantsContact ? nextBusinessDay(now) : null,
     lead_date: now.toISOString().slice(0, 10),
     project_details: `Ressource : ${ressource.titre}`,
     next_action: wantsContact
@@ -300,11 +326,17 @@ async function findRessource(slug: string, key: string): Promise<RessourceRow | 
  * silent duplicate. A failed lookup returns null and the insert proceeds: degrading to "no dedup"
  * is safer than refusing a real request.
  */
-async function findRecentLead(email: string, slug: string, key: string): Promise<string | null> {
+async function findRecentLead(
+  email: string,
+  slug: string,
+  contact: boolean,
+  key: string,
+): Promise<string | null> {
   const since = new Date(Date.now() - DEDUP_WINDOW_MS).toISOString()
   const url =
     `${LEADS_ENDPOINT}?select=id&email=eq.${encodeURIComponent(email)}` +
     `&source=eq.contenu&raw->>slug=eq.${encodeURIComponent(slug)}` +
+    `&raw->>contact=eq.${contact}` +
     `&created_at=gte.${encodeURIComponent(since)}&limit=1`
   try {
     const response = await fetch(url, {
@@ -403,7 +435,7 @@ export default {
       }
 
       const leadId =
-        (await findRecentLead(value.email, value.slug, serviceKey)) ??
+        (await findRecentLead(value.email, value.slug, value.contact, serviceKey)) ??
         (await insertLead(leadRow(value, ressource), serviceKey))
 
       try {

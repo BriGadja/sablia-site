@@ -6,6 +6,7 @@ import handler, {
   internalMailPayload,
   leadRow,
   mailPayload,
+  nextBusinessDay,
   normalizePhone,
   type RessourceRow,
 } from './ressources-request'
@@ -219,6 +220,33 @@ describe('leadRow', () => {
     expect(leadRow(accepted(), RESSOURCE).project_details).toBe(
       "Ressource : Le template n8n du compte rendu d'appel",
     )
+  })
+})
+
+describe('leadRow: intention', () => {
+  it('box unticked: intention ressource_seule, no due date', () => {
+    const row = leadRow(accepted({ contact: false }), RESSOURCE, new Date('2026-10-13T10:00:00Z'))
+    expect(row.intention).toBe('ressource_seule')
+    expect(row.relance_date).toBeNull()
+  })
+
+  it('box ticked: intention veut_un_echange, due the next business day', () => {
+    const row = leadRow(accepted({ contact: true }), RESSOURCE, new Date('2026-10-13T10:00:00Z'))
+    expect(row.intention).toBe('veut_un_echange')
+    expect(row.relance_date).toBe('2026-10-14')
+  })
+})
+
+describe('lendemain ouvré', () => {
+  it.each([
+    ['Friday → Monday', '2026-10-16T13:00:00Z', '2026-10-19'],
+    ['Saturday → Monday', '2026-10-17T10:00:00Z', '2026-10-19'],
+    ['Sunday → Monday', '2026-10-18T10:00:00Z', '2026-10-19'],
+    ['Tuesday → Wednesday', '2026-10-13T10:00:00Z', '2026-10-14'],
+    ['Friday 00:30 Paris (Thursday UTC) → Monday', '2026-10-15T22:30:00Z', '2026-10-19'],
+    ['a public holiday is not skipped', '2026-11-10T10:00:00Z', '2026-11-11'],
+  ])('%s', (_name, now, expected) => {
+    expect(nextBusinessDay(new Date(now))).toBe(expected)
   })
 })
 
@@ -497,6 +525,51 @@ describe('handler', () => {
     const lookup = calls.find((c) => c.url.includes('select=id'))
     expect(lookup?.url).toContain('source=eq.contenu')
     expect(lookup?.url).toContain('slug=eq.demo-of1')
+  })
+
+  it('dedup: the lookup carries the contact flag of the request', async () => {
+    vi.stubEnv('RESEND_API_KEY', 'rk')
+    vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'sk')
+    const unticked = recorder(happyPath)
+    await handler.fetch(post(payload({ contact: false })))
+    expect(unticked.find((c) => c.url.includes('select=id'))?.url).toContain(
+      'raw->>contact=eq.false',
+    )
+    const ticked = recorder(happyPath)
+    await handler.fetch(post(payload({ contact: true })))
+    expect(ticked.find((c) => c.url.includes('select=id'))?.url).toContain('raw->>contact=eq.true')
+  })
+
+  it('dedup: a ticked request after an unticked download inserts a veut_un_echange fiche', async () => {
+    vi.stubEnv('RESEND_API_KEY', 'rk')
+    vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'sk')
+    const calls = recorder((url) => {
+      if (url.includes('contenu_ressources')) return ok([RESSOURCE])
+      if (url.includes('select=id')) {
+        return ok(url.includes('raw->>contact=eq.false') ? [{ id: 'unticked' }] : [])
+      }
+      if (url.includes('sabcrm_leads')) return ok([{ id: 'lead-2' }])
+      return ok({ id: 'mail' })
+    })
+    await handler.fetch(post(payload({ contact: true })))
+    const inserted = calls.find((c) => c.url.includes('sabcrm_leads') && c.init?.method === 'POST')
+    expect(JSON.parse(String(inserted?.init?.body))).toMatchObject({ intention: 'veut_un_echange' })
+  })
+
+  it('dedup: a pure retry (lookup answers an id) inserts nothing', async () => {
+    vi.stubEnv('RESEND_API_KEY', 'rk')
+    vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'sk')
+    const calls = recorder((url) => {
+      if (url.includes('contenu_ressources')) return ok([RESSOURCE])
+      if (url.includes('select=id')) {
+        return ok(url.includes('raw->>contact=eq.true') ? [{ id: 'deja' }] : [])
+      }
+      return ok({ id: 'mail' })
+    })
+    await handler.fetch(post(payload({ contact: true })))
+    expect(calls.some((c) => c.url.includes('sabcrm_leads') && c.init?.method === 'POST')).toBe(
+      false,
+    )
   })
 
   it('never enrols a sequence: no call touches sabcrm_lead_sequences', async () => {
