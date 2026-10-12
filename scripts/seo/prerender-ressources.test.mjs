@@ -246,7 +246,7 @@ describe('extractFromHtml', () => {
 })
 
 describe('routes manifest', () => {
-  it('lists the 8 current routes with page-specific sources only', () => {
+  it('lists the 12 routes (8 pages + the 4 CRM pages of P10a) with page-specific sources only', () => {
     assert.deepEqual(
       PAGE_ROUTES.map((r) => r.path),
       [
@@ -256,6 +256,10 @@ describe('routes manifest', () => {
         '/cgv',
         '/guides/integrer-l-ia-dans-votre-entreprise',
         '/offres/compte-rendu-appel',
+        '/offres/compte-rendu-appel/hubspot',
+        '/offres/compte-rendu-appel/zoho',
+        '/offres/compte-rendu-appel/salesforce',
+        '/offres/compte-rendu-appel/pipedrive',
         '/ressources',
         '/thank-you',
       ],

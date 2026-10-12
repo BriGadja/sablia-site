@@ -1,0 +1,70 @@
+{
+  "status": "published",
+  "slug": "hubspot",
+  "crm": "CRM de test",
+  "path": "/offres/compte-rendu-appel/hubspot",
+  "seo": {
+    "title": "Compte rendu d'appel dans le CRM de test, installé pour vous",
+    "description": "Page de gabarit pour les tests : elle montre où atterrit le compte rendu, comment la relance est créée et ce qu'il faut côté abonnement."
+  },
+  "hero": {
+    "title": "Le compte rendu de chaque appel, écrit dans le CRM de test",
+    "lead": "Contenu fictif de gabarit. Il sert à vérifier la mise en page, jamais à être publié."
+  },
+  "where": {
+    "heading": "Où atterrit le compte rendu",
+    "body": "Premier paragraphe fictif sur l'endroit où le compte rendu se dépose. Il ne décrit aucun logiciel réel et ne reprend aucune phrase d'une autre page."
+  },
+  "followUp": {
+    "heading": "Comment la tâche de relance est créée",
+    "body": "Deuxième paragraphe fictif sur la création de la tâche de relance, avec sa date et son propriétaire, rédigé avec des mots propres à cette page de test."
+  },
+  "prerequisites": {
+    "heading": "Ce que la chaîne demande à votre abonnement",
+    "body": "Troisième paragraphe fictif sur l'abonnement et l'accès à l'interface de programmation, formulé autrement que sur les autres pages de test."
+  },
+  "pitfall": {
+    "heading": "Le piège à connaître",
+    "body": "Quatrième paragraphe fictif sur un piège propre à ce logiciel de test, afin que le gabarit affiche bien un bloc d'avertissement."
+  },
+  "facts": [
+    {
+      "label": "Fait un",
+      "value": "Valeur fictive numéro un.",
+      "sourceId": "F1",
+      "sourceUrl": "https://developers.hubspot.com/docs/fixture-un"
+    },
+    {
+      "label": "Fait deux",
+      "value": "Valeur fictive numéro deux.",
+      "sourceId": "F2",
+      "sourceUrl": "https://developers.hubspot.com/docs/fixture-deux"
+    },
+    {
+      "label": "Fait trois",
+      "value": "Valeur fictive numéro trois.",
+      "sourceId": "F3",
+      "sourceUrl": "https://knowledge.hubspot.com/fixture-trois"
+    },
+    {
+      "label": "Fait quatre",
+      "value": "Valeur fictive numéro quatre.",
+      "sourceId": "F4",
+      "sourceUrl": "https://knowledge.hubspot.com/fixture-quatre"
+    }
+  ],
+  "faq": [
+    {
+      "q": "Première question fictive du gabarit ?",
+      "a": "Première réponse fictive, assez longue pour occuper une ligne entière dans le gabarit."
+    },
+    {
+      "q": "Deuxième question fictive du gabarit ?",
+      "a": "Deuxième réponse fictive, tout aussi inoffensive que la première."
+    },
+    {
+      "q": "Troisième question fictive du gabarit ?",
+      "a": "Troisième réponse fictive qui complète le minimum de trois questions."
+    }
+  ]
+}
