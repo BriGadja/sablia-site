@@ -19,7 +19,7 @@ const OFFRE_COMPONENTS_DIR = resolve(HERE, '../components/offre')
 const PAGE_FILE = resolve(HERE, '../pages/OffreCompteRenduAppel.tsx')
 const APP_FILE = resolve(HERE, '../App.tsx')
 const SEO_FILE = resolve(HERE, '../components/SEO.tsx')
-const PRERENDER_FILE = resolve(HERE, '../../../scripts/prerender.mjs')
+const ROUTES_FILE = resolve(HERE, '../../../scripts/seo/routes.mjs')
 const SITEMAP_FILE = resolve(HERE, '../../public/sitemap.xml')
 const META_TAGS_FILE = resolve(HERE, '../../../docs/meta-tags.json')
 
@@ -207,8 +207,8 @@ describe('OF-1 copy guard: route coherence', () => {
     expect(app).toContain('<Route path={OF1_ROUTE}')
   })
 
-  it('registers the route in the prerender script', () => {
-    expect(readFileSync(PRERENDER_FILE, 'utf8')).toContain(OF1_ROUTE)
+  it('registers the route in the prerender route manifest', () => {
+    expect(readFileSync(ROUTES_FILE, 'utf8')).toContain(OF1_ROUTE)
   })
 
   it('registers the route in the sitemap', () => {
