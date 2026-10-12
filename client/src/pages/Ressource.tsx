@@ -9,9 +9,10 @@ import { fetchRessource, type Ressource as RessourceRow } from '@/lib/contenu'
 /**
  * `/ressources/{slug}` — one resource, read live from Supabase (NS-19, decision D7).
  *
- * This route is deliberately NOT prerendered: it is parametric, and the list it belongs to changes
- * with every video. It renders client-side and carries its own `<Helmet>`; an unknown slug is
- * `noindex`, so an unpublished resource never enters an index.
+ * It renders client-side and carries its own `<Helmet>`; an unknown slug is `noindex`, so an
+ * unpublished resource never enters an index. The build prerenders every PUBLISHED slug
+ * (`scripts/prerender.mjs` waits for `data-ready` on `<main>`) so crawlers that do not run
+ * JavaScript get the real title, canonical and text.
  *
  * The files sit behind the form, but the form captures the lead — it does not lock the file
  * (decision D8). The URLs it hands out are public and unguessable.
@@ -72,7 +73,7 @@ export default function Ressource({ slug }: RessourceProps) {
         {!indexable && <meta name="robots" content="noindex" />}
       </Helmet>
       <TopNav />
-      <main>
+      <main data-ready={state.kind === 'ready' ? 'true' : undefined}>
         <section className="relative pb-16 pt-32 md:pb-24 md:pt-40 lg:pt-48">
           <div className="container-editorial">
             <div className="mx-auto max-w-3xl">
