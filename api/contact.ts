@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { type FoundVia, FoundViaField, namesFoundVia, withFoundVia } from './_found-via.js'
 
 /**
  * `POST /api/contact` — the contact form of sablia.io (decision A7, 2026-09-18).
@@ -41,6 +42,7 @@ const ContactSchema = z.object({
   email: z.string().trim().max(200).email().toLowerCase(),
   teamSize: z.enum(TEAM_SIZES),
   message: z.string().trim().min(1).max(3000),
+  foundVia: FoundViaField,
   website: z.string().max(200).optional().default(''),
   elapsedMs: z.number().int().min(0),
 })
@@ -66,6 +68,8 @@ export interface LeadRow {
   updated_by: string
   updated_at: string
   raw: { origin: string; form: string }
+  /** Present only when the visitor answered (contract C1). */
+  found_via?: FoundVia
 }
 
 export interface MailPayload {
@@ -96,21 +100,24 @@ export function decide(body: unknown): Decision {
 
 /** No `id`, no `optout_token`: both carry a database default, and the table has no generated column. */
 export function leadRow(value: Contact, now = new Date()): LeadRow {
-  return {
-    full_name: value.name,
-    email: value.email,
-    company: value.company,
-    team_size: value.teamSize,
-    source: 'formation',
-    owner: 'Brice',
-    stage: 'nouveau',
-    lead_date: now.toISOString().slice(0, 10),
-    project_details: value.message,
-    next_action: 'Répondre à la demande de contact (formulaire sablia.io)',
-    updated_by: 'sablia-site/api/contact',
-    updated_at: now.toISOString(),
-    raw: { origin: 'sablia.io/#contact', form: 'contact' },
-  }
+  return withFoundVia(
+    {
+      full_name: value.name,
+      email: value.email,
+      company: value.company,
+      team_size: value.teamSize,
+      source: 'formation',
+      owner: 'Brice',
+      stage: 'nouveau',
+      lead_date: now.toISOString().slice(0, 10),
+      project_details: value.message,
+      next_action: 'Répondre à la demande de contact (formulaire sablia.io)',
+      updated_by: 'sablia-site/api/contact',
+      updated_at: now.toISOString(),
+      raw: { origin: 'sablia.io/#contact', form: 'contact' },
+    },
+    value.foundVia,
+  )
 }
 
 export function mailPayload(value: Contact, leadId: string | null): MailPayload {
@@ -166,8 +173,11 @@ async function findRecentLead(email: string, key: string): Promise<string | null
   }
 }
 
-/** Never throws: a CRM that refuses the row must not cost the visitor their mail. */
-async function insertLead(row: LeadRow, key: string): Promise<string | null> {
+/**
+ * Never throws: a CRM that refuses the row must not cost the visitor their mail. `found_via` is an
+ * optional field: when the refusal names it, the row is retried ONCE without it so the lead is kept.
+ */
+async function insertLead(row: LeadRow, key: string, retried = false): Promise<string | null> {
   try {
     const response = await fetch(LEADS_ENDPOINT, {
       method: 'POST',
@@ -181,7 +191,12 @@ async function insertLead(row: LeadRow, key: string): Promise<string | null> {
       signal: AbortSignal.timeout(TIMEOUT_MS),
     })
     if (!response.ok) {
+      const refusal = await response.text().catch(() => '')
       console.error('[contact] lead insert failed', response.status)
+      if (!retried && row.found_via && namesFoundVia(refusal)) {
+        const { found_via: _dropped, ...withoutKey } = row
+        return await insertLead(withoutKey, key, true)
+      }
       return null
     }
     const rows = (await response.json()) as { id?: string }[] | null

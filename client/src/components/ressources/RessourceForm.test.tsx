@@ -101,3 +101,42 @@ describe('RessourceForm: the optional phone', () => {
     expect(screen.queryByText(/on revient vers vous/)).toBeNull()
   })
 })
+
+describe('RessourceForm: found_via', () => {
+  it('found_via: the select is present, optional, labelled verbatim, with six options', () => {
+    render(<RessourceForm slug="demo-of1" titre="le template" />)
+    const select = screen.getByLabelText('Comment nous avez-vous trouvés ?') as HTMLSelectElement
+    expect(select.required).toBe(false)
+    expect(select.value).toBe('')
+    const labels = Array.from(select.options)
+      .filter((o) => o.value !== '')
+      .map((o) => o.textContent)
+    expect(labels).toEqual([
+      'Google',
+      'ChatGPT ou une autre IA',
+      'YouTube',
+      'LinkedIn',
+      'Bouche-à-oreille',
+      'Autre',
+    ])
+  })
+
+  it('found_via: the form submits without it', async () => {
+    const spy = stubFetch()
+    const user = userEvent.setup()
+    render(<RessourceForm slug="demo-of1" titre="le template" />)
+    await fillIdentity(user)
+    await user.click(screen.getByRole('button', { name: /Recevoir/ }))
+    expect(sentBody(spy)).toMatchObject({ foundVia: '' })
+  })
+
+  it('found_via: the payload carries the chosen key', async () => {
+    const spy = stubFetch()
+    const user = userEvent.setup()
+    render(<RessourceForm slug="demo-of1" titre="le template" />)
+    await fillIdentity(user)
+    await user.selectOptions(screen.getByLabelText('Comment nous avez-vous trouvés ?'), 'ia')
+    await user.click(screen.getByRole('button', { name: /Recevoir/ }))
+    expect(sentBody(spy)).toMatchObject({ foundVia: 'ia' })
+  })
+})

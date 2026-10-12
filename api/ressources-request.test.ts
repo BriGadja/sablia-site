@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { FOUND_VIA_KEYS } from './_found-via.js'
 import handler, {
   decide,
   displayPhone,
@@ -591,5 +592,85 @@ describe('handler', () => {
     const response = await handler.fetch(post(payload()))
     expect(response.status).toBe(200)
     expect(await response.json()).toMatchObject({ lead: false })
+  })
+})
+
+describe('found_via (contract C1)', () => {
+  const insertsOf = (calls: Call[]) =>
+    calls.filter((c) => c.url.includes('sabcrm_leads') && c.init?.method === 'POST')
+  const bodyOf = (call: Call) => JSON.parse(String(call.init?.body)) as Record<string, unknown>
+
+  it('found_via: a valid key is written on the lead row', async () => {
+    vi.stubEnv('RESEND_API_KEY', 'rk')
+    vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'sk')
+    const calls = recorder(happyPath)
+    const response = await handler.fetch(post(payload({ foundVia: 'linkedin' })))
+    expect(response.status).toBe(200)
+    expect(bodyOf(insertsOf(calls)[0])).toMatchObject({ found_via: 'linkedin' })
+  })
+
+  it('found_via: empty or absent omits the key and the send succeeds', async () => {
+    vi.stubEnv('RESEND_API_KEY', 'rk')
+    vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'sk')
+    for (const over of [{ foundVia: '' }, {}]) {
+      const calls = recorder(happyPath)
+      const response = await handler.fetch(post(payload(over)))
+      expect(response.status).toBe(200)
+      expect(bodyOf(insertsOf(calls)[0])).not.toHaveProperty('found_via')
+    }
+  })
+
+  it('found_via: a value outside the six is invalid and nothing is inserted', async () => {
+    expect(decide(payload({ foundVia: 'tiktok' })).kind).toBe('invalid')
+    vi.stubEnv('RESEND_API_KEY', 'rk')
+    vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'sk')
+    const calls = recorder(happyPath)
+    const response = await handler.fetch(post(payload({ foundVia: 'tiktok' })))
+    expect(response.status).toBe(400)
+    expect(calls).toHaveLength(0)
+  })
+
+  it('found_via: leadRow carries the key only when non-null', () => {
+    expect(leadRow(accepted({ foundVia: 'youtube' }), RESSOURCE)).toMatchObject({
+      found_via: 'youtube',
+    })
+    expect(leadRow(accepted(), RESSOURCE)).not.toHaveProperty('found_via')
+  })
+
+  it('found_via: a refused insert naming the column is retried ONCE without it, the lead is kept', async () => {
+    vi.stubEnv('RESEND_API_KEY', 'rk')
+    vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'sk')
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    let attempts = 0
+    const calls = recorder((url) => {
+      if (url.includes('contenu_ressources')) return ok([RESSOURCE])
+      if (url.includes('sabcrm_leads') && url.includes('select=id')) return ok([])
+      if (url.includes('sabcrm_leads')) {
+        attempts += 1
+        return attempts === 1
+          ? new Response(JSON.stringify({ message: "column 'found_via' does not exist" }), {
+              status: 400,
+            })
+          : ok([{ id: 'lead-retry' }])
+      }
+      return ok({ id: 'mail-1' })
+    })
+    const response = await handler.fetch(post(payload({ foundVia: 'google' })))
+    expect(((await response.json()) as { lead: boolean }).lead).toBe(true)
+    const posts = insertsOf(calls)
+    expect(posts).toHaveLength(2)
+    expect(bodyOf(posts[0])).toHaveProperty('found_via', 'google')
+    expect(bodyOf(posts[1])).not.toHaveProperty('found_via')
+  })
+
+  it('found_via: the six keys are Brice order', () => {
+    expect([...FOUND_VIA_KEYS]).toEqual([
+      'google',
+      'ia',
+      'youtube',
+      'linkedin',
+      'bouche_a_oreille',
+      'autre',
+    ])
   })
 })

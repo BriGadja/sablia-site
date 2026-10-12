@@ -1,5 +1,6 @@
 import { track } from '@vercel/analytics'
 import { type FormEvent, useRef, useState } from 'react'
+import { FOUND_VIA_EMPTY, FOUND_VIA_LABEL, FOUND_VIA_OPTIONS } from '@/content/found-via'
 import { site } from '@/lib/site'
 
 /**
@@ -58,6 +59,7 @@ export default function RessourceForm({ slug, titre }: RessourceFormProps) {
           slug,
           contact: wantsContact,
           telephone: wantsContact ? String(data.get('telephone') ?? '') : '',
+          foundVia: String(data.get('foundVia') ?? ''),
           website: String(data.get('website') ?? ''),
           elapsedMs: Date.now() - mountedAt.current,
         }),
@@ -200,6 +202,20 @@ export default function RessourceForm({ slug, titre }: RessourceFormProps) {
             </p>
           </div>
         )}
+
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="ressource-found-via" className={LABEL}>
+            {FOUND_VIA_LABEL}
+          </label>
+          <select id="ressource-found-via" name="foundVia" defaultValue="" className={FIELD}>
+            <option value="">{FOUND_VIA_EMPTY}</option>
+            {FOUND_VIA_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
 
         {/* Honeypot: invisible to a visitor, out of the tab order, irresistible to a bot. */}
         <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
