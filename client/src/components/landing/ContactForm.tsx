@@ -1,5 +1,6 @@
 import { track } from '@vercel/analytics'
 import { type FormEvent, useRef, useState } from 'react'
+import { FOUND_VIA_EMPTY, FOUND_VIA_LABEL, FOUND_VIA_OPTIONS } from '@/content/found-via'
 import { site } from '@/lib/site'
 
 /**
@@ -50,6 +51,7 @@ export default function ContactForm() {
           email: String(data.get('email') ?? ''),
           teamSize: String(data.get('teamSize') ?? ''),
           message: String(data.get('message') ?? ''),
+          foundVia: String(data.get('foundVia') ?? ''),
           website: String(data.get('website') ?? ''),
           elapsedMs: Date.now() - mountedAt.current,
         }),
@@ -159,6 +161,20 @@ export default function ContactForm() {
               placeholder="Le contexte, la date envisagée, ce que vous attendez de l'intervention."
               className="min-h-[120px] w-full rounded-md border border-hairline bg-canvas px-3.5 py-2.5 text-[15px] leading-relaxed text-on-dark placeholder:text-on-dark-soft focus:border-primary focus:shadow-ring-coral focus:outline-none"
             />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="contact-found-via" className={LABEL}>
+              {FOUND_VIA_LABEL}
+            </label>
+            <select id="contact-found-via" name="foundVia" defaultValue="" className={FIELD}>
+              <option value="">{FOUND_VIA_EMPTY}</option>
+              {FOUND_VIA_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Honeypot: invisible to a visitor, out of the tab order, irresistible to a bot. */}

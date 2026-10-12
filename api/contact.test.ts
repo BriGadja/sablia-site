@@ -8,6 +8,8 @@
  * create a second lead. A GET on the last ten minutes is what refuses it.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { FOUND_VIA_LABELS } from '../client/src/content/found-via'
+import { FOUND_VIA_LABELS as API_LABELS, FOUND_VIA_KEYS } from './_found-via.js'
 import handler, { decide, leadRow, mailPayload } from './contact'
 
 const VALID = {
@@ -294,5 +296,85 @@ describe('POST /api/contact', () => {
     const res = await post(JSON.stringify(VALID))
     expect(res.status).toBe(502)
     expect(await res.json()).toMatchObject({ code: 'mail_failed' })
+  })
+})
+
+describe('found_via (contract C1)', () => {
+  const inserts = (calls: Call[]) => calls.filter((c) => c.method === 'POST' && c.url === LEADS_URL)
+
+  it('found_via: a valid key is written on the lead row', async () => {
+    const calls = stubFetch(happyResponder)
+    const res = await post(JSON.stringify({ ...VALID, foundVia: 'ia' }))
+    expect(res.status).toBe(200)
+    expect(JSON.parse(inserts(calls)[0].body ?? '{}')).toMatchObject({ found_via: 'ia' })
+  })
+
+  it('found_via: an empty string omits the key from the insert and the send succeeds', async () => {
+    const calls = stubFetch(happyResponder)
+    const res = await post(JSON.stringify({ ...VALID, foundVia: '' }))
+    expect(res.status).toBe(200)
+    expect(JSON.parse(inserts(calls)[0].body ?? '{}')).not.toHaveProperty('found_via')
+  })
+
+  it('found_via: an absent field omits the key from the insert', async () => {
+    const calls = stubFetch(happyResponder)
+    const res = await post(JSON.stringify(VALID))
+    expect(res.status).toBe(200)
+    expect(JSON.parse(inserts(calls)[0].body ?? '{}')).not.toHaveProperty('found_via')
+  })
+
+  it('found_via: a value outside the six is invalid and nothing is inserted', async () => {
+    expect(decide({ ...VALID, foundVia: 'tiktok' }).kind).toBe('invalid')
+    const calls = stubFetch(happyResponder)
+    const res = await post(JSON.stringify({ ...VALID, foundVia: 'tiktok' }))
+    expect(res.status).toBe(400)
+    expect(calls).toHaveLength(0)
+  })
+
+  it('found_via: leadRow carries the key only when non-null', () => {
+    const accepted = (over: object) => {
+      const d = decide({ ...VALID, ...over })
+      if (d.kind !== 'accept') throw new Error('rejected')
+      return d.value
+    }
+    expect(leadRow(accepted({ foundVia: 'youtube' }))).toMatchObject({ found_via: 'youtube' })
+    expect(leadRow(accepted({}))).not.toHaveProperty('found_via')
+  })
+
+  it('found_via: a refused insert naming the column is retried ONCE without it, the lead is kept', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    let attempts = 0
+    const calls = stubFetch((call) => {
+      if (call.url === RESEND_URL) return json({ id: 're_fv' })
+      if (call.method === 'GET') return json([])
+      attempts += 1
+      if (attempts === 1) {
+        return json({ message: "Could not find the 'found_via' column of 'sabcrm_leads'" }, 400)
+      }
+      return json([{ id: 'lead-retry' }], 201)
+    })
+    const res = await post(JSON.stringify({ ...VALID, foundVia: 'google' }))
+    expect(await res.json()).toEqual({ ok: true, lead: true })
+    const posts = inserts(calls)
+    expect(posts).toHaveLength(2)
+    expect(JSON.parse(posts[0].body ?? '{}')).toHaveProperty('found_via', 'google')
+    expect(JSON.parse(posts[1].body ?? '{}')).not.toHaveProperty('found_via')
+  })
+
+  it('found_via: a refusal that does not name the column is not retried', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    const calls = stubFetch((call) => {
+      if (call.url === RESEND_URL) return json({ id: 're_fv2' })
+      if (call.method === 'GET') return json([])
+      return new Response('duplicate key', { status: 409 })
+    })
+    const res = await post(JSON.stringify({ ...VALID, foundVia: 'google' }))
+    expect(await res.json()).toEqual({ ok: true, lead: false })
+    expect(inserts(calls)).toHaveLength(1)
+  })
+
+  it('found_via: the server list and the client list have the same keys and labels', () => {
+    expect(Object.keys(FOUND_VIA_LABELS)).toEqual([...FOUND_VIA_KEYS])
+    expect(API_LABELS).toEqual(FOUND_VIA_LABELS)
   })
 })
