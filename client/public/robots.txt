@@ -15,11 +15,15 @@ Crawl-delay: 10
 User-agent: OAI-SearchBot
 Allow: /
 
-# Anthropic — Claude crawler
+# Anthropic — roles per https://support.claude.com/en/articles/8896518
+# ClaudeBot (model development), Claude-User (user-requested fetches), Claude-SearchBot (search quality)
 User-agent: ClaudeBot
 Allow: /
 
-User-agent: Claude-Web
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
 Allow: /
 
 # Perplexity
