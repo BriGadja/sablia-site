@@ -44,10 +44,10 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 
 ## US-8 — Demander à être contacté depuis une ressource
 - Surface : /ressources/:slug (case « Je souhaite être contacté par Sablia », décochée par défaut) → `POST /api/ressources-request`
-- Parcours : (cible) ouvrir une ressource → remplir le formulaire, cocher la case → envoyer
-- Oracle : ligne `sabcrm_leads` relue avec `stage='a_contacter'`, `owner='Raphael'` (sans accent), `next_action` = « Rappeler : a demandé à être contacté depuis /ressources/{slug} » ; second mail interne envoyé à brice@sablia.io (+ Raphaël dès confirmation V3) ; case décochée → aucun de ces deux effets, `stage='nouveau'`, `owner='Brice'`
+- Parcours : (cible) ouvrir une ressource → remplir le formulaire, cocher la case → (facultatif) laisser un téléphone dans le champ qui apparaît → envoyer
+- Oracle : ligne `sabcrm_leads` relue avec `stage='a_contacter'`, `owner='Raphael'` (sans accent) ; avec un téléphone : `phone` au format `+33…` et `next_action` = « Rappeler au 06 … : a demandé à être contacté depuis /ressources/{slug} » ; sans téléphone : `phone` vide et `next_action` = « Écrire (aucun numéro laissé) : a demandé à être contacté depuis /ressources/{slug} » ; le mail du visiteur porte « Vous avez demandé à être contacté : on vous appelle au … / on vous répond par mail sous 24 h ouvrées. » et l'écran de succès « on revient vers vous sous 24 h ouvrées » ; second mail interne envoyé à brice@sablia.io (+ Raphaël dès confirmation V3) avec la ligne « Téléphone : … » ; numéro illisible → 400 « Numéro de téléphone invalide » ; case décochée → pas de champ téléphone, aucun de ces effets, `stage='nouveau'`, `owner='Brice'`
 - Statut : JAMAIS-PASSÉE
-- Source : plan `sablia-machine-de-contenu.md` T27/T28/T34 (NS-19, décision D7) ; marchée en preview le 2026-09-22, prod = geste de Brice (Règle 15)
+- Source : plan `sablia-machine-de-contenu.md` T27/T28/T34 (NS-19, décision D7) ; marchée en preview le 2026-09-22, prod = geste de Brice (Règle 15) ; amendée le 2026-10-12 (Brice : le premier lead qui a coché la case, Achille, est arrivé sur Raphaël en « Rappeler » sans aucun numéro à appeler, et son mail ne disait pas que la demande était entendue) — champ téléphone facultatif, mail et écran qui accusent réception ; tests `api/ressources-request.test.ts` + `client/src/components/ressources/RessourceForm.test.tsx`
 
 ## US-3 — Lire la home à la voix « nous »
 - Surface : / (toutes sections ; la section fondateur `#equipe` a quitté la home le 2026-09-28) et `/llms.txt`

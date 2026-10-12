@@ -7,8 +7,9 @@ import { site } from '@/lib/site'
  * which mails the links and writes a `sabcrm_leads` row.
  *
  * The checkbox is unticked by default and stays that way unless the visitor ticks it: unticked
- * means nobody calls them. On success the files appear on screen straight away — the form captures
- * the lead, it does not lock the file.
+ * means nobody calls them. Ticking it reveals an optional phone field (Brice, 2026-10-12: a lead
+ * asked to be contacted and left nothing to call); the email stays required either way. On success
+ * the files appear on screen straight away — the form captures the lead, it does not lock the file.
  *
  * Anti-spam is the honeypot plus a minimum delay of the contact form: no third-party script.
  */
@@ -26,7 +27,7 @@ interface Fichier {
 type FormState =
   | { kind: 'idle' }
   | { kind: 'pending' }
-  | { kind: 'success'; files: Fichier[] }
+  | { kind: 'success'; files: Fichier[]; contact: boolean }
   | { kind: 'error'; message: string }
 
 const FIELD =
@@ -35,6 +36,7 @@ const LABEL = 'text-[13px] font-medium text-on-dark-body'
 
 export default function RessourceForm({ slug, titre }: RessourceFormProps) {
   const [state, setState] = useState<FormState>({ kind: 'idle' })
+  const [wantsContact, setWantsContact] = useState(false)
   /** Set at the first client render, so the prerendered HTML never bakes a timestamp. */
   const mountedAt = useRef(Date.now())
 
@@ -54,7 +56,8 @@ export default function RessourceForm({ slug, titre }: RessourceFormProps) {
           prenom: String(data.get('prenom') ?? ''),
           email: String(data.get('email') ?? ''),
           slug,
-          contact: data.get('contact') === 'on',
+          contact: wantsContact,
+          telephone: wantsContact ? String(data.get('telephone') ?? '') : '',
           website: String(data.get('website') ?? ''),
           elapsedMs: Date.now() - mountedAt.current,
         }),
@@ -63,13 +66,13 @@ export default function RessourceForm({ slug, titre }: RessourceFormProps) {
       // 204 is what a bot gets. It sees the same confirmation as everyone else.
       if (response.status === 204) {
         track('ressource_request', { status: 'sent' })
-        setState({ kind: 'success', files: [] })
+        setState({ kind: 'success', files: [], contact: wantsContact })
         return
       }
       if (response.status === 200) {
         const body = (await response.json().catch(() => null)) as { files?: Fichier[] } | null
         track('ressource_request', { status: 'sent' })
-        setState({ kind: 'success', files: body?.files ?? [] })
+        setState({ kind: 'success', files: body?.files ?? [], contact: wantsContact })
         return
       }
       if (response.status === 400 || response.status === 404) {
@@ -94,6 +97,11 @@ export default function RessourceForm({ slug, titre }: RessourceFormProps) {
         <p className="mt-2 text-[15px] leading-relaxed text-on-dark-body">
           Le lien vous est aussi envoyé par mail, pour le retrouver plus tard.
         </p>
+        {state.contact && (
+          <p className="mt-2 text-[15px] leading-relaxed text-on-dark-body">
+            Vous avez demandé à être contacté : on revient vers vous sous 24 h ouvrées.
+          </p>
+        )}
         {state.files.length > 0 && (
           <ul className="mt-6 flex flex-col gap-3">
             {state.files.map((file) => (
@@ -161,10 +169,37 @@ export default function RessourceForm({ slug, titre }: RessourceFormProps) {
             id="ressource-contact"
             name="contact"
             type="checkbox"
+            checked={wantsContact}
+            onChange={(event) => setWantsContact(event.target.checked)}
             className="mt-0.5 h-4 w-4 shrink-0 rounded border-hairline bg-canvas accent-primary"
           />
           <span>Je souhaite être contacté par Sablia</span>
         </label>
+
+        {wantsContact && (
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="ressource-telephone" className={LABEL}>
+              Téléphone (facultatif)
+            </label>
+            <input
+              id="ressource-telephone"
+              name="telephone"
+              type="tel"
+              inputMode="tel"
+              maxLength={40}
+              autoComplete="tel"
+              placeholder="06 12 34 56 78"
+              aria-describedby="ressource-telephone-aide"
+              className={FIELD}
+            />
+            <p
+              id="ressource-telephone-aide"
+              className="text-[13px] leading-relaxed text-on-dark-body"
+            >
+              Pour qu'on vous appelle. Sans numéro, on vous répond par mail.
+            </p>
+          </div>
+        )}
 
         {/* Honeypot: invisible to a visitor, out of the tab order, irresistible to a bot. */}
         <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">

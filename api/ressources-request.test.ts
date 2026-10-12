@@ -1,11 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import handler, {
   decide,
+  displayPhone,
   fileUrl,
   internalMailPayload,
   leadRow,
   mailPayload,
-  type RessourceRequest,
+  normalizePhone,
   type RessourceRow,
 } from './ressources-request'
 
@@ -34,8 +35,8 @@ const payload = (over: Partial<Record<string, unknown>> = {}) => ({
   ...over,
 })
 
-const accepted = (over: Partial<RessourceRequest> = {}): RessourceRequest => {
-  const decision = decide(payload(over as Record<string, unknown>))
+const accepted = (over: Partial<Record<string, unknown>> = {}) => {
+  const decision = decide(payload(over))
   if (decision.kind !== 'accept') throw new Error(`payload rejeté : ${decision.kind}`)
   return decision.value
 }
@@ -113,6 +114,69 @@ describe('decide', () => {
   })
 })
 
+/**
+ * Brice, 2026-10-12: Achille ticked « être contacté » and the lead landed on Raphaël as
+ * « Rappeler » with no number to call. A ticked box now offers an optional phone; the email stays
+ * required. The CRM stores phones in E.164 (`+33612345678`, like every row already there).
+ */
+describe('normalizePhone', () => {
+  it.each([
+    ['06 12 34 56 78', '+33612345678'],
+    ['06.12.34.56.78', '+33612345678'],
+    ['06-12-34-56-78', '+33612345678'],
+    ['+33 6 12 34 56 78', '+33612345678'],
+    ['+33 (0)6 12 34 56 78', '+33612345678'],
+    ['0033 6 12 34 56 78', '+33612345678'],
+    ['+32 470 12 34 56', '+32470123456'],
+  ])('%s → %s', (input, expected) => {
+    expect(normalizePhone(input)).toBe(expected)
+  })
+
+  it.each([
+    '12',
+    'abc',
+    '06 12 34',
+    '+33 6 12 34 56 78 90',
+    '1234567890',
+  ])('rejects %s', (input) => {
+    expect(normalizePhone(input)).toBeNull()
+  })
+})
+
+describe('displayPhone', () => {
+  it('reads a French number back the way it is typed in France', () => {
+    expect(displayPhone('+33612345678')).toBe('06 12 34 56 78')
+  })
+
+  it('leaves a foreign number in its international form', () => {
+    expect(displayPhone('+32470123456')).toBe('+32470123456')
+  })
+})
+
+describe('decide: the optional phone', () => {
+  it('box ticked + phone: keeps the number, normalised', () => {
+    expect(accepted({ contact: true, telephone: '06 12 34 56 78' }).telephone).toBe('+33612345678')
+  })
+
+  it('box ticked, no phone: accepted, the email is enough', () => {
+    expect(accepted({ contact: true, telephone: '' }).telephone).toBeNull()
+  })
+
+  it('an older page that never sends the field is still accepted', () => {
+    expect(accepted({ contact: true }).telephone).toBeNull()
+  })
+
+  it('box unticked: a number is never kept, nobody asked to be called', () => {
+    expect(accepted({ contact: false, telephone: '06 12 34 56 78' }).telephone).toBeNull()
+  })
+
+  it('box ticked + unreadable phone: invalid, with a message that names the phone', () => {
+    const decision = decide(payload({ contact: true, telephone: '12' }))
+    expect(decision.kind).toBe('invalid')
+    if (decision.kind === 'invalid') expect(decision.error).toContain('téléphone')
+  })
+})
+
 describe('leadRow', () => {
   it('box unchecked: nouveau, owner Brice, nobody is contacted', () => {
     const row = leadRow(accepted({ contact: false }), RESSOURCE)
@@ -129,6 +193,26 @@ describe('leadRow', () => {
     expect(row.owner).toBe('Raphael')
     expect(row.next_action).toContain('/ressources/demo-of1')
     expect(row.raw.contact).toBe(true)
+  })
+
+  it('box checked + phone: the number lands in `phone` and the next action says to call it', () => {
+    const row = leadRow(accepted({ contact: true, telephone: '06 12 34 56 78' }), RESSOURCE)
+    expect(row.phone).toBe('+33612345678')
+    expect(row.next_action).toBe(
+      'Rappeler au 06 12 34 56 78 : a demandé à être contacté depuis /ressources/demo-of1',
+    )
+  })
+
+  it('box checked, no phone: the next action says to write, since there is nothing to call', () => {
+    const row = leadRow(accepted({ contact: true }), RESSOURCE)
+    expect(row.phone).toBeNull()
+    expect(row.next_action).toBe(
+      'Écrire (aucun numéro laissé) : a demandé à être contacté depuis /ressources/demo-of1',
+    )
+  })
+
+  it('box unchecked: no phone column filled', () => {
+    expect(leadRow(accepted({ contact: false }), RESSOURCE).phone).toBeNull()
   })
 
   it('carries the resource title into project_details', () => {
@@ -191,6 +275,27 @@ describe('mailPayload', () => {
     const mail = mailPayload(accepted(), { ...RESSOURCE, youtube_id: null })
     expect(mail.text).not.toContain('youtube.com')
   })
+
+  // Brice, 2026-10-12: the mail was identical whether the box was ticked or not, so a visitor
+  // who asked to be contacted had no sign the request was heard.
+  it('box ticked + phone: tells the visitor they will be called, on which number', () => {
+    const mail = mailPayload(accepted({ contact: true, telephone: '0612345678' }), RESSOURCE)
+    const line =
+      'Vous avez demandé à être contacté : on vous appelle au 06 12 34 56 78 sous 24 h ouvrées.'
+    expect(mail.text).toContain(line)
+    expect(mail.html).toContain(line)
+  })
+
+  it('box ticked, no phone: tells the visitor the answer comes by mail', () => {
+    const mail = mailPayload(accepted({ contact: true }), RESSOURCE)
+    expect(mail.text).toContain(
+      'Vous avez demandé à être contacté : on vous répond par mail sous 24 h ouvrées.',
+    )
+  })
+
+  it('box unticked: no contact promise at all', () => {
+    expect(mailPayload(accepted({ contact: false }), RESSOURCE).text).not.toContain('contacté')
+  })
 })
 
 describe('internalMailPayload', () => {
@@ -198,6 +303,20 @@ describe('internalMailPayload', () => {
     const mail = internalMailPayload(accepted({ contact: true }), RESSOURCE, 'lead-1')
     expect(mail.to).toEqual(['brice@sablia.io'])
     expect(mail.text).toContain('lead-1')
+  })
+
+  it('gives the number to call when there is one', () => {
+    const mail = internalMailPayload(
+      accepted({ contact: true, telephone: '06 12 34 56 78' }),
+      RESSOURCE,
+      'lead-1',
+    )
+    expect(mail.text).toContain('Téléphone : 06 12 34 56 78')
+  })
+
+  it('says to answer by mail when there is none', () => {
+    const mail = internalMailPayload(accepted({ contact: true }), RESSOURCE, 'lead-1')
+    expect(mail.text).toContain('Téléphone : aucun, répondre par mail')
   })
 })
 
@@ -315,6 +434,26 @@ describe('handler', () => {
       stage: 'a_contacter',
       owner: 'Raphael',
     })
+  })
+
+  it('writes the normalised phone into the CRM row', async () => {
+    vi.stubEnv('RESEND_API_KEY', 'rk')
+    vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'sk')
+    const calls = recorder(happyPath)
+
+    await handler.fetch(post(payload({ contact: true, telephone: '06 12 34 56 78' })))
+
+    const inserted = calls.find((c) => c.url.includes('sabcrm_leads') && c.init?.method === 'POST')
+    expect(JSON.parse(String(inserted?.init?.body))).toMatchObject({ phone: '+33612345678' })
+  })
+
+  it('400 on an unreadable phone, and writes nothing', async () => {
+    vi.stubEnv('RESEND_API_KEY', 'rk')
+    vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'sk')
+    const calls = recorder(happyPath)
+    const response = await handler.fetch(post(payload({ contact: true, telephone: 'abc' })))
+    expect(response.status).toBe(400)
+    expect(calls).toHaveLength(0)
   })
 
   it('a failed INTERNAL mail still returns 200: the visitor already has the resource', async () => {
