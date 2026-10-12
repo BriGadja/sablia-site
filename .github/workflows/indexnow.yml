@@ -1,0 +1,56 @@
+# Submits changed sablia.io URLs to IndexNow after a successful Production deploy.
+# Depends on the Vercel Git setting "deployment_status Events" being ON for this project
+# (Vercel > Project > Settings > Git); without it Vercel never emits the event and this
+# workflow never runs. URL selection = sitemap diff against the previous Production
+# deployment (scripts/seo/indexnow.mjs). 422/429 answers are warnings, not failures.
+name: IndexNow
+
+on: deployment_status
+
+permissions:
+  contents: read
+  deployments: read
+
+jobs:
+  submit:
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment_status.environment == 'Production'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Find previous Production deployment URL
+        id: prev
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          CURRENT_ID: ${{ github.event.deployment.id }}
+        run: |
+          prev=""
+          for id in $(gh api "repos/$REPO/deployments?environment=Production&per_page=10" --jq '.[].id'); do
+            [ "$id" = "$CURRENT_ID" ] && continue
+            url=$(gh api "repos/$REPO/deployments/$id/statuses" --jq '[.[] | select(.state=="success")][0].environment_url // empty')
+            if [ -n "$url" ]; then prev="$url"; break; fi
+          done
+          echo "url=$prev" >> "$GITHUB_OUTPUT"
+
+      - name: Submit to IndexNow
+        env:
+          NEW_URL: ${{ github.event.deployment_status.environment_url }}
+          PREV_URL: ${{ steps.prev.outputs.url }}
+        run: |
+          args=(--sitemap "${NEW_URL%/}/sitemap.xml")
+          if [ -n "$PREV_URL" ]; then
+            args+=(--previous-sitemap "${PREV_URL%/}/sitemap.xml")
+          else
+            echo "No previous Production deployment found: falling back to --all"
+            args+=(--all)
+          fi
+          node scripts/seo/indexnow.mjs "${args[@]}"
