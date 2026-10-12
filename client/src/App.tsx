@@ -5,6 +5,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { Toaster } from '@/components/ui/toaster'
 import { OF1_ROUTE } from '@/content/of1'
 import CGV from '@/pages/CGV'
+import CrmPage from '@/pages/CrmPage'
 import GuideIaEntreprise from '@/pages/GuideIaEntreprise'
 import Landing from '@/pages/Landing'
 import MentionsLegales from '@/pages/MentionsLegales'
@@ -25,6 +26,7 @@ function Router() {
         <Route path="/cgv" component={CGV} />
         <Route path="/guides/integrer-l-ia-dans-votre-entreprise" component={GuideIaEntreprise} />
         <Route path={OF1_ROUTE} component={OffreCompteRenduAppel} />
+        <Route path={`${OF1_ROUTE}/:crm`}>{(p) => <CrmPage slug={p.crm} />}</Route>
         <Route path="/ressources" component={Ressources} />
         <Route path="/ressources/:slug">{(p) => <Ressource slug={p.slug} />}</Route>
         <Route path="/thank-you" component={ThankYou} />

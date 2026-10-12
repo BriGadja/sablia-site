@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async'
 import FooterSection from '@/components/landing/FooterSection'
 import TopNav from '@/components/landing/TopNav'
 import AudienceStrip from '@/components/offre/AudienceStrip'
+import CrmLinks from '@/components/offre/CrmLinks'
 import IncludedExcludedSection from '@/components/offre/IncludedExcludedSection'
 import ObjectionSection from '@/components/offre/ObjectionSection'
 import OffreCallout from '@/components/offre/OffreCallout'
@@ -85,6 +86,7 @@ export default function OffreCompteRenduAppel() {
           <PricingSection />
           <ObjectionSection />
           <ProofStrip />
+          <CrmLinks />
           <OffreFaq />
           <OffreCallout />
         </main>

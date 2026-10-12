@@ -84,6 +84,15 @@ export const PAGE_ROUTES = [
     changefreq: 'monthly',
     priority: 0.9,
   },
+  ...['hubspot', 'zoho', 'salesforce', 'pipedrive'].map((crm) => ({
+    // P10a: `indexable` is derived from the JSON `status`; a draft is neither prerendered nor in
+    // the sitemap. `sources` = the JSON only, so a template tweak bumps no `lastmod`.
+    path: `/offres/compte-rendu-appel/${crm}`,
+    sources: [`${C}/crm/${crm}.json`],
+    indexable: { fromJson: `${C}/crm/${crm}.json` },
+    changefreq: 'monthly',
+    priority: 0.8,
+  })),
   {
     path: '/ressources',
     sources: [`${P}/Ressources.tsx`],
