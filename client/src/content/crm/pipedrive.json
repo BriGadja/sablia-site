@@ -21,7 +21,7 @@
     "body": "La prochaine action est une seconde activité, rattachée au même deal, avec un sujet, une date d'échéance et un responsable. Elle apparaît dans la liste des activités de votre commercial le jour prévu, comme n'importe quelle tâche saisie à la main. Si l'appel ne mérite aucune relance, aucune activité n'est créée : vous n'héritez pas d'un calendrier rempli de tâches vides."
   },
   "prerequisites": {
-    "heading": "Ce que la chaîne demande à votre abonnement Pipedrive",
+    "heading": "Votre formule Pipedrive et son budget de jetons",
     "body": "Pipedrive limite les appels programmatiques par un budget quotidien de jetons, calculé sur 30 000 jetons de base, multipliés par un coefficient lié à votre formule (de 1 à 7) et par le nombre de licences. Ce budget est partagé entre tous les utilisateurs du compte. Notre chaîne en consomme très peu : quelques écritures par appel. Nous vérifions votre formule et votre nombre de licences avant l'installation, pour que la chaîne tienne largement dans la limite."
   },
   "pitfall": {
