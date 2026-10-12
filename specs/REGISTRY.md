@@ -126,16 +126,16 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Statut : VALIDÉE 2026-09-18 @88fd143
 - Source : brief D10 2026-09-18, A7, AC-5
 
-## US-15 — Un téléchargement sans case cochée est une « ressource seule »
+## US-52 — Un téléchargement sans case cochée est une « ressource seule »
 - Surface : `POST /api/ressources-request` → colonne `sabcrm_leads.intention` (`leadRow()`)
 - Parcours : (cible) /ressources/:slug → prénom + email, case décochée → envoyer ; puis case cochée
 - Oracle : ligne relue avec `intention = 'ressource_seule'` quand la case est décochée, `'veut_un_echange'` quand elle est cochée ; `leadRow()` pose `intention` dans les deux cas ; stage, owner et next_action restent ceux de US-7 et US-8
 - Exemple : Étant donné Léo qui télécharge `skill-devis` sans cocher la case / Quand le formulaire part / Alors la ligne porte `intention = 'ressource_seule'`, `stage = 'nouveau'`, owner Brice ; et Achille, case cochée sur `pipedrive-nouveau-lead` → `intention = 'veut_un_echange'`
 - Test : vitest api/ressources-request.test.ts -t intention
 - Statut : JAMAIS-PASSÉE
-- Source : brief du 2026-10-12 (Q4, Q6, grill de 16 questions) ; `research/brainstorm/2026-10-12-canal-intention-brief.md` du hub — plan `sablia-crm-canal-intention`
+- Source : brief du 2026-10-12 (Q4, Q6, grill de 16 questions) ; `research/brainstorm/2026-10-12-canal-intention-brief.md` du hub — plan `sablia-crm-canal-intention` ; numérotée 52 et non 15 pour que le contrôle `registry_ready_check.py` d'un plan qui clame des stories des deux registres (portail et site) ne confonde pas deux numéros identiques
 
-## US-16 — Une demande de rappel est relancée le lendemain ouvré
+## US-53 — Une demande de rappel est relancée le lendemain ouvré
 - Surface : `POST /api/ressources-request` → colonne `sabcrm_leads.relance_date` (`leadRow()`), promesse « sous 24 h ouvrées » du site
 - Parcours : (cible) /ressources/:slug → prénom + email, case cochée → envoyer
 - Oracle : `relance_date` = le lendemain ouvré du jour de Paris, samedi et dimanche sautés (vendredi → lundi), les jours fériés NON sautés ; case décochée → aucune `relance_date`
