@@ -129,9 +129,9 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 ## US-52 — Un téléchargement sans case cochée est une « ressource seule »
 - Surface : `POST /api/ressources-request` → colonne `sabcrm_leads.intention` (`leadRow()`)
 - Parcours : (cible) /ressources/:slug → prénom + email, case décochée → envoyer ; puis case cochée
-- Oracle : ligne relue avec `intention = 'ressource_seule'` quand la case est décochée, `'veut_un_echange'` quand elle est cochée ; `leadRow()` pose `intention` dans les deux cas ; stage, owner et next_action restent ceux de US-7 et US-8
+- Oracle : ligne relue avec `intention = 'ressource_seule'` quand la case est décochée, `'veut_un_echange'` quand elle est cochée ; `leadRow()` pose `intention` dans les deux cas ; stage, owner et next_action restent ceux de US-7 et US-8 ; le dédoublonnage de 10 minutes porte aussi sur la case : une demande cochée envoyée après un téléchargement non coché du même visiteur crée une NOUVELLE fiche (l'alerte 📞 part à l'INSERT), un simple renvoi de la même demande n'en crée pas
 - Exemple : Étant donné Léo qui télécharge `skill-devis` sans cocher la case / Quand le formulaire part / Alors la ligne porte `intention = 'ressource_seule'`, `stage = 'nouveau'`, owner Brice ; et Achille, case cochée sur `pipedrive-nouveau-lead` → `intention = 'veut_un_echange'`
-- Test : vitest api/ressources-request.test.ts -t intention
+- Test : vitest api/ressources-request.test.ts -t intention ; vitest api/ressources-request.test.ts -t dedup
 - Statut : JAMAIS-PASSÉE
 - Source : brief du 2026-10-12 (Q4, Q6, grill de 16 questions) ; `research/brainstorm/2026-10-12-canal-intention-brief.md` du hub — plan `sablia-crm-canal-intention` ; numérotée 52 et non 15 pour que le contrôle `registry_ready_check.py` d'un plan qui clame des stories des deux registres (portail et site) ne confonde pas deux numéros identiques
 
