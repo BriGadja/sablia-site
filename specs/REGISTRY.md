@@ -174,8 +174,8 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 ## US-57 — Chaque mise en ligne réussie en production prévient IndexNow [script]
 - Surface : clé publique `client/public/{clé}.txt` ; `scripts/seo/indexnow.mjs` ; action GitHub `indexnow.yml` (dossier des workflows du dépôt) sur `deployment_status` (production, état `success`)
 - Parcours : (cible) fusion d'une PR → déploiement Vercel réussi → l'action s'exécute ; `node scripts/seo/indexnow.mjs --dry-run --sitemap <fichier>`
-- Oracle : la clé est servie à `https://sablia.io/{clé}.txt` et son contenu est la clé ; l'action ne s'exécute que pour la production en `success` ; la liste envoyée = les URL du plan dont `lastmod` est d'aujourd'hui ou d'hier (jamais tout le site à chaque déploiement), au plus 10 000, hôte `sablia.io` ; une réponse 200 ou 202 est un succès, toute autre fait échouer l'action
-- Exemple : Étant donné un plan à 9 URL dont 2 modifiées hier / Quand le script tourne à blanc le 2026-10-14 / Alors il imprime une liste de 2 URL, l'hôte `sablia.io`, la clé et l'emplacement de sa clé, sans aucun appel réseau
+- Oracle : la clé est servie à `https://sablia.io/{clé}.txt` et son contenu est la clé ; l'action ne s'exécute que pour la production en `success` ; la liste envoyée = les URL NOUVELLES ou dont le `lastmod` a changé entre le plan du déploiement de production précédent et celui du déploiement qui vient de réussir (jamais tout le site à chaque déploiement ; une option `--all` sert à la première soumission), au plus 10 000, hôte `sablia.io` ; une réponse 200 ou 202 est un succès, 422 et 429 sont signalées sans faire échouer l'action, 400 et 403 la font échouer
+- Exemple : Étant donné deux fichiers de plan, l'ancien à 9 URL et le nouveau à 10 URL dont 1 ajoutée et 1 au `lastmod` changé / Quand le script tourne à blanc avec `--sitemap nouveau.xml --previous-sitemap ancien.xml` / Alors il imprime une liste de 2 URL, l'hôte `sablia.io`, la clé et l'emplacement de sa clé, sans aucun appel réseau
 - Test : [script] node --test scripts/seo/indexnow.test.mjs (dans `sablia-site`)
 - Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
 - Source : brief § Décisions du grill, Q2e ; protocole https://www.indexnow.org/documentation (fichier de clé à la racine, codes 200/202) ; IndexNow jamais activé (Bing Webmaster, mesuré le 12/10)
@@ -201,7 +201,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 ## US-60 — La page « Claude dans Zoho CRM » dit ce qui est propre à Zoho
 - Surface : `/offres/compte-rendu-appel/zoho`
 - Parcours : (cible) ouvrir la page depuis l'aperçu Vercel
-- Oracle : mêmes exigences que US-59, avec les objets Zoho (module Appels, notes rattachées, tâche de relance) ; au moins 4 faits propres sourcés dans `research/visibilite-llm/crm-sources/zoho.md` ; aucun passage de 8 mots consécutifs identique à une autre page CRM hors des modules communs `of1` (garde « doorway »)
+- Oracle : mêmes exigences que US-59, avec les objets Zoho (module Appels, notes rattachées, tâche de relance) ; au moins 4 faits propres sourcés dans `research/visibilite-llm/crm-sources/zoho.md`, sinon la page reste en brouillon (`noindex`, hors plan du site) avec la raison écrite (règle « pas de contenu propre, pas de page ») ; aucun passage de 8 mots consécutifs identique à une autre page CRM hors des modules communs `of1` (garde « doorway »)
 - Exemple : Étant donné l'aperçu / Quand j'ouvre la page / Alors elle nomme le module Appels de Zoho CRM et sa propre exigence d'édition pour l'API, et sa section propre diffère de celle de HubSpot
 - Test : vitest `client/src/pages/CrmPage.test.tsx -t zoho` et `client/src/content/crm/crm.doorway.test.ts`
 - Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
@@ -210,7 +210,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 ## US-61 — La page « Claude dans Salesforce » dit ce qui est propre à Salesforce
 - Surface : `/offres/compte-rendu-appel/salesforce`
 - Parcours : (cible) ouvrir la page depuis l'aperçu Vercel
-- Oracle : mêmes exigences que US-59, avec les objets Salesforce (tâche d'activité de sous-type appel rattachée au contact ou au lead et à l'opportunité) et l'exigence d'édition pour l'accès API (documentation officielle) ; au moins 4 faits propres sourcés dans `research/visibilite-llm/crm-sources/salesforce.md`
+- Oracle : mêmes exigences que US-59, avec les objets Salesforce (tâche d'activité de sous-type appel rattachée au contact ou au lead et à l'opportunité) et l'exigence d'édition pour l'accès API (documentation officielle) ; au moins 4 faits propres sourcés dans `research/visibilite-llm/crm-sources/salesforce.md`, sinon la page reste en brouillon avec la raison écrite
 - Exemple : Étant donné l'aperçu / Quand j'ouvre la page / Alors elle dit sur quelles éditions l'accès API est inclus, en citant la page officielle, et nomme l'objet Tâche
 - Test : vitest `client/src/pages/CrmPage.test.tsx -t salesforce` et `client/src/content/crm/crm.doorway.test.ts`
 - Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
@@ -219,7 +219,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 ## US-62 — La page « Claude dans Pipedrive » dit ce qui est propre à Pipedrive, et porte la preuve anonyme
 - Surface : `/offres/compte-rendu-appel/pipedrive`
 - Parcours : (cible) ouvrir la page depuis l'aperçu Vercel
-- Oracle : mêmes exigences que US-59, avec les objets Pipedrive (activité de type appel, note rattachée à l'affaire ou à la personne) ; au moins 4 faits propres sourcés dans `research/visibilite-llm/crm-sources/pipedrive.md` ; UNE ligne de preuve, anonyme : « en production depuis avril 2026 chez une société d'investissement locatif : chaque appel est écrit dans son Pipedrive (étape, note, attribution) » ; le mot « Norloc » n'apparaît nulle part dans le code ni dans le HTML construit ; cette ligne n'existe que sur cette page
+- Oracle : mêmes exigences que US-59, avec les objets Pipedrive (activité de type appel, note rattachée à l'affaire ou à la personne) ; au moins 4 faits propres sourcés dans `research/visibilite-llm/crm-sources/pipedrive.md` (sinon la page reste en brouillon avec la raison écrite) ; UNE ligne de preuve, anonyme : « en production depuis avril 2026 chez une société d'investissement locatif : chaque appel est écrit dans son Pipedrive (étape, note, attribution) » ; le mot « Norloc » n'apparaît nulle part dans le code ni dans le HTML construit ; cette ligne n'existe que sur cette page
 - Exemple : Étant donné l'aperçu / Quand j'ouvre la page / Alors la ligne de preuve anonyme est présente une fois, sans nom de société, et les pages HubSpot, Zoho et Salesforce n'en portent aucune
 - Test : vitest `client/src/pages/CrmPage.test.tsx -t pipedrive` et `client/src/content/crm/crm.doorway.test.ts`
 - Statut : CLAMÉE 2026-10-12 — plan `visibilite-llm-sablia`, non livrée
