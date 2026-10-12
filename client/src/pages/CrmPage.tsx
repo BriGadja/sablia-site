@@ -131,7 +131,29 @@ function PublishedView({ page }: { page: PublishedCrmPage }) {
               <h2 className="t-display-md text-ink [text-wrap:balance]">
                 Ce que la documentation officielle de {page.crm} établit
               </h2>
-              <div className="mt-8 overflow-x-auto rounded-lg border border-hairline-light bg-white">
+              <ul data-testid="facts-cards" className="mt-8 space-y-4 sm:hidden">
+                {page.facts.map((fact) => (
+                  <li
+                    key={fact.sourceId}
+                    className="rounded-lg border border-hairline-light bg-white p-5"
+                  >
+                    <p className="font-medium text-ink">{fact.label}</p>
+                    <p className="mt-2 leading-relaxed text-body">{fact.value}</p>
+                    <p className="mt-3 text-[15px] text-muted-text [overflow-wrap:anywhere]">
+                      Source :{' '}
+                      <a
+                        href={fact.sourceUrl}
+                        rel="noreferrer"
+                        target="_blank"
+                        className="text-primary-active underline underline-offset-4"
+                      >
+                        {new URL(fact.sourceUrl).host}
+                      </a>
+                    </p>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-8 hidden overflow-x-auto rounded-lg border border-hairline-light bg-white sm:block">
                 <table className="w-full border-collapse text-left text-[15px]">
                   <thead>
                     <tr className="border-b border-hairline-light">
@@ -163,7 +185,7 @@ function PublishedView({ page }: { page: PublishedCrmPage }) {
                             href={fact.sourceUrl}
                             rel="noreferrer"
                             target="_blank"
-                            className="break-all text-primary-active underline underline-offset-4"
+                            className="whitespace-nowrap text-primary-active underline underline-offset-4"
                           >
                             {new URL(fact.sourceUrl).host}
                           </a>
