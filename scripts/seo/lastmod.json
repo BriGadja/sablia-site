@@ -20,11 +20,19 @@
     "hash": "sha256:bb13171d0508940bdbf4c7f435f8f94396d841ce2b3d99a7ca9ab607730d8fb3"
   },
   "/offres/compte-rendu-appel": {
-    "lastmod": "2026-09-07",
-    "hash": "sha256:65f68923c1d4686d9761ca3621a4754ad4acdfe8ad2d14944e722f23400e1297"
+    "lastmod": "2026-10-12",
+    "hash": "sha256:2f9a993c63e8c2424687d87acfe2dca63385f070687efc6ecc98747bc7fcb292"
   },
   "/ressources": {
     "lastmod": "2026-09-22",
     "hash": "sha256:4d663b08db6bbbca6d348ff6a3ac38d81d17d9f65ed9b9d2e8e0ceebb9ea89b7"
+  },
+  "/offres/compte-rendu-appel/zoho": {
+    "lastmod": "2026-10-12",
+    "hash": "sha256:9f3c0176173ce82b572528533bfb539a874461af25dc62d01e0856997114a49e"
+  },
+  "/offres/compte-rendu-appel/pipedrive": {
+    "lastmod": "2026-10-12",
+    "hash": "sha256:5b1df5ea8cd696caeb8da824744d3f5fd4ba4bed864a2084b8a577294a639f2d"
   }
 }
