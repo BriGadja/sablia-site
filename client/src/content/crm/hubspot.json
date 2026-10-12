@@ -20,7 +20,7 @@
     "body": "La relance est une tâche HubSpot ordinaire, créée par la même chaîne et rattachée au même contact. Trois champs comptent : son titre, sa date d'échéance et son propriétaire, c'est-à-dire l'identifiant du commercial qui a passé l'appel. La date vient de ce que le client a dit (« rappelez-moi jeudi »), lu par Claude dans la transcription. Si l'appel ne donne aucune date claire, nous appliquons le délai par défaut convenu avec vous à la recette plutôt qu'une date devinée en silence."
   },
   "prerequisites": {
-    "heading": "Ce que la chaîne demande à votre abonnement",
+    "heading": "Jeton, forfait HubSpot et plafond de requêtes",
     "body": "La chaîne écrit par l'interface de programmation de HubSpot, avec le jeton statique d'une application installée dans votre seul compte. Ce jeton reste chez vous, dans votre n8n, à votre nom. Côté abonnement, la seule dépendance que nous avons trouvée dans la documentation est le débit autorisé : il varie avec votre forfait. En Free et Starter, une application privée dispose de 100 requêtes par tranche de 10 secondes, et le compte de 250 000 requêtes par jour. Notre estimation pour une équipe de 2 à 20 personnes : quelques centaines d'écritures par jour, très en dessous. Avant le lancement, nous vérifions avec vous que votre compte peut créer cette application."
   },
   "pitfall": {
