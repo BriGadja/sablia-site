@@ -1,7 +1,7 @@
 #!/bin/bash
 # Writes the three env files of the site from the credential store (plan sablia-io-lot0-vps, F3).
 #
-#     sudo bash deploy/install-env.sh
+#     sudo CREDS_FILE=<credential store JSON> bash deploy/install-env.sh
 #
 #   /etc/sablia-site/build.env    640 root:sablia-site  VITE_SUPABASE_ANON_KEY (public by design; the build needs it)
 #   /etc/sablia-site/prod.env     600 root:root         PORT=5000, RESEND_API_KEY, SUPABASE_SERVICE_ROLE_KEY
@@ -16,7 +16,7 @@
 set -euo pipefail
 
 CONF_DIR="${CONF_DIR:-/etc/sablia-site}"
-CREDS_FILE="${CREDS_FILE:-/home/sablia/workspace/.credentials/sablia.json}"
+CREDS_FILE="${CREDS_FILE:?set CREDS_FILE to the credential store (a JSON file readable by root)}"
 ROOT_USER="${ENV_ROOT_USER:-root}"
 RUN_GROUP="${ENV_RUN_GROUP:-sablia-site}"
 ANON_KEY_FILE="${ANON_KEY_FILE:-}"

@@ -2,7 +2,8 @@
 # Proves the Caddy blocks of deploy/Caddyfile.sablia-site against a PRIVATE Caddy on 127.0.0.1:18080
 # (never /etc/caddy, never a reload of the live one) fronting the real dist/ build on 5001 and the
 # real Umami on 3100. Needs: dist/ built, the Umami stack up, `caddy`, `curl`.
-# usage: bash deploy/caddy.test.sh        exit 0 = every assertion holds
+# usage: UMAMI_CREDENTIALS=<json> bash deploy/caddy.test.sh        exit 0 = every assertion holds
+# (E2E=1 also runs scripts/analytics-e2e.mjs; E2E_REPLAY=1 adds the tier-2 proof)
 cd "$(dirname "$0")/.." || exit 2
 T="$(mktemp -d)"; fails=0; PIDS=()
 cleanup() { for p in "${PIDS[@]}"; do kill "$p" 2>/dev/null; done; rm -rf "$T"; }
@@ -13,7 +14,7 @@ check() { if [ "$2" = "$3" ]; then ok "$1"; else bad "$1 (expected '$3', got '$2
 
 [ -f deploy/Caddyfile.sablia-site ] || { echo "FAIL deploy/Caddyfile.sablia-site missing"; exit 1; }
 [ -f dist/index.js ] || { echo "FAIL dist/index.js missing: run the build first"; exit 2; }
-CREDS=/home/sablia/workspace/.credentials/umami.json
+CREDS="${UMAMI_CREDENTIALS:?set UMAMI_CREDENTIALS to the Umami credentials JSON}"
 WID="$(python3 -c "import json;print(json.load(open('$CREDS'))['websites']['preview'])")"
 
 # throwaway preview password (the real one never touches this test)

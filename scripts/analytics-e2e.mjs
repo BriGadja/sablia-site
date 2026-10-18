@@ -8,7 +8,7 @@
 // --map     host=ip, Chrome's host-resolver rule (a private Caddy on loopback, before DNS exists)
 // --replay  also prove tier 2: a stored replay longer than 5 s, a heatmap click, no canary in it
 //
-// The Umami API key is read at runtime from .credentials/umami.json. The form endpoints are
+// The Umami API key is read at runtime from the file named by UMAMI_CREDENTIALS (never argv). The form endpoints are
 // answered by the script itself (no mail, no CRM row): the proof is about the events, not the API.
 // Exit 0 = every check passes.
 import { readFileSync } from 'node:fs'
@@ -30,7 +30,12 @@ if (!base) {
 }
 const origin = new URL(base).origin
 
-const cred = JSON.parse(readFileSync('/home/sablia/workspace/.credentials/umami.json', 'utf8'))
+const credPath = process.env.UMAMI_CREDENTIALS
+if (!credPath) {
+  console.error('set UMAMI_CREDENTIALS to the JSON file holding the Umami api_key, local_url and website ids')
+  process.exit(2)
+}
+const cred = JSON.parse(readFileSync(credPath, 'utf8'))
 const UMAMI = cred.local_url
 const WEBSITE = cred.websites.preview
 const KEY = cred.api_key
