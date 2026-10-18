@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 import chromium from '@sparticuz/chromium'
 import puppeteer from 'puppeteer-core'
 import { assertCleanStaticHtml } from './seo/prerender-guards.mjs'
-import { assertRessourceHtml, listPublishedSlugs } from './seo/ressources.mjs'
+import { assertRessourceHtml, listPublishedSlugs, ressourceTitle } from './seo/ressources.mjs'
 import { resolveRoutes } from './seo/routes.mjs'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -96,17 +96,12 @@ async function loadResource(page, url) {
   }
 }
 
-// Helmet flushes asynchronously: let the canonical settle, then read the DECODED DOM values.
-async function readDom(page) {
+// Helmet flushes asynchronously, AFTER the commit that sets `data-ready`: wait for the row's own
+// title (the canonical is already right while loading, so it proves nothing), then read the DECODED
+// DOM values. On 2026-10-18 the deploy of 48cc7aa failed reading the loading title.
+async function readDom(page, wantTitle) {
   await page
-    .waitForFunction(
-      () =>
-        document
-          .querySelector('link[rel="canonical"]')
-          ?.getAttribute('href')
-          ?.includes('/ressources/'),
-      { timeout: 5000 },
-    )
+    .waitForFunction((title) => document.title === title, { timeout: 5000 }, wantTitle)
     .catch(() => {})
   return page.evaluate(() => {
     const attr = (selector, name) => document.querySelector(selector)?.getAttribute(name) ?? null
@@ -173,7 +168,7 @@ async function prerender() {
       try {
         if (row) {
           await loadResource(page, url)
-          assertRessourceHtml(await readDom(page), row)
+          assertRessourceHtml(await readDom(page, ressourceTitle(row)), row)
         } else {
           await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 })
           // Helmet flushes asynchronously and tags itself with data-rh="true".
