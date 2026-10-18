@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { track } from '@/lib/analytics'
+import { clearConsent, writeConsent } from '@/lib/consent'
 import RessourceForm from './RessourceForm'
 
 /**
@@ -138,5 +140,45 @@ describe('RessourceForm: found_via', () => {
     await user.selectOptions(screen.getByLabelText('Comment nous avez-vous trouvés ?'), 'ia')
     await user.click(screen.getByRole('button', { name: /Recevoir/ }))
     expect(sentBody(spy)).toMatchObject({ foundVia: 'ia' })
+  })
+})
+
+describe('RessourceForm: the outcome is reported (consent only, code only)', () => {
+  beforeEach(() => {
+    vi.mocked(track).mockReset()
+    clearConsent()
+  })
+
+  it('reports form_success for the ressource form after a 200 and after a bot 204', async () => {
+    writeConsent(true)
+    stubFetch()
+    const user = userEvent.setup()
+    render(<RessourceForm slug="demo-of1" titre="le template" />)
+    await fillIdentity(user)
+    await user.click(screen.getByRole('button', { name: /Recevoir|Envoyer|ressource/i }))
+    expect(track).toHaveBeenCalledWith('form_success', { form: 'ressource', page: '/' })
+  })
+
+  it('reports form_error with the API code on a 404', async () => {
+    writeConsent(true)
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(
+        async () =>
+          new Response(JSON.stringify({ error: 'Ressource introuvable', code: 'not_found' }), {
+            status: 404,
+            headers: { 'content-type': 'application/json' },
+          }),
+      ),
+    )
+    const user = userEvent.setup()
+    render(<RessourceForm slug="demo-of1" titre="le template" />)
+    await fillIdentity(user)
+    await user.click(screen.getByRole('button', { name: /Recevoir|Envoyer|ressource/i }))
+    expect(track).toHaveBeenCalledWith('form_error', {
+      form: 'ressource',
+      code: 'not_found',
+      page: '/',
+    })
   })
 })

@@ -70,6 +70,7 @@ export default function ThankYou() {
               </p>
               <a
                 href={site.bookingUrl}
+                data-cta-book
                 target="_blank"
                 rel="noopener noreferrer"
                 className="t-button inline-flex items-center gap-2 rounded-md bg-primary-active px-6 py-3 text-on-primary hover:bg-primary-hover active:bg-primary-hover transition-shadow hover:shadow-glow-coral"
