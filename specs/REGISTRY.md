@@ -235,12 +235,12 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 
 ## US-63 — Le site sort de notre serveur exactement comme il sortait de Vercel [script]
 - Surface : toutes les routes de `https://sablia.io` (puis `https://preview.sablia.io`), servies par `server/` (Express) derrière Caddy ; `POST /api/contact` et `POST /api/ressources-request` ; `/healthz`
-- Parcours : (cible) `python3 scripts/site-parity.py --baseline deploy/parity-baseline.json --b http://127.0.0.1:5000 --extras deploy/parity-extras.txt` (dépôt hub)
+- Parcours : (cible) `python3 scripts/site-parity.py --baseline deploy/parity-baseline.json --b http://127.0.0.1:5000 --extras deploy/parity-extras.txt --allowed deploy/parity-allowed.txt` (dépôt hub ; sans `--allowed`, les écarts voulus du lot 0 — bouton du pied de page, façade vidéo, `lastmod` du plan du site — le font sortir 1)
 - Oracle : pour chaque URL du plan du site et chaque URL de `deploy/parity-extras.txt`, le statut, le type de contenu, la cible d'une redirection et le corps normalisé sont ceux de Vercel (liste des écarts permis : en-têtes propres à Vercel, `date`, `etag`, nom du paquet JavaScript haché, cache longue durée des `/assets/*`) ; `/cgv` et `/cgv/` répondent 200 (pas de 301) ; `/escalier-modeles` sert `escalier-modeles.html` ; une page inconnue sert l'accueil en 200 ; `/api/contact` en GET répond 405 avec `allow: POST` ; `/healthz` répond `{ok, release}`
 - Exemple : Étant donné la ligne `/cgv` du fichier de référence prise sur Vercel le 2026-10-18 (200, `text/html`) / Quand le script compare notre serveur / Alors il imprime `OK /cgv 200` et sort 0 ; puis, si notre serveur répondait 301, il imprime `DIFF /cgv status 200 != 301` et sort 1
 - Test : [script] python3 scripts/site-parity.py (dépôt hub, voir Parcours) + vitest server/ (static, api-adapter, healthz)
-- Statut : BROUILLON
-- Source : décisions du grill 2026-10-16 (`research/site-theophile-2026-10/decisions.md` § Lot 0) ; plan `sablia-io-lot0-vps.md` Phase B ; écarts mesurés le 2026-10-18 : `/cgv` 301, `/escalier-modeles` SPA, `/api/contact` HTML 200
+- Statut : VALIDÉE 2026-10-18 @c5a443c
+- Source : décisions du grill 2026-10-16 (`research/site-theophile-2026-10/decisions.md` § Lot 0) ; plan `sablia-io-lot0-vps.md` Phase B ; écarts mesurés le 2026-10-18 : `/cgv` 301, `/escalier-modeles` SPA, `/api/contact` HTML 200 ; **Parcourue en production le 2026-10-18 @c5a443c** : parity 34/34 contre la référence Vercel sur `https://sablia.io` servi par le VPS, `/healthz` → `c5a443c-20261018T185245Z`
 
 ## US-64 — Chaque fusion sur `main` met le site en ligne toute seule, et un retour arrière tient en une commande [script]
 - Surface : `deploy/deploy.sh` (minuteur systemd `sablia-site-deploy.timer`, deux emplacements `prod` et `preview`), `/healthz`
@@ -248,17 +248,17 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Oracle : une construction qui échoue, un essai de fumée qui échoue ou un contrôle après bascule qui échoue ne change JAMAIS l'emplacement en ligne ; `deploy.sh rollback <emplacement>` remet la version précédente en quelques secondes ; un sha déjà en ligne ne reconstruit rien ; deux déploiements ne tournent jamais ensemble ; seules les 3 dernières versions restent ; `/healthz.release` = la version servie
 - Exemple : Étant donné `prod` servant la version `a1b2c3d` et un nouveau commit `e4f5a6b` dont la construction échoue / Quand le minuteur lance `deploy.sh prod` / Alors `prod` sert toujours `a1b2c3d`, un marqueur `failed-e4f5a6b` existe et une alerte est écrite ; puis le commit suivant, sain, est mis en ligne et `rollback` revient à `a1b2c3d`
 - Test : [script] bash deploy/deploy.test.sh
-- Statut : BROUILLON
-- Source : grill 2026-10-16 § « ce que le VPS apporte et coûte » ; plan Phase F, amendements R1-R3
+- Statut : VALIDÉE 2026-10-18 @c5a443c
+- Source : grill 2026-10-16 § « ce que le VPS apporte et coûte » ; plan Phase F, amendements R1-R3 ; **Parcourue en production le 2026-10-18 @c5a443c** : fusion de #19 → tranche prod sur `c5a443c` par `deploy.sh` (fumée sur port d'essai puis bascule), reconstruction forcée `c5a443c-20261018T185245Z` passée
 
 ## US-65 — On sait où les visiteurs cliquent, jusqu'où ils défilent, sans cookie et sans les suivre [script]
 - Surface : toutes les pages (script `/m/a.js` servi par notre propre origine) ; tableau de bord `stats.sablia.io`
 - Parcours : (cible) `node scripts/analytics-e2e.mjs --base https://preview.sablia.io`
-- Oracle : sans consentement, chaque clic (libellé et zone), chaque clic sur « Réserver 30 min » (`cta_book`), chaque lien sortant (hôte seul) et chaque palier de défilement 25/50/75/100 % arrive dans Umami avec ses propriétés ; aucun cookie (`document.cookie` vide), rien dans `localStorage` hormis `sablia_consent`, aucune requête vers un autre domaine avant consentement ; les événements vidéo (`video_*`) et formulaire (`form_*`) n'existent qu'après « Tout accepter » ; un site autre que `sablia.io` / `preview.sablia.io` ne mesure rien
+- Oracle : sans consentement, chaque clic (libellé et zone), chaque clic sur « Réserver 30 min » (`cta_book`), chaque lien sortant (hôte seul) et chaque palier de défilement 25/50/75/100 % arrive dans Umami avec ses propriétés ; aucun cookie (`document.cookie` vide), rien dans `localStorage` hormis `sablia_consent`, aucune requête vers un autre domaine avant consentement, hors la liste nommée et acceptée (plan R16 / AC-6) : l'affiche `i.ytimg.com` d'une page ressource et la lecture `*.supabase.co` de `/ressources` (affiches rapatriées au lot 3, accord de Brice le 2026-10-18) ; les événements vidéo (`video_*`) et formulaire (`form_*`) n'existent qu'après « Tout accepter » ; un site autre que `sablia.io` / `preview.sablia.io` ne mesure rien
 - Exemple : Étant donné la page d'accueil de l'aperçu et un visiteur sans consentement / Quand il clique sur « Réserver 30 min » du bandeau du haut puis défile jusqu'à la moitié / Alors Umami reçoit `cta_book` avec `zone='nav'` et `scroll_50` avec `page='/'`, et `document.cookie` vaut `''`
 - Test : [script] node scripts/analytics-e2e.mjs --base https://preview.sablia.io + vitest client/src/lib/analytics.test.ts
-- Statut : BROUILLON
-- Source : grill 2026-10-16 § Mesure (« je veux qu'on monitore un maximum ») ; plan Phase C et E ; découpage des événements sans consentement après la grille de la CNIL (trois types d'évènements)
+- Statut : VALIDÉE 2026-10-18 @c5a443c
+- Source : grill 2026-10-16 § Mesure (« je veux qu'on monitore un maximum ») ; plan Phase C et E ; découpage des événements sans consentement après la grille de la CNIL (trois types d'évènements) ; **Parcourue en production le 2026-10-18 @c5a443c** : navigateur partagé : `/m/a.js` et `/m/r.js` servis par notre origine, `/m/api/send` 200, 13 événements relus dans la base Umami (`/`, `/ressources`, `/#contact`)
 
 ## US-66 — Le bandeau : refuser est aussi simple qu'accepter, et l'enregistrement des écrans n'existe qu'après « Tout accepter » [chemin-critique]
 - Surface : toutes les pages (bandeau en bas), lien « Gérer mes choix » dans le pied de page, `/politique-confidentialite`
@@ -266,8 +266,8 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Oracle : « Tout refuser » et « Tout accepter » ont la même taille, le même poids, la même rangée ; le silence vaut refus ; refuser ne charge jamais `recorder.js` ; accepter le charge une fois ; « Gérer mes choix » rouvre le bandeau et retirer son accord recharge la page ; le choix expire au bout de 6 mois ; l'HTML prérendu ne contient ni le bandeau ni un script de mesure ; les formulaires ne sont jamais enregistrés
 - Exemple : Étant donné un visiteur qui ouvre l'accueil de l'aperçu sur un téléphone de 390 px de large / Quand il appuie sur « Tout refuser » puis recharge la page / Alors le bandeau ne revient pas, aucune requête vers `/m/r.js` n'est partie, et `localStorage['sablia_consent']` vaut `{v:1, replay:false, at:…}` ; puis il appuie sur « Gérer mes choix » dans le pied de page et sur « Tout accepter » : `/m/r.js` est demandé une fois
 - Test : vitest client/src/lib/consent.test.ts + client/src/components/consent/ConsentBanner.test.tsx + marche navigateur sur l'aperçu, 390 px
-- Statut : BROUILLON
-- Source : grill 2026-10-16 (« bandeau où refuser est aussi simple qu'accepter ») ; plan Phase D ; texte du bandeau et de la politique de confidentialité à valider par Brice
+- Statut : VALIDÉE 2026-10-18 @c5a443c
+- Source : grill 2026-10-16 (« bandeau où refuser est aussi simple qu'accepter ») ; plan Phase D ; texte du bandeau et de la politique de confidentialité à valider par Brice ; **Parcourue en production le 2026-10-18 @c5a443c** : navigateur partagé : bandeau « Aidez-nous à améliorer ce site », « Tout refuser » le ferme (`replay:false`), « Tout accepter » charge l'enregistreur (`/m/api/record` 200)
 
 ## US-67 — La vidéo d'une ressource ne charge YouTube qu'après un clic [script]
 - Surface : `/ressources/:slug` (composant `VideoFacade`), HTML prérendu de chaque ressource
@@ -275,14 +275,14 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Oracle : avant le clic, la page ne contient aucun `<iframe` ni requête vers `youtube-nocookie.com` ; après le clic, l'iframe `https://www.youtube-nocookie.com/embed/{id}` apparaît ; le HTML prérendu des ressources ne contient aucun `<iframe`
 - Exemple : Étant donné la ressource `pipedrive-nouveau-lead` avec `youtube_id='d5fo00AFqVM'` / Quand la page se charge / Alors le DOM n'a aucun `iframe` et affiche l'image d'ouverture ; puis un clic → l'iframe `youtube-nocookie.com/embed/d5fo00AFqVM` est montée
 - Test : vitest client/src/pages/Ressource.test.tsx
-- Statut : BROUILLON
-- Source : grill 2026-10-16 (défaut CNIL repéré : l'iframe se chargeait sans clic sur `Ressource.tsx`) ; plan Phase D4
+- Statut : VALIDÉE 2026-10-18 @c5a443c
+- Source : grill 2026-10-16 (défaut CNIL repéré : l'iframe se chargeait sans clic sur `Ressource.tsx`) ; plan Phase D4 ; **Parcourue en production le 2026-10-18 @c5a443c** : relecture 03-validate : 0 `iframe` sur une page ressource avant clic
 
 ## US-68 — Le site et n8n sont surveillés depuis l'extérieur du serveur [script]
 - Surface : flux de travail GitHub `uptime.yml` (toutes les 10 minutes) ; issues GitHub étiquetées `uptime`
 - Parcours : (cible) lancer `uptime.yml` à la main avec une cible forcée en panne, puis une seconde fois
 - Oracle : la sonde interroge `https://sablia.io/` et `https://n8n.sablia.io/healthz` ; une panne ouvre UNE issue `uptime` (jamais deux ouvertes en même temps) ; le corps de la réponse n'est jamais copié dans l'issue ; le retour au vert est visible dans le journal
-- Exemple : Étant donné la cible forcée `https://sablia.io/__down` / Quand la sonde tourne deux fois de suite / Alors une seule issue `uptime` est ouverte et la seconde exécution la commente sans en créer une autre
-- Test : [script] gh workflow run uptime.yml -f target=https://sablia.io/__down puis gh issue list --label uptime
-- Statut : BROUILLON
-- Source : grill 2026-10-16 (le site et n8n partagent une seule machine) ; plan Phase F5, amendement R7
+- Exemple : Étant donné la cible forcée `https://sablia.io/api/nope` (404 ; `/__down` répond 200, car toute page inconnue renvoie l'accueil) / Quand la sonde tourne deux fois de suite / Alors une seule issue `uptime` est ouverte et la seconde exécution la commente sans en créer une autre
+- Test : [script] gh workflow run uptime.yml -f target=https://sablia.io/api/nope (deux fois) puis gh issue list --label uptime
+- Statut : VALIDÉE 2026-10-18 @c5a443c
+- Source : grill 2026-10-16 (le site et n8n partagent une seule machine) ; plan Phase F5, amendement R7 ; **Parcourue en production le 2026-10-18 @c5a443c** : cible forcée `/api/nope` ×2 → issue #20 puis un commentaire, exécution normale (contrôle de version actif) → #20 fermée ; l'étiquette `uptime` a dû être créée à la main (corrigé dans ce même lot, `--repo`)
