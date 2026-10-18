@@ -76,8 +76,17 @@ export default function PolitiqueConfidentialite() {
             <p>Les données transitent et sont stockées via les prestataires suivants :</p>
             <ul>
               <li>
-                <strong>Vercel Inc.</strong> — hébergement du site (États-Unis, DPA signé, cadre
-                Data Privacy Framework)
+                <strong>Hostinger</strong> — hébergement du site et de la mesure d'audience, sur un
+                serveur dédié à Sablia en France ; les sauvegardes chiffrées sont déposées sur
+                Google Drive
+              </li>
+              <li>
+                <strong>Resend</strong> — envoi des emails de confirmation et des notifications
+                internes
+              </li>
+              <li>
+                <strong>YouTube</strong> — lecture des vidéos, chargée uniquement après un clic sur
+                la vidéo
               </li>
               <li>
                 <strong>n8n (self-hosted)</strong> — orchestration des formulaires (serveur France,
@@ -117,15 +126,43 @@ export default function PolitiqueConfidentialite() {
             </p>
           </LegalSection>
 
-          <LegalSection title="Cookies">
+          <LegalSection title="Mesure d'audience et enregistrement des écrans">
             <p>
-              {site.domain} n'utilise aucun cookie à des fins de mesure d'audience ou de publicité.
-              Seuls les cookies strictement nécessaires au fonctionnement du site (session Calendly)
-              sont déposés.
+              {site.domain} mesure sa fréquentation avec un outil hébergé sur notre propre serveur
+              (Umami), sans cookie, sans identifiant persistant et sans vous suivre d'un site à
+              l'autre. Sont comptés : les pages vues, les clics sur les liens et les boutons, la
+              profondeur de défilement, les liens sortants. Ces statistiques sont conservées 25 mois
+              au plus.
+            </p>
+            <p>
+              Si vous cliquez sur « Tout accepter » dans le bandeau, nous enregistrons en plus, sans
+              vous identifier directement, vos déplacements et vos clics sur nos pages (replay et
+              cartes de chaleur) pour repérer ce qui est difficile à utiliser. Les champs de saisie
+              sont masqués et les formulaires ne sont jamais enregistrés. Ces enregistrements sont
+              conservés 180 jours puis supprimés. Sans votre accord, ou si vous cliquez sur « Tout
+              refuser » ou ne répondez pas, rien n'est enregistré.
+            </p>
+            <p>
+              Votre choix est mémorisé dans votre navigateur (clé <code>sablia_consent</code>) pour
+              6 mois, puis le bandeau vous le redemande. Vous pouvez le modifier à tout moment avec
+              le lien « Gérer mes choix » en bas de chaque page ; retirer votre accord recharge la
+              page.
+            </p>
+            <p>
+              Les vidéos YouTube ne chargent rien chez YouTube tant que vous n'avez pas cliqué
+              dessus.
             </p>
           </LegalSection>
 
-          <p className="legal-updated">Dernière mise à jour : 20/04/2026.</p>
+          <LegalSection title="Cookies">
+            <p>
+              {site.domain} ne dépose aucun cookie à des fins de mesure d'audience ou de publicité.
+              Seuls les cookies strictement nécessaires au fonctionnement du site (session Calendly,
+              lorsque vous ouvrez la réservation) peuvent être déposés.
+            </p>
+          </LegalSection>
+
+          <p className="legal-updated">Dernière mise à jour : 18/10/2026.</p>
         </LegalShell>
         <ScrollToTop />
       </motion.div>

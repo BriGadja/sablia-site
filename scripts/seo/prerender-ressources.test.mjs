@@ -241,6 +241,14 @@ describe('assertRessourceHtml', () => {
     assert.throws(() => assertRessourceHtml({ ...GOOD, text: 'Chargement…' }, ROW), /body|text/)
   })
 
+  it('rejects a mounted iframe: the video must sit behind its click-to-play facade (US-67)', () => {
+    const withPlayer = {
+      ...GOOD,
+      html: '<main data-ready="true"><iframe src="https://www.youtube-nocookie.com/embed/x"></iframe></main>',
+    }
+    assert.throws(() => assertRessourceHtml(withPlayer, ROW), /iframe/)
+  })
+
   it('rejects any public contenu-ressources file URL in the html', () => {
     const leaky = {
       ...GOOD,

@@ -4,6 +4,7 @@ import FooterSection from '@/components/landing/FooterSection'
 import TopNav from '@/components/landing/TopNav'
 import RessourceForm from '@/components/ressources/RessourceForm'
 import ScrollToTop from '@/components/ScrollToTop'
+import VideoFacade from '@/components/VideoFacade'
 import { fetchRessource, type Ressource as RessourceRow } from '@/lib/contenu'
 
 /**
@@ -137,13 +138,15 @@ export default function Ressource({ slug }: RessourceProps) {
                 <hr className="border-t border-hairline" />
 
                 {state.row.youtube_id && (
-                  <div className="aspect-video w-full max-w-full overflow-hidden rounded-xl border border-hairline">
-                    <iframe
-                      src={`https://www.youtube-nocookie.com/embed/${state.row.youtube_id}`}
+                  <div className="w-full max-w-full overflow-hidden rounded-xl border border-hairline">
+                    <VideoFacade
+                      youtubeId={state.row.youtube_id}
                       title={state.row.titre}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      className="h-full w-full border-0"
+                      thumbnail={{
+                        src: `https://i.ytimg.com/vi/${state.row.youtube_id}/sddefault.jpg`,
+                        width: 640,
+                        height: 480,
+                      }}
                     />
                   </div>
                 )}

@@ -138,6 +138,11 @@ export function assertRessourceHtml(dom, row) {
       )
     }
   }
+  if ((dom.html ?? '').includes('<iframe')) {
+    throw new Error(
+      `/ressources/${row.slug}: html mounts an <iframe> before any click (the video must sit behind VideoFacade)`,
+    )
+  }
   if ((dom.html ?? '').includes(FILE_URL_MARK)) {
     throw new Error(
       `/ressources/${row.slug}: html leaks a public ${FILE_URL_MARK} file URL (decision D8)`,

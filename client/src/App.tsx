@@ -1,6 +1,7 @@
 import { AnimatePresence, MotionConfig } from 'framer-motion'
 import { HelmetProvider } from 'react-helmet-async'
 import { Route, Switch } from 'wouter'
+import ConsentBanner from '@/components/consent/ConsentBanner'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { Toaster } from '@/components/ui/toaster'
 import { OF1_ROUTE } from '@/content/of1'
@@ -43,6 +44,7 @@ function App() {
         <HelmetProvider>
           <Router />
           <Toaster />
+          <ConsentBanner />
         </HelmetProvider>
       </MotionConfig>
     </ErrorBoundary>

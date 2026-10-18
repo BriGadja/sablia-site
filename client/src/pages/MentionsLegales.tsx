@@ -58,10 +58,9 @@ export default function MentionsLegales() {
 
           <LegalSection title="Hébergeur du site">
             <ul>
-              <li>Vercel Inc.</li>
-              <li>340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis</li>
-              <li>privacy@vercel.com</li>
-              <li>+1 (559) 288-7060</li>
+              <li>HOSTINGER, UAB</li>
+              <li>Švitrigailos str. 34, LT-03230 Vilnius, Lituanie</li>
+              <li>gdpr@hostinger.com</li>
             </ul>
           </LegalSection>
 
