@@ -10,6 +10,7 @@ import {
   extractFromHtml,
   listPublishedSlugs,
   ressourceRoutes,
+  ressourceTitle,
 } from './ressources.mjs'
 import { PAGE_ROUTES, resolveRoutes } from './routes.mjs'
 
@@ -365,5 +366,24 @@ describe('resolveRoutes', () => {
 
   it('resolves the real manifest without a CRM file', () => {
     assert.equal(resolveRoutes().length, PAGE_ROUTES.length)
+  })
+})
+
+// 2026-10-18: `data-ready` and the title change land in one React commit, but Helmet writes <title>
+// later; the build read the loading title « Ressource — Sablia » and failed the deploy of 48cc7aa.
+// The prerender now waits for THIS exact title, shared with the assertion so the two cannot drift.
+describe('ressourceTitle', () => {
+  it('is the title the page renders once its row is read, never the loading title', () => {
+    const row = { slug: 'pipedrive-nouveau-lead', titre: 'Brancher Pipedrive' }
+    assert.equal(ressourceTitle(row), 'Brancher Pipedrive — Sablia')
+    assert.notEqual(ressourceTitle(row), 'Ressource — Sablia')
+  })
+
+  it('is the title assertRessourceHtml demands', () => {
+    const row = { slug: 's', titre: 'T', resume: null }
+    assert.throws(
+      () => assertRessourceHtml({ title: 'Ressource — Sablia' }, row),
+      /expected "T — Sablia"/,
+    )
   })
 })

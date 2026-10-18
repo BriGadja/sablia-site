@@ -102,6 +102,11 @@ export function extractFromHtml(html) {
   }
 }
 
+/** The <title> a resource page renders once its row is read (`client/src/pages/Ressource.tsx`). */
+export function ressourceTitle(row) {
+  return `${row.titre} — Sablia`
+}
+
 /**
  * Throws when a prerendered resource page is not the page of `row`. Values are DECODED (as read from
  * the DOM): a title « Claude & Pipedrive » compares equal to itself, never to its escaped form.
@@ -112,7 +117,7 @@ export function assertRessourceHtml(dom, row) {
       `/ressources/${row.slug}: ${what} is ${JSON.stringify(got)}, expected ${JSON.stringify(want)}`,
     )
   }
-  const wantTitle = `${row.titre} — Sablia`
+  const wantTitle = ressourceTitle(row)
   if (dom.title !== wantTitle) fail('title', dom.title, wantTitle)
   const wantCanonical = `https://sablia.io/ressources/${row.slug}`
   if (dom.canonical !== wantCanonical) fail('canonical', dom.canonical, wantCanonical)

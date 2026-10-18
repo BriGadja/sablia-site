@@ -58,9 +58,9 @@ export default function MentionsLegales() {
 
           <LegalSection title="Hébergeur du site">
             <ul>
-              <li>HOSTINGER, UAB</li>
-              <li>Švitrigailos str. 34, LT-03230 Vilnius, Lituanie</li>
-              <li>gdpr@hostinger.com</li>
+              <li>HOSTINGER INTERNATIONAL LIMITED</li>
+              <li>61 Lordou Vironos str., 6023 Larnaca, Chypre</li>
+              <li>compliance@hostinger.com</li>
             </ul>
           </LegalSection>
 
