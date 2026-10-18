@@ -1,8 +1,8 @@
 {
  "entries": [
   {
-   "body_len": 33872,
-   "body_sha256": "ac6305336315e762159cd4adc0115baee06238386fdf12d4c9aaec5c56aa5356",
+   "body_len": 33764,
+   "body_sha256": "9a25b7c1b21c8c17f87c90793d206027717ed0df5679ece792aa0ef3008a4231",
    "content_type": "text/html",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -14,8 +14,8 @@
    "status": 200
   },
   {
-   "body_len": 22749,
-   "body_sha256": "0488879fcb281970f309cf617a56f3caff6d3b30a4baa9a0c72f56c3c0d7d0ae",
+   "body_len": 22641,
+   "body_sha256": "e247f6ab8eaea69540bd37af5ef9f4929d2515fbed09c28bba170985c6b0cfed",
    "content_type": "text/html",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -27,8 +27,8 @@
    "status": 200
   },
   {
-   "body_len": 57558,
-   "body_sha256": "631f5bb9e4afeb6ae2cc6ac12244d3b148bd4a9ec635e8b9de069f26af6b3efc",
+   "body_len": 57406,
+   "body_sha256": "da0110dfa7eb40ad07b771a2249d27f65a16fa6e4d3c9c99ac561afa3b439066",
    "content_type": "text/html",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -40,8 +40,8 @@
    "status": 200
   },
   {
-   "body_len": 30172,
-   "body_sha256": "0cf2c3a8a2758800a50ff2eb0abe6103743882f8db3ec170814726f135f6b2fe",
+   "body_len": 30064,
+   "body_sha256": "33525bd71661e7cef4ded4aa36a24a2fb1d285260aa70244d639e4b69bedfd57",
    "content_type": "text/html",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -53,8 +53,8 @@
    "status": 200
   },
   {
-   "body_len": 30668,
-   "body_sha256": "6fe954bfad1c78894e55ca03bd1181d960233d4ece4a797364368ce79691a0c2",
+   "body_len": 30560,
+   "body_sha256": "c285543848871a725ac8e68d944918a0a2ef3084252accf51ee8342f73c997fe",
    "content_type": "text/html",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -66,8 +66,8 @@
    "status": 200
   },
   {
-   "body_len": 32485,
-   "body_sha256": "f944f35924fa1e91f36209eb1a9909293fda2faccb1f7ec62aba9cf554f6eb05",
+   "body_len": 32377,
+   "body_sha256": "acb896e325fe88ca7c9f4fbca27accfa6ba5ffde3c34120caa7ef118d47937b7",
    "content_type": "text/html",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -79,8 +79,8 @@
    "status": 200
   },
   {
-   "body_len": 27210,
-   "body_sha256": "6d906c0113cc45bb8b307325b52df22251ddbd1ee89717818752894f44c6f704",
+   "body_len": 27102,
+   "body_sha256": "081e14d5f9e942cc8a8d7f572385b6163f7fe8e4318a15790b2041bc73134c4d",
    "content_type": "text/html",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -92,8 +92,8 @@
    "status": 200
   },
   {
-   "body_len": 18036,
-   "body_sha256": "5cda62a32de39cf094d8eaca57423d61cd5b47a7b130a8f17eca4e623a8482ab",
+   "body_len": 17928,
+   "body_sha256": "6637a1daf7f474d3d1f0bc53de11e66176ec6ede49cccaee9039d5446f016343",
    "content_type": "text/html",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -105,8 +105,8 @@
    "status": 200
   },
   {
-   "body_len": 15991,
-   "body_sha256": "49f76f5aa53734641cd596727069839b6e7a642fb4991e4e2b930d90823bae54",
+   "body_len": 15883,
+   "body_sha256": "89971621955367b4de6475ca0fd18d98bab320b99ca7571206002a071934ffde",
    "content_type": "text/html",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -118,8 +118,8 @@
    "status": 200
   },
   {
-   "body_len": 17202,
-   "body_sha256": "b45206b894549b1b06810a126f91ed715ce8483020b2b8779a5ebf0e637e1351",
+   "body_len": 17094,
+   "body_sha256": "e8962b1d8075820c0b4fbfa481e88a00283d2be22f1fde7d886168205a50e49f",
    "content_type": "text/html",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -131,8 +131,8 @@
    "status": 200
   },
   {
-   "body_len": 16009,
-   "body_sha256": "513b16451a83b024ca5a341cf4531451c9e3e39a227b57b8bed8ac671ff67dcf",
+   "body_len": 15901,
+   "body_sha256": "9abd6a9a84431239b1ad2fdd12c7d378a94cfbca29a36d449da45208eafd4ab4",
    "content_type": "text/html",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -209,8 +209,8 @@
    "status": 200
   },
   {
-   "body_len": 33872,
-   "body_sha256": "ac6305336315e762159cd4adc0115baee06238386fdf12d4c9aaec5c56aa5356",
+   "body_len": 33764,
+   "body_sha256": "9a25b7c1b21c8c17f87c90793d206027717ed0df5679ece792aa0ef3008a4231",
    "content_type": "text/html",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -246,8 +246,21 @@
    "status": 200
   },
   {
-   "body_len": 15710,
-   "body_sha256": "84925642b55403cd10805be4cf14bb4c620d91f89375c3981eea30a2cea1b681",
+   "body_len": 15602,
+   "body_sha256": "ea70f572237f3f785fd205a44b37f209f201a0d0a0a2119d798167f66546a315",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/cgv",
+   "status": 200
+  },
+  {
+   "body_len": 15602,
+   "body_sha256": "ea70f572237f3f785fd205a44b37f209f201a0d0a0a2119d798167f66546a315",
    "content_type": "text/html",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -259,8 +272,8 @@
    "status": 200
   },
   {
-   "body_len": 11367,
-   "body_sha256": "cb4dd1384df000acc1e206a5d922020400de918eea19ac3d9f1b487d91c8e211",
+   "body_len": 11197,
+   "body_sha256": "17d4fc31cc90053accb123c798ee408e2771ce1368a00a19146bb4d30601166c",
    "content_type": "text/html",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -272,8 +285,8 @@
    "status": 200
   },
   {
-   "body_len": 33872,
-   "body_sha256": "ac6305336315e762159cd4adc0115baee06238386fdf12d4c9aaec5c56aa5356",
+   "body_len": 33764,
+   "body_sha256": "9a25b7c1b21c8c17f87c90793d206027717ed0df5679ece792aa0ef3008a4231",
    "content_type": "text/html",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -285,8 +298,8 @@
    "status": 200
   },
   {
-   "body_len": 33872,
-   "body_sha256": "ac6305336315e762159cd4adc0115baee06238386fdf12d4c9aaec5c56aa5356",
+   "body_len": 33764,
+   "body_sha256": "9a25b7c1b21c8c17f87c90793d206027717ed0df5679ece792aa0ef3008a4231",
    "content_type": "text/html",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -338,7 +351,7 @@
   },
   {
    "body_len": 79,
-   "body_sha256": "3adc1a8ac84c9e245e846d20b3e600aeb01cd7b7689c43c051480667b3342f3a",
+   "body_sha256": "0f175fd5d346a0b9d73de5438c31b8c5b3f14a9ba11f0b53110525905c2b98f3",
    "content_type": "text/plain",
    "headers": {
     "cache-control": "public, max-age=0, must-revalidate",
@@ -428,6 +441,6 @@
    "status": 400
   }
  ],
- "recorded_at": "2026-10-18T09:58:35Z",
+ "recorded_at": "2026-10-18T10:09:52Z",
  "source": "https://sablia.io"
 }

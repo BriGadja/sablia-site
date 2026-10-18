@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import ContactForm from './ContactForm'
 
-vi.mock('@vercel/analytics', () => ({ track: vi.fn() }))
+vi.mock('@/lib/analytics', () => ({ track: vi.fn() }))
 
 function stubFetch() {
   const spy = vi.fn(

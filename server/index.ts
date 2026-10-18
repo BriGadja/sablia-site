@@ -1,65 +1,37 @@
-import express, { type NextFunction, type Request, type Response } from 'express'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { createApp } from './app'
+import { log } from './log'
 import { registerRoutes } from './routes'
-import { log, serveStatic, setupVite } from './vite'
 
-const app = express()
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
-
-app.use((req, res, next) => {
-  const start = Date.now()
-  const path = req.path
-  let capturedJsonResponse: Record<string, any> | undefined
-
-  const originalResJson = res.json
-  res.json = (bodyJson, ...args) => {
-    capturedJsonResponse = bodyJson
-    return originalResJson.apply(res, [bodyJson, ...args])
-  }
-
-  res.on('finish', () => {
-    const duration = Date.now() - start
-    if (path.startsWith('/api')) {
-      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`
-      }
-
-      if (logLine.length > 80) {
-        logLine = logLine.slice(0, 79) + '…'
-      }
-
-      log(logLine)
-    }
-  })
-
-  next()
-})
+// Bound to loopback by default: in production Caddy is the only way in (plan Decision 1).
+const HOST = process.env.HOST ?? '127.0.0.1'
+const PORT = Number(process.env.PORT ?? 5000)
+const here = dirname(fileURLToPath(import.meta.url))
 
 ;(async () => {
+  const app = createApp({
+    distPath: join(here, 'public'),
+    releaseFile: process.env.RELEASE_FILE ?? join(here, '..', 'RELEASE'),
+    serveBuild: process.env.NODE_ENV !== 'development',
+  })
   const server = registerRoutes(app)
 
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500
-    const message = err.message || 'Internal Server Error'
-
-    res.status(status).json({ message })
-    throw err
-  })
-
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
-  if (app.get('env') === 'development') {
+  // The build defines NODE_ENV as "production", so this branch (and Vite) is gone from dist/index.js.
+  if (process.env.NODE_ENV === 'development') {
+    const { setupVite } = await import('./vite')
     await setupVite(app, server)
-  } else {
-    serveStatic(app)
   }
 
-  // ALWAYS serve the app on port 5000
-  // this serves both the API and the client
-  const PORT = 5000
-  server.listen(PORT, '0.0.0.0', () => {
-    log(`serving on port ${PORT}`)
+  server.listen(PORT, HOST, () => {
+    log(`serving on ${HOST}:${PORT}`)
   })
+
+  const stop = () => {
+    server.close(() => process.exit(0))
+    server.closeIdleConnections()
+    setTimeout(() => process.exit(0), 10_000).unref()
+  }
+  process.on('SIGTERM', stop)
+  process.on('SIGINT', stop)
 })()

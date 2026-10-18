@@ -13,8 +13,8 @@ const realSleep = (ms) => new Promise((r) => setTimeout(r, ms))
 /**
  * Published resources, newest first. The anon key is public by design (it ships in the bundle) but
  * is read from the environment, never committed. Three tries with a growing backoff, then throws.
- * Without the key: throws on Vercel (a build must not silently ship without its pages), warns and
- * returns [] anywhere else. An empty list is a valid answer, not an error.
+ * Without the key: throws on Vercel or when PRERENDER_STRICT is set (the self-hosted deploy sets it:
+ * a build must not silently ship without its pages), warns and returns [] anywhere else. An empty list is a valid answer, not an error.
  */
 export async function listPublishedSlugs({
   env = process.env,
@@ -24,9 +24,9 @@ export async function listPublishedSlugs({
 } = {}) {
   const key = env.VITE_SUPABASE_ANON_KEY
   if (!key) {
-    if (env.VERCEL) {
+    if (env.VERCEL || env.PRERENDER_STRICT) {
       throw new Error(
-        'VITE_SUPABASE_ANON_KEY is not set on Vercel: cannot list the resources to prerender',
+        'VITE_SUPABASE_ANON_KEY is not set on a production build (VERCEL or PRERENDER_STRICT): cannot list the resources to prerender',
       )
     }
     warn('[prerender] VITE_SUPABASE_ANON_KEY is not set: skipping /ressources/{slug} (local build)')

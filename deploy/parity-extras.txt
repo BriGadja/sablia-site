@@ -8,6 +8,7 @@ GET /.well-known/ai.txt
 GET /index.html
 HEAD /
 GET /escalier-modeles
+GET /cgv
 GET /cgv/
 GET /thank-you
 GET /nimporte-quoi

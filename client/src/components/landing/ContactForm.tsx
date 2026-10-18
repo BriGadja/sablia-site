@@ -1,6 +1,6 @@
-import { track } from '@vercel/analytics'
 import { type FormEvent, useRef, useState } from 'react'
 import { FOUND_VIA_EMPTY, FOUND_VIA_LABEL, FOUND_VIA_OPTIONS } from '@/content/found-via'
+import { track } from '@/lib/analytics'
 import { site } from '@/lib/site'
 
 /**

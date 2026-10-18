@@ -115,6 +115,35 @@ describe('listPublishedSlugs', () => {
     assert.equal(called, false)
   })
 
+  it('throws at once when PRERENDER_STRICT is set (self-hosted build) and the anon key is missing', async () => {
+    let called = false
+    await assert.rejects(
+      listPublishedSlugs({
+        env: { PRERENDER_STRICT: '1' },
+        fetch: async () => {
+          called = true
+        },
+        sleep: noSleep,
+      }),
+      /VITE_SUPABASE_ANON_KEY/,
+    )
+    assert.equal(called, false)
+  })
+
+  it('only warns without the key when neither VERCEL nor PRERENDER_STRICT is set', async () => {
+    const warnings = []
+    const rows = await listPublishedSlugs({
+      env: {},
+      fetch: async () => {
+        throw new Error('must not be called')
+      },
+      sleep: noSleep,
+      warn: (m) => warnings.push(m),
+    })
+    assert.deepEqual(rows, [])
+    assert.equal(warnings.length, 1)
+  })
+
   it('throws on a non-OK response (after the retries)', async () => {
     let n = 0
     await assert.rejects(

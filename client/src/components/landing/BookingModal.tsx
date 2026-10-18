@@ -1,4 +1,4 @@
-import { track } from '@vercel/analytics'
+import { track } from '@/lib/analytics'
 import { site } from '@/lib/site'
 
 export function openBookingUrl(url: string) {

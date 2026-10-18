@@ -1,0 +1,3 @@
+# Differences from Vercel that are deliberate (scripts/site-parity.py --allowed).
+# Vercel answered an unknown /api path with its own HTML-ish 404 text; ours is plain "Not Found".
+body ^/api/nope$

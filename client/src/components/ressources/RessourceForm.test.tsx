@@ -8,7 +8,7 @@ import RessourceForm from './RessourceForm'
  * the email stays required. The field only exists once the box is ticked, so an unticked visitor
  * is never asked for a number nobody will call.
  */
-vi.mock('@vercel/analytics', () => ({ track: vi.fn() }))
+vi.mock('@/lib/analytics', () => ({ track: vi.fn() }))
 
 function stubFetch() {
   const spy = vi.fn(

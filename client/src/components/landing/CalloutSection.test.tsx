@@ -1,11 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import { track } from '@vercel/analytics'
 import { describe, expect, it, vi } from 'vitest'
 import { FINAL_CALL_TITLE } from '@/content/home'
+import { track } from '@/lib/analytics'
 import { site } from '@/lib/site'
 import CalloutSection from './CalloutSection'
 
-vi.mock('@vercel/analytics', () => ({ track: vi.fn() }))
+vi.mock('@/lib/analytics', () => ({ track: vi.fn() }))
 
 /** US-11, the final call of the home (grill decisions 3 and 6, 2026-09-28). */
 describe('CalloutSection', () => {
