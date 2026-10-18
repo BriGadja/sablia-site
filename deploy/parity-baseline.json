@@ -1,0 +1,433 @@
+{
+ "entries": [
+  {
+   "body_len": 33872,
+   "body_sha256": "ac6305336315e762159cd4adc0115baee06238386fdf12d4c9aaec5c56aa5356",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/",
+   "status": 200
+  },
+  {
+   "body_len": 22749,
+   "body_sha256": "0488879fcb281970f309cf617a56f3caff6d3b30a4baa9a0c72f56c3c0d7d0ae",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/guides/integrer-l-ia-dans-votre-entreprise",
+   "status": 200
+  },
+  {
+   "body_len": 57558,
+   "body_sha256": "631f5bb9e4afeb6ae2cc6ac12244d3b148bd4a9ec635e8b9de069f26af6b3efc",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/offres/compte-rendu-appel",
+   "status": 200
+  },
+  {
+   "body_len": 30172,
+   "body_sha256": "0cf2c3a8a2758800a50ff2eb0abe6103743882f8db3ec170814726f135f6b2fe",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/offres/compte-rendu-appel/hubspot",
+   "status": 200
+  },
+  {
+   "body_len": 30668,
+   "body_sha256": "6fe954bfad1c78894e55ca03bd1181d960233d4ece4a797364368ce79691a0c2",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/offres/compte-rendu-appel/zoho",
+   "status": 200
+  },
+  {
+   "body_len": 32485,
+   "body_sha256": "f944f35924fa1e91f36209eb1a9909293fda2faccb1f7ec62aba9cf554f6eb05",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/offres/compte-rendu-appel/salesforce",
+   "status": 200
+  },
+  {
+   "body_len": 27210,
+   "body_sha256": "6d906c0113cc45bb8b307325b52df22251ddbd1ee89717818752894f44c6f704",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/offres/compte-rendu-appel/pipedrive",
+   "status": 200
+  },
+  {
+   "body_len": 18036,
+   "body_sha256": "5cda62a32de39cf094d8eaca57423d61cd5b47a7b130a8f17eca4e623a8482ab",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/ressources",
+   "status": 200
+  },
+  {
+   "body_len": 15991,
+   "body_sha256": "49f76f5aa53734641cd596727069839b6e7a642fb4991e4e2b930d90823bae54",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/ressources/veille-du-matin",
+   "status": 200
+  },
+  {
+   "body_len": 17202,
+   "body_sha256": "b45206b894549b1b06810a126f91ed715ce8483020b2b8779a5ebf0e637e1351",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/ressources/skill-devis",
+   "status": 200
+  },
+  {
+   "body_len": 16009,
+   "body_sha256": "513b16451a83b024ca5a341cf4531451c9e3e39a227b57b8bed8ac671ff67dcf",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/ressources/pipedrive-nouveau-lead",
+   "status": 200
+  },
+  {
+   "body_len": 2061,
+   "body_sha256": "03e45b184d0cc70f17463fd0186c7bff168efcfbf01dd158c67bc4f334be3feb",
+   "content_type": "application/xml",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/sitemap.xml",
+   "status": 200
+  },
+  {
+   "body_len": 699,
+   "body_sha256": "5c56f3da16fa25a9e7d3b24e2625d3046c145cf327e14dd4d62b3035186b26a3",
+   "content_type": "text/plain",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/robots.txt",
+   "status": 200
+  },
+  {
+   "body_len": 5508,
+   "body_sha256": "92f53a001e98556a817534689e5909a649917be09b8e7c15f8991a5060574e35",
+   "content_type": "text/plain",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/llms.txt",
+   "status": 200
+  },
+  {
+   "body_len": 32,
+   "body_sha256": "2e724e2f17de407b83d2ee3a51be83b1ffef8cd99c355cac63a417afe01409e5",
+   "content_type": "text/plain",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/b726ffc356cf2894abdd81a5a309a181.txt",
+   "status": 200
+  },
+  {
+   "body_len": 473,
+   "body_sha256": "823ce1207675f1e02e149b8e01c8ccf14f3ec66d242dbe713c6519fdc8cd35af",
+   "content_type": "text/plain",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/.well-known/ai.txt",
+   "status": 200
+  },
+  {
+   "body_len": 33872,
+   "body_sha256": "ac6305336315e762159cd4adc0115baee06238386fdf12d4c9aaec5c56aa5356",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/index.html",
+   "status": 200
+  },
+  {
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "HEAD",
+   "path": "/",
+   "status": 200
+  },
+  {
+   "body_len": 18997,
+   "body_sha256": "2f3e275c7d7b1a011f2b0301ff73030356bb4a2f90134539019ccc0de8beaede",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/escalier-modeles",
+   "status": 200
+  },
+  {
+   "body_len": 15710,
+   "body_sha256": "84925642b55403cd10805be4cf14bb4c620d91f89375c3981eea30a2cea1b681",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/cgv/",
+   "status": 200
+  },
+  {
+   "body_len": 11367,
+   "body_sha256": "cb4dd1384df000acc1e206a5d922020400de918eea19ac3d9f1b487d91c8e211",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/thank-you",
+   "status": 200
+  },
+  {
+   "body_len": 33872,
+   "body_sha256": "ac6305336315e762159cd4adc0115baee06238386fdf12d4c9aaec5c56aa5356",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/nimporte-quoi",
+   "status": 200
+  },
+  {
+   "body_len": 33872,
+   "body_sha256": "ac6305336315e762159cd4adc0115baee06238386fdf12d4c9aaec5c56aa5356",
+   "content_type": "text/html",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/assets/x.js",
+   "status": 200
+  },
+  {
+   "body_len": 539,
+   "body_sha256": "f1857d32051ea370e02353aee9d9e76b3c17710a6317b6feeebe085f4dec709e",
+   "content_type": "image/svg+xml",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/favicon.svg",
+   "status": 200
+  },
+  {
+   "body_len": 233,
+   "body_sha256": "77f70db78ed98d5e6f6b0727fb761ae7569fcd00231c72ad3a8be96c5e07fd24",
+   "content_type": "image/svg+xml",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/brand/symbol.svg",
+   "status": 200
+  },
+  {
+   "body_len": 36068,
+   "body_sha256": "491962054b1b2c4ac0ef32dd57198f9192a26062d6584464a83a19679e1e1644",
+   "content_type": "image/webp",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/photos/accueil-meetup-ecran-720.webp",
+   "status": 200
+  },
+  {
+   "body_len": 79,
+   "body_sha256": "3adc1a8ac84c9e245e846d20b3e600aeb01cd7b7689c43c051480667b3342f3a",
+   "content_type": "text/plain",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/api/nope",
+   "status": 404
+  },
+  {
+   "body_len": 0,
+   "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "content_type": "",
+   "headers": {
+    "allow": "POST",
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/api/contact",
+   "status": 405
+  },
+  {
+   "content_type": "",
+   "headers": {
+    "allow": "POST",
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "HEAD",
+   "path": "/api/contact",
+   "status": 405
+  },
+  {
+   "body_len": 84,
+   "body_sha256": "fcc0691bba4afa6e37429179a1291ac87fddcd8ae4e7fd05906b740f1452225b",
+   "content_type": "application/json",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "POST",
+   "path": "/api/contact",
+   "status": 400
+  },
+  {
+   "body_len": 0,
+   "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "content_type": "",
+   "headers": {
+    "allow": "POST",
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "GET",
+   "path": "/api/ressources-request",
+   "status": 405
+  },
+  {
+   "content_type": "",
+   "headers": {
+    "allow": "POST",
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "HEAD",
+   "path": "/api/ressources-request",
+   "status": 405
+  },
+  {
+   "body_len": 86,
+   "body_sha256": "af65b1ff922b6aac2a18bb3436cb46fa511d3003a7e31a5af37d2b71b593373d",
+   "content_type": "application/json",
+   "headers": {
+    "cache-control": "public, max-age=0, must-revalidate",
+    "strict-transport-security": "max-age=63072000"
+   },
+   "location": null,
+   "method": "POST",
+   "path": "/api/ressources-request",
+   "status": 400
+  }
+ ],
+ "recorded_at": "2026-10-18T09:58:35Z",
+ "source": "https://sablia.io"
+}

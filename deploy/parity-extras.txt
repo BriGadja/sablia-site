@@ -1,0 +1,24 @@
+# Routes compared on top of every sitemap URL (scripts/site-parity.py in the hub).
+# Format: METHOD /path. Each line is a behaviour Vercel gave sablia.io before the VPS move.
+GET /sitemap.xml
+GET /robots.txt
+GET /llms.txt
+GET /b726ffc356cf2894abdd81a5a309a181.txt
+GET /.well-known/ai.txt
+GET /index.html
+HEAD /
+GET /escalier-modeles
+GET /cgv/
+GET /thank-you
+GET /nimporte-quoi
+GET /assets/x.js
+GET /favicon.svg
+GET /brand/symbol.svg
+GET /photos/accueil-meetup-ecran-720.webp
+GET /api/nope
+GET /api/contact
+HEAD /api/contact
+POST /api/contact
+GET /api/ressources-request
+HEAD /api/ressources-request
+POST /api/ressources-request

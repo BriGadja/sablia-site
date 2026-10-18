@@ -39,6 +39,8 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Surface : /ressources/:slug (page détail + `RessourceForm` → `POST /api/ressources-request`)
 - Parcours : (cible) ouvrir une carte de /ressources → lire le détail (vidéo YouTube si présente, corps, fichiers derrière le formulaire) → remplir prénom + email, case décochée → envoyer
 - Oracle : réponse `200 { ok, files, lead }` ; les liens des fichiers s'affichent à l'écran (« C'est à vous », « Le lien vous est aussi envoyé par mail ») ; ligne `sabcrm_leads` relue avec `source='contenu'`, `owner='Brice'`, `stage='nouveau'` ; mail Resend reçu par le visiteur (« Votre ressource Sablia : {titre} ») ; slug inconnu ou `published=false` → 404 « Ressource introuvable », page en `noindex`
+- Exemple : Étant donné la ressource publiée `pipedrive-nouveau-lead` et un visiteur « Claire Martin » (`claire@atelier-verde.example`), case « contacté » décochée / Quand il envoie le formulaire de la page / Alors la réponse est 200 `{ok, files, lead}`, les liens s'affichent, la ligne `sabcrm_leads` porte `source='contenu'`, `stage='nouveau'`, `owner='Brice'` et le mail « Votre ressource Sablia : … » part
+- Test : vitest api/ressources-request.test.ts + client/src/components/ressources/RessourceForm.test.tsx + server/api-adapter.test.ts
 - Statut : JAMAIS-PASSÉE
 - Source : plan `sablia-machine-de-contenu.md` T25-T28/T34 (NS-19, décision D7) ; marchée en preview le 2026-09-22 (POST réel relu en base et mail Gmail confirmé), prod = geste de Brice (Règle 15)
 
@@ -46,6 +48,8 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Surface : /ressources/:slug (case « Je souhaite être contacté par Sablia », décochée par défaut) → `POST /api/ressources-request`
 - Parcours : (cible) ouvrir une ressource → remplir le formulaire, cocher la case → (facultatif) laisser un téléphone dans le champ qui apparaît → envoyer
 - Oracle : ligne `sabcrm_leads` relue avec `stage='a_contacter'`, `owner='Raphael'` (sans accent) ; avec un téléphone : `phone` au format `+33…` et `next_action` = « Rappeler au 06 … : a demandé à être contacté depuis /ressources/{slug} » ; sans téléphone : `phone` vide et `next_action` = « Écrire (aucun numéro laissé) : a demandé à être contacté depuis /ressources/{slug} » ; le mail du visiteur porte « Vous avez demandé à être contacté : on vous appelle au … / on vous répond par mail sous 24 h ouvrées. » et l'écran de succès « on revient vers vous sous 24 h ouvrées » ; second mail interne envoyé à brice@sablia.io (+ Raphaël dès confirmation V3) avec la ligne « Téléphone : … » ; numéro illisible → 400 « Numéro de téléphone invalide » ; case décochée → pas de champ téléphone, aucun de ces effets, `stage='nouveau'`, `owner='Brice'`
+- Exemple : Étant donné la même ressource et la case « Je souhaite être contacté par Sablia » cochée avec le téléphone `06 12 34 56 78` / Quand le visiteur envoie / Alors la ligne `sabcrm_leads` porte `stage='a_contacter'`, `owner='Raphael'`, `phone='+33612345678'` et `next_action` « Rappeler au 06 12 34 56 78 : a demandé à être contacté depuis /ressources/pipedrive-nouveau-lead » ; puis sans téléphone → `next_action` « Écrire (aucun numéro laissé) : … »
+- Test : vitest api/ressources-request.test.ts + client/src/components/ressources/RessourceForm.test.tsx
 - Statut : JAMAIS-PASSÉE
 - Source : plan `sablia-machine-de-contenu.md` T27/T28/T34 (NS-19, décision D7) ; marchée en preview le 2026-09-22, prod = geste de Brice (Règle 15) ; amendée le 2026-10-12 (Brice : le premier lead qui a coché la case, Achille, est arrivé sur Raphaël en « Rappeler » sans aucun numéro à appeler, et son mail ne disait pas que la demande était entendue) — champ téléphone facultatif, mail et écran qui accusent réception ; tests `api/ressources-request.test.ts` + `client/src/components/ressources/RessourceForm.test.tsx`
 
@@ -116,6 +120,8 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Surface : / (formulaire `#contact` dans la section Formations, aussi via le lien « Nous écrire » du pied de page ; « Contact » a quitté la nav le 2026-09-28) → `POST /api/contact` (fonction Vercel)
 - Parcours : (cible) remplir nom, société, email, taille d'équipe, texte libre → envoyer
 - Oracle : mail reçu dans brice@sablia.io (Resend, `send.sablia.io`) ET ligne `sabcrm_leads` relue avec `source = 'formation'`, owner Brice ; aucune ligne `sabcrm_lead_sequences` pour ce lead
+- Exemple : Étant donné un visiteur qui remplit nom « Claire Martin », société « Atelier Verde », email `claire@atelier-verde.example`, équipe « 5-10 », message « Nous voulons relier Pipedrive à Claude » et attend 4 s / Quand il envoie / Alors `POST /api/contact` répond 200, brice@sablia.io reçoit le mail « Demande via sablia.io : Atelier Verde » et `sabcrm_leads` porte une ligne `source='formation'`, `owner='Brice'`
+- Test : vitest api/contact.test.ts (fonction) + server/api-adapter.test.ts (même fonction servie par Express, lot 0 VPS)
 - Statut : VALIDÉE 2026-09-18 @88fd143 (PROD)
 - Source : brief D10 2026-09-18, A7, AC-5/AC-6 ; hébergement fonction Vercel — validé par Brice le 2026-09-18. **Marchée sur la PRODUCTION par 03-validate le 2026-09-18** : formulaire rempli dans le navigateur partagé sur `https://sablia.io/#contact`, honeypot vide, 7,6 s après le montage → `POST /api/contact` **200**, bloc de succès rendu ; ligne `981f7fc8-20e8-41e8-a855-c5622a3f5cd2` relue (`source='formation'`, `owner='Brice'`, `stage='nouveau'`, `updated_by='sablia-site/api/contact'`), **0 ligne dans les 6 tables filles** lues AVANT la suppression, puis `delete … returning` 1 ligne et relecture à 0 (base revenue de 138 à 137, 0 orphelin). Le 200 prouve que le runtime de PRODUCTION lit bien `RESEND_API_KEY` et `SUPABASE_SERVICE_ROLE_KEY` (sinon 500 `not_configured` ou 502 `mail_failed`). Preuve antérieure conservée : envoi de 02-execute sur la preview `sablia-site-git-autopilot-2026-d7c176-brices-projects-c5e1ba72.vercel.app` (lead `ef4b285d-4fb0-4d6e-9d5a-4c6bc57bfe69`, supprimé), mail Gmail `1a0b3ef5656b9a04` confirmé par l'orchestrateur
 
@@ -123,6 +129,8 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Surface : `POST /api/contact`
 - Parcours : `curl` × 3 : champ caché rempli ; délai < 3 s ; payload sans email
 - Oracle : 204 sans mail ni ligne en base pour les deux premiers ; 400 pour le troisième
+- Exemple : Étant donné un robot qui remplit le champ caché `website` / Quand il envoie `POST /api/contact` / Alors la réponse est 204, sans mail ni ligne en base ; puis un envoi 1 s après le chargement → 204 ; puis un corps sans email → 400 `{"error":…,"code":…}`
+- Test : vitest api/contact.test.ts + server/api-adapter.test.ts
 - Statut : VALIDÉE 2026-09-18 @88fd143
 - Source : brief D10 2026-09-18, A7, AC-5
 
@@ -172,9 +180,9 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Source : brief § Décisions du grill, Q2b et Q2d ; doc Anthropic des robots (ClaudeBot, Claude-User, Claude-SearchBot) https://support.claude.com/en/articles/8896518
 
 ## US-57 — Chaque mise en ligne réussie en production prévient IndexNow [script]
-- Surface : clé publique `client/public/{clé}.txt` ; `scripts/seo/indexnow.mjs` ; action GitHub `indexnow.yml` (dossier des workflows du dépôt) sur `deployment_status` (production, état `success`)
-- Parcours : (cible) fusion d'une PR → déploiement Vercel réussi → l'action s'exécute ; `node scripts/seo/indexnow.mjs --dry-run --sitemap <nouveau> --previous-sitemap <ancien>`
-- Oracle : la clé est servie à `https://sablia.io/{clé}.txt` et son contenu est la clé ; l'action ne s'exécute que pour la production en `success` ; la liste envoyée = les URL NOUVELLES ou dont le `lastmod` a changé entre le plan du déploiement de production précédent et celui du déploiement qui vient de réussir (jamais tout le site à chaque déploiement ; une option `--all` sert à la première soumission), au plus 10 000, hôte `sablia.io` ; une réponse 200 ou 202 est un succès, 422 et 429 sont signalées sans faire échouer l'action, 400 et 403 la font échouer
+- Surface : clé publique `client/public/{clé}.txt` ; `scripts/seo/indexnow.mjs` ; depuis le lot 0 VPS, `deploy/deploy.sh prod` lance le script après chaque bascule réussie quand `INDEXNOW_ENABLED=1` (l'action `indexnow.yml` ne sert plus que de secours manuel, `workflow_dispatch`) ; avant le lot 0 : l'action sur `deployment_status` (production, état `success`)
+- Parcours : (cible) fusion d'une PR → `deploy.sh prod` réussit sur le VPS → `deploy.sh` exécute `node scripts/seo/indexnow.mjs --sitemap <nouveau> --previous-sitemap <ancien>` ; `node scripts/seo/indexnow.mjs --dry-run --sitemap <nouveau> --previous-sitemap <ancien>`
+- Oracle : la clé est servie à `https://sablia.io/{clé}.txt` et son contenu est la clé ; le déclencheur ne tourne que pour la production après une bascule réussie (le journal de déploiement le dit, `INDEXNOW_ENABLED=0` ne soumet rien) ; la liste envoyée = les URL NOUVELLES ou dont le `lastmod` a changé entre le plan du déploiement de production précédent et celui du déploiement qui vient de réussir (jamais tout le site à chaque déploiement ; une option `--all` sert à la première soumission), au plus 10 000, hôte `sablia.io` ; une réponse 200 ou 202 est un succès, 422 et 429 sont signalées sans faire échouer l'action, 400 et 403 la font échouer
 - Exemple : Étant donné deux fichiers de plan, l'ancien à 9 URL et le nouveau à 10 URL dont 1 ajoutée et 1 au `lastmod` changé / Quand le script tourne à blanc avec `--sitemap nouveau.xml --previous-sitemap ancien.xml` / Alors il imprime une liste de 2 URL, l'hôte `sablia.io`, la clé et l'emplacement de sa clé, sans aucun appel réseau
 - Test : [script] node --test scripts/seo/indexnow.test.mjs (dans `sablia-site`)
 - Statut : VALIDÉE 2026-10-12 @d00d89d (prod sablia.io, PR #16 fa76f80 + #17 d00d89d, clé servie en 200 ; action `indexnow.yml` run 38320526302 : 8 URL nouvelles envoyées, réponse 202, `/` + guide soumis à la main, 200 ; défaut du redéploiement à l'identique corrigé par #17 : run 38321234118 après correctif = `urls: 0`, « nothing to submit » ; INFRA.md `2c536674`)
@@ -224,3 +232,57 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Test : vitest `client/src/pages/CrmPage.test.tsx -t pipedrive` et `client/src/content/crm/crm.doorway.test.ts`
 - Statut : VALIDÉE 2026-10-12 @d00d89d (prod sablia.io, PR #16 fa76f80 + #17 d00d89d, page prod à 390 et 1440 sans débordement ; `crm-ledger-check.py pipedrive.md` 8 PASS ; ligne de preuve anonyme verbatim, `grep -ril norloc client api scripts` vide ; garde « doorway » verte ; `site-check` prod 15/15 ; la matérialité du fait « en production depuis avril 2026 » est une décision de Brice (grill Q9), non vérifiée par le relecteur)
 - Source : brief § Décisions du grill, Q7 et Q9 (cas réel jamais nommé sans accord écrit)
+
+## US-63 — Le site sort de notre serveur exactement comme il sortait de Vercel [script]
+- Surface : toutes les routes de `https://sablia.io` (puis `https://preview.sablia.io`), servies par `server/` (Express) derrière Caddy ; `POST /api/contact` et `POST /api/ressources-request` ; `/healthz`
+- Parcours : (cible) `python3 scripts/site-parity.py --baseline deploy/parity-baseline.json --b http://127.0.0.1:5000 --extras deploy/parity-extras.txt` (dépôt hub)
+- Oracle : pour chaque URL du plan du site et chaque URL de `deploy/parity-extras.txt`, le statut, le type de contenu, la cible d'une redirection et le corps normalisé sont ceux de Vercel (liste des écarts permis : en-têtes propres à Vercel, `date`, `etag`, nom du paquet JavaScript haché, cache longue durée des `/assets/*`) ; `/cgv` et `/cgv/` répondent 200 (pas de 301) ; `/escalier-modeles` sert `escalier-modeles.html` ; une page inconnue sert l'accueil en 200 ; `/api/contact` en GET répond 405 avec `allow: POST` ; `/healthz` répond `{ok, release}`
+- Exemple : Étant donné la ligne `/cgv` du fichier de référence prise sur Vercel le 2026-10-18 (200, `text/html`) / Quand le script compare notre serveur / Alors il imprime `OK /cgv 200` et sort 0 ; puis, si notre serveur répondait 301, il imprime `DIFF /cgv status 200 != 301` et sort 1
+- Test : [script] python3 scripts/site-parity.py (dépôt hub, voir Parcours) + vitest server/ (static, api-adapter, healthz)
+- Statut : BROUILLON
+- Source : décisions du grill 2026-10-16 (`research/site-theophile-2026-10/decisions.md` § Lot 0) ; plan `sablia-io-lot0-vps.md` Phase B ; écarts mesurés le 2026-10-18 : `/cgv` 301, `/escalier-modeles` SPA, `/api/contact` HTML 200
+
+## US-64 — Chaque fusion sur `main` met le site en ligne toute seule, et un retour arrière tient en une commande [script]
+- Surface : `deploy/deploy.sh` (minuteur systemd `sablia-site-deploy.timer`, deux emplacements `prod` et `preview`), `/healthz`
+- Parcours : (cible) `bash deploy/deploy.test.sh` ; en réel, pousser sur la référence de l'emplacement `preview` puis lire `/healthz`
+- Oracle : une construction qui échoue, un essai de fumée qui échoue ou un contrôle après bascule qui échoue ne change JAMAIS l'emplacement en ligne ; `deploy.sh rollback <emplacement>` remet la version précédente en quelques secondes ; un sha déjà en ligne ne reconstruit rien ; deux déploiements ne tournent jamais ensemble ; seules les 3 dernières versions restent ; `/healthz.release` = la version servie
+- Exemple : Étant donné `prod` servant la version `a1b2c3d` et un nouveau commit `e4f5a6b` dont la construction échoue / Quand le minuteur lance `deploy.sh prod` / Alors `prod` sert toujours `a1b2c3d`, un marqueur `failed-e4f5a6b` existe et une alerte est écrite ; puis le commit suivant, sain, est mis en ligne et `rollback` revient à `a1b2c3d`
+- Test : [script] bash deploy/deploy.test.sh
+- Statut : BROUILLON
+- Source : grill 2026-10-16 § « ce que le VPS apporte et coûte » ; plan Phase F, amendements R1-R3
+
+## US-65 — On sait où les visiteurs cliquent, jusqu'où ils défilent, sans cookie et sans les suivre [script]
+- Surface : toutes les pages (script `/m/a.js` servi par notre propre origine) ; tableau de bord `stats.sablia.io`
+- Parcours : (cible) `node scripts/analytics-e2e.mjs --base https://preview.sablia.io`
+- Oracle : sans consentement, chaque clic (libellé et zone), chaque clic sur « Réserver 30 min » (`cta_book`), chaque lien sortant (hôte seul) et chaque palier de défilement 25/50/75/100 % arrive dans Umami avec ses propriétés ; aucun cookie (`document.cookie` vide), rien dans `localStorage` hormis `sablia_consent`, aucune requête vers un autre domaine avant consentement ; les événements vidéo (`video_*`) et formulaire (`form_*`) n'existent qu'après « Tout accepter » ; un site autre que `sablia.io` / `preview.sablia.io` ne mesure rien
+- Exemple : Étant donné la page d'accueil de l'aperçu et un visiteur sans consentement / Quand il clique sur « Réserver 30 min » du bandeau du haut puis défile jusqu'à la moitié / Alors Umami reçoit `cta_book` avec `zone='nav'` et `scroll_50` avec `page='/'`, et `document.cookie` vaut `''`
+- Test : [script] node scripts/analytics-e2e.mjs --base https://preview.sablia.io + vitest client/src/lib/analytics.test.ts
+- Statut : BROUILLON
+- Source : grill 2026-10-16 § Mesure (« je veux qu'on monitore un maximum ») ; plan Phase C et E ; découpage des événements sans consentement après la grille de la CNIL (trois types d'évènements)
+
+## US-66 — Le bandeau : refuser est aussi simple qu'accepter, et l'enregistrement des écrans n'existe qu'après « Tout accepter » [chemin-critique]
+- Surface : toutes les pages (bandeau en bas), lien « Gérer mes choix » dans le pied de page, `/politique-confidentialite`
+- Parcours : (cible) ouvrir l'aperçu sur un téléphone → lire le bandeau → « Tout refuser » → recharger → ouvrir « Gérer mes choix » → « Tout accepter »
+- Oracle : « Tout refuser » et « Tout accepter » ont la même taille, le même poids, la même rangée ; le silence vaut refus ; refuser ne charge jamais `recorder.js` ; accepter le charge une fois ; « Gérer mes choix » rouvre le bandeau et retirer son accord recharge la page ; le choix expire au bout de 6 mois ; l'HTML prérendu ne contient ni le bandeau ni un script de mesure ; les formulaires ne sont jamais enregistrés
+- Exemple : Étant donné un visiteur qui ouvre l'accueil de l'aperçu sur un téléphone de 390 px de large / Quand il appuie sur « Tout refuser » puis recharge la page / Alors le bandeau ne revient pas, aucune requête vers `/m/r.js` n'est partie, et `localStorage['sablia_consent']` vaut `{v:1, replay:false, at:…}` ; puis il appuie sur « Gérer mes choix » dans le pied de page et sur « Tout accepter » : `/m/r.js` est demandé une fois
+- Test : vitest client/src/lib/consent.test.ts + client/src/components/consent/ConsentBanner.test.tsx + marche navigateur sur l'aperçu, 390 px
+- Statut : BROUILLON
+- Source : grill 2026-10-16 (« bandeau où refuser est aussi simple qu'accepter ») ; plan Phase D ; texte du bandeau et de la politique de confidentialité à valider par Brice
+
+## US-67 — La vidéo d'une ressource ne charge YouTube qu'après un clic [script]
+- Surface : `/ressources/:slug` (composant `VideoFacade`), HTML prérendu de chaque ressource
+- Parcours : (cible) `npx vitest run client/src/pages/Ressource.test.tsx` ; `grep -rl '<iframe' dist/public/ressources` ne trouve rien
+- Oracle : avant le clic, la page ne contient aucun `<iframe` ni requête vers `youtube-nocookie.com` ; après le clic, l'iframe `https://www.youtube-nocookie.com/embed/{id}` apparaît ; le HTML prérendu des ressources ne contient aucun `<iframe`
+- Exemple : Étant donné la ressource `pipedrive-nouveau-lead` avec `youtube_id='d5fo00AFqVM'` / Quand la page se charge / Alors le DOM n'a aucun `iframe` et affiche l'image d'ouverture ; puis un clic → l'iframe `youtube-nocookie.com/embed/d5fo00AFqVM` est montée
+- Test : vitest client/src/pages/Ressource.test.tsx
+- Statut : BROUILLON
+- Source : grill 2026-10-16 (défaut CNIL repéré : l'iframe se chargeait sans clic sur `Ressource.tsx`) ; plan Phase D4
+
+## US-68 — Le site et n8n sont surveillés depuis l'extérieur du serveur [script]
+- Surface : flux de travail GitHub `uptime.yml` (toutes les 10 minutes) ; issues GitHub étiquetées `uptime`
+- Parcours : (cible) lancer `uptime.yml` à la main avec une cible forcée en panne, puis une seconde fois
+- Oracle : la sonde interroge `https://sablia.io/` et `https://n8n.sablia.io/healthz` ; une panne ouvre UNE issue `uptime` (jamais deux ouvertes en même temps) ; le corps de la réponse n'est jamais copié dans l'issue ; le retour au vert est visible dans le journal
+- Exemple : Étant donné la cible forcée `https://sablia.io/__down` / Quand la sonde tourne deux fois de suite / Alors une seule issue `uptime` est ouverte et la seconde exécution la commente sans en créer une autre
+- Test : [script] gh workflow run uptime.yml -f target=https://sablia.io/__down puis gh issue list --label uptime
+- Statut : BROUILLON
+- Source : grill 2026-10-16 (le site et n8n partagent une seule machine) ; plan Phase F5, amendement R7
