@@ -49,10 +49,14 @@ describe('politique de confidentialité', () => {
 })
 
 describe('mentions légales', () => {
-  it('names Hostinger as host, no longer Vercel', () => {
+  // The contracting entity for a customer in France is the Cyprus company: Hostinger's Universal Terms
+  // of Service § 2 (« any other country not listed above (including EU countries) »), France being in
+  // neither Group No. 1 nor Group No. 2 of hostinger.com/legal/list-of-countries (read 2026-10-18).
+  it('names the Hostinger entity that contracts with a French customer, no longer Vercel', () => {
     const t = text(<MentionsLegales />)
-    expect(t).toContain('HOSTINGER, UAB')
-    expect(t).toContain('Vilnius')
+    expect(t).toContain('HOSTINGER INTERNATIONAL LIMITED')
+    expect(t).toContain('61 Lordou Vironos str., 6023 Larnaca, Chypre')
+    expect(t).not.toContain('Vilnius')
     expect(t).not.toContain('Vercel Inc.')
   })
 })
