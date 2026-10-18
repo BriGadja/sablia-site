@@ -1,0 +1,51 @@
+[Unit]
+Description=sablia.io site, slot %i (Node behind Caddy)
+Documentation=https://github.com/BriGadja/sablia-site/tree/main/deploy
+After=network.target
+
+[Service]
+Type=simple
+User=sablia-site
+Group=sablia-site
+WorkingDirectory=/opt/sablia/sites/sablia-site/%i
+# PORT and the two secrets (RESEND_API_KEY, SUPABASE_SERVICE_ROLE_KEY): root:root 600, read by systemd only.
+EnvironmentFile=/etc/sablia-site/%i.env
+Environment=NODE_ENV=production
+Environment=HOST=127.0.0.1
+Environment=RELEASE_FILE=/opt/sablia/sites/sablia-site/%i/RELEASE
+# The release contract (Lot 3 keeps it): a release directory holds bin/start and RELEASE.
+ExecStart=/opt/sablia/sites/sablia-site/%i/bin/start
+Restart=always
+RestartSec=2
+TimeoutStopSec=15
+
+# Hardening. The server writes nothing: logs go to the journal, and ReadWritePaths stays EMPTY on
+# purpose. If it ever needs to write somewhere it will fail loudly — fix the app, never widen this.
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=yes
+InaccessiblePaths=/home /root /etc/sablia-site
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+LockPersonality=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+RestrictNamespaces=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @resources
+CapabilityBoundingSet=
+AmbientCapabilities=
+UMask=0077
+MemoryMax=512M
+TasksMax=128
+
+[Install]
+WantedBy=multi-user.target

@@ -1,61 +1,51 @@
-# Submits changed sablia.io URLs to IndexNow after a successful Production deploy.
-# Depends on the Vercel Git setting "deployment_status Events" being ON for this project
-# (Vercel > Project > Settings > Git); without it Vercel never emits the event and this
-# workflow never runs. URL selection = sitemap diff against the previous Production
-# deployment (scripts/seo/indexnow.mjs). 422/429 answers are warnings, not failures.
+# MANUAL fallback for IndexNow. Since the move to our own server (plan sablia-io-lot0-vps) the
+# submission is made by deploy/deploy.sh itself after every successful production switch (gate:
+# INDEXNOW_ENABLED in /etc/sablia-site/deploy.env on the host), because Vercel no longer emits the
+# `deployment_status` event this workflow used to wait for. Run it by hand to (re)submit URLs, e.g.
+# after a host problem. URL selection = sitemap diff, or every URL with `all` (scripts/seo/indexnow.mjs).
+# 422/429 answers are warnings, not failures.
 name: IndexNow
 
-on: deployment_status
+on:
+  workflow_dispatch:
+    inputs:
+      new_url:
+        description: 'Base URL whose /sitemap.xml is the new sitemap'
+        required: false
+        default: 'https://sablia.io'
+      previous_url:
+        description: 'Base URL whose /sitemap.xml is the previous sitemap (empty = submit everything)'
+        required: false
+        default: ''
+      all:
+        description: 'Submit every URL of the new sitemap'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
-  deployments: read
 
 jobs:
   submit:
-    if: >-
-      github.event.deployment_status.state == 'success' &&
-      github.event.deployment_status.environment == 'Production'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.deployment.sha }}
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - name: Find previous Production deployment URL
-        id: prev
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-          CURRENT_ID: ${{ github.event.deployment.id }}
-        run: |
-          # A redeploy of the same commit (scripts/site-redeploy.py, Vercel API) reuses the SAME
-          # GitHub deployment and adds a new success status: its previous success status is the
-          # sitemap to diff against. Without this, the run skipped the current id and diffed
-          # against the deployment before it, resubmitting unchanged URLs (seen 2026-10-12).
-          prev=$(gh api "repos/$REPO/deployments/$CURRENT_ID/statuses" --jq '[.[] | select(.state=="success")][1].environment_url // empty')
-          [ -n "$prev" ] && { echo "url=$prev" >> "$GITHUB_OUTPUT"; exit 0; }
-          for id in $(gh api "repos/$REPO/deployments?environment=Production&per_page=10" --jq '.[].id'); do
-            [ "$id" = "$CURRENT_ID" ] && continue
-            url=$(gh api "repos/$REPO/deployments/$id/statuses" --jq '[.[] | select(.state=="success")][0].environment_url // empty')
-            if [ -n "$url" ]; then prev="$url"; break; fi
-          done
-          echo "url=$prev" >> "$GITHUB_OUTPUT"
-
       - name: Submit to IndexNow
         env:
-          NEW_URL: ${{ github.event.deployment_status.environment_url }}
-          PREV_URL: ${{ steps.prev.outputs.url }}
+          NEW_URL: ${{ inputs.new_url }}
+          PREV_URL: ${{ inputs.previous_url }}
+          ALL: ${{ inputs.all }}
         run: |
+          case "$NEW_URL" in https://sablia.io|https://sablia.io/) ;; *) echo "only https://sablia.io is accepted"; exit 2;; esac
           args=(--sitemap "${NEW_URL%/}/sitemap.xml")
-          if [ -n "$PREV_URL" ]; then
-            args+=(--previous-sitemap "${PREV_URL%/}/sitemap.xml")
-          else
-            echo "No previous Production deployment found: falling back to --all"
+          if [ "$ALL" = true ] || [ -z "$PREV_URL" ]; then
             args+=(--all)
+          else
+            args+=(--previous-sitemap "${PREV_URL%/}/sitemap.xml")
           fi
           node scripts/seo/indexnow.mjs "${args[@]}"

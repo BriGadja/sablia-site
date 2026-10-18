@@ -1,0 +1,11 @@
+[Unit]
+Description=sablia.io site: look for a new commit on each slot's ref every minute
+
+[Timer]
+OnBootSec=90s
+# measured from the END of the previous run, so a long build never overlaps itself
+OnUnitInactiveSec=60s
+AccuracySec=5s
+
+[Install]
+WantedBy=timers.target

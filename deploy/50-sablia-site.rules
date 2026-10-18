@@ -1,0 +1,25 @@
+// polkit: the deploy user may restart exactly the two site slots, nothing else (plan sablia-io-lot0-vps R1).
+// Installed by deploy/install.sh into /etc/polkit-1/rules.d/. No sudo rule: the deploy unit runs with
+// NoNewPrivileges, which a setuid sudo could not cross.
+// And the human user may START the deploy service (scripts/site-redeploy.py, after publishing a resource).
+polkit.addRule(function (action, subject) {
+  if (
+    action.id === "org.freedesktop.systemd1.manage-units" &&
+    subject.user === "sablia" &&
+    action.lookup("verb") === "start" &&
+    action.lookup("unit") === "sablia-site-deploy.service"
+  ) {
+    return polkit.Result.YES;
+  }
+});
+
+polkit.addRule(function (action, subject) {
+  if (
+    action.id === "org.freedesktop.systemd1.manage-units" &&
+    subject.user === "sablia-site" &&
+    action.lookup("verb") === "restart" &&
+    /^sablia-site@(prod|preview)\.service$/.test(action.lookup("unit"))
+  ) {
+    return polkit.Result.YES;
+  }
+});

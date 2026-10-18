@@ -17,7 +17,7 @@ CREDS=/home/sablia/workspace/.credentials/umami.json
 WID="$(python3 -c "import json;print(json.load(open('$CREDS'))['websites']['preview'])")"
 
 # throwaway preview password (the real one never touches this test)
-HASH="$(printf 'testpass' | caddy hash-password 2>/dev/null)" || HASH="$(caddy hash-password --plaintext testpass)"
+HASH="$(printf 'testpass\n' | caddy hash-password)"
 {
   printf '{\n\tadmin off\n\tauto_https off\n\torder rate_limit first\n}\n'
   sed -e "s#^preview.sablia.io {#http://preview.sablia.io:18080 {#" \

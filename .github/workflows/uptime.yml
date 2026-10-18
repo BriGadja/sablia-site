@@ -1,0 +1,95 @@
+# External probe: the site and n8n share one VPS, so the watcher must not run on it.
+# Every 10 minutes (odd minutes, GitHub drops on-the-hour runs under load) it fetches the public pages;
+# a failure opens ONE issue labelled `uptime` (an issue mails the repository owner reliably, the
+# schedule's own failure mail does not), further failures comment on it, the first green run closes it.
+#
+# Facts that shape this file (GitHub docs, events-that-trigger-workflows):
+#  - a schedule runs from the DEFAULT branch only: this workflow does nothing until the PR is merged;
+#  - scheduled runs are best effort and "can be delayed during periods of high loads";
+#  - scheduled workflows are disabled after 60 days without repository activity (monthly review note).
+# The release check (/healthz on sablia.io) is switched on by the repository variable PROBE_RELEASE=1
+# once the DNS points at the VPS; before that the probe watches the home page and n8n only.
+name: Uptime
+
+on:
+  schedule:
+    - cron: '7,17,27,37,47,57 * * * *'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Force a failing target (https URL) to test issue creation and de-duplication'
+        required: false
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: uptime
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Probe
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          FORCED: ${{ inputs.target }}
+          PROBE_RELEASE: ${{ vars.PROBE_RELEASE }}
+        run: |
+          set -u
+          fails=()
+          probe() {
+            local code
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 --retry 2 --retry-delay 3 "$1") || code=000
+            echo "$1 -> $code"
+            [ "$code" = 200 ] || fails+=("$1 answered $code")
+          }
+
+          if [ -n "$FORCED" ]; then
+            if ! printf '%s' "$FORCED" | grep -Eq '^https://[A-Za-z0-9.-]+(/[A-Za-z0-9._~/-]*)?$'; then
+              echo "refusing the forced target"; exit 2
+            fi
+            probe "$FORCED"
+          else
+            probe "https://sablia.io/"
+            probe "https://sablia.io/sitemap.xml"
+            probe "https://n8n.sablia.io/healthz"
+            if [ "${PROBE_RELEASE:-0}" = 1 ]; then
+              body=$(curl -s --max-time 15 https://sablia.io/healthz || true)
+              release=$(printf '%s' "$body" | sed -n 's/.*"release":"\([^"]*\)".*/\1/p')
+              echo "release: ${release:-none}"
+              if [ -z "$release" ]; then
+                fails+=("https://sablia.io/healthz did not report a release")
+              else
+                main=$(git ls-remote "https://github.com/$REPO" refs/heads/main | cut -c1-7)
+                when=$(gh api "repos/$REPO/commits/main" --jq .commit.committer.date)
+                age=$(( $(date +%s) - $(date -d "$when" +%s) ))
+                if [ "${release%%-*}" != "$main" ] && [ "$age" -gt 900 ]; then
+                  fails+=("production serves ${release%%-*} but main is $main since $(( age / 60 )) minutes: the deploy chain is stuck")
+                fi
+              fi
+            fi
+          fi
+
+          gh label create uptime --color B60205 --description "sablia.io / n8n watcher" >/dev/null 2>&1 || true
+          open=$(gh issue list --repo "$REPO" --label uptime --state open --json number --jq '.[0].number // empty')
+          if [ "${#fails[@]}" -gt 0 ]; then
+            text="$(date -u +%FT%TZ) probe failed:"
+            for f in "${fails[@]}"; do text="$text"$'\n'"- $f"; done
+            echo "$text"
+            if [ -n "$open" ]; then
+              gh issue comment "$open" --repo "$REPO" --body "$text"
+            else
+              gh issue create --repo "$REPO" --label uptime --title "Uptime: sablia.io or n8n is not answering" --body "$text"
+            fi
+            exit 1
+          fi
+          echo "all targets answered"
+          if [ -n "$open" ]; then
+            gh issue comment "$open" --repo "$REPO" --body "$(date -u +%FT%TZ) all targets answer again."
+            gh issue close "$open" --repo "$REPO" --reason completed
+          fi

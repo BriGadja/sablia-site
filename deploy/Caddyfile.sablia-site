@@ -1,8 +1,8 @@
 # Caddy blocks for the sablia.io move to the VPS (plan sablia-io-lot0-vps, Decision 1/4/6, R5, R10).
 # NOT applied by a stage: appended to /etc/caddy/Caddyfile by the orchestrator (see caddy-snippets.md).
-# Placeholders: __PREVIEW_HASH__ (bcrypt of the preview password, rendered by the hub script
-# scripts/sablia-site-caddy-render.py — the hash is never committed) and __APEX_TLS__ (`tls <cert> <key>`
-# while the certificates are pre-issued by DNS-01, empty afterwards so Caddy renews by itself).
+# Two placeholders are filled by the hub script scripts/sablia-site-caddy-render.py: the bcrypt hash of the
+# preview password (never committed: this repository is public) and, while the certificates are pre-issued
+# by DNS-01, a `tls <cert> <key>` line in the apex and www blocks (left empty afterwards so Caddy renews).
 # The global option `order rate_limit first` already exists in the live Caddyfile.
 
 (sablia_headers) {
