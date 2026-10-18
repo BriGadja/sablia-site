@@ -75,7 +75,9 @@ jobs:
             fi
           fi
 
-          gh label create uptime --color B60205 --description "sablia.io / n8n watcher" >/dev/null 2>&1 || true
+          # --repo is required: there is no checkout, so a bare gh call has no repository and fails silently,
+          # and `issue create --label uptime` then fails on the missing label (no alert at all, 18/10)
+          gh label create uptime --repo "$REPO" --color B60205 --description "sablia.io / n8n watcher" >/dev/null 2>&1 || true
           open=$(gh issue list --repo "$REPO" --label uptime --state open --json number --jq '.[0].number // empty')
           if [ "${#fails[@]}" -gt 0 ]; then
             text="$(date -u +%FT%TZ) probe failed:"

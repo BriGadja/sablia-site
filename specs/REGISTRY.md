@@ -282,7 +282,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Surface : flux de travail GitHub `uptime.yml` (toutes les 10 minutes) ; issues GitHub étiquetées `uptime`
 - Parcours : (cible) lancer `uptime.yml` à la main avec une cible forcée en panne, puis une seconde fois
 - Oracle : la sonde interroge `https://sablia.io/` et `https://n8n.sablia.io/healthz` ; une panne ouvre UNE issue `uptime` (jamais deux ouvertes en même temps) ; le corps de la réponse n'est jamais copié dans l'issue ; le retour au vert est visible dans le journal
-- Exemple : Étant donné la cible forcée `https://sablia.io/__down` / Quand la sonde tourne deux fois de suite / Alors une seule issue `uptime` est ouverte et la seconde exécution la commente sans en créer une autre
-- Test : [script] gh workflow run uptime.yml -f target=https://sablia.io/__down puis gh issue list --label uptime
+- Exemple : Étant donné la cible forcée `https://sablia.io/api/nope` (404 ; `/__down` répond 200, car toute page inconnue renvoie l'accueil) / Quand la sonde tourne deux fois de suite / Alors une seule issue `uptime` est ouverte et la seconde exécution la commente sans en créer une autre
+- Test : [script] gh workflow run uptime.yml -f target=https://sablia.io/api/nope (deux fois) puis gh issue list --label uptime
 - Statut : BROUILLON
 - Source : grill 2026-10-16 (le site et n8n partagent une seule machine) ; plan Phase F5, amendement R7
