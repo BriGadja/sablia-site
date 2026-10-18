@@ -32,7 +32,9 @@ const origin = new URL(base).origin
 
 const credPath = process.env.UMAMI_CREDENTIALS
 if (!credPath) {
-  console.error('set UMAMI_CREDENTIALS to the JSON file holding the Umami api_key, local_url and website ids')
+  console.error(
+    'set UMAMI_CREDENTIALS to the JSON file holding the Umami api_key, local_url and website ids',
+  )
   process.exit(2)
 }
 const cred = JSON.parse(readFileSync(credPath, 'utf8'))

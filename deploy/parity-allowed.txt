@@ -6,3 +6,5 @@ body ^/api/nope$
 strip <button type="button" class="text-left text-[13px] text-on-dark-body hover:text-on-dark">Gérer mes choix</button>
 # A resource's video sits behind the click-to-play facade instead of a live YouTube iframe (US-67):
 body ^/ressources/[a-z0-9-]+$
+# The thank-you page's booking link is marked for the event map (data-cta-book, US-65):
+strip-re  ?data-cta-book="(?:true)?"

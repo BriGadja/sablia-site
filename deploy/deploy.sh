@@ -10,6 +10,12 @@
 # slot changes until a candidate has built, been prerendered completely and answered a smoke test on a
 # scratch port; after the switch a failing health check flips the slot back by itself.
 #
+# Trust boundary (security review 2026-10-18): the build runs repository code as the sablia-site user, which
+# also owns the release tree. Whoever can push to a CONFIGURED ref can therefore run code as that user (no
+# access to the secrets: those are read by systemd only). Hence: refs are set by root, `main` is protected on
+# GitHub (orchestrator gesture), releases are read-only once built, and the units drop every capability.
+# Separate users per slot would be the next step if the repository ever gets more committers.
+#
 # Config (root-owned, read here): $CONF_DIR/{prod-ref,preview-ref} (default main), build.env (640, build
 # variables: the public anon key), deploy.env (INDEXNOW_ENABLED). Secrets of the RUNNING app live in
 # $CONF_DIR/<slot>.env and are read by systemd only. Output goes to the journal; no value from an env
@@ -38,8 +44,11 @@ SMOKE_PID=""
 
 log()   { echo "[$(date -u +%FT%TZ)] $*"; }
 alert() { # <kind> <message>: loud line in the journal + a marker the morning brief reads
-  mkdir -p "$SITE_ROOT/alerts"
-  echo "$(date -u +%FT%TZ) $2" > "$SITE_ROOT/alerts/$1-$(date -u +%Y%m%dT%H%M%SZ).txt"
+  # readable by the human user (the morning brief reads them): the unit's umask is 0027
+  mkdir -p "$SITE_ROOT/alerts" && chmod 755 "$SITE_ROOT/alerts"
+  local f; f="$SITE_ROOT/alerts/$1-$(date -u +%Y%m%dT%H%M%SZ).txt"
+  echo "$(date -u +%FT%TZ) $2" > "$f" && chmod 644 "$f"
+  find "$SITE_ROOT/alerts" -name '*.txt' -mtime +14 -delete 2>/dev/null
   echo "ALERT [$1] $2"
 }
 die()   { log "$*"; exit 1; }
@@ -134,7 +143,7 @@ prune_releases() {
     d="$(readlink -f "$SITE_ROOT/$l" 2>/dev/null)" && keep_refs="$keep_refs $d"
   done
   ls -1dt "$SITE_ROOT"/releases/*/ 2>/dev/null | sed 's#/$##' | tail -n +"$((KEEP + 1))" | while read -r d; do
-    case " $keep_refs " in *" $d "*) ;; *) rm -rf "$d" && log "pruned $(basename "$d")";; esac
+    case " $keep_refs " in *" $d "*) ;; *) chmod -R u+w "$d" && rm -rf "$d" && log "pruned $(basename "$d")";; esac
   done
 }
 
@@ -234,6 +243,8 @@ deploy() {
 
   smoke "$rel" "$id" >> "$blog" 2>&1 || { tail -n 8 "$blog"; fail "smoke test failed on the scratch port"; return 1; }
   log "$slot: $id passed the smoke test; switching"
+  # Read-only from here on: a later build (another slot, a mistaken script) cannot rewrite a release in place.
+  chmod -R a-w "$rel"
 
   [ -L "$link" ] && prev_target="$(readlink -f "$link")"
   local prev_prev=""

@@ -1,3 +1,5 @@
+**Where it runs**: `api/contact.ts` is a Web-standard Fetch handler (`export default { fetch(Request): Response }`). Since the lot 0 move it is served by the site's own Express process through `server/api-adapter.ts` (it was a Vercel Function before 2026-10-18). The handler itself was not touched; `api/contact.test.ts` and `server/api-adapter.test.ts` (the same behaviours replayed over HTTP) both guard it.
+
 # Integrations — Sablia Site
 
 **Last updated**: 2026-09-22
@@ -81,7 +83,7 @@ under `api/` IS deployed, on the Node 22 runtime.
 | Piece | Detail |
 |---|---|
 | Endpoint | `POST /api/contact` — any other method answers `405` with `allow: POST` |
-| Routing | `vercel.json`'s SPA catch-all excludes it: `{ "source": "/((?!api/).*)" }`. Without that exclusion the rewrite swallows `/api/*` and the function is unreachable |
+| Routing | mounted before the static server and the SPA fallback (`server/app.ts`); a GET answers 405 `allow: POST` with an empty body, a body over 100 kB answers 413 before parsing, any other `/api/*` is a plain 404 |
 | Payload | `name`, `company`, `email`, `teamSize`, `message`, `website` (honeypot), `elapsedMs` — validated with zod `safeParse`, never `.parse()` |
 | `teamSize` | the four values the portal questionnaire already writes: `je_suis_seul(e)`, `2_à_5_personnes`, `6_à_20_personnes`, `plus_de_20_personnes` |
 | Mail | Resend `POST /emails`, from `Sablia <site@send.sablia.io>`, to `brice@sablia.io`, `reply_to` = the visitor. Subject `Demande via sablia.io : {société}`. The body carries the lead id, so a refused insert is visible in the inbox |
@@ -89,7 +91,7 @@ under `api/` IS deployed, on the Node 22 runtime.
 | Dedup | a GET on the last 10 minutes (same email, same source) runs BEFORE the insert. `idx_sabcrm_leads_email` is NOT unique, so a retry after a slow answer would otherwise create a silent duplicate |
 | Anti-spam | honeypot field + a 3 s floor measured from form mount. Both answer **204 before any I/O** — no mail, no row. No captcha, by decision (A7) |
 | Failure modes | mail fails → `502 { code: 'mail_failed' }` and the visitor sees the fallback address · CRM insert fails → still `200`, `console.error`, the mail goes out anyway · env missing → `500 { code: 'not_configured' }` with zero I/O |
-| Keys | server-side only, on the Vercel project (`sensitive`, Preview + Production). Never in `.env`, never in the client bundle |
+| Keys | server-side only: `/etc/sablia-site/{prod,preview}.env` (600, root:root, read by systemd; `deploy/install-env.sh`). Never in `.env`, never in the client bundle, never in git |
 | Tests | `api/contact.test.ts`, 24 cases with a stubbed `fetch` — included in the Vitest run via `{client,server,db,api}/**`. `.vercelignore` carries `api/**/*.test.ts` so the test file never becomes a routable function (proven live: `GET /api/contact.test` → 404) |
 
 **What the insert fires** (read live 2026-09-18): `sabcrm_leads_normalize_raw` (no-op on this `raw`), and two
@@ -100,7 +102,11 @@ subscription).
 
 ---
 
-## Analytics & Ads — NOT IMPLEMENTED
+## Audience measurement — Umami (self-hosted, lot 0)
+
+Cookieless tracker `/m/a.js` and consent-gated recorder `/m/r.js`, served from our own origin; Umami 3.4.0 on the VPS (`127.0.0.1:3100`, dashboard `stats.sablia.io`). Event map and consent rules: `CLAUDE.md` § Measurement and consent. Credentials never in this repository (`UMAMI_CREDENTIALS` file for the e2e).
+
+## Analytics & Ads — NOT IMPLEMENTED (Google)
 
 GA4 and Google Ads tracking was lost during the 2026-04 redesign. Env vars (`VITE_GA4_MEASUREMENT_ID`, `VITE_GADS_CONVERSION_ID`, `VITE_GADS_LABEL_CONTACT`) are still defined in Vercel but **no code reads them**. There is no `analytics.ts`, no `gtag.js` injection, no consent banner, no page-view tracking, no conversion events.
 
@@ -117,7 +123,7 @@ Account IDs and conversion labels are documented in [`GOOGLE_ADS.md`](./GOOGLE_A
 | `VITE_GA4_MEASUREMENT_ID` | — | GA4 measurement ID — declared but unused (see above) |
 | `VITE_GADS_CONVERSION_ID` | — | Google Ads conversion ID — declared but unused (see above) |
 | `VITE_GADS_LABEL_CONTACT` | — | Ads conversion label — declared but unused (see above) |
-| `RESEND_API_KEY` | Yes (function) | Resend key for `api/contact.ts`. Vercel project settings, `sensitive`, Preview + Production |
+| `RESEND_API_KEY` | Yes (function) | Resend key for `api/contact.ts`. `/etc/sablia-site/*.env` (600) |
 | `SUPABASE_SERVICE_ROLE_KEY` | Yes (function) | Service-role key for the `sabcrm_leads` insert. Same storage. RLS on that table has zero policies, so this is the only write path |
 | `VITE_SUPABASE_ANON_KEY` | Yes (client) | Anon key for `client/src/lib/contenu.ts`, ships in the bundle by design — RLS on `contenu_ressources` exposes only `published=true` rows. Vercel project settings, plain, Preview + Production (T33) |
 

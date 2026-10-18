@@ -8,7 +8,7 @@ DEPLOY="$HERE/deploy.sh"
 
 T="$(mktemp -d)"; fails=0
 PIDF="$T/pids"; mkdir -p "$PIDF"
-cleanup() { for f in "$PIDF"/*; do [ -f "$f" ] && kill "$(cat "$f")" 2>/dev/null; done; rm -rf "$T"; }
+cleanup() { for f in "$PIDF"/*; do [ -f "$f" ] && kill "$(cat "$f")" 2>/dev/null; done; chmod -R u+w "$T" 2>/dev/null; rm -rf "$T"; }
 trap cleanup EXIT
 ok()    { echo "PASS $1"; }
 bad()   { echo "FAIL $1"; fails=$((fails+1)); }
@@ -127,6 +127,7 @@ check "the slot is a symlink into releases/" "$(slotdir preview | sed "s#$SITE_R
 [ -x "$SITE_ROOT/preview/bin/start" ] && ok "bin/start is executable" || bad "bin/start missing"
 [ -s "$SITE_ROOT/preview/dist/index.js" ] && ok "dist/index.js present" || bad "dist/index.js"
 [ -d "$SITE_ROOT/preview/node_modules" ] && bad "release must not ship node_modules" || ok "no node_modules in the release"
+[ -w "$SITE_ROOT/preview/dist" ] || [ -w "$SITE_ROOT/preview/dist/index.js" ] && bad "a built release must be read-only" || ok "the release is read-only once built"
 [ -e "$SITE_ROOT/preview.prev" ] && bad "no .prev on a first deploy" || ok "no .prev yet"
 check "the running slot answers the release on its port" "$(health $PORT_PREVIEW)" "$R1"
 check "systemd was asked to restart sablia-site@preview once" "$(calls 'systemctl restart sablia-site@preview')" 1
@@ -148,6 +149,8 @@ check "slot still on release one" "$(slotrel preview)" "$R1"
 check "slot still served" "$(health $PORT_PREVIEW)" "$R1"
 [ -f "$SITE_ROOT/failed/${BAD:0:7}" ] && ok "failed marker written" || bad "failed marker"
 ls "$SITE_ROOT"/alerts/* >/dev/null 2>&1 && ok "alert written" || bad "alert written"
+check "alerts folder is readable by the brief (755)" "$(stat -c %a "$SITE_ROOT/alerts")" 755
+check "alert files are readable by the brief (644)" "$(stat -c %a "$(ls "$SITE_ROOT"/alerts/* | head -1)")" 644
 before="$(calls 'npm ')"
 bash "$DEPLOY" preview > "$T/out3b.log" 2>&1; check "within the backoff: skipped, exit 0" "$?" 0
 check "no rebuild during the backoff" "$(calls 'npm ')" "$before"
