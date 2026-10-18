@@ -1,0 +1,167 @@
+# Caddy blocks for the sablia.io move to the VPS (plan sablia-io-lot0-vps, Decision 1/4/6, R5, R10).
+# NOT applied by a stage: appended to /etc/caddy/Caddyfile by the orchestrator (see caddy-snippets.md).
+# Two placeholders are filled by the hub script scripts/sablia-site-caddy-render.py: the bcrypt hash of the
+# preview password (never committed: this repository is public) and, while the certificates are pre-issued
+# by DNS-01, a `tls <cert> <key>` line in the apex and www blocks (left empty afterwards so Caddy renews).
+# The global option `order rate_limit first` already exists in the live Caddyfile.
+
+(sablia_headers) {
+	header {
+		-Server
+		Strict-Transport-Security "max-age=63072000"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+	encode zstd gzip
+}
+
+(umami_upstream) {
+	reverse_proxy 127.0.0.1:3100 {
+		lb_try_duration 5s
+		lb_try_interval 250ms
+		transport http {
+			response_header_timeout 5s
+		}
+	}
+}
+
+# The analytics endpoints the BROWSER needs, under /m/ — an allowlist, not a wildcard: the Umami login,
+# its API and its dashboard must never be reachable from the public site (R5). {args[0]} names the rate zone.
+(sablia_m) {
+	@m_tracker {
+		method GET HEAD
+		path /m/a.js
+	}
+	@m_recorder {
+		method GET HEAD
+		path /m/r.js
+	}
+	@m_send {
+		method POST
+		path /m/api/send
+	}
+	@m_record {
+		method POST
+		path /m/api/record
+	}
+	@m_rconfig {
+		method GET HEAD
+		path_regexp m_rconf ^/m/api/websites/[0-9a-fA-F-]{36}/recorder$
+	}
+	rate_limit {
+		zone m_{args[0]} {
+			key {remote_host}
+			events 300
+			window 1m
+		}
+	}
+	handle @m_tracker {
+		rewrite * /a.js
+		header >Cache-Control "public, max-age=3600"
+		import umami_upstream
+	}
+	handle @m_recorder {
+		rewrite * /recorder.js
+		header >Cache-Control "public, max-age=3600"
+		import umami_upstream
+	}
+	handle @m_send {
+		rewrite * /api/send
+		import umami_upstream
+	}
+	handle @m_record {
+		rewrite * /api/record
+		import umami_upstream
+	}
+	handle @m_rconfig {
+		uri strip_prefix /m
+		import umami_upstream
+	}
+	handle {
+		respond "Not Found" 404
+	}
+}
+
+# The site itself: Node process on loopback ({args[1]} = port), stricter rate limit on the two form endpoints.
+(sablia_app) {
+	handle /api/* {
+		rate_limit {
+			zone api_{args[0]} {
+				key {remote_host}
+				events 30
+				window 1m
+			}
+		}
+		reverse_proxy 127.0.0.1:{args[1]} {
+			lb_try_duration 5s
+			lb_try_interval 250ms
+		}
+	}
+	handle {
+		rate_limit {
+			zone site_{args[0]} {
+				key {remote_host}
+				events 600
+				window 1m
+			}
+		}
+		reverse_proxy 127.0.0.1:{args[1]} {
+			lb_try_duration 5s
+			lb_try_interval 250ms
+		}
+	}
+}
+
+# Protected preview of the next release (Brice checks it on his phone before the DNS flip).
+preview.sablia.io {
+	header X-Robots-Tag "noindex, nofollow"
+	import sablia_headers
+	@robots path /robots.txt
+	handle @robots {
+		respond <<TXT
+			User-agent: *
+			Disallow: /
+			TXT 200
+	}
+	# The tracker fetches with credentials omitted: /m/* must not ask for the preview password.
+	handle /m/* {
+		import sablia_m preview
+	}
+	handle {
+		basic_auth {
+			sablia __PREVIEW_HASH__
+		}
+		import sablia_app preview 5001
+	}
+}
+
+# Analytics dashboard (full Umami UI, its own login).
+stats.sablia.io {
+	import sablia_headers
+	rate_limit {
+		zone stats_per_ip {
+			key {remote_host}
+			events 240
+			window 1m
+		}
+	}
+	import umami_upstream
+}
+
+# Production. No X-Frame-Options / frame-ancestors: Umami's heatmap view frames the real page.
+sablia.io {
+	__APEX_TLS__
+	import sablia_headers
+	handle /m/* {
+		import sablia_m apex
+	}
+	handle {
+		import sablia_app apex 5000
+	}
+}
+
+# Vercel answered 308 from www to the apex; so do we.
+www.sablia.io {
+	__APEX_TLS__
+	redir https://sablia.io{uri} 308
+}

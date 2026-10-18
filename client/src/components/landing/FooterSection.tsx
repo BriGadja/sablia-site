@@ -1,5 +1,6 @@
 import { Link } from 'wouter'
 import Logo from '@/components/Logo'
+import { requestConsentBanner } from '@/lib/consent'
 import { site } from '@/lib/site'
 
 export default function FooterSection() {
@@ -40,6 +41,13 @@ export default function FooterSection() {
           >
             CGV
           </Link>
+          <button
+            type="button"
+            onClick={requestConsentBanner}
+            className="text-left text-[13px] text-on-dark-body hover:text-on-dark"
+          >
+            Gérer mes choix
+          </button>
         </div>
       </div>
       <div className="mx-auto mt-12 flex max-w-editorial items-center justify-between border-t border-hairline pt-6">

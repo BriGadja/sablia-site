@@ -115,6 +115,35 @@ describe('listPublishedSlugs', () => {
     assert.equal(called, false)
   })
 
+  it('throws at once when PRERENDER_STRICT is set (self-hosted build) and the anon key is missing', async () => {
+    let called = false
+    await assert.rejects(
+      listPublishedSlugs({
+        env: { PRERENDER_STRICT: '1' },
+        fetch: async () => {
+          called = true
+        },
+        sleep: noSleep,
+      }),
+      /VITE_SUPABASE_ANON_KEY/,
+    )
+    assert.equal(called, false)
+  })
+
+  it('only warns without the key when neither VERCEL nor PRERENDER_STRICT is set', async () => {
+    const warnings = []
+    const rows = await listPublishedSlugs({
+      env: {},
+      fetch: async () => {
+        throw new Error('must not be called')
+      },
+      sleep: noSleep,
+      warn: (m) => warnings.push(m),
+    })
+    assert.deepEqual(rows, [])
+    assert.equal(warnings.length, 1)
+  })
+
   it('throws on a non-OK response (after the retries)', async () => {
     let n = 0
     await assert.rejects(
@@ -210,6 +239,14 @@ describe('assertRessourceHtml', () => {
   it('rejects a wrong h1 and a page without its body text', () => {
     assert.throws(() => assertRessourceHtml({ ...GOOD, h1: 'Ressource indisponible' }, ROW), /h1/)
     assert.throws(() => assertRessourceHtml({ ...GOOD, text: 'Chargement…' }, ROW), /body|text/)
+  })
+
+  it('rejects a mounted iframe: the video must sit behind its click-to-play facade (US-67)', () => {
+    const withPlayer = {
+      ...GOOD,
+      html: '<main data-ready="true"><iframe src="https://www.youtube-nocookie.com/embed/x"></iframe></main>',
+    }
+    assert.throws(() => assertRessourceHtml(withPlayer, ROW), /iframe/)
   })
 
   it('rejects any public contenu-ressources file URL in the html', () => {

@@ -1,0 +1,44 @@
+[Unit]
+Description=sablia.io site: build and switch each slot whose configured ref moved
+Documentation=https://github.com/BriGadja/sablia-site/tree/main/deploy
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=sablia-site
+Group=sablia-site
+# deploy.sh is root-owned and installed by deploy/install.sh: the unprivileged user can run it, not change it.
+ExecStart=/etc/sablia-site/deploy.sh all
+Environment=HOME=/opt/sablia/sites/sablia-site/home
+Environment=NPM_CONFIG_UPDATE_NOTIFIER=false
+Environment=SYSTEMCTL=systemctl
+TimeoutStartSec=1200
+
+# The build is a guest on a loaded host (load 10-18 on 4 vCPU measured on 2026-10-18).
+Nice=10
+CPUQuota=150%
+IOWeight=50
+MemoryHigh=2G
+MemoryMax=3G
+TasksMax=512
+
+# Hardening. Writes: the site tree only (PrivateTmp gives the Chromium prerender its own /tmp).
+# The restart of sablia-site@prod|preview is authorised by deploy/50-sablia-site.rules (polkit), not by
+# sudo, so NoNewPrivileges can stay on.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=yes
+InaccessiblePaths=/home /root
+ReadWritePaths=/opt/sablia/sites/sablia-site
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+LockPersonality=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
+AmbientCapabilities=
+UMask=0027

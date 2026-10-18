@@ -1,11 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import { track } from '@vercel/analytics'
 import { describe, expect, it, vi } from 'vitest'
 import { FINAL_CALL_TITLE } from '@/content/home'
+import { track } from '@/lib/analytics'
 import { site } from '@/lib/site'
 import CalloutSection from './CalloutSection'
 
-vi.mock('@vercel/analytics', () => ({ track: vi.fn() }))
+vi.mock('@/lib/analytics', () => ({ track: vi.fn() }))
 
 /** US-11, the final call of the home (grill decisions 3 and 6, 2026-09-28). */
 describe('CalloutSection', () => {
@@ -14,14 +14,14 @@ describe('CalloutSection', () => {
     expect(screen.getByRole('heading', { level: 2 }).textContent).toBe(FINAL_CALL_TITLE)
   })
 
-  it('books 30 minutes on the site Calendly and records the book_call event', () => {
+  it('books 30 minutes on the site Calendly and records the cta_book event', () => {
     const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null)
     render(<CalloutSection />)
     fireEvent.click(screen.getByRole('button', { name: /Réserver 30 min/ }))
     expect(openSpy.mock.calls[0][0]).toBe(site.bookingUrl)
-    expect(track).toHaveBeenCalledWith('book_call', {
-      url: site.bookingUrl,
-      path: window.location.pathname,
+    expect(track).toHaveBeenCalledWith('cta_book', {
+      zone: expect.any(String),
+      label: expect.any(String),
     })
     openSpy.mockRestore()
   })

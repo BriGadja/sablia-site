@@ -52,7 +52,8 @@
       "!**/attached_assets",
       "!**/plans",
       "!**/memory",
-      "!**/examples"
+      "!**/examples",
+      "!**/deploy/parity-baseline.json"
     ]
   }
 }

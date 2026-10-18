@@ -1,5 +1,6 @@
 import { cva } from 'class-variance-authority'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { trackVideoPlay, watchVideoProgress } from '@/lib/events'
 
 const playButton = cva(
   'absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-primary shadow-lg transition-transform duration-base group-hover:scale-105',
@@ -31,11 +32,20 @@ export default function VideoFacade({
   size = 'default',
 }: VideoFacadeProps) {
   const [playing, setPlaying] = useState(false)
+  const frame = useRef<HTMLIFrameElement>(null)
+
+  // After the click only: report the play and follow the player (both need the visitor's consent).
+  useEffect(() => {
+    if (!playing || !frame.current) return
+    trackVideoPlay(youtubeId)
+    watchVideoProgress(frame.current, youtubeId)
+  }, [playing, youtubeId])
 
   if (playing) {
     return (
       <iframe
-        src={`https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0`}
+        ref={frame}
+        src={`https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&enablejsapi=1`}
         title={title}
         allow="autoplay; encrypted-media; picture-in-picture"
         allowFullScreen

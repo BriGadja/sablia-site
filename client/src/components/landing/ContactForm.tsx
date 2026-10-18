@@ -1,6 +1,6 @@
-import { track } from '@vercel/analytics'
 import { type FormEvent, useRef, useState } from 'react'
 import { FOUND_VIA_EMPTY, FOUND_VIA_LABEL, FOUND_VIA_OPTIONS } from '@/content/found-via'
+import { formError, formSuccess } from '@/lib/events'
 import { site } from '@/lib/site'
 
 /**
@@ -59,17 +59,21 @@ export default function ContactForm() {
 
       // 204 is what a bot gets. It sees the same thank-you as everyone else.
       if (response.status === 200 || response.status === 204) {
-        track('contact_form', { status: 'sent' })
+        formSuccess('contact')
         setState({ kind: 'success' })
         return
       }
-      if (response.status === 400) {
-        const body = (await response.json().catch(() => null)) as { error?: string } | null
-        setState({ kind: 'error', message: body?.error ?? fallback })
-        return
-      }
-      setState({ kind: 'error', message: fallback })
+      const body = (await response.json().catch(() => null)) as {
+        error?: string
+        code?: string
+      } | null
+      formError('contact', body?.code ?? `http_${response.status}`)
+      setState({
+        kind: 'error',
+        message: response.status === 400 ? (body?.error ?? fallback) : fallback,
+      })
     } catch {
+      formError('contact', 'network')
       setState({ kind: 'error', message: fallback })
     }
   }

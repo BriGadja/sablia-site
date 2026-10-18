@@ -1,4 +1,4 @@
-import express, { type Express } from 'express'
+import type { Express } from 'express'
 import fs from 'fs'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
@@ -14,17 +14,6 @@ const nanoid = () => Math.random().toString(36).slice(2, 10)
 import viteConfig from '../vite.config'
 
 const viteLogger = createLogger()
-
-export function log(message: string, source = 'express') {
-  const formattedTime = new Date().toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: true,
-  })
-
-  console.log(`${formattedTime} [${source}] ${message}`)
-}
 
 export async function setupVite(app: Express, server: Server) {
   const vite = await createViteServer({
@@ -60,22 +49,5 @@ export async function setupVite(app: Express, server: Server) {
       vite.ssrFixStacktrace(e as Error)
       next(e)
     }
-  })
-}
-
-export function serveStatic(app: Express) {
-  const distPath = path.resolve(__dirname, 'public')
-
-  if (!fs.existsSync(distPath)) {
-    throw new Error(
-      `Could not find the build directory: ${distPath}, make sure to build the client first`,
-    )
-  }
-
-  app.use(express.static(distPath))
-
-  // fall through to index.html if the file doesn't exist
-  app.use('*', (_req, res) => {
-    res.sendFile(path.resolve(distPath, 'index.html'))
   })
 }

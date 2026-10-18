@@ -5,6 +5,7 @@ import { dirname, extname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import chromium from '@sparticuz/chromium'
 import puppeteer from 'puppeteer-core'
+import { assertCleanStaticHtml } from './seo/prerender-guards.mjs'
 import { assertRessourceHtml, listPublishedSlugs } from './seo/ressources.mjs'
 import { resolveRoutes } from './seo/routes.mjs'
 
@@ -151,6 +152,10 @@ async function prerender() {
     for (const { route, row } of jobs) {
       const url = `http://localhost:${PORT}${route}`
       const page = await browser.newPage()
+      // The consent banner and the analytics loader stay out of the static HTML (plan R9).
+      await page.evaluateOnNewDocument(() => {
+        window.__SABLIA_PRERENDER__ = true
+      })
       // Skip downloading webfonts/images — we only need the rendered HTML
       await page.setRequestInterception(true)
       page.on('request', (req) => {
@@ -176,6 +181,7 @@ async function prerender() {
           await page.waitForSelector('[data-rh="true"]', { timeout: 10000 })
         }
         const html = await page.content()
+        assertCleanStaticHtml(html, route)
         const canonical = await page
           .$eval('link[rel="canonical"]', (el) => el.getAttribute('href'))
           .catch(() => null)

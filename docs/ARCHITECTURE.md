@@ -1,6 +1,6 @@
 # Architecture — Sablia Site
 
-**Last updated**: 2026-03-02
+**Last updated**: 2026-10-18 (Server and Hosting chain sections; the rest predates the 2026-09/10 redesigns)
 **Stack**: React 18 / TypeScript / Vite / Express / Drizzle ORM / Tailwind
 
 ---
@@ -11,7 +11,7 @@
 main.tsx > StrictMode > App.tsx > ErrorBoundary > MotionConfig(reducedMotion="user") > HelmetProvider > Router > AnimatePresence > Routes
 ```
 
-Global overlays rendered alongside Router: `Toaster`, `CookieConsentBanner`
+Global overlays rendered alongside Router: `Toaster`, `ConsentBanner` (lot 0: `components/consent/`, tier-2 consent; the cookieless tier-1 measurement needs none)
 
 ---
 
@@ -117,7 +117,17 @@ Located in `client/src/utils/`:
 
 ## Server
 
-Express on port 5000. No API routes — all forms submit directly to n8n webhooks. Server only handles static file serving and SPA routing.
+Since the lot 0 move (plan `sablia-io-lot0-vps`) the site is served by **our own Node process behind Caddy**, no longer by Vercel.
+
+- `server/app.ts` — `createApp()`: security headers (HSTS 2 years, nosniff, referrer policy), `/healthz` (public: `{ok, release}`) and `/healthz/full` (loopback only: which API secrets are present, booleans), the API adapter, the static server with the SPA fallback, a JSON 500 handler that never re-throws.
+- `server/static.ts` — Vercel's behaviour measured on 2026-10-18 (`deploy/parity-baseline.json`): a prerendered directory page answers 200 at `/x` and `/x/`, `/escalier-modeles` serves `escalier-modeles.html`, any other unknown path serves `index.html` with 200, only `/assets/*` is `immutable`, `.well-known` is served, other dotfiles never.
+- `server/api-adapter.ts` — `api/contact.ts` and `api/ressources-request.ts` stay Web-standard Fetch handlers; the adapter builds a `Request`, caps the body at 100 kB (413), writes status/headers/body back, answers any other `/api/*` with 404.
+- `server/index.ts` — `HOST` (default `127.0.0.1`) / `PORT` (default 5000), graceful `SIGTERM`; the Vite dev branch exists only under `tsx` (the build defines `process.env.NODE_ENV`, which removes it from `dist/index.js`).
+- Production bundle: `scripts/build-server.mjs` makes ONE `dist/index.js` (no `node_modules` at runtime). A release directory holds `bin/start`, `RELEASE` and `dist/` — the contract a Next.js release (Lot 3) keeps.
+
+## Hosting chain
+
+`deploy/deploy.sh` (systemd timer every minute on the VPS): ref moved → `npm ci --ignore-scripts` → build with `PRERENDER_STRICT=1` → every sitemap URL prerendered → candidate smoke-tested on a scratch port → atomic symlink switch → health check, automatic revert → last 3 releases kept. Two slots: `prod` (port 5000) and `preview` (5001, `preview.sablia.io`, basic auth, noindex). Caddy blocks: `deploy/Caddyfile.sablia-site`. Measurement: self-hosted Umami, tracker under `/m/`. Details: `deploy/*.md` and the hub card `knowledge/infra/sablia-site-vps.md`.
 
 ---
 

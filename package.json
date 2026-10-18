@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx server/index.ts",
-    "build": "vite build && node scripts/prerender.mjs && node scripts/seo/generate-sitemap.mjs && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+    "build": "vite build && node scripts/prerender.mjs && node scripts/seo/generate-sitemap.mjs && node scripts/build-server.mjs",
     "prerender": "node scripts/prerender.mjs",
     "test:seo": "node --test scripts/seo/*.test.mjs",
     "seo:stamp-check": "node scripts/seo/stamp-lastmod.mjs --check",
@@ -28,7 +28,6 @@
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.2",
-    "@vercel/analytics": "^2.0.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.38.2",
