@@ -54,7 +54,7 @@ export default function ConsentBanner() {
     >
       <div className="mx-auto flex max-w-editorial flex-col gap-3 sm:flex-row sm:items-center sm:gap-8">
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-medium">Comment vous aidez à améliorer ce site</p>
+          <p className="text-sm font-medium">Aidez-nous à améliorer ce site</p>
           <p className="mt-1 text-xs leading-snug text-on-dark-body sm:text-[13px]">
             Nous mesurons la fréquentation de ce site de façon anonyme, sans cookie et sans vous
             suivre d'un site à l'autre. Avec votre accord, nous enregistrons aussi, sans vous

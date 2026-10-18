@@ -46,7 +46,7 @@ describe('ConsentBanner: the offer', () => {
     expect(region.hasAttribute('data-consent-banner')).toBe(true)
     expect(region.getAttribute('aria-modal')).toBeNull()
     expect(screen.queryByRole('dialog')).toBeNull()
-    expect(region.textContent).toContain('Comment vous aidez à améliorer ce site')
+    expect(region.textContent).toContain('Aidez-nous à améliorer ce site')
     expect(region.textContent).toContain('sans cookie')
     expect(region.textContent).toContain('jamais enregistrés')
     expect(screen.getByRole('link', { name: 'En savoir plus' }).getAttribute('href')).toBe(
