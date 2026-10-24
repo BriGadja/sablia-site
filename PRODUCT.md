@@ -101,6 +101,10 @@ captures en cadre dégradé, le quadrillage et le jaune de Théophile, les ombre
    d'écran ; aucun décor répété sur tout l'écran.
 3. Couleur : un neutre profond pour les blocs, un fond clair qui n'est pas crème, UNE couleur de signal qui
    n'est ni le bleu/violet de la catégorie ni l'argile d'Anthropic ; texte à 4,5:1 au moins.
+   **Arbitrage de Brice (24/10, round 11 de la maquette)** : « les changements de couleur sont okay » pour la palette
+   « désert au crépuscule » : fonds sable `#F4ECDD` et rose du soir `#F2E3DF`, un bandeau violet du soir très sombre
+   `#262038`, des crêtes de dunes. Ils priment sur « pas crème » et « pas violet » ci-dessus ; un critique ne les
+   compte plus comme écarts. Restent interdits : le violet vif de la catégorie, l'argile `#D97757`, le titre à empattement.
 4. Imagerie : l'interface dessinée porte l'explication ; la signature est le sable et le S-sablier ; la seule
    photo humaine est Brice ; jamais de robot, de visage généré ni de poignée de main.
 5. Voix : « nous », phrases courtes, français simple.
