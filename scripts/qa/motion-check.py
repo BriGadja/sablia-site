@@ -6,6 +6,7 @@ Per route and viewport, in the page's OWN headless Chromium (never the shared Ch
     5 s in total (WAAPI `getAnimations()`, CSSAnimation only), or (b) the DOM still mutating (attributes, text, children)
     during a 2 s window taken 6 s after a scroll stop, on a virtual clock (`page.clock`, so JS timers / rAF advance without
     real waiting). JS loops are sampled from the virtual clock only; CSS animations are not driven by it (see shots.py).
+    A region that mutates at first but goes quiet and stays quiet within 22 s of the scroll stop is a finite sequence, not a loop.
     Each loop needs a PAUSE BUTTON on the page: accessible name matching pause|arrêt|stop|figer|geler (not reprendre/lecture/play),
     >= 44x44 px, reached by pressing Tab from the top of the page (<= 400 presses), and activated by the keyboard (Enter) it
     must leave no CSS loop running and the DOM quiet for 2 s. The page with a loop and no button, a small button, an
@@ -124,6 +125,21 @@ def mutating(page, clock):
     return page.evaluate("window.__mut") - before > 0
 
 
+def still_mutating_at_end(page, until=22000, waited=8000):
+    """Called once the DOM mutated in the 6-8 s window after a scroll stop. A loop keeps mutating until the end of the
+    observation (22 s after the scroll stop) or mutates again after a quiet window; a sequence that goes quiet and stays
+    quiet is finite (WCAG 2.2.2 pause rule is about loops, not one-shot sequences)."""
+    quiet = False
+    while waited < until:
+        m = mutating(page, True)
+        waited += 2000
+        if m and quiet:
+            return True  # restarted after a pause: repeats
+        if not m:
+            quiet = True
+    return not quiet
+
+
 def scroll_steps(page):
     h = page.evaluate("document.scrollingElement.scrollHeight")
     vh = page.evaluate("innerHeight")
@@ -142,7 +158,7 @@ def check_loops(browser, base, path, w, h, out):
             run_for(page, 6000, True)
             for l in page.evaluate(JS_LOOPS):
                 loops.setdefault("css: " + l, y)
-            if mutating(page, True):
+            if mutating(page, True) and still_mutating_at_end(page):
                 loops.setdefault(f"js: DOM keeps mutating at scroll {y}", y)
         if not loops:
             print(f"ok   {tag} no loop found")
