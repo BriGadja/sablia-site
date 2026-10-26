@@ -149,8 +149,17 @@ async () => {
 """
 
 
+# A stored refusal, written with the page's own Date (fake under page.clock), so the consent banner
+# never overlays a build shot; the mockup has no banner, so this keeps the two sides comparable.
+NO_BANNER_JS = ("try{localStorage.setItem('sablia_consent',JSON.stringify("
+                "{v:1,replay:false,at:new Date(Date.now()-1000).toISOString()}))}catch(e){}")
+
+
 def goto(page, url: str, tries: int = 5) -> int:
     status = 0
+    if not getattr(page, "_no_banner", False):
+        page.add_init_script(NO_BANNER_JS)  # registered after any clock.install, so it sees the fake Date
+        page._no_banner = True
     for i in range(tries):
         resp = page.goto(url, wait_until="load", timeout=120_000)
         status = resp.status if resp else 0
