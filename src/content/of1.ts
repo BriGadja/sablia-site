@@ -59,14 +59,14 @@ export interface Of1Offer {
 
 export const of1: Of1Offer = {
   id: 'OF-1',
-  title: 'Le CRM qui se remplit tout seul après chaque appel',
+  title: "Compte rendu d'appel",
   promise:
     "Le commercial raccroche, le CRM est déjà à jour : recap et tâche de relance créées automatiquement, sans qu'il tape une ligne.",
 
   teamSize: { min: 2, max: 20 },
   audience:
     "Pour les équipes commerciales de 2 à 20 personnes qui ont déjà un CRM en place et qui perdent leurs informations d'appel entre deux rendez-vous.",
-  crms: ['HubSpot', 'Zoho', 'Pipedrive', 'Salesforce', 'Airtable'],
+  crms: ['HubSpot', 'Zoho', 'Pipedrive', 'Salesforce', 'Airtable', 'Google Sheets', 'Excel 365'],
 
   variants: [
     {
@@ -98,8 +98,8 @@ export const of1: Of1Offer = {
     "Les licences : CRM, téléphonie VoIP, n8n cloud si vous le choisissez hébergé. Elles restent à votre charge et à votre nom. L'option de transcription de votre téléphonie en fait partie : Empower chez Ringover, AI Assist chez Aircall. Elle est payante, elle est à votre nom, et sans elle la variante A n'a pas de transcript à lire.",
     "L'astreinte et les interventions hors heures ouvrées. Elles ne font partie ni de cette offre ni du récurrent.",
     "L'enregistrement ou la transcription d'appels passés depuis un mobile classique sans téléphonie d'entreprise. C'est exactement ce que la variante B contourne, autrement.",
-    "L'agent vocal, c'est-à-dire une intelligence artificielle qui parle à vos clients à votre place. Nous n'en vendons pas.",
-    'La refonte de votre CRM, ou un CRM construit sur mesure.',
+    "Les agents vocaux, c'est-à-dire une intelligence artificielle qui parle à vos clients à votre place, ne font pas partie de cette offre.",
+    'La refonte de votre CRM, ou un CRM construit sur mesure : cela ne fait pas partie de cette offre, et se chiffre à part sous 24 heures.',
     'La migration de vos données existantes.',
     'La formation au-delà du rituel de 10 minutes.',
     'Tout développement hors de ce périmètre passe par une demande de changement chiffrée à part.',

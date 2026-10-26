@@ -15,7 +15,7 @@ import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 // @ts-expect-error: plain ESM manifest shared with the Node scripts, no type declarations
-import { resolveRoutes } from '../../../../scripts/seo/routes.mjs'
+import { resolveRoutes } from '../../../scripts/seo/routes.mjs'
 import { of1 } from '../of1'
 import banned from './banned-figures.json'
 import { publishedCrmPages } from './index'
@@ -30,7 +30,7 @@ import {
 const HERE = dirname(fileURLToPath(import.meta.url))
 const SRC = resolve(HERE, '../..')
 /** Hub ledgers, read through the relative path (of1.parity.test.ts precedent). */
-const HUB_LEDGER_DIR = resolve(HERE, '../../../../../../../../research/visibilite-llm/crm-sources')
+const HUB_LEDGER_DIR = resolve(HERE, '../../../../../../../research/visibilite-llm/crm-sources')
 const FIXTURE = resolve(HERE, '__fixtures__/published-fixture.json')
 const FIXTURE_LEDGER = resolve(HERE, '__fixtures__/ledger-fixture.md')
 

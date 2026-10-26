@@ -15,7 +15,7 @@ import { describe, expect, it } from 'vitest'
 import { of1 } from './of1'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
-const DEFAULT_OF1_PATH = resolve(HERE, '../../../../../offre/of-1-compte-rendu-appel.md')
+const DEFAULT_OF1_PATH = resolve(HERE, '../../../../offre/of-1-compte-rendu-appel.md')
 const OF1_PATH = process.env.OF1_PATH ?? DEFAULT_OF1_PATH
 
 if (!existsSync(OF1_PATH)) {
