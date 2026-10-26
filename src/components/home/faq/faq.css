@@ -1,0 +1,202 @@
+@layer theme, base, components, utilities;
+
+/* #faq — ported from the v143 mockup's RENDERED result (append-only patches merged: later rules won).
+   Keyframes are prefixed `faq-`; the chat bubbles keep the mockup's `rise` / `gone` / `dot` class names. */
+@layer components {
+  .v2-faq {
+    position: relative;
+    z-index: 1;
+    background: #f2e3df;
+    border-top: 1px solid #e4d6c0;
+    padding: 96px 0;
+    font-family: var(--font-sans);
+    color: #131620;
+
+    .fq-h2 {
+      margin: 14px 0 0;
+      max-width: 680px;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .faq-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 40px;
+      align-items: start;
+      margin-top: 32px;
+    }
+    .fq-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+    }
+    .qbtn {
+      appearance: none;
+      font: inherit;
+      text-align: left;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #e4d6c0;
+      background: #fff;
+      font-size: 15px;
+      line-height: 1.35;
+      color: #131620;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .qbtn[aria-pressed='true'] {
+      background: #f8eed9;
+      border-color: #eedcb3;
+    }
+    .qbtn:hover {
+      border-color: #131620;
+    }
+    .qbtn:focus-visible {
+      outline: 2px solid #d9a441;
+      outline-offset: 4px;
+    }
+
+    .fq-chat {
+      border: 1px solid #e4d6c0;
+      border-radius: 16px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .fq-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      border-bottom: 1px solid #e7e9ef;
+      background: #f8f9fb;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .fq-stack {
+      padding: 20px 18px 24px;
+      min-height: 360px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .fq-pair {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .fq-pair[hidden] {
+      display: none;
+    }
+    .fq-q {
+      align-self: flex-end;
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 14px 14px 4px 14px;
+      background: #131620;
+      color: #fff;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+    .fq-a {
+      align-self: flex-start;
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 14px 14px 14px 4px;
+      background: #f5f6f9;
+      color: #131620;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .fq-dots {
+      align-self: flex-start;
+      display: flex;
+      gap: 5px;
+      padding: 14px;
+      border-radius: 14px 14px 14px 4px;
+      background: #f5f6f9;
+      color: #61677a;
+    }
+    .rise {
+      animation: faq-rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    .gone {
+      overflow: hidden;
+      animation: faq-gone 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    .dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: faq-dot 0.9s ease-in-out 3 both;
+    }
+  }
+
+  @keyframes faq-rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes faq-gone {
+    0%,
+    70% {
+      opacity: 1;
+      max-height: 48px;
+    }
+    100% {
+      opacity: 0;
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-top: 0;
+    }
+  }
+  @keyframes faq-dot {
+    0%,
+    100% {
+      opacity: 0.25;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-faq .faq-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .v2-faq .fq-h2 {
+      font-size: 28px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-faq .rise,
+    .v2-faq .gone,
+    .v2-faq .dot {
+      animation: none !important;
+    }
+    .v2-faq .gone {
+      display: none;
+    }
+    .v2-faq .qbtn {
+      transition: none;
+    }
+  }
+}

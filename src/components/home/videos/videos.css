@@ -1,0 +1,108 @@
+@layer theme, base, components, utilities;
+
+/* #videos — ported from the v143 mockup's RENDERED result (append-only patches merged: later rules won). */
+@layer components {
+  .v2-videos {
+    position: relative;
+    z-index: 1;
+    background: #262038;
+    padding: 96px 0;
+    font-family: var(--font-sans);
+
+    .vd-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .vd-h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      color: #f1f2f5;
+    }
+    .vd-channel {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 44px;
+      padding: 0 18px;
+      border-radius: 12px;
+      border: 1px solid #e4d6c0;
+      background: #fff;
+      color: #131620;
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .vd-channel:focus-visible,
+    .vid:focus-visible {
+      outline: 2px solid #d9a441;
+      outline-offset: 4px;
+    }
+    .vid-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .vid {
+      display: block;
+      text-decoration: none;
+      color: #f1f2f5;
+    }
+    .vid-frame {
+      position: relative;
+      overflow: hidden;
+      border-radius: 14px;
+      background: #edeff4;
+      aspect-ratio: 16 / 9;
+    }
+    .vid-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .vid:hover .vid-img {
+      transform: scale(1.02);
+    }
+    .vid-title {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .vid-play {
+      flex: 0 0 auto;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #d9a441;
+      display: grid;
+      place-items: center;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-videos .vid-row {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .v2-videos .vd-h2 {
+      font-size: 28px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-videos .vid-img {
+      transition: none;
+    }
+  }
+}
