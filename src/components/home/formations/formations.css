@@ -1,0 +1,217 @@
+@layer theme, base, components, utilities;
+
+/* #formations — ported from the v143 mockup's RENDERED result (append-only patches merged: later rules won). */
+@layer components {
+  .v2-formations {
+    position: relative;
+    z-index: 1;
+    background: #f4ecdd;
+    padding: 56px 0 96px;
+
+    .fo-band {
+      margin: 0 16px;
+      border-radius: 32px;
+      background: #161b29;
+      color: #f1f2f5;
+      padding: 48px 0 72px;
+    }
+    .fo-h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+    }
+    .fo-lead {
+      margin: 14px 0 0;
+      font-size: 16px;
+      line-height: 1.55;
+      color: #a4aabd;
+    }
+    .fo-school {
+      color: #f1f2f5;
+      text-decoration: underline;
+      text-decoration-color: #d9a441;
+      text-underline-offset: 4px;
+    }
+    .fo-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .fo-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 44px;
+      padding: 0 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+
+      &.is-light {
+        background: #f1f2f5;
+        color: #131620;
+      }
+      &.is-ghost {
+        border: 1px solid #323a52;
+        color: #f1f2f5;
+      }
+    }
+    .fo-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .fo-stat {
+      border-top: 1px solid #323a52;
+      padding-top: 18px;
+    }
+    .fo-big {
+      font-size: 44px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .fo-stat-label {
+      margin-top: 8px;
+      font-size: 15px;
+      color: #a4aabd;
+    }
+    .fo-below {
+      margin-top: 48px;
+    }
+    .fo-three {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .fo-formats {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 18px;
+        border: 1px solid #e4d6c0;
+        border-radius: 12px;
+        background: #fff;
+        font-size: 16px;
+        font-weight: 600;
+      }
+    }
+    .fo-quotes {
+      margin-top: 16px;
+    }
+    .fo-quote {
+      margin: 0;
+      padding: 22px;
+      border: 1px solid #e4d6c0;
+      border-radius: 12px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+
+      blockquote {
+        margin: 0;
+        font-size: 18px;
+        line-height: 1.4;
+        letter-spacing: -0.01em;
+        font-weight: 600;
+      }
+      figcaption {
+        margin-top: auto;
+        /* 14 px + the 28 px the mockup's empty collapsed-answer slot leaves above the signature */
+        padding-top: 42px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        color: #61677a;
+      }
+      b {
+        color: #131620;
+        font-weight: 600;
+      }
+    }
+    .fo-full {
+      margin: 12px 0 0;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #3a3f4d;
+      animation: formations-rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    .fo-more {
+      all: unset;
+      cursor: pointer;
+      margin-top: 12px;
+      align-self: flex-start;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: underline;
+      text-decoration-color: #d9a441;
+      text-underline-offset: 4px;
+    }
+    .fo-more:focus-visible {
+      outline: 2px solid #835a0c;
+      outline-offset: 3px;
+    }
+    .fo-ini {
+      flex: 0 0 auto;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #f8eed9;
+      color: #835a0c;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-formations {
+      .fo-band {
+        margin: 0 8px;
+        border-radius: 22px;
+      }
+      .fo-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .fo-h2 {
+        font-size: 28px;
+      }
+      .fo-big {
+        font-size: 32px;
+      }
+      .fo-three {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-formations .fo-full {
+      animation: none;
+    }
+  }
+
+  @keyframes formations-rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

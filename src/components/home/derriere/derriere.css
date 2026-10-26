@@ -1,0 +1,146 @@
+@layer theme, base, components, utilities;
+
+/* #derriere — ported from the v143 mockup's RENDERED result. */
+@layer components {
+  .v2-derriere {
+    position: relative;
+    z-index: 1;
+    background: #f4ecdd;
+    padding: 24px 0 96px;
+
+    .dr-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 56px;
+      align-items: center;
+    }
+    .dr-photo {
+      display: block;
+      width: 100%;
+      max-height: 460px;
+      aspect-ratio: 4 / 4.4;
+      object-fit: cover;
+      object-position: 60% 30%;
+      border-radius: 20px;
+      min-width: 0;
+    }
+    .dr-copy {
+      min-width: 0;
+    }
+    .dr-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #835a0c;
+    }
+    .dr-heading {
+      margin: 14px 0 0;
+      font-size: 24px;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .dr-founder {
+      margin: 14px 0 0;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #3a3f4d;
+    }
+    .dr-tl {
+      list-style: none;
+      padding-inline: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 2fr);
+      gap: 12px;
+      align-items: start;
+      margin-top: 32px;
+      margin-bottom: 0;
+    }
+    .dr-step {
+      border-top: 2px solid #131620;
+      padding-top: 12px;
+    }
+    .dr-period {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #61677a;
+    }
+    .dr-employer {
+      margin-top: 6px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .dr-role {
+      margin-top: 2px;
+      font-size: 14px;
+      color: #61677a;
+    }
+    .dr-parallel {
+      display: grid;
+      gap: 8px;
+    }
+    .dr-parallel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #61677a;
+      padding-top: 14px;
+    }
+    .dr-both {
+      color: #835a0c;
+    }
+    .dr-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #f8eed9;
+      color: #131620;
+
+      &.is-dark {
+        background: #131620;
+        color: #fff;
+      }
+    }
+    .dr-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #d9a441;
+    }
+    .dr-pill-name {
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .dr-pill-role {
+      font-size: 13px;
+      color: #61677a;
+    }
+    .dr-pill.is-dark .dr-pill-role,
+    .dr-pill.is-dark .dr-pill-arrow {
+      color: #a4aabd;
+    }
+    .dr-pill-arrow {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #61677a;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-derriere {
+      .dr-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .dr-tl {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  }
+}
