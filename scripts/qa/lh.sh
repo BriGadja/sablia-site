@@ -4,6 +4,8 @@
 #   --base   default http://127.0.0.1:5001 (the preview slot)
 #   --out    write the per-route numbers as JSON (default: stdout summary only)
 #   --check  exit 1 when a target is missed (a11y>=95, seo>=95, best-practices>=90, perf>=75, CLS<=0.1, LCP<=3.0 s, TBT<=300 ms)
+# LH_EXTRA_HEADERS=FILE.json adds request headers from a file (the preview's basic auth behind Caddy), so no
+# credential ever sits in argv. The bare slot serves uncompressed files; only Caddy's zstd matches prod.
 set -u
 BASE=http://127.0.0.1:5001; OUT=""; CHECK=0
 while [ $# -gt 0 ]; do case "$1" in
@@ -17,6 +19,7 @@ i=0
 for route in / /formations /accompagnement /ressources; do
   i=$((i+1))
   npx --yes lighthouse@13.5.0 "$BASE$route" --form-factor=mobile --only-categories=performance,accessibility,best-practices,seo \
+    ${LH_EXTRA_HEADERS:+--extra-headers="$LH_EXTRA_HEADERS"} \
     --chrome-flags="--headless=new --no-sandbox" --output=json --output-path="$TMP/$i.json" --quiet >"$TMP/$i.log" 2>&1 \
     || { echo "lighthouse failed on $route:" >&2; tail -5 "$TMP/$i.log" >&2; echo "$route" >"$TMP/$i.route"; }
   echo "$route" >"$TMP/$i.route"
