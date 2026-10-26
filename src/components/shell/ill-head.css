@@ -1,0 +1,16 @@
+@layer theme, base, components, utilities;
+
+@layer components {
+  .v2-ill-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 500px);
+    gap: 40px;
+    align-items: center;
+  }
+  @media (max-width: 900px) {
+    .v2-ill-head {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+    }
+  }
+}

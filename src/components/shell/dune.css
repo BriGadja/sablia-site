@@ -1,0 +1,19 @@
+@layer theme, base, components, utilities;
+
+@layer components {
+  .v2-dune {
+    position: absolute;
+    left: 0;
+    top: -79px;
+    width: 100%;
+    height: 80px;
+    display: block;
+    pointer-events: none;
+    overflow: hidden;
+
+    &.is-bottom {
+      top: auto;
+      bottom: 0;
+    }
+  }
+}
