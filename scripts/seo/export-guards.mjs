@@ -122,11 +122,8 @@ export function checkExport({ dir, routes, rows }) {
     }
     const html = read(file)
     const dom = extractFromHtml(stripBlocks(html))
-    const main = /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(stripBlocks(html))?.[1] ?? ''
-    dom.text = main
-      .replace(/<[^>]+>/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim()
+    // `dom.text` is the decoded <main> text from extractFromHtml (React escapes ' as &#x27;).
+    if (!/<main\b/i.test(stripBlocks(html))) dom.text = ''
     dom.html = html
     if (!/<main\b[^>]*data-ready="true"/i.test(html))
       problems.push(`${path}: <main> lacks data-ready="true"`)

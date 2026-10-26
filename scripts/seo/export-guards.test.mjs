@@ -163,6 +163,34 @@ describe('checkExport', () => {
     assert.match(run(notReady).join('\n'), /ma-video.*data-ready/)
   })
 
+  it('reads the body text decoded: an apostrophe rendered as &#x27; still matches the row', () => {
+    const row = {
+      slug: 'ma-video',
+      titre: "Brancher l'appli",
+      resume: "pour qu'une tâche tourne & finisse",
+      youtube_id: 'abc123def45',
+    }
+    const body = (resume) => `<h2>Brancher l&#x27;appli</h2><p>${resume}</p>`
+    const build = (resume) =>
+      fixture({
+        'ressources/ma-video.html': page({
+          title: 'Brancher l&#x27;appli — Sablia',
+          h1: '<h1>Brancher l&#x27;appli</h1>',
+          canonical: 'https://sablia.io/ressources/ma-video',
+          body: body(resume),
+        })
+          .replace('<main>', '<main data-ready="true">')
+          .replace(
+            '</head>',
+            '<meta name="description" content="pour qu&#x27;une tâche tourne &amp; finisse"/></head>',
+          ),
+      })
+    const ok = build('pour qu&#x27;une tâche tourne &amp; finisse')
+    assert.deepEqual(run(ok, { rows: [row] }), [])
+    const lacking = build('un autre texte')
+    assert.match(run(lacking, { rows: [row] }).join('\n'), /missing the résumé/)
+  })
+
   it('rejects a resource page that bakes the unavailable state', () => {
     const dir = fixture({
       'ressources/ma-video.html': page({
