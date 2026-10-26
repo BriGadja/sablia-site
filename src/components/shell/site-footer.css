@@ -1,0 +1,53 @@
+@layer theme, base, components, utilities;
+
+@layer components {
+  .v2-footer {
+    position: relative;
+    z-index: 1;
+    background: #f4ecdd;
+    border-top: 1px solid #e4d6c0;
+    padding: 36px 0 44px;
+
+    .v2-footer-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      font-size: 14px;
+      color: #61677a;
+    }
+    .v2-footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #131620;
+      font-weight: 600;
+      font-size: 17px;
+      letter-spacing: -0.02em;
+    }
+    /* No row gap: each link already carries a 44 px touch target, so a wrapped row sits close. */
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 20px;
+    }
+    nav a,
+    nav button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0;
+      border: 0;
+      background: none;
+      font: inherit;
+      color: #3a3f4d;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    nav a:hover,
+    nav button:hover {
+      color: #835a0c;
+    }
+  }
+}

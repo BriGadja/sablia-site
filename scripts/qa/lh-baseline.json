@@ -1,0 +1,65 @@
+{
+  "base": "https://sablia.io",
+  "tool": "lighthouse@13.5.0 mobile",
+  "targets": {
+    "accessibility": [">=", 95],
+    "seo": [">=", 95],
+    "best-practices": [">=", 90],
+    "performance": [">=", 75],
+    "cls": ["<=", 0.1],
+    "lcp_s": ["<=", 3.0],
+    "tbt_ms": ["<=", 300]
+  },
+  "routes": {
+    "/": {
+      "performance": 92,
+      "accessibility": 97,
+      "best-practices": 100,
+      "seo": 100,
+      "cls": 0.013,
+      "lcp_s": 2.98,
+      "tbt_ms": 100,
+      "finalUrl": "https://sablia.io/"
+    },
+    "/formations": {
+      "performance": 89,
+      "accessibility": 94,
+      "best-practices": 100,
+      "seo": 92,
+      "cls": 0.013,
+      "lcp_s": 3.34,
+      "tbt_ms": 144,
+      "finalUrl": "https://sablia.io/formations"
+    },
+    "/accompagnement": {
+      "performance": 90,
+      "accessibility": 94,
+      "best-practices": 100,
+      "seo": 92,
+      "cls": 0.013,
+      "lcp_s": 3.32,
+      "tbt_ms": 0,
+      "finalUrl": "https://sablia.io/accompagnement"
+    },
+    "/ressources": {
+      "performance": 76,
+      "accessibility": 96,
+      "best-practices": 100,
+      "seo": 100,
+      "cls": 0.176,
+      "lcp_s": 3.77,
+      "tbt_ms": 198,
+      "finalUrl": "https://sablia.io/ressources"
+    }
+  },
+  "misses": [
+    ["/formations", "accessibility", 94],
+    ["/formations", "seo", 92],
+    ["/formations", "lcp_s", 3.34],
+    ["/accompagnement", "accessibility", 94],
+    ["/accompagnement", "seo", 92],
+    ["/accompagnement", "lcp_s", 3.32],
+    ["/ressources", "cls", 0.176],
+    ["/ressources", "lcp_s", 3.77]
+  ]
+}

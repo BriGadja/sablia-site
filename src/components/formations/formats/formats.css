@@ -1,0 +1,70 @@
+@layer theme, base, components, utilities;
+
+/* #formats of /formations, ported from the rendered mockup (F:264-282). */
+@layer components {
+  .v2-formats {
+    background: #fbf7f0;
+    border-top: 1px solid #e4d6c0;
+    border-bottom: 1px solid #e4d6c0;
+    padding: 96px 0;
+    color: #131620;
+
+    h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .fm-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 36px;
+    }
+    .fm-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid #e4d6c0;
+      padding: 24px;
+
+      h3 {
+        margin: 6px 0 0;
+        font-size: 20px;
+        letter-spacing: -0.02em;
+        font-weight: 600;
+      }
+      p {
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.5;
+        color: #3a3f4d;
+      }
+    }
+    .fm-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      margin-top: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #835a0c;
+      text-decoration: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-formats {
+      h2 {
+        font-size: 28px;
+      }
+      .fm-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  }
+}

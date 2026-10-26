@@ -5,7 +5,7 @@
 //   --write  bump only the drifted routes to today (UTC)
 // Test hooks: --root DIR, --routes FILE.json, --ledger FILE, --today YYYY-MM-DD.
 import { createHash } from 'node:crypto'
-import { readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { resolveRoutes } from './routes.mjs'
@@ -14,9 +14,29 @@ const HERE = dirname(fileURLToPath(import.meta.url))
 export const DEFAULT_ROOT = resolve(HERE, '..', '..')
 export const DEFAULT_LEDGER = join(HERE, 'lastmod.json')
 
-export function hashSources(root, sources) {
+/** A trailing-slash source is a directory: its files, tests excluded, in a stable order. */
+function expand(root, source, warn) {
+  const full = join(root, source)
+  if (!existsSync(full)) {
+    warn(`[seo:stamp] source not found yet, skipped: ${source}`)
+    return []
+  }
+  if (!source.endsWith('/')) return [source]
+  const out = []
+  const walk = (rel) => {
+    for (const name of readdirSync(join(root, rel)).sort()) {
+      const next = `${rel}${name}`
+      if (statSync(join(root, next)).isDirectory()) walk(`${next}/`)
+      else if (!/\.test\.[cm]?[jt]sx?$/.test(name)) out.push(next)
+    }
+  }
+  walk(source)
+  return out
+}
+
+export function hashSources(root, sources, { warn = console.warn } = {}) {
   const h = createHash('sha256')
-  for (const file of sources) {
+  for (const file of sources.flatMap((s) => expand(root, s, warn))) {
     h.update(`${file}\n`)
     h.update(readFileSync(join(root, file)))
     h.update('\n')

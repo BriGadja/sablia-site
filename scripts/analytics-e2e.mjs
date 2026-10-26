@@ -3,10 +3,19 @@
 //
 //   node scripts/analytics-e2e.mjs --base https://preview.sablia.io [--netrc FILE] [--replay]
 //   node scripts/analytics-e2e.mjs --base http://preview.sablia.io:18080 --map preview.sablia.io=127.0.0.1
+//   node scripts/analytics-e2e.mjs --base https://sablia.io --website prod
 //
+// --website prod|preview  the Umami website id to read back. Default: chosen by the --base hostname
+//           (sablia.io, www.sablia.io -> prod; anything else, incl. 127.0.0.1 -> preview), the same
+//           map the tracker uses in src/lib/analytics.ts
 // --netrc   machine/login/password file for the preview's basic auth (never on the command line)
 // --map     host=ip, Chrome's host-resolver rule (a private Caddy on loopback, before DNS exists)
 // --replay  also prove tier 2: a stored replay longer than 5 s, a heatmap click, no canary in it
+//
+// v2's home has no app.sablia.io link: outbound is proven on the « Voir la chaîne » YouTube channel link.
+// v2 has ONE form, the resource form on /ressources/<slug>: every form_* check runs there (the old
+// contact form and the « 36 » checks are gone). form_view is not asserted: the form is already in view
+// before consent, which spends its once-per-form event while it is still dropped.
 //
 // The Umami API key is read at runtime from the file named by UMAMI_CREDENTIALS (never argv). The form endpoints are
 // answered by the script itself (no mail, no CRM row): the proof is about the events, not the API.
@@ -25,7 +34,9 @@ const mapArg = opt('map')
 const netrcPath = opt('netrc')
 const replayMode = argv.includes('--replay')
 if (!base) {
-  console.error('usage: analytics-e2e.mjs --base URL [--map host=ip] [--netrc FILE] [--replay]')
+  console.error(
+    'usage: analytics-e2e.mjs --base URL [--website prod|preview] [--map host=ip] [--netrc FILE] [--replay]',
+  )
   process.exit(2)
 }
 const origin = new URL(base).origin
@@ -39,7 +50,15 @@ if (!credPath) {
 }
 const cred = JSON.parse(readFileSync(credPath, 'utf8'))
 const UMAMI = cred.local_url
-const WEBSITE = cred.websites.preview
+const websiteName =
+  opt('website') ??
+  (['sablia.io', 'www.sablia.io'].includes(new URL(base).hostname) ? 'prod' : 'preview')
+const WEBSITE = cred.websites[websiteName]
+if (!WEBSITE) {
+  console.error(`no website id « ${websiteName} » in ${credPath}`)
+  process.exit(2)
+}
+console.log(`NOTE reading Umami website « ${websiteName} »`)
 const KEY = cred.api_key
 
 let basic = null
@@ -174,7 +193,9 @@ try {
 
   await clickText('nav button', /Réserver 30 min/)
   await sleep(500)
-  await page.evaluate(() => document.querySelector('a[href^="https://app.sablia.io"]')?.click())
+  await page.evaluate(() =>
+    document.querySelector('a[href^="https://www.youtube.com/channel/"]')?.click(),
+  )
   await sleep(300)
   for (const ratio of [0.3, 0.55, 0.8, 1]) {
     await page.evaluate(
@@ -183,10 +204,30 @@ try {
     )
     await sleep(500)
   }
-  // typing in the contact form before any consent: nothing form_* may leave the page
-  await page.evaluate(() => document.querySelector('form[data-form="contact"]')?.scrollIntoView())
+  // no request left our origin on the home (the library below fetches from Supabase, so snapshot now)
+  const offBefore = requests.filter((r) => !r.sameOrigin)
+  check(
+    'no request leaves our origin before consent (home)',
+    offBefore.length === 0,
+    offBefore.map((r) => new URL(r.url).host).join(','),
+  )
+
+  // a resource page, still without consent: typing in its form must send no form_* event
+  await page.goto(`${base}/ressources`, { waitUntil: 'networkidle0', timeout: 45_000 })
+  const slugPath = await page.evaluate(
+    () => document.querySelector('a[href^="/ressources/"]')?.getAttribute('href') ?? null,
+  )
+  check('the library lists at least one resource', Boolean(slugPath))
+  if (!slugPath) throw new Error('no resource to drive the form with')
+  await page.goto(`${base}${slugPath}`, { waitUntil: 'networkidle0', timeout: 45_000 })
+  const form = 'form[data-form="ressource"]'
+  await page.waitForSelector(form, { timeout: 15_000 })
+  const frames0 = await page.evaluate(() => document.querySelectorAll('iframe').length)
+  check('the resource page mounts no iframe before the click', frames0 === 0, String(frames0))
+  await page.waitForSelector('[data-consent-banner]', { timeout: 10_000 })
+  await page.evaluate((sel) => document.querySelector(sel)?.scrollIntoView(), form)
   await sleep(500)
-  await page.type('form[data-form="contact"] input[name="name"]', `PRECONSENT-${run}`)
+  await page.type(`${form} input[name="prenom"]`, `PRECONSENT-${run}`)
   await page.evaluate(() => document.activeElement?.blur())
   await sleep(500)
 
@@ -200,12 +241,6 @@ try {
     'localStorage holds nothing before the visitor chooses',
     pre.keys.length === 0,
     pre.keys.join(','),
-  )
-  const offBefore = requests.filter((r) => !r.sameOrigin)
-  check(
-    'no request leaves our origin before consent (home)',
-    offBefore.length === 0,
-    offBefore.map((r) => new URL(r.url).host).join(','),
   )
 
   // ── 2. accept → tier 2 ─────────────────────────────────────────────────────
@@ -223,18 +258,35 @@ try {
   )
   check('the choice is stored as {v:1, replay:true}', stored?.v === 1 && stored?.replay === true)
 
-  // forms with consent: the canary goes into the fields; the endpoint is answered locally
-  await page.evaluate(() => document.querySelector('form[data-form="contact"]')?.scrollIntoView())
+  // video with consent: the click mounts the player and reports video_play
+  const played = await page.evaluate(() => {
+    const b = document.querySelector('button[aria-label^="Lire la vidéo"]')
+    b?.click()
+    return Boolean(b)
+  })
+  videoPlayed = played
+  if (played) {
+    await sleep(800)
+    const frames1 = await page.evaluate(() => document.querySelectorAll('iframe').length)
+    check('the click mounts the player', frames1 === 1, String(frames1))
+  } else {
+    console.log('NOTE this resource has no video: video_play not exercised')
+  }
+
+  // form_start fires once per form element and the pre-consent one was dropped by design: reload the
+  // resource page (consent is stored, the banner stays closed) so the consented typing starts on a fresh form
+  await page.goto(`${base}${slugPath}`, { waitUntil: 'networkidle0', timeout: 45_000 })
+  await page.waitForSelector(form, { timeout: 15_000 })
+
+  // the resource form with consent: the canary goes into the fields; the endpoint is answered locally
+  await page.evaluate((sel) => document.querySelector(sel)?.scrollIntoView(), form)
   await sleep(800)
-  await page.click('form[data-form="contact"] input[name="name"]', { clickCount: 3 })
-  await page.type('form[data-form="contact"] input[name="name"]', CANARY)
-  await page.type('form[data-form="contact"] input[name="company"]', `Société ${CANARY}`)
-  await page.type('form[data-form="contact"] input[name="email"]', `${run}@canary.example`)
-  await page.select('form[data-form="contact"] select[name="teamSize"]', '2_à_5_personnes')
-  await page.type('form[data-form="contact"] textarea[name="message"]', `Message ${CANARY}`)
+  await page.click(`${form} input[name="prenom"]`, { clickCount: 3 })
+  await page.type(`${form} input[name="prenom"]`, CANARY)
+  await page.type(`${form} input[name="email"]`, `${run}@canary.example`)
   await page.evaluate(() => document.activeElement?.blur())
   await sleep(400)
-  await page.click('form[data-form="contact"] button[type="submit"]')
+  await page.click(`${form} button[type="submit"]`)
   await sleep(1500)
 
   // a click that the heatmap can see
@@ -242,41 +294,6 @@ try {
   await sleep(500)
   await page.mouse.click(150, 400)
   await sleep(500)
-
-  // ── 3. a resource: facade, video_play, ressource form ──────────────────────
-  await page.goto(`${base}/ressources`, { waitUntil: 'networkidle0', timeout: 45_000 })
-  const slugPath = await page.evaluate(
-    () => document.querySelector('a[href^="/ressources/"]')?.getAttribute('href') ?? null,
-  )
-  check('the library lists at least one resource', Boolean(slugPath))
-  if (slugPath) {
-    await page.goto(`${base}${slugPath}`, { waitUntil: 'networkidle0', timeout: 45_000 })
-    await page.waitForSelector('main[data-ready="true"]', { timeout: 15_000 })
-    const frames0 = await page.evaluate(() => document.querySelectorAll('iframe').length)
-    check('the resource page mounts no iframe before the click', frames0 === 0, String(frames0))
-    const played = await page.evaluate(() => {
-      const b = document.querySelector('button[aria-label^="Lire la vidéo"]')
-      b?.click()
-      return Boolean(b)
-    })
-    videoPlayed = played
-    if (played) {
-      await sleep(800)
-      const frames1 = await page.evaluate(() => document.querySelectorAll('iframe').length)
-      check('the click mounts the player', frames1 === 1, String(frames1))
-    } else {
-      console.log('NOTE this resource has no video: video_play not exercised')
-    }
-    const form = 'form[data-form="ressource"]'
-    await page.evaluate((sel) => document.querySelector(sel)?.scrollIntoView(), form)
-    await sleep(800)
-    await page.type(`${form} input[name="prenom"]`, CANARY)
-    await page.type(`${form} input[name="email"]`, `${run}@canary.example`)
-    await page.evaluate(() => document.activeElement?.blur())
-    await sleep(300)
-    await page.click(`${form} button[type="submit"]`)
-    await sleep(1500)
-  }
 
   const during = await page.evaluate(() => ({
     cookie: document.cookie,
@@ -337,7 +354,7 @@ try {
   const outData = out ? await dataOf(out) : {}
   check(
     'outbound carries the host only',
-    outData.host === 'app.sablia.io' && !('url' in outData),
+    outData.host === 'youtube.com' && !('url' in outData),
     JSON.stringify(outData),
   )
   const sc = (
@@ -405,13 +422,16 @@ try {
       if (chunks.includes(CANARY)) leaked = r.id
     }
     check(
-      'the canary typed in both forms is absent from every stored replay',
+      'the canary typed in the resource form is absent from every stored replay',
       leaked === null,
       `found in ${leaked}`,
     )
-    const heat = await umami(`/api/websites/${WEBSITE}/heatmaps`, { urlPath: '/', mode: 'click' })
+    const heat = await umami(`/api/websites/${WEBSITE}/heatmaps`, {
+      urlPath: slugPath,
+      mode: 'click',
+    })
     check(
-      'a heatmap click point exists for /',
+      'a heatmap click point exists for the resource page',
       (heat.points ?? []).length > 0,
       JSON.stringify(heat).slice(0, 200),
     )

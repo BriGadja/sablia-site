@@ -1,12 +1,28 @@
-# Differences from Vercel that are deliberate (scripts/site-parity.py --allowed).
+# Differences from the Vercel baseline that are deliberate (scripts/site-parity.py --allowed).
+# Run against the preview SLOT (http://127.0.0.1:5001, no Caddy); strict form on prod is G3.
 # Vercel answered an unknown /api path with its own HTML-ish 404 text; ours is plain "Not Found".
 body ^/api/nope$
-# Lot 0 content changes — the only deliberate differences from Vercel's pages (plan R15).
-# The footer gains a « Gérer mes choix » button on every page (withdrawal as easy as consent):
-strip <button type="button" class="text-left text-[13px] text-on-dark-body hover:text-on-dark">Gérer mes choix</button>
-# A resource's video sits behind the click-to-play facade instead of a live YouTube iframe (US-67):
-body ^/ressources/[a-z0-9-]+$
-# The thank-you page's booking link is marked for the event map (data-cta-book, US-65):
-strip-re  ?data-cta-book="(?:true)?"
-# The sitemap's lastmod of the two legal pages moved with their new text (seo:stamp, lot 0):
+# v2 rewrote every page: page HTML bodies are released (statuses, content types and headers stay compared).
+body ^/(index\.html|guides/.*|offres/.*|ressources(/.*)?|cgv/?|thank-you|formations|accompagnement|mentions-legales|politique-confidentialite)?$
+# The two ex-soft-404 probes (unknown path, missing asset) now answer a real 404 with 404.html (t-20261019-24).
+status ^/nimporte-quoi$ 404
+status ^/assets/x\.js$ 404
+body ^/nimporte-quoi$
+body ^/assets/x\.js$
+# The two old pages Google lists as soft 404s redirect to their natural replacements (reversible in static.ts).
+redirect ^/roi$ /offres/compte-rendu-appel
+redirect ^/about$ /#derriere
+# Next's hashed _next/static files are served immutable on purpose (same reason as the built-in /assets/ rule).
+header cache-control ^/_next/static/
+# The sitemap's lastmod moved with the rewritten pages (stamp-lastmod --write is honest, plan A5).
 body ^/sitemap\.xml$
+# llms.txt is rewritten for v2 (A5; no contact form, booking link and offer page instead).
+body ^/llms\.txt$
+# The AI-usage statement changed by 8 bytes with the v2 wording (A5).
+body ^/\.well-known/ai\.txt$
+# favicon.svg is the Sablier mark (A10); the baseline holds the old coral one.
+body ^/favicon\.svg$
+# brand/symbol.svg is redrawn in the Sablier palette at the same byte length (A10).
+body ^/brand/symbol\.svg$
+# escalier-modeles lost its Google Fonts lines (system-ui fallback) so the content gate passes (A5).
+body ^/escalier-modeles$

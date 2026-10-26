@@ -1,0 +1,65 @@
+@layer theme, base, components, utilities;
+
+/* #exemples of /accompagnement, ported from the v143 mockup's RENDERED result. */
+@layer components {
+  .v2-acc-exemples {
+    padding: 96px 0;
+
+    .acc-h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .cases {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 36px;
+    }
+    .case {
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid #e4d6c0;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .case-tag {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      height: 26px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #f8eed9;
+      color: #835a0c;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+    .case h3 {
+      margin: 4px 0 0;
+      font-size: 20px;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      font-weight: 600;
+    }
+    .case p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #3a3f4d;
+    }
+  }
+  @media (max-width: 900px) {
+    .v2-acc-exemples .cases {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .v2-acc-exemples .acc-h2 {
+      font-size: 28px;
+    }
+  }
+}

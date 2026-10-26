@@ -1,0 +1,10 @@
+@layer theme, base, components, utilities;
+/* comment with .v2-nothing { and braces } */
+@layer components {
+  .v2-top { font-family: var(--font-sans); color: red; }
+  .v2-top .a, .v2-top:hover .b { margin: 0; }
+  .v2-top { &#hero { background: red; } .x { color: blue; } }
+  @keyframes top-spin { from { opacity: 0; } to { opacity: 1; } }
+  @media (max-width: 900px) { .v2-top .a { margin: 1px; } }
+  @media (prefers-reduced-motion: reduce) { .v2-top .a { animation: none; } }
+}

@@ -1,0 +1,5 @@
+@layer theme, base, components, utilities;
+@layer components {
+  .v2-faq { color: red; }
+  @keyframes faq-rise { from { opacity: 0; } to { opacity: 1; } }
+}

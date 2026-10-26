@@ -39,9 +39,6 @@ const LEDGER = {
   '/legal': { lastmod: '2026-05-26', hash: 'sha256:x' },
   '/offres/x/live': { lastmod: '2026-10-01', hash: 'sha256:x' },
 }
-const META = {
-  pages: { '/legal': { robots: 'noindex, follow' }, '/': { robots: 'index, follow' } },
-}
 
 const locs = (xml) => [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])
 const lastmodOf = (xml, loc) =>
@@ -49,31 +46,31 @@ const lastmodOf = (xml, loc) =>
     xml,
   )?.[1]
 
-test('lists indexable routes and published resources, never drafts, noindex or thank-you', () => {
+test('lists indexable routes and published resources, never drafts or non-indexable routes', () => {
   const xml = buildSitemap({
     routes: ROUTES,
     ledger: LEDGER,
-    metaTags: META,
     resources: [{ slug: 'un', published_at: '2026-09-01T10:00:00Z', updated_at: null }],
   })
   assert.deepEqual(locs(xml).sort(), [
     'https://sablia.io/',
+    'https://sablia.io/legal',
     'https://sablia.io/offres/x/live',
     'https://sablia.io/ressources',
     'https://sablia.io/ressources/un',
   ])
 })
 
-test('a route whose meta-tags robots says noindex is left out even if the manifest says indexable', () => {
-  const xml = buildSitemap({ routes: ROUTES, ledger: LEDGER, metaTags: META, resources: [] })
-  assert.ok(!locs(xml).includes('https://sablia.io/legal'))
+test('the manifest alone decides: an indexable route is listed, a non-indexable one is not (no meta-tags file)', () => {
+  const xml = buildSitemap({ routes: ROUTES, ledger: LEDGER, resources: [] })
+  assert.ok(locs(xml).includes('https://sablia.io/legal'))
+  assert.ok(!locs(xml).includes('https://sablia.io/thank-you'))
 })
 
 test('lastmod: route = ledger date; resource = updated_at ?? published_at', () => {
   const xml = buildSitemap({
     routes: ROUTES,
     ledger: LEDGER,
-    metaTags: META,
     resources: [
       { slug: 'a', published_at: '2026-09-01T10:00:00Z', updated_at: '2026-09-05T08:00:00Z' },
       { slug: 'b', published_at: '2026-09-02T10:00:00Z', updated_at: null },
@@ -88,14 +85,12 @@ test('/ressources lastmod = max(ledger date, latest resource date)', () => {
   const newer = buildSitemap({
     routes: ROUTES,
     ledger: LEDGER,
-    metaTags: META,
     resources: [{ slug: 'z', published_at: '2026-10-03T00:00:00Z', updated_at: null }],
   })
   assert.equal(lastmodOf(newer, 'https://sablia.io/ressources'), '2026-10-03')
   const older = buildSitemap({
     routes: ROUTES,
     ledger: LEDGER,
-    metaTags: META,
     resources: [{ slug: 'z', published_at: '2026-01-03T00:00:00Z', updated_at: null }],
   })
   assert.equal(lastmodOf(older, 'https://sablia.io/ressources'), '2026-09-22')
@@ -105,7 +100,6 @@ test('url shape keeps loc, lastmod, changefreq, priority; escapes XML', () => {
   const xml = buildSitemap({
     routes: ROUTES,
     ledger: LEDGER,
-    metaTags: META,
     resources: [{ slug: 'a&b', published_at: '2026-09-01T00:00:00Z' }],
   })
   assert.match(
@@ -116,10 +110,7 @@ test('url shape keeps loc, lastmod, changefreq, priority; escapes XML', () => {
 })
 
 test('an indexable route with no ledger entry makes the generator throw', () => {
-  assert.throws(
-    () => buildSitemap({ routes: ROUTES, ledger: {}, metaTags: META, resources: [] }),
-    /no lastmod/,
-  )
+  assert.throws(() => buildSitemap({ routes: ROUTES, ledger: {}, resources: [] }), /no lastmod/)
 })
 
 function fixtureRoot() {
@@ -135,6 +126,34 @@ test('hashSources is stable and changes with content', () => {
   assert.match(h1, /^sha256:[0-9a-f]{64}$/)
   writeFileSync(join(root, 'b.txt'), 'changed')
   assert.notEqual(h1, hashSources(root, ['a.txt', 'b.txt']))
+})
+
+test('hashSources skips a source that does not exist yet, with a warning', () => {
+  const root = fixtureRoot()
+  const warnings = []
+  const h = hashSources(root, ['a.txt', 'later.txt'], { warn: (m) => warnings.push(m) })
+  assert.equal(h, hashSources(root, ['a.txt']))
+  assert.equal(warnings.length, 1)
+  assert.match(warnings[0], /later\.txt/)
+})
+
+test('hashSources reads a directory source (trailing slash): every non-test file, sorted', () => {
+  const root = fixtureRoot()
+  mkdirSync(join(root, 'pg/sub'), { recursive: true })
+  writeFileSync(join(root, 'pg/page.tsx'), 'p')
+  writeFileSync(join(root, 'pg/sub/x.css'), 'x')
+  const h = hashSources(root, ['pg/'])
+  writeFileSync(join(root, 'pg/page.test.tsx'), 'a test never bumps lastmod')
+  assert.equal(h, hashSources(root, ['pg/']))
+  writeFileSync(join(root, 'pg/sub/x.css'), 'changed')
+  assert.notEqual(h, hashSources(root, ['pg/']))
+})
+
+test('hashSources: a source that appears later changes the hash (the route drifts once its page lands)', () => {
+  const root = fixtureRoot()
+  const before = hashSources(root, ['a.txt', 'later.txt'], { warn: () => {} })
+  writeFileSync(join(root, 'later.txt'), 'now')
+  assert.notEqual(before, hashSources(root, ['a.txt', 'later.txt']))
 })
 
 test('checkLedger: clean, drifted, missing; non-indexable routes are skipped', () => {

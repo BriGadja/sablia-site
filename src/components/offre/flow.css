@@ -1,0 +1,143 @@
+@layer theme, base, components, utilities;
+
+/* The call chain, drawn: appel, transcript, Claude, fiche à jour. Lit step by step in a loop. */
+@layer components {
+  .v2-flow {
+    margin: 0;
+    border-radius: 24px;
+    background: #ffffff;
+    border: 1px solid #e4d6c0;
+    padding: 24px;
+    box-shadow: 0 30px 60px -40px rgba(22, 27, 41, 0.45);
+
+    .flow-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .flow-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #131620;
+    }
+    .flow-pause {
+      all: unset;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      min-width: 44px;
+      padding: 0 14px;
+      border-radius: 10px;
+      border: 1px solid #e4d6c0;
+      background: #ffffff;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: #131620;
+    }
+    .flow-pause:focus-visible {
+      outline: 2px solid #835a0c;
+      outline-offset: 3px;
+    }
+    .flow-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+    }
+    .flow-node {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 124px;
+      padding: 14px;
+      border-radius: 16px;
+      background: #fbf7f0;
+      border: 1px solid #e4d6c0;
+      transform: translateY(8px);
+      /* Unlit steps stay fully legible: only position and border change, never the text colour. */
+      transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.3s;
+    }
+    .flow-node.is-on {
+      transform: none;
+      border-color: #131620;
+    }
+    .flow-node.is-ai.is-on {
+      background: #161b29;
+      border-color: #161b29;
+      color: #f1f2f5;
+    }
+    .flow-node.is-out.is-on {
+      border-color: #2f7a4f;
+    }
+    .flow-n {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #835a0c;
+    }
+    .flow-node.is-ai.is-on .flow-n {
+      color: #d9a441;
+    }
+    .flow-name {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    .flow-sub {
+      font-size: 13px;
+      line-height: 1.4;
+      color: #61677a;
+    }
+    .flow-node.is-ai.is-on .flow-sub {
+      color: #a4aabd;
+    }
+    /* The arrow between two nodes, drawn with the sand gold. */
+    .flow-node:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: -17px;
+      width: 12px;
+      height: 12px;
+      border-top: 2px solid #b9852a;
+      border-right: 2px solid #b9852a;
+      transform: translateY(-50%) rotate(45deg);
+      opacity: 0.8;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-flow {
+      padding: 18px;
+    }
+    .v2-flow .flow-list {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 22px;
+    }
+    .v2-flow .flow-node {
+      min-height: 0;
+    }
+    .v2-flow .flow-node:not(:last-child)::after {
+      top: auto;
+      right: auto;
+      bottom: -17px;
+      left: 24px;
+      transform: rotate(135deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-flow .flow-node {
+      transition: none;
+      transform: none;
+    }
+  }
+}

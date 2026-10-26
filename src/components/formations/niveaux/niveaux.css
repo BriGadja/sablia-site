@@ -1,0 +1,140 @@
+@layer theme, base, components, utilities;
+
+/* #niveaux of /formations, ported from the rendered mockup (F:162-185). */
+@layer components {
+  .v2-niveaux {
+    background: #fbf7f0;
+    border-top: 1px solid #e4d6c0;
+    border-bottom: 1px solid #e4d6c0;
+    padding: 96px 0;
+    color: #131620;
+
+    h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .nv-lead {
+      margin: 14px 0 0;
+      font-size: 16px;
+      line-height: 1.55;
+      color: #61677a;
+    }
+    .nv-ladder {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin: 40px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .nv-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 15px;
+      height: 2px;
+      background: #e4d6c0;
+      border-radius: 2px;
+      overflow: hidden;
+
+      i {
+        display: block;
+        height: 100%;
+        background: #d9a441;
+        transition: width 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+    }
+    .nv-rung {
+      position: relative;
+      padding-top: 40px;
+      transform: translateY(10px);
+      transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+
+      /* The mockup dims the rung with opacity .35; a section-coloured veil at .65 blends identically
+         but leaves the text itself at full opacity, so a contrast scan never reads a half-faded rung. */
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: #fbf7f0;
+        opacity: 0.65;
+        pointer-events: none;
+        transition: opacity 0.45s;
+      }
+      &.on {
+        transform: none;
+      }
+      &.on::after {
+        opacity: 0;
+      }
+      h3 {
+        margin: 8px 0 0;
+        font-size: 20px;
+        letter-spacing: -0.02em;
+        font-weight: 600;
+      }
+    }
+    .nv-dot {
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid #e4d6c0;
+      transition:
+        background 0.3s,
+        border-color 0.3s;
+    }
+    .nv-rung.on .nv-dot {
+      background: #d9a441;
+      border-color: #d9a441;
+    }
+    .nv-n {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #61677a;
+    }
+    .nv-what {
+      margin: 8px 0 0;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #3a3f4d;
+    }
+    .nv-who {
+      margin: 10px 0 0;
+      font-size: 13px;
+      color: #61677a;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-niveaux {
+      h2 {
+        font-size: 28px;
+      }
+      .nv-ladder {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .nv-line {
+        display: none;
+      }
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .v2-niveaux .nv-rung,
+    .v2-niveaux .nv-rung::after,
+    .v2-niveaux .nv-line i,
+    .v2-niveaux .nv-dot {
+      transition: none;
+    }
+  }
+}

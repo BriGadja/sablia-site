@@ -17,12 +17,6 @@ const here = dirname(fileURLToPath(import.meta.url))
   })
   const server = registerRoutes(app)
 
-  // The build defines NODE_ENV as "production", so this branch (and Vite) is gone from dist/index.js.
-  if (process.env.NODE_ENV === 'development') {
-    const { setupVite } = await import('./vite')
-    await setupVite(app, server)
-  }
-
   server.listen(PORT, HOST, () => {
     log(`serving on ${HOST}:${PORT}`)
   })

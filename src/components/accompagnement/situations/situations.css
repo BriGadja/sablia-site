@@ -1,0 +1,61 @@
+@layer theme, base, components, utilities;
+
+/* #situations of /accompagnement, ported from the v143 mockup's RENDERED result. */
+@layer components {
+  .v2-acc-situations {
+    background: #fbf7f0;
+    border-top: 1px solid #e4d6c0;
+    border-bottom: 1px solid #e4d6c0;
+    padding: 96px 0;
+
+    .acc-h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .situ {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 36px;
+    }
+    .situ-card {
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid #e4d6c0;
+      padding: 22px;
+      font-size: 17px;
+      line-height: 1.4;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      animation: acc-situations-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+  }
+  @media (max-width: 900px) {
+    .v2-acc-situations .situ {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .v2-acc-situations .acc-h2 {
+      font-size: 28px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .v2-acc-situations .situ-card {
+      animation: none;
+    }
+  }
+
+  @keyframes acc-situations-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

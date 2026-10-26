@@ -1,0 +1,61 @@
+@layer theme, base, components, utilities;
+
+@layer components {
+  .v2-notfound {
+    padding: 96px 0 120px;
+
+    .v2-notfound-in {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    h1 {
+      margin: 14px 0 16px;
+      font-size: 44px;
+      line-height: 1.08;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      color: #131620;
+    }
+    p {
+      margin: 0 0 28px;
+      font-size: 17px;
+      line-height: 1.55;
+      color: #3a3f4d;
+    }
+    .v2-notfound-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 20px;
+    }
+    button.v2-notfound-retry {
+      min-height: 44px;
+      padding: 0 20px;
+      border-radius: 12px;
+      border: 1px solid #131620;
+      background: #131620;
+      color: #f4ecdd;
+      font: inherit;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .v2-notfound-home {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      font-weight: 500;
+      text-decoration: underline;
+      text-decoration-color: #d9a441;
+      text-underline-offset: 4px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-notfound {
+      padding: 56px 0 80px;
+    }
+    .v2-notfound h1 {
+      font-size: 32px;
+    }
+  }
+}

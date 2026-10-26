@@ -1,0 +1,86 @@
+@layer theme, base, components, utilities;
+
+@layer components {
+  .v2-fin-band {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    min-height: 600px;
+    background: #161b29;
+    /* The dune straddles the top edge, so the band itself must not clip; the image clips itself. */
+    overflow: visible;
+
+    .v2-fin-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 30% 50%;
+      pointer-events: none;
+      clip-path: inset(0);
+    }
+    .v2-fin-in {
+      position: relative;
+      width: 100%;
+    }
+    .v2-fin-copy {
+      margin-left: 50%;
+      max-width: 540px;
+      padding: 96px 0;
+    }
+    h2 {
+      margin: 0;
+      font-size: 40px;
+      line-height: 1.08;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+      color: #f1f2f5;
+    }
+    p {
+      margin: 16px 0 0;
+      font-size: 16px;
+      line-height: 1.55;
+      color: #a4aabd;
+    }
+    .v2-fin-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 20px;
+      margin-top: 28px;
+    }
+    .v2-fin-actions a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      font-size: 14px;
+      color: #a4aabd;
+      text-decoration: underline;
+      text-decoration-color: #d9a441;
+      text-underline-offset: 4px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-fin-band {
+      display: block;
+      min-height: 0;
+    }
+    .v2-fin-band .v2-fin-img {
+      position: relative;
+      display: block;
+      height: 300px;
+      object-position: 27% 50%;
+    }
+    .v2-fin-band .v2-fin-copy {
+      margin-left: 0;
+      padding: 36px 0 56px;
+    }
+    .v2-fin-band h2 {
+      font-size: 28px;
+    }
+  }
+}

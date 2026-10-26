@@ -1,0 +1,189 @@
+@layer theme, base, components, utilities;
+
+/* #top of /accompagnement, ported from the v143 mockup's RENDERED result (append-only patches merged: later rules won). */
+@layer components {
+  .v2-acc-hero {
+    position: relative;
+    padding: 72px 0 88px;
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 56px;
+      align-items: center;
+    }
+    .hero-h1 {
+      margin: 16px 0 0;
+      font-size: 52px;
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      font-weight: 600;
+    }
+    .hero-lede {
+      margin: 20px 0 0;
+      max-width: 34em;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #3a3f4d;
+    }
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      margin-top: 24px;
+    }
+    .hero-free {
+      font-size: 14px;
+      color: #61677a;
+    }
+
+    .seg {
+      position: relative;
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 28px;
+      padding: 4px;
+      border-radius: 14px;
+      background: #f2e3df;
+      border: 1px solid #e4d6c0;
+    }
+    .seg-pill {
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      left: 4px;
+      width: calc(50% - 4px);
+      border-radius: 10px;
+      background: #161b29;
+      transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    .seg-btn {
+      all: unset;
+      box-sizing: border-box;
+      cursor: pointer;
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 170px;
+      height: 44px;
+      padding: 0 18px;
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 600;
+      color: #3a3f4d;
+      transition: color 0.3s;
+
+      &.on {
+        color: #ffffff;
+      }
+      &:focus-visible {
+        outline: 2px solid #d9a441;
+        outline-offset: 3px;
+        border-radius: 10px;
+      }
+    }
+
+    .week {
+      border-radius: 24px;
+      background: #ffffff;
+      border: 1px solid #e4d6c0;
+      padding: 22px;
+      box-shadow: 0 30px 60px -40px rgba(22, 27, 41, 0.45);
+    }
+    .week-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .week-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .week-who {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #61677a;
+    }
+    .wk-row {
+      display: grid;
+      grid-template-columns: 118px minmax(0, 1fr) 22px;
+      gap: 12px;
+      align-items: center;
+      min-height: 64px;
+      border-top: 1px solid #edeff4;
+      font-size: 15px;
+      animation: acc-hero-row-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+
+      &:first-child {
+        border-top: 0;
+      }
+    }
+    .wk-day {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: #61677a;
+    }
+    .wk-ok {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #2f7a4f;
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      animation: acc-hero-ok-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .hero-h1 {
+        font-size: 36px;
+      }
+      .seg-btn {
+        min-width: 0;
+      }
+      .wk-row {
+        grid-template-columns: 96px minmax(0, 1fr) 22px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .wk-row,
+      .wk-ok {
+        animation: none !important;
+      }
+      .seg-pill,
+      .seg-btn {
+        transition: none !important;
+      }
+    }
+  }
+
+  @keyframes acc-hero-row-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes acc-hero-ok-pop {
+    0% {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    100% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

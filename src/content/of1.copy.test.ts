@@ -1,0 +1,277 @@
+/**
+ * Editorial + coherence guard for the OF-1 product page.
+ *
+ * The parity test binds the module to the offer; this one binds the PAGE to the house rules:
+ * no em dash, none of the banned AI figures, no day-rate or man-day wording, no social proof
+ * (zero client delivered on this offer), one CTA URL, and a route registered in every place that
+ * must agree. It reads the component sources when they exist, so it grows teeth as the page lands.
+ */
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { dirname, join, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { describe, expect, it } from 'vitest'
+import { FAQ_CARRIED } from './faq-carried'
+import { OF1_BOOKING_URL, OF1_ROUTE, of1 } from './of1'
+import { faqSchema, serviceSchema } from './of1-schema'
+
+const HERE = dirname(fileURLToPath(import.meta.url))
+const OFFRE_COMPONENTS_DIR = resolve(HERE, '../components/offre')
+const PAGE_DIR = resolve(HERE, '../app/offres/compte-rendu-appel')
+const PAGE_FILE = join(PAGE_DIR, 'page.tsx')
+const ROUTES_FILE = resolve(HERE, '../../scripts/seo/routes.mjs')
+
+/**
+ * The codebase writes `100&nbsp;%`; an unnormalised match would walk straight past `80&nbsp;%`.
+ * Every entity and every exotic space becomes a plain space before any assertion runs.
+ */
+function normalise(text: string): string {
+  return text.replace(/&nbsp;|&#160;|&#xa0;/gi, ' ').replace(/[\u00A0\u202F\u2009]/g, ' ')
+}
+
+/** Every string and number the module carries, plus the two exported constants. */
+function contentLeaves(): string[] {
+  const leaves: string[] = [OF1_ROUTE, OF1_BOOKING_URL]
+  const walk = (node: unknown): void => {
+    if (typeof node === 'string') leaves.push(node)
+    else if (typeof node === 'number') leaves.push(String(node))
+    else if (Array.isArray(node)) for (const item of node) walk(item)
+    else if (node !== null && typeof node === 'object') for (const v of Object.values(node)) walk(v)
+  }
+  walk(of1)
+  return leaves.map(normalise)
+}
+
+/** Component + page sources, once they exist. Absence is tolerated: they land in Phases C and E. */
+function pageSources(): { path: string; text: string }[] {
+  const files: string[] = []
+  if (existsSync(OFFRE_COMPONENTS_DIR)) {
+    for (const name of readdirSync(OFFRE_COMPONENTS_DIR)) {
+      if (/\.tsx?$/.test(name) && !/\.test\./.test(name)) {
+        files.push(join(OFFRE_COMPONENTS_DIR, name))
+      }
+    }
+  }
+  if (existsSync(PAGE_DIR)) {
+    const walk = (dir: string): void => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const full = join(dir, entry.name)
+        if (entry.isDirectory()) walk(full)
+        else if (/\.tsx?$/.test(entry.name) && !/\.test\./.test(entry.name)) files.push(full)
+      }
+    }
+    walk(PAGE_DIR)
+  }
+  // The content module's OWN source too: an em dash in one of its comments is still an em dash
+  // in a file this plan owns, and scanning only the components let one through (2026-09-07).
+  for (const name of readdirSync(HERE)) {
+    if (name.endsWith('.ts') && !name.endsWith('.test.ts')) files.push(join(HERE, name))
+  }
+  return files.map((path) => ({ path, text: normalise(readFileSync(path, 'utf8')) }))
+}
+
+const LEAVES = contentLeaves()
+const SOURCES = pageSources()
+const ALL_TEXT = [...LEAVES, ...SOURCES.map((s) => s.text)]
+
+/** The twelve figures of memory/reference-chiffres-ia-bannis.md, plus their citation ring. */
+const BANNED_FIGURES: RegExp[] = [
+  /\b(80|95|70|19|94|46|51|54|36|35|96|26|17) ?%/,
+  /\b70,9 ?%/,
+  /18,6 milliards/i,
+  /\b1 ?200 entreprises/i,
+  /\b5 ?h ?30\b/i,
+  /\b5h30\b/i,
+]
+
+const BANNED_SOURCES = [
+  'Incenteev',
+  'Introhive',
+  'RAND',
+  'McKinsey',
+  'Gartner',
+  'METR',
+  'Pendo',
+  'Zylo',
+  'Eurostat',
+  'France Num',
+  'selon une étude',
+]
+
+/** Day-rate wording, and every name that would read as social proof we do not have. */
+const BANNED_WORDING = [
+  'TJM',
+  'jour-homme',
+  'jours-homme',
+  'jour homme',
+  'jours homme',
+  'témoignage',
+  'Norloc',
+  'Qwertys',
+  'VB Mobilier',
+  'Nestenn',
+  'Nesten',
+]
+
+const REQUIRED_IN_PAGE = [
+  '2 à 20 personnes',
+  '1 490',
+  '149',
+  'remier mois offert',
+  'intégralement remboursé',
+  'https://calendly.com/brice-gachadoat/30min',
+]
+
+/** French words that lost their accents : the module is client-facing copy, not code. */
+const UNACCENTED =
+  /\b(donnees|equipe|equipes|telephonie|apres|deja|delai|premiere|etape|etapes|synthese|controle|resiliable|cree|creee|remplacons)\b/i
+
+describe('OF-1 copy guard: characters and figures', () => {
+  it('uses no em dash anywhere in the copy or the page sources', () => {
+    for (const text of ALL_TEXT) {
+      expect(text).not.toMatch(/[\u2014\u2015]/)
+    }
+  })
+
+  it('carries none of the banned AI figures', () => {
+    for (const text of ALL_TEXT) {
+      for (const pattern of BANNED_FIGURES) {
+        expect(text).not.toMatch(pattern)
+      }
+    }
+  })
+
+  it('names none of the banned statistic sources', () => {
+    for (const text of ALL_TEXT) {
+      for (const source of BANNED_SOURCES) {
+        expect(text.toLowerCase()).not.toContain(source.toLowerCase())
+      }
+    }
+  })
+})
+
+describe('OF-1 copy guard: what the page must never say', () => {
+  it('never prices in day rates or man-days, and shows no social proof', () => {
+    for (const text of ALL_TEXT) {
+      for (const banned of BANNED_WORDING) {
+        expect(text.toLowerCase()).not.toContain(banned.toLowerCase())
+      }
+    }
+  })
+
+  it('anchors on no competitor price', () => {
+    for (const text of ALL_TEXT) {
+      expect(text).not.toMatch(/\b(500|1 000|1000) ?€/)
+    }
+  })
+
+  it('keeps the French copy accented', () => {
+    for (const leaf of LEAVES) {
+      expect(leaf).not.toMatch(UNACCENTED)
+    }
+  })
+
+  it('uses no `any` in the page sources', () => {
+    for (const source of SOURCES) {
+      expect(`${source.path}: ${source.text}`).not.toMatch(/:\s*any\b|\bas any\b|<any>/)
+    }
+  })
+})
+
+describe('OF-1 copy guard: what the page must say', () => {
+  it('carries every load-bearing fact of the offer', () => {
+    const haystack = ALL_TEXT.join('\n')
+    for (const required of REQUIRED_IN_PAGE) {
+      expect(haystack).toContain(required)
+    }
+  })
+
+  it('derives the price and the delay from the module, never hard-coded', () => {
+    // The literal "7 jours" is assembled from of1.delay.days at render time, so a source
+    // grep cannot see it: OffreHero.test.tsx asserts it on the RENDERED pills. What this
+    // guard proves is that the page READS the module instead of restating a number that
+    // would then drift away from OF-1.
+    const joined = SOURCES.map((source) => source.text).join('\n')
+    expect(SOURCES.length).toBeGreaterThan(0)
+    expect(joined).toContain('of1.price.oneShotHt')
+    expect(joined).toContain('of1.delay.days')
+  })
+
+  it('offers exactly one booking URL', () => {
+    for (const source of SOURCES) {
+      const urls = source.text.match(/https:\/\/calendly\.com\/[a-z0-9-]+\/[a-z0-9-]+/g) ?? []
+      for (const url of urls) {
+        expect(url).toBe(OF1_BOOKING_URL)
+      }
+    }
+  })
+})
+
+describe('OF-1 copy guard: route coherence', () => {
+  it('has a page file for the offer and for each of its CRM pages', () => {
+    expect(existsSync(PAGE_FILE)).toBe(true)
+    expect(existsSync(join(PAGE_DIR, '[crm]', 'page.tsx'))).toBe(true)
+    for (const tool of ['google-sheets', 'excel-365']) {
+      expect(existsSync(join(PAGE_DIR, tool, 'page.tsx')), tool).toBe(true)
+    }
+  })
+
+  it('registers the route in the route manifest (sitemap and prerender read it)', () => {
+    expect(readFileSync(ROUTES_FILE, 'utf8')).toContain(OF1_ROUTE)
+  })
+})
+
+describe('OF-1 copy guard: structured data', () => {
+  it('prices the Service offer from the module, never by hand', () => {
+    expect(serviceSchema.offers.price).toBe(String(of1.price.oneShotHt))
+    expect(serviceSchema.offers.priceCurrency).toBe('EUR')
+    expect(serviceSchema.offers.priceSpecification.price).toBe(String(of1.price.oneShotHt))
+    expect(serviceSchema.offers.priceSpecification.valueAddedTaxIncluded).toBe(false)
+  })
+
+  it('publishes every FAQ entry the page renders, the carried home questions included', () => {
+    expect(faqSchema.mainEntity).toHaveLength(of1.faq.length + FAQ_CARRIED.length)
+    expect(faqSchema.mainEntity[0].name).toBe(of1.faq[0].q)
+    expect(faqSchema.mainEntity[of1.faq.length].name).toBe(FAQ_CARRIED[0].q)
+  })
+})
+
+/**
+ * Two sentences on this page state something OF-1 does not: the closing line of the n8n objection
+ * (a paraphrase of IDEATION §9 T3) and the callout's delivery-date promise. Brice kept both on
+ * 2026-09-07 and asked that they stay traceable, so no future session mistakes one for a clause of
+ * the offer and goes looking for it in OF-1. Each carries an `@off-source` marker; this counts them.
+ * A third one appearing unmarked is beyond what a test can see -- what it CAN do is make adding or
+ * removing a marked line a deliberate act rather than a silent one.
+ */
+describe('OF-1 copy guard: lines that deliberately go beyond the offer', () => {
+  const OFF_SOURCE_MARKER = '@off-source'
+  const EXPECTED = ['ObjectionSection.tsx', 'OffreCallout.tsx'] as const
+
+  it('carries exactly two marked out-of-source lines, in the two known components', () => {
+    const marked = pageSources()
+      .filter((source) => source.text.includes(OFF_SOURCE_MARKER))
+      .map((source) => source.path.split('/').at(-1))
+      .sort()
+    expect(marked).toEqual([...EXPECTED])
+  })
+
+  it('still shows the exact sentence each marker vouches for', () => {
+    const byName = new Map(pageSources().map((s) => [s.path.split('/').at(-1), normalise(s.text)]))
+    expect(byName.get('OffreCallout.tsx')).toContain(
+      'une date de livraison, que nous travaillions ensemble ou non.',
+    )
+    expect(byName.get('ObjectionSection.tsx')).toContain(
+      "c'est la peur de l'installer, et l'inconnu qui va avec.",
+    )
+  })
+})
+
+describe('OF-1 copy guard: the page reads the module, never retypes a figure', () => {
+  it('no page or component source carries a literal price or delay', () => {
+    for (const source of SOURCES) {
+      if (source.path.includes('/content/')) continue
+      expect(source.text, source.path).not.toMatch(/\b1[ {2}]?490\b/)
+      expect(source.text, source.path).not.toMatch(/\b149 ?€/)
+    }
+  })
+})

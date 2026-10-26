@@ -1,0 +1,98 @@
+@layer theme, base, components, utilities;
+
+/* #deroule of /formations, ported from the rendered mockup (F:205-225). */
+@layer components {
+  .v2-deroule {
+    background: #f2e3df;
+    padding: 96px 0;
+    color: #131620;
+
+    h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .de-steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin: 40px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .de-step {
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid #e4d6c0;
+      padding: 20px;
+      position: relative;
+      transform: translateY(12px);
+      transition:
+        transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+        border-color 0.3s;
+
+      /* Veil instead of opacity .35 (same blend over the section ground, text stays full opacity). */
+      &::after {
+        content: '';
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        background: #f2e3df;
+        opacity: 0.65;
+        pointer-events: none;
+        transition: opacity 0.45s;
+      }
+      &.on {
+        transform: none;
+      }
+      &.on::after {
+        opacity: 0;
+      }
+      &.cur {
+        border-color: #161b29;
+      }
+      h3 {
+        margin: 16px 0 0;
+        font-size: 18px;
+        letter-spacing: -0.015em;
+        font-weight: 600;
+      }
+      p {
+        margin: 8px 0 0;
+        font-size: 14.5px;
+        line-height: 1.5;
+        color: #3a3f4d;
+      }
+    }
+    .de-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .de-n {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: #835a0c;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-deroule {
+      h2 {
+        font-size: 28px;
+      }
+      .de-steps {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .v2-deroule .de-step,
+    .v2-deroule .de-step::after {
+      transition: none;
+    }
+  }
+}

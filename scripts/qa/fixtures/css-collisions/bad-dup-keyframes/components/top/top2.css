@@ -1,0 +1,2 @@
+@layer theme, base, components, utilities;
+@layer components { .v2-top { color: red; } @keyframes top-spin { from { opacity: 0; } to { opacity: 1; } } }

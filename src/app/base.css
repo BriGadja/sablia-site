@@ -1,0 +1,112 @@
+@layer theme, base, components, utilities;
+
+/* The ONLY file with global element rules (CSS discipline). Ported from the mockup boards. */
+@layer base {
+  body {
+    margin: 0;
+    background: #F4ECDD;
+    font-family: var(--font-sans);
+  }
+  a {
+    color: #131620;
+  }
+  a:hover {
+    color: #835A0C;
+  }
+}
+
+@layer components {
+  .wrap {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px;
+    box-sizing: border-box;
+  }
+  @media (max-width: 900px) {
+    .wrap {
+      padding: 0 16px;
+    }
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 8px;
+    top: -64px;
+    z-index: 100;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: #FBF7F0;
+    color: #131620;
+    font-weight: 500;
+  }
+  .skip-link:focus {
+    top: 8px;
+  }
+
+  /* Global focus ring, then the dark-band gold override (same layer, later wins among !important). */
+  *:focus-visible {
+    outline: 2px solid #835A0C !important;
+    outline-offset: 3px;
+  }
+  .panel :focus-visible,
+  #scene :focus-visible,
+  #videos :focus-visible,
+  #fin :focus-visible {
+    outline-color: #D9A441 !important;
+  }
+
+  /* Shared scroll-driven effects, ported verbatim from the mockup. Static fallback = no animation
+     (the dune and the illustration simply show their final state where animation-timeline is unsupported).
+     Geometry of .dune / .ill belongs to the A8 shell CSS; only the effect bindings live here. */
+  .dune {
+    view-timeline: --dune block;
+  }
+  @supports (animation-timeline: view()) {
+    .dune .d-back {
+      animation: duneBack linear both;
+      animation-timeline: --dune;
+    }
+    .dune .d-front {
+      animation: duneFront linear both;
+      animation-timeline: --dune;
+    }
+    .ill-draw {
+      -webkit-mask-image: linear-gradient(90deg, #000 40%, transparent 60%);
+      mask-image: linear-gradient(90deg, #000 40%, transparent 60%);
+      -webkit-mask-size: 250% 100%;
+      mask-size: 250% 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      animation: illDraw linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 50%;
+    }
+  }
+  @keyframes duneBack {
+    from { transform: translateX(-60px); }
+    to { transform: translateX(60px); }
+  }
+  @keyframes duneFront {
+    from { transform: translateX(20px); }
+    to { transform: translateX(-20px); }
+  }
+  @keyframes illDraw {
+    from { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+    to { -webkit-mask-position: 0 0; mask-position: 0 0; }
+  }
+
+  /* Reduced motion: jump to the final state. Sections add their own blocks in their scope. */
+  @media (prefers-reduced-motion: reduce) {
+    .dune path {
+      animation: none !important;
+    }
+    .ill-draw {
+      animation: none !important;
+      -webkit-mask-image: none !important;
+      mask-image: none !important;
+    }
+    .flash1 {
+      animation: none !important;
+    }
+  }
+}

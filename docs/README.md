@@ -1,3 +1,5 @@
+> **v1, kept for history (2026-10-26):** this guide was written for the Vite SPA; sablia.io v2 is statically exported HTML (see `docs/ARCHITECTURE.md` and `docs/SEO.md`), so the "empty shell" warning below no longer applies.
+
 # Documentation Sablia — Guide pour LLMs
 
 **Dernière mise à jour** : 2026-05-27

@@ -2,8 +2,8 @@
 <!--
   OG / Twitter image template (1200x630), rendered by scripts/og-image.mjs.
   The three marker comments below (FONTS, SYMBOL, TITLE) are filled in by the script: the fonts are the site's own
-  (@fontsource files inlined as data URIs), the symbol is client/public/brand/symbol.svg, the title
-  is of1.title read from client/src/content/of1.ts.
+  (src/app/fonts woff2 inlined as data URIs), the symbol is public/brand/symbol.svg, the line
+  is the home H1 or of1.title (see og-image.mjs).
 -->
 <html lang="fr">
   <head>
@@ -13,9 +13,9 @@
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: 1200px; height: 630px; }
       body {
-        background: #f5f2ec;
-        color: #141413;
-        font-family: 'Inter Variable', sans-serif;
+        background: #161B29;
+        color: #F4ECDD;
+        font-family: 'Familjen Grotesk', sans-serif;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -30,27 +30,28 @@
         right: 0;
         bottom: 0;
         height: 10px;
-        background: #cc785c;
+        background: #D9A441;
       }
       .lockup { display: flex; align-items: center; gap: 22px; }
       .lockup svg { width: 88px; height: 88px; display: block; }
       .wordmark {
-        font-family: 'Cormorant Garamond Variable', serif;
-        font-weight: 500;
+        font-family: 'Familjen Grotesk', sans-serif;
+        font-weight: 600;
         font-size: 64px;
-        letter-spacing: -1px;
+        letter-spacing: -2px;
         line-height: 1;
       }
       h1 {
-        font-family: 'Cormorant Garamond Variable', serif;
-        font-weight: 500;
-        font-size: 72px;
-        line-height: 1.05;
-        letter-spacing: -1.5px;
+        font-family: 'Familjen Grotesk', sans-serif;
+        font-weight: 600;
+        font-size: 88px;
+        line-height: 1.04;
+        letter-spacing: -2.6px;
+        text-wrap: balance;
         max-width: 960px;
       }
-      .foot { display: flex; justify-content: space-between; align-items: baseline; font-size: 26px; color: #6c6a64; }
-      .foot strong { color: #141413; font-weight: 500; }
+      .foot { display: flex; justify-content: space-between; align-items: baseline; font-family: 'Fragment Mono', monospace; font-size: 24px; color: #A4AABD; }
+      .foot strong { color: #D9A441; font-weight: 400; }
     </style>
   </head>
   <body>

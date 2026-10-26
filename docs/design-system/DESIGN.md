@@ -1,3 +1,5 @@
+> **v1, kept for history (2026-10-26):** the dark and coral system below is retired; the current charte is « Sablier » in the root `DESIGN.md`.
+
 ## Overview
 
 Sablia.io is a dark-first, editorial B2B landing page for an AI integration agency. The base atmosphere is a **warm dark canvas** (`{colors.canvas}` — #0f0f12) — deliberately dark but not cold, with warm undertones that prevent it from feeling corporate-sterile. Headlines run a **serif display** (Cormorant Garamond) at weight 500 with negative letter-spacing, paired with **Inter** body sans. The combination feels like a premium consulting publication, not a generic SaaS marketing page.

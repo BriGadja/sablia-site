@@ -1,46 +1,62 @@
 {
   "/": {
-    "lastmod": "2026-06-18",
-    "hash": "sha256:22887d8dea64b27bedc1366598b10b2bdb7c7c8472bfc3897fe53cfbd3ae794d"
+    "lastmod": "2026-10-26",
+    "hash": "sha256:050e27bf938a2038fbe2d61680d8a954ca5a2d93dac937b72c357bdfa08413d4"
   },
   "/mentions-legales": {
-    "lastmod": "2026-10-18",
-    "hash": "sha256:41c6d4f708d8ad80cb0671a3aebce7e2d884553a0ebee72fbdbcd44a0825f1e5"
+    "lastmod": "2026-10-26",
+    "hash": "sha256:85506803f0a95f3ac27bffbbf08731b5dbcbca5765d3d5895bc8d9e9c6ec4cf0"
   },
   "/politique-confidentialite": {
-    "lastmod": "2026-10-18",
-    "hash": "sha256:34a72e49a93c799628e96b26d80e0b95af570ccc6b390b663fd67817547734d3"
+    "lastmod": "2026-10-26",
+    "hash": "sha256:6bf5b814f48368fc1184e5d9427d4f31351bbda7464ef7870a91893cd9d7bdb9"
   },
   "/cgv": {
-    "lastmod": "2026-05-26",
-    "hash": "sha256:6ac9b31c4fa405ba9bff86a05b3017ab16003c10a6f71f3a891e004a08a3d15a"
+    "lastmod": "2026-10-26",
+    "hash": "sha256:9c8a68140bbc587365bc9de1d0c5bdc1fd5fb27e08fd169c044eb8965cbeebe4"
   },
   "/guides/integrer-l-ia-dans-votre-entreprise": {
-    "lastmod": "2026-06-18",
-    "hash": "sha256:bb13171d0508940bdbf4c7f435f8f94396d841ce2b3d99a7ca9ab607730d8fb3"
+    "lastmod": "2026-10-26",
+    "hash": "sha256:7815bc761e53e36fdfff5cc48915817bb1bba6e3a86b348dd34fc0c473285b8e"
   },
   "/offres/compte-rendu-appel": {
-    "lastmod": "2026-10-12",
-    "hash": "sha256:2f9a993c63e8c2424687d87acfe2dca63385f070687efc6ecc98747bc7fcb292"
+    "lastmod": "2026-10-26",
+    "hash": "sha256:b364c31a6d72dbebf2a551ef9f25b662a5470d067b9b9a68ea3c7c00e87a30eb"
   },
   "/ressources": {
-    "lastmod": "2026-09-22",
-    "hash": "sha256:4d663b08db6bbbca6d348ff6a3ac38d81d17d9f65ed9b9d2e8e0ceebb9ea89b7"
+    "lastmod": "2026-10-26",
+    "hash": "sha256:b417d81e13cba40314d2da23ae54611b4b41d85f858d0d4f072f784241808b1d"
   },
   "/offres/compte-rendu-appel/zoho": {
-    "lastmod": "2026-10-12",
-    "hash": "sha256:9f3c0176173ce82b572528533bfb539a874461af25dc62d01e0856997114a49e"
+    "lastmod": "2026-10-26",
+    "hash": "sha256:a0055481f99826b7d2878860ab743d61ac28a7cf6d9ffe077e9a9a06f9b4cbd2"
   },
   "/offres/compte-rendu-appel/pipedrive": {
-    "lastmod": "2026-10-12",
-    "hash": "sha256:5b1df5ea8cd696caeb8da824744d3f5fd4ba4bed864a2084b8a577294a639f2d"
+    "lastmod": "2026-10-26",
+    "hash": "sha256:3c9ed2de0c618d51c53cec979210144fbfcfee4d8d14ddd7426f13fe990a1ab8"
   },
   "/offres/compte-rendu-appel/salesforce": {
-    "lastmod": "2026-10-12",
-    "hash": "sha256:4afaa2129802de1fd2fb71d07423e9482a228f52db21aa22f6fe46c5ba183408"
+    "lastmod": "2026-10-26",
+    "hash": "sha256:208dbf6e46f32e75cfc7c8a92526a7f28b4944a8357052bc4bc46b4e8688e9a1"
   },
   "/offres/compte-rendu-appel/hubspot": {
-    "lastmod": "2026-10-12",
-    "hash": "sha256:bbf295af20c92b4e1e403f19fb4e36c833b0c7d293aa987fed8130052d623ae3"
+    "lastmod": "2026-10-26",
+    "hash": "sha256:abea29fa3293ea0a92e07de0943fccd8c9c7986478f87899581abb60a190dfac"
+  },
+  "/formations": {
+    "lastmod": "2026-10-26",
+    "hash": "sha256:b7e9c49505fa1d0cf35d9a3d0fb4c97b246fef51324383e5fdb610b68e9c6959"
+  },
+  "/accompagnement": {
+    "lastmod": "2026-10-26",
+    "hash": "sha256:792ebe45569a7f5d9366f78459a0c884052674757e3eec76d1d2a8cf53e63749"
+  },
+  "/offres/compte-rendu-appel/google-sheets": {
+    "lastmod": "2026-10-26",
+    "hash": "sha256:a96bfdbb3dad44f9848124394e0e7e0b206f6ca0ef8584d8e52d176d6723d66a"
+  },
+  "/offres/compte-rendu-appel/excel-365": {
+    "lastmod": "2026-10-26",
+    "hash": "sha256:a9e1d10f0eee2e41fd0fcfa06efef6af4da26ba87b6edbb8056e75ab9fd1ce2e"
   }
 }

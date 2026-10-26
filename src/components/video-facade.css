@@ -1,0 +1,80 @@
+@layer theme, base, components, utilities;
+
+@layer components {
+  .v2-vf {
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    padding: 0;
+    border: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #161b29;
+    cursor: pointer;
+    font-family: var(--font-sans);
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    &:hover img {
+      transform: scale(1.02);
+    }
+    /* No poster on disk: a drawn night ground with a gold horizon instead of a broken image. */
+    &.is-generic {
+      background:
+        radial-gradient(120% 70% at 50% 120%, #c68a8e 0%, rgba(198, 138, 142, 0) 60%),
+        linear-gradient(180deg, #262038 0%, #161b29 100%);
+    }
+    .v2-vf-play {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      display: grid;
+      place-items: center;
+      width: 64px;
+      height: 64px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: #d9a441;
+      box-shadow: 0 6px 22px rgba(19, 22, 32, 0.4);
+      transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    &:hover .v2-vf-play {
+      transform: translate(-50%, -50%) scale(1.06);
+    }
+    &.is-compact .v2-vf-play {
+      width: 48px;
+      height: 48px;
+    }
+    &.is-frame {
+      display: block;
+      aspect-ratio: 16 / 9;
+      border: 0;
+      background: #131620;
+      cursor: auto;
+    }
+    .v2-vf-play svg {
+      width: 26px;
+      height: 26px;
+      margin-left: 3px;
+      fill: #131620;
+    }
+    &.is-compact .v2-vf-play svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-vf img,
+    .v2-vf .v2-vf-play {
+      transition: none;
+    }
+  }
+}

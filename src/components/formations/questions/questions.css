@@ -1,0 +1,51 @@
+@layer theme, base, components, utilities;
+
+/* #questions of /formations, ported from the rendered mockup (F:284-298). */
+@layer components {
+  .v2-questions {
+    padding: 96px 0;
+    color: #131620;
+
+    h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .qu-faq {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 40px;
+      margin-top: 32px;
+    }
+    .qu-item {
+      border-top: 1px solid #e4d6c0;
+      padding-top: 16px;
+
+      h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+      }
+      p {
+        margin: 6px 0 0;
+        font-size: 15px;
+        line-height: 1.55;
+        color: #3a3f4d;
+      }
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-questions {
+      h2 {
+        font-size: 28px;
+      }
+      .qu-faq {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  }
+}

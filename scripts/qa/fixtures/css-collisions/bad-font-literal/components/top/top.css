@@ -1,0 +1,2 @@
+@layer theme, base, components, utilities;
+@layer components { .v2-top { font-family: 'Familjen Grotesk', sans-serif; } }

@@ -1,0 +1,105 @@
+@layer theme, base, components, utilities;
+
+@layer components {
+  .v2-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: #f4ecdd;
+    border-bottom: 1px solid #e4d6c0;
+
+    .v2-header-bar {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .v2-header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      text-decoration: none;
+      color: #131620;
+      font-weight: 600;
+      font-size: 19px;
+      letter-spacing: -0.02em;
+    }
+    .v2-header-links {
+      display: flex;
+      gap: 26px;
+      align-items: center;
+      font-size: 14px;
+      color: #3a3f4d;
+    }
+    /* 44 px hit area around the 17 px text line: padding grows the box, the negative margin cancels it in layout. */
+    .v2-header-links a {
+      white-space: nowrap;
+      text-decoration: none;
+      color: #3a3f4d;
+      padding-block: 14px;
+      margin-block: -14px;
+    }
+    .v2-header-links a:hover {
+      color: #835a0c;
+    }
+    .v2-header-links a[aria-current='page'] {
+      color: #131620;
+      font-weight: 600;
+      background: linear-gradient(#d9a441, #d9a441) no-repeat left bottom 14px / 100% 2px;
+    }
+    .v2-header-menubtn {
+      display: none;
+      box-sizing: border-box;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border-radius: 10px;
+      border: 1px solid #e4d6c0;
+      background: #fbf7f0;
+      color: #131620;
+      cursor: pointer;
+      place-items: center;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-header .v2-header-bar {
+      flex-wrap: wrap;
+      height: auto;
+      padding-top: 10px;
+      padding-bottom: 8px;
+      row-gap: 8px;
+      column-gap: 12px;
+    }
+    .v2-header .v2-header-logo {
+      margin-right: auto;
+    }
+    .v2-header .v2-header-menubtn {
+      display: grid;
+      order: 5;
+    }
+    .v2-header .v2-header-links {
+      display: none;
+    }
+    .v2-header .v2-header-links.is-open {
+      display: grid;
+      order: 6;
+      width: 100%;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 16px;
+      padding: 4px 0;
+    }
+    .v2-header .v2-header-links a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding-block: 0;
+      margin-block: 0;
+    }
+    .v2-header .v2-header-links a[aria-current='page'] {
+      background-position: left bottom 0;
+    }
+  }
+}

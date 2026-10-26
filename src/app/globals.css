@@ -1,0 +1,31 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "./base.css";
+
+/* No preflight: the mockup is reset-less and global element rules live in base.css only.
+   Tokens: CHARTES["C"] (Sablier charte) on the dusk grounds. */
+@theme {
+  --color-sand: #F4ECDD;
+  --color-card: #FBF7F0;
+  --color-line: #E4D6C0;
+  --color-rose: #F2E3DF;
+  --color-night: #161B29;
+  --color-night-raised: #1E2436;
+  --color-night-sunken: #242B40;
+  --color-night-line: #323A52;
+  --color-violet: #262038;
+  --color-ink: #131620;
+  --color-body: #3A3F4D;
+  --color-muted: #61677A;
+  --color-gold: #D9A441;
+  --color-gold-dark: #835A0C;
+  --color-gold-mid: #B9852A;
+  --color-success: #2F7A4F;
+}
+
+/* next/font's variables are --font-sans-nf / --font-mono-nf (set on <html> by layout.tsx). */
+@theme inline {
+  --font-sans: var(--font-sans-nf), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-nf), ui-monospace, monospace;
+}

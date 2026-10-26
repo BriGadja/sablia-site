@@ -43,6 +43,10 @@ http.createServer((req, res) => {
   if (u === '/api/contact' && req.method === 'GET') { res.statusCode = 405; res.setHeader('allow', 'POST'); return res.end() }
   if (u.startsWith('/api/')) { res.statusCode = 404; return res.end('Not Found') }
   if (u === '/' && flags.includes('smoke=home500')) { res.statusCode = 500; return res.end('boom') }
+  // The v2 server: a known page answers 200, anything else is a real 404 (flag unknown=200 restores the old fallback)
+  const known = ['/', '/cgv', '/escalier-modeles', '/ressources', '/sitemap.xml']
+  if (!known.includes(u) && !flags.includes('unknown=200')) { res.statusCode = 404; return res.end('<html>404</html>') }
+  if (u === '/ressources' && flags.includes('smoke=ressources500')) { res.statusCode = 500; return res.end('boom') }
   res.statusCode = 200; res.end('<html>ok</html>')
 }).listen(port, host)
 process.on('SIGTERM', () => process.exit(0))
@@ -69,10 +73,14 @@ case "$1" in
   run)
     [ -n "${FAKE_BUILD_SLEEP:-}" ] && sleep "$FAKE_BUILD_SLEEP"
     case "$flags" in *build=fail*) echo "vite: build exploded" >&2; exit 1;; esac
+    echo "build slot=${SABLIA_SLOT:-unset}" >> "$FAKE_CALLS"
     [ "${PRERENDER_STRICT:-}" = 1 ] || { echo "PRERENDER_STRICT not set" >&2; exit 1; }
     [ -n "${VITE_SUPABASE_ANON_KEY:-}" ] || { echo "anon key missing from build env" >&2; exit 1; }
-    mkdir -p dist/public/cgv dist/public/ressources/demo
-    echo home > dist/public/index.html; echo cgv > dist/public/cgv/index.html; echo demo > dist/public/ressources/demo/index.html
+    # Next export shape: <route>.html, with a directory of the same name beside it (ressources.html + ressources/);
+    # one page keeps the <route>/index.html shape to prove both are accepted.
+    mkdir -p dist/public/ressources/demo
+    echo home > dist/public/index.html; echo cgv > dist/public/cgv.html; echo list > dist/public/ressources.html
+    echo demo > dist/public/ressources/demo/index.html
     case "$flags" in *sitemap=missing-page*) locs='<loc>https://sablia.io/</loc><loc>https://sablia.io/ressources/ghost/</loc>';; *) locs='<loc>https://sablia.io/</loc><loc>https://sablia.io/cgv</loc><loc>https://sablia.io/ressources/demo</loc>';; esac
     echo "<urlset>$locs</urlset>" > dist/public/sitemap.xml
     cp "$FAKE_STUB" dist/index.js; echo "$flags" > dist/flags
@@ -265,7 +273,38 @@ bash "$DEPLOY" preview > "$T/out13c.log" 2>&1; check "trigger present: exit 0" "
 check "prod trigger does not force the preview slot" "$(touch "$SITE_ROOT/triggers/prod-force"; before="$(calls 'npm run')"; bash "$DEPLOY" preview >/dev/null 2>&1; echo $(( $(calls 'npm run') - before )))" 0
 rm -f "$SITE_ROOT/triggers/prod-force"
 
-echo "-- 14. no secret value anywhere in the logs"
+echo "-- 14. smoke: an unknown path must answer 404 and /ressources 200 (v2 server contract)"
+make_commit fallback feature "unknown=200"
+bash "$DEPLOY" preview > "$T/out14a.log" 2>&1; rc=$?; [ $rc -ne 0 ] && ok "a 200 on an unknown path fails the smoke" || bad "unknown path answering 200 must fail the smoke"
+grep -q "unknown path" "$T/out14a.log" && ok "the log names the unknown-path check" || bad "unknown-path check named in the log"
+make_commit res500 feature "smoke=ressources500"
+bash "$DEPLOY" preview > "$T/out14b.log" 2>&1; rc=$?; [ $rc -ne 0 ] && ok "a 500 on /ressources fails the smoke" || bad "/ressources 500 must fail"
+make_commit v2ok feature ""
+bash "$DEPLOY" preview > "$T/out14c.log" 2>&1; check "a server answering 404 on unknown paths passes" "$?" 0
+
+echo "-- 15. SABLIA_SLOT is exported to the build, and differs between prod and preview"
+: > "$FAKE_CALLS"
+make_commit slotp main ""; make_commit slotv feature ""
+bash "$DEPLOY" prod > "$T/out15a.log" 2>&1; bash "$DEPLOY" preview > "$T/out15b.log" 2>&1
+check "the prod build saw SABLIA_SLOT=prod" "$(grep -c '^build slot=prod$' "$FAKE_CALLS")" 1
+check "the preview build saw SABLIA_SLOT=preview" "$(grep -c '^build slot=preview$' "$FAKE_CALLS")" 1
+
+echo "-- 16. the force trigger survives a skipped tick (resources) and is consumed once a build can run"
+make_commit trig feature ""
+bash "$DEPLOY" preview > "$T/out16a.log" 2>&1
+mkdir -p "$SITE_ROOT/triggers"; : > "$SITE_ROOT/triggers/preview-force"
+before="$(calls 'npm run')"
+DEPLOY_MIN_MEM_KB=999999999999 bash "$DEPLOY" preview > "$T/out16b.log" 2>&1
+[ -e "$SITE_ROOT/triggers/preview-force" ] && ok "under the memory gate the trigger is kept" || bad "the trigger was lost under the memory gate"
+check "no build under the memory gate" "$(calls 'npm run')" "$before"
+DEPLOY_MAX_LOAD=0 bash "$DEPLOY" preview > "$T/out16c.log" 2>&1
+[ -e "$SITE_ROOT/triggers/preview-force" ] && ok "under the load gate the trigger is kept" || bad "the trigger was lost under the load gate"
+sleep 1
+bash "$DEPLOY" preview > "$T/out16d.log" 2>&1
+[ -e "$SITE_ROOT/triggers/preview-force" ] && bad "the trigger must be consumed once resources allow" || ok "the trigger is consumed when the build runs"
+[ "$(calls 'npm run')" -gt "$before" ] && ok "the forced build ran on the next free tick" || bad "forced build did not run"
+
+echo "-- 17. no secret value anywhere in the logs"
 grep -rq SECRETVALUE "$T"/out*.log "$SITE_ROOT/logs" 2>/dev/null && bad "SECRETVALUE leaked" || ok "no env value in any log"
 if [ "$fails" -gt 0 ]; then
   echo "---- logs of the failing run (tail of each) ----"

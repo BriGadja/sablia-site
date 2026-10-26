@@ -1,0 +1,3 @@
+@layer theme, base, components, utilities;
+@layer base { body { margin: 0; } a { color: #131620; } }
+@layer components { *:focus-visible { outline: 2px solid #835A0C !important; } .wrap { max-width: 1240px; } }

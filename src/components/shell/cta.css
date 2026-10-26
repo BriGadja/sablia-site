@@ -1,0 +1,44 @@
+@layer theme, base, components, utilities;
+
+/* The one call-to-action look: ink on sand (dark) or pale on night (light). Button and link share it. */
+@layer components {
+  .v2-cta {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    border: 0;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    text-decoration: none;
+    transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.2s;
+
+    &.is-md {
+      gap: 8px;
+      height: 44px;
+      padding: 0 18px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+    &.is-lg {
+      gap: 10px;
+      height: 48px;
+      padding: 0 22px;
+      border-radius: 12px;
+      font-size: 15px;
+    }
+    &.is-dark {
+      background: #131620;
+      color: #ffffff;
+    }
+    &.is-light {
+      background: #f1f2f5;
+      color: #131620;
+    }
+    &:hover {
+      transform: translateY(-1px);
+      background: #262b38;
+      color: #ffffff;
+    }
+  }
+}

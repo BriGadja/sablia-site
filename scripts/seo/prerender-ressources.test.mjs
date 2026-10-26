@@ -63,7 +63,10 @@ describe('listPublishedSlugs', () => {
       ['newer', 'older'],
     )
     const q = new URL(calls[0].url)
-    assert.equal(q.searchParams.get('select'), 'slug,titre,resume,published_at,updated_at')
+    assert.equal(
+      q.searchParams.get('select'),
+      'slug,titre,resume,youtube_id,published_at,updated_at',
+    )
     assert.equal(q.searchParams.get('published'), 'eq.true')
     assert.equal(calls[0].init.headers.apikey, KEY)
   })
@@ -284,11 +287,13 @@ describe('extractFromHtml', () => {
 })
 
 describe('routes manifest', () => {
-  it('lists the 12 routes (8 pages + the 4 CRM pages of P10a) with page-specific sources only', () => {
+  it('lists the 16 routes (v2: /formations, /accompagnement, Google Sheets and Excel 365 pages added) with page-specific sources only', () => {
     assert.deepEqual(
       PAGE_ROUTES.map((r) => r.path),
       [
         '/',
+        '/formations',
+        '/accompagnement',
         '/mentions-legales',
         '/politique-confidentialite',
         '/cgv',
@@ -298,6 +303,8 @@ describe('routes manifest', () => {
         '/offres/compte-rendu-appel/zoho',
         '/offres/compte-rendu-appel/salesforce',
         '/offres/compte-rendu-appel/pipedrive',
+        '/offres/compte-rendu-appel/google-sheets',
+        '/offres/compte-rendu-appel/excel-365',
         '/ressources',
         '/thank-you',
       ],
@@ -305,7 +312,7 @@ describe('routes manifest', () => {
     for (const r of PAGE_ROUTES) {
       assert.ok(r.sources.length > 0, `${r.path} has sources`)
       for (const s of r.sources) {
-        assert.doesNotMatch(s, /TopNav|FooterSection|App\.tsx|index\.html/, `${r.path}: ${s}`)
+        assert.doesNotMatch(s, /SiteHeader|SiteFooter|layout\.tsx|shell\//, `${r.path}: ${s}`)
       }
     }
   })
@@ -349,6 +356,26 @@ describe('resolveRoutes', () => {
       routes: [{ path: '/', sources: ['p'], indexable: true, changefreq: 'weekly', priority: 1 }],
     })
     assert.equal(out[0].indexable, true)
+  })
+
+  it('accepts a list of candidate files and reads the first one that exists', () => {
+    const root = tempRoot({ 'new/a.json': { status: 'published' } })
+    const out = resolveRoutes({
+      root,
+      routes: [{ ...entry('x'), indexable: { fromJson: ['old/a.json', 'new/a.json'] } }],
+    })
+    assert.equal(out[0].indexable, true)
+  })
+
+  it('names every candidate when none exists', () => {
+    assert.throws(
+      () =>
+        resolveRoutes({
+          root: tempRoot({}),
+          routes: [{ ...entry('x'), indexable: { fromJson: ['old/a.json', 'new/a.json'] } }],
+        }),
+      /old\/a\.json.*new\/a\.json/,
+    )
   })
 
   it('throws a clear error naming the missing file', () => {

@@ -1,0 +1,272 @@
+@layer theme, base, components, utilities;
+
+/* #parcours of /accompagnement, ported from the v143 mockup's RENDERED result (append-only patches merged: later rules won). */
+@layer components {
+  .v2-acc-parcours {
+    padding: 96px 0;
+
+    .acc-h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .tlg {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 500px);
+      gap: 56px;
+      align-items: start;
+      margin-top: 40px;
+    }
+    .tl {
+      position: relative;
+      padding-left: 40px;
+    }
+    .tl-line {
+      position: absolute;
+      left: 11px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: #e4d6c0;
+      border-radius: 2px;
+      overflow: hidden;
+
+      i {
+        display: block;
+        width: 100%;
+        background: #d9a441;
+        transition: height 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+    }
+    .tl-step {
+      position: relative;
+      padding: 0 0 30px;
+    }
+    .tl-dot {
+      position: absolute;
+      left: -36px;
+      top: 2px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 2px solid #e4d6c0;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .tl-step.on .tl-dot {
+      background: #d9a441;
+      border-color: #d9a441;
+    }
+    .tl-when {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #61677a;
+    }
+    .tl-t {
+      margin: 6px 0 0;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+      font-weight: 600;
+      color: #131620;
+      transition: color 0.45s;
+    }
+    .tl-p {
+      margin: 6px 0 0;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #3a3f4d;
+      transition: color 0.45s;
+    }
+    .tl-step:not(.on) .tl-t,
+    .tl-step:not(.on) .tl-p {
+      color: #61677a;
+    }
+
+    /* CP4 12: the last two steps get an effect. « Entre les séances »: the dot sends two gold ripples.
+       « À la fin »: a check is drawn in the dot and the title gets a gold underline. */
+    .tl-dot::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      border: 2px solid #d9a441;
+      opacity: 0;
+    }
+    .tl-step.fx-ping.on .tl-dot::after {
+      animation: acc-parcours-ping 0.9s ease-out 0.1s 2 both;
+    }
+    .tl-check {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      color: #131620;
+
+      path {
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+      }
+    }
+    .tl-step.fx-done.on .tl-check path {
+      animation: acc-parcours-draw 0.45s ease-out 0.25s both;
+    }
+    .tl-step.fx-done .tl-t {
+      width: fit-content;
+      background-image: linear-gradient(#d9a441, #d9a441);
+      background-repeat: no-repeat;
+      background-position: 0 100%;
+      background-size: 0 3px;
+      padding-bottom: 2px;
+      transition: color 0.45s, background-size 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s;
+    }
+    .tl-step.fx-done.on .tl-t {
+      background-size: 100% 3px;
+    }
+
+    .tasks {
+      margin-top: 14px;
+      max-width: 560px;
+      border-radius: 14px;
+      background: #ffffff;
+      border: 1px solid #e4d6c0;
+      overflow: hidden;
+    }
+    .task {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      height: 44px;
+      padding: 0 14px;
+      border-top: 1px solid #edeff4;
+      font-size: 14px;
+      transition: background 0.35s;
+
+      &:first-child {
+        border-top: 0;
+      }
+      &.ai {
+        background: #fffaf0;
+      }
+      &.hu {
+        background: #f2e3df;
+      }
+    }
+    .ttag {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      height: 26px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      opacity: 0;
+      transform: scale(0.7);
+      transition: opacity 0.2s, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+      &.on {
+        opacity: 1;
+        transform: none;
+      }
+      &.ai {
+        background: transparent;
+        border: 1.5px solid #d9a441;
+        color: #835a0c;
+      }
+      &.ai.done {
+        background: #d9a441;
+        border-color: #d9a441;
+        color: #131620;
+      }
+      &.hu {
+        background: #161b29;
+        color: #f1f2f5;
+      }
+    }
+    .tl-sum {
+      margin: 14px 0 0;
+      font-size: 15px;
+      font-weight: 600;
+      color: #131620;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.4s, transform 0.4s;
+
+      &.on {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    .tl-inline {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .acc-h2 {
+        font-size: 28px;
+      }
+      .tlg {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 28px;
+      }
+      .tl-side {
+        display: none;
+      }
+      .tl-inline {
+        display: block;
+        margin-top: 14px;
+
+        .tasks {
+          margin-top: 0;
+        }
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tl-line i,
+      .tl-dot,
+      .tl-t,
+      .tl-p,
+      .task,
+      .ttag,
+      .tl-sum {
+        transition: none !important;
+      }
+      .tl-step.fx-ping.on .tl-dot::after,
+      .tl-step.fx-done.on .tl-check path {
+        animation: none !important;
+      }
+      .tl-step.fx-done .tl-check path {
+        stroke-dashoffset: 0;
+      }
+      .tl-step.fx-done .tl-t {
+        background-size: 100% 3px;
+      }
+    }
+  }
+
+  @keyframes acc-parcours-ping {
+    0% {
+      opacity: 0.9;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(2.4);
+    }
+  }
+  @keyframes acc-parcours-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+}

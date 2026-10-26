@@ -3,11 +3,11 @@
 
 Brice, 2026-09-29, Claude Design round 3: « on prend le 3, et on garde en tête le 12 qui va
 permettre d'ajouter un fond quand nécessaire ».
-  client/public/brand/symbol.svg  mark 3, the stroked S-hourglass: the mark on a page
+  public/brand/symbol.svg  mark 3, the stroked S-hourglass: the mark on a page
                                   (logo.svg for schema.org, nav, footer, OG images).
-  client/public/brand/badge.svg   mark 12, the same S cut out of a rounded coral square: every
+  public/brand/badge.svg   mark 12, the same S in gold on a rounded night square: every
                                   slot that needs its own background (favicon, app icons).
-Writes into client/public/:
+Writes into public/:
   logo.svg (symbol), favicon.svg (badge), favicon.png (32), favicon.ico (16/32/48),
   icon-192/512/1024.png (badge, transparent corners), apple-touch-icon.png (180) and
   icon-maskable-192/512.png (full-bleed tile: the platform crops its own shape, so the badge's
@@ -31,10 +31,10 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
-PUBLIC = ROOT / "client" / "public"
+PUBLIC = ROOT / "public"
 BRAND = PUBLIC / "brand"
-CREAM = (245, 242, 236, 255)  # --color-surface-light #F5F2EC
-CORAL = (217, 119, 87, 255)  # #D97757, the logo colour (grill 2026-09-28, decision 7)
+GOLD = (217, 164, 65, 255)  # #D9A441, the Sablier charte signal (decision D1: the logo goes coral to gold)
+NIGHT = (22, 27, 41, 255)  # #161B29, --color-night
 
 
 def rasterise(svg: Path, size: int) -> Image.Image:
@@ -53,11 +53,11 @@ def badge_scale(badge: Path) -> float:
 
 
 def tile(symbol: Path, size: int, scale: float) -> Image.Image:
-    """The badge, full-bleed: a coral square with the S in cream, at the badge's scale."""
-    canvas = Image.new("RGBA", (size, size), CORAL)
+    """The badge, full-bleed: a night square with the S in gold, at the badge's scale."""
+    canvas = Image.new("RGBA", (size, size), NIGHT)
     mark = rasterise(symbol, round(size * scale))
     offset = (size - mark.size[0]) // 2
-    canvas.paste(Image.new("RGBA", mark.size, CREAM), (offset, offset), mark.getchannel("A"))
+    canvas.paste(Image.new("RGBA", mark.size, GOLD), (offset, offset), mark.getchannel("A"))
     return canvas
 
 
@@ -78,7 +78,7 @@ def main() -> None:
 
     shutil.copyfile(symbol, PUBLIC / "logo.svg")
     shutil.copyfile(badge, PUBLIC / "favicon.svg")
-    print("client/public/logo.svg (symbol), client/public/favicon.svg (badge) copied")
+    print("public/logo.svg (symbol), public/favicon.svg (badge) copied")
 
     save(rasterise(badge, 32), "favicon.png")
     save(tile(symbol, 180, scale), "apple-touch-icon.png")

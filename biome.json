@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.10/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.13/schema.json",
   "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": {
     "enabled": true,
@@ -40,6 +40,8 @@
       "!**/.next",
       "!**/out",
       "!**/dist",
+      "!**/client",
+      "!**/.next-*",
       "!**/public",
       "!**/tmp",
       "!**/docs/crm",
@@ -53,7 +55,10 @@
       "!**/plans",
       "!**/memory",
       "!**/examples",
-      "!**/deploy/parity-baseline.json"
+      "!**/deploy/parity-baseline.json",
+      "!**/next-env.d.ts",
+      "!**/tsconfig.json",
+      "!**/scripts/qa/fixtures"
     ]
   }
 }

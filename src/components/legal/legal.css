@@ -1,0 +1,146 @@
+@layer theme, base, components, utilities;
+
+@layer components {
+  .v2-legal {
+    padding-bottom: 96px;
+
+    .v2-legal-hero {
+      padding: 72px 0 40px;
+    }
+    .v2-legal-narrow {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    h1 {
+      margin: 14px 0 0;
+      font-size: 44px;
+      line-height: 1.08;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+      color: #131620;
+    }
+    .v2-legal-intro {
+      margin: 20px 0 0;
+      max-width: 58ch;
+      font-size: 17px;
+      line-height: 1.55;
+      color: #3a3f4d;
+    }
+    .v2-legal-card {
+      box-sizing: border-box;
+      padding: 16px 40px 40px;
+      border: 1px solid #e4d6c0;
+      border-radius: 20px;
+      background: #fbf7f0;
+    }
+    .v2-legal-section {
+      padding: 28px 0;
+      border-top: 1px solid #e4d6c0;
+    }
+    .v2-legal-section:first-child {
+      border-top: 0;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 22px;
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      font-weight: 600;
+      color: #131620;
+    }
+    h3 {
+      margin: 20px 0 6px;
+      font-size: 17px;
+      line-height: 1.35;
+      font-weight: 600;
+      color: #131620;
+    }
+    p,
+    li {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #3a3f4d;
+    }
+    p {
+      margin: 0 0 12px;
+    }
+    ul {
+      margin: 0 0 12px;
+      padding-left: 22px;
+    }
+    li {
+      margin: 0 0 6px;
+    }
+    strong {
+      color: #131620;
+      font-weight: 600;
+    }
+    a {
+      color: #131620;
+      text-decoration: underline;
+      text-decoration-color: #d9a441;
+      text-underline-offset: 3px;
+    }
+    a:hover {
+      color: #835a0c;
+    }
+    code {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: #f4ecdd;
+      color: #131620;
+    }
+    .v2-legal-updated {
+      margin: 8px 0 0;
+      padding-top: 20px;
+      border-top: 1px solid #e4d6c0;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: #61677a;
+    }
+
+    /* A CGV point still to settle with Brice: loud on purpose, the PROD build refuses to ship while one remains. */
+    .v2-legal-todo {
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: #f6d98c;
+      color: #131620;
+      box-shadow: 0 0 0 1px #b9852a;
+    }
+    .v2-legal-todo b {
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      letter-spacing: 0.04em;
+    }
+
+    /* Guide */
+    .v2-legal-faq-item {
+      margin-bottom: 20px;
+    }
+    .v2-legal-faq-item h3 {
+      margin-top: 0;
+    }
+    .v2-legal-cta {
+      margin: 20px 0 0;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-legal .v2-legal-hero {
+      padding: 40px 0 24px;
+    }
+    .v2-legal h1 {
+      font-size: 32px;
+    }
+    .v2-legal .v2-legal-card {
+      padding: 8px 20px 28px;
+      border-radius: 16px;
+    }
+    .v2-legal h2 {
+      font-size: 20px;
+    }
+  }
+}
