@@ -1,0 +1,142 @@
+@layer theme, base, components, utilities;
+
+/* #avis of /formations, ported from the rendered mockup (F:227-262). The survey quotes are an open
+   list (rule and signature, no repeated white cards), the three cases stay cards as in the mockup. */
+@layer components {
+  .v2-avis {
+    padding: 96px 0;
+    color: #131620;
+
+    h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .av-cases {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 36px;
+    }
+    .av-case {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid #e4d6c0;
+      padding: 24px;
+
+      h3 {
+        margin: 4px 0 0;
+        font-size: 20px;
+        line-height: 1.25;
+        letter-spacing: -0.02em;
+        font-weight: 600;
+      }
+      p {
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.5;
+        color: #3a3f4d;
+      }
+    }
+    .av-tag {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      height: 26px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #f8eed9;
+      color: #835a0c;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+    .av-survey {
+      margin-top: 48px;
+    }
+    .av-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #61677a;
+    }
+    .av-list {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px 32px;
+      margin: 16px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .av-ans {
+      border-top: 2px solid #d9a441;
+      padding-top: 14px;
+      position: relative;
+      transform: translateY(12px);
+      transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+
+      /* Veil instead of opacity 0 (same result over the section ground, text stays full opacity). */
+      &::after {
+        content: '';
+        position: absolute;
+        inset: -2px 0 0;
+        background: #f4ecdd;
+        pointer-events: none;
+        transition: opacity 0.4s;
+      }
+      &.on {
+        transform: none;
+      }
+      &.on::after {
+        opacity: 0;
+      }
+      figure {
+        margin: 0;
+      }
+      blockquote {
+        margin: 0;
+        font-size: 17px;
+        line-height: 1.35;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+      figcaption {
+        margin-top: 10px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #61677a;
+      }
+    }
+    .av-note {
+      margin: 20px 0 0;
+      font-size: 13px;
+      color: #61677a;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-avis {
+      h2 {
+        font-size: 28px;
+      }
+      .av-cases,
+      .av-list {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .v2-avis .av-ans,
+    .v2-avis .av-ans::after {
+      transition: none;
+    }
+  }
+}

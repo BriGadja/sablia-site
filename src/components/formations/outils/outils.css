@@ -1,0 +1,82 @@
+@layer theme, base, components, utilities;
+
+/* #outils of /formations, ported from the rendered mockup (F:187-203). */
+@layer components {
+  .v2-outils {
+    padding: 96px 0;
+    color: #131620;
+
+    h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .ou-lead {
+      margin: 14px 0 0;
+      font-size: 16px;
+      line-height: 1.55;
+      color: #61677a;
+    }
+    .ou-tools {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 36px;
+    }
+    .ou-group {
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid #e4d6c0;
+      padding: 18px;
+
+      h3 {
+        margin: 0;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        font-weight: 400;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #61677a;
+      }
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 12px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+    }
+    .ou-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 9px;
+      background: #f4ecdd;
+      font-size: 13.5px;
+      font-weight: 500;
+    }
+    .ou-note {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 400;
+      color: #61677a;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-outils {
+      h2 {
+        font-size: 28px;
+      }
+      .ou-tools {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  }
+}
