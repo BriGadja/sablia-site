@@ -8,7 +8,7 @@
     "description": "Le compte rendu de chaque appel déposé dans Salesforce comme tâche d'appel liée au contact, avec sa relance. Ce que l'édition de votre abonnement doit autoriser."
   },
   "hero": {
-    "title": "Le compte rendu de chaque appel, déposé dans Salesforce sans que votre commercial ouvre la fiche",
+    "title": "Chaque appel déposé dans Salesforce.",
     "lead": "Dans Salesforce, un appel est une tâche. La chaîne en crée une par appel, rattachée au bon contact et au bon dossier, puis une seconde pour la relance. Reste une question à régler avant tout : l'édition de votre abonnement ouvre-t-elle l'accès par l'API ?"
   },
   "where": {

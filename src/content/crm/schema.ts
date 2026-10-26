@@ -8,7 +8,8 @@
  * route manifest derives `indexable` from `status`, so it is stored once.
  */
 import { z } from 'zod'
-import { OF1_ROUTE, of1 } from '../of1'
+import { of1 } from '../of1'
+import { type CrmView, crmPath } from './view'
 
 export const CRM_SLUGS = ['hubspot', 'zoho', 'salesforce', 'pipedrive'] as const
 export type CrmSlug = (typeof CRM_SLUGS)[number]
@@ -26,7 +27,7 @@ export const CRM_SOURCE_HOSTS = [
   'pipedrive.readme.io',
 ] as const
 
-export const crmPath = (slug: CrmSlug) => `${OF1_ROUTE}/${slug}` as const
+export { crmPath } from './view'
 
 const text = z.string().trim().min(1)
 const block = z.object({ heading: text, body: text }).strict()
@@ -95,22 +96,27 @@ export type DraftCrmPage = Extract<CrmPageContent, { status: 'draft' }>
 
 const SITE = 'https://sablia.io'
 
-/** Service JSON-LD: the price is the module's, never the JSON's. */
-export function crmServiceSchema(page: PublishedCrmPage) {
+/** Service JSON-LD: the price is the module's, never the page content's. Shared by every CRM page. */
+export function pageServiceSchema(args: {
+  name: string
+  description: string
+  tool: string
+  path: string
+}) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: page.hero.title,
-    description: page.seo.description,
-    serviceType: `Automatisation de compte rendu d'appel dans ${page.crm}`,
-    url: `${SITE}${page.path}`,
+    name: args.name,
+    description: args.description,
+    serviceType: `Automatisation de compte rendu d'appel dans ${args.tool}`,
+    url: `${SITE}${args.path}`,
     provider: { '@id': `${SITE}/#organization` },
     areaServed: { '@type': 'Country', name: 'France' },
     offers: {
       '@type': 'Offer',
       price: String(of1.price.oneShotHt),
       priceCurrency: 'EUR',
-      url: `${SITE}${page.path}`,
+      url: `${SITE}${args.path}`,
       availability: 'https://schema.org/InStock',
       priceSpecification: {
         '@type': 'UnitPriceSpecification',
@@ -122,11 +128,11 @@ export function crmServiceSchema(page: PublishedCrmPage) {
   }
 }
 
-export function crmFaqSchema(page: PublishedCrmPage) {
+export function pageFaqSchema(faq: readonly { q: string; a: string }[]) {
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: page.faq.map((entry) => ({
+    mainEntity: faq.map((entry) => ({
       '@type': 'Question',
       name: entry.q,
       acceptedAnswer: { '@type': 'Answer', text: entry.a },
@@ -134,19 +140,15 @@ export function crmFaqSchema(page: PublishedCrmPage) {
   }
 }
 
-export function crmBreadcrumbSchema(page: PublishedCrmPage) {
+/** The shared template's input, from a published JSON page. */
+export function crmView(page: PublishedCrmPage): CrmView {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${SITE}/` },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Le CRM qui se remplit tout seul après chaque appel',
-        item: `${SITE}${OF1_ROUTE}`,
-      },
-      { '@type': 'ListItem', position: 3, name: page.crm, item: `${SITE}${page.path}` },
-    ],
+    tool: page.crm,
+    path: page.path,
+    hero: page.hero,
+    blocks: [page.where, page.followUp, page.prerequisites, { ...page.pitfall, warn: true }],
+    facts: page.facts,
+    faq: page.faq,
+    proofLine: page.proofLine,
   }
 }

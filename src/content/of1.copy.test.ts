@@ -6,9 +6,7 @@
  * (zero client delivered on this offer), one CTA URL, and a route registered in every place that
  * must agree. It reads the component sources when they exist, so it grows teeth as the page lands.
  */
-import { execFileSync } from 'node:child_process'
-import { existsSync, mkdtempSync, readdirSync, readFileSync } from 'node:fs'
-import { tmpdir } from 'node:os'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
@@ -18,12 +16,9 @@ import { faqSchema, serviceSchema } from './of1-schema'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const OFFRE_COMPONENTS_DIR = resolve(HERE, '../components/offre')
-const PAGE_FILE = resolve(HERE, '../pages/OffreCompteRenduAppel.tsx')
-const APP_FILE = resolve(HERE, '../App.tsx')
-const SEO_FILE = resolve(HERE, '../components/SEO.tsx')
-const ROUTES_FILE = resolve(HERE, '../../../scripts/seo/routes.mjs')
-const SITEMAP_GENERATOR = resolve(HERE, '../../../scripts/seo/generate-sitemap.mjs')
-const META_TAGS_FILE = resolve(HERE, '../../../docs/meta-tags.json')
+const PAGE_DIR = resolve(HERE, '../app/offres/compte-rendu-appel')
+const PAGE_FILE = join(PAGE_DIR, 'page.tsx')
+const ROUTES_FILE = resolve(HERE, '../../scripts/seo/routes.mjs')
 
 /**
  * The codebase writes `100&nbsp;%`; an unnormalised match would walk straight past `80&nbsp;%`.
@@ -51,12 +46,21 @@ function pageSources(): { path: string; text: string }[] {
   const files: string[] = []
   if (existsSync(OFFRE_COMPONENTS_DIR)) {
     for (const name of readdirSync(OFFRE_COMPONENTS_DIR)) {
-      if (name.endsWith('.tsx') && !name.endsWith('.test.tsx')) {
+      if (/\.tsx?$/.test(name) && !/\.test\./.test(name)) {
         files.push(join(OFFRE_COMPONENTS_DIR, name))
       }
     }
   }
-  if (existsSync(PAGE_FILE)) files.push(PAGE_FILE)
+  if (existsSync(PAGE_DIR)) {
+    const walk = (dir: string): void => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const full = join(dir, entry.name)
+        if (entry.isDirectory()) walk(full)
+        else if (/\.tsx?$/.test(entry.name) && !/\.test\./.test(entry.name)) files.push(full)
+      }
+    }
+    walk(PAGE_DIR)
+  }
   // The content module's OWN source too: an em dash in one of its comments is still an em dash
   // in a file this plan owns, and scanning only the components let one through (2026-09-07).
   for (const name of readdirSync(HERE)) {
@@ -203,39 +207,16 @@ describe('OF-1 copy guard: what the page must say', () => {
 })
 
 describe('OF-1 copy guard: route coherence', () => {
-  it('registers the route in App.tsx', () => {
-    const app = readFileSync(APP_FILE, 'utf8')
-    expect(app).toContain('OF1_ROUTE')
-    expect(app).toContain('<Route path={OF1_ROUTE}')
+  it('has a page file for the offer and for each of its CRM pages', () => {
+    expect(existsSync(PAGE_FILE)).toBe(true)
+    expect(existsSync(join(PAGE_DIR, '[crm]', 'page.tsx'))).toBe(true)
+    for (const tool of ['google-sheets', 'excel-365']) {
+      expect(existsSync(join(PAGE_DIR, tool, 'page.tsx')), tool).toBe(true)
+    }
   })
 
-  it('registers the route in the prerender route manifest', () => {
+  it('registers the route in the route manifest (sitemap and prerender read it)', () => {
     expect(readFileSync(ROUTES_FILE, 'utf8')).toContain(OF1_ROUTE)
-  })
-
-  it('registers the route in the sitemap', () => {
-    // The sitemap is generated at build time: run the generator as the local build does (no
-    // Supabase key, so no resources) and read what it writes.
-    const out = join(mkdtempSync(join(tmpdir(), 'of1-sitemap-')), 'sitemap.xml')
-    const env = { ...process.env }
-    env.VITE_SUPABASE_ANON_KEY = undefined
-    env.VERCEL = undefined
-    execFileSync('node', [SITEMAP_GENERATOR, '--out', out], {
-      env: Object.fromEntries(Object.entries(env).filter(([, v]) => v !== undefined)),
-      stdio: 'pipe',
-    })
-    expect(readFileSync(out, 'utf8')).toContain(`https://sablia.io${OF1_ROUTE}`)
-  })
-
-  it('registers the route in meta-tags.json', () => {
-    const metaTags: { pages: Record<string, unknown> } = JSON.parse(
-      readFileSync(META_TAGS_FILE, 'utf8'),
-    )
-    expect(Object.keys(metaTags.pages)).toContain(OF1_ROUTE)
-  })
-
-  it('registers the route in SEO.tsx', () => {
-    expect(readFileSync(SEO_FILE, 'utf8')).toContain(OF1_ROUTE)
   })
 })
 
@@ -282,5 +263,15 @@ describe('OF-1 copy guard: lines that deliberately go beyond the offer', () => {
     expect(byName.get('ObjectionSection.tsx')).toContain(
       "c'est la peur de l'installer, et l'inconnu qui va avec.",
     )
+  })
+})
+
+describe('OF-1 copy guard: the page reads the module, never retypes a figure', () => {
+  it('no page or component source carries a literal price or delay', () => {
+    for (const source of SOURCES) {
+      if (source.path.includes('/content/')) continue
+      expect(source.text, source.path).not.toMatch(/\b1[  ]?490\b/)
+      expect(source.text, source.path).not.toMatch(/\b149 ?€/)
+    }
   })
 })

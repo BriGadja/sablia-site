@@ -8,7 +8,7 @@
     "description": "Chaque appel laisse un appel journalisé, une note et une tâche de relance sur la fiche HubSpot du contact. Ce que la documentation établit, installé chez vous par Sablia."
   },
   "hero": {
-    "title": "Votre commercial raccroche, la fiche HubSpot est déjà à jour",
+    "title": "Raccroché, la fiche HubSpot est à jour.",
     "lead": "Sablia installe une chaîne qui lit la transcription de l'appel, la fait synthétiser par Claude, puis dépose le résultat sur la fiche du contact : un appel journalisé, une note, une tâche de relance avec sa date et son propriétaire. Personne ne retape rien."
   },
   "where": {

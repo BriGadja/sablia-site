@@ -1,0 +1,164 @@
+@layer theme, base, components, utilities;
+
+/* What a CRM page adds on top of the offer page's grammar (.v2-offre): crumbs, blocks, facts table. */
+@layer components {
+  .v2-crm {
+    .crumbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      margin-bottom: 28px;
+      font-size: 14px;
+      color: #61677a;
+    }
+    .crumbs a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      color: #3a3f4d;
+    }
+    .crumbs li + li::before {
+      content: '/';
+      margin-right: 10px;
+      color: #b9852a;
+    }
+    .lede.is-wide {
+      max-width: 40em;
+    }
+    .proofline {
+      margin-top: 28px;
+      max-width: 40em;
+      padding-left: 18px;
+      border-left: 2px solid #d9a441;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #131620;
+    }
+    .blocks {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 36px;
+    }
+    .block {
+      padding: 26px;
+      border-radius: 20px;
+      background: #ffffff;
+      border: 1px solid #e4d6c0;
+    }
+    .block.is-warn {
+      border-left: 4px solid #d9a441;
+    }
+    .block h3 {
+      font-size: 19px;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      font-weight: 600;
+    }
+    .block p {
+      margin-top: 10px;
+      font-size: 15px;
+      line-height: 1.65;
+      color: #3a3f4d;
+    }
+
+    .facts {
+      width: 100%;
+      margin-top: 32px;
+      border-collapse: collapse;
+      background: #ffffff;
+      border: 1px solid #e4d6c0;
+      border-radius: 20px;
+      overflow: hidden;
+      text-align: left;
+      font-size: 15px;
+    }
+    .facts th,
+    .facts td {
+      padding: 16px 20px;
+      vertical-align: top;
+      border-bottom: 1px solid #e4d6c0;
+      line-height: 1.55;
+    }
+    .facts tbody tr:last-child > * {
+      border-bottom: 0;
+    }
+    .facts thead th {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #61677a;
+      background: #fbf7f0;
+    }
+    .facts tbody th {
+      width: 24%;
+      font-weight: 600;
+      color: #131620;
+    }
+    .facts td {
+      color: #3a3f4d;
+    }
+    .facts a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      white-space: nowrap;
+      color: #835a0c;
+      text-underline-offset: 4px;
+    }
+
+    .terms {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 28px;
+    }
+    .terms-text {
+      margin-top: 22px;
+      max-width: 46em;
+      font-size: 17px;
+      line-height: 1.6;
+      color: #3a3f4d;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-crm .blocks {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .v2-crm .facts,
+    .v2-crm .facts tbody,
+    .v2-crm .facts tr,
+    .v2-crm .facts th,
+    .v2-crm .facts td {
+      display: block;
+    }
+    .v2-crm .facts thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+    .v2-crm .facts tr {
+      padding: 14px 0;
+      border-bottom: 1px solid #e4d6c0;
+    }
+    .v2-crm .facts tbody tr:last-child {
+      border-bottom: 0;
+    }
+    .v2-crm .facts th,
+    .v2-crm .facts td {
+      width: auto;
+      padding: 3px 18px;
+      border-bottom: 0;
+    }
+    .v2-crm .facts a {
+      min-height: 44px;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+  }
+}

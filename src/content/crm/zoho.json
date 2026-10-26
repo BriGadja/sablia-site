@@ -8,7 +8,7 @@
     "description": "Chaque appel devient un enregistrement du module Appels de Zoho CRM, avec sa note et sa tâche de relance, sans saisie. Les points propres à Zoho, sourcés."
   },
   "hero": {
-    "title": "Le compte rendu de chaque appel, écrit dans votre Zoho CRM",
+    "title": "Chaque appel écrit dans votre Zoho CRM.",
     "lead": "Dans Zoho, un appel est un enregistrement à part entière du module Appels. Nous y déposons le compte rendu, puis nous créons la tâche de relance : votre commercial raccroche, Zoho est déjà à jour."
   },
   "where": {
