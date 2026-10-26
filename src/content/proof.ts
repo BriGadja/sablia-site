@@ -36,7 +36,7 @@ export const DOGFOODING_LINE =
 
 /** Canonical wording of the founder's background. Never "DSI" as a job title. */
 export const FOUNDER_LINE =
-  "Six ans au sein de la DSI du groupe LVMH comme Proxy Product Owner, sur huit applications et deux mille utilisateurs, puis deux ans Data Senior Consultant chez MeltOne. Sablia depuis février 2025. C'est la même personne qui installe la chaîne, qui la répare quand une interface change, et qui décroche quand vous appelez."
+  "Six ans au sein de la DSI du groupe LVMH, dont cinq comme Product Owner, sur huit applications et deux mille utilisateurs, puis deux ans Consultant senior BI. Sablia depuis janvier 2025. C'est la même personne qui installe la chaîne, qui la répare quand une interface change, et qui décroche quand vous appelez."
 
 export interface ProofItem {
   readonly key: string
@@ -57,7 +57,7 @@ export const PROOF_ITEMS: readonly ProofItem[] = [
   },
   {
     key: 'fondateur',
-    label: 'Une seule personne, du premier appel à la panne',
+    label: 'Le même interlocuteur, du premier appel à la panne',
     body: FOUNDER_LINE,
   },
 ]
