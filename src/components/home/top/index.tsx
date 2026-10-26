@@ -199,6 +199,7 @@ export function Top() {
                   {d.relance && (
                     <div className="hx-rel pop">
                       <svg
+                        aria-hidden="true"
                         width="12"
                         height="12"
                         viewBox="0 0 24 24"
@@ -238,6 +239,7 @@ export function Top() {
                     </span>
                     <span className={`hs-hang${d.hangPress ? ' press' : ''}`}>
                       <svg
+                        aria-hidden="true"
                         width="20"
                         height="20"
                         viewBox="0 0 24 24"
@@ -273,6 +275,7 @@ export function Top() {
                         </div>
                         <span className="hs-call">
                           <svg
+                            aria-hidden="true"
                             width="16"
                             height="16"
                             viewBox="0 0 24 24"
@@ -295,6 +298,7 @@ export function Top() {
                 {d.working && (
                   <>
                     <svg
+                      aria-hidden="true"
                       className="spin"
                       width="16"
                       height="16"
