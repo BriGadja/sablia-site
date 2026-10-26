@@ -1,150 +1,97 @@
-# SEO — Sablia Site
+# SEO — Sablia Site (v2)
 
-**Last updated**: 2026-09-22
-
----
-
-## Recent Changes
-
-- **2026-10-18 (lot 0 VPS)**: the site is served by our own server (same URLs, same prerendered pages — `deploy/parity-baseline.json` proves it route by route). `/politique-confidentialite` and `/mentions-legales` gain the audience-measurement / recording section and the real host (Hostinger). `/ressources/:slug` no longer mounts a YouTube iframe before a click (`VideoFacade`): the prerendered HTML contains no `<iframe`. IndexNow is now submitted by `deploy/deploy.sh` after each production switch (the GitHub workflow is a manual fallback).
-- **2026-09-22 (NS-19, décision D7 — machine de contenu)**: Two new routes, `/ressources` (list, prerendered) and `/ressources/:slug` (detail, NOT prerendered — parametric, client-side fetch against Supabase). `/ressources` meta-tags added to `docs/meta-tags.json` and applied via `SEO.tsx`; `/ressources/:slug` carries its own `<Helmet>` directly in `Ressource.tsx` (title = resource title, canonical `/ressources/{slug}`, `noindex` when the slug is unknown or unpublished — never enters an index). `client/public/sitemap.xml` gains `/ressources` (weekly, 0.8, `lastmod` 2026-09-22) — the detail route is deliberately excluded, same reasoning as the prerender skip. `client/public/llms.txt`'s existing `## Ressources` heading gains a first line pointing at `/ressources`. `scripts/prerender.mjs`'s `ROUTES` array gains `/ressources` with an inline comment noting `/ressources/:slug` is skipped.
-- **2026-04-20 (ux-migration Phase 5)**: Homepage H1 shifts from Inter Tight to Fraunces Variable (display serif). Palette moves navy/parchment → encre/sable. Legal pages (/cgv, /politique-confidentialite, /mentions-legales) restructured via `LegalShell` with updated editorial body copy (SIREN/APE lifted into /mentions-legales, art. 293 B CGI disclosed in /cgv §3, n8n self-host + Data Privacy Framework disclosed in /politique-confidentialite). `/faq` reviewCount on FAQPage schema unchanged (9 Q, JSON-LD via Helmet). Sitemap `lastmod` bumped to 2026-04-20 on 3 legal routes + `/gap` + `/roi`.
+**Last updated**: 2026-10-26 (v2 build: Next.js static export). The Vite-era `meta-tags.json`, `SEO.tsx` and `react-helmet-async` no longer exist.
 
 ---
 
-## Meta-Tags Coverage
+## Where each thing is decided
 
-All meta-tags are defined in `docs/meta-tags.json` and applied via `react-helmet-async` through the `SEO.tsx` component.
+| What | Source of truth |
+|------|-----------------|
+| List of pages, indexable or not, priority, change frequency | `scripts/seo/routes.mjs` (`PAGE_ROUTES`): read by the sitemap generator, the export guards and `stamp-lastmod` |
+| `<title>`, description, canonical, OG, Twitter, robots of a page | the page's own `metadata` / `generateMetadata`, built by `pageMetadata()` in `src/lib/seo.ts` |
+| JSON-LD | `src/components/seo/` (`JsonLd`, `OrganizationJsonLd`, `BreadcrumbJsonLd`, `VideoObjectJsonLd`) and the content modules `src/content/of1-schema.ts`, `src/content/crm/schema.ts` |
+| Sitemap dates | `scripts/seo/lastmod.json` (ledger written by `stamp-lastmod.mjs`) |
+| Crawler files | `public/robots.txt`, `public/llms.txt`, `public/.well-known/ai.txt`, the IndexNow key file `public/*.txt` |
 
-| Route | Title | Description | OG | Twitter | Structured Data |
-|-------|-------|-------------|----|---------|----|
-| `/` | Sablia - Automatisation IA pour PME \| n8n & Make.com | Yes | Yes (website) | summary_large_image | Organization |
-| `/tarifs` | Tarifs Automatisation - Offres & Packages | Yes | Yes | summary_large_image | ItemList (offers) |
-| `/gap` | Analyse GAP Gratuite | Yes | Yes | summary | - |
-| `/roi` | Calculateur ROI Automatisation | Yes | Yes | summary_large_image | WebApplication |
-| `/about` | A propos de Sablia | Yes | Yes | summary | Person |
-| `/faq` | FAQ - Questions frequentes | Yes | Yes | summary | FAQPage (inline) |
-| `/cas-clients` | Cas clients - Exemples de transformations | Yes | Yes | summary | ItemList |
-| `/thank-you` | Merci - Sablia | Yes | - | - | noindex, nofollow |
-| `/mentions-legales` | Mentions Legales | Yes | Yes | - | noindex, follow |
-| `/politique-confidentialite` | Politique de Confidentialite | Yes | Yes | - | noindex, follow |
-| `/cgv` | Conditions Generales de Vente | Yes | Yes | - | noindex, follow |
-| `/lp/automatisation-pme` | Automatisez vos processus repetitifs | Yes | - | - | noindex, follow |
-| `/lp/audit-gratuit` | Audit Automatisation Gratuit | Yes | - | - | noindex, follow |
-| `/offres/compte-rendu-appel` | Le CRM qui se remplit tout seul après chaque appel : 1 490 € HT, livré en 7 jours | Yes | Yes (website) | summary_large_image | - |
-| `/ressources` | Ressources : les templates et schémas de nos vidéos — Sablia | Yes | Yes (website) | summary_large_image | - |
-| `/ressources/:slug` | dynamique (titre de la ressource) — `<Helmet>` propre dans `Ressource.tsx`, PAS dans `meta-tags.json` | - | - | - | `noindex` si slug inconnu ou non publié |
+## Metadata
 
----
+`pageMetadata({ path, title, description, noindex?, image?, twitterImage? })` returns the whole `Metadata` object:
+- `metadataBase` is always `https://sablia.io`, so a preview slot never writes its own host into a canonical or an OG URL;
+- the title is absolute (no site suffix appended); the canonical is the path without trailing slash (the home is the bare origin);
+- it throws on a trailing slash or an empty title or description;
+- it is never used in `src/app/layout.tsx`: anything set there would be inherited by `404.html`, which must carry no canonical.
 
-## Structured Data Inventory
+`/thank-you` is `noindex` and still has a canonical. A resource page of an unknown slug does not exist (`dynamicParams = false`): it is a real 404.
 
-| Page | Schema Type | Source File |
-|------|------------|-------------|
-| All pages (head) | ProfessionalService + OfferCatalog | index.html (inline JSON-LD) |
-| All pages (meta) | Organization | meta-tags.json homepage structuredData, via SEO.tsx |
-| All non-home pages | BreadcrumbList | SEO.tsx (dynamic) |
-| `/` pricing section | Service (9 offerings) | PricingSection.tsx |
-| `/` process section | HowTo (3 steps) | ThreeStepProcess.tsx |
-| `/` testimonials | AggregateRating + Review (5 reviews, 4.9/5) | TestimonialsSection.tsx |
-| `/` FAQ section | FAQPage | FaqSection.tsx |
-| `/about` | Person (Brice Gachadoat) | meta-tags.json via SEO.tsx |
-| `/faq` | FAQPage | Faq.tsx (inline Helmet) |
-| `/roi` | WebApplication | meta-tags.json |
-| `/cas-clients` | ItemList (case studies) | meta-tags.json |
-| `/tarifs` | ItemList (offers) | meta-tags.json |
+## What the build refuses (`scripts/seo/export-guards.mjs`, run by `npm run build`)
 
----
+On every `dist/public/**/*.html`: the audience tracker and consent banner absent from the static HTML, exactly one `h1`, canonical equal to the page's own URL, `noindex` exactly where `routes.mjs` says, every indexable route has its page and no unlisted page exists (`404.html`, `_not-found*` and `escalier-modeles.html` are exempt). Resource pages: title and description, `<main data-ready="true">`, no « Chargement », no `<iframe`; `/ressources` lists every published slug and the home video tiles match the slugs and `youtube_id`. Home: exactly one Organization JSON-LD, no « 30 jours », no « dashboards intelligents ». Then `scripts/qa/content-gates.sh --auto` greps the built HTML (banned figures and names, third-party hosts, em dash on proof surfaces, foreign e-mail, « [À CONFIRMER] » when `SABLIA_SLOT=prod`).
+
+## Structured data
+
+| Page | Types | Source |
+|------|-------|--------|
+| every page | ProfessionalService (founder Person, PostalAddress, OfferCatalog with the OF-1 price and delay read from `of1.ts`; voice agent and custom CRM « sur demande », no price) | `OrganizationJsonLd`, mounted in `layout.tsx` |
+| `/offres/compte-rendu-appel` | Service (Offer with UnitPriceSpecification), FAQPage, BreadcrumbList | `of1-schema.ts` + `BreadcrumbJsonLd` |
+| the four CRM pages | Service, FAQPage, BreadcrumbList | `CrmPageView.tsx`, `src/content/crm/schema.ts` |
+| `/guides/integrer-l-ia-dans-votre-entreprise` | Article, FAQPage, BreadcrumbList | the page file |
+| `/ressources/<slug>` | BreadcrumbList, VideoObject (only when the poster is on disk: the thumbnail must be our own file, never `i.ytimg.com`) | `src/app/ressources/[slug]/page.tsx` |
+
+`JsonLd` escapes `<`, U+2028 and U+2029 in the payload.
 
 ## Sitemap
 
-**File**: `client/public/sitemap.xml`
-**Routes**: 7 URLs live in the file today (`/ressources/:slug` is deliberately excluded — parametric, not prerendered)
-**Last modified**: 2026-09-22
-
-⚠️ The table below predates this session and lists routes (`/tarifs`, `/gap`, `/roi`, `/about`,
-`/faq`, `/cas-clients`) that are **not** in the current `sitemap.xml` nor in `App.tsx`'s routes —
-flagged, not fixed, here (T35 only adds `/ressources`; see report).
+Written to `dist/public/sitemap.xml` by `node scripts/seo/generate-sitemap.mjs` at build time: every indexable route of `routes.mjs` dated from the ledger, plus every published `/ressources/<slug>` (priority 0.6, monthly, dated from its row). A Supabase read failure fails the build. The table below is the indexable part of `PAGE_ROUTES`, generated from the file on 2026-10-26 (regenerate it when `routes.mjs` changes):
 
 | Route | Priority | Change Freq |
 |-------|----------|-------------|
 | `/` | 1.0 | weekly |
-| `/tarifs` | 0.9 | monthly |
-| `/gap` | 0.9 | monthly |
-| `/offres/compte-rendu-appel` | 0.9 | monthly |
-| `/ressources` | 0.8 | weekly |
-| `/roi` | 0.8 | monthly |
-| `/about` | 0.7 | monthly |
-| `/faq` | 0.7 | monthly |
-| `/cas-clients` | 0.7 | monthly |
+| `/formations` | 0.8 | monthly |
+| `/accompagnement` | 0.8 | monthly |
 | `/mentions-legales` | 0.3 | yearly |
 | `/politique-confidentialite` | 0.3 | yearly |
 | `/cgv` | 0.3 | yearly |
+| `/guides/integrer-l-ia-dans-votre-entreprise` | 0.7 | monthly |
+| `/offres/compte-rendu-appel` | 0.9 | monthly |
+| `/offres/compte-rendu-appel/hubspot` | 0.8 | monthly |
+| `/offres/compte-rendu-appel/zoho` | 0.8 | monthly |
+| `/offres/compte-rendu-appel/salesforce` | 0.8 | monthly |
+| `/offres/compte-rendu-appel/pipedrive` | 0.8 | monthly |
+| `/offres/compte-rendu-appel/google-sheets` | 0.8 | monthly |
+| `/offres/compte-rendu-appel/excel-365` | 0.8 | monthly |
+| `/ressources` | 0.8 | weekly |
+| `/ressources/<slug>` (one per published resource) | 0.6 | monthly |
 
----
+Built but kept out of the sitemap: `/thank-you` (noindex). `/roi` and `/about` are 301 in `server/static.ts` (to `/offres/compte-rendu-appel` and `/#derriere`).
 
-## Robots.txt
+### `lastmod`
 
-**File**: `client/public/robots.txt`
+The date of a page is the day its own sources last changed, not the build day. `scripts/seo/lastmod.json` holds `{ "/path": { lastmod, hash } }`; `hash` is the sha256 of the `sources` listed in `routes.mjs` (a directory source = every non-test file under it). `npm run seo:stamp-check` fails when a page's hash drifted; `node scripts/seo/stamp-lastmod.mjs --write` stamps it. v2 rewrote every page, so the ledger was restamped on 2026-10-26 for the 15 rewritten routes: the first production deploy's IndexNow ping therefore covers every changed URL.
 
-- All user-agents allowed
-- Sitemap declared
-- AI agent guidance: `AI-Documentation` and `AI-Content` headers pointing to GitHub raw files
-- GPTBot: allowed with `Crawl-delay: 10`
-- Claude-Web: allowed
-- Google-Extended: allowed
+### IndexNow
 
----
+`deploy/deploy.sh` runs `scripts/seo/indexnow.mjs` after each production switch: it submits the URLs whose `<lastmod>` differs from the previous release's sitemap (new URL or changed date), never a date window. `INDEXNOW_ENABLED` turns it off; the GitHub workflow is a manual fallback. Rejections (400/403) raise an alert, 422/429 only warn.
 
-## Known Issues
+## Robots and AI-search files
 
-From PRD audit (sections 3.3-3.7):
+- `public/robots.txt`: all user agents allowed, sitemap declared, explicit blocks for GPTBot (`Crawl-delay: 10`), OAI-SearchBot, ClaudeBot, Claude-User, Claude-SearchBot, PerplexityBot and Google-Extended, all `Allow: /`.
+- `public/llms.txt`: markdown summary for LLMs (offer, CRM and spreadsheet pages, pages list); it is a proof surface for `content-gates.sh` (no em dash, no banned figure). `public/.well-known/ai.txt` points to it. Both are served by the static server (`.well-known` is the one dotted folder opened).
 
-- [x] **Canonical trailing slash inconsistency** — Fixed: index.html canonical now has trailing slash
-- [x] **Homepage has 2 JSON-LD blocks** — Fixed: removed duplicate Organization from meta-tags.json, keeping ProfessionalService in index.html
-- [x] **`/cas-clients` missing structured data** — Fixed: added ItemList schema to meta-tags.json
-- [x] **www vs non-www redirect** — Resolved: `www.sablia.io` now 308-redirects (permanent, path-preserving) to apex `https://sablia.io`, matching canonicals. Verified live 2026-06-18.
-- [x] **Stale sitemap lastmod dates** — Fixed: updated to 2026-03-02
+## Manual tasks
 
----
+Done (from the Vite era, still true): GA4 and Google Ads infrastructure exists but has no code in the site; Google Search Console domain property `sc-domain:sablia.io` verified, sitemap submitted; Bing Webmaster Tools imported from GSC (this is also ChatGPT Search's path); `www.sablia.io` redirects 308 to the apex.
 
-## Manual Tasks Checklist
+Open: social sharing validation (Facebook Debugger, Twitter Card Validator, Rich Results Test) once the v2 head is on production; backlink strategy.
 
-Migrated from former `SEO-MANUAL-TASKS.md`:
+### Rank tracking keywords
 
-- [x] GA4 setup — property created, tracking code in analytics.ts, consent-gated
-- [x] Google Ads conversion tracking — 3 conversion actions, labels in .env
-- [x] GA4 <> Google Ads linked
-- [x] **Fix www redirect** — Done: `www.sablia.io` → apex 308 (verified live 2026-06-18)
-- [x] **Google Search Console** — Done 2026-06-19: domain property `sc-domain:sablia.io` was already verified (account brice@sablia.io); sitemap resubmitted + indexing requested for the guide URL.
-- [x] **Bing Webmaster Tools** — Done 2026-06-19: site `https://sablia.io/` imported from GSC (Google sign-in, no DNS verification needed) + sitemap `https://sablia.io/sitemap.xml` submitted (Processing). ChatGPT Search reads Bing's index → ChatGPT visibility path now open.
-
-### GEO / AI-search assets (added 2026-06-18)
-
-For LLM citation ("intégrateur Claude/CRM", "comment intégrer l'IA dans son entreprise"):
-
-- `client/public/llms.txt` — self-contained markdown summary (2026 LLM-sitemap standard), calibrated on the live site
-- `client/public/.well-known/ai.txt` — points to llms.txt (old version had 4 broken GitHub-raw refs)
-- `client/public/robots.txt` — allows ClaudeBot, OAI-SearchBot (ChatGPT Search), PerplexityBot
-- `index.html` ProfessionalService schema — `@id` entity, founder + LinkedIn `sameAs`, PostalAddress, `hasOfferCatalog`
-- **NEW indexable route** `/guides/integrer-l-ia-dans-votre-entreprise` — cornerstone guide (Article + FAQPage schema, prerendered, in sitemap)
-- [ ] **Social sharing validation** — test OG previews (Facebook Debugger), Twitter Card Validator, Rich Results Test
-- [ ] **Backlink strategy** — n8n forum post, Make.com community, French startup directories, LinkedIn profile link
-
-### Rank Tracking Keywords
-
-| Keyword | Target Page |
-|---------|-------------|
-| automatisation PME | `/` |
-| consultant n8n | `/` |
-| automatisation entreprise IA | `/` |
-| formation n8n | `/tarifs` |
-| ROI automatisation | `/roi` |
+None defined for v2 yet (the Vite-era list targeted pages that no longer exist). To be set with Brice.
 
 ---
 
 ## Related Docs
 
-- [INTEGRATIONS.md](./INTEGRATIONS.md) — GA4 and Google Ads implementation details
-- [GOOGLE_ADS.md](./GOOGLE_ADS.md) — Conversion IDs, campaign strategy
-- [meta-tags.json](./meta-tags.json) — Full SEO metadata per page
+- [INTEGRATIONS.md](./INTEGRATIONS.md): GA4 and Google Ads details (written for the Vite site)
+- [GOOGLE_ADS.md](./GOOGLE_ADS.md): conversion IDs, campaign strategy
+- [ARCHITECTURE.md](./ARCHITECTURE.md): build chain and server

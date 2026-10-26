@@ -1,66 +1,42 @@
 # Sablia Site - Status
 
-**Last Updated**: 2026-09-18
+**Last Updated**: 2026-10-26
 
 ---
 
 ## Current State
 
-**Site v2 (sablia-site Vite+React UX migration) SHIPPED on https://sablia.io prod 2026-04-20 15:02 UTC** (cutover from sablia-io-preview Next.js). GA4 + Google Ads infrastructure deployed. Pre-design package frozen (product-v1 v2 / wireframe-v1 v2 / copy-v1 v2). Homepage v2 + global cohérence + 9-section stack éditoriale (palette sable/encre/tuile, Fraunces Variable, Diagnostic Sablia 490€ funnel) live. Build + tsc + tests all clean (27/27). **2026-04-27: SEO prerender pipeline live** — fix Google Search Console "Page en double" + per-route static HTML via puppeteer + sparticuz/chromium at build time. Remaining: P3 (Google Ads manual launch — promo expires 2026-05-01), P4 (HITL business decisions + E2E use cases), P5 (tech debt backlog).
+**v2 (Next.js static export, Sablier charte) is built on branch `autopilot/2026-10-26-sablia-io-v2` and NOT yet on production.** `main` (production, served from the VPS) is still the Vite site until Brice's go. The branch is pushed; the preview slot (`preview.sablia.io`) follows the branch ref.
+
+Built on the branch: the nine-section home, `/formations`, `/accompagnement`, the offer page and its six CRM and spreadsheet pages, the resource library (built from Supabase), the guide, the legal pages (the CGV is a draft with visible « [À CONFIRMER] » marks), `/thank-you`, the 404 page, the SEO toolchain, the QA gates, the shell, the motion hooks, the brand assets in gold. Architecture: `docs/ARCHITECTURE.md`. Charte: `DESIGN.md`.
+
+Stories `specs/REGISTRY.md` US-69 to US-80 stay JAMAIS-PASSÉE until the production gate. Plan and run log live in the hub (`plans/sablia-io-v2.md`, `state/autopilot/runs/2026-10-26-sablia-io-v2/`).
+
+---
+
+## Next
+
+- [ ] Full QA pass on the committed head (clean build, preview slot gates, Lighthouse, parity, measurement e2e).
+- [ ] First validation with Brice on the preview (recette page): switch or not, CGV text, content remarks.
+- [ ] Cleanup unit: delete `client/`, `vite.config.ts`, `tailwind.config.ts`, `theme.json`, `scripts/prerender.mjs`, `server/vite.ts` and the dependencies nothing imports (importer scan first). `vercel.json` and `.vercelignore` stay until Vercel is retired.
+- [ ] After the switch: browser verification on production, registry statuses, close-out.
 
 ---
 
 ## Known Issues
 
-- [ ] Import `generate_lead` conversion in Google Ads (Goals > Conversions > Import from GA4)
-- [ ] **HITL Brice**: dans Google Search Console → Indexation → Pages, cliquer "Valider la correction" sur les 2 rapports "Page en double" reçus 2026-04-27 (concerne /tarifs, /gap, /roi, /about, /faq, /cas-clients). Re-crawl Google sous 1-2 sem.
-- [ ] **GSC validation en cours (relancée 2026-05-07)** : "Page avec redirection" sur 4 URLs (https://www.sablia.io/, http://www.sablia.io/, https://www.sablia.io/roi, http://sablia.io/). Cause initiale : Vercel renvoyait 307 (Temporary) sur www→apex car www.sablia.io n'était pas explicitement attaché au projet. Fix : domaine attaché au projet sablia-site via API Vercel avec `redirectStatusCode: 308`. Tous les redirects passent maintenant en 308 (Permanent). Re-crawl Google sous 7-14 j attendu.
-
----
-
-## Active Plans
-
-| Plan / Brief | Status | Next |
-|---|---|---|
-| `plans/site-completion-checklist.md` | **P0 + P1 + P2 DONE 2026-04-20**. Homepage v2 shipped (9-section stack, Diagnostic Sablia funnel, n8n workflow live). Cohérence globale propagée. UX migration completée post-bascule 2026-04-20 15:02 UTC. | Brice: launch P3 (Google Ads UI) + trancher HITL P4.1-P4.4 |
-| `plans/sablia-page-produit-of1.md` (hub) | **Page produit OF-1 construite le 2026-09-07** sur la branche `autopilot/2026-09-07-page-produit-of1`, route `/offres/compte-rendu-appel`, prix affiches. Gates verts (tsc, lint, 47 tests, build + prerender 7/7), verification navigateur locale a 1280 et 390. **Rien n'est en ligne.** | Brice : valider la copie rendue (`state/autopilot/runs/2026-09-07-page-produit-of1/rendu-page-of1.md`), puis merge vers `main` = mise en ligne automatique. En attente de mise en ligne par Brice. |
-| `research/brainstorm/2026-04-17-sablia-acquisition-machine-v1-brief.md` | Amended 2026-04-18. Pre-design unit delivered (v2: 490€ HT + crédit post-audit). Units 3-6 (pricing page redesign, hub pages, case studies, content cadence) backlog | Post P1 completion |
-
----
-
-## TODO — Strategic Pivot
-
-- [x] **NS-15 EN LIGNE le 2026-09-17 à 21:07 UTC (go de Brice, fast-forward `f823d56` + `ba06423` sur `main`, `x-vercel-id` renouvelé, vérifié au navigateur partagé : 1 blockquote, 0 nom de client, 0 débordement, 0 erreur console). Ci-dessous l'état tel qu'il était avant la mise en ligne.** Une citation sur la home, section
-  « Votre interlocuteur »** (`TeamSection.tsx` + `llms.txt`). Texte écrit par Denis, membre de la
-  formation, prénom publié sur décision de Brice ; source et statut dans le hub
-  (`projects/sablia/offre/preuve/temoignages/iapreneurs.md`, ligne P-14), parité gardée par
-  `landing.copy.test.ts`. Gates : vitest 115/115, tsc 0, Biome vert sur les fichiers touchés, build
-  7/7, rendu vérifié à 1440 et 390 px. Mise en ligne décidée par Brice le soir même, avant le oui écrit de Denis sur la
-  formulation retouchée : ce oui reste à classer a posteriori.
-- [x] ~~**NS-15, branche `ns15-preuve-sociale`**~~ EN LIGNE le 2026-09-17 avec la citation ci-dessus : section preuve de la home en secteur seul, bloc
-  preuve sur la page produit, `llms.txt` aligné. Gates verts (112 tests, build 7/7, navigateur
-  1440 et 390). **Mise en ligne = geste de Brice**, jamais par une session.
-
-- [x] ~~Brice ↔ Yassine Sdiri validation~~ — **DONE 2026-04-18**: validated + affiliate link provided (`https://www.iapreneurs.com/?affiliate_code=8b6eda`).
-- [ ] Confirm SASU vs auto-entrepreneur status (impact: capacity model, TVA, invoice legitimacy at 990€).
-- [ ] Capacity model: lock monthly diagnostic limit (hypothesis: 4-6/mo given existing Qwertys 6j/mo retainer).
-- [x] ~~Case study consent: named vs anonymized~~ — **TRANCHÉ 2026-09-17 (NS-15)** : on ne nomme que qui a validé par écrit, et aucun nom de personne nulle part ; une signature publiée est un rôle et une société. La home passe en secteur seul, la citation nommée sort du site. Règle et sources : `projects/sablia/offre/preuve/dossier-de-preuve.md` (hub), contrôlée par `check-preuve.py` et par `landing.copy.test.ts`.
-- [ ] Elorri / Formation IA Normandie overlap with Sablia "formation d'équipes internes" — clarify boundaries.
-
----
-
-## Completed (recent)
-
-- **2026-09-18 — Section « Formations », nav à 5 items, voix « nous » et PREMIER FORMULAIRE du site, EN LIGNE (commit `3e133ae`)**. Plan `sablia-site-section-formations` (hub), décision D10. La home gagne une section `#formations` après les cas clients : accroche « Vous préparez un séminaire ? Nous animons l'intervention IA. », deux lignes d'offre, la preuve « académie de plus de 1 400 entrepreneurs », **aucun prix**, et la citation de Denis qui QUITTE la section fondateur (c'est un témoignage de formation). Nav resserrée à 5 items en ancres **root-relative** rendues en `<a>` simple — ce qui ferme au passage les ancres mortes de `/cgv`, `/mentions-legales`, `/politique-confidentialite` et `/thank-you`, où la TopNav partagée pointait sur un `#contact` inexistant. Voix « nous » sur la section fondateur et `llms.txt` (plus de « tient lui-même »). **`api/contact.ts`**, première fonction Vercel du dépôt : mail Resend vers brice@ + ligne `sabcrm_leads` (`source='formation'`, owner Brice), dédoublonnage sur 10 minutes, honeypot + plancher de 3 s répondant 204 avant toute I/O. Tests écrits AVANT et vus ROUGES (code de sortie 1) : **115 → 170 verts**, tsc 0, Biome 0, build + prerender 7/7. Vérifié sur la preview de branche PUIS en prod à 1440 et 390 (0 erreur console, 0 collision nouvelle, pas de scroll horizontal), envoi réel relu en base puis supprimé, smoke honeypot en prod → 204 sans écriture. Go de Brice consigné avant tout push de `main`.
-- **2026-06-04 — Refonte landing CRM SHIPPED (commit 7d3ecd6)**. Plan `sablia-site-landing-refonte-crm` (5 phases A→E, challengé GO) exécuté + déployé prod sablia.io + vérifié navigateur Playwright. Homepage réalignée sur le brief collègues : nouveau H1 « Exploitez 100 % du potentiel de votre CRM », **3 sections neuves** — Problématiques (`#problemes`, 4 frictions B2B), Équipe (`#equipe`, 4 portraits webp détourés fond coral), FAQ (`#faq`, accordéon a11y maison panneau-toujours-monté + FAQPage JSON-LD). ProcessSection « Comment nous vous accompagnons » (audit 30min→diagnostic→implémentation→suivi). ProofSection : faux témoignage « Camille Marchand » supprimé → grille 4 cartes (Valentin/VB Mobilier réel +30% CA, avatar initiales ; 3 placeholders « à venir »). Calendly centralisé `site.ts` → Raph (`raphael-espo-pro/30min`, BookingModal + ThankYou), « Powered by Claude » retiré du footer. CRMStrip +Sellsy (7 logos, flex-wrap). DashboardMockup hero neutralisé (libellés génériques). `biome.json` : exclut `tmp/` + `docs/crm` (symlink projet sibling — biome linait un venv + sablia-crm, 310+ diagnostics parasites). Gates : tsc 0, vitest 6/6, build+prerender 5/5. Vérif prod : bundle = raphael présent / brice absent, 4 portraits coral chargent, accordéon FAQ OK, FAQPage JSON-LD dans le DOM live, 0 erreur console. **HITL Brice restants (hors code)** : FAQ Q5 sécurité = formulation tier-safe « API commerciale » (confirmer si Enterprise) ; autorisation logo VB Mobilier ; citations qwertys/Norloc/Nesten + wording Pablo. `docs/INTEGRATIONS.md` (modif foreign non-commitée depuis ≥2026-05-31) laissée intacte, non commitée (multi-session-git).
-- **2026-05-31 — Portail button in TopNav → app.sablia.io (commit 7020024)**. Added an outlined "Portail" link (LogIn icon from `lucide-crm.tsx`) in `client/src/components/landing/TopNav.tsx`, desktop + mobile, left of the coral "Réserver un call" CTA so the booking CTA stays primary. Links to the new Sablia Portal (SSO/RBAC app-launcher, `sablia-portal` project) — visitors without an account land on `app.sablia.io/login`. tsc + Biome clean; prod-verified live on https://sablia.io (Portail href = https://app.sablia.io, 0 console errors). Note: an unrelated pre-existing uncommitted edit to `docs/INTEGRATIONS.md` was left untouched (not mine).
-- **2026-05-07 — Vercel www→apex redirect fix (308 Permanent)**. GSC validation des "Page avec redirection" avait échoué le 2026-05-05 sur 4 URLs www/http car Vercel auto-redirigeait www.sablia.io → sablia.io en 307 (Temporary) — Google n'accepte pas les 307 pour valider la canonisation. Fix : `www.sablia.io` attaché explicitement au projet sablia-site via API Vercel (`POST /v10/projects/sablia-site/domains` avec `redirectStatusCode: 308`). Vérifié : les 4 URLs renvoient maintenant 308. Aucun changement de code ni redéploiement nécessaire. Pattern sauvé en memory (`vercel_www_redirect_308.md`) — applicable aux autres projets Sablia hébergés sur Vercel (qwertys, vox, tasks).
-- **2026-04-27 — SEO prerender pipeline (commits 47e1922, 80f880a, f739d3c)**. Fixed GSC "Page en double" canonical errors. Added puppeteer-based prerender at build (`scripts/prerender.mjs` + `npm run build`). Each of 13 routes now ships its own static HTML with correct title/canonical/og/twitter — no JS rendering required for SEO. Sub-fixes: (a) stripped duplicate-prone meta from static `client/index.html` (Helmet now sole owner of per-page meta), (b) flattened SEO.tsx — replaced React Fragments with per-element conditionals (react-helmet-async v2 silently dropped Fragment children → og:* and twitter:* were absent in prod), (c) switched from `puppeteer` to `puppeteer-core + @sparticuz/chromium` so Vercel build env (no system Chromium libs) can launch headless.
+- [ ] `docs/INTEGRATIONS.md`, `docs/README.md` and `docs/GOOGLE_ADS.md` still describe the Vite site (BookingModal, `client/` paths, `meta-tags.json`); not rewritten by the v2 docs pass.
+- [ ] `public/llms.txt` still points to `https://sablia.io/#contact` although v2 has no contact form section.
+- [ ] The privacy page text is the previous one (still mentions the old diagnostic form and retention); needs a decision from Brice.
+- [ ] `src/lib/site.ts` still carries v1 constants (`diagnosticPrice`, `diagnosticAnchor`, `iapreneursUrl`) that the v2 pages do not use.
+- [ ] `motion` 14.6.0 is in `package.json` and nothing under `src/` imports it.
+- [ ] The two residual `score.py` defects on the home (« Brice » not in the first two screens, one empty band) are the mockup's, kept on purpose.
+- [ ] GA4 / Google Ads: no code in the site (unchanged).
 
 ---
 
 ## References
 
-- **Meta Tags Config**: `docs/meta-tags.json`
-- **Sitemap**: `client/public/sitemap.xml`
-- **Prerender script**: `scripts/prerender.mjs` (runs in `npm run build` between vite + esbuild)
+- Route manifest: `scripts/seo/routes.mjs` · Sitemap generator: `scripts/seo/generate-sitemap.mjs` · Lastmod ledger: `scripts/seo/lastmod.json`
+- Build: `bash scripts/qa/build.sh` · Host chain: `deploy/deploy.sh`
+- History before v2: `git log` on `main`

@@ -306,3 +306,33 @@ US-1, US-2, US-3, US-9 to US-13.
    previous mark was derived from a client's brand). Favicon live before 2026-10-22; the site ships before
    2026-10-09 even if the logo lags.
 8. Go-live criterion: the site is presentable enough for the school partner to redirect its traffic to it.
+
+## 9. v2 — the Sablier rebuild (2026-10-26)
+
+Source: hub plan `plans/sablia-io-v2.md` (autopilot run `2026-10-26-sablia-io-v2`, branch `autopilot/2026-10-26-sablia-io-v2`). Stories: `specs/REGISTRY.md` US-69 to US-80, all JAMAIS-PASSÉE until the production gate.
+
+**Objective.** Replace the Vite site by the v2 mockup (home, Formations, Accompagnement) in the Sablier charte, plus the new offer, CRM, resource, legal and 404 pages, without losing a URL, a measurement event or a deploy guarantee of lot 0.
+
+**What changed technically.** Next.js 16.4.3 static export (`output: 'export'`, `trailingSlash: false`) served by the unchanged lot-0 Express server; React 19.3.1; Tailwind 4.3.3 CSS-first without preflight; TypeScript 5.9.3; Biome 2.4.13; Vitest 4.0.4. Metadata through `pageMetadata()`, JSON-LD components, `routes.mjs` as the single route manifest. Details: `docs/ARCHITECTURE.md`, `docs/SEO.md`, `DESIGN.md`, `CLAUDE.md`.
+
+**Decisions taken during the run (obvious after the research, listed to Brice at the first validation point).**
+1. `trailingSlash: false`: every URL, canonical and measurement `path` stays identical (emits `route.html`, `ressources/<slug>.html`, `404.html`); costs two test-first edits (`server/static.ts` resolver, deploy `assert_prerendered`).
+2. Fonts self-hosted through `next/font/local` (Familjen Grotesk, Fragment Mono; woff2 from fontsource 5.3.0) instead of a Google Fonts link: a third-party request before consent is what the lot-0 reading of the CNIL guidance forbids.
+3. Versions: TypeScript 5.9.3 (not 7), Biome 2.4.13 (not 2.6), Vitest 4.0.4 (not 5), Next 16.4.3 (above the 16.3.0 workspace floor). Express 4.21.2, zod 3.25.76 and puppeteer-core 24.42.0 stay (their code is untouched); `@types/node` moves to 22.15.0 to match the host's Node 22.
+4. `client/` stays in place, read for reference, until the cleanup unit deletes it.
+5. `/roi` → `/offres/compte-rendu-appel` and `/about` → `/#derriere` (301): the two old pages Google lists as soft 404s had no target; reversible in one line of `server/static.ts`.
+6. Gates run against the preview slot `127.0.0.1:5001`, not `https://preview.sablia.io` (through Caddy every parity row differs on `X-Robots-Tag` and `robots.txt`, and Lighthouse's crawlability audit fails by construction); the strict public form runs on production at the switch.
+7. CSS: per-scope `@layer components` files, Tailwind without preflight, fonts only through CSS variables (the mockup is reset-less and its three boards share class names with different bodies).
+8. No contact form UI in v2 (the mockup has none; booking only): `POST /api/contact` and its parity row stay.
+9. « Voir l'offre » opens `/offres/compte-rendu-appel`; header « Compte rendu d'appel » → `/#offre`, « Réalisations » → `/#construit`; footer and legal links → real routes.
+10. URLs `/formations` and `/accompagnement`; spreadsheet pages at `/offres/compte-rendu-appel/google-sheets` and `/excel-365`.
+11. A video tile links to our page only when a `contenu_ressources` row exists for its `youtube_id`; the demo video keeps its YouTube link otherwise.
+12. The newsletter button is not rendered (only once issue 1 is out); the Formations line « Agents vocaux » is reworded « sur demande ».
+13. `/ressources` and `/ressources/<slug>` are built from Supabase at build time; video posters are fetched at build.
+14. The CGV page ships the v2 draft with visible « [À CONFIRMER] » marks on the preview; a production build refuses to deploy while one remains. If the text is not validated, the old text ships.
+15. `lastmod` is stamped honestly after the rewrite, so the first IndexNow ping covers every changed URL.
+16. Parity keeps statuses, headers and static files and releases page bodies (the content changed on purpose); the two former soft-404 rows and the two redirects are declared as allowed rows.
+
+**Acceptance (deterministic where possible).** Build chain and guards (`npm run build`); real 404 and `<route>.html` serving (`server/static.test.ts`); the 34 recorded URL behaviours (`scripts/site-parity.py`, `scripts/qa/routes-check.py`); measurement events (`src/lib/event-map.test.ts`, `scripts/analytics-e2e.mjs`); content gates and their bench (`scripts/qa/content-gates.sh`); home at most 2 `score.py` defects, Formations 0, Accompagnement 0; motion, accessibility and origin gates on every route; Lighthouse mobile a11y ≥ 95, SEO ≥ 95, best practices ≥ 90, performance ≥ 75, CLS ≤ 0.1, LCP ≤ 3 s, TBT ≤ 300 ms (or the old-production baseline where the old site missed one); CSS discipline (`scripts/qa/css-collisions.py`); no draft marker in a production build.
+
+**Out of scope.** Retiring Vercel, the newsletter, a contact form UI, a card for a client on the home wall, TypeScript 7 / Vitest 5 / Biome 2.6 / Express 5 migrations.

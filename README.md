@@ -1,119 +1,73 @@
-# Sablia - Automatisation Intelligente
+# Sablia site
 
-Site web moderne de conseil en automatisation d'entreprise avec calculateur ROI, formulaires de génération de leads et présentation des services.
+Source of https://sablia.io: the marketing site of Sablia (Claude integration into sales teams' CRM, trainings and support). This tree is the **v2 build**: a Next.js static export in the « Sablier » charte, served by a small Express server on our own VPS.
 
-## 🏗️ Architecture
+| | |
+|---|---|
+| Framework | Next.js 16.4.3 (App Router, `output: 'export'`), React 19.3.1, TypeScript 5.9.3 (strict) |
+| Styling | Tailwind CSS 4.3.3 (CSS-first, no preflight) + one scoped stylesheet per component |
+| Server | Express 4 serving the export and two Fetch handlers in `api/` (contact form, resource request) |
+| Quality | Biome 2.4.13, Vitest 4.0.4, scripts in `scripts/qa/` and `scripts/seo/` |
+| Content language | French for visitors; code, comments and docs in English |
 
-- **Frontend**: React 18 + TypeScript + Vite
-- **Backend**: Express.js + TypeScript
-- **Base de données**: PostgreSQL + Drizzle ORM
-- **Styling**: Tailwind CSS + Radix UI
-- **Déploiement**: Vercel
+Exact versions are in `package.json`.
 
-## 🚀 Installation
+## Run it
 
-### Prérequis
+Requirements: Node 22 and npm.
 
-- Node.js 18+
-- PostgreSQL (local ou distant)
-
-### Configuration locale
-
-1. **Cloner le projet**
-
-   ```bash
-   git clone https://github.com/BriGadja/sablia-site.git
-   cd sablia-site
-   ```
-
-2. **Installer les dépendances**
-
-   ```bash
-   npm install
-   ```
-
-3. **Configuration de l'environnement**
-
-   ```bash
-   cp .env.example .env
-   ```
-
-   Puis modifier le fichier `.env` avec vos propres valeurs.
-
-4. **Configuration de la base de données**
-
-   ```bash
-   # Pousser le schéma vers la base de données
-   npm run db:push
-   ```
-
-5. **Lancer en développement**
-
-   ```bash
-   npm run dev
-   ```
-
-   L'application sera accessible sur `http://localhost:5000`
-
-## 📦 Scripts disponibles
-
-- `npm run dev` - Lance le serveur de développement
-- `npm run build` - Build pour la production
-- `npm run start` - Lance l'application en production
-- `npm run check` - Vérification TypeScript
-- `npm run db:push` - Pousse le schéma vers la base de données
-
-## 🌐 Déploiement
-
-### Vercel
-
-1. Connecter votre repository GitHub à Vercel
-2. Configurer les variables d'environnement dans Vercel
-3. Le déploiement se fera automatiquement
-
-## 🏗️ Structure du projet
-
-```
-├── client/              # Frontend React
-│   ├── src/
-│   │   ├── components/  # Composants réutilisables
-│   │   ├── pages/       # Pages de l'application
-│   │   ├── lib/         # Utilitaires et configuration
-│   │   └── hooks/       # React hooks personnalisés
-│   └── index.html
-├── server/              # Backend Express
-│   ├── routes.ts        # Routes API
-│   ├── index.ts         # Point d'entrée serveur
-│   └── vite.ts          # Configuration Vite
-├── db/                  # Schéma base de données
-│   └── schema.ts
-└── migrations/          # Migrations de base de données
+```bash
+npm install --ignore-scripts      # or npm ci --ignore-scripts
+cp .env.example .env              # only what you need; never commit it
+npm run dev                       # next dev: pages only, no /api/*
 ```
 
-## 🔧 Configuration
+Resource pages read Supabase at build time. Without the public anon key, set `SABLIA_FIXTURE_SLUGS=a,b` to render fixtures.
 
-### Variables d'environnement
+## Check it
 
-- `DATABASE_URL` - URL de connexion PostgreSQL
-- `NODE_ENV` - Environnement (development/production)
+```bash
+npx vitest run                    # unit and component tests
+npm run check                     # tsc
+npm run lint                      # Biome
+npm run test:seo                  # SEO and export-guard tests
+python3 -I scripts/qa/css-collisions.py   # CSS discipline, must report 0 violations
+```
 
-### Intégrations
+## Build it
 
-- **Calendly**: Système de prise de rendez-vous
-- **TSParticles**: Animations de fond
+```bash
+bash scripts/qa/build.sh          # the one way to run a full build
+```
 
-## 🎨 Fonctionnalités
+It takes a lock (Next 16 refuses two builds in one tree), then runs `npm run build`: poster fetch, `next build`, export finalisation, export guards, sitemap, server bundle, content gates. The result is `dist/public` (the site) and `dist/index.js` (the server). Serve it locally on a free port with `PORT=<port> node dist/index.js`. Ports 5000, 5001 and 5099 belong to the host's deploy chain.
 
-- ✅ Calculateur ROI interactif
-- ✅ Formulaires de génération de leads
-- ✅ Design responsive et moderne
-- ✅ Animations fluides
-- ✅ Interface administrateur
+## Deploy
 
-## 📝 Licence
+Merging to `main` is enough: a timer on the VPS runs `deploy/deploy.sh` (build, checks, smoke test including a real 404, atomic switch, automatic revert). `curl -s https://sablia.io/healthz` returns the release id; `deploy.sh rollback prod` on the host undoes a release. Details: `deploy/*.md`, `docs/ARCHITECTURE.md`.
+
+## Layout
+
+```
+src/app/         routes (one folder per page), layout, global CSS, fonts
+src/components/  home sections, inner pages, shell (header, footer, buttons), consent, SEO
+src/lib/         seo, measurement, consent, booking, Supabase reads, motion hooks
+src/content/     offer module, CRM pages, legal text, proof
+public/          static files copied into the export
+api/  server/    Fetch handlers and the Express server
+scripts/         build chain, SEO, QA gates, brand assets
+deploy/          host chain (systemd, Caddy, parity baseline)
+docs/  specs/    architecture, SEO, stories (REGISTRY.md)
+```
+
+`client/` and the other Vite-era files remain only until the cleanup step removes them.
+
+## Documentation
+
+- `CLAUDE.md`: rules and conventions for working in this repository (also the best human onboarding)
+- `DESIGN.md`: the charte (colours, type, motion, illustration rule)
+- `docs/ARCHITECTURE.md`, `docs/SEO.md`, `PRD.md`, `specs/REGISTRY.md`
+
+## Licence
 
 MIT
-
----
-
-_Dernière mise à jour : Migration vers Vercel_
