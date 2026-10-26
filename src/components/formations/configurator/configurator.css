@@ -1,0 +1,380 @@
+@layer theme, base, components, utilities;
+
+/* Hero of /formations with the « Composez la vôtre » configurator. Ported from the rendered mockup (F:109, its append-only patches resolved). */
+@layer components {
+  .v2-formations-top {
+    position: relative;
+    padding: 72px 0 88px;
+    background: #f4ecdd;
+    font-family: var(--font-sans);
+    color: #131620;
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 600px);
+      gap: 56px;
+      align-items: center;
+    }
+    .copy {
+      min-width: 0;
+    }
+    .h1 {
+      margin: 16px 0 0;
+      font-size: 52px;
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      font-weight: 600;
+    }
+    .claim {
+      margin: 20px 0 0;
+      max-width: 34em;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #3a3f4d;
+    }
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      margin-top: 28px;
+    }
+    .free {
+      font-size: 14px;
+      color: #61677a;
+    }
+    .chipline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tags {
+      margin-top: 28px;
+    }
+    .tagchip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 30px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid #e4d6c0;
+      font-size: 13px;
+      color: #3a3f4d;
+    }
+
+    /* configurator card */
+    .cfg {
+      position: relative;
+      border-radius: 24px;
+      background: #ffffff;
+      border: 1px solid #e4d6c0;
+      padding: 24px;
+      box-shadow: 0 30px 60px -40px rgba(22, 27, 41, 0.45);
+      min-width: 0;
+    }
+    .cfg-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 44px;
+      margin-bottom: 8px;
+    }
+    .cfg-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .cfg-row {
+      display: grid;
+      grid-template-columns: 80px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      padding: 10px 0;
+      border-top: 1px solid #edeff4;
+    }
+    .cfg-lab {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #61677a;
+      padding-top: 10px;
+    }
+    .cfg .chipline {
+      gap: 8px 6px;
+    }
+    .opt {
+      all: unset;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 10px;
+      border-radius: 10px;
+      border: 1px solid #e4d6c0;
+      background: #f6f7fa;
+      font-family: var(--font-sans);
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #3a3f4d;
+      transition: none;
+
+      &:hover {
+        border-color: #161b29;
+      }
+      &.on {
+        background: #161b29;
+        border-color: #161b29;
+        color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.35);
+        animation: formations-top-opt-on 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+      &:focus-visible {
+        outline: 2px solid #835a0c;
+        outline-offset: 3px;
+      }
+    }
+    .pausebtn {
+      all: unset;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 44px;
+      padding: 0 14px;
+      border-radius: 10px;
+      border: 1px solid #e4d6c0;
+      background: #ffffff;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: #131620;
+
+      &:focus-visible {
+        outline: 2px solid #835a0c;
+        outline-offset: 3px;
+      }
+    }
+
+    /* programme box */
+    .pg {
+      margin-top: 14px;
+      border-radius: 16px;
+      background: #161b29;
+      color: #f1f2f5;
+      padding: 18px 18px 16px;
+    }
+    .pg-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+      white-space: nowrap;
+    }
+    .pg-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .pg-sum {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #a4aabd;
+    }
+    .pg-ex {
+      margin: 2px 0 4px;
+      padding: 0 0 12px;
+      border-bottom: 1px solid #323a52;
+      font-size: 14.5px;
+      line-height: 1.45;
+      color: #f1f2f5;
+    }
+    .pg-exl {
+      color: #a4aabd;
+    }
+    .pg-row {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      height: 46px;
+      border-top: 1px solid #323a52;
+      font-size: 14.5px;
+    }
+    .pg-row:first-child {
+      border-top: 0;
+    }
+    .pg-n {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #d9a441;
+    }
+    /* the text window: padding + negative margin keep descenders out of the clip while the line rolls (CP4 2) */
+    .pg-t {
+      position: relative;
+      display: inline-block;
+      padding: 5px 0;
+      margin: -5px 0;
+      clip-path: inset(0 -100vw);
+    }
+    .pg-row .pg-t {
+      align-self: stretch;
+      display: flex;
+    }
+    .pg-row .pg-new {
+      display: flex;
+      align-items: center;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    .pg-old {
+      position: absolute;
+      left: 0;
+      top: 5px;
+      width: 100%;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .pg-row .pg-old {
+      top: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .pg-ex .pg-old {
+      white-space: nowrap;
+    }
+    .sa,
+    .sb {
+      animation: formations-top-flash 0.9s ease-out;
+    }
+    .sa .pg-old {
+      animation: formations-top-roll-out-a 0.22s cubic-bezier(0.5, 0, 0.2, 1);
+    }
+    .sb .pg-old {
+      animation: formations-top-roll-out-b 0.22s cubic-bezier(0.5, 0, 0.2, 1);
+    }
+    .sa .pg-new {
+      animation: formations-top-roll-in-a 0.22s cubic-bezier(0.5, 0, 0.2, 1);
+    }
+    .sb .pg-new {
+      animation: formations-top-roll-in-b 0.22s cubic-bezier(0.5, 0, 0.2, 1);
+    }
+    .pg-late .pg-old,
+    .pg-late .pg-new {
+      animation-delay: 0.2s;
+      animation-fill-mode: both;
+    }
+  }
+
+  @keyframes formations-top-opt-on {
+    from {
+      box-shadow: 0 0 0 7px rgba(217, 164, 65, 0.55);
+    }
+    to {
+      box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.35);
+    }
+  }
+  @keyframes formations-top-flash {
+    from {
+      background: rgba(217, 164, 65, 0.24);
+    }
+    to {
+      background: rgba(217, 164, 65, 0);
+    }
+  }
+  /* the a/b pairs only differ by name: swapping the class restarts the animation */
+  @keyframes formations-top-roll-out-a {
+    from {
+      opacity: 1;
+      transform: none;
+    }
+    to {
+      opacity: 1;
+      transform: translateY(-100%);
+    }
+  }
+  @keyframes formations-top-roll-out-b {
+    from {
+      opacity: 1;
+      transform: none;
+    }
+    to {
+      opacity: 1;
+      transform: translateY(-100%);
+    }
+  }
+  @keyframes formations-top-roll-in-a {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: none;
+    }
+  }
+  @keyframes formations-top-roll-in-b {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-formations-top {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .h1 {
+        font-size: 36px;
+      }
+      .cfg {
+        padding: 16px;
+      }
+      .cfg-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .cfg-lab {
+        padding-top: 0;
+      }
+      .opt {
+        padding: 0 12px;
+      }
+      .pg {
+        padding: 16px 14px 14px;
+      }
+      /* CP4 5: header on one line, whatever the summary */
+      .pg-sum {
+        font-size: 10px;
+        letter-spacing: -0.04em;
+      }
+      .pg-exl {
+        display: block;
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-formations-top {
+      .opt.on,
+      .sa,
+      .sb,
+      .sa .pg-new,
+      .sb .pg-new {
+        animation: none !important;
+      }
+      .pg-old {
+        display: none !important;
+      }
+    }
+  }
+}
