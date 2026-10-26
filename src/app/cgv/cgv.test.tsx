@@ -18,11 +18,14 @@ describe('CGV page', () => {
     expect(heads[15]).toBe('Article 16. Contact')
   })
 
-  it('shows every [À CONFIRMER] marker as a visible mark, with what it asks', () => {
-    const marks = [...markup.matchAll(/<mark class="v2-legal-todo">/g)]
-    expect(marks).toHaveLength(5)
-    expect(t.match(/\[À CONFIRMER\]/g)).toHaveLength(5)
-    expect(t).toContain('mention TVA')
+  it('carries the wording Brice validated at VP1 (26/10), with no marker left', () => {
+    expect(markup).not.toContain('v2-legal-todo')
+    expect(t).not.toContain('À CONFIRMER')
+    expect(t).toContain('Dernière mise à jour : 26/10/2026.')
+    expect(t).toContain('la TVA applicable est ajoutée au taux en vigueur')
+    expect(t).toContain('pendant 60 jours.')
+    expect(t).toContain("Le remboursement prévu à l'article 8.3 est écarté")
+    expect(t).toContain('effacées de ses systèmes sous 30 jours')
     expect(t).not.toContain('**')
   })
 

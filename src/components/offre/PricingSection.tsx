@@ -60,7 +60,9 @@ export default function PricingSection() {
               price.terms,
               `Livré sous ${delay.days} jours calendaires à compter de la réception de vos accès.`,
             ]}
-            fine={['TVA non applicable, art. 293 B du CGI.']}
+            fine={[
+              'Prix hors taxes ; la TVA applicable est ajoutée au taux en vigueur à la date de la facture.',
+            ]}
           />
           <PriceCard
             label="Supervision et maintenance"

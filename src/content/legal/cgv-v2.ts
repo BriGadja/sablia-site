@@ -1,5 +1,6 @@
 /**
- * CGV v2 (catalogue v1), ported from research/site-theophile-2026-10/cgv-v2-draft.md in the hub (drafted 26/10, NOT yet validated by Brice).
+ * CGV v2 (catalogue v1), ported from research/site-theophile-2026-10/cgv-v2-draft.md in the hub (drafted 26/10). Brice validated it at
+ * the VP1 recette on 26/10 (« CGV ok »): the five [À CONFIRMER] points carry the recommended wording.
  * Inline markup: `**bold**` and `[À CONFIRMER : what to settle]`, which LegalText renders as a highlighted marker. The PROD slot's
  * build guard (scripts/qa/content-gates.sh --auto) fails while one remains. The text the site shipped before is cgv-v1.ts.
  */
@@ -13,8 +14,7 @@ export interface CgvArticle {
 }
 
 export const cgvV2 = {
-  intro:
-    'Applicables aux clients professionnels uniquement. Dernière mise à jour : [À CONFIRMER : date de mise en ligne].',
+  intro: 'Applicables aux clients professionnels uniquement. Dernière mise à jour : 26/10/2026.',
   articles: [
     {
       n: 1,
@@ -84,7 +84,10 @@ export const cgvV2 = {
           kind: 'p',
           text: "5.2. Option d'installation sur un serveur dédié au nom du Client : 390 € HT, une fois.",
         },
-        { kind: 'p', text: '5.3. **[À CONFIRMER : mention TVA]**' },
+        {
+          kind: 'p',
+          text: '5.3. Les prix sont hors taxes ; la TVA applicable est ajoutée au taux en vigueur à la date de la facture.',
+        },
         {
           kind: 'p',
           text: "5.4. Aucun frais n'est ajouté en cours de mission sans accord écrit préalable du Client.",
@@ -133,11 +136,11 @@ export const cgvV2 = {
         },
         {
           kind: 'p',
-          text: '8.4. Après la recette, Sablia corrige sans frais toute anomalie signalée par écrit pendant [À CONFIRMER : durée de la garantie de conformité, 60 jours ?]. Une demande qui ajoute ou modifie le périmètre est une évolution, chiffrée à part.',
+          text: '8.4. Après la recette, Sablia corrige sans frais toute anomalie signalée par écrit pendant 60 jours. Une demande qui ajoute ou modifie le périmètre est une évolution, chiffrée à part.',
         },
         {
           kind: 'p',
-          text: "8.5. [À CONFIRMER : le remboursement est-il écarté si le défaut vient d'un accès ou d'un outil du Client ?]",
+          text: "8.5. Le remboursement prévu à l'article 8.3 est écarté lorsque l'échec de la recette résulte d'un accès, d'une donnée ou d'un outil dont le Client a la maîtrise et qu'il n'a pas rendu disponible ou conforme dans les délais convenus.",
         },
       ],
     },
@@ -205,7 +208,7 @@ export const cgvV2 = {
       blocks: [
         {
           kind: 'p',
-          text: "Chaque partie garde confidentielles les informations de l'autre. Pour les données personnelles traitées par la chaîne, le Client est responsable de traitement et Sablia agit comme sous-traitant : elle ne les traite que sur instruction du Client, pour la prestation, et supprime ses accès à la fin de la mission ou de la supervision. [À CONFIRMER : conditions d'utilisation des données par le fournisseur du modèle, à vérifier avant d'écrire une clause de conservation.]",
+          text: "Chaque partie garde confidentielles les informations de l'autre. Pour les données personnelles traitées par la chaîne, le Client est responsable de traitement et Sablia agit comme sous-traitant : elle ne les traite que sur instruction du Client, pour la prestation, et supprime ses accès à la fin de la mission ou de la supervision. Seul le texte de l'appel est transmis au modèle d'IA ; selon les conditions du fournisseur, ces données ne servent pas à entraîner ses modèles par défaut et sont effacées de ses systèmes sous 30 jours.",
         },
       ],
     },

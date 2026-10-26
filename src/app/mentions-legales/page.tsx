@@ -21,9 +21,7 @@ export default function MentionsLegalesPage() {
         <p>Le site {site.domain} est édité par :</p>
         <ul>
           <li>GACHADOAT Brice</li>
-          <li>
-            Entrepreneur individuel, régime de la franchise en base de TVA (art. 293 B du CGI)
-          </li>
+          <li>Entrepreneur individuel</li>
           <li>SIREN : 940 901 127</li>
           <li>SIRET : 94090112700016</li>
           <li>Adresse du siège : 60 rue François Ier, 75008 Paris, France</li>
