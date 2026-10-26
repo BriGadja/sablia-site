@@ -23,3 +23,12 @@ POST /api/contact
 GET /api/ressources-request
 HEAD /api/ressources-request
 POST /api/ressources-request
+# v2 routes: rows absent from the baseline print SKIP and compare nothing (the route test is scripts/qa/routes-check.py).
+GET /formations
+GET /accompagnement
+GET /offres/compte-rendu-appel/google-sheets
+GET /offres/compte-rendu-appel/excel-365
+GET /mentions-legales
+GET /politique-confidentialite
+GET /roi
+GET /about
