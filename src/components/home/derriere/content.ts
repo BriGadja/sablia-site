@@ -1,7 +1,7 @@
 /** Home `#derriere` copy. Dates and titles follow memory/identity/CAREER.md (LinkedIn ruling 2026-10-14). */
 
 export const HEADING =
-  "Derrière Sablia, Brice Gachadoat : il installe Claude dans les outils des entreprises, et l'enseigne à l'école Noésia."
+  "Derrière Sablia, Brice Gachadoat\u00a0: il installe Claude dans les outils des entreprises, et l'enseigne à l'école Noésia."
 
 export interface CareerRow {
   readonly key: string

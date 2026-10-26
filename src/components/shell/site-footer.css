@@ -26,10 +26,11 @@
       font-size: 17px;
       letter-spacing: -0.02em;
     }
+    /* No row gap: each link already carries a 44 px touch target, so a wrapped row sits close. */
     nav {
       display: flex;
       flex-wrap: wrap;
-      gap: 20px;
+      gap: 0 20px;
     }
     nav a,
     nav button {
