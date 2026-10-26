@@ -1,8 +1,17 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import type { RessourceSummary } from '@/lib/contenu'
 import { resolveTiles, TILES } from './content'
 import { Videos, VideosView } from './index'
+
+// Tag next/link so jsdom can tell a client-navigation anchor from a plain one.
+vi.mock('next/link', () => ({
+  default: ({ href, children, ...rest }: { href: string; children: React.ReactNode }) => (
+    <a href={href} data-next-link="" {...rest}>
+      {children}
+    </a>
+  ),
+}))
 
 const row = (youtube_id: string, slug: string): RessourceSummary => ({
   slug,
@@ -60,6 +69,13 @@ describe('VideosView', () => {
     const own = links[2]
     expect(own.getAttribute('href')).toBe('/ressources/skill-devis')
     expect(own.getAttribute('target')).toBeNull()
+  })
+
+  it('navigates to own pages through next/link, and leaves YouTube as a plain anchor', () => {
+    const { container } = render(<VideosView tiles={tiles} />)
+    const links = [...container.querySelectorAll('a.vid')]
+    expect(links[2].hasAttribute('data-next-link')).toBe(true)
+    expect(links[0].hasAttribute('data-next-link')).toBe(false)
   })
 
   it('loads no third-party image and no player before a click', () => {

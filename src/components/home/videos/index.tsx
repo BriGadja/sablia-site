@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { loadList } from '@/components/ressources/data'
 import { posterPath } from '@/components/ressources/poster'
 import { Dune } from '@/components/shell/Dune'
@@ -56,13 +57,8 @@ export function VideosView({ tiles }: { tiles: readonly Tile[] }) {
         <div className="vid-row">
           {tiles.map((tile) => {
             const poster = posterPath(tile.youtubeId)
-            return (
-              <a
-                key={tile.youtubeId}
-                className="vid"
-                href={tile.href}
-                {...(tile.external ? { target: '_blank', rel: 'noopener' } : {})}
-              >
+            const body = (
+              <>
                 <div className="vid-frame">
                   {poster && (
                     // biome-ignore lint/performance/noImgElement: static export, no image optimizer
@@ -90,7 +86,22 @@ export function VideosView({ tiles }: { tiles: readonly Tile[] }) {
                   </span>
                   <span>{tile.title}</span>
                 </div>
+              </>
+            )
+            return tile.external ? (
+              <a
+                key={tile.youtubeId}
+                className="vid"
+                href={tile.href}
+                target="_blank"
+                rel="noopener"
+              >
+                {body}
               </a>
+            ) : (
+              <Link key={tile.youtubeId} className="vid" href={tile.href}>
+                {body}
+              </Link>
             )
           })}
         </div>
