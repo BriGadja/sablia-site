@@ -365,7 +365,13 @@ def main() -> int:
     ap.add_argument("--walk", action="store_true", help="build only: client navigation walk + diff vs cold loads")
     ap.add_argument("--walk-routes", help="mechanism test on other routes, e.g. /ressources,/ (comma list of hrefs to click in turn)")
     ap.add_argument("--diff", action="store_true", help="print per-shot pixel difference reference vs build")
+    ap.add_argument("--route", help="build only: capture this path instead of the page's route (one page in --pages), e.g. a throwaway /dev-top preview before the home is assembled")
     args = ap.parse_args()
+    if args.route:
+        keys = [k for k in args.pages.split(",") if k]
+        if len(keys) != 1 or not args.route.startswith("/"):
+            ap.error("--route needs exactly one page in --pages and an absolute path")
+        PAGES[keys[0]]["route"] = args.route
 
     pages = [p for p in args.pages.split(",") if p]
     vps = [int(v) for v in args.vp.split(",") if v]
