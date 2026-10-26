@@ -23,7 +23,6 @@ export const WEBSITE_IDS: Record<string, string> = {
 
 type AnalyticsWindow = Window & {
   umami?: { track: (name: string, data?: object) => void }
-  __SABLIA_PRERENDER__?: boolean
 }
 
 let trackerStarted = false
@@ -65,7 +64,6 @@ function inject(kind: 'tracker' | 'recorder', src: string, websiteId: string): v
 }
 
 function target(): string | null {
-  if ((window as AnalyticsWindow).__SABLIA_PRERENDER__ === true) return null
   return websiteIdFor(window.location.hostname)
 }
 

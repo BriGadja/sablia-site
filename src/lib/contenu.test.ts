@@ -36,6 +36,17 @@ const ROW = {
   ],
 }
 
+describe('fixture mode', () => {
+  it('serves the listed slugs without any network call', async () => {
+    const spy = stubFetch(() => ok([]))
+    vi.stubEnv('SABLIA_FIXTURE_SLUGS', 'a, b')
+    expect((await fetchRessources())?.map((r) => r.slug)).toEqual(['a', 'b'])
+    expect((await fetchRessource('b'))?.slug).toBe('b')
+    expect(await fetchRessource('zzz')).toBeUndefined()
+    expect(spy).not.toHaveBeenCalled()
+  })
+})
+
 afterEach(() => {
   vi.unstubAllGlobals()
   vi.unstubAllEnvs()
@@ -43,12 +54,12 @@ afterEach(() => {
 
 describe('anonKey', () => {
   it('returns the key when the build had the variable', () => {
-    vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'anon-key')
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'anon-key')
     expect(anonKey()).toBe('anon-key')
   })
 
   it('returns null rather than an empty string when the variable is missing', () => {
-    vi.stubEnv('VITE_SUPABASE_ANON_KEY', '')
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', '')
     expect(anonKey()).toBeNull()
   })
 })
@@ -63,7 +74,7 @@ describe('fileUrl', () => {
 
 describe('fetchRessources', () => {
   it('returns the published rows and asks only for published ones', async () => {
-    vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'anon-key')
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'anon-key')
     const spy = stubFetch(() => ok([ROW]))
 
     const rows = await fetchRessources()
@@ -76,7 +87,7 @@ describe('fetchRessources', () => {
   })
 
   it('sends the anon key in both headers', async () => {
-    vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'anon-key')
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'anon-key')
     const spy = stubFetch(() => ok([]))
 
     await fetchRessources()
@@ -88,32 +99,32 @@ describe('fetchRessources', () => {
   })
 
   it('distinguishes "nothing published" from "could not read"', async () => {
-    vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'anon-key')
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'anon-key')
     stubFetch(() => ok([]))
     expect(await fetchRessources()).toEqual([])
   })
 
   it('returns null on a non-2xx answer', async () => {
-    vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'anon-key')
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'anon-key')
     stubFetch(() => new Response('nope', { status: 500 }))
     expect(await fetchRessources()).toBeNull()
   })
 
   it('returns null when the request throws (timeout, offline)', async () => {
-    vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'anon-key')
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'anon-key')
     stubFetch(() => Promise.reject(new DOMException('aborted', 'TimeoutError')))
     expect(await fetchRessources()).toBeNull()
   })
 
   it('returns null and never calls fetch when the key is absent', async () => {
-    vi.stubEnv('VITE_SUPABASE_ANON_KEY', '')
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', '')
     const spy = stubFetch(() => ok([ROW]))
     expect(await fetchRessources()).toBeNull()
     expect(spy).not.toHaveBeenCalled()
   })
 
   it('returns null when the body is not an array', async () => {
-    vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'anon-key')
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'anon-key')
     stubFetch(() => ok({ message: 'unexpected' }))
     expect(await fetchRessources()).toBeNull()
   })
@@ -121,7 +132,7 @@ describe('fetchRessources', () => {
 
 describe('fetchRessource', () => {
   it('returns the row, with its files, for a published slug', async () => {
-    vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'anon-key')
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'anon-key')
     const spy = stubFetch(() => ok([ROW]))
 
     const row = await fetchRessource('demo-of1')
@@ -134,26 +145,26 @@ describe('fetchRessource', () => {
   })
 
   it('escapes the slug it puts in the query', async () => {
-    vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'anon-key')
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'anon-key')
     const spy = stubFetch(() => ok([]))
     await fetchRessource('a b&c')
     expect(spy.mock.calls[0][0] as string).toContain('slug=eq.a%20b%26c')
   })
 
   it('returns undefined — not null — when no published row matches (a 404)', async () => {
-    vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'anon-key')
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'anon-key')
     stubFetch(() => ok([]))
     expect(await fetchRessource('inconnue')).toBeUndefined()
   })
 
   it('returns null when the read itself failed', async () => {
-    vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'anon-key')
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'anon-key')
     stubFetch(() => new Response('nope', { status: 503 }))
     expect(await fetchRessource('demo-of1')).toBeNull()
   })
 
   it('defaults fichiers to an empty array when the column is not a list', async () => {
-    vi.stubEnv('VITE_SUPABASE_ANON_KEY', 'anon-key')
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'anon-key')
     stubFetch(() => ok([{ ...ROW, fichiers: null }]))
     const row = await fetchRessource('demo-of1')
     expect(row?.fichiers).toEqual([])

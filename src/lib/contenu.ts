@@ -45,7 +45,7 @@ const DETAIL_SELECT = `${LIST_SELECT},corps_md,fichiers`
 
 /** `null` (not an empty string) when the build ran without the Vercel variable. */
 export function anonKey(): string | null {
-  const key = import.meta.env.VITE_SUPABASE_ANON_KEY
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   return typeof key === 'string' && key.length > 0 ? key : null
 }
 
@@ -72,8 +72,34 @@ async function get<T>(query: string): Promise<T[] | null> {
   }
 }
 
+/**
+ * Fixture mode (build/QA without network or key): `SABLIA_FIXTURE_SLUGS=a,b` makes every listed
+ * slug a published resource with placeholder text. Server-side env, never `NEXT_PUBLIC_`; unset in
+ * production, where it would hide real rows.
+ */
+function fixtureSlugs(): string[] {
+  return (process.env.SABLIA_FIXTURE_SLUGS ?? '')
+    .split(',')
+    .map((slug) => slug.trim())
+    .filter(Boolean)
+}
+
+function fixtureRessource(slug: string): Ressource {
+  return {
+    slug,
+    titre: `Ressource de test ${slug}`,
+    resume: 'Contenu de test.',
+    youtube_id: null,
+    published_at: '2026-01-01T00:00:00Z',
+    corps_md: null,
+    fichiers: [],
+  }
+}
+
 /** `null` = could not be read. `[]` = read fine, nothing published yet. The two differ on screen. */
 export async function fetchRessources(): Promise<RessourceSummary[] | null> {
+  const fixtures = fixtureSlugs()
+  if (fixtures.length > 0) return fixtures.map(fixtureRessource)
   return await get<RessourceSummary>(
     `contenu_ressources?select=${LIST_SELECT}&published=eq.true&order=published_at.desc`,
   )
@@ -81,6 +107,8 @@ export async function fetchRessources(): Promise<RessourceSummary[] | null> {
 
 /** `null` = could not be read. `undefined` = read fine, no such published resource (a 404). */
 export async function fetchRessource(slug: string): Promise<Ressource | null | undefined> {
+  const fixtures = fixtureSlugs()
+  if (fixtures.length > 0) return fixtures.includes(slug) ? fixtureRessource(slug) : undefined
   const rows = await get<Ressource>(
     `contenu_ressources?select=${DETAIL_SELECT}&published=eq.true&slug=eq.${encodeURIComponent(slug)}&limit=1`,
   )

@@ -67,9 +67,16 @@ export function outboundHost(href: string, ownHost: string): string | null {
 
 let lastZone = 'unknown'
 let lastLabel = ''
+// The capture listener already reported a `[data-cta-book]` click; `trackBooking()` of the same
+// click must not report it again. Cleared on the next task so a stale flag never swallows a later call.
+let bookingReported = false
 
 /** Called by `openBookingUrl()`, the single call site of every « Réserver 30 min » button. */
 export function trackBooking(): void {
+  if (bookingReported) {
+    bookingReported = false
+    return
+  }
   emit('cta_book', { zone: lastZone, label: lastLabel })
 }
 
@@ -161,13 +168,10 @@ export function watchVideoProgress(iframe: HTMLIFrameElement, id: string): void 
 
 // ── the delegated listeners ───────────────────────────────────────────────────
 
-type MaybePrerender = Window & { __SABLIA_PRERENDER__?: boolean }
 const SCROLL_STEPS = [25, 50, 75, 100] as const
 
 /** Installs the click, scroll and form listeners. Returns a function that removes them (tests). */
 export function startEventTracking(): () => void {
-  if ((window as MaybePrerender).__SABLIA_PRERENDER__ === true) return () => {}
-
   // clicks
   const onClick = (event: MouseEvent) => {
     const target = event.target as Element | null
@@ -185,7 +189,13 @@ export function startEventTracking(): () => void {
       const host = outboundHost(el.getAttribute('href') ?? '', window.location.hostname)
       if (host) emit('outbound', { host, zone })
     }
-    if (el.hasAttribute('data-cta-book')) emit('cta_book', { zone, label })
+    if (el.hasAttribute('data-cta-book')) {
+      emit('cta_book', { zone, label })
+      bookingReported = true
+      setTimeout(() => {
+        bookingReported = false
+      }, 0)
+    }
   }
   document.addEventListener('click', onClick, true)
 

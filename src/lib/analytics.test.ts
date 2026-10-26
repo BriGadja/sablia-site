@@ -13,7 +13,6 @@ import { clearConsent, writeConsent } from './consent'
 
 type UmamiWindow = Window & { umami?: { track: (name: string, data?: object) => void } }
 type TestWindow = Window & {
-  __SABLIA_PRERENDER__?: boolean
   happyDOM: { setURL: (url: string) => void }
 }
 
@@ -26,7 +25,6 @@ function reset() {
   resetAnalyticsForTests()
   clearConsent()
   document.head.replaceChildren()
-  delete (window as unknown as TestWindow).__SABLIA_PRERENDER__
 }
 
 describe('track', () => {
@@ -98,14 +96,6 @@ describe('tier 1: the cookieless tracker', () => {
       expect(startAnalytics()).toBe(false)
     }
     expect(scripts('tracker')).toHaveLength(0)
-  })
-
-  it('stays out of the prerendered HTML', () => {
-    visit('https://sablia.io/')
-    ;(window as unknown as TestWindow).__SABLIA_PRERENDER__ = true
-    expect(startAnalytics()).toBe(false)
-    expect(loadRecorder()).toBe(false)
-    expect(document.head.querySelectorAll('script[data-sablia]')).toHaveLength(0)
   })
 })
 
