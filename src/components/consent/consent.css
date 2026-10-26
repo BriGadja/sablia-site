@@ -28,10 +28,14 @@
       margin-inline: auto;
     }
     /* On a phone the long text scrolls inside the banner; both answers stay in view. */
+    /* The painted text block stays small (a few lines, the rest scrolls) so that the page's own
+       server-rendered content, not this late-mounted banner, is the largest contentful paint. */
     .v2-consent-copy {
       flex: 1;
       min-height: 0;
+      max-height: 4.5rem;
       overflow-y: auto;
+      overscroll-behavior: contain;
     }
     .v2-consent-title {
       margin: 0;
@@ -55,6 +59,9 @@
       display: flex;
       flex-shrink: 0;
       gap: 0.75rem;
+    }
+    .v2-consent-answers .v2-consent-answer {
+      flex: 1;
     }
     /* One rule for both answers: refusing is exactly as easy as accepting. */
     .v2-consent-answer {
@@ -95,7 +102,11 @@
       }
       .v2-consent-copy {
         min-width: 0;
+        max-height: none;
         overflow: visible;
+      }
+      .v2-consent-answers .v2-consent-answer {
+        flex: none;
       }
       .v2-consent-text {
         font-size: 0.8125rem;
