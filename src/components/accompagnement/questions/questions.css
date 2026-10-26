@@ -1,0 +1,46 @@
+@layer theme, base, components, utilities;
+
+/* #questions of /accompagnement, ported from the v143 mockup's RENDERED result. */
+@layer components {
+  .v2-acc-questions {
+    padding: 0 0 96px;
+
+    .acc-h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .faq {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 40px;
+      margin-top: 32px;
+    }
+    .faq-item {
+      border-top: 1px solid #e4d6c0;
+      padding-top: 16px;
+    }
+    .faq-q {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .faq-a {
+      margin: 6px 0 0;
+      font-size: 15px;
+      line-height: 1.55;
+      color: #3a3f4d;
+    }
+  }
+  @media (max-width: 900px) {
+    .v2-acc-questions .faq {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .v2-acc-questions .acc-h2 {
+      font-size: 28px;
+    }
+  }
+}
