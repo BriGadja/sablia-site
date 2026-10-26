@@ -6,9 +6,17 @@
     "server/**/*",
     "docs/*.json",
     "api/**/*",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "build", "dist", "out", "client", "**/*.test.ts"],
+  "exclude": [
+    "node_modules",
+    "build",
+    "dist",
+    "out",
+    "client",
+    "**/*.test.ts"
+  ],
   "compilerOptions": {
     "incremental": true,
     "tsBuildInfoFile": "./node_modules/typescript/tsbuildinfo",
@@ -19,7 +27,11 @@
     "allowUnreachableCode": false,
     "noUncheckedSideEffectImports": true,
     "allowUnusedLabels": false,
-    "lib": ["esnext", "dom", "dom.iterable"],
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable"
+    ],
     "jsx": "react-jsx",
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -29,13 +41,28 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "baseUrl": ".",
-    "types": ["node"],
-    "plugins": [{ "name": "next" }],
+    "types": [
+      "node"
+    ],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "paths": {
-      "@db": ["./db/index.ts"],
-      "@db/*": ["./db/*"],
-      "@docs/*": ["./docs/*"],
-      "@/*": ["./src/*"]
-    }
+      "@db": [
+        "./db/index.ts"
+      ],
+      "@db/*": [
+        "./db/*"
+      ],
+      "@docs/*": [
+        "./docs/*"
+      ],
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "target": "ES2017"
   }
 }
