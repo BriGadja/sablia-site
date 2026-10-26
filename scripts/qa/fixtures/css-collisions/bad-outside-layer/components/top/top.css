@@ -1,0 +1,2 @@
+@layer theme, base, components, utilities;
+.v2-top { color: red; }
