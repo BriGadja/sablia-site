@@ -42,6 +42,8 @@ export function Construit() {
   // Hover (and focus) on the deck pause it; the button is the user's own pause.
   const pause = usePausable()
   const live = inView && !pause.paused && !reduced
+  // Reduced motion: nothing scrolls by itself, so the button already reads « Reprendre » (as the mockup).
+  const stopped = pause.userPaused || reduced
 
   const [deck, setDeck] = useState(0)
   const [prev, setPrev] = useState(-1)
@@ -138,8 +140,8 @@ export function Construit() {
           <div className="ill-side">
             <SandIllustration src="/illus/realisations-contour-nuit.webp" height={196} />
             <button type="button" className="pausebtn" onClick={pause.toggle}>
-              {pause.userPaused ? <PlayIcon /> : <PauseIcon />}
-              {pause.userPaused ? RESUME_LABEL : PAUSE_LABEL}
+              {stopped ? <PlayIcon /> : <PauseIcon />}
+              {stopped ? RESUME_LABEL : PAUSE_LABEL}
             </button>
           </div>
         </div>
