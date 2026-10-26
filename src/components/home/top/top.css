@@ -529,20 +529,28 @@
       .h1 {
         font-size: 36px;
       }
+      /* The phone stacks above the laptop so the record (note and fields) renders at .85 (CP4 16). */
       .hs {
-        height: 320px;
-      }
-      .hs-laptop {
-        left: 150px;
+        height: 570px;
       }
       .hs-stage {
-        transform: scale(0.688);
+        width: 364px;
+        height: 666px;
+        margin-left: -182px;
+        transform: scale(0.85);
         transform-origin: 50% 0;
       }
-      .hs-phone {
+      .hs-laptop {
         left: 0;
-        scale: 1.24;
-        transform-origin: 0 100%;
+        top: 308px;
+      }
+      .hs-phone {
+        left: 102px;
+        top: 0;
+      }
+      .hs-claude {
+        left: 0;
+        top: 626px;
       }
     }
   }

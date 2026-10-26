@@ -3,21 +3,21 @@
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { Cta } from '@/components/shell/Cta'
 import { Dune } from '@/components/shell/Dune'
+import { useInView } from '@/lib/hooks/useInView'
+import { usePausable } from '@/lib/hooks/usePausable'
 import { useReducedMotion } from '@/lib/hooks/useReducedMotion'
 import { useScrollProgress } from '@/lib/hooks/useScrollProgress'
-import { usePausable } from '@/lib/hooks/usePausable'
 import { useTimelineLoop } from '@/lib/hooks/useTimelineLoop'
 import {
   CLAIM_LINES,
+  derive,
   FIGURE_LABEL,
   FINAL_FRAME,
   type Frame,
   H1_LINES,
   PILL,
-  ROWS,
-  START_FRAME,
-  derive,
   proofLine,
+  START_FRAME,
 } from './content'
 import './top.css'
 
@@ -58,10 +58,13 @@ export function Top() {
   const wide = useWide()
   const pause = usePausable({ hover: false })
   const heroRef = useRef<HTMLElement>(null)
+  const lapRef = useRef(0)
   const sceneRef = useRef<HTMLElement | null>(null)
   useEffect(() => {
     sceneRef.current = document.getElementById('scene')
   }, [])
+  // The loop runs only while the hero is on screen, at every width (the recede below is wide-only).
+  const inView = useInView(heroRef, { threshold: 0 })
   const p = useScrollProgress({ target: sceneRef, reference: heroRef, enabled: wide })
 
   const set = useCallback((patch: Partial<Frame>) => setFrame((f) => ({ ...f, ...patch })), [])
@@ -69,7 +72,8 @@ export function Top() {
   // The mockup's heroLoop: one lap per run, the fade-out closes it, the hook repeats it.
   useTimelineLoop(
     async ({ wait }) => {
-      setFrame({ ...START_FRAME })
+      const lap = (lapRef.current++ % 2) as 0 | 1
+      setFrame({ ...START_FRAME, lap })
       await wait(500)
       set({ s: 1 })
       for (let sec = 358; sec <= 372; sec++) {
@@ -92,10 +96,10 @@ export function Top() {
       await wait(4000)
       set({ fade: true })
       await wait(450)
-      setFrame({ ...START_FRAME, fade: true })
+      setFrame({ ...START_FRAME, lap, fade: true })
       await wait(600)
     },
-    { active: !pause.paused && p < 0.95, final: () => setFrame(FINAL_FRAME) },
+    { active: inView && !pause.paused && p < 0.95, final: () => setFrame(FINAL_FRAME) },
   )
 
   // Paused by the button: park on the finished scene. Reduced motion: always the finished scene.
@@ -142,31 +146,42 @@ export function Top() {
                   <span className="hs-dot" />
                   <span className="hs-dot" />
                   <span className="hs-dot" />
-                  {/* biome-ignore lint/performance/noImgElement: tiny static svg, decorative */}
-                  <img className="hs-logo" src="/logos/crm/hubspot.svg" alt="" />
-                  <span className="hs-tag">Fiche contact</span>
+                  {d.who.logo && (
+                    // biome-ignore lint/performance/noImgElement: tiny static svg, decorative
+                    <img className="hs-logo" src={d.who.logo} alt="" />
+                  )}
+                  <span className="hs-tag">{d.who.tag}</span>
                 </div>
                 <div className="hs-who">
-                  <span className="hs-av">PL</span>
+                  <span className="hs-av">{d.who.av}</span>
                   <div>
-                    <b>Paul Lemoine</b>
-                    <small>Garage Lemoine</small>
+                    <b>{d.who.name}</b>
+                    <small>{d.who.sub}</small>
                   </div>
                   <span className={`hs-upd${d.updOn ? ' on' : ''}`}>{d.updText}</span>
                 </div>
                 <div className="hs-body">
                   <div className="hs-note">
                     <span className="hx-k">Compte rendu d&apos;appel</span>
-                    <span className={`hs-nt${d.noteFill ? ' fill' : ''}`}>
-                      Veut prendre ses <span className={`hs-w${d.lit[0] ? ' lit' : ''}`}>rendez-vous en ligne</span>,
-                    </span>
-                    <span className={`hs-nt${d.noteFill ? ' fill' : ''}`} style={{ animationDelay: '380ms' }}>
-                      <span className={`hs-w${d.lit[1] ? ' lit' : ''}`}>budget env. 3 000 €</span>,{' '}
-                      <span className={`hs-w${d.lit[2] ? ' lit' : ''}`}>décide seul</span>.{' '}
-                      <span className={`hs-w${d.lit[3] ? ' lit' : ''}`}>Rappel jeudi matin</span>.
-                    </span>
+                    {d.who.note.map((line, li) => (
+                      <span
+                        key={line[0][0]}
+                        className={`hs-nt${d.noteFill ? ' fill' : ''}`}
+                        style={li ? { animationDelay: '380ms' } : undefined}
+                      >
+                        {line.map(([t, hit]) =>
+                          hit === null ? (
+                            t
+                          ) : (
+                            <span key={t} className={`hs-w${d.lit[hit] ? ' lit' : ''}`}>
+                              {t}
+                            </span>
+                          ),
+                        )}
+                      </span>
+                    ))}
                   </div>
-                  {ROWS.map(([k, v], i) => (
+                  {d.who.rows.map(([k, v], i) => (
                     <div className="hs-row" key={k}>
                       <span className="hx-k">{k}</span>
                       {d.rowsOn[i] ? (
@@ -195,7 +210,7 @@ export function Top() {
                       >
                         <path d="M4 5h16v15H4zM4 9h16M8 3v4M16 3v4" />
                       </svg>
-                      Relance · Jeu. 09:00
+                      {d.who.relance}
                     </div>
                   )}
                 </div>
@@ -208,9 +223,9 @@ export function Top() {
                       <span className={`hx-live${d.live ? ' on' : ''}`} />
                       Appel en cours
                     </div>
-                    <span className="hs-pav">PL</span>
-                    <b>Paul Lemoine</b>
-                    <small>Garage Lemoine</small>
+                    <span className="hs-pav">{d.who.av}</span>
+                    <b>{d.who.name}</b>
+                    <small>{d.who.sub}</small>
                     <span className="hs-time">{d.time}</span>
                     <span className="hx-wave">
                       {d.bars.map((b) => (
@@ -254,7 +269,7 @@ export function Top() {
                       <div className="hs-next">
                         <div>
                           <small>Appel suivant</small>
-                          <span className="hs-nm">Catherine Durand</span>
+                          <span className="hs-nm">{d.nextName}</span>
                         </div>
                         <span className="hs-call">
                           <svg
@@ -307,10 +322,22 @@ export function Top() {
                 type="button"
                 className="hs-pause"
                 onClick={pause.toggle}
-                aria-label={pause.userPaused ? "Reprendre l'animation" : "Mettre l'animation en pause"}
+                aria-label={
+                  pause.userPaused ? "Reprendre l'animation" : "Mettre l'animation en pause"
+                }
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  {pause.userPaused ? <path d="M8 5v14l11-7z" /> : <path d="M7 5h3v14H7zM14 5h3v14h-3z" />}
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  {pause.userPaused ? (
+                    <path d="M8 5v14l11-7z" />
+                  ) : (
+                    <path d="M7 5h3v14H7zM14 5h3v14h-3z" />
+                  )}
                 </svg>
               </button>
             )}

@@ -11,10 +11,12 @@ export interface Frame {
   sec: number
   /** The stage fades out between two laps. */
   fade: boolean
+  /** Which caller the lap is about: laps alternate, the phone announces the next one (CP4 16). */
+  lap: 0 | 1
 }
 
-export const START_FRAME: Frame = { s: 0, r: 0, sec: 358, fade: false }
-export const FINAL_FRAME: Frame = { s: 6, r: 4, sec: 372, fade: false }
+export const START_FRAME: Frame = { s: 0, r: 0, sec: 358, fade: false, lap: 0 }
+export const FINAL_FRAME: Frame = { s: 6, r: 4, sec: 372, fade: false, lap: 0 }
 
 export const H1_LINES = ['Appel terminé,', 'CRM à jour.'] as const
 
@@ -30,13 +32,84 @@ export const FIGURE_LABEL =
 
 /** Price and delay come from the OF-1 file, never typed here. */
 export function proofLine(): string[] {
-  return [eurHt(of1.price.oneShotHt), `en place en ${of1.delay.days} jours`, 'remboursé si ça ne tourne pas']
+  return [
+    eurHt(of1.price.oneShotHt),
+    `en place en ${of1.delay.days} jours`,
+    'remboursé si ça ne tourne pas',
+  ]
 }
 
-export const ROWS: ReadonlyArray<readonly [string, string]> = [
-  ['Besoin', 'Rendez-vous en ligne'],
-  ['Budget', 'Environ 3 000 €'],
-  ['Décideur', 'Paul Lemoine, seul'],
+/** One caller's record. Catherine Durand is the scene section's first call case (same facts, one story). */
+export interface Caller {
+  name: string
+  sub: string
+  av: string
+  /** CRM mark and tab label of the record window. */
+  logo: string | null
+  tag: string
+  /** Note lines: [text, highlighted word or null] runs, the four highlights light up in order. */
+  note: ReadonlyArray<ReadonlyArray<readonly [string, number | null]>>
+  rows: ReadonlyArray<readonly [string, string]>
+  relance: string
+}
+
+export const CALLERS: readonly [Caller, Caller] = [
+  {
+    name: 'Paul Lemoine',
+    sub: 'Garage Lemoine',
+    av: 'PL',
+    logo: '/logos/crm/hubspot.svg',
+    tag: 'Fiche contact',
+    note: [
+      [
+        ['Veut prendre ses ', null],
+        ['rendez-vous en ligne', 0],
+        [',', null],
+      ],
+      [
+        ['budget env. 3 000 €', 1],
+        [', ', null],
+        ['décide seul', 2],
+        ['. ', null],
+        ['Rappel jeudi matin', 3],
+        ['.', null],
+      ],
+    ],
+    rows: [
+      ['Besoin', 'Rendez-vous en ligne'],
+      ['Budget', 'Environ 3 000 €'],
+      ['Décideur', 'Paul Lemoine, seul'],
+    ],
+    relance: 'Relance · Jeu. 09:00',
+  },
+  {
+    name: 'Catherine Durand',
+    sub: 'Atelier Durand',
+    av: 'CD',
+    logo: null,
+    tag: 'Google Sheets',
+    note: [
+      [
+        ['Veut remplacer ses ', null],
+        ['devis sur Excel', 0],
+        [',', null],
+      ],
+      [
+        ['avant le 15 novembre', 1],
+        [', ', null],
+        ['la gérante et son comptable', 2],
+        ['. ', null],
+        ['Relance mardi matin', 3],
+        ['.', null],
+      ],
+    ],
+    rows: [
+      ['Besoin', 'Remplacer les devis Excel'],
+      ['Échéance', 'Avant le 15 novembre'],
+      ['Décideurs', 'La gérante et son comptable'],
+    ],
+    relance: 'Relance · Mar. 10:00',
+  },
 ]
 
 /** Wave bar heights while the call runs. */
@@ -47,8 +120,12 @@ export function clock(sec: number): string {
 }
 
 /** Everything the markup needs, derived from a frame (the mockup's renderVals, hero part). */
-export function derive({ s, r, sec, fade }: Frame) {
+export function derive({ s, r, sec, fade, lap }: Frame) {
+  const who = CALLERS[lap]
+  const next = CALLERS[lap === 0 ? 1 : 0]
   return {
+    who,
+    nextName: next.name,
     u1: s >= 2,
     u2: s >= 5,
     fade,
@@ -66,7 +143,7 @@ export function derive({ s, r, sec, fade }: Frame) {
     updText: s >= 5 ? 'Mis à jour · 14:02' : 'Dernier échange il y a 3 jours',
     noteFill: r >= 1,
     lit: [r >= 2, r >= 3, r >= 4, s >= 5],
-    rowsOn: ROWS.map((_, i) => r > i + 1),
+    rowsOn: who.rows.map((_, i) => r > i + 1),
     relance: s >= 5,
     time: clock(sec),
     bars: WAVE.map((h, i) => ({ h: s === 1 ? h : 3, d: i * 60, on: s === 1 })),
