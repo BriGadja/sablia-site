@@ -286,3 +286,111 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Test : [script] gh workflow run uptime.yml -f target=https://sablia.io/api/nope (deux fois) puis gh issue list --label uptime
 - Statut : VALIDÉE 2026-10-18 @c5a443c
 - Source : grill 2026-10-16 (le site et n8n partagent une seule machine) ; plan Phase F5, amendement R7 ; **Parcourue en production le 2026-10-18 @c5a443c** : cible forcée `/api/nope` ×2 → issue #20 puis un commentaire, exécution normale (contrôle de version actif) → #20 fermée ; l'étiquette `uptime` a dû être créée à la main (corrigé dans ce même lot, `--repo`)
+
+## US-69 — Chaque adresse actuelle répond encore ou redirige proprement, sur le site v2 [script, chemin-critique]
+- Surface : les adresses du relevé du lot 0 (`deploy/parity-baseline.json`, 34 lignes) et celles du plan du site, servies par `server/` (Express) à partir de l'export statique Next.js ; `/escalier-modeles`, `/sitemap.xml`, `/robots.txt`, `/llms.txt`, `/.well-known/ai.txt`
+- Parcours : (cible) `python3 scripts/site-parity.py --baseline deploy/parity-baseline.json --b http://127.0.0.1:5001 --extras deploy/parity-extras.txt --allowed deploy/parity-allowed.txt` (dépôt hub ; 5001 = l'emplacement d'aperçu, sans Caddy, qui ajoute `noindex` à toutes les lignes ; la forme stricte sur `https://sablia.io` au moment de la bascule)
+- Oracle : chacune des 34 lignes répond avec le même statut qu'au relevé, ou une redirection 301 vers sa nouvelle adresse déclarée dans `deploy/parity-allowed.txt` ; `/cgv` et `/cgv/` répondent 200 ; les pages HTML ne sont plus comparées au corps (le contenu a changé exprès), les fichiers statiques non HTML et les en-têtes cache et HSTS le restent ; les deux faux 200 de l'ancien site (`/nimporte-quoi`, `/assets/x.js`) sont des écarts voulus (404, US-70)
+- Exemple : Étant donné l'aperçu qui sert la branche `autopilot/2026-10-26-sablia-io-v2` / Quand le script rejoue les 34 lignes / Alors il sort 0, `/offres/compte-rendu-appel/hubspot` affiche `OK … 200` et `/cgv/` aussi
+- Test : [script] python3 scripts/site-parity.py (dépôt hub, voir Parcours) + vitest server/static.test.ts
+- Statut : JAMAIS-PASSÉE
+- Source : résumé du 2026-10-26 (« mêmes adresses, test bloquant ») ; plan `sablia-io-v2.md` ; prolonge US-63 (même contrat, corps libres)
+
+## US-70 — Une adresse inconnue répond 404 pour de vrai, et les anciennes adresses redirigent [script]
+- Surface : toute adresse hors du plan du site ; `/roi` et `/about` (anciennes pages) ; `server/static.ts`, `404.html`
+- Parcours : (cible) `curl -s -o /dev/null -w '%{http_code}' https://preview.sablia.io/nimporte-quoi` puis `/roi`, `/about`, `/assets/x.js`
+- Oracle : `/nimporte-quoi` et `/assets/x.js` répondent 404 avec la page « Page introuvable » (noindex, un lien vers l'accueil) ; `/roi` et `/about` répondent 301 vers la page de remplacement choisie dans le TODO t-20261019-24 ; `/api/nope` reste 404 en texte brut ; un POST sur une page répond 405
+- Exemple : Étant donné le site v2 servi / Quand on ouvre `/nimporte-quoi` / Alors le statut est 404, le corps contient « Page introuvable » et `<meta name="robots" content="noindex`
+- Test : vitest server/static.test.ts + [script] python3 scripts/site-check.py --base http://127.0.0.1:5001 --canonical-host sablia.io --preview + python3 scripts/qa/routes-check.py
+- Statut : JAMAIS-PASSÉE
+- Source : TODO t-20261019-24 (faux 404 de l'ancien site) ; résumé du 2026-10-26 (« défauts connus réglés par construction »)
+
+## US-71 — La mesure du site v2 est identique : mêmes événements, mêmes deux chiffres de tête [script, chemin-critique]
+- Surface : toutes les pages v2 (script `/m/a.js`, bandeau, `src/lib/{analytics,events,consent}.ts`) ; tableau de bord `stats.sablia.io`
+- Parcours : (cible) `UMAMI_CREDENTIALS=.credentials/umami.json node scripts/analytics-e2e.mjs --base https://preview.sablia.io --netrc <fichier> --replay`
+- Oracle : sans consentement : `click` (libellé et zone), `cta_book` sur chaque « Réserver 30 min » (barre du haut, héros, appel final, pages intérieures), `outbound` (hôte seul), `scroll_25/50/75/100` avec `path=/` pour l'accueil ; avec « Tout accepter » seulement : `video_*`, `form_*`, enregistreur ; aucun cookie, aucun `localStorage` hors `sablia_consent`, aucune requête vers un autre domaine avant consentement (liste nommée de US-65) ; `scripts/site-analytics-brief.py` calcule encore « Cliquent Réserver 30 min » et « Passent la moitié de l'accueil »
+- Exemple : Étant donné l'accueil de l'aperçu sans consentement / Quand le visiteur clique « Réserver 30 min » dans la barre du haut puis défile à mi-page / Alors Umami reçoit `cta_book` avec `zone='nav'` et `scroll_50` pour le chemin `/`
+- Test : [script] node scripts/analytics-e2e.mjs (voir Parcours) + vitest src/lib/{analytics,events,consent}.test.ts + src/components/consent/ConsentBanner.test.tsx
+- Statut : JAMAIS-PASSÉE
+- Source : résumé du 2026-10-26 (« la mesure reste identique ») ; décisions D14/D15 du 2026-10-16 ; prolonge US-65 et US-66
+
+## US-72 — L'accueil se déroule en neuf sections dans la charte Sablier, sur ordinateur et téléphone [chemin-critique]
+- Surface : `/` (sections `top`, `scene`, `automatisations`, `construit`, `formations`, `derriere`, `videos`, `faq`, `fin`, 1440 et 390)
+- Parcours : (cible) ouvrir l'aperçu à 1440 puis 390, défiler jusqu'au pied de page
+- Oracle : les neuf sections existent dans cet ordre dans `<main id="contenu">`, après un lien d'évitement ; le texte, les chiffres et les animations sont ceux de la maquette gelée v143 (file de corrections du point 4 comprise) ; fond sable, bandeaux nuit et violet, or du sable, Familjen Grotesk et Fragment Mono ; la mesure `score.py home` compte au plus 2 défauts (les deux verrouillés par Brice) et aucun débordement horizontal à 390 ; les polices viennent de notre origine
+- Exemple : Étant donné l'accueil à 390 / Quand on défile de haut en bas / Alors `document.documentElement.scrollWidth` vaut 390, les neuf `section[id]` apparaissent dans l'ordre et le titre du héros est « Appel terminé, CRM à jour. »
+- Test : [script] python3 scripts/qa/score.py home --max 2 + python3 scripts/qa/css-collisions.py src + vitest src/components/home/ + marche navigateur 1440/390 (reste du navigateur partagé)
+- Statut : JAMAIS-PASSÉE
+- Source : résumé du 2026-10-26 ; `decisions-lot2.md` (L2-6, L2-7, R1 à R13, points de contrôle 1 à 4) ; remplace US-1, US-3, US-9, US-10, US-11 au moment de la bascule
+
+## US-73 — Tout ce qui bouge plus de 5 secondes s'arrête sur demande, et « réduire les animations » donne l'état final [script]
+- Surface : `/`, `/formations`, `/accompagnement` (boucles d'animation, boutons Pause)
+- Parcours : (cible) `python3 scripts/qa/motion-check.py` (par défaut sur l'emplacement d'aperçu `http://127.0.0.1:5001`)
+- Oracle : chaque région animée plus de 5 s porte un bouton de pause au clavier et à 44 px ; la pause tient au survol et au focus pour le configurateur et la vitrine ; avec `prefers-reduced-motion: reduce` aucune boucle ne tourne et chaque scène montre son état final ; aucun `aria-pressed` sur un bouton dont le libellé change ; anneau de focus 2 px `#835A0C`
+- Exemple : Étant donné l'accueil avec « réduire les animations » demandé / Quand on défile jusqu'à `#scene` / Alors le tuyau d'appel montre ses valeurs finales et aucune animation CSS ne tourne
+- Test : [script] python3 scripts/qa/motion-check.py + axe-core via `scripts/qa/axe-check.py` + `scripts/qa/origin-check.py`
+- Statut : JAMAIS-PASSÉE
+- Source : décision D17 (WCAG 2.2.2), R7 ; résumé du 2026-10-26 (« pause pour tout ce qui bouge plus de 5 s, mouvement réduit »)
+
+## US-74 — Formations : composer sa formation et voir le programme se mettre à jour
+- Surface : `/formations` (configurateur, échelle des niveaux, outils, déroulé, avis, formats, questions, appel final)
+- Parcours : (cible) ouvrir l'aperçu `/formations`, choisir un secteur, un usage, un niveau
+- Oracle : les trois rangées de puces (5 secteurs, 4 usages, 3 niveaux) changent le programme et seules les lignes changées défilent ; la démonstration automatique parcourt trois profils dont un profil métier « Industrie et BTP · Mails et comptes rendus · À l'aise » ; elle s'arrête au survol, au focus et au bouton Pause ; l'en-tête du programme tient sur une ligne à 390 sans saut ; voix « je » ; aucun prix ; aucun nom d'entreprise
+- Exemple : Étant donné `/formations` à 390 / Quand on choisit « Industrie et BTP » / Alors l'en-tête du programme reste sur une ligne et la ligne « secteur » du programme défile
+- Test : vitest src/components/formations/ + [script] python3 scripts/qa/score.py form --max 0
+- Statut : JAMAIS-PASSÉE
+- Source : maquette gelée v143 (`Formations.dc.html`) ; `decisions-lot2.md` § point 4 file d'attente (2, 4, 5, 6, 14) ; D8 modifiée le 2026-10-24 (« je » sur les pages intérieures)
+
+## US-75 — Accompagnement : choisir « pour vous » ou « pour votre équipe » et suivre le parcours en cinq étapes
+- Surface : `/accompagnement` (bascule du héros, situations, parcours, livrables, exemples, pourquoi, questions, appel final)
+- Parcours : (cible) ouvrir l'aperçu `/accompagnement` à 1440 puis 390, basculer le héros, regarder le parcours
+- Oracle : la bascule change toutes les données de la page et rejoue le parcours ; les cinq étapes se déroulent dans l'ordre, les deux dernières ont chacune un effet, les coches du héros arrivent en séquence ; sur téléphone le panneau des tâches s'insère sous l'étape 2 ; un seul vocabulaire de niveaux ; voix « je » ; aucun client nommé ; aucun chiffre
+- Exemple : Étant donné `/accompagnement` à 1440 / Quand on clique « Pour votre équipe » / Alors le titre des situations, la carte « semaine » et le parcours changent et le parcours redémarre à l'étape 1
+- Test : vitest src/components/accompagnement/ + [script] python3 scripts/qa/score.py acc --max 0
+- Statut : JAMAIS-PASSÉE
+- Source : maquette gelée v143 (`Accompagnement.dc.html`) ; file d'attente du point 4 (9, 10, 12, 13, 14)
+
+## US-76 — L'offre « Compte rendu d'appel » et ses six pages CRM disent ce qui est propre à chaque outil, dans la charte Sablier
+- Surface : `/offres/compte-rendu-appel` et `/offres/compte-rendu-appel/{hubspot,zoho,salesforce,pipedrive,google-sheets,excel-365}`
+- Parcours : (cible) ouvrir l'offre puis chaque page CRM à 1440 et 390
+- Oracle : la page offre liste six outils (dont Google Sheets et Excel 365, ce dernier « si le fichier est sur OneDrive ou SharePoint ») au prix de 1 490 € HT, avec « Agents vocaux » seulement en « sur demande » (« ne fait pas partie de cette offre ») ; chaque page CRM garde ses faits sourcés (quatre existantes) ou ses faits du fichier d'offre du hub (deux nouvelles) ; données structurées Service avec le catalogue v1 (sans « 30 jours ») ; aucun écart avec `of1.parity.test.ts`
+- Exemple : Étant donné `/offres/compte-rendu-appel/google-sheets` / Quand on la charge sans JavaScript / Alors un seul `<h1>`, le prix « 1 490 € HT » et un JSON-LD `Service` valide sont dans le HTML
+- Test : vitest src/content/of1.parity.test.ts + src/content/crm/ + [script] node --test scripts/seo/*.test.mjs
+- Statut : JAMAIS-PASSÉE
+- Source : `decisions-lot2.md` § Lot 3 point 1 (L2-3, L2-4) ; TODO t-20261019-34 ; prolonge US-59 à US-62
+
+## US-77 — Une ressource se lit vidéo d'abord, avec ses données VideoObject, sans charger YouTube avant un clic [script]
+- Surface : `/ressources`, `/ressources/:slug` (une page par vidéo), bande « vidéos » de l'accueil
+- Parcours : (cible) ouvrir `/ressources`, ouvrir une ressource, lire le HTML sans JavaScript
+- Oracle : la liste et chaque page sont dans le HTML construit (pas de lecture Supabase par le navigateur) ; la vidéo est au-dessus de la ressource ; JSON-LD `VideoObject` ; l'affiche vient de notre origine ; `youtube.com` ne se charge qu'après le clic sur la façade ; les quatre vignettes de l'accueil mènent à nos pages vidéo ; un slug inconnu répond 404
+- Exemple : Étant donné `/ressources/skill-devis` sans JavaScript / Quand on lit le HTML / Alors le `<h1>`, le `VideoObject`, la façade et le formulaire sont présents et aucune requête ne part vers `i.ytimg.com`
+- Test : vitest src/components/ressources/ src/lib/contenu.test.ts + [script] node --test scripts/seo/*.test.mjs + python3 scripts/site-check.py --base https://preview.sablia.io --preview
+- Statut : JAMAIS-PASSÉE
+- Source : décisions D13, D12 ; accord de Brice du 2026-10-18 (affiches rapatriées au lot 3) ; prolonge US-6, US-7, US-54, US-67
+
+## US-78 — Les pages légales, le guide, le remerciement et la page 404 sont dans la charte, et les CGV ne partent qu'avec l'accord de Brice
+- Surface : `/mentions-legales`, `/politique-confidentialite`, `/cgv`, `/guides/integrer-l-ia-dans-votre-entreprise`, `/thank-you`, page 404
+- Parcours : (cible) ouvrir chaque page à 1440 et 390
+- Oracle : chaque page porte l'en-tête, le pied de page et le bandeau v2 ; la politique de confidentialité nomme toujours `sablia_consent` et « Tout accepter » ; `/thank-you` s'ouvre sans erreur avec ou sans paramètre ; le texte des CGV du dépôt est le brouillon `cgv-v2-draft.md` tant que Brice n'a pas répondu, aucun marqueur `[À CONFIRMER]` ne part en production
+- Exemple : Étant donné `/cgv` sur l'aperçu / Quand Brice lit la page à la recette / Alors il lit le brouillon 16 articles avec ses points `[À CONFIRMER]` visibles, et le build de production échoue s'il en reste un
+- Test : vitest src/app/ (pages légales) + [script] grep du HTML construit (`scripts/qa/content-gates.sh`)
+- Statut : JAMAIS-PASSÉE
+- Source : résumé du 2026-10-26 (CGV réécrites, TODO t-20260929-01) ; brouillon `research/site-theophile-2026-10/cgv-v2-draft.md`
+
+## US-79 — Aucun chiffre banni, aucun nom interdit, aucune preuve non conforme dans le HTML construit [script]
+- Surface : le HTML construit de toutes les pages (`dist/public`), `src/content/proof.ts`, `public/llms.txt`
+- Parcours : (cible) `python3 projects/sablia/offre/preuve/check-preuve.py` (dépôt hub, avec `PREUVE_SITE_ROOT`) puis `bash scripts/qa/content-gates.sh dist/public`
+- Oracle : les sept contrôles de check-preuve passent et échouent si un fichier voulu manque ; aucun des quatorze pourcentages bannis, aucun « 18,6 milliards », aucun nom de client, de courtier ou de personne de la liste du lot 2, aucun tiret long sur les surfaces de preuve, aucun « IAPreneurs » dans le HTML construit
+- Exemple : Étant donné le HTML construit de l'accueil / Quand on cherche « 80 % » / Alors il n'y a aucune occurrence et `content-gates.sh` sort 0
+- Test : [script] check-preuve.py + `bash scripts/qa/content-gates.sh dist/public` + son banc `scripts/qa/content-gates.bench.sh`
+- Statut : JAMAIS-PASSÉE
+- Source : `decisions-lot2.md` (L2-2, L2-9, R9-5), `autoresearch/program.md` (check-preuve) ; `memory/reference-chiffres-ia-bannis.md`
+
+## US-80 — La chaîne de déploiement du lot 0 fabrique et sert le site v2 sans changer de forme [script]
+- Surface : `package.json` (`build`), `deploy/deploy.sh` (`assert_prerendered`, `smoke`), `server/static.ts`, `dist/public`, `dist/index.js`, `/healthz`
+- Parcours : (cible) `bash deploy/deploy.test.sh` puis un déploiement réel de l'aperçu (`journalctl -u sablia-site-deploy`)
+- Oracle : `npm ci --ignore-scripts && PRERENDER_STRICT=1 npm run build` produit `dist/public/**.html`, `dist/public/sitemap.xml` et `dist/index.js` ; chaque URL du plan du site a son fichier `.html` (ou `/index.html`) ; le test de fumée vérifie aussi qu'une adresse inconnue répond 404 ; `deploy.test.sh` passe ; l'aperçu annonce le sha de la branche dans `/healthz`
+- Exemple : Étant donné la branche poussée / Quand le minuteur construit l'emplacement `preview` / Alors `/healthz` annonce le sha7 de la branche et le test de fumée est passé
+- Test : [script] bash deploy/deploy.test.sh + python3 scripts/site-parity.py --healthz-release <sha7> --b http://127.0.0.1:5001
+- Statut : JAMAIS-PASSÉE
+- Source : résumé du 2026-10-26 (« la chaîne ne change que son étape de compilation ») ; prolonge US-63 et US-64
