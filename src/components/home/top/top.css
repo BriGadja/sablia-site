@@ -1,0 +1,651 @@
+@layer theme, base, components, utilities;
+
+/* Hero of the home: sticky, receding under the scene panel. Ported from the rendered mockup (M:473-535). */
+@layer components {
+  .v2-top {
+    position: sticky;
+    top: 0;
+    z-index: 0;
+    padding: 64px 0 88px;
+    background: #f4ecdd;
+    font-family: var(--font-sans);
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: 56px;
+      align-items: center;
+      transform-origin: 50% 20%;
+      will-change: transform, opacity;
+    }
+    .copy {
+      min-width: 0;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 30px;
+      padding: 0 12px;
+      border: 1px solid #e4d6c0;
+      border-radius: 999px;
+      background: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #3a3f4d;
+    }
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #d9a441;
+    }
+    .h1 {
+      margin: 20px 0 0;
+      font-size: 52px;
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      font-weight: 600;
+      text-wrap: balance;
+      color: #131620;
+    }
+    .claim {
+      margin: 20px 0 0;
+      max-width: 500px;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #3a3f4d;
+    }
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .free {
+      font-size: 14px;
+      color: #61677a;
+    }
+
+    .hx-u {
+      background-image: linear-gradient(#b9852a, #b9852a);
+      background-repeat: no-repeat;
+      background-position: 0 92%;
+      background-size: 0% 6px;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+      transition: background-size 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .hx-u.on {
+      background-size: 100% 6px;
+    }
+    .hx-proof {
+      margin: 18px 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #3a3f4d;
+    }
+    .hx-proof span {
+      white-space: nowrap;
+    }
+    .hx-proof span + span::before {
+      content: '·';
+      margin-right: 10px;
+      color: #b9852a;
+      font-weight: 600;
+    }
+
+    /* Figure */
+    .hs {
+      position: relative;
+      margin: 0;
+      min-width: 0;
+      height: 480px;
+      border-radius: 24px;
+      background: #efe3cc;
+      border: 1px solid #e4d6c0;
+      overflow: hidden;
+    }
+    .hs-stage {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 520px;
+      height: 480px;
+      margin-left: -260px;
+      transition: opacity 0.4s;
+    }
+    .hs-stage.fade {
+      opacity: 0;
+    }
+    .hs-pause {
+      all: unset;
+      box-sizing: border-box;
+      cursor: pointer;
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      z-index: 2;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid #dadde6;
+      background: #ffffff;
+      color: #131620;
+      display: grid;
+      place-items: center;
+    }
+    .hs-pause:focus-visible {
+      outline: 2px solid #d9a441;
+      outline-offset: 3px;
+    }
+
+    .hs-laptop {
+      position: absolute;
+      left: 140px;
+      top: 20px;
+      width: 364px;
+      height: 306px;
+      box-sizing: border-box;
+      border-radius: 16px;
+      background: #ffffff;
+      border: 1px solid #dadde6;
+      box-shadow: 0 24px 48px -30px rgba(22, 27, 41, 0.45);
+      overflow: hidden;
+    }
+    .hs-bar {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      height: 36px;
+      padding: 0 12px;
+      border-bottom: 1px solid #edeff4;
+    }
+    .hs-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #dadde6;
+    }
+    .hs-logo {
+      height: 13px;
+      display: block;
+      margin-left: 10px;
+    }
+    .hs-tag {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #61677a;
+    }
+    .hs-who {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px 10px;
+      border-bottom: 1px solid #edeff4;
+    }
+    .hs-who b {
+      display: block;
+      font-size: 14px;
+    }
+    .hs-who small {
+      display: block;
+      font-size: 12px;
+      color: #61677a;
+    }
+    .hs-av {
+      width: 34px;
+      height: 34px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: #161b29;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 600;
+      display: grid;
+      place-items: center;
+    }
+    .hs-upd {
+      margin-left: auto;
+      font-size: 11.5px;
+      color: #61677a;
+      white-space: nowrap;
+      transition: color 0.3s;
+    }
+    /* The « Mis à jour » stamp (later patch of the mockup wins). */
+    .hs-upd.on {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 7px;
+      border: 1.5px solid #835a0c;
+      border-radius: 4px;
+      color: #835a0c;
+      transform: rotate(-3deg);
+      animation: top-stamp-hit 0.38s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    .hs-body {
+      padding: 6px 14px 0 50px;
+    }
+    .hs-note {
+      padding: 3px 0 7px;
+      border-bottom: 1px solid #edeff4;
+    }
+    .hs-nt {
+      display: block;
+      width: max-content;
+      font-size: 12.5px;
+      line-height: 1.3;
+      color: #3a3f4d;
+      border-radius: 3px;
+      padding: 0 2px;
+    }
+    .hx-k + .hs-nt {
+      margin-top: 3px;
+    }
+    .hs-nt:not(.fill) {
+      visibility: hidden;
+    }
+    .hs-w {
+      border-radius: 3px;
+    }
+    .hs-w.lit {
+      animation: top-flash 1.8s ease-out both;
+    }
+    .hs-row {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr) 18px;
+      gap: 8px;
+      align-items: center;
+      height: 31px;
+      font-size: 12.5px;
+    }
+    .hx-k {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #61677a;
+    }
+    .hx-v {
+      display: block;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 500;
+      border-radius: 3px;
+      padding: 0 2px;
+    }
+    .hx-v.fill,
+    .hs-nt.fill {
+      animation: top-type 0.5s steps(20, end) both, top-flash 1.8s ease-out both;
+    }
+    .hx-ph {
+      display: block;
+      height: 8px;
+      width: 80%;
+      border-radius: 4px;
+      background: #edeff4;
+    }
+    .hx-ok {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #2f7a4f;
+      display: grid;
+      place-items: center;
+    }
+    .hx-rel {
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 8px;
+      background: #131620;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+    .pop {
+      animation: top-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    /* Phone */
+    .hs-phone {
+      position: absolute;
+      left: 16px;
+      top: 150px;
+      width: 160px;
+      height: 296px;
+      box-sizing: border-box;
+      border-radius: 30px;
+      background: #161b29;
+      border: 5px solid #0b0f18;
+      color: #f1f2f5;
+      padding: 16px 12px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 30px 50px -24px rgba(22, 27, 41, 0.7);
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.4s, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .hs-phone.in {
+      opacity: 1;
+      transform: none;
+    }
+    .hs-phone.down {
+      transform: translateY(10px) rotate(-4deg);
+    }
+    .hs-ps {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: #a4aabd;
+    }
+    .hs-ps-end {
+      flex-direction: column;
+      gap: 2px;
+    }
+    .hx-live {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #8fcb9b;
+    }
+    .hx-live.on {
+      animation: top-dot 0.9s ease-in-out infinite;
+    }
+    .hs-pav {
+      margin-top: 14px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #2a3249;
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .hs-phone b {
+      margin-top: 8px;
+      font-size: 14px;
+    }
+    .hs-phone small {
+      font-size: 11px;
+      color: #a4aabd;
+    }
+    .hs-time {
+      margin-top: 6px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+    .hx-wave {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      height: 18px;
+      margin-top: 10px;
+      color: #f1f2f5;
+    }
+    .hx-wave span {
+      width: 2.5px;
+      border-radius: 2px;
+      background: currentColor;
+      opacity: 0.8;
+      transform-origin: 50% 50%;
+      transition: height 0.3s;
+    }
+    .bar {
+      transform-origin: 50% 50%;
+      animation: top-wave 1.1s cubic-bezier(0.45, 0, 0.55, 1) infinite both;
+    }
+    .hs-hang {
+      margin-top: auto;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: #e0533d;
+      display: grid;
+      place-items: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hs-hang.press {
+      transform: scale(0.86);
+      box-shadow: 0 0 0 8px rgba(224, 83, 61, 0.28);
+    }
+    .hs-end {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      animation: top-rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    .hs-endok {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #2f7a4f;
+      display: grid;
+      place-items: center;
+    }
+    .hs-next {
+      margin-top: auto;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px;
+      border-radius: 14px;
+      background: #1e2436;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 34px;
+      gap: 6px;
+      align-items: center;
+      text-align: left;
+      animation: top-rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+    .hs-next small {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #a4aabd;
+    }
+    .hs-nm {
+      display: block;
+      margin-top: 3px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: normal;
+      line-height: 1.2;
+    }
+    .hs-call {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #2f7a4f;
+      display: grid;
+      place-items: center;
+    }
+
+    /* Claude pill */
+    .hs-claude {
+      position: absolute;
+      left: 196px;
+      top: 338px;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      height: 42px;
+      padding: 0 15px;
+      border-radius: 12px;
+      background: #161b29;
+      color: #f1f2f5;
+      font-size: 13.5px;
+      font-weight: 500;
+      white-space: nowrap;
+      box-shadow: 0 18px 36px -20px rgba(22, 27, 41, 0.6);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.35s, transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.3s, color 0.3s;
+    }
+    .hs-claude.in {
+      opacity: 1;
+      transform: none;
+    }
+    .hs-claude.done {
+      background: #eaf4ee;
+      color: #2f7a4f;
+    }
+    .spin {
+      animation: top-spin 2.4s linear infinite;
+    }
+
+    /* Phones: no recede, the figure is fitted to the column and the phone stays large (CP4 16). */
+    @media (max-width: 900px) {
+      position: relative;
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr);
+        transform: none !important;
+        opacity: 1 !important;
+        will-change: auto;
+      }
+      .h1 {
+        font-size: 36px;
+      }
+      .hs {
+        height: 320px;
+      }
+      .hs-laptop {
+        left: 150px;
+      }
+      .hs-stage {
+        transform: scale(0.688);
+        transform-origin: 50% 0;
+      }
+      .hs-phone {
+        left: 0;
+        scale: 1.24;
+        transform-origin: 0 100%;
+      }
+    }
+  }
+
+  @keyframes top-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes top-wave {
+    0%,
+    100% {
+      transform: scaleY(0.25);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
+  @keyframes top-type {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  @keyframes top-rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes top-flash {
+    0% {
+      background-color: rgba(217, 164, 65, 0.3);
+    }
+    100% {
+      background-color: rgba(217, 164, 65, 0);
+    }
+  }
+  @keyframes top-pop {
+    0% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    60% {
+      opacity: 1;
+      transform: scale(1.04);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @keyframes top-dot {
+    0%,
+    100% {
+      opacity: 0.25;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  @keyframes top-stamp-hit {
+    0% {
+      opacity: 0;
+      transform: rotate(-3deg) scale(1.7);
+    }
+    60% {
+      opacity: 1;
+      transform: rotate(-3deg) scale(0.94);
+    }
+    100% {
+      opacity: 1;
+      transform: rotate(-3deg) scale(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-top {
+      .hx-v.fill,
+      .hs-nt.fill,
+      .pop,
+      .bar,
+      .hx-live,
+      .spin,
+      .hs-end,
+      .hs-next,
+      .hs-upd.on,
+      .hs-w.lit {
+        animation: none !important;
+      }
+      .hx-u,
+      .hs-phone,
+      .hs-claude,
+      .hs-hang,
+      .hs-upd {
+        transition: none !important;
+      }
+    }
+  }
+}
