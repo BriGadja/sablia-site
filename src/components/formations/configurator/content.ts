@@ -34,11 +34,14 @@ export const LEVELS = [
 
 export type Pick3 = { s: number; u: number; l: number }
 
-/** What the auto-demo cycles through (CP4 4: the Industrie et BTP profile is in). */
+/**
+ * What the auto-demo cycles through, starting from the first paint (START): the mockup's three profiles with
+ * profile 2 (Numérique) replaced by Industrie et BTP (CP4 4), so BTP, Commerce, then back to START.
+ */
 export const PROFILES: readonly Pick3[] = [
   { s: 1, u: 0, l: 1 },
-  { s: 4, u: 3, l: 2 },
   { s: 3, u: 2, l: 1 },
+  { s: 0, u: 1, l: 0 },
 ]
 
 /** The programme shown on first paint (and settled under reduced motion). */

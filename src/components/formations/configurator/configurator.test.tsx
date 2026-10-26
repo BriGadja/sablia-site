@@ -77,7 +77,29 @@ describe('auto-demo', () => {
     await tick(6000)
     expect(screen.getByText('Industrie et BTP · À l\'aise')).toBeTruthy()
     await tick(1200)
-    expect(document.querySelector('.pg-sum')?.textContent).toMatch(/^Numérique/)
+    expect(document.querySelector('.pg-sum')?.textContent).toMatch(/^Commerce/)
+  })
+
+  it('cycles Conseil, BTP, Commerce, Conseil with no Numérique profile (CP4 4)', async () => {
+    start()
+    const seen = new Set<string>()
+    for (let t = 0; t < 24000; t += 100) {
+      await tick(100)
+      seen.add(document.querySelector('.pg-sum')?.textContent ?? '')
+    }
+    expect([...seen].some((x) => /^Industrie et BTP · À l'aise$/.test(x))).toBe(true)
+    expect([...seen].some((x) => /^Commerce/.test(x))).toBe(true)
+    expect([...seen].some((x) => /^Numérique/.test(x))).toBe(false)
+    expect(document.querySelector('.pg-sum')?.textContent).toBe('Conseil · Débutant')
+    expect(document.body.textContent).not.toContain('Claude Code dans vos dépôts')
+  })
+
+  it('announces to screen readers only the visitor\'s own picks', () => {
+    start()
+    const pg = () => document.querySelector('.pg')?.getAttribute('aria-live')
+    expect(pg()).toBe('off')
+    fireEvent.click(screen.getByRole('button', { name: 'Services' }))
+    expect(pg()).toBe('polite')
   })
 
   it('Pause stops it and the label flips to Démonstration', async () => {

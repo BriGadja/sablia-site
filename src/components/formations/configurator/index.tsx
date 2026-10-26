@@ -153,7 +153,7 @@ export function Configurator() {
             <Chips label="Secteur" name="Secteur" options={SECTORS} cur={cfg.s} onPick={(i) => pick('s', i)} />
             <Chips label="À confier" name="À confier" options={USES} cur={cfg.u} onPick={(i) => pick('u', i)} />
             <Chips label="Aisance" name="Aisance" options={LEVELS} cur={cfg.l} onPick={(i) => pick('l', i)} />
-            <div className="pg" aria-live="polite">
+            <div className="pg" aria-live={auto ? 'off' : 'polite'}>
               <div className="pg-head">
                 <span className="pg-title">{PG_TITLE}</span>
                 <span className="pg-sum">{d.summary}</span>
