@@ -358,7 +358,7 @@
       transform: scaleX(1);
     }
     .spin {
-      animation: scene-spin 1.1s linear infinite;
+      animation: scene-spin 2.4s linear infinite;
     }
     .pp-slot {
       display: block;

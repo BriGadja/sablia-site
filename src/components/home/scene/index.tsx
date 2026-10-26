@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Eyebrow } from '@/components/shell/Eyebrow'
 import { IllHead, SandIllustration } from '@/components/shell/SandIllustration'
 import { OF1_ROUTE } from '@/content/of1'
@@ -184,6 +184,15 @@ export function Scene() {
   const inView = useInView(pipeRef, { threshold: 0.35 })
   const { paused, userPaused, toggle } = usePausable({ hover: false })
   const active = inView && !paused
+
+  // The server HTML keeps the finished call (readable text); the first client paint is the start frame
+  // when motion is allowed. Reduced motion is read live here: it is false during hydration.
+  useLayoutEffect(() => {
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) setS(callReset())
+  }, [])
+  useEffect(() => {
+    if (reduced) setS(callFinal())
+  }, [reduced])
 
   const set = useCallback((p: Patch) => setS((prev) => ({ ...prev, ...(typeof p === 'function' ? p(prev) : p) })), [])
   const chip = useCallback(

@@ -73,7 +73,7 @@ describe('count-up', () => {
     expect(formatFigure(29)).toBe('29')
   })
 
-  it('counts from 0 to the target once the band is 35 % in view, 1.4 s', async () => {
+  it('counts from 0 to the target once the stats row is 60 % in view, 1.4 s', async () => {
     vi.useFakeTimers()
     mockReducedMotion(false)
     const io = mockIntersectionObserver()
@@ -85,8 +85,8 @@ describe('count-up', () => {
     vi.stubGlobal('cancelAnimationFrame', (id: number) => clearTimeout(id))
     const { container } = render(<Formations />)
     expect(container.textContent).toContain('1 400+')
-    const band = container.querySelector('.fo-band') as Element
-    expect(io.observers.map((o) => o.options?.threshold)).toContain(0.35)
+    const band = container.querySelector('.fo-stats') as Element
+    expect(io.observers.map((o) => o.options?.threshold)).toContain(0.6)
     act(() => io.trigger(band, true))
     await act(async () => {
       await vi.advanceTimersByTimeAsync(300)

@@ -117,6 +117,16 @@ describe('loop', () => {
   })
 })
 
+describe('first client frame', () => {
+  it('with motion allowed, is the start frame of job 0 before the section is in view', () => {
+    mockReducedMotion(false)
+    mockIntersectionObserver()
+    const { container } = render(<Automatisations />)
+    expect(container.querySelector('.fl-msg')?.textContent ?? '').toBe('')
+    expect(container.querySelectorAll('.fl-card.on')).toHaveLength(0)
+  })
+})
+
 describe('reduced motion', () => {
   it('stays on the finished picture and never types', async () => {
     vi.useFakeTimers()

@@ -20,13 +20,13 @@ function Counter({ stat, active }: { stat: Stat; active: boolean }) {
 }
 
 export function Formations() {
-  const bandRef = useRef<HTMLDivElement>(null)
-  const inView = useInView(bandRef, { threshold: 0.35, once: true })
+  const statsRef = useRef<HTMLDivElement>(null)
+  const inView = useInView(statsRef, { threshold: 0.6, once: true })
   const [open, setOpen] = useState<Record<string, boolean>>({})
 
   return (
     <section id="formations" className="v2-formations">
-      <div ref={bandRef} className="panel fo-band">
+      <div className="panel fo-band">
         <div className="wrap">
           <IllHead>
             <div>
@@ -67,7 +67,7 @@ export function Formations() {
               position="50% 58%"
             />
           </IllHead>
-          <div className="fo-stats">
+          <div ref={statsRef} className="fo-stats">
             {STATS.map((s) => (
               <Counter key={s.key} stat={s} active={inView} />
             ))}

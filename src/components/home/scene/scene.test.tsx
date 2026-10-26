@@ -1,4 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import { renderToString } from 'react-dom/server'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -85,7 +86,9 @@ describe('Scene', () => {
     expect(section?.textContent).toContain('Ce qui se passe quand votre commercial raccroche.')
     expect(section?.textContent).toContain('repérées dans le transcript')
     expect(section?.textContent).not.toContain('étape de vente avance')
-    expect(section?.textContent).toContain('Remplacer les devis Excel')
+    const html = renderToString(<Scene />)
+    expect(html).toContain('Remplacer les devis Excel')
+    expect(html).toContain('Raccroché')
     expect(section?.textContent).toContain('Appel passé sur votre téléphonie (Ringover, Aircall)')
     const offre = container.querySelector('#offre')
     expect(offre?.textContent).toContain('1 490 € HT')
@@ -96,6 +99,14 @@ describe('Scene', () => {
       (li) => li.querySelector('img')?.getAttribute('alt') ?? li.textContent,
     )
     expect(tools).toEqual(['HubSpot', 'Pipedrive', 'Zoho', 'Salesforce', 'Airtable', 'Google Sheets', 'Excel'])
+  })
+
+  it('with motion allowed, the first client frame is the start frame, before the section is in view', () => {
+    mockReducedMotion(false)
+    mockIntersectionObserver()
+    const { container } = render(<Scene />)
+    expect(container.querySelector('.pp')?.textContent).toContain("En attente de l'appel")
+    expect(container.querySelector('.pp')?.textContent).not.toContain('Raccroché')
   })
 
   it('under reduced motion shows the final frame and no pause button', () => {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Eyebrow } from '@/components/shell/Eyebrow'
 import { IllHead, SandIllustration } from '@/components/shell/SandIllustration'
 import { useInView } from '@/lib/hooks/useInView'
@@ -77,6 +77,15 @@ export function Automatisations() {
       av.getBoundingClientRect().left + av.offsetWidth / 2 - 20 - parent.getBoundingClientRect().left - parent.clientLeft,
     )
   }, [])
+
+  // The server HTML keeps job 0's finished frame (readable text); the first client paint is its start frame
+  // when motion is allowed. Reduced motion is read live: the hook is false during hydration.
+  useLayoutEffect(() => {
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) setS(pickedState(0))
+  }, [])
+  useEffect(() => {
+    if (reduced) setS(finalState(cur.current))
+  }, [reduced])
 
   // pausing shows the finished picture of the current job; resuming restarts it (Runner's active flips)
   useEffect(() => {
