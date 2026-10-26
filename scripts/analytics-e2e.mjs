@@ -12,6 +12,7 @@
 // --map     host=ip, Chrome's host-resolver rule (a private Caddy on loopback, before DNS exists)
 // --replay  also prove tier 2: a stored replay longer than 5 s, a heatmap click, no canary in it
 //
+// v2's home has no app.sablia.io link: outbound is proven on the « Voir la chaîne » YouTube channel link.
 // v2 has ONE form, the resource form on /ressources/<slug>: every form_* check runs there (the old
 // contact form and the « 36 » checks are gone). form_view is not asserted: the form is already in view
 // before consent, which spends its once-per-form event while it is still dropped.
@@ -192,7 +193,9 @@ try {
 
   await clickText('nav button', /Réserver 30 min/)
   await sleep(500)
-  await page.evaluate(() => document.querySelector('a[href^="https://app.sablia.io"]')?.click())
+  await page.evaluate(() =>
+    document.querySelector('a[href^="https://www.youtube.com/channel/"]')?.click(),
+  )
   await sleep(300)
   for (const ratio of [0.3, 0.55, 0.8, 1]) {
     await page.evaluate(
@@ -270,6 +273,11 @@ try {
     console.log('NOTE this resource has no video: video_play not exercised')
   }
 
+  // form_start fires once per form element and the pre-consent one was dropped by design: reload the
+  // resource page (consent is stored, the banner stays closed) so the consented typing starts on a fresh form
+  await page.goto(`${base}${slugPath}`, { waitUntil: 'networkidle0', timeout: 45_000 })
+  await page.waitForSelector(form, { timeout: 15_000 })
+
   // the resource form with consent: the canary goes into the fields; the endpoint is answered locally
   await page.evaluate((sel) => document.querySelector(sel)?.scrollIntoView(), form)
   await sleep(800)
@@ -346,7 +354,7 @@ try {
   const outData = out ? await dataOf(out) : {}
   check(
     'outbound carries the host only',
-    outData.host === 'app.sablia.io' && !('url' in outData),
+    outData.host === 'youtube.com' && !('url' in outData),
     JSON.stringify(outData),
   )
   const sc = (
