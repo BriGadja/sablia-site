@@ -153,3 +153,19 @@ describe('Construit', () => {
     expect(d.className).toContain('on')
   })
 })
+
+describe('card footers', () => {
+  it('links the Noésia card to noesia.school as a real anchor', () => {
+    mockIntersectionObserver()
+    const { container } = render(<Construit />)
+    const link = container.querySelector('a[href="https://noesia.school"]')
+    expect(link).not.toBeNull()
+    expect(link?.getAttribute('rel')).toBe('noopener')
+    expect(link?.closest('article')?.textContent).toContain('École Noésia')
+  })
+
+  it('names no client company and no headcount on the séminaire card', () => {
+    const seminar = CARDS.find((c) => c.kind === 'seminar')!
+    expect(`${seminar.sector} ${seminar.text}`).not.toMatch(/Madeca|\d+\s*(personnes|participants|collaborateurs)/i)
+  })
+})

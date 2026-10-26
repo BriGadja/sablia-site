@@ -8,6 +8,7 @@ import { usePausable } from '@/lib/hooks/usePausable'
 import { useReducedMotion } from '@/lib/hooks/useReducedMotion'
 import {
   CARDS,
+  CARD_LINKS,
   EYEBROW,
   FINAL_STAGE,
   IDLE_STAGE,
@@ -196,7 +197,22 @@ export function Construit() {
                       )}
                     </div>
                     <h3 className="cn-sector">{card.sector}</h3>
-                    <p className="cn-text">{card.text}</p>
+                    <p className="cn-text">
+                      {card.text}
+                      {CARD_LINKS[card.kind] && (
+                        <>
+                          {' '}
+                          <a
+                            href={CARD_LINKS[card.kind]?.href}
+                            rel="noopener"
+                            tabIndex={slot.active ? undefined : -1}
+                            style={{ textDecoration: 'underline', textUnderlineOffset: 4 }}
+                          >
+                            {CARD_LINKS[card.kind]?.label}
+                          </a>
+                        </>
+                      )}
+                    </p>
                   </div>
                   <div
                     className="cn-veil"

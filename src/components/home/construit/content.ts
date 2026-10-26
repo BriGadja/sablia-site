@@ -5,7 +5,7 @@ import { MaintenanceCard } from './cards/maintenance'
 import { NoesiaCard } from './cards/noesia'
 import { SeminaireCard } from './cards/seminaire'
 import { VoixCard } from './cards/voix'
-import type { BlueprintCard, CardStage } from './types'
+import type { BlueprintCard, CardKind, CardStage } from './types'
 
 export const EYEBROW = 'Réalisations'
 export const TITLE = 'Exemples de réalisations.'
@@ -24,6 +24,11 @@ const ICON = {
   app: 'M3 5h18v14H3zM3 9h18M7 7h.01',
   cap: 'M2 9l10-5 10 5-10 5zM6 11v5c3 2 9 2 12 0v-5',
   phone: 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2',
+}
+
+/** Outbound link in a card's text (the click is an `outbound` event through the global listener). Mockup: noesia.school. */
+export const CARD_LINKS: Partial<Record<CardKind, { href: string; label: string }>> = {
+  noesia: { href: 'https://noesia.school', label: 'noesia.school' },
 }
 
 /** The wall, in the decided order: voice agents last, Pluriel stays off. Figures: units/d4-cashback.md. */
