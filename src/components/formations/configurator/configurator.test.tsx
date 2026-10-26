@@ -1,4 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import { readFileSync } from 'node:fs'
 import { renderToString } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockIntersectionObserver, mockReducedMotion } from '@/lib/hooks/test-utils'
@@ -116,5 +117,16 @@ describe('reduced motion', () => {
     await tick(20000)
     expect(screen.getByText('Conseil · Débutant')).toBeTruthy()
     expect(screen.queryByRole('button', { name: 'Pause' })).toBeNull()
+  })
+})
+
+describe('phone programme summary', () => {
+  it('stays at 12 px or more, never wraps or truncates (CP4 5)', () => {
+    const css = readFileSync(`${__dirname}/configurator.css`, 'utf8')
+    const phone = css.slice(css.indexOf('/* CP4 5'))
+    const rule = phone.slice(phone.indexOf('.pg-sum'), phone.indexOf('}', phone.indexOf('.pg-sum')))
+    expect(Number(/font-size:\s*([\d.]+)px/.exec(rule)?.[1])).toBeGreaterThanOrEqual(12)
+    const base = css.slice(css.indexOf('.pg-head'), css.indexOf('.pg-ex {'))
+    expect(base).toMatch(/white-space:\s*nowrap/)
   })
 })

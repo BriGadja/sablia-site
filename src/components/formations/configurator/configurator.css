@@ -353,8 +353,9 @@
       }
       /* CP4 5: header on one line, whatever the summary */
       .pg-sum {
-        font-size: 10px;
-        letter-spacing: -0.04em;
+        font-family: var(--font-sans);
+        font-size: 12px;
+        letter-spacing: -0.01em;
       }
       .pg-exl {
         display: block;
