@@ -8,7 +8,7 @@
  * create a second lead. A GET on the last ten minutes is what refuses it.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { FOUND_VIA_LABELS } from '../client/src/content/found-via'
+import { FOUND_VIA_LABELS } from '../src/content/found-via'
 import { FOUND_VIA_LABELS as API_LABELS, FOUND_VIA_KEYS } from './_found-via.js'
 import handler, { decide, leadRow, mailPayload } from './contact'
 

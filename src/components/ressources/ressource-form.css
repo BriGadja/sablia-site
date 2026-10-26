@@ -1,0 +1,140 @@
+@layer theme, base, components, utilities;
+
+@layer components {
+  .v2-ressource-form {
+    position: relative;
+    box-sizing: border-box;
+    padding: 32px;
+    border: 1px solid #e4d6c0;
+    border-radius: 16px;
+    background: #fbf7f0;
+    color: #131620;
+
+    h3 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      font-weight: 600;
+    }
+    p {
+      margin: 8px 0 0;
+      font-size: 15px;
+      line-height: 1.55;
+      color: #3a3f4d;
+    }
+    .fields {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #3a3f4d;
+    }
+    input[type='text'],
+    input[type='email'],
+    input[type='tel'],
+    select {
+      box-sizing: border-box;
+      width: 100%;
+      height: 44px;
+      padding: 0 14px;
+      border: 1px solid #c9b99f;
+      border-radius: 10px;
+      background: #ffffff;
+      color: #131620;
+      font: inherit;
+      font-size: 15px;
+    }
+    input::placeholder {
+      color: #61677a;
+    }
+    .check {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      min-height: 44px;
+      cursor: pointer;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+    .check input {
+      flex: none;
+      width: 20px;
+      height: 20px;
+      margin: 2px 0 0;
+      accent-color: #835a0c;
+    }
+    .help {
+      font-size: 13px;
+      margin: 0;
+    }
+    /* Honeypot: out of sight and out of the tab order. */
+    .trap {
+      position: absolute;
+      left: -9999px;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+    .submit {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 48px;
+      margin-top: 8px;
+      padding: 10px 22px;
+      border: 0;
+      border-radius: 12px;
+      background: #131620;
+      color: #ffffff;
+      font: inherit;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .submit:hover:not(:disabled) {
+      background: #262b38;
+    }
+    .submit:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    .err {
+      margin: 0;
+      font-size: 14px;
+      color: #9a2f2f;
+    }
+    .files {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 24px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .files a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      font-size: 15px;
+      color: #835a0c;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-ressource-form {
+      padding: 24px 20px;
+    }
+  }
+}

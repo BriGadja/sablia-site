@@ -43,3 +43,14 @@ describe('VideoFacade reports plays (US-65, consent only)', () => {
     ).not.toBeNull()
   })
 })
+
+describe('VideoFacade without a poster', () => {
+  it('draws the generic poster, still a labelled play button, and no image', () => {
+    const { container } = render(
+      <VideoFacade youtubeId="abc123" title="La démo" thumbnail={null} />,
+    )
+    expect(container.querySelector('img')).toBeNull()
+    expect(container.querySelector('.is-generic')).not.toBeNull()
+    expect(screen.getByRole('button', { name: 'Lire la vidéo : La démo' })).toBeTruthy()
+  })
+})

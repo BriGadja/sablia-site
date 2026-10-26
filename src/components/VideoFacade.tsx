@@ -1,21 +1,14 @@
-import { cva } from 'class-variance-authority'
+'use client' // click state, and the play report after the click
+
 import { useEffect, useRef, useState } from 'react'
 import { trackVideoPlay, watchVideoProgress } from '@/lib/events'
-
-const playButton = cva(
-  'absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-primary shadow-lg transition-transform duration-base group-hover:scale-105',
-  { variants: { size: { default: 'h-16 w-16', compact: 'h-12 w-12' } } },
-)
-
-const playIcon = cva('ml-1 fill-on-primary', {
-  variants: { size: { default: 'h-7 w-7', compact: 'h-5 w-5' } },
-})
+import './video-facade.css'
 
 interface VideoFacadeProps {
   youtubeId: string
   title: string
-  /** The image shown before the click. */
-  thumbnail: { src: string; width: number; height: number }
+  /** The image shown before the click; `null` draws the generic poster. */
+  thumbnail: { src: string; width: number; height: number } | null
   /** `compact`: a smaller play button, for a thumbnail inside a list card. */
   size?: 'default' | 'compact'
 }
@@ -45,12 +38,12 @@ export default function VideoFacade({
     return (
       <iframe
         ref={frame}
+        className="v2-vf is-frame"
         src={`https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&enablejsapi=1`}
         title={title}
         allow="autoplay; encrypted-media; picture-in-picture"
         allowFullScreen
         loading="lazy"
-        className="aspect-video w-full rounded-xl border-0 bg-ink"
       />
     )
   }
@@ -60,18 +53,20 @@ export default function VideoFacade({
       type="button"
       onClick={() => setPlaying(true)}
       aria-label={`Lire la vidéo : ${title}`}
-      className="group relative block aspect-video w-full overflow-hidden rounded-xl bg-ink"
+      className={`v2-vf is-${size}${thumbnail ? '' : ' is-generic'}`}
     >
-      <img
-        src={thumbnail.src}
-        alt=""
-        width={thumbnail.width}
-        height={thumbnail.height}
-        loading="lazy"
-        className="h-full w-full object-cover transition-transform duration-base group-hover:scale-[1.02]"
-      />
-      <span className={playButton({ size })}>
-        <svg viewBox="0 0 24 24" aria-hidden="true" className={playIcon({ size })}>
+      {thumbnail && (
+        // biome-ignore lint/performance/noImgElement: static export, no image optimizer
+        <img
+          src={thumbnail.src}
+          alt=""
+          width={thumbnail.width}
+          height={thumbnail.height}
+          loading="lazy"
+        />
+      )}
+      <span className="v2-vf-play">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M7 4.5v15l13-7.5z" />
         </svg>
       </span>
