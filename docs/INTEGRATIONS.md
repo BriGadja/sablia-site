@@ -1,3 +1,5 @@
+> **v1, kept for history (2026-10-26):** the file paths below under `client/` and the `VITE_*` variables describe the deleted Vite site; the Next.js v2 site lives in `src/` (see `docs/ARCHITECTURE.md`). The service facts and `api/` handlers still hold.
+
 **Where it runs**: `api/contact.ts` is a Web-standard Fetch handler (`export default { fetch(Request): Response }`). Since the lot 0 move it is served by the site's own Express process through `server/api-adapter.ts` (it was a Vercel Function before 2026-10-18). The handler itself was not touched; `api/contact.test.ts` and `server/api-adapter.test.ts` (the same behaviours replayed over HTTP) both guard it.
 
 # Integrations — Sablia Site

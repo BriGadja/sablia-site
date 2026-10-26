@@ -56,7 +56,7 @@ db/                   # Drizzle schema (connected but unused at runtime)
 docs/                 # ARCHITECTURE.md, SEO.md, INTEGRATIONS.md, frozen v1 specs
 specs/REGISTRY.md     # functional stories (US-*), PRD.md the narrative
 ```
-`client/`, `vite.config.ts`, `tailwind.config.ts`, `theme.json`, `scripts/prerender.mjs` and `server/vite.ts` belong to the Vite site; they are read for reference until the cleanup unit (E5) deletes them. Vitest and `tsc` exclude `client/`.
+The Vite site (`client/`, `vite.config.ts`, `tailwind.config.ts`, `theme.json`, `scripts/prerender.mjs`, `server/vite.ts`) was deleted by the E5 cleanup (2026-10-26); git history keeps it.
 
 ### Dev story
 - Pages: `npm run dev` (`next dev`). The dev server compiles per route; it has no `/api/*` (those handlers exist only in Express).

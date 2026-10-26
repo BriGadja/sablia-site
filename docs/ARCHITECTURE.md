@@ -2,7 +2,7 @@
 
 **Last updated**: 2026-10-26 (v2 build). **Stack**: Next.js 16.4.3 static export / React 19.3.1 / TypeScript 5.9.3 / Tailwind 4.3.3 / Express 4 / Vitest 4.0.4 / Biome 2.4.13 (versions: `package.json`).
 
-The Vite + Wouter + Helmet site this file used to describe is replaced. Its tree (`client/`, `vite.config.ts`, `tailwind.config.ts`, `theme.json`, `scripts/prerender.mjs`, `server/vite.ts`) stays in place, read for reference, until the cleanup unit deletes it.
+The Vite + Wouter + Helmet site this file used to describe is replaced and its tree (`client/`, `vite.config.ts`, `tailwind.config.ts`, `theme.json`, `scripts/prerender.mjs`, `server/vite.ts`) was deleted on 2026-10-26; git history keeps it.
 
 ---
 

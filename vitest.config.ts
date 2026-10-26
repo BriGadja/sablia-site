@@ -5,7 +5,7 @@ export default defineConfig({
   esbuild: { jsx: 'automatic' },
   test: {
     include: ['{src,server,db,api}/**/*.test.{ts,tsx}'],
-    exclude: ['client/**', 'node_modules/**'],
+    exclude: ['node_modules/**'],
     globals: true,
     environment: 'happy-dom',
     setupFiles: ['./vitest.setup.ts'],

@@ -1,5 +1,5 @@
 // OG / Twitter images (1200x630) from the chosen symbol, the site fonts and the offer title, and the
-// four lockups of decision 7 (US-12). Same browser recipe as scripts/prerender.mjs
+// four lockups of decision 7 (US-12). Same browser recipe as the former prerender script (deleted 2026-10-26)
 // (puppeteer-core + @sparticuz/chromium).
 // Usage: node scripts/og-image.mjs
 import { readFileSync, writeFileSync } from 'node:fs'

@@ -19,7 +19,7 @@ const A = 'src/app'
 const H = 'src/components/home'
 const C = 'src/content'
 
-const crmJson = (crm) => [`${C}/crm/${crm}.json`, `client/${C}/crm/${crm}.json`]
+const crmJson = (crm) => [`${C}/crm/${crm}.json`]
 
 export const PAGE_ROUTES = [
   {

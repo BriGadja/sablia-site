@@ -60,7 +60,7 @@ deploy/          host chain (systemd, Caddy, parity baseline)
 docs/  specs/    architecture, SEO, stories (REGISTRY.md)
 ```
 
-`client/` and the other Vite-era files remain only until the cleanup step removes them.
+The Vite-era files (`client/` and its configs) were deleted on 2026-10-26; git history keeps them.
 
 ## Documentation
 
