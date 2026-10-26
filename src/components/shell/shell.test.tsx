@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { OPEN_EVENT } from '@/lib/consent'
@@ -34,6 +36,11 @@ describe('SiteHeader', () => {
     ])
     const book = nav.querySelector('button[data-cta-book]')
     expect(book?.textContent).toBe('Réserver 30 min')
+  })
+
+  it('gives each desktop nav link a 44 px hit area that cancels out in layout', () => {
+    const css = readFileSync(join(__dirname, 'site-header.css'), 'utf8')
+    expect(css).toMatch(/\.v2-header-links a \{[^}]*padding-block:\s*14px;[^}]*margin-block:\s*-14px/)
   })
 
   it('opens and closes the phone menu with aria-expanded wired to the links list', () => {

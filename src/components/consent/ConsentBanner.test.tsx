@@ -78,6 +78,12 @@ describe('ConsentBanner: the offer', () => {
     expect(css).not.toMatch(/inset:\s*0\b/)
   })
 
+  it('gives both answers and the « En savoir plus » link a 44 px target', () => {
+    const css = readFileSync(join(__dirname, 'consent.css'), 'utf8')
+    expect(css).toMatch(/\.v2-consent-answer \{[^}]*height:\s*2\.75rem/)
+    expect(css).toMatch(/\.v2-consent-text a \{[^}]*padding-block:\s*0\.9rem/)
+  })
+
   it('stays away from a visitor who already chose', () => {
     writeConsent(false)
     const second = render(<ConsentBanner />)

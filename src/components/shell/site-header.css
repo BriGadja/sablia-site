@@ -33,10 +33,13 @@
       font-size: 14px;
       color: #3a3f4d;
     }
+    /* 44 px hit area around the 17 px text line: padding grows the box, the negative margin cancels it in layout. */
     .v2-header-links a {
       white-space: nowrap;
       text-decoration: none;
       color: #3a3f4d;
+      padding-block: 14px;
+      margin-block: -14px;
     }
     .v2-header-links a:hover {
       color: #835a0c;
@@ -44,7 +47,7 @@
     .v2-header-links a[aria-current='page'] {
       color: #131620;
       font-weight: 600;
-      box-shadow: inset 0 -2px #d9a441;
+      background: linear-gradient(#d9a441, #d9a441) no-repeat left bottom 14px / 100% 2px;
     }
     .v2-header-menubtn {
       display: none;
@@ -92,6 +95,11 @@
       display: inline-flex;
       align-items: center;
       min-height: 44px;
+      padding-block: 0;
+      margin-block: 0;
+    }
+    .v2-header .v2-header-links a[aria-current='page'] {
+      background-position: left bottom 0;
     }
   }
 }

@@ -48,6 +48,8 @@
       color: inherit;
       text-decoration: underline;
       text-underline-offset: 2px;
+      /* Inline padding enlarges the target to 44 px without moving a line of text. */
+      padding-block: 0.9rem;
     }
     .v2-consent-answers {
       display: flex;
@@ -59,7 +61,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      height: 2.5rem;
+      height: 2.75rem;
       min-width: 8.5rem;
       padding: 0 1.25rem;
       border: 1px solid rgb(244 236 221 / 0.4);
