@@ -98,7 +98,8 @@ const SITE = 'https://sablia.io'
 
 /** Service JSON-LD: the price is the module's, never the page content's. Shared by every CRM page. */
 export function pageServiceSchema(args: {
-  name: string
+  /** Ignored: the name is derived so it equals the visible eyebrow (jsonld-names-visible). */
+  name?: string
   description: string
   tool: string
   path: string
@@ -106,7 +107,7 @@ export function pageServiceSchema(args: {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: args.name,
+    name: `${of1.title} · ${args.tool}`,
     description: args.description,
     serviceType: `Automatisation de compte rendu d'appel dans ${args.tool}`,
     url: `${SITE}${args.path}`,
