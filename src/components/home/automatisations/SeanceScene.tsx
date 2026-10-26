@@ -10,8 +10,23 @@ export function SeanceScene({ s }: { s: FlowState }) {
   return (
     <div className="scn">
       <div className="se-player">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontSize: 14, fontWeight: 600 }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'baseline',
+            gap: 12,
+          }}
+        >
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              fontSize: 14,
+              fontWeight: 600,
+            }}
+          >
             <PathIcon
               d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3M5 11a7 7 0 0 0 14 0M12 18v3"
               size={15}
@@ -20,7 +35,9 @@ export function SeanceScene({ s }: { s: FlowState }) {
             />
             Séance de mardi
           </span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#A4AABD' }}>{time} / 52:00</span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#A4AABD' }}>
+            {time} / 52:00
+          </span>
         </div>
         <div className="se-track">
           {SEANCE_MARKS.map((m, i) =>
@@ -44,7 +61,14 @@ export function SeanceScene({ s }: { s: FlowState }) {
       </div>
       <div className="se-low">
         <div className="se-doc">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 10,
+            }}
+          >
             <b style={{ fontSize: 15 }}>Compte rendu de séance</b>
             {s.sRelu && (
               <span className="vl-pill pop">
@@ -87,7 +111,14 @@ export function SeanceScene({ s }: { s: FlowState }) {
                 {i === 3 && s.sMail === 3 && (
                   <span
                     className="rise"
-                    style={{ position: 'absolute', left: 8, right: 6, bottom: 8, fontSize: 11, fontWeight: 600 }}
+                    style={{
+                      position: 'absolute',
+                      left: 8,
+                      right: 6,
+                      bottom: 8,
+                      fontSize: 11,
+                      fontWeight: 600,
+                    }}
                   >
                     Programmé
                   </span>
@@ -98,7 +129,10 @@ export function SeanceScene({ s }: { s: FlowState }) {
               className={`se-chip${s.sMail ? ' vis' : ''}`}
               style={{
                 left: s.sMail >= 2 ? 'calc(60% + 9px)' : 'calc(20% + 7px)',
-                transition: s.sMail >= 2 ? 'left .85s cubic-bezier(.65,0,.35,1), opacity .25s' : 'opacity .25s',
+                transition:
+                  s.sMail >= 2
+                    ? 'left .85s cubic-bezier(.65,0,.35,1), opacity .25s'
+                    : 'opacity .25s',
               }}
             >
               <PathIcon d={MAIL} size={13} stroke="#835A0C" width={2} />

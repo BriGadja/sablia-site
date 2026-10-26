@@ -12,12 +12,15 @@ import './configurator.css'
 import {
   CFG_TITLE,
   CLAIM,
+  choose,
+  derive,
   EX_LABEL,
   EYEBROW,
   FIRST_CHANGE_MS,
   FREE,
   H1,
   HOLD_MS,
+  initialCfg,
   LEVELS,
   PG_TITLE,
   PROFILES,
@@ -25,9 +28,6 @@ import {
   STEP_MS,
   TAGS,
   USES,
-  choose,
-  derive,
-  initialCfg,
 } from './content'
 
 type Key = 's' | 'u' | 'l'
@@ -48,9 +48,16 @@ function Chips({
   return (
     <div className="cfg-row">
       <span className="cfg-lab">{label}</span>
+      {/* biome-ignore lint/a11y/useSemanticElements: a chip row, not a form fieldset; a fieldset would bring its default border and legend box */}
       <div role="group" aria-label={name} className="chipline">
         {options.map((o, i) => (
-          <button key={o.t} type="button" className={`opt${i === cur ? ' on' : ''}`} aria-pressed={i === cur} onClick={() => onPick(i)}>
+          <button
+            key={o.t}
+            type="button"
+            className={`opt${i === cur ? ' on' : ''}`}
+            aria-pressed={i === cur}
+            onClick={() => onPick(i)}
+          >
             {o.t}
           </button>
         ))}
@@ -137,11 +144,23 @@ export function Configurator() {
             {!reduced && (
               <button type="button" className="pausebtn" onClick={() => setAuto((a) => !a)}>
                 {auto ? (
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
                     <path d="M7 5h3v14H7zM14 5h3v14h-3z" />
                   </svg>
                 ) : (
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
                     <path d="M8 5v14l11-7z" />
                   </svg>
                 )}
@@ -150,20 +169,42 @@ export function Configurator() {
             )}
           </div>
           <div {...bind}>
-            <Chips label="Secteur" name="Secteur" options={SECTORS} cur={cfg.s} onPick={(i) => pick('s', i)} />
-            <Chips label="À confier" name="À confier" options={USES} cur={cfg.u} onPick={(i) => pick('u', i)} />
-            <Chips label="Aisance" name="Aisance" options={LEVELS} cur={cfg.l} onPick={(i) => pick('l', i)} />
+            <Chips
+              label="Secteur"
+              name="Secteur"
+              options={SECTORS}
+              cur={cfg.s}
+              onPick={(i) => pick('s', i)}
+            />
+            <Chips
+              label="À confier"
+              name="À confier"
+              options={USES}
+              cur={cfg.u}
+              onPick={(i) => pick('u', i)}
+            />
+            <Chips
+              label="Aisance"
+              name="Aisance"
+              options={LEVELS}
+              cur={cfg.l}
+              onPick={(i) => pick('l', i)}
+            />
             <div className="pg" aria-live={auto ? 'off' : 'polite'}>
               <div className="pg-head">
                 <span className="pg-title">{PG_TITLE}</span>
                 <span className="pg-sum">{d.summary}</span>
               </div>
               <div className={`pg-ex${d.exFlip ? ` ${d.exFlip}` : ''}`}>
-                <span className="pg-exl">{EX_LABEL}</span> <Rolling t={`${d.ex}.`} old={`${d.exOld}.`} />
+                <span className="pg-exl">{EX_LABEL}</span>{' '}
+                <Rolling t={`${d.ex}.`} old={`${d.exOld}.`} />
               </div>
               <div>
                 {d.rows.map((r) => (
-                  <div key={r.n} className={`pg-row${r.flip ? ` ${r.flip}` : ''}${r.late ? ' pg-late' : ''}`}>
+                  <div
+                    key={r.n}
+                    className={`pg-row${r.flip ? ` ${r.flip}` : ''}${r.late ? ' pg-late' : ''}`}
+                  >
                     <span className="pg-n">{r.n}</span>
                     <Rolling t={r.t} old={r.old} />
                   </div>

@@ -1,7 +1,8 @@
 import type { CSSProperties } from 'react'
 import { type CardProps, lit, outline, panel } from '../types'
 
-const tick = (delay?: string): CSSProperties | undefined => (delay ? { transitionDelay: delay } : undefined)
+const tick = (delay?: string): CSSProperties | undefined =>
+  delay ? { transitionDelay: delay } : undefined
 
 const Check = ({ size, width = 3 }: { size: number; width?: number }) => (
   <svg
@@ -68,7 +69,14 @@ export function InstitutCard({ stage }: CardProps) {
             <span className="bp-bar" style={{ width: '64%', height: 11, background: '#131620' }} />
             <span className="bp-bar" style={{ width: '80%', marginTop: 2 }} />
             <span
-              style={{ display: 'block', width: 96, height: 24, borderRadius: 7, background: '#161B29', marginTop: 4 }}
+              style={{
+                display: 'block',
+                width: 96,
+                height: 24,
+                borderRadius: 7,
+                background: '#161B29',
+                marginTop: 4,
+              }}
             />
           </div>
           <span style={{ display: 'block', height: 88, borderRadius: 10, background: '#E9EBF1' }} />
@@ -88,7 +96,15 @@ export function InstitutCard({ stage }: CardProps) {
         >
           {[0, 1, 2].map((i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ width: 26, height: 26, flexShrink: 0, borderRadius: '50%', background: '#F8EED9' }} />
+              <span
+                style={{
+                  width: 26,
+                  height: 26,
+                  flexShrink: 0,
+                  borderRadius: '50%',
+                  background: '#F8EED9',
+                }}
+              />
               <span className="bp-bar" style={{ flex: 1 }} />
             </div>
           ))}
@@ -120,7 +136,12 @@ export function InstitutCard({ stage }: CardProps) {
             ].map(([label, delay]) => (
               <div
                 key={label}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 13.5 }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  fontSize: 13.5,
+                }}
               >
                 {label}
                 <span className={`bp-tick ${lit(stage, 2)}`} style={tick(delay)}>

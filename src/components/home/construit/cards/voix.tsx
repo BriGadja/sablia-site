@@ -1,7 +1,11 @@
 import { type CardProps, outline, panel } from '../types'
 
 const BARS = [10, 22, 30, 16, 34, 24, 12, 28, 36, 18, 14, 30, 26, 10, 20, 32, 16, 12]
-const QUOTES = ['« Je vous propose mardi à 10 h. »', '« Mercredi 14 h 30, ça vous va ? »', "« Jeudi 9 h, c'est noté. »"]
+const QUOTES = [
+  '« Je vous propose mardi à 10 h. »',
+  '« Mercredi 14 h 30, ça vous va ? »',
+  "« Jeudi 9 h, c'est noté. »",
+]
 const SLOTS = ['Mar. 10:00', 'Mer. 14:30', 'Jeu. 09:00']
 
 /** Voice agents (on request, last card): an inbound call, the agent proposes slots, the advisor's agenda fills. */
@@ -23,6 +27,7 @@ export function VoixCard({ stage }: CardProps) {
           <div className="bp-wave">
             {BARS.map((h, j) => (
               <span
+                // biome-ignore lint/suspicious/noArrayIndexKey: static decorative bars, never reordered
                 key={j}
                 className={talking ? 'bar' : ''}
                 style={{ height: stage.l >= 1 ? h : 4, animationDelay: `${j * 50}ms` }}
@@ -34,7 +39,11 @@ export function VoixCard({ stage }: CardProps) {
               <span
                 key={t}
                 className={`bp-quote${
-                  stage.l >= 2 * j + 1 && j === current ? ' on' : stage.l >= 2 * j + 1 ? ' gone' : ''
+                  stage.l >= 2 * j + 1 && j === current
+                    ? ' on'
+                    : stage.l >= 2 * j + 1
+                      ? ' gone'
+                      : ''
                 }`}
               >
                 {t}

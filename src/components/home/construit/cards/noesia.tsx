@@ -11,7 +11,12 @@ export function NoesiaCard({ stage }: CardProps) {
         <div className={outline(stage)} />
         <div
           className={panel(stage, 0, 'dark')}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 16px' }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '0 16px',
+          }}
         >
           <span style={{ fontSize: 15, fontWeight: 600 }}>Module Claude Code</span>
           <span className="bp-mono" style={{ color: '#A4AABD', fontSize: 12 }}>
@@ -59,7 +64,10 @@ export function NoesiaCard({ stage }: CardProps) {
           <span style={{ fontSize: 13, fontWeight: 600 }}>Ateliers en direct</span>
           {WEEKS.map((j) => (
             <span key={j} className="bp-wk">
-              <b className={j % 2 === 0 && stage.l >= 1 ? 'on' : ''} style={{ transitionDelay: `${j * 110}ms` }}>
+              <b
+                className={j % 2 === 0 && stage.l >= 1 ? 'on' : ''}
+                style={{ transitionDelay: `${j * 110}ms` }}
+              >
                 {j % 2 === 0 ? 'Atelier' : ''}
               </b>
             </span>

@@ -10,11 +10,11 @@ import { useTimelineLoop } from '@/lib/hooks/useTimelineLoop'
 import './automatisations.css'
 import { JOBS, SCENE_TEXT, SR_INTRO, SWAP_MS } from './content'
 import { FlowScene } from './FlowScene'
-import { PathIcon } from './icons'
 import { InterventionScene } from './InterventionScene'
+import { PathIcon } from './icons'
 import { LeadScene } from './LeadScene'
-import { playJob, type ScriptDeps } from './script'
 import { SeanceScene } from './SeanceScene'
+import { playJob, type ScriptDeps } from './script'
 import { type FlowState, finalState, pickedState } from './state'
 import { VeilleScene } from './VeilleScene'
 
@@ -74,7 +74,11 @@ export function Automatisations() {
     if (!parent || !who) return null
     const av = who.querySelector<HTMLElement>('.ld-av') ?? (who as HTMLElement)
     return Math.round(
-      av.getBoundingClientRect().left + av.offsetWidth / 2 - 20 - parent.getBoundingClientRect().left - parent.clientLeft,
+      av.getBoundingClientRect().left +
+        av.offsetWidth / 2 -
+        20 -
+        parent.getBoundingClientRect().left -
+        parent.clientLeft,
     )
   }, [])
 
@@ -106,9 +110,14 @@ export function Automatisations() {
             <Eyebrow>Automatisations</Eyebrow>
             <h2 className="auto-h2">Le même principe, partout où ça se répète.</h2>
           </div>
-          <SandIllustration src="/illus/automatisations-contour-nuit.webp" height={212} position="50% 42%" />
+          <SandIllustration
+            src="/illus/automatisations-contour-nuit.webp"
+            height={212}
+            position="50% 42%"
+          />
         </IllHead>
         <div className="auto-bar">
+          {/* biome-ignore lint/a11y/useSemanticElements: a chip row, not a form fieldset; a fieldset would bring its default border and legend box */}
           <div role="group" aria-label="Choisir un cas" className="auto-chips">
             {JOBS.map((j, i) => (
               <button
@@ -125,11 +134,23 @@ export function Automatisations() {
           </div>
           <button type="button" className="pausebtn" onClick={toggle}>
             {userPaused ? (
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
                 <path d="M8 5v14l11-7z" />
               </svg>
             ) : (
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
                 <path d="M7 5h3v14H7zM14 5h3v14h-3z" />
               </svg>
             )}

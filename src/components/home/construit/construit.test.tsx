@@ -3,13 +3,18 @@ import { join } from 'node:path'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockIntersectionObserver, mockReducedMotion } from '@/lib/hooks/test-utils'
-import { CARDS, FINAL_STAGE, IDLE_STAGE, figureText, fmt } from './content'
+import { CARDS, FINAL_STAGE, figureText, fmt, IDLE_STAGE } from './content'
 import { Construit } from './index'
 import { lit, panel } from './types'
 
 vi.mock('./cards/helene', () => ({
   HeleneCard: ({ stage }: { stage: import('./types').CardStage }) => (
-    <div data-testid="helene" className={panel(stage, 1)} data-l={lit(stage, 5)} data-plan={String(stage.plan)} />
+    <div
+      data-testid="helene"
+      className={panel(stage, 1)}
+      data-l={lit(stage, 5)}
+      data-plan={String(stage.plan)}
+    />
   ),
 }))
 
@@ -168,7 +173,9 @@ describe('card footers', () => {
 
   it('names no client company and no headcount on the séminaire card', () => {
     const seminar = CARDS.find((c) => c.kind === 'seminar')!
-    expect(`${seminar.sector} ${seminar.text}`).not.toMatch(/Madeca|\d+\s*(personnes|participants|collaborateurs)/i)
+    expect(`${seminar.sector} ${seminar.text}`).not.toMatch(
+      /Madeca|\d+\s*(personnes|participants|collaborateurs)/i,
+    )
   })
 })
 

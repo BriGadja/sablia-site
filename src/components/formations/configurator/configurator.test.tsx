@@ -1,10 +1,10 @@
-import { act, fireEvent, render, screen } from '@testing-library/react'
 import { readFileSync } from 'node:fs'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import { renderToString } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockIntersectionObserver, mockReducedMotion } from '@/lib/hooks/test-utils'
+import { choose, derive, initialCfg, LEVELS, PROFILES, SECTORS, USES } from './content'
 import { Configurator } from './index'
-import { LEVELS, PROFILES, SECTORS, USES, choose, derive, initialCfg } from './content'
 
 const tick = (ms: number) =>
   act(async () => {
@@ -47,7 +47,7 @@ describe('programme logic', () => {
     expect(derive(c).rows[0].flip).toBe('')
   })
 
-  it('cycles a profile that includes Industrie et BTP / Mails et comptes rendus / À l\'aise', () => {
+  it("cycles a profile that includes Industrie et BTP / Mails et comptes rendus / À l'aise", () => {
     expect(PROFILES).toHaveLength(3)
     expect(PROFILES).toContainEqual({ s: 1, u: 0, l: 1 })
   })
@@ -73,9 +73,9 @@ describe('auto-demo', () => {
     await tick(200)
     expect(screen.getByText(/^Industrie et BTP · Débutant$/)).toBeTruthy()
     await tick(1800)
-    expect(screen.getByText('Industrie et BTP · À l\'aise')).toBeTruthy()
+    expect(screen.getByText("Industrie et BTP · À l'aise")).toBeTruthy()
     await tick(6000)
-    expect(screen.getByText('Industrie et BTP · À l\'aise')).toBeTruthy()
+    expect(screen.getByText("Industrie et BTP · À l'aise")).toBeTruthy()
     await tick(1200)
     expect(document.querySelector('.pg-sum')?.textContent).toMatch(/^Commerce/)
   })
@@ -94,7 +94,7 @@ describe('auto-demo', () => {
     expect(document.body.textContent).not.toContain('Claude Code dans vos dépôts')
   })
 
-  it('announces to screen readers only the visitor\'s own picks', () => {
+  it("announces to screen readers only the visitor's own picks", () => {
     start()
     const pg = () => document.querySelector('.pg')?.getAttribute('aria-live')
     expect(pg()).toBe('off')

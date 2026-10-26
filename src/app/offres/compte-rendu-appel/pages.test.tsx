@@ -4,9 +4,9 @@
  */
 import { render } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { FAQ_CARRIED } from '@/content/faq-carried'
 import { publishedCrmPages } from '@/content/crm'
 import { SPREADSHEET_PAGES, SPREADSHEET_SLUGS } from '@/content/crm/spreadsheets'
+import { FAQ_CARRIED } from '@/content/faq-carried'
 import { OF1_ROUTE, of1 } from '@/content/of1'
 
 vi.mock('next/navigation', () => ({

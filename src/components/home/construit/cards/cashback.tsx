@@ -13,7 +13,15 @@ interface Row {
 /** Rate table: at step 1 competitor A overtakes, at step 2 the rows swap places, at step 3 the alert shows. */
 function rows(l: number): Row[] {
   return [
-    { name: 'Vous', pct: 74, val: '4,5 %', color: '#D9A441', weight: 600, hot: false, ty: l >= 2 ? 44 : 0 },
+    {
+      name: 'Vous',
+      pct: 74,
+      val: '4,5 %',
+      color: '#D9A441',
+      weight: 600,
+      hot: false,
+      ty: l >= 2 ? 44 : 0,
+    },
     {
       name: 'Concurrent A',
       pct: l >= 1 ? 82 : 72,
@@ -23,8 +31,24 @@ function rows(l: number): Row[] {
       hot: l >= 1,
       ty: l >= 2 ? -44 : 0,
     },
-    { name: 'Concurrent C', pct: 69, val: '4,2 %', color: '#131620', weight: 400, hot: false, ty: 0 },
-    { name: 'Concurrent B', pct: 62, val: '3,8 %', color: '#131620', weight: 400, hot: false, ty: 0 },
+    {
+      name: 'Concurrent C',
+      pct: 69,
+      val: '4,2 %',
+      color: '#131620',
+      weight: 400,
+      hot: false,
+      ty: 0,
+    },
+    {
+      name: 'Concurrent B',
+      pct: 62,
+      val: '3,8 %',
+      color: '#131620',
+      weight: 400,
+      hot: false,
+      ty: 0,
+    },
   ]
 }
 
@@ -53,7 +77,13 @@ export function CashbackCard({ stage }: CardProps) {
         <div
           key={r.name}
           className="bp-c mv"
-          style={{ left: 0, top: 48 + 44 * j, width: 680, height: 36, transform: `translateY(${r.ty}px)` }}
+          style={{
+            left: 0,
+            top: 48 + 44 * j,
+            width: 680,
+            height: 36,
+            transform: `translateY(${r.ty}px)`,
+          }}
         >
           <div className={outline(stage)} style={{ transitionDelay: `${70 * (j + 1)}ms` }} />
           <div className={panel(stage, j + 1)}>

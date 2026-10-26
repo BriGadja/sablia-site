@@ -55,8 +55,12 @@ export function LeadScene({ s }: { s: FlowState }) {
               <div key={r} className="ld-row">
                 <span className={`ld-rule${v === 2 ? ' yes' : v === 1 ? ' no' : ''}`}>
                   <span className="ld-mark">
-                    {v === 2 && <PathIcon d="M5 12l5 5L20 7" size={10} stroke="#131620" width={3.4} />}
-                    {v === 1 && <PathIcon d="M6 6l12 12M18 6L6 18" size={9} stroke="#FFFFFF" width={3.4} />}
+                    {v === 2 && (
+                      <PathIcon d="M5 12l5 5L20 7" size={10} stroke="#131620" width={3.4} />
+                    )}
+                    {v === 1 && (
+                      <PathIcon d="M6 6l12 12M18 6L6 18" size={9} stroke="#FFFFFF" width={3.4} />
+                    )}
                   </span>
                   {r}
                 </span>
@@ -83,7 +87,8 @@ export function LeadScene({ s }: { s: FlowState }) {
         <span
           className={`ld-env${s.lEnv ? ' vis' : ''}`}
           style={{
-            left: s.lEnv === 2 ? (s.lX != null ? `${s.lX}px` : 'calc(67% - 14px)') : 'calc(67% - 80px)',
+            left:
+              s.lEnv === 2 ? (s.lX != null ? `${s.lX}px` : 'calc(67% - 14px)') : 'calc(67% - 80px)',
             top: 51 + 52 * s.lRow,
             transition: s.lEnv === 2 ? 'left 1s cubic-bezier(.65,0,.35,1), opacity .2s' : 'none',
           }}

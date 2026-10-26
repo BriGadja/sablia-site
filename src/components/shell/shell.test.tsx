@@ -40,7 +40,9 @@ describe('SiteHeader', () => {
 
   it('gives each desktop nav link a 44 px hit area that cancels out in layout', () => {
     const css = readFileSync(join(__dirname, 'site-header.css'), 'utf8')
-    expect(css).toMatch(/\.v2-header-links a \{[^}]*padding-block:\s*14px;[^}]*margin-block:\s*-14px/)
+    expect(css).toMatch(
+      /\.v2-header-links a \{[^}]*padding-block:\s*14px;[^}]*margin-block:\s*-14px/,
+    )
   })
 
   it('opens and closes the phone menu with aria-expanded wired to the links list', () => {

@@ -20,11 +20,14 @@ describe('Hélène card', () => {
     expect(c.textContent).not.toMatch(/\d+\s*(clients|patients)/i)
   })
   it('lights one row per detail step starting at step 2, the site pill at step 1', () => {
-    const rows = (l: number) => html(HeleneCard, { plan: true, b: 2, l, f: 0 }).querySelectorAll('.bp-sr.on').length
+    const rows = (l: number) =>
+      html(HeleneCard, { plan: true, b: 2, l, f: 0 }).querySelectorAll('.bp-sr.on').length
     expect(rows(1)).toBe(0)
     expect(rows(3)).toBe(2)
     expect(rows(5)).toBe(4)
-    expect(html(HeleneCard, { plan: true, b: 2, l: 1, f: 0 }).querySelector('.bp-ok.on')).not.toBeNull()
+    expect(
+      html(HeleneCard, { plan: true, b: 2, l: 1, f: 0 }).querySelector('.bp-ok.on'),
+    ).not.toBeNull()
   })
   it('is empty-looking before the build starts', () => {
     const c = html(HeleneCard, IDLE_STAGE)
@@ -61,7 +64,8 @@ describe('cashback card', () => {
     expect(q(0).textContent).toContain('4,4 %')
     expect(q(1).textContent).toContain('5,0 %')
     expect(q(1).querySelector('.bp-val.hot')).not.toBeNull()
-    const moves = (c: HTMLElement) => [...c.querySelectorAll<HTMLElement>('.bp-c.mv')].map((e) => e.style.transform)
+    const moves = (c: HTMLElement) =>
+      [...c.querySelectorAll<HTMLElement>('.bp-c.mv')].map((e) => e.style.transform)
     expect(moves(q(1))[0]).toBe('translateY(0px)')
     expect(moves(q(2))[0]).toBe('translateY(44px)')
     expect(moves(q(2))[1]).toBe('translateY(-44px)')

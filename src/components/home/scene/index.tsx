@@ -10,22 +10,22 @@ import { usePausable } from '@/lib/hooks/usePausable'
 import { useReducedMotion } from '@/lib/hooks/useReducedMotion'
 import { useTimelineLoop } from '@/lib/hooks/useTimelineLoop'
 import {
-  CALLS,
   CALL_LINES,
+  CALLS,
   type CallState,
   type ChipState,
+  callFinal,
+  callReset,
+  derive,
   EYEBROW,
   ICON_CLOCK,
   OFFER,
+  offerFigures,
   SR_INTRO,
   TITLE,
   TOOLS,
   TOOLS_LABEL,
   WAVE,
-  callFinal,
-  callReset,
-  derive,
-  offerFigures,
 } from './content'
 import './scene.css'
 
@@ -111,7 +111,15 @@ function Runner({ active, d, final }: { active: boolean; d: Deps; final: () => v
       }
       await wait(1000)
       for (let i = 0; i < 3; i++) {
-        chip(i, { x: 1, vis: true, tr: false, look: 'raw', px: null, py: null, ...wordAt(kEls.current[i]) })
+        chip(i, {
+          x: 1,
+          vis: true,
+          tr: false,
+          look: 'raw',
+          px: null,
+          py: null,
+          ...wordAt(kEls.current[i]),
+        })
         await wait(40)
         chip(i, { x: 2, tr: true, px: null, py: null })
         set({ t1: i + 1, lift: i + 1 })
@@ -130,7 +138,15 @@ function Runner({ active, d, final }: { active: boolean; d: Deps; final: () => v
       await wait(700)
       set({ st: 'plan', k2: true })
       await wait(600)
-      chip(3, { x: 1, vis: true, tr: false, look: 'raw', px: null, py: null, ...wordAt(k2El.current) })
+      chip(3, {
+        x: 1,
+        vis: true,
+        tr: false,
+        look: 'raw',
+        px: null,
+        py: null,
+        ...wordAt(k2El.current),
+      })
       await wait(40)
       chip(3, { x: 2, tr: true, px: null, py: null })
       await wait(740)
@@ -194,7 +210,10 @@ export function Scene() {
     if (reduced) setS(callFinal())
   }, [reduced])
 
-  const set = useCallback((p: Patch) => setS((prev) => ({ ...prev, ...(typeof p === 'function' ? p(prev) : p) })), [])
+  const set = useCallback(
+    (p: Patch) => setS((prev) => ({ ...prev, ...(typeof p === 'function' ? p(prev) : p) })),
+    [],
+  )
   const chip = useCallback(
     (i: number, p: Partial<ChipState>) =>
       setS((prev) => {
@@ -212,7 +231,10 @@ export function Scene() {
     const p = pipe.getBoundingClientRect()
     const r = el.getClientRects()[0]
     if (!r) return null
-    return { px: Math.round(r.left - p.left - 12), py: Math.round(r.top - p.top + r.height / 2 - 17) }
+    return {
+      px: Math.round(r.left - p.left - 12),
+      py: Math.round(r.top - p.top + r.height / 2 - 17),
+    }
   }, [])
   const deps = useRef<Deps>({ set, chip, wordAt, kEls, k2El, cur, setCase: setCaseIdx })
   deps.current = { set, chip, wordAt, kEls, k2El, cur, setCase: setCaseIdx }
@@ -245,6 +267,7 @@ export function Scene() {
             <h2 className="sc-h2">{TITLE}</h2>
           </div>
           <div className="sc-ctl">
+            {/* biome-ignore lint/a11y/useSemanticElements: a chip row, not a form fieldset; a fieldset would bring its default border and legend box */}
             <div role="group" aria-label="Choisir un exemple" className="sc-tabs">
               {CALLS.map((c, i) => (
                 <button
@@ -261,8 +284,18 @@ export function Scene() {
             </div>
             {!reduced && (
               <button type="button" className="ctab" onClick={toggle}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  {userPaused ? <path d="M8 5v14l11-7z" /> : <path d="M7 5h3v14H7zM14 5h3v14h-3z" />}
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  {userPaused ? (
+                    <path d="M8 5v14l11-7z" />
+                  ) : (
+                    <path d="M7 5h3v14H7zM14 5h3v14h-3z" />
+                  )}
                 </svg>
                 {userPaused ? 'Reprendre' : 'Pause'}
               </button>
@@ -292,6 +325,7 @@ export function Scene() {
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      aria-hidden="true"
                     >
                       <path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3M5 11a7 7 0 0 0 14 0M12 18v3" />
                     </svg>
@@ -387,13 +421,16 @@ export function Scene() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
+                    aria-hidden="true"
                   >
                     <path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6" />
                   </svg>
                 </span>
                 <div className="pc-id">
                   <div className="pc-name">Claude</div>
-                  <div className={`pc-sub${s.st === 'done' ? ' is-done' : ''}`}>{v.claudeStatus}</div>
+                  <div className={`pc-sub${s.st === 'done' ? ' is-done' : ''}`}>
+                    {v.claudeStatus}
+                  </div>
                 </div>
               </div>
             </div>
@@ -499,7 +536,9 @@ export function Scene() {
                     {isSheet && <span className="pf-n">{fd.n}</span>}
                     {fd.k}
                   </dt>
-                  <dd>{fd.on ? <span className="flash1">{fd.v}</span> : <span className="pf-ph" />}</dd>
+                  <dd>
+                    {fd.on ? <span className="flash1">{fd.v}</span> : <span className="pf-ph" />}
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -574,7 +613,12 @@ export function Scene() {
               <Eyebrow onDark>{OFFER.eyebrow}</Eyebrow>
               <h2 className="sc-h2">{OFFER.title}</h2>
             </div>
-            <SandIllustration src="/illus/offre-contour-nuit.webp" height={220} bare position="50% 52%" />
+            <SandIllustration
+              src="/illus/offre-contour-nuit.webp"
+              height={220}
+              bare
+              position="50% 52%"
+            />
           </IllHead>
           <div className="offer-grid">
             <div className="offer-card">

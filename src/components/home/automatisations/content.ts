@@ -4,12 +4,10 @@ const I = {
   doc: 'M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5',
   lead: 'M15 19a6 6 0 0 0-12 0M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M19 8v6M16 11h6',
   sun: 'M12 4v2M12 18v2M4 12h2M18 12h2M6.3 6.3l1.4 1.4M16.3 16.3l1.4 1.4M6.3 17.7l1.4-1.4M16.3 7.7l1.4-1.4M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8',
-  wrench:
-    'M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z',
+  wrench: 'M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z',
   mic: 'M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3M5 11a7 7 0 0 0 14 0M12 18v3',
   app: 'M3 5h18v14H3zM3 9h18M7 7h.01',
-  globe:
-    'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18',
+  globe: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18',
   cap: 'M2 9l10-5 10 5-10 5zM6 11v5c3 2 9 2 12 0v-5',
 }
 const USER = 'M20 21a8 8 0 0 0-16 0M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8'
@@ -185,8 +183,9 @@ export const SEANCE_ROWS: [string, string][] = [
   ['Difficulté', 'Les grignotages du soir'],
   ['Exercice', 'Un carnet alimentaire, 7 jours'],
 ]
-export const SEANCE_BARS = Array.from({ length: 48 }, (_, i) =>
-  8 + Math.round(22 * Math.abs(Math.sin(i * 1.7) * Math.cos(i * 0.6))),
+export const SEANCE_BARS = Array.from(
+  { length: 48 },
+  (_, i) => 8 + Math.round(22 * Math.abs(Math.sin(i * 1.7) * Math.cos(i * 0.6))),
 )
 export const SEANCE_DAYS = ['Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.']
 
@@ -201,7 +200,10 @@ export const SCENE_TEXT: string[][] = [
     `Vos règles : ${RULES.join(', ')}.`,
     `Votre équipe : ${TEAM.map((p) => p.name).join(', ')}.`,
   ],
-  [`Vos sources : ${TILES.map((t) => t.t).join(', ')}.`, `Votre veille du matin : ${BULLETINS.join(' ')}`],
+  [
+    `Vos sources : ${TILES.map((t) => t.t).join(', ')}.`,
+    `Votre veille du matin : ${BULLETINS.join(' ')}`,
+  ],
   [
     "Demande d'intervention du syndic : fuite au 3e étage.",
     ...[FICHE, BON, FACTURE].map((rows) => rows.map(([k, v]) => `${k} : ${v}`).join(', ')),

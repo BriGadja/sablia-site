@@ -7,7 +7,7 @@
  */
 import { eurHt } from '@/lib/format'
 import { of1 } from '../of1'
-import { crmPath, type CrmView } from './view'
+import { type CrmView, crmPath } from './view'
 
 export const SPREADSHEET_SLUGS = ['google-sheets', 'excel-365'] as const
 export type SpreadsheetSlug = (typeof SPREADSHEET_SLUGS)[number]
@@ -36,7 +36,7 @@ export const SPREADSHEET_PAGES: Record<SpreadsheetSlug, SpreadsheetPage> = {
     blocks: [
       {
         heading: 'Ce que votre feuille reçoit',
-        body: "À chaque appel, une synthèse structurée est écrite dans la feuille que votre équipe utilise déjà, rangée dans vos champs et avec vos étapes de vente. La relance est créée avec sa date et son propriétaire. Le prompt est adapté à votre vocabulaire, pas à un modèle générique.",
+        body: 'À chaque appel, une synthèse structurée est écrite dans la feuille que votre équipe utilise déjà, rangée dans vos champs et avec vos étapes de vente. La relance est créée avec sa date et son propriétaire. Le prompt est adapté à votre vocabulaire, pas à un modèle générique.',
       },
       {
         heading: 'Deux façons de téléphoner, une seule feuille',
@@ -48,7 +48,7 @@ export const SPREADSHEET_PAGES: Record<SpreadsheetSlug, SpreadsheetPage> = {
       },
       {
         heading: 'Pas de feuille tenue, pas de CRM ?',
-        body: "Nous pouvons le construire avec vous : un tableur bien tenu, un CRM du marché configuré pour vous, ou un outil sur mesure. Cela ne fait pas partie de cette offre et se chiffre à part, sous 24 heures.",
+        body: 'Nous pouvons le construire avec vous : un tableur bien tenu, un CRM du marché configuré pour vous, ou un outil sur mesure. Cela ne fait pas partie de cette offre et se chiffre à part, sous 24 heures.',
         warn: true,
       },
     ],
@@ -59,7 +59,7 @@ export const SPREADSHEET_PAGES: Record<SpreadsheetSlug, SpreadsheetPage> = {
       },
       {
         q: "Et si mon outil n'est ni un tableur ni un CRM de la liste ?",
-        a: "Un autre outil ouvert aux intégrations, par API ou par MCP, peut convenir. Nous confirmons la faisabilité sous 24 heures, sans engagement de votre part.",
+        a: 'Un autre outil ouvert aux intégrations, par API ou par MCP, peut convenir. Nous confirmons la faisabilité sous 24 heures, sans engagement de votre part.',
       },
       {
         q: 'Qui garde la main sur mon fichier ?',
@@ -74,7 +74,7 @@ export const SPREADSHEET_PAGES: Record<SpreadsheetSlug, SpreadsheetPage> = {
     seo: {
       title: "Compte rendu d'appel dans Excel 365 : fiche et relance automatiques",
       description:
-        "Votre suivi commercial est un classeur Excel 365 dans OneDrive ou SharePoint ? Chaque appel y dépose le compte rendu et la tâche de relance, automatiquement.",
+        'Votre suivi commercial est un classeur Excel 365 dans OneDrive ou SharePoint ? Chaque appel y dépose le compte rendu et la tâche de relance, automatiquement.',
     },
     hero: {
       title: 'Excel 365 à jour après chaque appel.',
@@ -87,7 +87,7 @@ export const SPREADSHEET_PAGES: Record<SpreadsheetSlug, SpreadsheetPage> = {
       },
       {
         heading: 'Ce que votre classeur reçoit',
-        body: "Après chaque appel, une synthèse structurée est ajoutée au classeur : vos étapes de vente, vos objections, vos champs. La relance part datée, au nom du bon commercial. Aucun besoin de rouvrir Excel pour recopier une note.",
+        body: 'Après chaque appel, une synthèse structurée est ajoutée au classeur : vos étapes de vente, vos objections, vos champs. La relance part datée, au nom du bon commercial. Aucun besoin de rouvrir Excel pour recopier une note.',
       },
       {
         heading: 'Téléphonie ou note vocale, même classeur',

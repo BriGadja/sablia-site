@@ -10,9 +10,9 @@ import { OF1_ROUTE, of1 } from '@/content/of1'
 import './offre.css'
 import './crm-page.css'
 import { FlowDiagram } from './FlowDiagram'
-import { FaqList } from './OffreFaq'
-import OffreCallout from './OffreCallout'
 import { euros } from './format'
+import OffreCallout from './OffreCallout'
+import { FaqList } from './OffreFaq'
 
 /**
  * One template for the six CRM pages: the four JSON pages (sourced facts) and the two spreadsheet
@@ -28,9 +28,7 @@ export default function CrmPageView({ view, description }: { view: CrmView; desc
 
   return (
     <main id="contenu" tabIndex={-1} className="v2-offre v2-crm">
-      <JsonLd
-        data={pageServiceSchema({ name: `${of1.title} dans ${tool}`, description, tool, path })}
-      />
+      <JsonLd data={pageServiceSchema({ description, tool, path })} />
       <JsonLd data={pageFaqSchema(faq)} />
       <BreadcrumbJsonLd
         items={[

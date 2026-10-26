@@ -270,7 +270,7 @@ describe('OF-1 copy guard: the page reads the module, never retypes a figure', (
   it('no page or component source carries a literal price or delay', () => {
     for (const source of SOURCES) {
       if (source.path.includes('/content/')) continue
-      expect(source.text, source.path).not.toMatch(/\b1[  ]?490\b/)
+      expect(source.text, source.path).not.toMatch(/\b1[ {2}]?490\b/)
       expect(source.text, source.path).not.toMatch(/\b149 ?€/)
     }
   })

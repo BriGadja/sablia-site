@@ -48,7 +48,14 @@ export function HeleneCard({ stage }: CardProps) {
             <span className="bp-bar" style={bar('92%', { marginTop: 4 })} />
             <span className="bp-bar" style={bar('70%')} />
             <span
-              style={{ display: 'block', width: 92, height: 26, borderRadius: 7, background: '#D9A441', marginTop: 6 }}
+              style={{
+                display: 'block',
+                width: 92,
+                height: 26,
+                borderRadius: 7,
+                background: '#D9A441',
+                marginTop: 6,
+              }}
             />
           </div>
           <span className={`bp-ok ${lit(stage, 1)}`} style={{ left: 14, bottom: 14 }}>
@@ -81,7 +88,7 @@ export function HeleneCard({ stage }: CardProps) {
           </div>
           {ROWS.map(([day, what], j) => (
             <div
-              key={what + j}
+              key={what}
               className={`bp-sr${j === 3 ? ' hot' : ''}${stage.l >= j + 2 ? ' on' : ''}`}
             >
               <span className="bp-mono" style={{ color: '#131620', width: 92 }}>

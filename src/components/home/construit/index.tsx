@@ -7,18 +7,18 @@ import { useInView } from '@/lib/hooks/useInView'
 import { usePausable } from '@/lib/hooks/usePausable'
 import { useReducedMotion } from '@/lib/hooks/useReducedMotion'
 import {
-  CARDS,
   CARD_LINKS,
+  CARDS,
+  deckSlot,
   EYEBROW,
   FINAL_STAGE,
+  figureText,
   IDLE_STAGE,
   LIST_LABEL,
   PAUSE_LABEL,
   RESUME_LABEL,
   SUBTITLE,
   TITLE,
-  deckSlot,
-  figureText,
 } from './content'
 import type { CardStage } from './types'
 import './construit.css'
@@ -217,7 +217,10 @@ export function Construit() {
                   </div>
                   <div
                     className="cn-veil"
-                    style={{ background: slot.second ? '#EEF0F5' : '#E3E6EE', opacity: slot.active ? 0 : 1 }}
+                    style={{
+                      background: slot.second ? '#EEF0F5' : '#E3E6EE',
+                      opacity: slot.active ? 0 : 1,
+                    }}
                   />
                 </article>
               )

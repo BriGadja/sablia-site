@@ -8,7 +8,7 @@ import banned from './banned-figures.json'
 import { CRM_PAGES } from './index'
 import { SPREADSHEET_PAGES, SPREADSHEET_SLUGS } from './spreadsheets'
 
-const normalise = (t: string) => t.replace(/[   ]/g, ' ').replace(/[’‘]/g, "'")
+const normalise = (t: string) => t.replace(/[ {3}]/g, ' ').replace(/[’‘]/g, "'")
 
 function leaves(node: unknown, out: string[] = []): string[] {
   if (typeof node === 'string') out.push(normalise(node))
@@ -80,7 +80,10 @@ describe('spreadsheet pages', () => {
     for (const [slugA, a] of own) {
       for (const [slugB, b] of [...own, ...others]) {
         if (slugA === slugB) continue
-        expect([...a].filter((x) => b.has(x)), `${slugA} vs ${slugB}`).toEqual([])
+        expect(
+          [...a].filter((x) => b.has(x)),
+          `${slugA} vs ${slugB}`,
+        ).toEqual([])
       }
     }
   })

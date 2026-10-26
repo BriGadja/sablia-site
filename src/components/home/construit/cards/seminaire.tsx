@@ -17,7 +17,9 @@ export function SeminaireCard({ stage }: CardProps) {
             <span className="bp-mono" style={{ color: '#835A0C', textTransform: 'uppercase' }}>
               Démo
             </span>
-            <span style={{ fontSize: 15, fontWeight: 600, color: '#131620' }}>Sur leurs propres cas</span>
+            <span style={{ fontSize: 15, fontWeight: 600, color: '#131620' }}>
+              Sur leurs propres cas
+            </span>
           </div>
         </div>
       </div>

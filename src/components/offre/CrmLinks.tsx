@@ -17,7 +17,13 @@ export function linkablePaths(): Set<string> {
  * One chip per tool: a link when the tool has a page, plain text otherwise. A draft page is not
  * routable, so it never appears among the paths and is never linked.
  */
-export default function CrmLinks({ names, paths }: { names: readonly string[]; paths?: Set<string> }) {
+export default function CrmLinks({
+  names,
+  paths,
+}: {
+  names: readonly string[]
+  paths?: Set<string>
+}) {
   const known = paths ?? linkablePaths()
   return (
     <ul className="chips">

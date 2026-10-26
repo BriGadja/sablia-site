@@ -42,12 +42,22 @@ export function FlowScene({ s }: { s: FlowState }) {
         </div>
       </div>
       <div className="fl-link">
-        <svg className="fl-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <svg
+          className="fl-lines"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
           <path className="fl-base" d="M0 50 L100 50" />
           <path className={`fl-trace${on(traced)}`} pathLength={100} d="M0 50 L100 50" />
         </svg>
         <span className={`fl-trav${s.aPh === 'send' ? ' go' : ''}`}>
-          <PathIcon d="M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5" size={14} stroke="#835A0C" width={2} />
+          <PathIcon
+            d="M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5"
+            size={14}
+            stroke="#835A0C"
+            width={2}
+          />
         </span>
       </div>
       <div className={`fl-agent${s.aPh === 'think' ? ' think' : ''}`} style={{ background: BLK }}>
@@ -80,13 +90,21 @@ export function FlowScene({ s }: { s: FlowState }) {
           ))}
         </div>
       </div>
-      <svg className="fl-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <svg className="fl-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
         <path className="fl-base" d="M0 50 C50 50 50 14 100 14" />
         <path className="fl-base" d="M0 50 L100 50" />
         <path className="fl-base" d="M0 50 C50 50 50 86 100 86" />
-        <path className={`fl-trace${on(s.outs > 0)}`} pathLength={100} d="M0 50 C50 50 50 14 100 14" />
+        <path
+          className={`fl-trace${on(s.outs > 0)}`}
+          pathLength={100}
+          d="M0 50 C50 50 50 14 100 14"
+        />
         <path className={`fl-trace${on(s.outs > 1)}`} pathLength={100} d="M0 50 L100 50" />
-        <path className={`fl-trace${on(s.outs > 2)}`} pathLength={100} d="M0 50 C50 50 50 86 100 86" />
+        <path
+          className={`fl-trace${on(s.outs > 2)}`}
+          pathLength={100}
+          d="M0 50 C50 50 50 86 100 86"
+        />
       </svg>
       <div className="fl-out">
         {job.outputs.map((o, i) => (

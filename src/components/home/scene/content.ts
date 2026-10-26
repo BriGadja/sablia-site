@@ -2,7 +2,8 @@ import { of1 } from '@/content/of1'
 import { eurHt } from '@/lib/format'
 
 /** SVG path data of the two tab icons (the mockup's I.phone / I.mic). */
-const ICON_PHONE = 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2'
+const ICON_PHONE =
+  'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2'
 const ICON_MIC = 'M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3M5 11a7 7 0 0 0 14 0M12 18v3'
 export const ICON_CLOCK = 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5l3 2'
 
@@ -108,12 +109,18 @@ export const CALLS: readonly [CallCase, CallCase] = [
 ]
 
 /** The line under the pipeline follows the case on screen. The call case quotes no figure. */
-export const CALL_LINES: readonly [{ figure: string | null; text: string }, { figure: string | null; text: string }] = [
+export const CALL_LINES: readonly [
+  { figure: string | null; text: string },
+  { figure: string | null; text: string },
+] = [
   {
     figure: null,
     text: 'Appel passé sur votre téléphonie (Ringover, Aircall) : Claude lit la transcription, rien à dicter.',
   },
-  { figure: '40 s', text: 'Note vocale dictée, fiche remplie 40 secondes plus tard : mesuré sur notre démo HubSpot.' },
+  {
+    figure: '40 s',
+    text: 'Note vocale dictée, fiche remplie 40 secondes plus tard : mesuré sur notre démo HubSpot.',
+  },
 ]
 
 export const EYEBROW = 'Après chaque appel'
@@ -121,7 +128,12 @@ export const TITLE = 'Ce qui se passe quand votre commercial raccroche.'
 export const SR_INTRO =
   "Exemple animé : pendant l'appel, les phrases utiles sont repérées dans le transcript. Quand le commercial raccroche, Claude les reprend, rédige le compte rendu, remplit les champs du CRM et crée la relance datée."
 
-export const STEP_TITLES = ['Il raccroche.', 'Claude écrit le compte rendu.', 'La fiche est à jour.', 'La relance est créée.']
+export const STEP_TITLES = [
+  'Il raccroche.',
+  'Claude écrit le compte rendu.',
+  'La fiche est à jour.',
+  'La relance est créée.',
+]
 /** Duration of the progress line of each step, in ms (the mockup's measured laps). */
 export const STEP_MS = [1900, 5150, 1460, 900]
 
@@ -197,16 +209,48 @@ const idleChip = (): ChipState => ({ x: 1, vis: false, tr: false, look: 'raw', p
 
 export function callReset(): CallState {
   return {
-    pq: 0, hl: 0, lift: 0, hung: false, p: 0, t1: 0, mv1: 0, cl: 0, rel: false, k2: false, t2: 0, mv2: 0, land: 0,
-    upd: false, step: 0, st: 'wait', fade: false, clk: 0,
+    pq: 0,
+    hl: 0,
+    lift: 0,
+    hung: false,
+    p: 0,
+    t1: 0,
+    mv1: 0,
+    cl: 0,
+    rel: false,
+    k2: false,
+    t2: 0,
+    mv2: 0,
+    land: 0,
+    upd: false,
+    step: 0,
+    st: 'wait',
+    fade: false,
+    clk: 0,
     chips: [0, 1, 2, 3].map(idleChip),
   }
 }
 
 export function callFinal(): CallState {
   return {
-    pq: 3, hl: 3, lift: 3, hung: true, p: 1, t1: 3, mv1: 3, cl: 3, rel: true, k2: true, t2: 4, mv2: 4, land: 4,
-    upd: true, step: 5, st: 'done', fade: false, clk: 40,
+    pq: 3,
+    hl: 3,
+    lift: 3,
+    hung: true,
+    p: 1,
+    t1: 3,
+    mv1: 3,
+    cl: 3,
+    rel: true,
+    k2: true,
+    t2: 4,
+    mv2: 4,
+    land: 4,
+    upd: true,
+    step: 5,
+    st: 'done',
+    fade: false,
+    clk: 40,
     chips: [0, 1, 2, 3].map(idleChip),
   }
 }
@@ -277,7 +321,14 @@ export function derive(caseIdx: number, S: CallState) {
     }),
     chips: S.chips.map((c, i) => ({
       ...c,
-      text: i === 3 ? (c.look === 'raw' ? (C.q[2].k2 ?? '') : C.rel) : c.look === 'raw' ? (C.q[i]?.k ?? '') : (C.f[i]?.v ?? ''),
+      text:
+        i === 3
+          ? c.look === 'raw'
+            ? (C.q[2].k2 ?? '')
+            : C.rel
+          : c.look === 'raw'
+            ? (C.q[i]?.k ?? '')
+            : (C.f[i]?.v ?? ''),
       ...chipPlace(caseIdx, c.x, i, c),
     })),
   }
@@ -291,10 +342,22 @@ export function chipPlace(
   c: { x?: number; px: number | null; py: number | null },
 ): { left: string; top: number } {
   const col = c.x ?? x
-  const xs = ['calc(0% + 17px)', 'calc(35% + 17px)', CALLS[caseIdx]?.crm === 'sheets' ? 'calc(70% + 33px)' : 'calc(70% + 7px)']
-  const left = c.px != null ? `${c.px}px` : i === 3 && col === 3 ? 'calc(70% + 17px)' : (xs[col - 1] ?? xs[0] ?? '')
-  const top = c.py != null ? c.py : i === 3 ? (col === 1 ? 250 : 334) : (col === 3 ? 134 : 122) + 64 * i
+  const xs = [
+    'calc(0% + 17px)',
+    'calc(35% + 17px)',
+    CALLS[caseIdx]?.crm === 'sheets' ? 'calc(70% + 33px)' : 'calc(70% + 7px)',
+  ]
+  const left =
+    c.px != null
+      ? `${c.px}px`
+      : i === 3 && col === 3
+        ? 'calc(70% + 17px)'
+        : (xs[col - 1] ?? xs[0] ?? '')
+  const top =
+    c.py != null ? c.py : i === 3 ? (col === 1 ? 250 : 334) : (col === 3 ? 134 : 122) + 64 * i
   return { left, top }
 }
 
-export const WAVE = [10, 18, 26, 14, 30, 22, 12, 28, 34, 20, 16, 30, 24, 10, 18, 32, 26, 14, 22, 30, 12, 20]
+export const WAVE = [
+  10, 18, 26, 14, 30, 22, 12, 28, 34, 20, 16, 30, 24, 10, 18, 32, 26, 14, 22, 30, 12, 20,
+]

@@ -23,7 +23,9 @@ export default function ProofStrip() {
       <div className="wrap column">
         <Eyebrow>Ce qui vous protège</Eyebrow>
         <h2 className="h2">Vous seriez le premier client de cette offre.</h2>
-        <p className="sub">À la place d'une liste de références : trois points sur lesquels vous appuyer.</p>
+        <p className="sub">
+          À la place d'une liste de références : trois points sur lesquels vous appuyer.
+        </p>
         <dl className="proof-list">
           {PROOF_ITEMS.map((item) => (
             <div key={item.key}>

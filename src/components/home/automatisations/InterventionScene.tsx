@@ -102,7 +102,10 @@ export function InterventionScene({ s }: { s: FlowState }) {
                       <span className="rise" style={{ color: '#3A3F4D' }}>
                         {k}
                       </span>
-                      <span className="rise" style={{ textAlign: 'right', fontFamily: 'var(--font-mono)' }}>
+                      <span
+                        className="rise"
+                        style={{ textAlign: 'right', fontFamily: 'var(--font-mono)' }}
+                      >
                         {v}
                       </span>
                     </>

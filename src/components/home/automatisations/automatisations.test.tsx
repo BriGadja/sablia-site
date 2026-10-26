@@ -2,8 +2,8 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import { renderToString } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockIntersectionObserver, mockReducedMotion } from '@/lib/hooks/test-utils'
-import { Automatisations } from './index'
 import { BULLETINS, FACTURE, FICHE, JOBS, LEADS, SEANCE_ROWS } from './content'
+import { Automatisations } from './index'
 
 const tick = (ms: number) =>
   act(async () => {
@@ -90,7 +90,9 @@ describe('loop', () => {
     fireEvent.click(screen.getByRole('button', { name: /Une veille/ }))
     await tick(3000)
     expect(container.querySelector('.vl')).not.toBeNull()
-    expect(screen.getByRole('button', { name: /Une veille/ }).getAttribute('aria-pressed')).toBe('true')
+    expect(screen.getByRole('button', { name: /Une veille/ }).getAttribute('aria-pressed')).toBe(
+      'true',
+    )
   })
 
   it('Pause freezes on the finished picture and Reprendre restarts', async () => {

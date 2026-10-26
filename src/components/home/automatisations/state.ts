@@ -43,30 +43,84 @@ export interface FlowState {
   sMail: number
 }
 
-type SceneKeys = Exclude<keyof FlowState, 'job' | 'shown' | 'aPh' | 'typed' | 'aStep' | 'outs' | 'bar' | 'lX' | 'lRow'>
+type SceneKeys = Exclude<
+  keyof FlowState,
+  'job' | 'shown' | 'aPh' | 'typed' | 'aStep' | 'outs' | 'bar' | 'lX' | 'lRow'
+>
 
 export function sceneReset(): Pick<FlowState, SceneKeys> & { lRow: number } {
   return {
-    lN: 0, lIn: false, lAttr: false, lR: [0, 0, 0], lEnv: 0, lRow: 0, lCnt: [0, 0, 0], lMsg: -1,
-    vT: 0, vScan: -1, vKeep: false, vBul: 0, vSent: false,
-    iMail: false, iHl: 0, iDoc: 0, iFlip: false, iStamp: false, iBonT: false, iFa: 0, iTot: 0, iStack: 0,
-    sP: 0, sMk: 0, sRelu: false, sMail: 0,
+    lN: 0,
+    lIn: false,
+    lAttr: false,
+    lR: [0, 0, 0],
+    lEnv: 0,
+    lRow: 0,
+    lCnt: [0, 0, 0],
+    lMsg: -1,
+    vT: 0,
+    vScan: -1,
+    vKeep: false,
+    vBul: 0,
+    vSent: false,
+    iMail: false,
+    iHl: 0,
+    iDoc: 0,
+    iFlip: false,
+    iStamp: false,
+    iBonT: false,
+    iFa: 0,
+    iTot: 0,
+    iStack: 0,
+    sP: 0,
+    sMk: 0,
+    sRelu: false,
+    sMail: 0,
   }
 }
 
 export function sceneFinal(): Pick<FlowState, SceneKeys> & { lRow: number } {
   return {
-    lN: 1, lIn: true, lAttr: true, lR: [2, 0, 0], lEnv: 0, lRow: 0, lCnt: [1, 1, 0], lMsg: 1,
-    vT: 1, vScan: 9, vKeep: true, vBul: 3, vSent: true,
-    iMail: true, iHl: 3, iDoc: 2, iFlip: false, iStamp: false, iBonT: true, iFa: 3, iTot: 118, iStack: 3,
-    sP: 1, sMk: 3, sRelu: true, sMail: 3,
+    lN: 1,
+    lIn: true,
+    lAttr: true,
+    lR: [2, 0, 0],
+    lEnv: 0,
+    lRow: 0,
+    lCnt: [1, 1, 0],
+    lMsg: 1,
+    vT: 1,
+    vScan: 9,
+    vKeep: true,
+    vBul: 3,
+    vSent: true,
+    iMail: true,
+    iHl: 3,
+    iDoc: 2,
+    iFlip: false,
+    iStamp: false,
+    iBonT: true,
+    iFa: 3,
+    iTot: 118,
+    iStack: 3,
+    sP: 1,
+    sMk: 3,
+    sRelu: true,
+    sMail: 3,
   }
 }
 
 /** Everything done, for job `job`: what a paused, reduced-motion or server-rendered section shows. */
 export function finalState(job = 0): FlowState {
   return {
-    job, shown: job, aPh: 'out', typed: 200, aStep: 3, outs: 3, bar: 1, lX: null,
+    job,
+    shown: job,
+    aPh: 'out',
+    typed: 200,
+    aStep: 3,
+    outs: 3,
+    bar: 1,
+    lX: null,
     ...sceneFinal(),
   }
 }

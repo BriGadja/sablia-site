@@ -2,9 +2,14 @@
 
 export const EYEBROW = 'Formations'
 export const H1 = 'Une formation construite sur votre quotidien.'
-export const CLAIM = "Votre secteur, vos cas d'usage, votre aisance avec l'IA : chaque séance part de là."
+export const CLAIM =
+  "Votre secteur, vos cas d'usage, votre aisance avec l'IA : chaque séance part de là."
 export const FREE = 'Gratuit, sans engagement.'
-export const TAGS = ['Sur site ou à distance', 'De la matinée au cycle de plusieurs semaines', 'Aucun prérequis technique']
+export const TAGS = [
+  'Sur site ou à distance',
+  'De la matinée au cycle de plusieurs semaines',
+  'Aucun prérequis technique',
+]
 
 export const CFG_TITLE = 'Composez la vôtre'
 export const PG_TITLE = 'Votre programme'
@@ -19,16 +24,36 @@ export const SECTORS = [
 ] as const
 
 export const USES = [
-  { t: 'Mails et comptes rendus', m: ['Vos mails et comptes rendus avec Claude', 'Un modèle de compte rendu à votre format'] },
-  { t: 'Recrutement et propositions', m: ['Des offres et propositions à votre ton', 'Trier et résumer des candidatures'] },
-  { t: 'Prospection et CRM', m: ['Préparer un rendez-vous client', 'Claude branché sur votre CRM'] },
-  { t: 'Code et outils internes', m: ['Claude Code dans vos dépôts', 'Tests et revue automatisés'] },
+  {
+    t: 'Mails et comptes rendus',
+    m: ['Vos mails et comptes rendus avec Claude', 'Un modèle de compte rendu à votre format'],
+  },
+  {
+    t: 'Recrutement et propositions',
+    m: ['Des offres et propositions à votre ton', 'Trier et résumer des candidatures'],
+  },
+  {
+    t: 'Prospection et CRM',
+    m: ['Préparer un rendez-vous client', 'Claude branché sur votre CRM'],
+  },
+  {
+    t: 'Code et outils internes',
+    m: ['Claude Code dans vos dépôts', 'Tests et revue automatisés'],
+  },
 ] as const
 
 /** One level vocabulary on the whole site: Débutant / À l'aise / Avancé (CP4 14). */
 export const LEVELS = [
-  { t: 'Débutant', a: 'Premiers pas : bien demander à Claude', z: 'Les bons réflexes : données et relecture' },
-  { t: "À l'aise", a: 'Projets, instructions et documents', z: 'Automatiser une tâche de bout en bout' },
+  {
+    t: 'Débutant',
+    a: 'Premiers pas : bien demander à Claude',
+    z: 'Les bons réflexes : données et relecture',
+  },
+  {
+    t: "À l'aise",
+    a: 'Projets, instructions et documents',
+    z: 'Automatiser une tâche de bout en bout',
+  },
   { t: 'Avancé', a: 'Skills, connecteurs et MCP', z: 'Des agents qui travaillent pour vous' },
 ] as const
 
@@ -59,7 +84,13 @@ export type Cfg = Pick3 & {
   rv: [number, number, number, number, number]
 }
 
-export const initialCfg = (p: Pick3 = START): Cfg => ({ ...p, ps: p.s, pu: p.u, pl: p.l, rv: [0, 0, 0, 0, 0] })
+export const initialCfg = (p: Pick3 = START): Cfg => ({
+  ...p,
+  ps: p.s,
+  pu: p.u,
+  pl: p.l,
+  rv: [0, 0, 0, 0, 0],
+})
 
 const ROWS_OF = { s: [4], u: [1, 2], l: [0, 3] } as const
 
@@ -70,7 +101,13 @@ export function choose(c: Cfg, key: 's' | 'u' | 'l', i: number): Cfg {
   return { ...c, [key]: i, [`p${key}`]: c[key], rv }
 }
 
-export type ProgramRow = { n: string; t: string; old: string; flip: '' | 'sa' | 'sb'; late: boolean }
+export type ProgramRow = {
+  n: string
+  t: string
+  old: string
+  flip: '' | 'sa' | 'sb'
+  late: boolean
+}
 
 const flipOf = (n: number): '' | 'sa' | 'sb' => (n === 0 ? '' : n % 2 ? 'sa' : 'sb')
 

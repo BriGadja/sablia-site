@@ -43,7 +43,10 @@ export function MaintenanceCard({ stage }: CardProps) {
             Demandes reçues
           </div>
           {ADDRESSES.map((ad, j) => (
-            <div key={ad} className={`bp-mr${stage.l >= 2 * j + 1 && stage.l < 2 * j + 3 ? ' on' : ''}`}>
+            <div
+              key={ad}
+              className={`bp-mr${stage.l >= 2 * j + 1 && stage.l < 2 * j + 3 ? ' on' : ''}`}
+            >
               Demande d'intervention<span className="pdf">PDF</span>
             </div>
           ))}

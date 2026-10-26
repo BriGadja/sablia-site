@@ -1,10 +1,19 @@
-import { act, fireEvent, render, screen } from '@testing-library/react'
-import { renderToString } from 'react-dom/server'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { act, fireEvent, render, screen } from '@testing-library/react'
+import { renderToString } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockIntersectionObserver, mockReducedMotion } from '@/lib/hooks/test-utils'
-import { CALLS, CALL_LINES, SR_INTRO, callFinal, callReset, derive, offerFigures, chipPlace } from './content'
+import {
+  CALL_LINES,
+  CALLS,
+  callFinal,
+  callReset,
+  chipPlace,
+  derive,
+  offerFigures,
+  SR_INTRO,
+} from './content'
 import { Scene } from './index'
 
 beforeEach(() => {
@@ -40,7 +49,9 @@ describe('content', () => {
       text: 'Appel passé sur votre téléphonie (Ringover, Aircall) : Claude lit la transcription, rien à dicter.',
     })
     expect(CALL_LINES[1]?.figure).toBe('40 s')
-    expect(CALL_LINES[1]?.text).toBe('Note vocale dictée, fiche remplie 40 secondes plus tard : mesuré sur notre démo HubSpot.')
+    expect(CALL_LINES[1]?.text).toBe(
+      'Note vocale dictée, fiche remplie 40 secondes plus tard : mesuré sur notre démo HubSpot.',
+    )
   })
 
   it('derives the reset and final frames', () => {
@@ -57,10 +68,16 @@ describe('content', () => {
   })
 
   it('places the flying chips on the three columns', () => {
-    expect(chipPlace(0, 1, 0, { x: 1, px: null, py: null })).toEqual({ left: 'calc(0% + 17px)', top: 122 })
+    expect(chipPlace(0, 1, 0, { x: 1, px: null, py: null })).toEqual({
+      left: 'calc(0% + 17px)',
+      top: 122,
+    })
     expect(chipPlace(0, 1, 0, { x: 3, px: null, py: null }).left).toBe('calc(70% + 33px)')
     expect(chipPlace(1, 1, 0, { x: 3, px: null, py: null }).left).toBe('calc(70% + 7px)')
-    expect(chipPlace(1, 1, 3, { x: 3, px: null, py: null })).toEqual({ left: 'calc(70% + 17px)', top: 334 })
+    expect(chipPlace(1, 1, 3, { x: 3, px: null, py: null })).toEqual({
+      left: 'calc(70% + 17px)',
+      top: 334,
+    })
   })
 
   it('carries no em dash, no banned phrase and no « IAPreneurs »', () => {
@@ -98,7 +115,15 @@ describe('Scene', () => {
     const tools = [...container.querySelectorAll('ul[aria-label="Outils compatibles"] li')].map(
       (li) => li.querySelector('img')?.getAttribute('alt') ?? li.textContent,
     )
-    expect(tools).toEqual(['HubSpot', 'Pipedrive', 'Zoho', 'Salesforce', 'Airtable', 'Google Sheets', 'Excel'])
+    expect(tools).toEqual([
+      'HubSpot',
+      'Pipedrive',
+      'Zoho',
+      'Salesforce',
+      'Airtable',
+      'Google Sheets',
+      'Excel',
+    ])
   })
 
   it('with motion allowed, the first client frame is the start frame, before the section is in view', () => {
@@ -130,9 +155,13 @@ describe('Scene', () => {
     await tick(4100)
     expect(container.querySelector('.pp.fade')).not.toBeNull()
     await tick(1500)
-    expect(container.textContent).toContain('Note vocale dictée, fiche remplie 40 secondes plus tard')
+    expect(container.textContent).toContain(
+      'Note vocale dictée, fiche remplie 40 secondes plus tard',
+    )
     expect(container.textContent).not.toContain('Appel passé sur votre téléphonie')
-    expect(container.querySelector('.ctab[aria-pressed="true"]')?.textContent).toContain('Note vocale')
+    expect(container.querySelector('.ctab[aria-pressed="true"]')?.textContent).toContain(
+      'Note vocale',
+    )
   })
 
   it('picks a tab, restarts from the top and shows that case', async () => {

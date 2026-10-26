@@ -16,7 +16,14 @@ export function VeilleScene({ s }: { s: FlowState }) {
     <div className="scn">
       <div className="vl">
         <div style={{ minWidth: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 12,
+            }}
+          >
             <span className="fl-tag" style={{ margin: 0 }}>
               Vos sources
             </span>
@@ -29,7 +36,14 @@ export function VeilleScene({ s }: { s: FlowState }) {
             {TILES.map((t, i) => (
               <div key={t.t} className={`vl-tile ${tileClass(s, i, t.n > 0)}`.trim()}>
                 <PathIcon d={t.icon} size={16} stroke="#131620" width={1.8} />
-                <span style={{ minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <span
+                  style={{
+                    minWidth: 0,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
                   {t.t}
                 </span>
                 {t.n > 0 && s.vScan >= i && <span className="vl-num">{t.n}</span>}
@@ -38,9 +52,18 @@ export function VeilleScene({ s }: { s: FlowState }) {
           </div>
         </div>
         <div className={`vl-mail${s.vKeep ? '' : ' wait'}`}>
-          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12 }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'baseline',
+              justifyContent: 'space-between',
+              gap: 12,
+            }}
+          >
             <b style={{ fontSize: 15 }}>Votre veille du matin</b>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#61677A' }}>07:02</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: '#61677A' }}>
+              07:02
+            </span>
           </div>
           <div style={{ marginTop: 10, display: 'grid' }}>
             {BULLETINS.map((b, i) => (
@@ -62,7 +85,10 @@ export function VeilleScene({ s }: { s: FlowState }) {
             ))}
           </div>
           {s.vSent && (
-            <div className="rise" style={{ marginTop: 12, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+            <div
+              className="rise"
+              style={{ marginTop: 12, display: 'flex', flexWrap: 'wrap', gap: 6 }}
+            >
               {VEILLE_PILLS.map((p, i) => (
                 <span key={p} className="vl-pill">
                   {i === 0 && <PathIcon d="M5 12l5 5L20 7" size={12} width={2.6} />}
