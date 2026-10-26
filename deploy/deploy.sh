@@ -5,8 +5,11 @@
 #   deploy.sh all                         both slots, prod first (what the timer runs)
 #   deploy.sh rollback <prod|preview>     swap <slot> and <slot>.prev (about 3 s)
 #
-# A slot is a symlink to releases/<sha7>-<UTC time>/ holding bin/start, RELEASE and dist/. The unit only
-# ever runs <slot>/bin/start, so a Next.js release (Lot 3) fits the same contract. Nothing about the live
+# A slot is a symlink to releases/<sha7>-<UTC time>/ holding bin/start, RELEASE and dist/ (dist/index.js is
+# the Express server, dist/public the Next static export: `<route>.html`, or `<route>/index.html`). The unit
+# only ever runs <slot>/bin/start. The build runs with SABLIA_SLOT=<slot> so that content-gates.sh --auto is
+# strict on prod only. A force trigger (triggers/<slot>-force) is consumed only once the resource gate lets a
+# build run, so a publication's rebuild request is never lost under memory or load pressure. Nothing about the live
 # slot changes until a candidate has built, been prerendered completely and answered a smoke test on a
 # scratch port; after the switch a failing health check flips the slot back by itself.
 #
@@ -101,8 +104,8 @@ assert_prerendered() { # <build dir>: every sitemap URL has its static page
   [ -s "$dist/sitemap.xml" ] || { log "build produced no sitemap.xml"; return 1; }
   while read -r loc; do
     p="${loc#*://}"; p="/${p#*/}"; p="${p%/}"
-    if [ -z "$p" ]; then f="$dist/index.html"; else f="$dist$p/index.html"; fi
-    [ -s "$f" ] || { log "sitemap lists $loc but $f was not prerendered"; missing=1; }
+    if [ -z "$p" ]; then f="$dist/index.html"; else f="$dist$p.html"; [ -s "$f" ] || f="$dist$p/index.html"; fi
+    [ -s "$f" ] || { log "sitemap lists $loc but neither $dist$p.html nor $dist$p/index.html was prerendered"; missing=1; }
   done < <(grep -o '<loc>[^<]*</loc>' "$dist/sitemap.xml" | sed 's#<loc>##; s#</loc>##')
   return $missing
 }
@@ -124,10 +127,12 @@ smoke() { # <release dir> <release id>: the candidate on a scratch port, no secr
   [ "$(release_on_port "$PORT_SCRATCH")" = "$id" ] || { log "smoke: /healthz did not report release $id on the scratch port"; ok=1; }
   if [ $ok = 0 ]; then
     local b="http://127.0.0.1:$PORT_SCRATCH"
-    for path in / /cgv /escalier-modeles /sitemap.xml; do
+    for path in / /cgv /escalier-modeles /ressources /sitemap.xml; do
       code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "$b$path")"
       [ "$code" = 200 ] || { log "smoke: GET $path answered $code, expected 200"; ok=1; }
     done
+    code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "$b/__smoke-unknown-path")"
+    [ "$code" = 404 ] || { log "smoke: unknown path answered $code, expected 404"; ok=1; }
     code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "$b/api/contact")"
     [ "$code" = 405 ] || { log "smoke: GET /api/contact answered $code, expected 405"; ok=1; }
     code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "$b/api/nope")"
@@ -183,13 +188,14 @@ deploy() {
   local slot="$1" force="$2" link="$SITE_ROOT/$1" ref sha short cur id work rel prev_target="" i
   lock 0
   mkdir -p "$SITE_ROOT/releases" "$SITE_ROOT/build" "$SITE_ROOT/failed" "$LOG_DIR" "$SITE_ROOT/.npm-cache"
+  resources_ok || return 0
   # A trigger file asks for a rebuild of the CURRENT sha (a resource was published: scripts/site-redeploy.py).
-  # It is consumed at once, so a failing forced build is not retried every minute.
+  # It is read AFTER the resource gate (a skipped tick keeps it) and consumed at once, so a failing forced
+  # build is not retried every minute.
   if [ -f "$SITE_ROOT/triggers/$slot-force" ]; then
     rm -f "$SITE_ROOT/triggers/$slot-force"; force=1
     log "$slot: forced rebuild requested (trigger consumed)"
   fi
-  resources_ok || return 0
 
   ref="$(cat "$CONF_DIR/$slot-ref" 2>/dev/null || echo main)"
   case "$ref" in ""|*[!A-Za-z0-9._/-]*|*..*) die "refusing ref '$ref' (characters outside [A-Za-z0-9._/-])";; esac
@@ -229,7 +235,7 @@ deploy() {
     npm ci --ignore-scripts --no-audit --no-fund --cache "$SITE_ROOT/.npm-cache" ) >> "$blog" 2>&1 || { fail "npm ci failed"; return 1; }
   ( cd "$work" || exit 1
     set -a; [ -r "$CONF_DIR/build.env" ] && . "$CONF_DIR/build.env"; set +a
-    export PRERENDER_STRICT=1
+    export PRERENDER_STRICT=1 SABLIA_SLOT="$slot"
     npm run build ) >> "$blog" 2>&1 || { fail "build failed"; return 1; }
   assert_prerendered "$work" >> "$blog" 2>&1 || { tail -n 5 "$blog"; fail "a page listed in the sitemap was not prerendered"; return 1; }
 

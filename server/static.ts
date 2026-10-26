@@ -2,55 +2,72 @@ import path from 'node:path'
 import express, { type Express, type NextFunction, type Request, type Response } from 'express'
 
 /**
- * Static half of the production server. It reproduces what Vercel did for sablia.io (measured on
- * 2026-10-18, see deploy/parity-baseline.json): vercel.json's rewrites, directory pages answered
- * at `/x` AND `/x/` with a 200, `.well-known` served, everything revalidated except the hashed
- * `/assets/*`.
+ * Static half of the production server, serving the Next `output: 'export'` tree (trailingSlash
+ * false). Contract, measured against sablia.io on 2026-10-18 (deploy/parity-baseline.json) and
+ * changed on purpose by the v2 build:
+ * - a page is `<route>.html` (or `<route>/index.html`) and answers 200 at `/x` AND `/x/`; a file
+ *   and a directory of the same name coexist (`ressources.html` beside `ressources/`);
+ * - an unknown path is a real 404 carrying 404.html (the Vercel-era index.html fallback is gone);
+ *   `/404*`, `/_not-found*` and `/ressources/__none*` (payload files included) are 404 too;
+ * - Next's RSC payloads (`*.txt`, `index.txt`, `__next.*.txt`) are plain files: 200 text/plain;
+ *   a 404 there would degrade every Link click to a full reload;
+ * - `_next/static/*` is immutable, everything else revalidates; `.well-known` is served.
  */
 
 const REVALIDATE = 'public, max-age=0, must-revalidate'
 const IMMUTABLE = 'public, max-age=31536000, immutable'
+const NEVER_SERVED = /^\/(?:404|_not-found|ressources\/__none)(?:[/.].*)?$/
+const REDIRECTS: Record<string, string> = {
+  '/roi': '/offres/compte-rendu-appel',
+  '/about': '/#derriere',
+}
 
 export function mountStatic(app: Express, distPath: string): void {
   const root = path.resolve(distPath)
   const setHeaders = (res: Response, filePath: string) => {
     const rel = path.relative(root, filePath)
-    res.setHeader('Cache-Control', rel.startsWith(`assets${path.sep}`) ? IMMUTABLE : REVALIDATE)
+    const hashed = rel.startsWith(`_next${path.sep}static${path.sep}`)
+    res.setHeader('Cache-Control', hashed ? IMMUTABLE : REVALIDATE)
   }
-  const sendPage = (res: Response, next: NextFunction, file: string) => {
-    res.setHeader('Cache-Control', REVALIDATE)
+  const sendFile = (res: Response, file: string, onMiss: () => void, status = 200) => {
+    res.status(status).setHeader('Cache-Control', REVALIDATE)
     res.sendFile(file, { root, dotfiles: 'deny' }, (err) => {
-      if (err) next(err)
+      if (!err) return
+      res.status(200).removeHeader('Cache-Control')
+      onMiss()
     })
   }
-  const isRead = (req: Request) => req.method === 'GET' || req.method === 'HEAD'
+  const notFound = (res: Response) =>
+    sendFile(res, '404.html', () => res.status(404).type('text/plain').send('Not Found'), 404)
 
-  // vercel.json: { "source": "/escalier-modeles", "destination": "/escalier-modeles.html" }
-  app.get('/escalier-modeles', (_req, res, next) => sendPage(res, next, 'escalier-modeles.html'))
-
-  // Prerendered directory pages (`cgv/index.html`): 200 with or without the trailing slash.
+  // Only GET and HEAD read the static tree.
   app.use((req, res, next) => {
-    if (!isRead(req)) return next()
+    if (req.method === 'GET' || req.method === 'HEAD') return next()
+    res.status(405).set('Allow', 'GET, HEAD').end()
+  })
+
+  app.use((req, res, next) => {
+    const clean = req.path.replace(/\/+$/, '') || '/'
+    const target = REDIRECTS[clean]
+    if (target) return res.redirect(301, target)
+    if (NEVER_SERVED.test(clean)) return notFound(res)
+    next()
+  })
+
+  // `<path>.html` first, then `<path>/index.html`; `/` is index.html.
+  app.use((req: Request, res: Response, next: NextFunction) => {
     let decoded: string
     try {
       decoded = decodeURIComponent(req.path)
     } catch {
       return next()
     }
-    const rel = decoded.replace(/\/+$/, '')
-    const segments = rel.split('/').filter(Boolean)
-    if (segments.length === 0 || segments.some((s) => s.startsWith('.') || s.includes('\0')))
-      return next()
-    const file = path.join(...segments, 'index.html')
-    const full = path.resolve(root, file)
-    if (!full.startsWith(root + path.sep)) return next()
-    res.setHeader('Cache-Control', REVALIDATE)
-    res.sendFile(file, { root, dotfiles: 'deny' }, (err) => {
-      if (err) {
-        res.removeHeader('Cache-Control')
-        next()
-      }
-    })
+    const segments = decoded.split('/').filter(Boolean)
+    if (segments.some((s) => s.startsWith('.') || s.includes('\0'))) return next()
+    if (segments.length === 0) return sendFile(res, 'index.html', next)
+    const base = path.join(...segments)
+    if (!path.resolve(root, base).startsWith(root + path.sep)) return next()
+    sendFile(res, `${base}.html`, () => sendFile(res, path.join(base, 'index.html'), next))
   })
 
   // `.well-known/ai.txt` is a dotfile path: only that folder is opened to dotfiles.
@@ -66,17 +83,10 @@ export function mountStatic(app: Express, distPath: string): void {
     express.static(root, {
       dotfiles: 'ignore',
       redirect: false,
-      index: ['index.html'],
+      index: false,
       setHeaders,
     }),
   )
 
-  // vercel.json: { "source": "/((?!api/).*)", "destination": "/index.html" }
-  app.use((req, res, next) => {
-    if (!isRead(req)) {
-      res.status(405).set('Allow', 'GET, HEAD').end()
-      return
-    }
-    sendPage(res, next, 'index.html')
-  })
+  app.use((_req, res) => notFound(res))
 }

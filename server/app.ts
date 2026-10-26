@@ -14,7 +14,7 @@ export interface AppOptions {
   apiRoutes?: Record<string, FetchHandler>
   /** Mounted after /healthz and before /api; tests use it to throw on purpose. */
   extraRoutes?: (app: Express) => void
-  /** false in development: Vite's middleware serves the client instead of dist/public. */
+  /** false in development: nothing is served from dist/public (the Next dev server owns pages). */
   serveBuild?: boolean
 }
 

@@ -1,9 +1,8 @@
 // @vitest-environment node
 /**
- * US-63: the static half of the server answers like Vercel did (vercel.json rewrites + the
- * filesystem). Measured against sablia.io on 2026-10-18: /cgv 200 (not 301), /escalier-modeles =
- * escalier-modeles.html, unknown paths and a missing /assets/x.js = index.html 200, .well-known
- * served, only /assets/* immutable.
+ * US-63 (v2): the static half serves a Next `output: 'export'` tree. Resolution is `<path>.html`
+ * then `<path>/index.html`, an unknown path is a real 404 carrying 404.html (the Vercel-era
+ * index.html fallback is gone), and Next's RSC payloads (`*.txt`) answer 200 text/plain.
  */
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
@@ -27,47 +26,115 @@ const get = (path: string, init?: RequestInit) =>
   fetch(srv.url + path, { redirect: 'manual', ...init })
 const html = (rel: string) => readFileSync(join(dist, rel), 'utf8')
 
-describe('mountStatic — Vercel parity', () => {
+const REVALIDATE = 'public, max-age=0, must-revalidate'
+
+describe('mountStatic — Next export', () => {
   it('serves / and /index.html with a revalidating cache', async () => {
     for (const p of ['/', '/index.html']) {
       const r = await get(p)
       expect(r.status).toBe(200)
       expect(await r.text()).toBe(html('index.html'))
-      expect(r.headers.get('cache-control')).toBe('public, max-age=0, must-revalidate')
+      expect(r.headers.get('cache-control')).toBe(REVALIDATE)
     }
   })
 
-  it('answers 200 at /cgv AND /cgv/ with the directory page (no 301)', async () => {
-    for (const p of ['/cgv', '/cgv/']) {
+  it('resolves <path>.html at /x AND /x/ (no redirect)', async () => {
+    for (const p of ['/cgv', '/cgv/', '/escalier-modeles']) {
       const r = await get(p)
       expect(r.status).toBe(200)
-      expect(await r.text()).toBe(html('cgv/index.html'))
+      expect(await r.text()).toBe(html(`${p.replace(/\/$/, '')}.html`.slice(1)))
     }
-    const nested = await get('/ressources/pipedrive-nouveau-lead')
-    expect(await nested.text()).toBe(html('ressources/pipedrive-nouveau-lead/index.html'))
+    const nested = await get('/offres/compte-rendu-appel')
+    expect(await nested.text()).toBe(html('offres/compte-rendu-appel.html'))
+    const slug = await get('/ressources/pipedrive-nouveau-lead')
+    expect(await slug.text()).toBe(html('ressources/pipedrive-nouveau-lead.html'))
   })
 
-  it('rewrites /escalier-modeles to escalier-modeles.html', async () => {
-    const r = await get('/escalier-modeles')
+  it('answers /ressources from ressources.html although a ressources/ directory sits beside it', async () => {
+    for (const p of ['/ressources', '/ressources/']) {
+      const r = await get(p)
+      expect(r.status).toBe(200)
+      expect(await r.text()).toBe(html('ressources.html'))
+    }
+  })
+
+  it('falls back to <path>/index.html when no <path>.html exists', async () => {
+    const dir = join(dist, 'legacy')
+    const { mkdirSync, writeFileSync } = await import('node:fs')
+    mkdirSync(dir, { recursive: true })
+    writeFileSync(join(dir, 'index.html'), '<title>Legacy</title>')
+    const r = await get('/legacy')
     expect(r.status).toBe(200)
-    expect(await r.text()).toBe(html('escalier-modeles.html'))
+    expect(await r.text()).toBe('<title>Legacy</title>')
   })
 
-  it('falls back to index.html (200) for unknown paths and missing assets', async () => {
-    for (const p of ['/nimporte-quoi', '/assets/x.js', '/ressources/inconnu/deep']) {
+  it('answers an unknown path with 404.html, status 404 and a revalidating cache', async () => {
+    for (const p of [
+      '/nimporte-quoi',
+      '/assets/x.js',
+      '/ressources/inconnu/deep',
+      '/ressources/inconnu',
+    ]) {
       const r = await get(p)
-      expect(r.status).toBe(200)
-      expect(await r.text()).toBe(html('index.html'))
-      expect(r.headers.get('cache-control')).toBe('public, max-age=0, must-revalidate')
+      expect(r.status, p).toBe(404)
+      expect(await r.text()).toBe(html('404.html'))
+      expect(r.headers.get('cache-control')).toBe(REVALIDATE)
     }
   })
 
-  it('serves hashed assets as immutable and everything else as must-revalidate', async () => {
-    const a = await get('/assets/main-abc12345.js')
-    expect(a.status).toBe(200)
-    expect(a.headers.get('cache-control')).toBe('public, max-age=31536000, immutable')
+  it('answers 404 on /404*, /_not-found* and /ressources/__none*, payload files included', async () => {
+    for (const p of [
+      '/404',
+      '/404.html',
+      '/_not-found',
+      '/_not-found/index.html',
+      '/ressources/__none',
+      '/ressources/__none.txt',
+      '/ressources/__none/__next.ressources.__none.txt',
+    ]) {
+      const r = await get(p)
+      expect(r.status, p).toBe(404)
+      expect(await r.text(), p).not.toContain('must-not-be-served')
+      expect(r.headers.get('cache-control'), p).toBe(REVALIDATE)
+    }
+  })
+
+  it('serves every RSC payload as 200 text/plain with a revalidating cache', async () => {
+    const payloads: Record<string, string> = {
+      '/index.txt': 'rsc-index',
+      '/formations.txt': 'rsc-formations',
+      '/formations/__next.formations.__PAGE__.txt': 'rsc-formations-page',
+      '/formations/__next.%24d%24slug.txt': 'rsc-dollar',
+      '/formations/__next.$d$slug.txt': 'rsc-dollar',
+      '/ressources/__next.ressources.txt': 'rsc-ressources',
+      '/ressources/pipedrive-nouveau-lead/__next.ressources.pipedrive-nouveau-lead.txt': 'rsc-slug',
+    }
+    for (const [p, body] of Object.entries(payloads)) {
+      const r = await get(p)
+      expect(r.status, p).toBe(200)
+      expect(r.headers.get('content-type'), p).toMatch(/^text\/plain/)
+      expect(r.headers.get('cache-control'), p).toBe(REVALIDATE)
+      expect(await r.text(), p).toBe(body)
+    }
+  })
+
+  it('serves _next/static as immutable and everything else as must-revalidate', async () => {
+    for (const p of ['/_next/static/chunks/x.js', '/_next/static/css/app-ff00aa11.css']) {
+      const a = await get(p)
+      expect(a.status).toBe(200)
+      expect(a.headers.get('cache-control')).toBe('public, max-age=31536000, immutable')
+    }
     const r = await get('/robots.txt')
-    expect(r.headers.get('cache-control')).toBe('public, max-age=0, must-revalidate')
+    expect(r.headers.get('cache-control')).toBe(REVALIDATE)
+  })
+
+  it('redirects /roi and /about with a 301', async () => {
+    const roi = await get('/roi')
+    expect(roi.status).toBe(301)
+    expect(roi.headers.get('location')).toBe('/offres/compte-rendu-appel')
+    const about = await get('/about/')
+    expect(about.status).toBe(301)
+    expect(about.headers.get('location')).toBe('/#derriere')
   })
 
   it('serves .well-known but never another dotfile', async () => {
