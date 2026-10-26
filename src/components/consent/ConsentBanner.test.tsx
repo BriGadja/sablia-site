@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { initAnalytics, resetAnalyticsForTests } from '@/lib/analytics'
@@ -8,14 +10,13 @@ import {
   requestConsentBanner,
   writeConsent,
 } from '@/lib/consent'
-import ConsentBanner from './ConsentBanner'
+import { ConsentBanner } from './ConsentBanner'
 
 /**
  * US-66: refusing is as easy as accepting, silence is a refusal, the recorder exists only after
  * « Tout accepter », and the choice can be taken back from the footer.
  */
 type TestWindow = Window & {
-  __SABLIA_PRERENDER__?: boolean
   happyDOM: { setURL: (url: string) => void }
 }
 const recorderTags = () => document.head.querySelectorAll('script[data-sablia="recorder"]')
@@ -30,7 +31,6 @@ beforeEach(() => {
   clearConsent()
   resetAnalyticsForTests()
   document.head.replaceChildren()
-  delete (window as unknown as TestWindow).__SABLIA_PRERENDER__
   reload = vi.fn()
   Object.defineProperty(window.location, 'reload', { value: reload, configurable: true })
   initAnalytics()
@@ -71,17 +71,14 @@ describe('ConsentBanner: the offer', () => {
   it('does not animate, cover the booking button, or hide behind a wall', () => {
     render(<ConsentBanner />)
     const region = screen.getByRole('region', { name: /confidentialité/i })
-    expect(region.className).not.toMatch(/animate-|transition|duration-/)
-    expect(region.className).toMatch(/max-h-40/)
-    expect(region.className).not.toMatch(/inset-0\b/)
+    expect(region.className).toBe('v2-consent')
+    const css = readFileSync(join(__dirname, 'consent.css'), 'utf8')
+    expect(css).not.toMatch(/animation|transition|@keyframes/)
+    expect(css).toMatch(/max-height:\s*12rem/)
+    expect(css).not.toMatch(/inset:\s*0\b/)
   })
 
-  it('stays away from the prerender run and from a visitor who already chose', () => {
-    ;(window as unknown as TestWindow).__SABLIA_PRERENDER__ = true
-    const { container, unmount } = render(<ConsentBanner />)
-    expect(container.querySelector('[data-consent-banner]')).toBeNull()
-    unmount()
-    delete (window as unknown as TestWindow).__SABLIA_PRERENDER__
+  it('stays away from a visitor who already chose', () => {
     writeConsent(false)
     const second = render(<ConsentBanner />)
     expect(second.container.querySelector('[data-consent-banner]')).toBeNull()

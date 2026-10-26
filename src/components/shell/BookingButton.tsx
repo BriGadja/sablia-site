@@ -17,7 +17,12 @@ type Props = {
  */
 export function BookingButton({ children = 'Réserver 30 min', className, url }: Props) {
   return (
-    <button type="button" data-cta-book="" className={className} onClick={() => openBookingUrl(url)}>
+    <button
+      type="button"
+      data-cta-book=""
+      className={className}
+      onClick={() => openBookingUrl(url)}
+    >
       {children}
     </button>
   )

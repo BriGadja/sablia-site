@@ -1,14 +1,16 @@
 @layer theme, base, components, utilities;
 
-/* The consent banner (US-66): fixed to the bottom, never modal, no animation, equal answers. */
+/* The consent banner (US-66): fixed to the bottom, never modal, static, equal answers. */
 @layer components {
   .v2-consent {
+    box-sizing: border-box;
     position: fixed;
     inset-inline: 0;
     bottom: 0;
     z-index: 60;
-    max-height: 10rem;
-    overflow-y: auto;
+    display: flex;
+    max-height: 12rem;
+    overflow: hidden;
     padding: 0.75rem 1rem;
     background: var(--color-ink);
     color: var(--color-sand);
@@ -18,10 +20,18 @@
 
     .v2-consent-inner {
       display: flex;
+      flex: 1;
       flex-direction: column;
       gap: 0.75rem;
+      min-height: 0;
       max-width: 72rem;
       margin-inline: auto;
+    }
+    /* On a phone the long text scrolls inside the banner; both answers stay in view. */
+    .v2-consent-copy {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
     }
     .v2-consent-title {
       margin: 0;
@@ -82,8 +92,8 @@
         gap: 2rem;
       }
       .v2-consent-copy {
-        flex: 1;
         min-width: 0;
+        overflow: visible;
       }
       .v2-consent-text {
         font-size: 0.8125rem;
