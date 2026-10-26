@@ -60,21 +60,21 @@ export const PAGE_ROUTES = [
   },
   {
     path: '/mentions-legales',
-    sources: [`${A}/mentions-legales/`],
+    sources: [`${A}/mentions-legales/`, 'src/components/legal/', 'src/content/legal/'],
     indexable: true,
     changefreq: 'yearly',
     priority: 0.3,
   },
   {
     path: '/politique-confidentialite',
-    sources: [`${A}/politique-confidentialite/`],
+    sources: [`${A}/politique-confidentialite/`, 'src/components/legal/', 'src/content/legal/'],
     indexable: true,
     changefreq: 'yearly',
     priority: 0.3,
   },
   {
     path: '/cgv',
-    sources: [`${A}/cgv/`],
+    sources: [`${A}/cgv/`, 'src/components/legal/', 'src/content/legal/'],
     indexable: true,
     changefreq: 'yearly',
     priority: 0.3,
@@ -126,7 +126,7 @@ export const PAGE_ROUTES = [
   {
     // Built (the page emits noindex) but kept out of the sitemap.
     path: '/thank-you',
-    sources: [`${A}/thank-you/`],
+    sources: [`${A}/thank-you/`, 'src/components/legal/', 'src/content/legal/'],
     indexable: false,
     changefreq: 'yearly',
     priority: 0.1,
