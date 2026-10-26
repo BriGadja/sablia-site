@@ -37,8 +37,8 @@ export const PAGE_ROUTES = [
         'derriere',
         'videos',
         'faq',
-        'fin',
       ].map((id) => `${H}/${id}/`),
+      // #fin is the shell's FinBand; its home copy lives in faq/content.ts (FIN_BAND).
     ],
     indexable: true,
     changefreq: 'weekly',
