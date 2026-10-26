@@ -65,3 +65,14 @@ coverage/
 
 # CRM business context (symlink to sablia-crm)
 docs/crm
+
+# Next.js
+.next
+.next-*
+out
+.build.lock
+public/_posters
+next-env.d.ts
+
+# Python bytecode (scripts/qa tools)
+__pycache__/

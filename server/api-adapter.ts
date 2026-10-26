@@ -46,14 +46,15 @@ function adapt(handler: FetchHandler) {
         else headers.set(name, value)
       }
       const hasBody = req.method !== 'GET' && req.method !== 'HEAD'
-      let body: Buffer | undefined
+      // A copy typed on ArrayBuffer: since @types/node 22 a Buffer may sit on a SharedArrayBuffer, which BodyInit refuses
+      let body: Uint8Array<ArrayBuffer> | undefined
       if (hasBody) {
         const read = await readBody(req)
         if (read.kind === 'too_large') {
           sendJson(res, 413, { error: 'Requête trop volumineuse', code: 'payload_too_large' })
           return
         }
-        body = read.data
+        body = new Uint8Array(read.data)
       }
       const url = `${req.protocol}://${req.get('host') ?? 'localhost'}${req.originalUrl}`
       const response = await handler.fetch(new Request(url, { method: req.method, headers, body }))
