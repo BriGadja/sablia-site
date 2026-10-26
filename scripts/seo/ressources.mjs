@@ -3,7 +3,7 @@
 
 // Same constant as client/src/lib/contenu.ts — a public project ref, not a secret.
 const SUPABASE_URL = 'https://qlxoitzdxjqhljjoeqoq.supabase.co'
-const SELECT = 'slug,titre,resume,published_at,updated_at'
+const SELECT = 'slug,titre,resume,youtube_id,published_at,updated_at'
 const TRIES = 3
 const BACKOFF_MS = 1000
 const FILE_URL_MARK = 'storage/v1/object/public/contenu-ressources'

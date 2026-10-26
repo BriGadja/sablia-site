@@ -42,5 +42,21 @@
   "/offres/compte-rendu-appel/hubspot": {
     "lastmod": "2026-10-12",
     "hash": "sha256:bbf295af20c92b4e1e403f19fb4e36c833b0c7d293aa987fed8130052d623ae3"
+  },
+  "/formations": {
+    "lastmod": "2026-10-26",
+    "hash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "/accompagnement": {
+    "lastmod": "2026-10-26",
+    "hash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "/offres/compte-rendu-appel/google-sheets": {
+    "lastmod": "2026-10-26",
+    "hash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "/offres/compte-rendu-appel/excel-365": {
+    "lastmod": "2026-10-26",
+    "hash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   }
 }

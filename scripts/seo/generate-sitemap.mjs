@@ -1,7 +1,7 @@
 // Writes dist/public/sitemap.xml at build time (US-55): indexable routes (routes.mjs, contract C2)
 // dated from the lastmod ledger, plus every published /ressources/{slug} dated from its row.
 // A Supabase read failure fails the build (the shared helper retries 3 times). Chain position:
-// after prerender, because `vite build` empties dist/public first.
+// after export-guards (dist/public is moved into place by finalize-export first).
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -17,18 +17,13 @@ const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, 
 const day = (iso) => String(iso).slice(0, 10)
 const resourceDate = (row) => day(row.updated_at ?? row.published_at)
 
-/** A page whose own meta says noindex must not be advertised, whatever the manifest says. */
-function metaNoindex(metaTags, path) {
-  return /noindex/i.test(metaTags?.pages?.[path]?.robots ?? '')
-}
-
-export function buildSitemap({ routes, ledger, metaTags, resources }) {
+export function buildSitemap({ routes, ledger, resources }) {
   const urls = []
   const dated = resources.filter((r) => r.published_at || r.updated_at)
   const latest = dated.map(resourceDate).sort().at(-1)
 
   for (const route of routes) {
-    if (route.indexable !== true || metaNoindex(metaTags, route.path)) continue
+    if (route.indexable !== true) continue
     const entry = ledger[route.path]
     if (!entry?.lastmod) {
       throw new Error(`sitemap: no lastmod for ${route.path} (run stamp-lastmod.mjs --write)`)
@@ -68,8 +63,7 @@ async function main(argv) {
   const out = i === -1 ? join(ROOT, 'dist', 'public', 'sitemap.xml') : resolve(argv[i + 1])
   const resources = await listPublishedSlugs()
   const ledger = JSON.parse(readFileSync(join(HERE, 'lastmod.json'), 'utf8'))
-  const metaTags = JSON.parse(readFileSync(join(ROOT, 'docs', 'meta-tags.json'), 'utf8'))
-  const xml = buildSitemap({ routes: resolveRoutes({ root: ROOT }), ledger, metaTags, resources })
+  const xml = buildSitemap({ routes: resolveRoutes({ root: ROOT }), ledger, resources })
   mkdirSync(dirname(out), { recursive: true })
   writeFileSync(out, xml)
   console.log(`[sitemap] ${(xml.match(/<loc>/g) ?? []).length} urls -> ${out}`)
