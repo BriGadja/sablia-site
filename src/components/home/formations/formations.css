@@ -33,6 +33,8 @@
       text-decoration: underline;
       text-decoration-color: #d9a441;
       text-underline-offset: 4px;
+      /* 44 px hit area: inline padding enlarges the rect, no text moves */
+      padding-block: 12px;
     }
     .fo-actions {
       display: flex;
@@ -151,7 +153,10 @@
     .fo-more {
       all: unset;
       cursor: pointer;
-      margin-top: 12px;
+      /* 44 px hit area, layout unchanged: padding-block offset by negative margin-block */
+      padding-block: 14px;
+      margin-top: -2px;
+      margin-bottom: -14px;
       align-self: flex-start;
       font-size: 14px;
       font-weight: 500;

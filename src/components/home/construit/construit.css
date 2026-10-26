@@ -108,6 +108,10 @@
       gap: 8px;
       min-height: 0;
     }
+    /* 44 px hit area: inline padding enlarges the rect, no text moves */
+    .cn-link {
+      padding-block: 12px;
+    }
     .cn-meta {
       display: flex;
       flex-wrap: wrap;

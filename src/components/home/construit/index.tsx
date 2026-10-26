@@ -205,6 +205,7 @@ export function Construit() {
                           <a
                             href={CARD_LINKS[card.kind]?.href}
                             rel="noopener"
+                            className="cn-link"
                             tabIndex={slot.active ? undefined : -1}
                             style={{ textDecoration: 'underline', textUnderlineOffset: 4 }}
                           >

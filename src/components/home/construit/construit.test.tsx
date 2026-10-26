@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockIntersectionObserver, mockReducedMotion } from '@/lib/hooks/test-utils'
@@ -167,5 +169,16 @@ describe('card footers', () => {
   it('names no client company and no headcount on the séminaire card', () => {
     const seminar = CARDS.find((c) => c.kind === 'seminar')!
     expect(`${seminar.sector} ${seminar.text}`).not.toMatch(/Madeca|\d+\s*(personnes|participants|collaborateurs)/i)
+  })
+})
+
+describe('touch target', () => {
+  it('the noesia.school link carries cn-link, rel kept, with a 44 px hit area', () => {
+    const { container } = render(<Construit />)
+    const a = container.querySelector('a[href="https://noesia.school"]') as HTMLAnchorElement
+    expect(a.className).toContain('cn-link')
+    expect(a.getAttribute('rel')).toBe('noopener')
+    const css = readFileSync(join(__dirname, 'construit.css'), 'utf8')
+    expect(css.match(/\.cn-link \{([^}]*)\}/)?.[1] ?? '').toMatch(/padding-block:\s*12px/)
   })
 })

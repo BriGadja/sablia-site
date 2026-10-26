@@ -1,4 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { renderToString } from 'react-dom/server'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { mockIntersectionObserver, mockReducedMotion } from '@/lib/hooks/test-utils'
@@ -57,6 +59,15 @@ describe('expand', () => {
 })
 
 describe('count-up', () => {
+  it('gives the « Lire la suite » toggles a 44 px hit area without moving the layout', () => {
+    const css = readFileSync(join(__dirname, 'formations.css'), 'utf8')
+    const rule = css.match(/\.fo-more \{([^}]*)\}/)?.[1] ?? ''
+    expect(rule).toMatch(/padding-block:\s*14px/)
+    expect(rule).toMatch(/margin-top:\s*-2px/)
+    expect(rule).toMatch(/margin-bottom:\s*-14px/)
+    expect(css.match(/\.fo-school \{([^}]*)\}/)?.[1] ?? '').toMatch(/padding-block:\s*12px/)
+  })
+
   it('formats thousands with a narrow no-break space', () => {
     expect(formatFigure(1400)).toBe('1 400')
     expect(formatFigure(29)).toBe('29')
