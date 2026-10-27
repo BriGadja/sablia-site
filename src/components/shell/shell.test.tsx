@@ -79,7 +79,7 @@ describe('SiteHeader', () => {
 })
 
 describe('SiteFooter', () => {
-  it('lists the legal and resource links', () => {
+  it('lists the legal and resource links, Newsletter right after Ressources', () => {
     render(<SiteFooter />)
     const nav = screen.getByRole('navigation', { name: 'Pied de page' })
     const hrefs = Array.from(nav.querySelectorAll('a')).map((a) => [
@@ -89,6 +89,7 @@ describe('SiteFooter', () => {
     expect(hrefs).toEqual([
       ["L'offre", '/#offre'],
       ['Ressources', '/ressources'],
+      ['Newsletter', '/newsletter'],
       ['Vidéos', '/#videos'],
       ['Guide', '/guides/integrer-l-ia-dans-votre-entreprise'],
       ['Mentions légales', '/mentions-legales'],

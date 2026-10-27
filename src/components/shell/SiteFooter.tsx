@@ -6,6 +6,7 @@ import './site-footer.css'
 const LINKS = [
   { href: '/#offre', label: "L'offre" },
   { href: '/ressources', label: 'Ressources' },
+  { href: '/newsletter', label: 'Newsletter' },
   { href: '/#videos', label: 'Vidéos' },
   { href: '/guides/integrer-l-ia-dans-votre-entreprise', label: 'Guide' },
   { href: '/mentions-legales', label: 'Mentions légales' },

@@ -15,7 +15,7 @@ export default function PolitiqueConfidentialitePage() {
       folio="Confidentialité · RGPD"
       title="Politique de confidentialité"
       intro="Comment Sablia collecte, utilise et protège vos données personnelles. Conforme au Règlement général sur la protection des données (RGPD) et à la Loi Informatique et Libertés."
-      updated="Dernière mise à jour : 18/10/2026."
+      updated="Dernière mise à jour : 27/10/2026."
     >
       <LegalSection title="Données collectées via le formulaire Diagnostic">
         <p>
@@ -60,6 +60,32 @@ export default function PolitiqueConfidentialitePage() {
         </p>
       </LegalSection>
 
+      <LegalSection title="Newsletter">
+        <p>
+          Finalité : vous envoyer « L&apos;IA au travail », la lettre du mardi de Brice Gachadoat
+          (la vidéo de la semaine poussée plus loin).
+        </p>
+        <p>
+          Base légale : votre consentement, donné en cochant la case prévue sur un formulaire du
+          site, en cliquant le lien de confirmation reçu après une inscription sur la page
+          Newsletter, ou en cliquant le bouton d&apos;un mail d&apos;invitation.
+        </p>
+        <p>
+          Données : votre prénom, votre adresse email et les dates de votre inscription et de votre
+          désinscription. Aucun suivi d&apos;ouverture ni de clic n&apos;est fait sur la lettre.
+          Pour limiter les abus, une empreinte de l&apos;adresse IP accompagne une demande
+          d&apos;inscription tant qu&apos;elle n&apos;est pas confirmée.
+        </p>
+        <p>
+          Durée : jusqu&apos;à votre désinscription. Une demande d&apos;inscription non confirmée
+          est effacée sous 7 jours.
+        </p>
+        <p>
+          Désinscription : un lien dans chaque lettre. Vos autres droits s&apos;exercent en écrivant
+          à <a href={`mailto:${site.email}`}>{site.email}</a>.
+        </p>
+      </LegalSection>
+
       <LegalSection title="Hébergement et sous-traitants">
         <p>Les données transitent et sont stockées via les prestataires suivants :</p>
         <ul>
@@ -69,7 +95,9 @@ export default function PolitiqueConfidentialitePage() {
             Drive
           </li>
           <li>
-            <strong>Resend</strong> — envoi des emails de confirmation et des notifications internes
+            <strong>Resend</strong> — envoi des emails de confirmation, des notifications internes
+            et de la lettre du mardi (newsletter) ; Resend héberge ses données aux États-Unis, sous
+            clauses contractuelles types
           </li>
           <li>
             <strong>YouTube</strong> — lecture des vidéos, chargée uniquement après un clic sur la

@@ -8,8 +8,8 @@
     "hash": "sha256:85506803f0a95f3ac27bffbbf08731b5dbcbca5765d3d5895bc8d9e9c6ec4cf0"
   },
   "/politique-confidentialite": {
-    "lastmod": "2026-10-26",
-    "hash": "sha256:6bf5b814f48368fc1184e5d9427d4f31351bbda7464ef7870a91893cd9d7bdb9"
+    "lastmod": "2026-10-27",
+    "hash": "sha256:67f30c7cf17b223ad3ce2f9cdfac5f4249095ef6055b182a216036dde9fb7538"
   },
   "/cgv": {
     "lastmod": "2026-10-26",
@@ -58,5 +58,9 @@
   "/offres/compte-rendu-appel/excel-365": {
     "lastmod": "2026-10-26",
     "hash": "sha256:a9e1d10f0eee2e41fd0fcfa06efef6af4da26ba87b6edbb8056e75ab9fd1ce2e"
+  },
+  "/newsletter": {
+    "lastmod": "2026-10-27",
+    "hash": "sha256:c6b45d9acb97a0fd50898157e745c912b23528e18c23b03f22ff03bd23c64893"
   }
 }

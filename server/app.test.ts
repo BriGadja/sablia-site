@@ -37,6 +37,18 @@ describe('createApp', () => {
     err.mockRestore()
   })
 
+  it('POST /api/newsletter reaches the handler (handlers are mounted explicitly, never discovered)', async () => {
+    const r = await fetch(`${srv.url}/api/newsletter`, {
+      method: 'POST',
+      body: '{}',
+      headers: { 'content-type': 'application/json' },
+    })
+    // The handler's own refusal, not the adapter's 404 for an unmounted /api path.
+    expect(r.status).toBe(400)
+    expect((await r.json()).code).toBe('invalid_payload')
+    expect((await fetch(`${srv.url}/api/newsletter`)).status).toBe(405)
+  })
+
   it('never logs an API response body', async () => {
     const log = vi.spyOn(console, 'log').mockImplementation(() => {})
     await fetch(`${srv.url}/api/contact`, {
