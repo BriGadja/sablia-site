@@ -23,9 +23,11 @@ import { findPerson, patchLead, personState } from './_newsletter-person.js'
  * with a due date of the next business day (Paris), unticked is `ressource_seule` with none — the
  * Monday review and the J+14 metric skip those.
  *
- * A second box subscribes to the Tuesday letter (US-82, plan sablia-newsletter-resend): ticked and not
- * opposed, the OLDEST row of the person (`_newsletter-person.ts`) gets `newsletter_subscribed_at`; the
- * download row itself keeps the stage, owner and intention above. Unticked, the mail offers /newsletter.
+ * A second box subscribes to the Tuesday letter (US-82, plan sablia-newsletter-resend), as a FIRST
+ * subscription only: ticked by a person never subscribed, the OLDEST row of the person
+ * (`_newsletter-person.ts`) gets `newsletter_subscribed_at`; a person who LEFT gets the /newsletter link
+ * instead (a box never overrides a departure), an opposed one gets nothing. The download row itself
+ * keeps the stage, owner and intention above. Unticked, the mail offers /newsletter.
  *
  * Anti-spam is the honeypot plus a minimum delay of `api/contact.ts`, answering 204 BEFORE any I/O.
  */
@@ -437,8 +439,10 @@ async function sendMail(payload: MailPayload, key: string): Promise<void> {
 }
 
 /**
- * Box ticked: subscribe the person on their OLDEST row (the download row may be it), unless they
- * opposed. Never throws: the visitor gets their resource whatever happens here.
+ * Box ticked: a FIRST subscription is written on the person's OLDEST row (the download row may be
+ * it). A box never overrides a departure: a person who LEFT gets the page link instead (its own
+ * double opt-in), an opposed one gets nothing, a subscribed one needs no write. Never throws: the
+ * visitor gets their resource whatever happens here.
  */
 async function subscribeToLetter(
   value: RessourceRequest,
@@ -448,16 +452,15 @@ async function subscribeToLetter(
   if (!value.newsletter) return 'offer'
   try {
     const person = await findPerson(value.email, key)
-    if (personState(person) === 'opposed') return 'none'
+    const state = personState(person)
+    if (state === 'opposed') return 'none'
+    if (state === 'left') return 'offer'
+    if (state === 'subscribed') return 'subscribed'
     const oldest = person[0]
     if (!oldest) return 'offer'
     await patchLead(
       oldest.id,
-      {
-        newsletter_subscribed_at: now.toISOString(),
-        newsletter_unsubscribed_at: null,
-        newsletter_source: 'ressource',
-      },
+      { newsletter_subscribed_at: now.toISOString(), newsletter_source: 'ressource' },
       key,
     )
     return 'subscribed'

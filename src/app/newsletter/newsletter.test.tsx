@@ -7,7 +7,7 @@ import NewsletterPage, { metadata } from './page'
 /**
  * `/newsletter` (US-81, US-83): the static HTML carries the whole promise and the form; the token
  * links of the confirmation mail (`?c=`) and of the invitation (`?t=`) show a button and post NOTHING
- * on load — a mail scanner that opens the link subscribes nobody.
+ * on load: a mail scanner that opens the link subscribes nobody.
  */
 vi.mock('@/lib/analytics', () => ({ track: vi.fn() }))
 
@@ -50,7 +50,7 @@ afterEach(() => {
   window.history.replaceState(null, '', '/')
 })
 
-describe('/newsletter — the static HTML (SSR content rule)', () => {
+describe('/newsletter: the static HTML (SSR content rule)', () => {
   const t = text(renderToString(<NewsletterPage />))
 
   it('carries the title, the promise, the byline, the form and the consent line', () => {
@@ -74,12 +74,12 @@ describe('/newsletter — the static HTML (SSR content rule)', () => {
   it('declares its own canonical path and title', () => {
     expect(metadata.alternates?.canonical).toBe('/newsletter')
     expect(metadata.title).toEqual({
-      absolute: "L'IA au travail — la lettre du mardi de Brice Gachadoat",
+      absolute: "L'IA au travail · la lettre du mardi de Brice Gachadoat",
     })
   })
 })
 
-describe('/newsletter — the public form', () => {
+describe('/newsletter: the public form', () => {
   it('posts nothing on mount', async () => {
     const spy = stubFetch(200, { ok: true, state: 'pending' })
     await open()
@@ -141,7 +141,7 @@ describe('/newsletter — the public form', () => {
   })
 })
 
-describe('/newsletter — the token links', () => {
+describe('/newsletter: the token links', () => {
   it('jeton ?c= : a button, nothing posted on load, the token dropped from the address', async () => {
     const spy = stubFetch(200, { ok: true, state: 'subscribed', prenom: 'Léa' })
     await open(`?c=${TOKEN}`)

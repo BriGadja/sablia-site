@@ -13,8 +13,9 @@ import { site } from '@/lib/site'
  *   subscribed »; a bot answered 204 sees it too.
  * - `?c=<token>` (confirmation mail) or `?t=<token>` (invitation): a button. NOTHING is posted on load,
  *   so a mail scanner that opens the link subscribes nobody. The token is read with
- *   `window.location.search` in an effect (`useSearchParams` would need a Suspense boundary on a static
- *   page) and dropped from the address at once; Umami already ignores query strings (`analytics.ts`).
+ *   `window.location.search` in an effect (the Next search-params hook would need a Suspense boundary on
+ *   a static page) and dropped from the address at once; Umami already ignores query strings
+ *   (`analytics.ts`).
  *
  * Anti-spam is the honeypot plus the minimum delay of the other forms: no third-party script.
  */

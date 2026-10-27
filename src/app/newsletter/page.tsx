@@ -6,7 +6,7 @@ import '@/components/newsletter/newsletter.css'
 
 export const metadata = pageMetadata({
   path: '/newsletter',
-  title: "L'IA au travail — la lettre du mardi de Brice Gachadoat",
+  title: "L'IA au travail · la lettre du mardi de Brice Gachadoat",
   description:
     "Chaque mardi, la vidéo de la semaine poussée plus loin : le problème d'entreprise derrière, ce que dix minutes ne disent pas, et mon avis. Par Brice Gachadoat, Sablia.",
 })
@@ -42,7 +42,7 @@ function Envelope() {
 }
 
 /**
- * `/newsletter` — « L'IA au travail ». The form and the two token links of the letter (`?c=` from
+ * `/newsletter`: « L'IA au travail ». The form and the two token links of the letter (`?c=` from
  * the confirmation mail, `?t=` from the invitation) live in `NewsletterForm`; everything readable
  * here is in the static HTML (SSR content rule), the motion only stages it.
  */

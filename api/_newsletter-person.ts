@@ -4,8 +4,10 @@
  *
  * `sabcrm_leads.email` is not unique (one row per resource download, mixed case in base), so every
  * reader fetches all rows of the address, oldest first: the person is OPPOSED if any row carries
- * `opted_out_at`, SUBSCRIBED if any row's subscription is newer than its unsubscription, and every
- * write goes to the OLDEST row (the one whose `optout_token` the invitation carries).
+ * `opted_out_at`, SUBSCRIBED if any row's subscription is newer than its unsubscription, LEFT when not
+ * subscribed but some row carries an unsubscription, and every write goes to the OLDEST row (the one
+ * whose `optout_token` the invitation carries). Only a verified click (the `?c=` link, the invitation
+ * button) brings a person who LEFT back; a checkbox never does.
  *
  * The leading underscore keeps this file from being read as a handler, like `_found-via.ts`.
  */
@@ -35,7 +37,7 @@ export function likeValue(email: string): string {
   return encodeURIComponent(email.replace(/[\\*%_]/g, (c) => `\\${c}`))
 }
 
-export function personState(rows: PersonRow[]): 'opposed' | 'subscribed' | 'none' {
+export function personState(rows: PersonRow[]): 'opposed' | 'subscribed' | 'left' | 'none' {
   if (rows.some((r) => r.opted_out_at)) return 'opposed'
   const subscribed = rows.some(
     (r) =>
@@ -43,7 +45,8 @@ export function personState(rows: PersonRow[]): 'opposed' | 'subscribed' | 'none
       (r.newsletter_unsubscribed_at === null ||
         Date.parse(r.newsletter_subscribed_at) > Date.parse(r.newsletter_unsubscribed_at)),
   )
-  return subscribed ? 'subscribed' : 'none'
+  if (subscribed) return 'subscribed'
+  return rows.some((r) => r.newsletter_unsubscribed_at !== null) ? 'left' : 'none'
 }
 
 const headers = (key: string) => ({ apikey: key, Authorization: `Bearer ${key}` })

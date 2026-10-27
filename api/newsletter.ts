@@ -10,7 +10,7 @@ import {
 } from './_newsletter-person.js'
 
 /**
- * `POST /api/newsletter` — « L'IA au travail », the Tuesday letter (plan sablia-newsletter-resend,
+ * `POST /api/newsletter`: « L'IA au travail », the Tuesday letter (plan sablia-newsletter-resend,
  * US-81 and US-83). Three kinds of body, one per entry point of `/newsletter`:
  *
  * - `request` (the public form): a row in `site_newsletter_pending` and ONE confirmation mail. It
@@ -35,7 +35,7 @@ import {
  * nobody.
  */
 
-/** Public project ref — no secret, so it stays a constant instead of another env var. */
+/** Public project ref (no secret), so it stays a constant instead of another env var. */
 const SUPABASE_URL = 'https://qlxoitzdxjqhljjoeqoq.supabase.co'
 const LEADS_ENDPOINT = `${SUPABASE_URL}/rest/v1/sabcrm_leads`
 const PENDING_ENDPOINT = `${SUPABASE_URL}/rest/v1/site_newsletter_pending`
@@ -246,7 +246,11 @@ async function handleRequest(
   const dayStart = new Date(
     Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
   ).toISOString()
-  const ipHash = createHash('sha256').update(ip).digest('hex')
+  // Salted with the UTC day: the per-day limit still matches, and a stored fingerprint cannot be
+  // reversed with one table of every IPv4 address.
+  const ipHash = createHash('sha256')
+    .update(`${dayStart.slice(0, 10)}|${ip}`)
+    .digest('hex')
   const fromIp = await rest<{ token: string }>(
     `${PENDING_ENDPOINT}?select=token&ip_hash=eq.${ipHash}&created_at=gte.${enc(dayStart)}&limit=${PER_IP_DAILY}`,
     key,
@@ -270,8 +274,10 @@ async function handleRequest(
   )
   if (recent.length > 0) return pendingAnswer()
 
-  // Subscribed or opposed: the same answer as a new address, and nothing is written or sent.
-  if (personState(await findPerson(value.email, key)) !== 'none') return pendingAnswer()
+  // Subscribed or opposed: the same answer as a new address, and nothing is written or sent. A person
+  // who LEFT may come back here: the confirmation click is the verified consent.
+  const state = personState(await findPerson(value.email, key))
+  if (state === 'subscribed' || state === 'opposed') return pendingAnswer()
 
   const [row] = await rest<{ token: string }>(PENDING_ENDPOINT, key, {
     method: 'POST',

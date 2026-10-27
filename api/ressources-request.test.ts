@@ -750,7 +750,6 @@ describe('the newsletter box (US-82, US-84)', () => {
     expect(new URL(patches[0]?.url ?? '').searchParams.get('id')).toBe('eq.lead-old')
     expect(patches[0]?.body).toEqual({
       newsletter_subscribed_at: NOW.toISOString(),
-      newsletter_unsubscribed_at: null,
       newsletter_source: 'ressource',
     })
     const inserted = calls.find((c) => c.method === 'POST' && c.url.includes('sabcrm_leads'))
@@ -781,6 +780,40 @@ describe('the newsletter box (US-82, US-84)', () => {
     const mail = visitorMail(calls)
     expect(mail.text).not.toContain('lettre du mardi')
     expect(mail.html).not.toContain('lettre du mardi')
+  })
+
+  it('newsletter: ancien désinscrit, the box never overrides a departure: zero PATCH, the mail carries the page link', async () => {
+    const calls = stub({
+      person: [
+        person('lead-old', {
+          newsletter_subscribed_at: '2026-10-01T08:00:00Z',
+          newsletter_unsubscribed_at: '2026-10-10T08:00:00Z',
+        }),
+        person('lead-new'),
+      ],
+    })
+    const response = await send({ newsletter: true })
+    expect(response.status).toBe(200)
+    expect(calls.filter((c) => c.method === 'PATCH')).toHaveLength(0)
+    const mail = visitorMail(calls)
+    expect(mail.text).toContain('Recevoir la lettre du mardi : https://sablia.io/newsletter')
+    expect(mail.html).toContain('<a href="https://sablia.io/newsletter">')
+    expect(mail.text).not.toContain('Vous recevrez la lettre du mardi')
+  })
+
+  it('newsletter: already subscribed, ticked again: no write, the mail says the letter is coming', async () => {
+    const calls = stub({
+      person: [
+        person('lead-old', {
+          newsletter_subscribed_at: '2026-10-12T08:00:00Z',
+          newsletter_unsubscribed_at: '2026-10-10T08:00:00Z',
+        }),
+        person('lead-new'),
+      ],
+    })
+    await send({ newsletter: true })
+    expect(calls.filter((c) => c.method === 'PATCH')).toHaveLength(0)
+    expect(visitorMail(calls).text).toContain('Vous recevrez la lettre du mardi')
   })
 
   it('newsletter: unticked → no lookup, no newsletter write', async () => {

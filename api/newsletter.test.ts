@@ -20,7 +20,8 @@ const RESEND_URL = 'https://api.resend.com/emails'
 const NOW = new Date('2026-10-29T10:00:00.000Z')
 const NOW_ISO = NOW.toISOString()
 const IP = '203.0.113.7'
-const IP_HASH = createHash('sha256').update(IP).digest('hex')
+/** Salted with the UTC day: the same IP gives another fingerprint tomorrow, the per-day limit still works. */
+const IP_HASH = createHash('sha256').update(`2026-10-29|${IP}`).digest('hex')
 const TOKEN = '6f1c2a9e-4b7d-4c1e-9a3f-2d5e8b7c1a40'
 
 const ago = (ms: number) => new Date(NOW.getTime() - ms).toISOString()
@@ -239,7 +240,7 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 
-describe('POST /api/newsletter — request (public form)', () => {
+describe('POST /api/newsletter: request (public form)', () => {
   it('demande : purge, then the pending INSERT, then Resend, in that order; the CRM is never written', async () => {
     const r = await post(REQUEST)
     expect(r.status).toBe(200)
@@ -263,6 +264,9 @@ describe('POST /api/newsletter — request (public form)', () => {
       ip_hash: IP_HASH,
     })
     expect(JSON.stringify(fake.pending)).not.toContain(IP)
+    expect(JSON.stringify(fake.pending)).not.toContain(
+      createHash('sha256').update(IP).digest('hex'),
+    )
 
     const [mail] = fake.mails()
     const token = String(fake.pending[0]?.token)
@@ -487,7 +491,7 @@ describe('POST /api/newsletter — request (public form)', () => {
   })
 })
 
-describe('POST /api/newsletter — confirm (?c= link)', () => {
+describe('POST /api/newsletter: confirm (?c= link)', () => {
   it('confirme : a new person → one INSERT newsletter_seule with the C1 fields, then the pending row keeps only the proof', async () => {
     fake.pending.push(pendingRow({}))
     const r = await post({ kind: 'confirm', token: TOKEN })
@@ -647,7 +651,7 @@ describe('POST /api/newsletter — confirm (?c= link)', () => {
   })
 })
 
-describe('POST /api/newsletter — invite (?t= link of the invitation)', () => {
+describe('POST /api/newsletter: invite (?t= link of the invitation)', () => {
   const OLD_TOKEN = '33333333-0000-4000-8000-000000000001'
   const YOUNG_TOKEN = '33333333-0000-4000-8000-000000000002'
 
