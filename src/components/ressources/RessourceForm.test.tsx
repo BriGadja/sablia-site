@@ -182,3 +182,53 @@ describe('RessourceForm: the outcome is reported (consent only, code only)', () 
     })
   })
 })
+
+describe('RessourceForm: the newsletter box (US-82, US-84)', () => {
+  const BOX = "Recevoir aussi la lettre du mardi (L'IA au travail)"
+
+  it('newsletter: a second box, never ticked by default, sent as newsletter: false', async () => {
+    const spy = stubFetch()
+    const user = userEvent.setup()
+    render(<RessourceForm slug="demo-of1" titre="le template" />)
+    const box = screen.getByLabelText(BOX) as HTMLInputElement
+    expect(box.type).toBe('checkbox')
+    expect(box.name).toBe('newsletter')
+    expect(box.id).toBe('ressource-newsletter')
+    expect(box.checked).toBe(false)
+    await fillIdentity(user)
+    await user.click(screen.getByRole('button', { name: /Recevoir le template/ }))
+    expect(sentBody(spy)).toMatchObject({ newsletter: false })
+  })
+
+  it('newsletter: ticked, the payload says newsletter: true', async () => {
+    const spy = stubFetch()
+    const user = userEvent.setup()
+    render(<RessourceForm slug="demo-of1" titre="le template" />)
+    await fillIdentity(user)
+    await user.click(screen.getByLabelText(BOX))
+    await user.click(screen.getByRole('button', { name: /Recevoir le template/ }))
+    expect(sentBody(spy)).toMatchObject({ newsletter: true })
+  })
+
+  it('lettre du mardi: box ticked, the success screen says so and offers no link', async () => {
+    stubFetch()
+    const user = userEvent.setup()
+    const { container } = render(<RessourceForm slug="demo-of1" titre="le template" />)
+    await fillIdentity(user)
+    await user.click(screen.getByLabelText(BOX))
+    await user.click(screen.getByRole('button', { name: /Recevoir le template/ }))
+    expect(await screen.findByText('Vous recevrez la lettre du mardi.')).toBeTruthy()
+    expect(container.querySelector('a[href="/newsletter"]')).toBeNull()
+  })
+
+  it('lettre du mardi: box unticked, the success screen offers /newsletter', async () => {
+    stubFetch()
+    const user = userEvent.setup()
+    render(<RessourceForm slug="demo-of1" titre="le template" />)
+    await fillIdentity(user)
+    await user.click(screen.getByRole('button', { name: /Recevoir le template/ }))
+    const link = await screen.findByRole('link', { name: 'Recevoir la lettre du mardi' })
+    expect(link.getAttribute('href')).toBe('/newsletter')
+    expect(screen.queryByText('Vous recevrez la lettre du mardi.')).toBeNull()
+  })
+})

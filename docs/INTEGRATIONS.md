@@ -20,8 +20,9 @@
 | Supabase (PostgREST) | REST insert with the service role, from the Vercel Function | `api/contact.ts` | `SUPABASE_SERVICE_ROLE_KEY` | **Live since 2026-09-18** — runtime, `sabcrm_leads` |
 | Supabase (PostgREST, anon) | REST read, RLS `published=true` only, from the client bundle | `client/src/lib/contenu.ts` | `VITE_SUPABASE_ANON_KEY` | **Live since 2026-09-22** — runtime, `contenu_ressources` |
 | Resend + Supabase (PostgREST, service role) | REST read + insert + mail from the Vercel Function | `api/ressources-request.ts` | `RESEND_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY` | **Live since 2026-09-22** — runtime, `contenu_ressources` read, `sabcrm_leads` insert |
+| Resend + Supabase (PostgREST, service role) | REST read/insert/update + one confirmation mail, from the site's Express process | `api/newsletter.ts`, `api/_newsletter-person.ts` | `RESEND_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (the same two, no new secret) | Branch `newsletter` (2026-10-27) — `site_newsletter_pending` read/insert/update/delete, `sabcrm_leads` read/insert/update |
 
-Lead capture has **three** paths since 2026-09-22: a Calendly booking, the contact form at `sablia.io/#contact`, and the resource-request form at `sablia.io/ressources/{slug}` (see below). There is still **no n8n webhook** wired in the site — every form talks to Resend and Supabase directly from its own Vercel Function.
+Lead capture has **four** paths: a Calendly booking, the contact form at `sablia.io/#contact`, the resource-request form at `sablia.io/ressources/{slug}` (since 2026-09-22), and the newsletter page `sablia.io/newsletter` (branch `newsletter`, 2026-10-27; a lead row only after the confirmation click, see below). There is still **no n8n webhook** wired in the site — every form talks to Resend and Supabase directly from its own handler.
 
 ---
 
@@ -60,7 +61,8 @@ table prefix exempt from the `site_` convention (see `CLAUDE.md` § Database).
 | Detail read | `fetchRessource(slug)` — same table, `select` adds `corps_md,fichiers`, filtered on `slug=eq.{slug}` |
 | Files | Public storage bucket `contenu-ressources`; `fileUrl(path)` builds `{SUPABASE_URL}/storage/v1/object/public/contenu-ressources/{path}` — URLs are public and unguessable, by decision (D8, "on donne un maximum"): the form captures the lead, it does not lock the file |
 | Anon key behaviour | `anonKey()` returns `null` when `VITE_SUPABASE_ANON_KEY` is absent from the build, or on any fetch failure/timeout (6 s) — never an exception. Pages render an explicit "unavailable" state |
-| Request endpoint | `POST /api/ressources-request` (model: `api/contact.ts`) — zod payload `{ prenom, email, slug, contact, telephone?, website, elapsedMs }`; honeypot / < 3 s → `204` before any I/O |
+| Request endpoint | `POST /api/ressources-request` (model: `api/contact.ts`) — zod payload `{ prenom, email, slug, contact, newsletter?, telephone?, website, elapsedMs }`; honeypot / < 3 s → `204` before any I/O |
+| Newsletter box (US-82, 2026-10-27) | Second box « Recevoir aussi la lettre du mardi (L'IA au travail) », `#ressource-newsletter`, never pre-ticked; absent from an older page = unticked. Ticked: after the insert/dedup, `findPerson(email)` (`api/_newsletter-person.ts`); not opposed → PATCH of the person's OLDEST row `{newsletter_subscribed_at, newsletter_unsubscribed_at: null, newsletter_source: 'ressource'}` (the download row may be it); opposed → nothing. Best effort: a failed lookup or write never costs the visitor the resource. The mail says « Vous recevrez la lettre du mardi : … » (written), offers « Recevoir la lettre du mardi : https://sablia.io/newsletter » (unticked or not written), or says nothing (opposed); the success screen says « Vous recevrez la lettre du mardi. » ticked, links `/newsletter` unticked |
 | Phone (2026-10-12) | The form shows « Téléphone (facultatif) » only once the box is ticked; email stays required. `normalizePhone()` stores E.164 like the rest of `sabcrm_leads.phone` (`06…`, `+33 (0)6…`, `0033…` → `+33` + 9 digits; other `+`/`00` numbers kept at 8-15 digits); unreadable → `400` « Numéro de téléphone invalide ». A number sent with the box unticked is dropped. A payload without `telephone` (older cached page) is still accepted |
 | CRM row | PostgREST insert into `sabcrm_leads`, service role, `source='contenu'`, `phone` (E.164 or null), `intention` (`veut_un_echange` ticked, `ressource_seule` unticked), `relance_date` (next business day, Paris, Sat/Sun skipped, holidays not; null unticked), `raw={origin:'sablia.io/ressources', slug, contact}`, `project_details='Ressource : {titre}'`, `updated_by='sablia-site/api/ressources-request'` |
 | Checkbox → stage/owner | box **unticked** (default) → `stage='nouveau'`, `owner='Brice'`, `next_action='Aucun contact (téléchargement de ressource)'`. Box **ticked** → `stage='a_contacter'`, `owner='Raphael'` (no accent — matches the 51 existing rows), `next_action='Rappeler au {06 …} : a demandé à être contacté depuis /ressources/{slug}'` with a phone, `'Écrire (aucun numéro laissé) : …'` without |
@@ -70,6 +72,24 @@ table prefix exempt from the `site_` convention (see `CLAUDE.md` § Database).
 | No sequence | nothing on this path writes to `sabcrm_lead_sequences` — same rule as the contact form |
 | Response | `200 { ok, files: [{nom, url}], lead: boolean }` — the file links are returned even though they were also mailed, so the visitor sees them immediately |
 | Tests | `client/src/lib/contenu.test.ts` (fetch stubbed: list, detail, 404, timeout, missing key) · `api/ressources-request.test.ts` (`decide`, `leadRow` ticked/unticked, dedup, honeypot/too-fast 204, invalid payload, unknown/unpublished slug 404, missing env 500, mail failure 502, nominal 200) |
+
+---
+
+## Newsletter — `/newsletter` and `POST /api/newsletter` (branch `newsletter`, 2026-10-27)
+
+« L'IA au travail », the Tuesday letter (plan `sablia-newsletter-resend`, US-81 and US-83). The site only collects consent and writes the CRM; the hub's `scripts/newsletter.py` syncs Resend Contacts and sends the letter.
+
+| Aspect | Detail |
+|---|---|
+| Page | `src/app/newsletter/page.tsx` (static) + `src/components/newsletter/NewsletterForm.tsx` (client). The query `?c=` (confirmation mail) or `?t=` (invitation) is read with `window.location.search` in an effect, then dropped with `history.replaceState`; the page shows a button and posts NOTHING on load (a mail scanner that opens the link subscribes nobody). Umami already ignores query strings |
+| Endpoint | `POST /api/newsletter`, zod discriminated union on `kind`: `request {prenom, email, foundVia?, website, elapsedMs}`, `confirm {token}`, `invite {token}`. Honeypot / < 3 s → `204` before any I/O; a token that is not a uuid → `404` without I/O |
+| `request` | Never writes `sabcrm_leads` (every insert there pages the sales group). Purges unconfirmed `site_newsletter_pending` rows older than 7 days, then: 3 rows per `ip_hash` (sha256 of the last `X-Forwarded-For` entry, set by Caddy) per UTC day and 30 rows per UTC day → `429 {code:'busy'}` + `Retry-After` (the ceiling also logs `newsletter: daily ceiling reached`); a pending row for the address younger than 1 h, or a person already subscribed or opposed → `200 {state:'pending'}` with no write and no mail (the same answer as a new address); else INSERT the pending row, then ONE mail. Mail failure → the row is deleted, `502 {code:'mail_failed'}` |
+| Confirmation mail | Resend `POST /emails`, `Brice Gachadoat <brice@send.sablia.io>`, reply-to `brice@sablia.io`, subject « Confirmez votre inscription à L'IA au travail », text + html, link `https://sablia.io/newsletter?c={token}`, header `Idempotency-Key: newsletter-confirm-{token}` (a `409` counts as sent) |
+| `confirm` | Pending row by token: none, or unconfirmed and older than 7 days → `404 {code:'unknown_token'}`; already confirmed → `200 {state:'subscribed'}`; person opposed → `410 {code:'opposed'}`, no write. Then the CLAIM (`PATCH …?token=eq.X&confirmed_at=is.null`, representation): no row back = a concurrent click won → `200`. Person exists → PATCH of the OLDEST row (`newsletter_requested_at`, `newsletter_subscribed_at`, `newsletter_unsubscribed_at: null`, `newsletter_source: 'site_form'`; stage, owner, intention untouched); none → INSERT `source='newsletter'`, `intention='newsletter_seule'`, `stage='nouveau'`, owner Brice. A failed lead write releases the claim (`500 {code:'write_failed'}`, the link works again). Finally the pending row keeps only `token`, `created_at`, `confirmed_at`, `lead_id` (email, prénom, ip_hash nulled): the proof of the double opt-in. `200 {state:'subscribed', prenom}` |
+| `invite` | The token is a lead's `optout_token` (a bearer secret: whoever holds the mail can subscribe or opt out that address, nobody else's). Row by token: none → `404`; person opposed → `410`; else PATCH of the person's OLDEST row `{newsletter_subscribed_at, newsletter_unsubscribed_at: null, newsletter_source: 'invitation'}`, no insert. `200 {state:'subscribed'}` |
+| A person | `lower(email)` across `sabcrm_leads` rows (`api/_newsletter-person.ts`): `email=ilike.<escaped>` then exact lowercase matches, oldest first; opposed if any row has `opted_out_at`; subscribed if any row's subscription is newer than its unsubscription |
+| Not here | Nothing on this path writes Resend Contacts or opens a sequence |
+| Tests | `api/newsletter.test.ts` (in-memory PostgREST behind a stubbed `fetch`, 26 cases) · `server/app.test.ts` (mounted) · `src/app/newsletter/newsletter.test.tsx` (SSR text, metadata, token modes) |
 
 ---
 
@@ -125,8 +145,8 @@ Account IDs and conversion labels are documented in [`GOOGLE_ADS.md`](./GOOGLE_A
 | `VITE_GA4_MEASUREMENT_ID` | — | GA4 measurement ID — declared but unused (see above) |
 | `VITE_GADS_CONVERSION_ID` | — | Google Ads conversion ID — declared but unused (see above) |
 | `VITE_GADS_LABEL_CONTACT` | — | Ads conversion label — declared but unused (see above) |
-| `RESEND_API_KEY` | Yes (function) | Resend key for `api/contact.ts`. `/etc/sablia-site/*.env` (600) |
-| `SUPABASE_SERVICE_ROLE_KEY` | Yes (function) | Service-role key for the `sabcrm_leads` insert. Same storage. RLS on that table has zero policies, so this is the only write path |
+| `RESEND_API_KEY` | Yes (function) | Resend key for `api/contact.ts`, `api/ressources-request.ts` and `api/newsletter.ts` (send-only is enough). `/etc/sablia-site/*.env` (600) |
+| `SUPABASE_SERVICE_ROLE_KEY` | Yes (function) | Service-role key for `sabcrm_leads` and `site_newsletter_pending`. Same storage. RLS on both tables has zero policies, so this is the only write path |
 | `VITE_SUPABASE_ANON_KEY` | Yes (client) | Anon key for `client/src/lib/contenu.ts`, ships in the bundle by design — RLS on `contenu_ressources` exposes only `published=true` rows. Vercel project settings, plain, Preview + Production (T33) |
 
 ---

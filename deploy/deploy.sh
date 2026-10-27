@@ -135,6 +135,8 @@ smoke() { # <release dir> <release id>: the candidate on a scratch port, no secr
     [ "$code" = 404 ] || { log "smoke: unknown path answered $code, expected 404"; ok=1; }
     code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "$b/api/contact")"
     [ "$code" = 405 ] || { log "smoke: GET /api/contact answered $code, expected 405"; ok=1; }
+    code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "$b/api/newsletter")"
+    [ "$code" = 405 ] || { log "smoke: GET /api/newsletter answered $code, expected 405"; ok=1; }
     code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 5 "$b/api/nope")"
     [ "$code" = 404 ] || { log "smoke: GET /api/nope answered $code, expected 404"; ok=1; }
   fi

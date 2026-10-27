@@ -1,5 +1,6 @@
 import express, { type Express, type NextFunction, type Request, type Response } from 'express'
 import contact from '../api/contact'
+import newsletter from '../api/newsletter'
 import ressourcesRequest from '../api/ressources-request'
 import { type FetchHandler, mountApi } from './api-adapter'
 import { mountHealthz } from './healthz'
@@ -10,7 +11,7 @@ export interface AppOptions {
   distPath: string
   releaseFile: string
   env?: NodeJS.ProcessEnv
-  /** Defaults to the two Vercel-style handlers in api/. */
+  /** Defaults to the three Fetch handlers in api/. */
   apiRoutes?: Record<string, FetchHandler>
   /** Mounted after /healthz and before /api; tests use it to throw on purpose. */
   extraRoutes?: (app: Express) => void
@@ -20,6 +21,7 @@ export interface AppOptions {
 
 const DEFAULT_API: Record<string, FetchHandler> = {
   '/api/contact': contact,
+  '/api/newsletter': newsletter,
   '/api/ressources-request': ressourcesRequest,
 }
 

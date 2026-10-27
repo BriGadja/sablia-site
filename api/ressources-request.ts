@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { type FoundVia, FoundViaField, namesFoundVia, withFoundVia } from './_found-via.js'
+import { findPerson, patchLead, personState } from './_newsletter-person.js'
 
 /**
  * `POST /api/ressources-request` — the download form of `/ressources/{slug}` (NS-19, decision D7).
@@ -22,6 +23,10 @@ import { type FoundVia, FoundViaField, namesFoundVia, withFoundVia } from './_fo
  * with a due date of the next business day (Paris), unticked is `ressource_seule` with none — the
  * Monday review and the J+14 metric skip those.
  *
+ * A second box subscribes to the Tuesday letter (US-82, plan sablia-newsletter-resend): ticked and not
+ * opposed, the OLDEST row of the person (`_newsletter-person.ts`) gets `newsletter_subscribed_at`; the
+ * download row itself keeps the stage, owner and intention above. Unticked, the mail offers /newsletter.
+ *
  * Anti-spam is the honeypot plus a minimum delay of `api/contact.ts`, answering 204 BEFORE any I/O.
  */
 
@@ -34,6 +39,7 @@ const RESEND_ENDPOINT = 'https://api.resend.com/emails'
 const INTERNAL_RECIPIENT = 'brice@sablia.io'
 const SENDER = 'Sablia <site@send.sablia.io>'
 const BOOKING_URL = 'https://calendly.com/brice-gachadoat/30min'
+const NEWSLETTER_URL = 'https://sablia.io/newsletter'
 const MIN_ELAPSED_MS = 3000
 /** Same address, source, resource and contact flag, inside this window: a retry, not a second request. */
 const DEDUP_WINDOW_MS = 10 * 60 * 1000
@@ -70,6 +76,8 @@ const RequestSchema = z
       .trim()
       .regex(/^[a-z0-9-]{3,80}$/, 'slug invalide'),
     contact: z.boolean(),
+    /** Absent from a page built before the box existed: unticked. */
+    newsletter: z.boolean().optional().default(false),
     telephone: z.string().trim().max(40).optional().default(''),
     foundVia: FoundViaField,
     website: z.string().max(200).optional().default(''),
@@ -86,6 +94,13 @@ const RequestSchema = z
   }))
 
 export type RessourceRequest = z.infer<typeof RequestSchema>
+
+/**
+ * What the visitor mail says about the letter: `subscribed` (box ticked and written), `offer` (box
+ * unticked, or the write did not happen: the link lets them do it themselves), `none` (opposed: the
+ * mail does not mention the letter at all).
+ */
+export type NewsletterLine = 'subscribed' | 'offer' | 'none'
 
 export type Decision =
   | { kind: 'invalid'; error: string; code: 'invalid_payload' }
@@ -235,8 +250,18 @@ function contactLine(value: RessourceRequest): string | null {
     : 'Vous avez demandé à être contacté : on vous répond par mail sous 24 h ouvrées.'
 }
 
-export function mailPayload(value: RessourceRequest, ressource: RessourceRow): MailPayload {
+export function mailPayload(
+  value: RessourceRequest,
+  ressource: RessourceRow,
+  newsletter: NewsletterLine = 'offer',
+): MailPayload {
   const promise = contactLine(value)
+  const letter =
+    newsletter === 'subscribed'
+      ? 'Vous recevrez la lettre du mardi : la vidéo de la semaine poussée plus loin.'
+      : newsletter === 'offer'
+        ? `Recevoir la lettre du mardi : ${NEWSLETTER_URL}`
+        : null
   const text = [
     `Bonjour ${value.prenom},`,
     '',
@@ -247,6 +272,7 @@ export function mailPayload(value: RessourceRequest, ressource: RessourceRow): M
       ? [`La vidéo : https://www.youtube.com/watch?v=${ressource.youtube_id}`, '']
       : []),
     ...(promise ? [promise, ''] : []),
+    ...(letter ? [letter, ''] : []),
     `Voir si ça marche chez vous, 30 min : ${BOOKING_URL}`,
     '',
     'Sablia',
@@ -263,6 +289,10 @@ export function mailPayload(value: RessourceRequest, ressource: RessourceRow): M
       ? `<p>La vidéo : <a href="https://www.youtube.com/watch?v=${encodeURIComponent(ressource.youtube_id)}">la regarder sur YouTube</a></p>`
       : '',
     promise ? `<p>${escapeHtml(promise)}</p>` : '',
+    newsletter === 'subscribed' && letter ? `<p>${escapeHtml(letter)}</p>` : '',
+    newsletter === 'offer'
+      ? `<p>Recevoir la lettre du mardi : <a href="${NEWSLETTER_URL}">${NEWSLETTER_URL}</a></p>`
+      : '',
     `<p>Voir si ça marche chez vous, 30 min : <a href="${BOOKING_URL}">réserver un créneau</a></p>`,
     '<p>Sablia</p>',
   ].join('')
@@ -406,6 +436,37 @@ async function sendMail(payload: MailPayload, key: string): Promise<void> {
   if (!response.ok) throw new Error(`resend ${response.status}`)
 }
 
+/**
+ * Box ticked: subscribe the person on their OLDEST row (the download row may be it), unless they
+ * opposed. Never throws: the visitor gets their resource whatever happens here.
+ */
+async function subscribeToLetter(
+  value: RessourceRequest,
+  key: string,
+  now = new Date(),
+): Promise<NewsletterLine> {
+  if (!value.newsletter) return 'offer'
+  try {
+    const person = await findPerson(value.email, key)
+    if (personState(person) === 'opposed') return 'none'
+    const oldest = person[0]
+    if (!oldest) return 'offer'
+    await patchLead(
+      oldest.id,
+      {
+        newsletter_subscribed_at: now.toISOString(),
+        newsletter_unsubscribed_at: null,
+        newsletter_source: 'ressource',
+      },
+      key,
+    )
+    return 'subscribed'
+  } catch (error) {
+    console.error('[ressources] newsletter write failed', detail(error))
+    return 'offer'
+  }
+}
+
 const jsonResponse = (body: unknown, status: number) =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } })
 
@@ -453,8 +514,10 @@ export default {
         (await findRecentLead(value.email, value.slug, value.contact, serviceKey)) ??
         (await insertLead(leadRow(value, ressource), serviceKey))
 
+      const newsletter = await subscribeToLetter(value, serviceKey)
+
       try {
-        await sendMail(mailPayload(value, ressource), resendKey)
+        await sendMail(mailPayload(value, ressource, newsletter), resendKey)
       } catch (error) {
         console.error('[ressources] mail failed', detail(error))
         return jsonResponse({ error: 'Envoi impossible', code: 'mail_failed' }, 502)

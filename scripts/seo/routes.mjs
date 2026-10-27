@@ -124,6 +124,13 @@ export const PAGE_ROUTES = [
     priority: 0.8,
   },
   {
+    path: '/newsletter',
+    sources: [`${A}/newsletter/`, 'src/components/newsletter/'],
+    indexable: true,
+    changefreq: 'monthly',
+    priority: 0.6,
+  },
+  {
     // Built (the page emits noindex) but kept out of the sitemap.
     path: '/thank-you',
     sources: [`${A}/thank-you/`, 'src/components/legal/', 'src/content/legal/'],

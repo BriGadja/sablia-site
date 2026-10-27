@@ -674,3 +674,150 @@ describe('found_via (contract C1)', () => {
     ])
   })
 })
+
+describe('the newsletter box (US-82, US-84)', () => {
+  const NOW = new Date('2026-10-29T10:00:00.000Z')
+
+  interface Rows {
+    person: Record<string, unknown>[]
+  }
+
+  /** Resource found, no recent lead, insert → lead-new, person lookup → `rows.person`, PATCH → one row. */
+  function stub(rows: Rows, opts: { lookupFails?: boolean } = {}) {
+    const calls: { url: string; method: string; body: unknown }[] = []
+    vi.stubGlobal('fetch', async (url: string, init?: RequestInit) => {
+      const method = (init?.method ?? 'GET').toUpperCase()
+      calls.push({
+        url,
+        method,
+        body: typeof init?.body === 'string' ? JSON.parse(init.body) : undefined,
+      })
+      if (url.includes('contenu_ressources')) return ok([RESSOURCE])
+      if (url.includes('sabcrm_leads') && url.includes('email=ilike.')) {
+        return opts.lookupFails ? new Response('boom', { status: 500 }) : ok(rows.person)
+      }
+      if (url.includes('sabcrm_leads') && method === 'GET') return ok([])
+      if (url.includes('sabcrm_leads') && method === 'POST') return ok([{ id: 'lead-new' }])
+      if (url.includes('sabcrm_leads') && method === 'PATCH') return ok([{ id: 'patched' }])
+      return ok({ id: 'mail-1' })
+    })
+    return calls
+  }
+
+  const person = (id: string, over: Record<string, unknown> = {}) => ({
+    id,
+    email: 'camille@exemple.fr',
+    full_name: 'Camille',
+    optout_token: `tok-${id}`,
+    opted_out_at: null,
+    archived_at: null,
+    newsletter_subscribed_at: null,
+    newsletter_unsubscribed_at: null,
+    ...over,
+  })
+
+  const visitorMail = (calls: ReturnType<typeof stub>) =>
+    calls.find((c) => c.url.includes('resend.com'))?.body as { text: string; html: string }
+
+  const send = async (over: Record<string, unknown>) => {
+    vi.stubEnv('RESEND_API_KEY', 'rk')
+    vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'sk')
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(NOW)
+    try {
+      return await handler.fetch(post(payload(over)))
+    } finally {
+      vi.useRealTimers()
+    }
+  }
+
+  it('newsletter: absent from an older page, it reads as unticked', () => {
+    expect(accepted().newsletter).toBe(false)
+    expect(decide(payload({ newsletter: 'oui' })).kind).toBe('invalid')
+  })
+
+  it('newsletter: ticked → PATCH of the OLDEST row of the person, the download row keeps US-7/US-52', async () => {
+    const calls = stub({
+      person: [person('lead-old', { email: 'CAMILLE@Exemple.fr' }), person('lead-new')],
+    })
+    const response = await send({ newsletter: true, contact: false })
+    expect(response.status).toBe(200)
+
+    const lookup = calls.find((c) => c.url.includes('email=ilike.'))
+    expect(lookup?.url).toContain('order=created_at.asc')
+    const patches = calls.filter((c) => c.method === 'PATCH')
+    expect(patches).toHaveLength(1)
+    expect(new URL(patches[0]?.url ?? '').searchParams.get('id')).toBe('eq.lead-old')
+    expect(patches[0]?.body).toEqual({
+      newsletter_subscribed_at: NOW.toISOString(),
+      newsletter_unsubscribed_at: null,
+      newsletter_source: 'ressource',
+    })
+    const inserted = calls.find((c) => c.method === 'POST' && c.url.includes('sabcrm_leads'))
+    expect(inserted?.body).toMatchObject({
+      stage: 'nouveau',
+      owner: 'Brice',
+      intention: 'ressource_seule',
+    })
+    expect(Object.keys(inserted?.body as object).some((k) => k.startsWith('newsletter'))).toBe(
+      false,
+    )
+  })
+
+  it('newsletter: ticked, a first-time visitor → the row this download created is the one patched', async () => {
+    const calls = stub({ person: [person('lead-new')] })
+    await send({ newsletter: true })
+    const patch = calls.find((c) => c.method === 'PATCH')
+    expect(new URL(patch?.url ?? '').searchParams.get('id')).toBe('eq.lead-new')
+  })
+
+  it('newsletter: ticked by a person who opposed → no newsletter write, and the mail says nothing of the letter', async () => {
+    const calls = stub({
+      person: [person('lead-old'), person('lead-new', { opted_out_at: '2026-09-02T09:00:00Z' })],
+    })
+    const response = await send({ newsletter: true })
+    expect(response.status).toBe(200)
+    expect(calls.filter((c) => c.method === 'PATCH')).toHaveLength(0)
+    const mail = visitorMail(calls)
+    expect(mail.text).not.toContain('lettre du mardi')
+    expect(mail.html).not.toContain('lettre du mardi')
+  })
+
+  it('newsletter: unticked → no lookup, no newsletter write', async () => {
+    const calls = stub({ person: [person('lead-new')] })
+    await send({ newsletter: false })
+    expect(calls.filter((c) => c.url.includes('email=ilike.'))).toHaveLength(0)
+    expect(calls.filter((c) => c.method === 'PATCH')).toHaveLength(0)
+  })
+
+  it('lettre du mardi: ticked → the mail (text AND html) says the letter is coming', async () => {
+    const calls = stub({ person: [person('lead-new')] })
+    await send({ newsletter: true })
+    const mail = visitorMail(calls)
+    const line = 'Vous recevrez la lettre du mardi : la vidéo de la semaine poussée plus loin.'
+    expect(mail.text).toContain(line)
+    expect(mail.html).toContain(line)
+    expect(mail.text).not.toContain('https://sablia.io/newsletter')
+  })
+
+  it('lettre du mardi: unticked → the mail (text AND html) offers https://sablia.io/newsletter', async () => {
+    const calls = stub({ person: [] })
+    await send({ newsletter: false })
+    const mail = visitorMail(calls)
+    expect(mail.text).toContain('Recevoir la lettre du mardi : https://sablia.io/newsletter')
+    expect(mail.html).toContain('Recevoir la lettre du mardi')
+    expect(mail.html).toContain('<a href="https://sablia.io/newsletter">')
+    expect(mail.text).not.toContain('Vous recevrez la lettre du mardi')
+  })
+
+  it('newsletter: a failed person lookup still delivers the resource, and the mail offers the link instead', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    const calls = stub({ person: [] }, { lookupFails: true })
+    const response = await send({ newsletter: true })
+    expect(response.status).toBe(200)
+    expect(calls.filter((c) => c.method === 'PATCH')).toHaveLength(0)
+    expect(visitorMail(calls).text).toContain(
+      'Recevoir la lettre du mardi : https://sablia.io/newsletter',
+    )
+  })
+})

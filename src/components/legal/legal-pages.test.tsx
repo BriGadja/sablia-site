@@ -36,6 +36,33 @@ describe('politique de confidentialité', () => {
   it('names the choice storage key', () => {
     expect(t).toContain('sablia_consent')
   })
+
+  // US-84: the Tuesday letter is a processing of its own, on consent.
+  it('has a Newsletter section: purpose, consent, data, no tracking, retention, unsubscribe, rights', () => {
+    expect(t).toContain('Newsletter')
+    expect(t).toContain("L'IA au travail")
+    expect(t).toMatch(/Base légale : votre consentement/)
+    expect(t).toMatch(/case[^.]*formulaire du site/)
+    expect(t).toMatch(/lien de confirmation/)
+    expect(t).toMatch(/bouton[^.]*invitation/)
+    expect(t).toMatch(
+      /prénom, votre adresse email[^.]*dates de votre inscription et de votre désinscription/,
+    )
+    expect(t).toContain("Aucun suivi d'ouverture ni de clic")
+    expect(t).toMatch(/non confirmée est effacée sous 7 jours/)
+    expect(t).toContain("jusqu'à votre désinscription")
+    expect(t).toContain('un lien dans chaque lettre')
+    expect(t).toContain('brice@sablia.io')
+  })
+
+  it('Newsletter: Resend also sends the Tuesday letter, from the United States under standard contractual clauses', () => {
+    expect(t).toContain(
+      'envoi des emails de confirmation, des notifications internes et de la lettre du mardi (newsletter)',
+    )
+    expect(t).toContain(
+      'Resend héberge ses données aux États-Unis, sous clauses contractuelles types',
+    )
+  })
 })
 
 describe('mentions légales', () => {
