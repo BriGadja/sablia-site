@@ -103,13 +103,13 @@ export const PROGRAMME = {
     },
     {
       key: 'd2',
-      title: "L'extrait de CCTP",
-      line: "L'IA relit la pièce écrite et signale ce qui manque ou se contredit.",
+      title: "Le fil de mails d'un client",
+      line: 'Un long échange résumé en une page, avec une réponse préparée.',
     },
     {
       key: 'd3',
-      title: "Le fil de mails d'un client",
-      line: 'Un long échange résumé en une page, avec une réponse préparée.',
+      title: "L'extrait de CCTP",
+      line: "L'IA relit la pièce écrite et signale ce qui manque ou se contredit.",
     },
     {
       key: 'd4',
@@ -182,9 +182,13 @@ export const FORM = {
     label: "J'accepte d'être rappelé(e) après la session.",
     info: "Case non cochée, personne ne vous appelle. Cochée, quelqu'un de l'équipe Sablia vous appelle une fois au sujet de la formation. Pour retirer cet accord, écrivez à brice@sablia.io.",
   },
-  privacy:
-    "Vos coordonnées servent à l'invitation et aux rappels de cette session ; le détail est dans la politique de confidentialité.",
-  privacyLink: 'Politique de confidentialité',
+  /** One sentence whose last words ARE the link (`/politique-confidentialite`): `before` + link + `after`. */
+  privacy: {
+    before:
+      "Vos coordonnées servent à l'invitation et aux rappels de cette session. Le détail est dans la ",
+    link: 'politique de confidentialité',
+    after: '.',
+  },
   submit: "Je m'inscris",
   sending: 'Inscription en cours…',
   busy: "Trop d'inscriptions depuis cette connexion aujourd'hui. Réessayez demain, ou écrivez à brice@sablia.io.",
