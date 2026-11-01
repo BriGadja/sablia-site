@@ -60,6 +60,13 @@ describe('createApp', () => {
     expect((await fetch(`${srv.url}/api/webinaire`)).status).toBe(405)
   })
 
+  it('/api/webinaire-questionnaire is mounted (404 on a malformed token, 405 on PUT)', async () => {
+    const r = await fetch(`${srv.url}/api/webinaire-questionnaire?t=abc`)
+    expect(r.status).toBe(404)
+    const put = await fetch(`${srv.url}/api/webinaire-questionnaire`, { method: 'PUT' })
+    expect(put.status).toBe(405)
+  })
+
   it('never logs an API response body', async () => {
     const log = vi.spyOn(console, 'log').mockImplementation(() => {})
     await fetch(`${srv.url}/api/contact`, {
