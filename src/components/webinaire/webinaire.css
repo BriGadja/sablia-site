@@ -1,0 +1,1147 @@
+@layer theme, base, components, utilities;
+
+/*
+ * The four /webinaire pages (plan webinaire-bureaux-etudes-2026-11-01, U3). Sablier charte only:
+ * sand / rose grounds, night bands, ink text, gold #D9A441 on night, #835A0C as text on light,
+ * #B9852A as stroke on light. Motion: the plan sheet draws itself at load, the branch figures count
+ * up (StatFigure), the hour fills with sand once (HourTimeline), the step lines of the after-pages
+ * draw once. Reduced motion = final state everywhere.
+ */
+@layer components {
+  .v2-webinaire {
+    color: #131620;
+
+    h1 {
+      margin: 18px 0 0;
+      font-size: 48px;
+      line-height: 1.06;
+      letter-spacing: -0.03em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    h2 {
+      margin: 18px 0 0;
+      font-size: 36px;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .wbn-lede {
+      max-width: 34em;
+      text-wrap: pretty;
+      margin: 24px 0 0;
+      font-size: 19px;
+      line-height: 1.55;
+      color: #3a3f4d;
+    }
+
+    /* ── hero ─────────────────────────────────────────────────────────── */
+    .wbn-hero {
+      position: relative;
+      padding: 88px 0 136px;
+    }
+    .wbn-hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      gap: 64px;
+      align-items: center;
+    }
+    .wbn-hero-copy {
+      min-width: 0;
+    }
+    .wbn-hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px 28px;
+      margin-top: 32px;
+    }
+    .wbn-by {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0;
+      font-size: 15px;
+      color: #61677a;
+
+      img {
+        flex: none;
+        border-radius: 7px;
+      }
+      strong {
+        font-weight: 500;
+        color: #131620;
+      }
+    }
+    .wbn-ticket {
+      min-width: 0;
+      padding: 32px 32px 8px;
+      border-radius: 24px;
+      background: #161b29;
+      color: #f4ecdd;
+      box-shadow: 0 24px 48px -32px rgba(19, 22, 32, 0.55);
+    }
+    .wbn-plan {
+      display: block;
+      width: 100%;
+      max-width: 380px;
+      height: auto;
+      margin: 0 auto;
+      color: #d9a441;
+    }
+    .wbn-plan-stroke {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 0;
+      animation: webinaire-draw 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: calc(var(--i) * 90ms + 200ms);
+    }
+    .wbn-facts {
+      margin: 24px 0 0;
+
+      div {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 0;
+        border-top: 1px solid #323a52;
+      }
+      dt {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #a4aabd;
+      }
+      dd {
+        margin: 0;
+        font-size: 16px;
+        text-align: right;
+        color: #f4ecdd;
+      }
+    }
+
+    /* ── night bands ──────────────────────────────────────────────────── */
+    .wbn-band {
+      position: relative;
+      padding: 104px 0 112px;
+      background: #161b29;
+      color: #f4ecdd;
+
+      h2 {
+        color: #f4ecdd;
+      }
+      a {
+        color: #d9a441;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+    }
+    .wbn-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 56px;
+      margin-top: 48px;
+    }
+    .wbn-stat {
+      min-width: 0;
+      padding-top: 24px;
+      border-top: 1px solid #323a52;
+    }
+    .wbn-stat-figure {
+      margin: 0;
+      font-size: 112px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      color: #d9a441;
+    }
+    .wbn-stat-label {
+      max-width: 24em;
+      margin: 16px 0 0;
+      font-size: 19px;
+      line-height: 1.45;
+      color: #f4ecdd;
+    }
+    .wbn-source {
+      max-width: 46em;
+      text-wrap: pretty;
+      margin: 40px 0 0;
+      font-size: 14px;
+      line-height: 1.55;
+      color: #a4aabd;
+
+      a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 24px;
+      }
+    }
+
+    /* ── programme: the hour ──────────────────────────────────────────── */
+    .wbn-programme {
+      position: relative;
+      padding: 104px 0 112px;
+      background: #f4ecdd;
+    }
+    .wbn-hour {
+      margin-top: 40px;
+    }
+    .wbn-hour-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .wbn-hour-glass {
+      flex: none;
+      color: #835a0c;
+    }
+    .wbn-hour-end {
+      flex: none;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: #61677a;
+    }
+    .wbn-hour-rule {
+      flex: 1 1 auto;
+      height: 1px;
+      background: #e4d6c0;
+    }
+    .wbn-replay {
+      flex: none;
+      min-height: 44px;
+      padding: 0 18px;
+      border: 1px solid #c9b99f;
+      border-radius: 999px;
+      background: transparent;
+      color: #131620;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .wbn-replay:hover:not(:disabled) {
+      border-color: #835a0c;
+    }
+    .wbn-replay:disabled {
+      display: none;
+    }
+    .wbn-hour-track {
+      position: relative;
+    }
+    .wbn-hour-segs {
+      display: flex;
+      gap: 4px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .wbn-seg {
+      flex-basis: 0;
+      min-width: 0;
+    }
+    .wbn-seg-bar {
+      position: relative;
+      display: block;
+      height: 14px;
+      border-radius: 4px;
+      background: #e4d6c0;
+      overflow: hidden;
+    }
+    .wbn-seg-bar::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #b9852a;
+      transform-origin: left center;
+    }
+    .wbn-seg[data-demo] .wbn-seg-bar::after {
+      background: #835a0c;
+    }
+    .wbn-seg-label {
+      display: block;
+      margin-top: 10px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: #3a3f4d;
+      white-space: nowrap;
+    }
+    .wbn-demos {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin: 40px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .wbn-demo {
+      position: relative;
+      overflow: hidden;
+      min-width: 0;
+      padding: 22px 20px 24px;
+      border: 1px solid #e4d6c0;
+      border-radius: 14px;
+      background: #fbf7f0;
+
+      h3 {
+        margin: 12px 0 8px;
+        font-size: 18px;
+        line-height: 1.3;
+        font-weight: 600;
+        color: #131620;
+      }
+      p {
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.55;
+        color: #3a3f4d;
+        text-wrap: pretty;
+      }
+    }
+    /* The gold strip that ties a card to its part of the hour (dark gold = a demonstration). */
+    .wbn-demo::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #835a0c;
+      transform-origin: left center;
+    }
+    .wbn-demo-num {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      color: #835a0c;
+    }
+    .wbn-note {
+      max-width: 44em;
+      text-wrap: pretty;
+      margin: 32px 0 0;
+      font-size: 15px;
+      line-height: 1.55;
+      color: #61677a;
+    }
+
+    /* Armed (below the fold, after hydration): the sand is not poured yet. Text never dims. */
+    .wbn-hour[data-phase='armed'] .wbn-seg-bar::after,
+    .wbn-hour[data-phase='armed'] .wbn-demo::before {
+      transform: scaleX(0);
+    }
+    .wbn-hour[data-phase='armed'] .wbn-demo {
+      transform: translateY(10px);
+    }
+    /* Playing: each part fills in its own share of the hour, then its card rises and takes its strip. */
+    .wbn-hour[data-phase='playing'] .wbn-seg-bar::after {
+      animation: webinaire-fill-x linear both;
+      animation-duration: calc(var(--w) * var(--play));
+      animation-delay: calc(var(--at) * var(--play));
+    }
+    .wbn-hour[data-phase='playing'] .wbn-demo {
+      animation: webinaire-rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: calc(var(--at) * var(--play));
+    }
+    .wbn-hour[data-phase='playing'] .wbn-demo::before {
+      animation: webinaire-fill-x linear both;
+      animation-duration: calc(var(--w) * var(--play));
+      animation-delay: calc(var(--at) * var(--play));
+    }
+
+    /* ── who + proof (rose) ───────────────────────────────────────────── */
+    .wbn-rose {
+      position: relative;
+      padding: 80px 0 104px;
+      background: #f2e3df;
+    }
+    .wbn-who-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 64px;
+      align-items: center;
+    }
+    .wbn-photo {
+      min-width: 0;
+      margin: 0;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #efe3cc;
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+    }
+    .wbn-who {
+      min-width: 0;
+    }
+    .wbn-role {
+      margin: 8px 0 0;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #835a0c;
+    }
+    .wbn-who-line {
+      max-width: 32em;
+      margin: 20px 0 0;
+      font-size: 17px;
+      line-height: 1.6;
+      color: #3a3f4d;
+    }
+    .wbn-proof {
+      margin-top: 36px;
+      padding: 24px 28px;
+      border: 1px solid #e8cfc8;
+      border-radius: 16px;
+      background: #fbf7f0;
+    }
+    .wbn-proof-eyebrow {
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #835a0c;
+    }
+    .wbn-proof-figure {
+      margin: 8px 0 0;
+      font-size: 48px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-weight: 600;
+      color: #131620;
+    }
+    .wbn-proof-line {
+      margin: 12px 0 0;
+      font-size: 15px;
+      line-height: 1.55;
+      color: #3a3f4d;
+    }
+
+    /* ── inscription (night) ──────────────────────────────────────────── */
+    .wbn-signup {
+      scroll-margin-top: 72px;
+    }
+    .wbn-signup-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      gap: 64px;
+      align-items: start;
+    }
+    .wbn-signup-copy {
+      min-width: 0;
+      position: sticky;
+      top: 112px;
+    }
+    .wbn-signup-when {
+      margin: 20px 0 0;
+      font-size: 19px;
+      color: #d9a441;
+    }
+    .wbn-next {
+      margin: 32px 0 0;
+      padding: 0;
+      list-style: none;
+
+      li {
+        display: flex;
+        align-items: baseline;
+        gap: 16px;
+        padding: 16px 0;
+        border-top: 1px solid #323a52;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #f4ecdd;
+      }
+      li:last-child {
+        border-bottom: 1px solid #323a52;
+      }
+    }
+    .wbn-next-num {
+      flex: none;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: #d9a441;
+    }
+
+    /* ── cards and forms ──────────────────────────────────────────────── */
+    .wbn-card {
+      position: relative;
+      min-width: 0;
+      box-sizing: border-box;
+      padding: 32px;
+      border: 1px solid #e4d6c0;
+      border-radius: 16px;
+      background: #fbf7f0;
+      color: #131620;
+      box-shadow: 0 18px 40px -28px rgba(19, 22, 32, 0.35);
+
+      p {
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.55;
+        color: #3a3f4d;
+        text-wrap: pretty;
+      }
+      a {
+        color: #835a0c;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+    }
+    .wbn-form,
+    .wbn-qform {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .wbn-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .wbn-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+
+      label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #3a3f4d;
+      }
+    }
+    .wbn-field input,
+    .wbn-field textarea,
+    .wbn-q textarea,
+    .wbn-q .wbn-q-detail {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 46px;
+      padding: 0 14px;
+      border: 1px solid #c9b99f;
+      border-radius: 10px;
+      background: #ffffff;
+      color: #131620;
+      font: inherit;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+    .wbn-field textarea,
+    .wbn-q textarea {
+      min-height: 96px;
+      padding: 12px 14px;
+      line-height: 1.5;
+      resize: vertical;
+    }
+    .wbn-field input:hover,
+    .wbn-field textarea:hover,
+    .wbn-q textarea:hover,
+    .wbn-q .wbn-q-detail:hover {
+      border-color: #b9852a;
+    }
+    .wbn-field input::placeholder,
+    .wbn-field textarea::placeholder,
+    .wbn-q .wbn-q-detail::placeholder {
+      color: #61677a;
+    }
+    .wbn-field [aria-invalid='true'] {
+      border-color: #9a2f2f;
+    }
+    .wbn-choices {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+    }
+    .wbn-choices-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #3a3f4d;
+    }
+    .wbn-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .wbn-chip {
+      position: relative;
+      display: inline-flex;
+
+      input {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+      span {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 0 16px;
+        border: 1px solid #c9b99f;
+        border-radius: 999px;
+        background: #ffffff;
+        color: #131620;
+        font-size: 15px;
+        transition:
+          background 0.2s,
+          border-color 0.2s,
+          color 0.2s;
+      }
+      input:hover + span {
+        border-color: #835a0c;
+      }
+      input:checked + span {
+        border-color: #131620;
+        background: #131620;
+        color: #ffffff;
+      }
+      input:focus-visible + span {
+        outline: 2px solid #835a0c;
+        outline-offset: 3px;
+      }
+    }
+    .wbn-choices[aria-invalid='true'] .wbn-chip span {
+      border-color: #9a2f2f;
+    }
+    .wbn-consent {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-top: 18px;
+      border-top: 1px solid #e4d6c0;
+    }
+    .wbn-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      min-height: 24px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #131620;
+      cursor: pointer;
+
+      input {
+        flex: none;
+        width: 20px;
+        height: 20px;
+        margin: 1px 0 0;
+        accent-color: #131620;
+      }
+    }
+    .wbn-card .wbn-info {
+      margin-left: 32px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #61677a;
+    }
+    /* Focus never lands under the sticky header (72 px) or the questionnaire's progress strip. */
+    .wbn-form input,
+    .wbn-form textarea {
+      scroll-margin-top: 104px;
+    }
+    .wbn-q input,
+    .wbn-q textarea {
+      scroll-margin-top: 152px;
+    }
+    .wbn-trap {
+      position: absolute;
+      left: -9999px;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+    .wbn-submit {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 52px;
+      padding: 10px 22px;
+      border: 0;
+      border-radius: 12px;
+      background: #131620;
+      color: #ffffff;
+      font: inherit;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition:
+        background 0.2s,
+        transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .wbn-submit:hover:not(:disabled) {
+      background: #262b38;
+      transform: translateY(-1px);
+    }
+    .wbn-submit:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    .wbn-card .wbn-err,
+    .wbn-err {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #9a2f2f;
+
+      a {
+        color: inherit;
+      }
+    }
+    .wbn-card .wbn-field-err {
+      font-size: 13px;
+      line-height: 1.45;
+      color: #9a2f2f;
+    }
+    .wbn-card .wbn-privacy {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #61677a;
+    }
+
+    /* ── after-pages (merci, après réservation, questionnaire) ────────── */
+    .wbn-after {
+      padding: 72px 0 120px;
+    }
+    .wbn-after-in {
+      max-width: 720px;
+      margin: 0 auto;
+
+      &.is-wide {
+        max-width: 1040px;
+      }
+    }
+    .wbn-after-mark {
+      display: block;
+      margin-bottom: 20px;
+      color: #835a0c;
+    }
+    .wbn-steps {
+      margin: 40px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .wbn-steps li {
+      position: relative;
+      min-width: 0;
+    }
+    .wbn-step-when {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #835a0c;
+    }
+    .wbn-step-what {
+      display: block;
+      margin-top: 6px;
+      font-size: 18px;
+      line-height: 1.45;
+      color: #131620;
+    }
+    /* Vertical steps (merci): dots on a line that draws downwards once. */
+    .wbn-steps.is-vertical li {
+      padding: 0 0 28px 40px;
+    }
+    .wbn-steps.is-vertical .wbn-step-dot {
+      position: absolute;
+      left: 0;
+      top: 2px;
+      width: 16px;
+      height: 16px;
+      box-sizing: border-box;
+      border: 2px solid #b9852a;
+      border-radius: 50%;
+      background: #f4ecdd;
+    }
+    .wbn-steps.is-vertical li:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 22px;
+      bottom: 0;
+      width: 2px;
+      background: #b9852a;
+      transform-origin: top center;
+      animation: webinaire-fill-y 0.5s ease-out both;
+      animation-delay: calc(var(--i) * 0.35s + 0.3s);
+    }
+    /* Path steps (après réservation): five numbered stops joined by a sand line. */
+    .wbn-steps-title {
+      margin-top: 56px;
+      font-size: 28px;
+    }
+    .wbn-steps.is-path {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 24px;
+      margin-top: 28px;
+    }
+    .wbn-steps.is-path .wbn-step-dot {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      box-sizing: border-box;
+      margin-bottom: 16px;
+      border: 2px solid #b9852a;
+      border-radius: 50%;
+      background: #fbf7f0;
+      font-family: var(--font-mono);
+      font-size: 15px;
+      color: #131620;
+    }
+    .wbn-steps.is-path li:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 44px;
+      right: -24px;
+      top: 21px;
+      height: 2px;
+      background: #b9852a;
+      transform-origin: left center;
+      animation: webinaire-fill-x 0.45s ease-out both;
+      animation-delay: calc(var(--i) * 0.35s + 0.3s);
+    }
+    .wbn-steps.is-path .wbn-step-when {
+      font-family: var(--font-sans);
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      text-transform: none;
+      color: #131620;
+    }
+    .wbn-steps.is-path .wbn-step-what {
+      margin-top: 8px;
+      font-size: 15px;
+      line-height: 1.55;
+      color: #3a3f4d;
+    }
+    .wbn-after-notes {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .wbn-booking {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px 24px;
+      margin-top: 32px;
+
+      p {
+        margin: 0;
+        font-size: 17px;
+        color: #131620;
+      }
+    }
+    .wbn-home {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      margin-top: 28px;
+      color: #835a0c;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* ── questionnaire ────────────────────────────────────────────────── */
+    .wbn-quest {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .wbn-qform {
+      gap: 0;
+      margin-top: 32px;
+    }
+    .wbn-hello {
+      margin: 0 0 8px;
+      font-size: 20px;
+      font-weight: 600;
+      color: #131620;
+    }
+    .wbn-loading {
+      font-weight: 400;
+      color: #61677a;
+    }
+    .wbn-progress {
+      position: sticky;
+      top: 72px;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 0;
+      background: #f4ecdd;
+    }
+    .wbn-progress-text {
+      flex: none;
+      min-width: 64px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: #3a3f4d;
+    }
+    .wbn-progress-bar {
+      position: relative;
+      flex: 1 1 auto;
+      height: 6px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e4d6c0;
+
+      span {
+        position: absolute;
+        inset: 0;
+        background: #b9852a;
+        transform-origin: left center;
+        transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+    }
+    .wbn-q {
+      min-width: 0;
+      margin: 0;
+      padding: 28px 0;
+      border: 0;
+      border-top: 1px solid #e4d6c0;
+    }
+    /* A legend is drawn inside the fieldset border by default: float it so the rule stays above. */
+    .wbn-q > legend {
+      float: left;
+      width: 100%;
+    }
+    .wbn-q > legend + * {
+      clear: both;
+    }
+    .wbn-q-num {
+      display: block;
+      margin-bottom: 6px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: #835a0c;
+    }
+    .wbn-q-label {
+      display: block;
+      margin-bottom: 14px;
+      padding: 0;
+      font-size: 18px;
+      line-height: 1.4;
+      font-weight: 600;
+      color: #131620;
+    }
+    .wbn-q-hint {
+      margin: -6px 0 12px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #61677a;
+    }
+    .wbn-q .wbn-q-detail {
+      max-width: 420px;
+      margin-top: 12px;
+    }
+    .wbn-qsend {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 28px;
+      border-top: 1px solid #e4d6c0;
+
+      .wbn-submit {
+        max-width: 360px;
+      }
+      .wbn-q-hint {
+        margin: 0;
+      }
+    }
+    .wbn-notice,
+    .wbn-done {
+      margin-top: 32px;
+    }
+    .wbn-done {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      p {
+        font-size: 19px;
+        line-height: 1.5;
+        color: #131620;
+      }
+    }
+    .wbn-done-mark {
+      color: #835a0c;
+    }
+  }
+
+  @keyframes webinaire-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes webinaire-fill-x {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+  @keyframes webinaire-fill-y {
+    from {
+      transform: scaleY(0);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+  @keyframes webinaire-rise {
+    from {
+      transform: translateY(10px);
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-webinaire h1 {
+      font-size: 34px;
+    }
+    .v2-webinaire h2 {
+      font-size: 28px;
+    }
+    .v2-webinaire .wbn-lede {
+      font-size: 17px;
+    }
+    .v2-webinaire .wbn-hero {
+      padding: 40px 0 112px;
+    }
+    .v2-webinaire .wbn-hero-grid,
+    .v2-webinaire .wbn-who-grid,
+    .v2-webinaire .wbn-signup-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 40px;
+    }
+    .v2-webinaire .wbn-ticket {
+      padding: 24px 20px 4px;
+    }
+    .v2-webinaire .wbn-plan {
+      max-width: 260px;
+    }
+    .v2-webinaire .wbn-band,
+    .v2-webinaire .wbn-programme,
+    .v2-webinaire .wbn-rose {
+      padding: 72px 0 80px;
+    }
+    .v2-webinaire .wbn-stats {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+      margin-top: 32px;
+    }
+    .v2-webinaire .wbn-stat-figure {
+      font-size: 80px;
+    }
+    .v2-webinaire .wbn-stat-label {
+      font-size: 17px;
+    }
+    .v2-webinaire .wbn-demos {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+    }
+    .v2-webinaire .wbn-photo {
+      max-width: 360px;
+    }
+    .v2-webinaire .wbn-signup-copy {
+      position: static;
+    }
+    .v2-webinaire .wbn-card {
+      padding: 24px 20px;
+    }
+    .v2-webinaire .wbn-row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .v2-webinaire .wbn-card .wbn-info {
+      margin-left: 0;
+    }
+    .v2-webinaire .wbn-after {
+      padding: 40px 0 96px;
+    }
+    .v2-webinaire .wbn-steps.is-path {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+    }
+    .v2-webinaire .wbn-steps.is-path li {
+      padding: 0 0 24px 60px;
+    }
+    .v2-webinaire .wbn-steps.is-path .wbn-step-dot {
+      position: absolute;
+      left: 0;
+      top: 0;
+      margin: 0;
+    }
+    .v2-webinaire .wbn-steps.is-path li:not(:last-child)::after {
+      left: 21px;
+      right: auto;
+      top: 44px;
+      bottom: 0;
+      width: 2px;
+      height: auto;
+      transform-origin: top center;
+      animation-name: webinaire-fill-y;
+    }
+    .v2-webinaire .wbn-steps.is-path .wbn-step-when {
+      padding-top: 10px;
+    }
+    .v2-webinaire .wbn-progress {
+      top: 64px;
+    }
+  }
+
+  /* Phones: the same bar, labels tighter so each one stays inside its share of the hour. */
+  @media (max-width: 640px) {
+    .v2-webinaire .wbn-hour-head {
+      gap: 10px;
+    }
+    .v2-webinaire .wbn-seg-label {
+      letter-spacing: 0;
+    }
+    .v2-webinaire .wbn-stat-figure {
+      font-size: 72px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-webinaire .wbn-plan-stroke,
+    .v2-webinaire .wbn-steps li::after,
+    .v2-webinaire .wbn-hour .wbn-seg-bar::after,
+    .v2-webinaire .wbn-hour .wbn-demo,
+    .v2-webinaire .wbn-hour .wbn-demo::before {
+      animation: none !important;
+      transform: none !important;
+    }
+    .v2-webinaire .wbn-submit,
+    .v2-webinaire .wbn-chip span,
+    .v2-webinaire .wbn-progress-bar span {
+      transition: none !important;
+    }
+  }
+}

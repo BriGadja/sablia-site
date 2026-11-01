@@ -8,8 +8,8 @@
     "hash": "sha256:85506803f0a95f3ac27bffbbf08731b5dbcbca5765d3d5895bc8d9e9c6ec4cf0"
   },
   "/politique-confidentialite": {
-    "lastmod": "2026-10-27",
-    "hash": "sha256:67f30c7cf17b223ad3ce2f9cdfac5f4249095ef6055b182a216036dde9fb7538"
+    "lastmod": "2026-11-01",
+    "hash": "sha256:2f23f245ad0325b28ff8ad95c5dd3db6ccdd68ade8053ae29380808469c88381"
   },
   "/cgv": {
     "lastmod": "2026-10-26",
@@ -62,5 +62,9 @@
   "/newsletter": {
     "lastmod": "2026-10-27",
     "hash": "sha256:c6b45d9acb97a0fd50898157e745c912b23528e18c23b03f22ff03bd23c64893"
+  },
+  "/webinaire": {
+    "lastmod": "2026-11-01",
+    "hash": "sha256:f28e28f0c84267a243d4f3067a9d333fd8e4428dc647e00c4cba196507daf059"
   }
 }

@@ -63,6 +63,33 @@ describe('politique de confidentialité', () => {
       'Resend héberge ses données aux États-Unis, sous clauses contractuelles types',
     )
   })
+
+  // Webinar plan U3b: the registration of /webinaire is a processing of its own.
+  it('has a Webinaire section: data, purposes, legal basis, recipients, retention, how to withdraw', () => {
+    expect(t).toContain('Webinaire')
+    expect(t).toMatch(
+      /prénom, votre nom, votre adresse email, votre téléphone, votre fonction, la taille de votre entreprise, votre usage de l'IA, votre question si vous en posez une, et votre réponse à la case de rappel/,
+    )
+    expect(t).toMatch(/empreinte de l'adresse IP accompagne l'inscription/)
+    expect(t).toMatch(/si vous y avez assisté/)
+    expect(t).toMatch(/questionnaire de préparation, seulement après la réservation d'un échange/)
+    expect(t).toMatch(/l'invitation à la séance et deux rappels par mail/)
+    expect(t).toMatch(/seulement si vous avez coché la case/)
+    expect(t).toMatch(/pour le rappel, votre consentement/)
+    for (const w of ['Google Agenda', 'Google Meet', 'Resend', 'Supabase', 'Calendly']) {
+      expect(t).toContain(w)
+    }
+    expect(t).toMatch(/liste des invités n'est pas visible des autres participants/)
+    expect(t).toMatch(/3 ans à compter de votre inscription ou du dernier contact venu de vous/)
+    expect(t).toMatch(/déclinez l'invitation ou répondez à l'un de nos mails/)
+    expect(t).toMatch(/retirer votre accord au rappel[^.]*brice@sablia\.io/)
+    expect(t).toMatch(/Dernière mise à jour : 01\/11\/2026\./)
+  })
+
+  it('Webinaire: Google is listed among the processors, Resend sends the reminders', () => {
+    expect(t).toMatch(/Google : invitations et séances en visio des webinaires/)
+    expect(t).toMatch(/ainsi que des rappels et du questionnaire des webinaires/)
+  })
 })
 
 describe('mentions légales', () => {

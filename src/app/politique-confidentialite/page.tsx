@@ -15,7 +15,7 @@ export default function PolitiqueConfidentialitePage() {
       folio="Confidentialité · RGPD"
       title="Politique de confidentialité"
       intro="Comment Sablia collecte, utilise et protège vos données personnelles. Conforme au Règlement général sur la protection des données (RGPD) et à la Loi Informatique et Libertés."
-      updated="Dernière mise à jour : 27/10/2026."
+      updated="Dernière mise à jour : 01/11/2026."
     >
       <LegalSection title="Données collectées via le formulaire Diagnostic">
         <p>
@@ -86,36 +86,81 @@ export default function PolitiqueConfidentialitePage() {
         </p>
       </LegalSection>
 
+      <LegalSection title="Webinaire">
+        <p>
+          Données : quand vous vous inscrivez à un webinaire sur la page Webinaire, nous
+          enregistrons votre prénom, votre nom, votre adresse email, votre téléphone, votre
+          fonction, la taille de votre entreprise, votre usage de l&apos;IA, votre question si vous
+          en posez une, et votre réponse à la case de rappel. Pour limiter les abus, une empreinte
+          de l&apos;adresse IP accompagne l&apos;inscription. Après la séance, nous notons si vous y
+          avez assisté. Si vous réservez ensuite un échange, nous gardons aussi vos réponses au
+          questionnaire de préparation.
+        </p>
+        <p>
+          Finalités : vous envoyer l&apos;invitation à la séance et deux rappels par mail ; vous
+          rappeler une fois au sujet de la formation, seulement si vous avez coché la case prévue ;
+          vous envoyer un questionnaire de préparation, seulement après la réservation d&apos;un
+          échange de 30 minutes. Votre inscription figure aussi dans notre fichier de contacts, avec
+          votre réponse à la case : sans la case cochée, personne ne vous appelle.
+        </p>
+        <p>
+          Base légale : votre demande d&apos;inscription (article 6-1-b du RGPD) ; pour le rappel,
+          votre consentement, donné en cochant la case, que vous pouvez retirer à tout moment.
+        </p>
+        <p>
+          Destinataires : l&apos;équipe Sablia et les prestataires de la séance. Google :
+          l&apos;invitation passe par Google Agenda et la séance se tient sur Google Meet ; la liste
+          des invités n&apos;est pas visible des autres participants. Resend envoie les mails de
+          rappel et le questionnaire, Supabase stocke les données, Calendly sert à réserver
+          l&apos;échange de 30 minutes. Rien n&apos;est revendu ni transmis à un tiers marketing.
+        </p>
+        <p>
+          Durée : 3 ans à compter de votre inscription ou du dernier contact venu de vous (un
+          message, une réservation).
+        </p>
+        <p>
+          Vos choix : pour ne plus recevoir les mails de rappel, déclinez l&apos;invitation ou
+          répondez à l&apos;un de nos mails. Pour retirer votre accord au rappel téléphonique ou
+          faire effacer vos données, répondez à l&apos;un de nos mails ou écrivez à{' '}
+          <a href={`mailto:${site.email}`}>{site.email}</a>.
+        </p>
+      </LegalSection>
+
       <LegalSection title="Hébergement et sous-traitants">
         <p>Les données transitent et sont stockées via les prestataires suivants :</p>
         <ul>
           <li>
-            <strong>Hostinger</strong> — hébergement du site et de la mesure d'audience, sur un
+            <strong>Hostinger</strong> : hébergement du site et de la mesure d'audience, sur un
             serveur dédié à Sablia en France ; les sauvegardes chiffrées sont déposées sur Google
             Drive
           </li>
           <li>
-            <strong>Resend</strong> — envoi des emails de confirmation, des notifications internes
-            et de la lettre du mardi (newsletter) ; Resend héberge ses données aux États-Unis, sous
-            clauses contractuelles types
+            <strong>Resend</strong> : envoi des emails de confirmation, des notifications internes
+            et de la lettre du mardi (newsletter), ainsi que des rappels et du questionnaire des
+            webinaires ; Resend héberge ses données aux États-Unis, sous clauses contractuelles
+            types
           </li>
           <li>
-            <strong>YouTube</strong> — lecture des vidéos, chargée uniquement après un clic sur la
+            <strong>Google</strong> : invitations et séances en visio des webinaires (Google Agenda,
+            Google Meet)
+          </li>
+          <li>
+            <strong>YouTube</strong> : lecture des vidéos, chargée uniquement après un clic sur la
             vidéo
           </li>
           <li>
-            <strong>n8n (self-hosted)</strong> — orchestration des formulaires (serveur France,
+            <strong>n8n (self-hosted)</strong> : orchestration des formulaires (serveur France,
             propriété Sablia)
           </li>
           <li>
-            <strong>Supabase</strong> — base de données (région Europe, DPA signé)
+            <strong>Supabase</strong> : base de données (région Europe, DPA signé)
           </li>
           <li>
-            <strong>Stripe</strong> — traitement des paiements (Irlande / États-Unis, conforme
+            <strong>Stripe</strong> : traitement des paiements (Irlande / États-Unis, conforme
             PCI-DSS)
           </li>
           <li>
-            <strong>Calendly</strong> — prise de rendez-vous (États-Unis, DPA signé)
+            <strong>Calendly</strong> : prise de rendez-vous (États-Unis, DPA signé)
           </li>
         </ul>
       </LegalSection>

@@ -287,7 +287,7 @@ describe('extractFromHtml', () => {
 })
 
 describe('routes manifest', () => {
-  it('lists the 17 routes (v2: /formations, /accompagnement, Google Sheets and Excel 365 pages added; /newsletter on 27/10) with page-specific sources only', () => {
+  it('lists the 21 routes (v2: /formations, /accompagnement, Google Sheets and Excel 365 pages added; /newsletter on 27/10; /webinaire and its three noindex pages on 01/11) with page-specific sources only', () => {
     assert.deepEqual(
       PAGE_ROUTES.map((r) => r.path),
       [
@@ -307,6 +307,10 @@ describe('routes manifest', () => {
         '/offres/compte-rendu-appel/excel-365',
         '/ressources',
         '/newsletter',
+        '/webinaire',
+        '/webinaire/merci',
+        '/webinaire/apres-reservation',
+        '/webinaire/questionnaire',
         '/thank-you',
       ],
     )
