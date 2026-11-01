@@ -1,3 +1,4 @@
+import { createHash, createHmac } from 'node:crypto'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import handler, { decide, ipHashFor, leadRow, registrationRow } from './webinaire'
 
@@ -34,8 +35,10 @@ interface World {
   ipCount?: number
   dayCount?: number
   /** Rows `sabcrm_leads` returns for the person lookup, oldest first. */
-  person?: { id: string; email: string }[]
+  person?: { id: string; email: string; intention?: string; opted_out_at?: string | null }[]
   duplicate?: boolean
+  /** Stored row returned by the duplicate-path lookup. */
+  stored?: { id: string; rappel_consent: boolean; lead_id?: string | null }
   registrationInsert?: number
   leadInsert?: number
 }
@@ -50,6 +53,9 @@ function world(w: World = {}) {
       calls.push({ url, method, body })
       const reply: Reply = (() => {
         if (url.includes('site_webinar_registrations')) {
+          if (method === 'GET' && url.includes('email=ilike.')) {
+            return json(w.stored ? [w.stored] : [])
+          }
           if (method === 'GET' && url.includes('ip_hash=eq.')) {
             return json(Array.from({ length: w.ipCount ?? 0 }, (_, i) => ({ id: `ip-${i}` })))
           }
@@ -66,6 +72,7 @@ function world(w: World = {}) {
         }
         if (url.includes('sabcrm_leads')) {
           if (method === 'GET') return json(w.person ?? [])
+          if (method === 'PATCH') return json([{ id: 'lead-x' }])
           if (method === 'POST') {
             return w.leadInsert && w.leadInsert !== 201
               ? json({ message: 'refused' }, w.leadInsert)
@@ -176,6 +183,30 @@ describe('rows', () => {
     expect(a).not.toBe(ipHashFor('203.0.113.7', '2026-11-11', 'pepper'))
     expect(a).not.toBe(ipHashFor('203.0.113.7', '2026-11-10', 'other'))
     expect(a).not.toContain('203')
+  })
+
+  it('m2: without a salt the key is an HMAC under the service key, stable within a day', () => {
+    const plain = createHash('sha256').update('2026-11-10||203.0.113.7').digest('hex')
+    const h = ipHashFor('203.0.113.7', '2026-11-10', '', 'svc-key')
+    expect(h).toMatch(/^[0-9a-f]{64}$/)
+    expect(h).not.toBe(plain)
+    expect(h).toBe(ipHashFor('203.0.113.7', '2026-11-10', '', 'svc-key'))
+    expect(h).not.toBe(ipHashFor('203.0.113.7', '2026-11-11', '', 'svc-key'))
+    expect(h).not.toBe(ipHashFor('203.0.113.7', '2026-11-10', '', 'other-key'))
+    expect(h).toBe(createHmac('sha256', 'svc-key').update('2026-11-10|203.0.113.7').digest('hex'))
+  })
+
+  it('m2: the handler stores the HMAC (not the reversible hash) when WEBINAR_IP_SALT is absent', async () => {
+    vi.stubEnv('SUPABASE_SERVICE_ROLE_KEY', 'service-key')
+    const calls = world()
+    await handler.fetch(post(payload()))
+    const day = new Date().toISOString().slice(0, 10)
+    const stored = (writes(calls, 'site_webinar_registrations')[0]?.body as { ip_hash: string })
+      .ip_hash
+    expect(stored).toBe(
+      createHmac('sha256', 'service-key').update(`${day}|203.0.113.7`).digest('hex'),
+    )
+    expect(stored).not.toBe(ipHashFor('203.0.113.7', day, ''))
   })
 })
 
@@ -356,5 +387,130 @@ describe('POST /api/webinaire', () => {
     const calls = world()
     await handler.fetch(post(payload({ rappel_consent: true })))
     expect(calls.some((c) => c.url.includes('resend'))).toBe(false)
+  })
+})
+
+describe('M4 consent upgrades a known lead', () => {
+  const person = (over: Record<string, unknown> = {}) => ({
+    id: 'lead-old',
+    email: 'claire.morel@exemple.fr',
+    intention: 'ressource_seule',
+    opted_out_at: null,
+    ...over,
+  })
+  const leadPatches = (calls: Call[]) => writes(calls, 'sabcrm_leads', 'PATCH')
+
+  it('new registration, ticked, existing ressource_seule lead: only intention is patched', async () => {
+    env()
+    const calls = world({ person: [person()] })
+    expect((await handler.fetch(post(payload({ rappel_consent: true })))).status).toBe(200)
+    expect(leadPatches(calls)).toHaveLength(1)
+    expect(leadPatches(calls)[0]?.url).toContain('id=eq.lead-old')
+    expect(leadPatches(calls)[0]?.body).toEqual({ intention: 'veut_un_echange' })
+  })
+
+  it('newsletter_seule is upgraded too', async () => {
+    env()
+    const calls = world({ person: [person({ intention: 'newsletter_seule' })] })
+    await handler.fetch(post(payload({ rappel_consent: true })))
+    expect(leadPatches(calls)[0]?.body).toEqual({ intention: 'veut_un_echange' })
+  })
+
+  it('unticked: the lead is never touched', async () => {
+    env()
+    const calls = world({ person: [person()] })
+    await handler.fetch(post(payload()))
+    expect(leadPatches(calls)).toHaveLength(0)
+  })
+
+  it('any opted-out row of the person: untouched', async () => {
+    env()
+    const calls = world({
+      person: [person(), person({ id: 'lead-new', opted_out_at: '2026-09-02T09:00:00Z' })],
+    })
+    await handler.fetch(post(payload({ rappel_consent: true })))
+    expect(leadPatches(calls)).toHaveLength(0)
+  })
+
+  it('never downgrades or rewrites an already engaged intention', async () => {
+    env()
+    const calls = world({ person: [person({ intention: 'veut_un_echange' })] })
+    await handler.fetch(post(payload({ rappel_consent: true })))
+    expect(leadPatches(calls)).toHaveLength(0)
+    const calls2 = world({ person: [person({ intention: 'autre' })] })
+    await handler.fetch(post(payload({ rappel_consent: true })))
+    expect(leadPatches(calls2)).toHaveLength(0)
+  })
+
+  it('a failing lead patch never costs the registration (still 200, link still written)', async () => {
+    env()
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    const calls = world({ person: [person()] })
+    const inner = globalThis.fetch
+    vi.stubGlobal('fetch', async (url: string, init?: RequestInit) => {
+      if (url.includes('sabcrm_leads') && init?.method === 'PATCH') {
+        return new Response('x', { status: 500 })
+      }
+      return inner(url, init)
+    })
+    const r = await handler.fetch(post(payload({ rappel_consent: true })))
+    expect(r.status).toBe(200)
+    expect(writes(calls, 'site_webinar_registrations', 'PATCH')[0]?.body).toEqual({
+      lead_id: 'lead-old',
+    })
+  })
+
+  it('duplicate, ticked after unticked: registration upgraded, lead upgraded, same 200 body', async () => {
+    env()
+    const calls = world({
+      duplicate: true,
+      stored: { id: 'reg-9', rappel_consent: false },
+      person: [person()],
+    })
+    const r = await handler.fetch(post(payload({ rappel_consent: true })))
+    expect(r.status).toBe(200)
+    expect(await r.json()).toEqual({ state: 'registered' })
+    const regPatch = writes(calls, 'site_webinar_registrations', 'PATCH')
+    expect(regPatch).toHaveLength(1)
+    expect(regPatch[0]?.url).toContain('id=eq.reg-9')
+    expect(regPatch[0]?.body).toMatchObject({ rappel_consent: true })
+    expect((regPatch[0]?.body as { consent_at: string }).consent_at).toEqual(expect.any(String))
+    expect(leadPatches(calls)[0]?.body).toEqual({ intention: 'veut_un_echange' })
+  })
+
+  it('duplicate, unticked after ticked: nothing written, no downgrade', async () => {
+    env()
+    const calls = world({
+      duplicate: true,
+      stored: { id: 'reg-9', rappel_consent: true },
+      person: [person()],
+    })
+    const r = await handler.fetch(post(payload()))
+    expect(r.status).toBe(200)
+    expect(writes(calls, 'site_webinar_registrations', 'PATCH')).toHaveLength(0)
+    expect(leadPatches(calls)).toHaveLength(0)
+  })
+
+  it('duplicate, ticked after ticked: nothing to upgrade, nothing written', async () => {
+    env()
+    const calls = world({ duplicate: true, stored: { id: 'reg-9', rappel_consent: true } })
+    const r = await handler.fetch(post(payload({ rappel_consent: true })))
+    expect(r.status).toBe(200)
+    expect(writes(calls, 'site_webinar_registrations', 'PATCH')).toHaveLength(0)
+    expect(leadPatches(calls)).toHaveLength(0)
+  })
+
+  it('duplicate-path lookup failure still answers the same 200', async () => {
+    env()
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    world({ duplicate: true, stored: { id: 'reg-9', rappel_consent: false } })
+    const inner = globalThis.fetch
+    vi.stubGlobal('fetch', async (url: string, init?: RequestInit) => {
+      if (url.includes('email=ilike.') && url.includes('site_webinar')) throw new Error('net')
+      return inner(url, init)
+    })
+    const r = await handler.fetch(post(payload({ rappel_consent: true })))
+    expect(r.status).toBe(200)
+    expect(await r.json()).toEqual({ state: 'registered' })
   })
 })

@@ -183,7 +183,7 @@ export const FORM = {
     info: "Case non cochée, personne ne vous appelle. Cochée, quelqu'un de l'équipe Sablia vous appelle une fois au sujet de la formation. Pour retirer cet accord, écrivez à brice@sablia.io.",
   },
   privacy:
-    "Vos coordonnées servent à vous envoyer l'invitation et les rappels de cette session, rien d'autre sans votre accord.",
+    "Vos coordonnées servent à l'invitation et aux rappels de cette session ; le détail est dans la politique de confidentialité.",
   privacyLink: 'Politique de confidentialité',
   submit: "Je m'inscris",
   sending: 'Inscription en cours…',

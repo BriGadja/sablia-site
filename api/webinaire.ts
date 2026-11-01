@@ -1,6 +1,6 @@
-import { createHash } from 'node:crypto'
+import { createHash, createHmac } from 'node:crypto'
 import { z } from 'zod'
-import { findPerson } from './_newsletter-person.js'
+import { findPerson, likeValue, type PersonRow, patchLead } from './_newsletter-person.js'
 import { normalizePhone } from './ressources-request.js'
 
 /**
@@ -15,6 +15,10 @@ import { normalizePhone } from './ressources-request.js'
  * `rappel_consent=false`, `consent_at=null`, lead `intention='ressource_seule'` (hidden from the
  * default sales list); ticked → `rappel_consent=true`, `consent_at=now`, `veut_un_echange`.
  *
+ * A ticked box also raises a KNOWN lead hidden by its intention (`ressource_seule`,
+ * `newsletter_seule`) to `veut_un_echange` (only that column, never a downgrade, never a person with
+ * any `opted_out_at`), and a second registration with the box ticked upgrades a stored unticked one.
+ *
  * An address already in `sabcrm_leads` (`lower(email)`, `_newsletter-person.ts`) is NOT duplicated:
  * `lead_id` points at the oldest row. A lead failure never costs the registration: the answer stays
  * 200 and the hub `status` flags `lead_id is null`.
@@ -24,7 +28,8 @@ import { normalizePhone } from './ressources-request.js'
  *
  * Abuse budget, counted IN THE TABLE so it survives deploys: 3 registrations per `ip_hash` per UTC
  * day, 60 per day overall (429 `busy`). `ip_hash = sha256(day | salt | ip)`, salt in
- * `WEBINAR_IP_SALT` (optional: absent means an empty salt, like the newsletter's day-only salt).
+ * `WEBINAR_IP_SALT`. With no salt the key is `HMAC_SHA256(service key, day|ip)`: an empty salt would
+ * leave a hash anyone reading the table could brute-force over the IPv4 space.
  * Honeypot and a 3 s floor answer 204 BEFORE any I/O, as `contact.ts` does.
  */
 
@@ -95,7 +100,10 @@ export function clientIp(request: Request): string {
   return last || 'unknown'
 }
 
-export function ipHashFor(ip: string, day: string, salt: string): string {
+export function ipHashFor(ip: string, day: string, salt: string, fallbackKey = ''): string {
+  if (salt === '' && fallbackKey !== '') {
+    return createHmac('sha256', fallbackKey).update(`${day}|${ip}`).digest('hex')
+  }
   return createHash('sha256').update(`${day}|${salt}|${ip}`).digest('hex')
 }
 
@@ -193,6 +201,37 @@ function busy(now: Date): Response {
   })
 }
 
+const UPGRADABLE = ['ressource_seule', 'newsletter_seule']
+
+/** Consent given: raise the oldest row of a known, not-opposed person that sits hidden. Only `intention`. */
+async function upgradeLead(person: PersonRow[], key: string): Promise<void> {
+  const oldest = person[0]
+  if (!oldest || person.some((r) => r.opted_out_at)) return
+  if (!oldest.intention || !UPGRADABLE.includes(oldest.intention)) return
+  await patchLead(oldest.id, { intention: 'veut_un_echange' }, key)
+}
+
+/** Duplicate path: a ticked box upgrades a stored unticked one, never the reverse. Never throws. */
+async function upgradeDuplicate(value: WebinaireRequest, key: string, now: Date): Promise<void> {
+  if (!value.rappel_consent) return
+  try {
+    const [stored] = await rest<{ id: string; rappel_consent: boolean }>(
+      `${REGISTRATIONS}?select=id,rappel_consent&session_slug=eq.${SESSION_SLUG}&email=ilike.${likeValue(
+        value.email.toLowerCase(),
+      )}&limit=1`,
+      key,
+    )
+    if (!stored || stored.rappel_consent) return
+    await rest(`${REGISTRATIONS}?id=eq.${enc(stored.id)}`, key, {
+      method: 'PATCH',
+      body: { rappel_consent: true, consent_at: now.toISOString() },
+    })
+    await upgradeLead(await findPerson(value.email, key), key)
+  } catch (error) {
+    console.error('[webinaire] duplicate upgrade failed', detail(error))
+  }
+}
+
 /** Never throws: whatever happens here, the registration is already stored. */
 async function reportLead(
   value: WebinaireRequest,
@@ -211,6 +250,7 @@ async function reportLead(
       method: 'PATCH',
       body: { lead_id: leadId },
     })
+    if (value.rappel_consent) await upgradeLead(person, key)
   } catch (error) {
     console.error('[webinaire] lead report failed', detail(error))
   }
@@ -226,7 +266,7 @@ async function handleRegistration(
   const dayStart = new Date(
     Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
   ).toISOString()
-  const ipHash = ipHashFor(ip, dayStart.slice(0, 10), salt)
+  const ipHash = ipHashFor(ip, dayStart.slice(0, 10), salt, key)
 
   const fromIp = await rest<{ id: string }>(
     `${REGISTRATIONS}?select=id&ip_hash=eq.${ipHash}&created_at=gte.${enc(dayStart)}&limit=${PER_IP_DAILY}`,
@@ -251,7 +291,10 @@ async function handleRegistration(
     })
   } catch (error) {
     // Unique index (session_slug, lower(email)): same answer as a new row, nothing else written.
-    if (error instanceof DbError && error.status === 409) return registered()
+    if (error instanceof DbError && error.status === 409) {
+      await upgradeDuplicate(value, key, now)
+      return registered()
+    }
     throw error
   }
   if (!row?.id) throw new DbError('POST site_webinar_registrations returned no id', 500)

@@ -16,12 +16,13 @@ const LEADS_ENDPOINT = 'https://qlxoitzdxjqhljjoeqoq.supabase.co/rest/v1/sabcrm_
 const TIMEOUT_MS = 4000
 
 export const PERSON_SELECT =
-  'id,email,full_name,optout_token,opted_out_at,archived_at,newsletter_subscribed_at,newsletter_unsubscribed_at'
+  'id,email,full_name,intention,optout_token,opted_out_at,archived_at,newsletter_subscribed_at,newsletter_unsubscribed_at'
 
 export interface PersonRow {
   id: string
   email: string | null
   full_name: string | null
+  intention?: string | null
   optout_token: string
   opted_out_at: string | null
   archived_at: string | null
