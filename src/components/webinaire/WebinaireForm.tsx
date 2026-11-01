@@ -219,7 +219,9 @@ export default function WebinaireForm({ onRegistered = goToMerci }: Props) {
       )}
 
       <p className="wbn-privacy">
-        {FORM.privacy} <Link href="/politique-confidentialite">{FORM.privacyLink}</Link>
+        {FORM.privacy.before}
+        <Link href="/politique-confidentialite">{FORM.privacy.link}</Link>
+        {FORM.privacy.after}
       </p>
     </form>
   )

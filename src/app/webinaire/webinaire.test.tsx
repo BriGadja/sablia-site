@@ -130,7 +130,7 @@ describe('/webinaire: the static HTML (SSR content rule)', () => {
     for (const label of Object.values(FORM.labels)) expect(t).toContain(label)
     expect(t).toContain(FORM.rappel.label)
     expect(t).toContain(FORM.rappel.info)
-    expect(t).toContain(FORM.privacy)
+    expect(t).toContain(FORM.privacy.before.trim())
     expect(html).toContain('href="/politique-confidentialite"')
     const box = html.match(/<input[^>]*name="rappel_consent"[^>]*>/)?.[0] ?? ''
     expect(box).toContain('type="checkbox"')
@@ -145,6 +145,36 @@ describe('/webinaire: the static HTML (SSR content rule)', () => {
   it('is indexable, with its own canonical', () => {
     expect(metadata.alternates?.canonical).toBe('/webinaire')
     expect(metadata.robots).toEqual({ index: true, follow: true })
+  })
+})
+
+// U3d (prod polish, 2026-11-01): the cards follow the session deck's order (webinaire/session/README.md:
+// demo 1 compte rendu 11:00, demo 2 fil de mails 18:00, demo 3 CCTP 26:00, demo 4 sources 39:00), and
+// the form's data line names the privacy policy once, as the link that ends the sentence.
+describe('/webinaire: demo order and data line (U3d)', () => {
+  const html = renderToString(<WebinairePage />)
+  const t = text(html)
+
+  it('lists the four demonstrations in the order of the session deck', () => {
+    expect(PROGRAMME.demos.map((d) => d.key)).toEqual(['d1', 'd2', 'd3', 'd4'])
+    const expected = [/compte rendu de réunion/i, /fil de mails/i, /CCTP/, /sources/i]
+    expected.forEach((pattern, i) => {
+      expect(PROGRAMME.demos[i]?.title).toMatch(pattern)
+    })
+    const positions = PROGRAMME.demos.map((demo) => t.indexOf(demo.title))
+    expect(positions.every((p) => p >= 0)).toBe(true)
+    expect([...positions].sort((a, b) => a - b)).toEqual(positions)
+  })
+
+  it('names the privacy policy once, as the link that ends the data sentence', () => {
+    const line = html.match(/<p class="wbn-privacy">([\s\S]*?)<\/p>/)?.[1] ?? ''
+    expect(line).not.toBe('')
+    expect(line.match(/politique de confidentialit/gi)).toHaveLength(1)
+    const link = line.match(/<a[^>]*href="\/politique-confidentialite"[^>]*>([^<]*)<\/a>/)
+    expect(link?.[1]).toBe('politique de confidentialité')
+    expect(text(line).trim()).toBe(
+      "Vos coordonnées servent à l'invitation et aux rappels de cette session. Le détail est dans la politique de confidentialité.",
+    )
   })
 })
 
