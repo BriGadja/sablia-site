@@ -1,6 +1,8 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
+import { hydrateRoot } from 'react-dom/client'
+import { renderToString } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { NDA_LINE } from '@/content/declaration'
 import { openBookingUrl } from '@/lib/booking'
@@ -32,6 +34,7 @@ beforeEach(() => {
 })
 afterEach(() => {
   vi.useRealTimers()
+  vi.unstubAllEnvs()
 })
 
 describe('SiteHeader', () => {
@@ -63,6 +66,43 @@ describe('SiteHeader', () => {
     expect(book.textContent).toBe('Réserver 30 min')
     fireEvent.click(book)
     expect(openBookingUrl).toHaveBeenCalledExactlyOnceWith(site.formationBookingUrl)
+  })
+
+  it('from the session start « Webinaires » leaves the menu (one list for the desktop bar and the phone menu)', () => {
+    at(AFTER)
+    const { container } = render(<SiteHeader />)
+    const links = document.getElementById('nav-links') as HTMLElement
+    expect(Array.from(links.querySelectorAll('a')).map((a) => a.getAttribute('href'))).toEqual([
+      '/formations',
+      '/accompagnement',
+      '/realisations',
+    ])
+    expect(container.querySelector('a[href="/webinaire"]')).toBeNull()
+  })
+
+  it('a page built before the start keeps the entry in its HTML, hydrates without a mismatch, then drops it', async () => {
+    vi.stubEnv('NEXT_PUBLIC_BUILD_AT', BEFORE.toISOString())
+    at(AFTER)
+    const html = renderToString(<SiteHeader />)
+    expect(html).toContain('href="/webinaire"')
+    // parsed the way the browser receives the static HTML, not built by React
+    const container = document.createElement('div')
+    const parsed = new DOMParser().parseFromString(`<body>${html}</body>`, 'text/html')
+    container.append(...Array.from(parsed.body.childNodes))
+    document.body.appendChild(container)
+    const errors = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const recoverable = vi.fn()
+    try {
+      await act(async () => {
+        hydrateRoot(container, <SiteHeader />, { onRecoverableError: recoverable })
+      })
+      expect(recoverable).not.toHaveBeenCalled()
+      expect(errors).not.toHaveBeenCalled()
+      expect(container.querySelector('a[href="/webinaire"]')).toBeNull()
+    } finally {
+      errors.mockRestore()
+      container.remove()
+    }
   })
 
   it('on /offres/** the header button keeps the CRM Calendly (default url)', () => {
@@ -101,6 +141,7 @@ describe('SiteHeader', () => {
     ['/accompagnement', 'Après la formation'],
     ['/realisations', 'Réalisations'],
   ])('marks the current page on %s', (path, label) => {
+    at(BEFORE)
     pathname = path
     render(<SiteHeader />)
     const current = document.querySelectorAll('[aria-current="page"]')
@@ -121,6 +162,7 @@ describe('SiteHeader', () => {
 
 describe('SiteFooter', () => {
   it('lists the training structure first, then the CRM page, resources and legal links (01b § 6 order)', () => {
+    at(BEFORE)
     const { container } = render(<SiteFooter />)
     expect(screen.getByRole('navigation', { name: 'Pied de page' })).toBeTruthy()
     expect(screen.getByRole('navigation', { name: 'Informations légales' })).toBeTruthy()
@@ -143,6 +185,22 @@ describe('SiteFooter', () => {
       ['CGV', '/cgv'],
     ])
     expect(screen.getByText(/© 2026 Sablia/)).toBeTruthy()
+  })
+
+  it('from the session start drops « Webinaires » (the one session page) and keeps every other link', () => {
+    at(AFTER)
+    const { container } = render(<SiteFooter />)
+    const hrefs = Array.from(container.querySelectorAll('footer nav a')).map((a) =>
+      a.getAttribute('href'),
+    )
+    expect(hrefs).not.toContain('/webinaire')
+    expect(hrefs.slice(0, 4)).toEqual([
+      '/formations',
+      '/accompagnement',
+      '/realisations',
+      '/offres/compte-rendu-appel',
+    ])
+    expect(hrefs).toHaveLength(11)
   })
 
   it('carries the activity declaration in its exact L6352-12 form, after the links, beside the copyright', () => {

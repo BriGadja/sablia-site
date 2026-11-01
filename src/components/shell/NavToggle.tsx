@@ -3,15 +3,18 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { NAV_LINKS } from './nav-links'
+import { useSessionUpcoming } from '@/content/session-bar'
+import { navLinksFor } from './nav-links'
 
 /**
  * The header links plus the phone menu button. Server-rendered with every link in the HTML; the
  * state only decides whether the 2-column list shows on a phone. A click on a link closes it.
+ * « Webinaires » leaves both lists at the session start (`navLinksFor`, the shared session clock).
  */
 export function NavToggle() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
+  const links = navLinksFor(useSessionUpcoming())
   return (
     <>
       <button
@@ -42,7 +45,7 @@ export function NavToggle() {
         onClick={() => setOpen(false)}
         onKeyDown={undefined}
       >
-        {NAV_LINKS.map((l) => (
+        {links.map((l) => (
           <Link
             key={l.label}
             href={l.href}

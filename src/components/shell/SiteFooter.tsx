@@ -1,13 +1,17 @@
 import Link from 'next/link'
 import { NDA_LINE } from '@/content/declaration'
+import { WhenUpcoming } from '@/content/session-bar'
 import { ConsentLink } from './ConsentLink'
 import { Logo } from './Logo'
 import './site-footer.css'
 
-/** Link order of 01b § 6: the training structure, the CRM offer page, resources, then the legal row. */
+/**
+ * Link order of 01b § 6: the training structure, the CRM offer page, resources, then the legal row.
+ * `untilSession`: gone from `SESSION_START`, like the header entry (`/webinaire` is the one session page).
+ */
 const LINKS = [
   { href: '/formations', label: 'Formation' },
-  { href: '/webinaire', label: 'Webinaires' },
+  { href: '/webinaire', label: 'Webinaires', untilSession: true },
   { href: '/accompagnement', label: 'Après la formation' },
   { href: '/realisations', label: 'Réalisations' },
   { href: '/offres/compte-rendu-appel', label: "Compte rendu d'appel" },
@@ -32,11 +36,18 @@ export function SiteFooter() {
           <span>Sablia</span>
         </span>
         <nav aria-label="Pied de page">
-          {LINKS.map((l) => (
-            <Link key={l.label} href={l.href}>
-              {l.label}
-            </Link>
-          ))}
+          {LINKS.map((l) => {
+            const link = (
+              <Link key={l.label} href={l.href}>
+                {l.label}
+              </Link>
+            )
+            return 'untilSession' in l ? (
+              <WhenUpcoming key={l.label} upcoming={link} past={null} />
+            ) : (
+              link
+            )
+          })}
         </nav>
       </div>
       <div className="wrap v2-footer-row is-legal">
