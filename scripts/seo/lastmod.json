@@ -62,5 +62,9 @@
   "/newsletter": {
     "lastmod": "2026-10-27",
     "hash": "sha256:c6b45d9acb97a0fd50898157e745c912b23528e18c23b03f22ff03bd23c64893"
+  },
+  "/webinaire": {
+    "lastmod": "2026-11-01",
+    "hash": "sha256:04d48ff97cc7c2311f95122b23287b4ace97911d50898186d2537b3f9d6e9d3f"
   }
 }

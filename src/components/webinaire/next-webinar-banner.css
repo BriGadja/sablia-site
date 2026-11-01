@@ -1,0 +1,49 @@
+@layer theme, base, components, utilities;
+
+/* The « prochain webinaire » strip: night ground, gold label, one link. Off until relay R4. */
+@layer components {
+  .v2-wbn-banner {
+    background: #161b29;
+    color: #f4ecdd;
+    font-size: 14px;
+    line-height: 1.45;
+
+    .wbn-banner-in {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-height: 48px;
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+    .wbn-banner-label {
+      flex: none;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #d9a441;
+    }
+    .wbn-banner-text {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    .wbn-banner-link {
+      flex: none;
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      color: #d9a441;
+      font-weight: 500;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-wbn-banner .wbn-banner-in {
+      flex-wrap: wrap;
+      gap: 4px 12px;
+    }
+  }
+}

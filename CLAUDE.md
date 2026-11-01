@@ -38,15 +38,15 @@
 ### Project Structure
 ```
 src/app/              # App Router: layout.tsx, globals.css, base.css, fonts.ts, one folder per route
-  ├── formations/  accompagnement/  cgv/  mentions-legales/  politique-confidentialite/  thank-you/  newsletter/
+  ├── formations/  accompagnement/  cgv/  mentions-legales/  politique-confidentialite/  thank-you/  newsletter/  webinaire/
   ├── offres/compte-rendu-appel/  (+ google-sheets/ excel-365/ [crm]/)
   ├── ressources/ (+ [slug]/)  guides/integrer-l-ia-dans-votre-entreprise/
   └── not-found.tsx  error.tsx
 src/components/       # home/<section>/ (top scene automatisations construit formations derriere videos faq),
-                      # formations/, accompagnement/, offre/, ressources/, newsletter/, legal/, shell/ (header, footer, Cta,
+                      # formations/, accompagnement/, offre/, ressources/, newsletter/, webinaire/, legal/, shell/ (header, footer, Cta,
                       # Dune, FinBand, SandIllustration, BookingButton), consent/, measurement/, seo/
 src/lib/              # seo.ts, analytics.ts, events.ts, consent.ts, contenu.ts, site.ts, booking.ts, format.ts, hooks/
-src/content/          # of1.ts (OF-1 module), crm/*.json, proof.ts, legal/ (cgv-v1.ts, cgv-v2.ts), faq-carried.ts
+src/content/          # of1.ts (OF-1 module), crm/*.json, proof.ts, legal/ (cgv-v1.ts, cgv-v2.ts), faq-carried.ts, webinaire.ts (all copy of the /webinaire pages)
 public/               # static files copied as they are into the export (brand/, illus/, photos/, llms.txt, robots.txt…)
 api/                  # Fetch handlers (contact, ressources-request, newsletter) + shared _modules, served by server/api-adapter.ts
 server/               # Express production server: index.ts, app.ts, static.ts, api-adapter.ts, healthz.ts
@@ -89,6 +89,8 @@ The list below is `PAGE_ROUTES` of `scripts/seo/routes.mjs` (the single manifest
 | `/guides/integrer-l-ia-dans-votre-entreprise` | Cornerstone guide (Article + FAQPage JSON-LD) |
 | `/cgv`, `/mentions-legales`, `/politique-confidentialite` | Legal pages (`src/components/legal/`, text in `src/content/legal/`). The CGV page ships the v2 draft with visible « [À CONFIRMER] » marks; `content-gates.sh --auto` fails a prod build while one remains (switch `cgvV2` to `cgvV1` in `src/app/cgv/page.tsx` to restore the old text) |
 | `/newsletter` | « L'IA au travail », the Tuesday letter: sign-up form (double opt-in) and the landing of the `?c=` (confirmation) and `?t=` (invitation) links, which post nothing on load |
+| `/webinaire` | Registration to the « Bureaux d'études » webinar: the form posts `POST /api/webinaire`, then lands on `/webinaire/merci`. Every visitor string of the four webinar pages lives in `src/content/webinaire.ts`, the single file the hub's anti-slop and red-line gates read; the 30-min booking link is `BOOKING_URL` there (the webinar's own Calendly event type, never `site.bookingUrl`) |
+| `/webinaire/merci`, `/webinaire/apres-reservation`, `/webinaire/questionnaire` | noindex, out of the sitemap: what follows a registration, what follows a booked call (five steps), the ten questions sent before the call (`?t=` only READS on load: `GET /api/webinaire-questionnaire`) |
 | `/thank-you` | Post-booking confirmation (noindex, with a canonical) |
 | `/roi`, `/about` | 301 in `server/static.ts` (old pages Google lists as soft 404s) |
 | any other path | `404.html`, status 404 |

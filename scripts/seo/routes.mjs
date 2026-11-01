@@ -131,6 +131,22 @@ export const PAGE_ROUTES = [
     priority: 0.6,
   },
   {
+    // Webinar registration (plan webinaire-bureaux-etudes-2026-11-01, US-86); copy in one module.
+    path: '/webinaire',
+    sources: [`${A}/webinaire/page.tsx`, `${C}/webinaire.ts`, 'src/components/webinaire/'],
+    indexable: true,
+    changefreq: 'weekly',
+    priority: 0.7,
+  },
+  ...['merci', 'apres-reservation', 'questionnaire'].map((slug) => ({
+    // Built (each page emits noindex) but kept out of the sitemap (US-86, US-88, US-90).
+    path: `/webinaire/${slug}`,
+    sources: [`${A}/webinaire/${slug}/`, `${C}/webinaire.ts`],
+    indexable: false,
+    changefreq: 'yearly',
+    priority: 0.1,
+  })),
+  {
     // Built (the page emits noindex) but kept out of the sitemap.
     path: '/thank-you',
     sources: [`${A}/thank-you/`, 'src/components/legal/', 'src/content/legal/'],
