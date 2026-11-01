@@ -1,36 +1,42 @@
-export const EYEBROW = 'Le déroulé'
-export const TITLE = "Vos cas d'abord, la séance ensuite."
+// « Le déroulé » of /formations (01b § 3 Déroulé, from the offer sheet « Le déroulé · proposé »).
 
-export interface Step {
-  n: string
+export const EYEBROW = 'Le déroulé'
+export const TITLE = 'Six demi-journées sur vos dossiers.'
+export const NOTE =
+  "Les trois jours peuvent se suivre ou s'étaler. Le programme exact est fixé dans la convention de formation."
+
+/** Number of half-days in the bar. */
+export const HALF_DAY_COUNT = 6
+
+export interface HalfDays {
+  key: string
+  /** First and last half-day (1-based, inclusive) the group covers. */
+  from: number
+  to: number
   title: string
   what: string
-  icon: string
 }
 
-export const STEPS: readonly Step[] = [
+export const HALF_DAYS: readonly HalfDays[] = [
   {
-    n: '01',
-    title: 'Un appel de 30 minutes',
-    what: 'Votre équipe, vos outils, ce qui vous prend du temps.',
-    icon: 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2',
+    key: 'direction',
+    from: 1,
+    to: 1,
+    title: 'Demi-journée 1, avec la direction',
+    what: "Les cas d'usage, les règles sur les données, l'espace de travail configuré, la mesure « avant ».",
   },
   {
-    n: '02',
-    title: 'Vos cas, envoyés avant',
-    what: "Les tâches que votre équipe aimerait confier à l'IA.",
-    icon: 'M4 6h16v12H4zM4 7l8 6 8-6',
+    key: 'metier',
+    from: 2,
+    to: 5,
+    title: 'Demi-journées 2 à 5, par métier',
+    what: 'Chaque équipe travaille sur ses dossiers réels.',
   },
   {
-    n: '03',
-    title: 'La séance, sur vos cas',
-    what: 'Des démonstrations construites sur vos situations réelles.',
-    icon: 'M3 5h18v12H3zM8 21h8M12 17v4',
-  },
-  {
-    n: '04',
-    title: 'Après la séance',
-    what: 'Le support, une page de ressources et un questionnaire anonyme.',
-    icon: 'M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5',
+    key: 'cloture',
+    from: 6,
+    to: 6,
+    title: 'Demi-journée 6, clôture',
+    what: 'La mesure « après », le plan de formation documenté, et la suite si vous la voulez.',
   },
 ]

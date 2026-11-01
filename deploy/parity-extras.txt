@@ -36,3 +36,4 @@ GET /politique-confidentialite
 GET /roi
 GET /about
 GET /newsletter
+GET /realisations

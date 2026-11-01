@@ -1,0 +1,249 @@
+@layer theme, base, components, utilities;
+
+/* #webinaire on the home: the next-session band (plan site-formation-lot1 U8). Scope distinct from
+   the /webinaire page's own `.v2-webinaire`. */
+@layer components {
+  .v2-home-webinaire {
+    position: relative;
+    z-index: 1;
+    background: #f4ecdd;
+    padding: 8px 0 96px;
+
+    .wb-panel {
+      margin: 0 16px;
+      border-radius: 32px;
+      background: #161b29;
+      color: #f1f2f5;
+      padding: 72px 0 80px;
+    }
+    .wb-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.85fr);
+      grid-template-rows: auto 1fr;
+      grid-template-areas:
+        'head aside'
+        'body aside';
+      column-gap: 80px;
+      row-gap: 22px;
+      align-items: start;
+    }
+    .wb-head {
+      grid-area: head;
+      min-width: 0;
+    }
+    .wb-h2 {
+      margin: 14px 0 0;
+      font-size: 40px;
+      line-height: 1.08;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      color: #f1f2f5;
+      text-wrap: balance;
+    }
+    .wb-body {
+      grid-area: body;
+      min-width: 0;
+    }
+    .wb-lede {
+      margin: 0;
+      text-wrap: pretty;
+      max-width: 54ch;
+      font-size: 17px;
+      line-height: 1.6;
+      color: #a4aabd;
+    }
+    .wb-actions {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    /* the site's first action: the one signal colour, so the cream ticket never outweighs it */
+    .wb-actions .v2-cta {
+      height: 52px;
+      padding: 0 26px;
+      background: #d9a441;
+      color: #131620;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .wb-actions .v2-cta:hover {
+      background: #e6b75a;
+      color: #131620;
+    }
+    .wb-autre {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #a4aabd;
+    }
+    .wb-book {
+      all: unset;
+      cursor: pointer;
+      color: #f1f2f5;
+      text-decoration: underline;
+      text-decoration-color: #d9a441;
+      text-underline-offset: 4px;
+      /* 44 px hit area: block padding enlarges the rect, no text moves */
+      padding-block: 12px;
+    }
+    .wb-book:hover {
+      color: #d9a441;
+    }
+    .wb-book:focus-visible {
+      outline: 2px solid #d9a441;
+      outline-offset: 3px;
+    }
+    /* the book heads the ticket, both centred against the left column */
+    .wb-aside {
+      grid-area: aside;
+      align-self: center;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* the paper ticket: sand on night, a dashed tear line punched on both sides before the price */
+    .wb-ticket {
+      margin: 0;
+      padding: 6px 24px 10px;
+      border-radius: 16px;
+      background: #f4ecdd;
+      color: #131620;
+    }
+    .wb-fact {
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr);
+      gap: 14px;
+      align-items: baseline;
+      padding: 14px 0;
+      border-top: 1px solid #e4d6c0;
+
+      &:first-child {
+        border-top: 0;
+      }
+      dt {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #61677a;
+      }
+      dd {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.4;
+        font-weight: 600;
+      }
+      &.is-prix {
+        position: relative;
+        margin-top: 8px;
+        padding-top: 20px;
+        border-top: 1.5px dashed #b9852a;
+      }
+      &.is-prix::before,
+      &.is-prix::after {
+        content: '';
+        position: absolute;
+        top: -12px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #161b29;
+      }
+      &.is-prix::before {
+        left: -35px;
+      }
+      &.is-prix::after {
+        right: -35px;
+      }
+      &.is-prix dd {
+        font-size: 20px;
+        color: #835a0c;
+      }
+    }
+
+    /* entrance: the ticket slides in from the right once the band scrolls in (useArmedReveal) */
+    &[data-reveal='armed'] .wb-ticket {
+      opacity: 0;
+      transform: translateX(28px);
+    }
+    &[data-reveal='in'] .wb-ticket {
+      transition:
+        opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s,
+        transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s;
+    }
+  }
+
+  @media (max-width: 1180px) {
+    .v2-home-webinaire {
+      .wb-grid {
+        column-gap: 48px;
+      }
+      .wb-h2 {
+        font-size: 34px;
+      }
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-home-webinaire {
+      /* the #apres dune (80 px) straddles this band's floor */
+      padding-bottom: 88px;
+
+      .wb-panel {
+        margin: 0 8px;
+        border-radius: 22px;
+        padding: 44px 0 48px;
+      }
+      .wb-grid {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: none;
+        grid-template-areas:
+          'head'
+          'body'
+          'aside';
+        row-gap: 24px;
+      }
+      .wb-h2 {
+        font-size: 28px;
+      }
+      .wb-aside .v2-ill {
+        display: none;
+      }
+      .wb-ticket {
+        padding: 4px 18px 8px;
+      }
+      .wb-fact {
+        grid-template-columns: 52px minmax(0, 1fr);
+        gap: 10px;
+
+        dd {
+          font-size: 15px;
+        }
+        &.is-prix::before {
+          left: -29px;
+        }
+        &.is-prix::after {
+          right: -29px;
+        }
+        &.is-prix dd {
+          font-size: 18px;
+        }
+      }
+      .wb-lede {
+        font-size: 16px;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-home-webinaire .wb-ticket {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+}

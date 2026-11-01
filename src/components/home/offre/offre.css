@@ -1,0 +1,316 @@
+@layer theme, base, components, utilities;
+
+/* #offre: the three-day offer on the night panel that slides over the sticky hero. */
+@layer components {
+  .v2-offre {
+    position: relative;
+    z-index: 1;
+    margin: 0 16px;
+    border-radius: 32px;
+    background: #161b29;
+    color: #f1f2f5;
+    padding: 64px 0 88px;
+    box-shadow: 0 -30px 60px -40px rgba(0, 0, 0, 0.5);
+    font-family: var(--font-sans);
+    /* An anchor to #offre lands docked under the sticky header (72 px), the heading and drawing clear. */
+    scroll-margin-top: 72px;
+    /* Empty grid track between two groups of half-days (the bar's grid, built in index.tsx). */
+    --of-gap: 8px;
+
+    .of-h2 {
+      margin: 14px 0 0;
+      max-width: 640px;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+
+    /* Three figures */
+    .of-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 32px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .of-card {
+      min-width: 0;
+      padding: 24px;
+      border: 1px solid #323a52;
+      border-radius: 16px;
+      background: #1e2436;
+    }
+    .of-big {
+      display: block;
+      font-size: 40px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-weight: 600;
+      color: #f1f2f5;
+    }
+    .of-sub {
+      display: block;
+      margin-top: 10px;
+      font-size: 15px;
+      line-height: 1.45;
+      color: #a4aabd;
+    }
+
+    /* The six half-days: one equal cell each, the gold sand fills them in order. The bar and the
+       captions share one grid (--cols), so each caption sits under its own half-days. */
+    .of-days {
+      margin-top: 80px;
+    }
+    .of-bar {
+      display: grid;
+      grid-template-columns: var(--cols);
+      column-gap: 6px;
+    }
+    .of-cell {
+      position: relative;
+      display: block;
+      grid-column: var(--c);
+      grid-row: 1;
+      height: 16px;
+      border-radius: 4px;
+      background: #242b40;
+      box-shadow: inset 0 0 0 1px #323a52;
+      overflow: hidden;
+    }
+    .of-cell::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #d9a441;
+      transform-origin: left center;
+    }
+    .of-steps {
+      display: grid;
+      grid-template-columns: var(--cols);
+      column-gap: 6px;
+      margin: 20px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .of-step {
+      min-width: 0;
+      grid-column: var(--col);
+      grid-row: 1;
+      padding-right: 12px;
+    }
+    .of-step-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    /* Locator (phones only, where captions stack under the bar): the six half-days in miniature,
+       this caption's own lit in gold. On wide screens the caption sits under its segment instead. */
+    .of-mini {
+      display: none;
+      flex: none;
+      gap: 3px;
+    }
+    .of-mini-cell {
+      width: 12px;
+      height: 6px;
+      border-radius: 2px;
+      background: #323a52;
+    }
+    .of-mini-cell[data-on] {
+      background: #d9a441;
+    }
+    .of-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #d9a441;
+    }
+    .of-step-text {
+      display: block;
+      max-width: 34em;
+      margin-top: 10px;
+      font-size: 15px;
+      line-height: 1.55;
+      color: #dadde6;
+      text-wrap: pretty;
+    }
+
+    .of-foot {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px 24px;
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #323a52;
+    }
+    .of-prix {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #a4aabd;
+    }
+    .of-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #f1f2f5;
+      text-decoration: underline;
+      text-decoration-color: #d9a441;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 5px;
+    }
+    .of-link:hover {
+      color: #d9a441;
+    }
+
+    /* Armed (below the fold, after hydration): figures lowered, the sand not poured yet. */
+    .of-cards[data-phase='armed'] .of-card {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    .of-cards[data-phase='playing'] .of-card {
+      animation: offre-rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: calc(var(--i) * 140ms);
+    }
+    .of-days[data-phase='armed'] .of-cell::after {
+      transform: scaleX(0);
+    }
+    .of-days[data-phase='armed'] .of-mini-cell[data-on] {
+      background: #323a52;
+    }
+    .of-days[data-phase='armed'] .of-label {
+      color: #a4aabd;
+    }
+    /* Each cell, locator cell and label starts at its own --d (index.tsx: 380 ms a half-day, a
+       300 ms beat between two groups). */
+    .of-days[data-phase='playing'] .of-cell::after {
+      animation: offre-pour var(--cell) linear both;
+      animation-delay: var(--d);
+    }
+    .of-days[data-phase='playing'] .of-mini-cell[data-on] {
+      animation: offre-fill var(--cell) linear both;
+      animation-delay: var(--d);
+    }
+    .of-days[data-phase='playing'] .of-label {
+      animation: offre-lit 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: var(--d);
+    }
+
+    @media (max-width: 900px) {
+      margin: 0 8px;
+      border-radius: 22px;
+      padding: 64px 0 72px;
+      scroll-margin-top: 64px;
+      --of-gap: 4px;
+
+      .of-h2 {
+        font-size: 28px;
+      }
+      .of-cards {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+        margin-top: 24px;
+      }
+      .of-card {
+        padding: 18px 20px;
+      }
+      .of-big {
+        font-size: 30px;
+      }
+      .of-sub {
+        margin-top: 8px;
+        font-size: 14px;
+      }
+      .of-days {
+        margin-top: 48px;
+      }
+      .of-bar {
+        column-gap: 4px;
+      }
+      .of-steps {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 22px;
+        margin-top: 24px;
+      }
+      .of-step {
+        grid-column: auto;
+        grid-row: auto;
+        padding-right: 0;
+      }
+      .of-mini {
+        display: inline-flex;
+      }
+      .of-step-text {
+        margin-top: 8px;
+      }
+      .of-foot {
+        margin-top: 36px;
+      }
+    }
+  }
+
+  @keyframes offre-pour {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+  @keyframes offre-rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes offre-fill {
+    from {
+      background: #323a52;
+    }
+    to {
+      background: #d9a441;
+    }
+  }
+  @keyframes offre-lit {
+    from {
+      color: #a4aabd;
+    }
+    to {
+      color: #d9a441;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-offre {
+      .of-card,
+      .of-cell::after,
+      .of-mini-cell,
+      .of-label {
+        animation: none !important;
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .of-label {
+        color: #d9a441 !important;
+      }
+      .of-mini-cell[data-on] {
+        background: #d9a441 !important;
+      }
+    }
+  }
+}

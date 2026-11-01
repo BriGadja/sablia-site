@@ -2,113 +2,109 @@
 
 <!-- impeccable:product-schema 1 -->
 
-> Provenance: the init interview was answered from sources, not held live: the two site grills
-> (`research/site-theophile-2026-10/decisions.md` 16/10, `decisions-lot2.md` 19/10, 21 questions answered by
-> Brice), `memory/identity/` (PROFILE, GOALS), and competitor sites looked at on 2026-10-24. [ASSUMED] marks
-> what no source says. Nothing here is a visual decision; the charte is chosen on the mockup canvas.
+> Rewritten 2026-11-01 (run `2026-11-01-site-formation`) from the hub grill summary `research/brainstorm/
+> 2026-11-01-site-formation-resume.md` and the run's copy draft. [ASSUMED] = no source says it.
 
 ## Platform
 
 web
 
 ## Users
-- Primary: owners and sales managers of French small companies with 2 to 20 salespeople, who keep their
-  customers in HubSpot, Pipedrive, Zoho, Salesforce, Airtable, or a plain Google Sheets / Excel. Job: stop
-  losing what was said on a call; have the record and the follow-up written without retyping.
-- Secondary: teams who want to learn Claude (trainings, seminars, workshops), and visitors comparing Brice
-  with other experts of the Noésia school.
+- Primary: owners and managers of French SMEs, mostly service companies with teams of 10 to 50 people, who want
+  their team trained to work with AI on its real files, with rules on the data. The first webinar speaks to
+  bureaux d'études. Secondary: people comparing trainers; Google visitors on the old CRM pages.
 
 ## Product Purpose
-sablia.io sells one offer, « Compte rendu d'appel »: when a salesperson hangs up, Claude writes the call
-report into the CRM record and creates the dated follow-up. 1 490 € HT once, running in 7 days, refunded if
-it does not work on 5 real test calls. Everything else (automations, apps, trainings, voice agents on
-request) is shown as proof, and every button leads to the same 30-minute call. Success = a booked call.
+sablia.io sells one offer, the training « L'IA au travail »: three days in the client's offices (six half-days),
+up to 12 people, on the team's own files, with Claude. Webinar first, call second, three days third: a free
+one-hour webinar on Thursday at noon, then the 30-minute call (Calendly « Échange de 30 minutes »), then a quote.
+Success = a webinar registration, then a booked call; read on 15/12 as counts, not rates.
 
 ## Positioning
-Claude installed inside the tools the company already has (its CRM, its telephony, its n8n), at a fixed
-small price, by a person who also teaches it (expert of the Noésia school, 1 400+ students). Call-intelligence
-SaaS sell a new platform and seats; Sablia writes into the CRM the client already pays for.
+On site, on the team's own files, the same trainer from the first call to the last half-day. Half-day 1 sets the
+rules on data with the management; 2 to 5 work by trade on real files; 6 measures « after ». Claude is the taught
+tool (titles say « l'IA », the next sentence names Claude). No site read on 01/11 makes a webinar the first step:
+our bet.
 
 ## Operating Context
-- The demo: a voice note dictated after a call fills the HubSpot record 40 seconds later (measured on our
-  demo, 08/09). Variant A reads the transcript the telephony already produces; variant B is a 30 s voice note.
-- Visitors arrive from Brice's LinkedIn and YouTube, the Noésia experts page (where Théophile's site is one
-  click away), a link sent by Raphaël after a sales call, and word of mouth. [ASSUMED] phone first from
-  LinkedIn, desktop when deciding.
+- The webinar: one hour on Google Meet, Thursday 12:00, the trade in its title, fictional documents.
+  First session 19/11 « Bureaux d'études : votre équipe utilise déjà l'IA. Avec quelles règles ? »; `/webinaire`
+  is frozen until then; lot 2 adds the list of upcoming sessions (no near-identical trade pages).
+- Few visitors, mostly sent (LinkedIn, newsletter n°1 on 10/11, relays, personal referrals, YouTube); Google: 29 of 34
+  referred visits in 28 days. 26/10 → 01/11: 36 visitors, 1 booking click. [ASSUMED] phone first, desktop to decide.
 
 ## Capabilities and Constraints
-- No client company is named on the site (sector only); exceptions: Hélène (first name + job) and the Noésia
-  school. Never a headcount. « Nous » everywhere; Brice is the only face.
-- As little text as possible: each section = a title of 7 words or fewer + at most one line; the animation
-  carries the logic (Brice, 19/10).
-- Voice agents exist « sur demande » only, never as part of the offer.
-- Stack of the live site: Vite + React (lot 3 re-examines it).
+- No training price anywhere (three days, conference, référent): it comes in the quote after the call (Q3). No
+  guarantee before the lawyer (06/11). The two pilot places are said in the call only.
+- Red lines (hub guard `projects/sablia/offre/formation/ia-au-travail/redlines/`): never « CPF », « finançable »,
+  « certifié », « Qualiopi »; no promised figure; no fake scarcity. The activity declaration only in its
+  L6352-12 form (footer, legal notice). Every visitor text passes it. No Copilot or ChatGPT training promised.
+- Noésia = one proof line in the trainer section (plus the moved card on `/realisations`): no other school or
+  training-partner content, never the school's former name, no client or contract counterpart named. Mister IA: its mechanics only, never its
+  titles, pages or visuals. No `Event` structured data.
+- No client company named (sector only; exceptions: Hélène, the Noésia school); never Sablia's headcount. « Nous »
+  on the home, « je » on `/formations` and `/accompagnement`; Brice is the only face.
+- A title of 7 words or fewer + at most one line per section; the animation or the photo carries the logic
+  (Brice, 19/10). The 8-word hero title is Brice's Q1 choice.
+
+**CRM offer (follow-on).** « Compte rendu d'appel » (the call report written into the CRM) stays on
+`/offres/compte-rendu-appel` and its six variants: unchanged, indexed, prices as before, out of the menu and the
+home, linked from « Après la formation » and the footer; the call → CRM animation joins it.
+« Après la formation » (`/accompagnement`): the référent IA (2 h a month, questions within 48 h) and sur-mesure.
 
 ## Brand Commitments
-- Name « Sablia » (from « sablier », hourglass). Logo: an S drawn as an hourglass, from Brice's own sketch
-  (29/09). The sand image « Goulot » (an hourglass drawn by falling sand) was picked by Brice for his LinkedIn
-  banner on 14/10 (`projects/sablia/assets/brand/linkedin-banner/`).
-- Not the Anthropic/Claude look: Brice judged a cream + serif + terracotta page « très généré par IA » and
-  « trop Claude » (19/10). The current coral `#D97757` is exactly Anthropic's « Clay ».
-- Théophile's site is the reference for flow and motion, never for its look (grid paper, electric blue,
-  yellow, offset shadows) or copy (16/10).
+- Name « Sablia » (from « sablier »). Logo: an S drawn as an hourglass, from Brice's sketch (29/09); the sand
+  image « Goulot » is his LinkedIn banner (14/10).
+- Charte « Sablier » (Brice, 24/10, `DESIGN.md`): sand and rose grounds, night band, gold `#D9A441` as the only
+  signal, Familjen Grotesk. Never the Anthropic/Claude look (19/10): no coral `#D97757`, no serif display, no
+  robot imagery. Théophile's site: flow and motion only (16/10).
 
 ## Evidence on Hand
-- Figures: 1 400+ élèves · 30+ ateliers · 4 masterclass · module Claude Code 10 h, 29 vidéos (declared);
-  40 s (measured); 68 rendez-vous on the voice card (measured); « plus de 20 clients accompagnés depuis 2025 »
-  (declared). Full table in `decisions-lot2.md` § Figures.
-- Brice's real photos and videos (`projects/sablia/contenu/`); written testimonials (Denis, Vassili, Franky).
-- No client logo, no client video testimonial yet: do not fabricate any.
+- Trainer (declared, school): 1 400+ élèves · 30+ ateliers · 4 masterclass · module Claude Code 10 h, 29 vidéos.
+- October 2026 seminar (an engineering consultancy, never named): 9,1/10 from 7 answers out of 23, always with
+  its base (R05), and four anonymous answers copied as written.
+- Five photos of the Noésia event of 09/10 (run `01c-photos.md`): no isolated recognisable person, no logo, no
+  readable screen; credit « Photos : école Noésia, 9 octobre 2026 ».
+- Realisations: 40 s (CRM demo, measured), 68 rendez-vous (voice), « plus de 20 clients accompagnés depuis 2025 ».
+- Absent, never to fabricate: a client logo or video, a photo of a training at a client, a price, a guarantee.
 
 ## Product Principles
-1. Show it working: a real CRM record changing state beats any sentence.
-2. One door: every action leads to the same 30-minute call.
-3. Nothing invented: a missing fact is a placeholder, never a plausible fake.
-4. Plain French, short, « nous ».
+1. Two doors, in order: the webinar first, the call second; offer pages lead with the call.
+2. Show the work: a team task done with Claude, on screen, beats any sentence.
+3. The price is a conversation: it comes in the quote, after the call.
+4. Nothing invented: a missing fact is a placeholder, never a plausible fake; no promised figure.
 
 ## Accessibility & Inclusion
 WCAG 2.2 AA; loops over 5 s get a pause control; reduced motion shows final states.
 
 ## Audience & secteur
 
-> Written 2026-10-24 for the charte round (design phase step 0). Sources above; competitors looked at in
-> headless captures on 2026-10-24: modjo.ai, noota.io, claap.io, ringover.fr, gong.io, maitrise-enfin-ia.com.
+> Étape 0 du design, réécrite le 2026-11-01. Sources : le grill et Umami du 01/11, les premiers écrans de
+> mister-ia.com, tensoria.fr, fjdigital.fr et contournement.io capturés le 01/11.
 
-**Le métier et son esprit.** Installer Claude dans le CRM d'une petite équipe commerciale : après l'appel,
-la fiche est à jour et la relance posée. L'esprit attendu est celui d'un outil fiable et précis, pas d'une
-promesse « IA ». Les logiciels voisins (Modjo, Noota, Gong, Ringover) se présentent tous pareil : fond blanc,
-bleu ou violet, captures d'écran dans des cadres en dégradé, parfois un robot mascotte (Ringover) ou des
-capitales condensées (Modjo). Claap est le seul à avoir un monde à lui, un grand paysage peint, et c'est le
-plus mémorable. Côté experts IA (Théophile) : papier quadrillé, bleu électrique, jaune, photo dans un cercle.
+**Le métier et son esprit.** Former une équipe d'entreprise à l'IA, chez elle, sur ses dossiers. L'esprit attendu :
+un formateur sérieux et concret qui connaît le travail de bureau, pas une promesse « IA ». Les voisins se
+ressemblent : bleu vif sur blanc ou bleu nuit (halo et italique à empattement chez Mister IA), badges de
+financement souvent en tête, compteurs, étoiles d'avis, banque d'images, heures gagnées promises. Mister IA et
+Contournement annoncent la prochaine session au-dessus du menu.
 
-**Qui arrive sur le site.** Un dirigeant ou un responsable commercial pressé, sollicité chaque semaine par
-des offres « IA », donc méfiant. Ses doutes sont les 9 questions de la FAQ : mon CRM ? vous enregistrez nos
-appels ? où vont nos données ? combien ? qui fait le travail ? Il vient vérifier que ça marche sur un vrai
-CRM, voir le prix et le risque, et qu'il y a une vraie personne derrière. Une partie compare avec Théophile.
+**Qui arrive, ce qui le rassure.** Un dirigeant ou un manager de PME de services, envoyé par LinkedIn, la
+newsletter, un relais ou une recommandation. Son équipe se sert déjà de l'IA sans règles, ou pas du tout. Ses doutes sont
+ceux de la FAQ : combien, Copilot, où, à combien, la confidentialité, qui anime. Le rassurent : Brice devant un
+vrai public (photos du 09/10), son parcours, le déroulé lu d'un coup d'œil, la règle sur les données posée
+d'abord, une note avec sa base. Lui plaisent : des tâches de bureau faites sous ses yeux, peu de texte.
 
-**Ce qui rassure, ce qui plaît.** Une vraie fiche CRM qui se remplit sous ses yeux ; les logos de ses outils ;
-le prix et le remboursement affichés ; une personne nommée avec un parcours (LVMH, MeltOne, Noésia) ; un
-chiffre mesuré (40 s). Ce qui plaît : la logique visible en animation, peu de texte.
-
-**Codes à garder.** L'interface produit montrée en vrai, des blocs sombres pour les moments forts, un seul
-appel à l'action, des chiffres concrets. **À éviter** : le look Claude (crème, titre à empattement, argile
-`#D97757`), le bleu et le violet de la catégorie, les dégradés, les robots, étincelles et cerveaux, les
-captures en cadre dégradé, le quadrillage et le jaune de Théophile, les ombres décalées.
+**Codes à garder** : la barre de la prochaine session, l'appel dans l'en-tête, des chiffres avec leur base, une
+vraie photo du formateur, des blocs sombres. **À éviter** : le bleu vif et les halos, l'italique à empattement, les
+badges, les étoiles, la banque d'images, les heures gagnées, les émojis, robots et cerveaux, le look Claude.
 
 **Contraintes de style (vérifiables sur une capture).**
-1. Tempo : vif et précis, le mouvement montre une cause puis son effet ; il ne décore pas.
-2. Densité : moyenne ; un objet animé et un titre court par section ; aucune bande vide de plus d'un tiers
-   d'écran ; aucun décor répété sur tout l'écran.
-3. Couleur : un neutre profond pour les blocs, un fond clair qui n'est pas crème, UNE couleur de signal qui
-   n'est ni le bleu/violet de la catégorie ni l'argile d'Anthropic ; texte à 4,5:1 au moins.
-   **Arbitrage de Brice (24/10, round 11 de la maquette)** : « les changements de couleur sont okay » pour la palette
-   « désert au crépuscule » : fonds sable `#F4ECDD` et rose du soir `#F2E3DF`, un bandeau violet du soir très sombre
-   `#262038`, des crêtes de dunes. Ils priment sur « pas crème » et « pas violet » ci-dessus ; un critique ne les
-   compte plus comme écarts. Restent interdits : le violet vif de la catégorie, l'argile `#D97757`, le titre à empattement.
-4. Imagerie : l'interface dessinée porte l'explication ; la signature est le sable et le S-sablier ; la seule
-   photo humaine est Brice ; jamais de robot, de visage généré ni de poignée de main.
-5. Voix : « nous », phrases courtes, français simple.
+1. Tempo : précis, sans hâte ; le mouvement montre une tâche faite, il ne décore pas.
+2. Densité : un objet (photo, animation ou barre du déroulé) et un titre court par section ; aucune bande vide de
+   plus d'un tiers d'écran ; aucun décor répété sur tout l'écran.
+3. Couleur : charte « Sablier » ; le violet `#262038` est un arbitrage de Brice (24/10), pas un écart ; texte 4,5:1.
+4. Imagerie : photos réelles de Brice en formation, dessins en sable, interface dessinée ; Brice seul visage
+   reconnaissable ; jamais de visage généré ni de robot. Voix : phrases courtes, français simple.
 
-**Matériel propre à Sablia (signature possible).** Le S-sablier du croquis de Brice ; le sable « Goulot » ;
-le compteur 00:00 → 00:40 de la vraie mesure ; le parcours LVMH → MeltOne → Sablia → Noésia ; les photos et
-vidéos de Brice.
+**Matériel propre à Sablia.** Le S-sablier, le sable « Goulot », les photos du 09/10, le parcours LVMH → MeltOne
+→ Sablia, les compteurs de l'école, l'animation des agents, les vidéos de Brice.

@@ -1,0 +1,386 @@
+@layer theme, base, components, utilities;
+
+/* #surmesure of /accompagnement: copy on the left, the night board on the right (Claude, then the six CRM pages). */
+@layer components {
+  .v2-acc-surmesure {
+    position: relative;
+    background: #f4ecdd;
+    padding: 84px 0 152px;
+
+    .sm-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      gap: 72px;
+      align-items: center;
+    }
+    .sm-h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .sm-line {
+      margin: 18px 0 0;
+      max-width: 30em;
+      font-size: 17px;
+      line-height: 1.6;
+      color: #3a3f4d;
+      text-wrap: pretty;
+    }
+    .sm-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      margin-top: 24px;
+    }
+    .sm-lead {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      font-size: 17px;
+      font-weight: 600;
+      color: #131620;
+      text-decoration: underline;
+      text-decoration-color: #b9852a;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 6px;
+      transition: color 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+
+      svg {
+        flex: none;
+        transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+      &:hover {
+        color: #835a0c;
+      }
+      &:hover svg {
+        transform: translateX(3px);
+      }
+    }
+    .sm-quiet {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      font-size: 15px;
+      color: #3a3f4d;
+      text-decoration: underline;
+      text-decoration-color: #b9852a;
+      text-underline-offset: 4px;
+    }
+
+    /* The board: tools on both sides of a tall Claude node, joined by gold connectors. */
+    .board {
+      position: relative;
+      padding: 32px 28px;
+      border-radius: 24px;
+      background: #161b29;
+      box-shadow: 0 30px 60px -40px rgba(22, 27, 41, 0.6);
+    }
+    .b-node {
+      position: absolute;
+      top: 32px;
+      bottom: 32px;
+      left: 50%;
+      width: 96px;
+      margin-left: -48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border-radius: 48px;
+      background: #1e2436;
+      border: 1px solid #d9a441;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: #d9a441;
+    }
+    .b-spark {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #d9a441;
+    }
+    /* One call report travels from Claude into the first CRM, once (motion only, see .is-in). */
+    .b-token {
+      display: none;
+    }
+    .b-tools {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 168px minmax(0, 1fr);
+      grid-template-rows: repeat(3, auto);
+      row-gap: 14px;
+
+      li {
+        position: relative;
+        grid-column: 1;
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          right: -36px;
+          width: 36px;
+          height: 2px;
+          margin-top: -1px;
+          background: #d9a441;
+          transform-origin: 100% 50%;
+        }
+      }
+      li:nth-child(n + 4) {
+        grid-column: 3;
+
+        &::after {
+          right: auto;
+          left: -36px;
+          transform-origin: 0 50%;
+        }
+      }
+      li:nth-child(1),
+      li:nth-child(4) {
+        grid-row: 1;
+      }
+      li:nth-child(2),
+      li:nth-child(5) {
+        grid-row: 2;
+      }
+      li:nth-child(3),
+      li:nth-child(6) {
+        grid-row: 3;
+      }
+    }
+    .b-tool {
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 52px;
+      padding: 0 16px;
+      border-radius: 12px;
+      background: #1e2436;
+      border: 1px solid #323a52;
+      color: #f1f2f5;
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      transition:
+        border-color 0.2s cubic-bezier(0.2, 0.7, 0.2, 1),
+        color 0.2s;
+
+      svg {
+        flex: none;
+        color: #a4aabd;
+        transition:
+          transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1),
+          color 0.2s;
+      }
+      &:hover {
+        border-color: #d9a441;
+        color: #ffffff;
+      }
+      &:hover svg {
+        color: #d9a441;
+        transform: translateX(3px);
+      }
+    }
+
+    /* Entry, staged only after hydration and below the fold (useEntry): the node lights up, then each
+       connector draws out of it and its tool arrives. */
+    .board.is-armed .b-node {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+    .board.is-armed li::after {
+      transform: scaleX(0);
+    }
+    .board.is-armed .b-tool {
+      opacity: 0;
+      transform: translateX(-14px);
+    }
+    .board.is-armed li:nth-child(-n + 3) .b-tool {
+      transform: translateX(14px);
+    }
+    .board.is-in {
+      .b-node {
+        transition:
+          opacity 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+          transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+      li::after {
+        transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) calc(0.25s + var(--d));
+      }
+      .b-tool {
+        transition:
+          opacity 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) calc(0.55s + var(--d)),
+          transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) calc(0.55s + var(--d)),
+          border-color 0.2s,
+          color 0.2s;
+      }
+      .b-token {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: calc(100% + 36px);
+        width: 10px;
+        height: 10px;
+        margin: -5px 0 0 -5px;
+        border-radius: 50%;
+        background: #d9a441;
+        animation: acc-surmesure-token 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 1.5s both;
+      }
+      li:first-child .b-tool {
+        animation: acc-surmesure-flash 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 2.25s;
+      }
+    }
+
+    @media (max-width: 900px) {
+      padding: 64px 0 128px;
+
+      .sm-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 36px;
+      }
+      .sm-h2 {
+        font-size: 28px;
+      }
+      .sm-line {
+        font-size: 16px;
+      }
+      .board {
+        padding: 22px 18px 24px;
+        border-radius: 20px;
+      }
+      /* One spine down the left: the node on top, each tool hanging from it. */
+      .b-node {
+        position: relative;
+        top: auto;
+        bottom: auto;
+        left: auto;
+        width: auto;
+        margin: 0;
+        display: inline-flex;
+        flex-direction: row;
+        height: 44px;
+        padding: 0 18px 0 14px;
+        border-radius: 22px;
+      }
+      .b-tools {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: none;
+        row-gap: 10px;
+        margin-top: 14px;
+        padding-left: 40px;
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 20px;
+          top: -14px;
+          bottom: 26px;
+          width: 2px;
+          background: #d9a441;
+          transform-origin: 50% 0;
+        }
+        li,
+        li:nth-child(n + 4) {
+          grid-column: 1;
+          grid-row: auto;
+
+          &::after {
+            right: auto;
+            left: -20px;
+            width: 20px;
+            transform-origin: 0 50%;
+          }
+        }
+      }
+      .board.is-armed .b-tools::before {
+        transform: scaleY(0);
+      }
+      .board.is-armed li:nth-child(-n + 3) .b-tool {
+        transform: translateX(-14px);
+      }
+      .board.is-in {
+        .b-tools::before {
+          transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s;
+        }
+        li::after {
+          transition-delay: calc(0.35s + var(--m));
+        }
+        .b-tool {
+          transition-delay: calc(0.55s + var(--m)), calc(0.55s + var(--m)), 0s, 0s;
+        }
+        .b-token {
+          left: -20px;
+          animation-name: acc-surmesure-token-phone;
+          animation-delay: 1.2s;
+        }
+        li:first-child .b-tool {
+          animation-delay: 1.95s;
+        }
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .board *,
+      .board *::before,
+      .board *::after {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  }
+
+  @keyframes acc-surmesure-token {
+    0% {
+      opacity: 0;
+      transform: none;
+    }
+    20% {
+      opacity: 1;
+    }
+    85% {
+      opacity: 1;
+      transform: translateX(-36px);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(-36px);
+    }
+  }
+  @keyframes acc-surmesure-token-phone {
+    0% {
+      opacity: 0;
+      transform: none;
+    }
+    20% {
+      opacity: 1;
+    }
+    85% {
+      opacity: 1;
+      transform: translateX(20px);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+  }
+  @keyframes acc-surmesure-flash {
+    0%,
+    100% {
+      border-color: #323a52;
+    }
+    35% {
+      border-color: #d9a441;
+    }
+  }
+}

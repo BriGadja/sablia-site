@@ -66,5 +66,9 @@
   "/webinaire": {
     "lastmod": "2026-11-01",
     "hash": "sha256:02bc0eb1706f1ef1f9b866b46686494fd1eccc2b6a56605ffd6c28629e63b5a6"
+  },
+  "/realisations": {
+    "lastmod": "2026-11-01",
+    "hash": "sha256:93215ae77db0d56198a4f8ab32e052c8b353c4cfacdefb2658a251836d586267"
   }
 }

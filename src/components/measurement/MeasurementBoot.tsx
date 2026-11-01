@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { initAnalytics } from '@/lib/analytics'
+import { applyStatsParam, initAnalytics } from '@/lib/analytics'
 import { startEventTracking } from '@/lib/events'
 
 /**
@@ -10,6 +10,7 @@ import { startEventTracking } from '@/lib/events'
  */
 export function MeasurementBoot() {
   useEffect(() => {
+    applyStatsParam()
     initAnalytics()
     return startEventTracking()
   }, [])

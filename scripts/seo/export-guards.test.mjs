@@ -276,5 +276,12 @@ describe('checkOrganizationJsonLd', () => {
       checkOrganizationJsonLd(ld({ ...ORG, description: 'Dashboards intelligents' })).join(),
       /dashboards intelligents/i,
     )
+    // U13a (site-formation lot 1): the site trains teams first; the CRM-agency identity is retired.
+    assert.match(
+      checkOrganizationJsonLd(
+        ld({ ...ORG, alternateName: "Sablia, agence d'intégration de Claude dans les CRM" }),
+      ).join(),
+      /CRM/,
+    )
   })
 })

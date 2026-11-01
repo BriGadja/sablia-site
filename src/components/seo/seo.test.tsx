@@ -1,6 +1,7 @@
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import { of1 } from '@/content/of1'
+import { site } from '@/lib/site'
 import { BreadcrumbJsonLd } from './BreadcrumbJsonLd'
 import { JsonLd, serializeJsonLd } from './JsonLd'
 import { OrganizationJsonLd } from './OrganizationJsonLd'
@@ -36,27 +37,47 @@ describe('OrganizationJsonLd', () => {
     expect(org.email).toBe('brice@sablia.io')
   })
 
-  it('states the 7-day promise and none of the retired claims', () => {
-    expect(org.description).toContain('7 jours')
-    expect(html).not.toMatch(/30 jours/i)
-    expect(html).not.toMatch(/dashboards intelligents/i)
+  // US-91..98 (plan site-formation-lot1, U13a): every page carries this block, so it must say what
+  // the site sells now, the training first; the CRM offer stays as a follow-on service.
+  it('says training first: tagline as alternate name, three days, Claude, the free webinar', () => {
+    expect(org.alternateName).toBe(
+      `Sablia, ${site.tagline.charAt(0).toLowerCase()}${site.tagline.slice(1)}`,
+    )
+    expect(org.description).toMatch(/^Formation à l'IA/)
+    expect(org.description).toContain('trois jours')
+    expect(org.description).toContain('Claude')
+    expect(org.description).toContain('webinaire gratuit')
+    expect(org.serviceType[0]).toMatch(/^Formation/)
   })
 
-  it('offers the catalogue v1: OF-1 priced from of1.ts, voice agents and custom CRM without a price', () => {
+  it('is no longer the CRM-integration agency and carries none of the retired claims', () => {
+    expect(html).not.toMatch(/dans les CRM|× CRM|agence/i)
+    expect(html).not.toMatch(/30 jours/i)
+    expect(html).not.toMatch(/dashboards intelligents/i)
+    expect(html).not.toContain('"Event"')
+  })
+
+  it('catalogue: the training first and unpriced, the CRM offer kept priced from of1.ts, the rest on request', () => {
     const offers = org.hasOfferCatalog.itemListElement as {
-      itemOffered: { name: string }
+      itemOffered: { name: string; description: string }
       priceSpecification?: { price: number; priceCurrency: string; valueAddedTaxIncluded: boolean }
     }[]
-    const of1Offer = offers.find((o) => o.itemOffered.name === of1.title)
-    expect(of1Offer?.priceSpecification).toEqual({
+    expect(offers.map((o) => o.itemOffered.name)).toEqual([
+      "L'IA au travail",
+      'Référent IA',
+      of1.title,
+      'Agent vocal',
+      'CRM sur mesure',
+    ])
+    expect(offers[0].itemOffered.description).toContain("jusqu'à 12 personnes")
+    const priced = offers.filter((o) => o.priceSpecification)
+    expect(priced.map((o) => o.itemOffered.name)).toEqual([of1.title])
+    expect(priced[0].priceSpecification).toEqual({
       '@type': 'PriceSpecification',
       price: of1.price.oneShotHt,
       priceCurrency: 'EUR',
       valueAddedTaxIncluded: false,
     })
-    const onRequest = offers.filter((o) => o.itemOffered.name !== of1.title)
-    expect(onRequest.map((o) => o.itemOffered.name)).toEqual(['Agent vocal', 'CRM sur mesure'])
-    for (const o of onRequest) expect(o.priceSpecification).toBeUndefined()
   })
 
   it('names no client and no headcount', () => {

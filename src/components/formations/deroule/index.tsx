@@ -1,47 +1,58 @@
 'use client'
 
+// Client component: the bar fills once the section is in view (useStaged).
 import { useRef } from 'react'
+import { Dune } from '@/components/shell/Dune'
 import { Eyebrow } from '@/components/shell/Eyebrow'
-import { useStaged } from '../niveaux/useStaged'
-import { EYEBROW, STEPS, TITLE } from './content'
+import { useStaged } from '../useStaged'
+import { EYEBROW, HALF_DAY_COUNT, HALF_DAYS, NOTE, TITLE } from './content'
 import './deroule.css'
 
+const DAYS = Array.from({ length: HALF_DAY_COUNT }, (_, i) => i + 1)
+
+/**
+ * `#deroule`, the page's signature moment: six equal half-days fill with gold sand, one after the
+ * other; each group card lights when its last half-day is full. The cards carry the text, the bar is
+ * decorative (aria-hidden). Plays once; the server HTML and reduced motion show it full.
+ */
 export function Deroule() {
   const ref = useRef<HTMLElement>(null)
-  const stage = useStaged(ref)
+  const stage = useStaged(ref, HALF_DAY_COUNT)
 
   return (
-    <section id="deroule" ref={ref} className="v2-deroule">
+    <section id="deroule" ref={ref} className="v2-fm-deroule">
+      <Dune back="#C68A8E" front="#161B29" />
       <div className="wrap">
-        <Eyebrow>{EYEBROW}</Eyebrow>
+        <Eyebrow onDark>{EYEBROW}</Eyebrow>
         <h2>{TITLE}</h2>
-        <ol className="de-steps">
-          {STEPS.map((s, i) => (
-            <li
-              key={s.n}
-              className={`de-step${stage > i ? ' on' : ''}${stage === i + 1 && stage < 4 ? ' cur' : ''}`}
-            >
-              <div className="de-head">
-                <span className="de-n">{s.n}</span>
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#131620"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d={s.icon} />
-                </svg>
-              </div>
-              <h3>{s.title}</h3>
-              <p>{s.what}</p>
+        <ol className="dr-bar" aria-hidden="true">
+          {DAYS.map((k) => (
+            <li key={k} className={`dr-seg${stage >= k ? ' is-on' : ''}`}>
+              <span className="dr-track">
+                <span className="dr-fill" />
+              </span>
+              <span className="dr-n">{k}</span>
             </li>
           ))}
         </ol>
+        <ol className="dr-cards">
+          {HALF_DAYS.map((h) => {
+            const on = stage >= h.to
+            const cur = !on && stage >= h.from
+            return (
+              <li key={h.key} className={`dr-card${on ? ' is-on' : ''}${cur ? ' is-cur' : ''}`}>
+                <span className="dr-pips" aria-hidden="true">
+                  {DAYS.map((k) => (
+                    <span key={k} className={k >= h.from && k <= h.to ? 'is-mine' : undefined} />
+                  ))}
+                </span>
+                <h3>{h.title}</h3>
+                <p>{h.what}</p>
+              </li>
+            )
+          })}
+        </ol>
+        <p className="dr-note">{NOTE}</p>
       </div>
     </section>
   )

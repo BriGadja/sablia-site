@@ -1,24 +1,16 @@
-'use client'
+'use client' // the hero recedes under the offer panel (scroll position, viewport width) and draws its underline when seen (tab visibility)
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import Link from 'next/link'
+import { type RefObject, useEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { BookingButton } from '@/components/shell/BookingButton'
 import { Cta } from '@/components/shell/Cta'
 import { Dune } from '@/components/shell/Dune'
+import { WhenUpcoming } from '@/content/session-bar'
+import { PATHS } from '@/content/webinaire'
 import { useInView } from '@/lib/hooks/useInView'
-import { usePausable } from '@/lib/hooks/usePausable'
 import { useReducedMotion } from '@/lib/hooks/useReducedMotion'
-import { useScrollProgress } from '@/lib/hooks/useScrollProgress'
-import { useTimelineLoop } from '@/lib/hooks/useTimelineLoop'
-import {
-  CLAIM_LINES,
-  derive,
-  FIGURE_LABEL,
-  FINAL_FRAME,
-  type Frame,
-  H1_LINES,
-  PILL,
-  proofLine,
-  START_FRAME,
-} from './content'
+import { site } from '@/lib/site'
+import { HERO, PHOTO } from './content'
 import './top.css'
 
 const WIDE = '(min-width: 901px)'
@@ -27,7 +19,7 @@ const subscribeWide = (cb: () => void) => {
   mq.addEventListener('change', cb)
   return () => mq.removeEventListener('change', cb)
 }
-/** The recede is a desktop effect (the mockup turns it off at 900 px and below). */
+/** The recede is a desktop effect (off at 900 px and below, where the hero is not sticky). */
 function useWide() {
   return useSyncExternalStore(
     subscribeWide,
@@ -36,315 +28,252 @@ function useWide() {
   )
 }
 
-const Check = ({ size, stroke, w }: { size: number; stroke: string; w: number }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke={stroke}
-    strokeWidth={w}
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M5 12l5 5L20 7" />
-  </svg>
-)
+/**
+ * Hero content at recede progress `p` (0: the panel still below the hero, 1: the panel at the
+ * viewport top), `travel` being the hero's height. The content rises at 0.6 of the scroll speed, so the
+ * panel reaches the two doors no sooner than ordinary scrolling would take them under the header; it
+ * shrinks a little and fades late: fully opaque until p = 0.4, still 0.8 when the panel reaches the
+ * doors (p about 0.6 at 1440), gone by p = 0.85, before the panel docks (no ghost line).
+ */
+export function recede(p: number, travel: number) {
+  const f = Math.min(1, Math.max(0, (p - 0.4) / 0.45))
+  return { y: 0 - p * travel * 0.6, scale: 1 - 0.08 * p, opacity: 1 - f * f }
+}
 
-export function Top() {
-  const [frame, setFrame] = useState<Frame>(START_FRAME)
-  const reduced = useReducedMotion()
-  const wide = useWide()
-  const pause = usePausable({ hover: false })
-  const heroRef = useRef<HTMLElement>(null)
-  const lapRef = useRef(0)
-  const sceneRef = useRef<HTMLElement | null>(null)
+/** Quiet time after which a scroll counts as settled. */
+const SETTLE_MS = 160
+
+/**
+ * Writes the recede straight onto the grid's style on each animation frame (no React render, no
+ * rounding: the content moves with the scroll and must not step). Wide screens only.
+ * When a scroll settles with the panel's top on the doors' row (a half-cut button), the page glides
+ * on to the dock if the visitor was going down, or back to the uncovered hero if going up.
+ */
+function useRecede(
+  heroRef: RefObject<HTMLElement | null>,
+  gridRef: RefObject<HTMLElement | null>,
+  on: boolean,
+) {
   useEffect(() => {
-    sceneRef.current = document.getElementById('scene')
+    const hero = heroRef.current
+    const grid = gridRef.current
+    const panel = document.getElementById('offre')
+    if (!on || !hero || !grid || !panel) return
+    const reset = () => {
+      grid.style.transform = ''
+      grid.style.opacity = ''
+      grid.style.willChange = ''
+    }
+    let raf = 0
+    const apply = () => {
+      raf = 0
+      const travel = hero.offsetHeight || 800
+      const p = Math.max(0, Math.min(1, 1 - panel.getBoundingClientRect().top / travel))
+      if (p === 0) return reset()
+      const r = recede(p, travel)
+      grid.style.transform = `translate3d(0, ${r.y.toFixed(1)}px, 0) scale(${r.scale.toFixed(4)})`
+      grid.style.opacity = r.opacity.toFixed(3)
+      grid.style.willChange = p < 1 ? 'transform, opacity' : ''
+    }
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(apply)
+    }
+    let lastY = window.scrollY
+    let dir = 0
+    let settle = 0
+    const settled = () => {
+      const doors = hero.querySelector('[data-zone="hero"]')
+      if (!doors || dir === 0) return
+      const t = panel.getBoundingClientRect().top
+      const d = doors.getBoundingClientRect()
+      if (t <= d.top - 8 || t >= d.bottom + 8) return // doors fully covered or clear
+      const line = document.querySelector('.v2-header')?.getBoundingClientRect().bottom ?? 0
+      const travel = hero.offsetHeight || 800
+      window.scrollBy({ top: dir > 0 ? t - Math.max(0, line) : -(travel - t), behavior: 'smooth' })
+    }
+    const onScroll = () => {
+      const y = window.scrollY
+      if (y !== lastY) dir = y > lastY ? 1 : -1
+      lastY = y
+      window.clearTimeout(settle)
+      settle = window.setTimeout(settled, SETTLE_MS)
+      schedule()
+    }
+    schedule()
+    document.addEventListener('scroll', onScroll, true)
+    window.addEventListener('resize', schedule)
+    return () => {
+      document.removeEventListener('scroll', onScroll, true)
+      window.removeEventListener('resize', schedule)
+      if (raf) cancelAnimationFrame(raf)
+      window.clearTimeout(settle)
+      reset()
+    }
+  }, [heroRef, gridRef, on])
+}
+
+/**
+ * A door of the receded hero (sticky, under the panel or the header) would take the keyboard focus
+ * invisibly: bring the hero back uncovered first. Wide screens only, where the hero is sticky; reduced
+ * motion included (the stickiness is CSS); instant.
+ */
+function useFocusUncover(heroRef: RefObject<HTMLElement | null>, on: boolean) {
+  useEffect(() => {
+    const hero = heroRef.current
+    const panel = document.getElementById('offre')
+    if (!on || !hero || !panel) return
+    const onFocus = () => {
+      const travel = hero.offsetHeight || 800
+      const t = panel.getBoundingClientRect().top
+      if (t < travel) window.scrollBy({ top: -(travel - t), behavior: 'auto' })
+    }
+    hero.addEventListener('focusin', onFocus)
+    return () => hero.removeEventListener('focusin', onFocus)
+  }, [heroRef, on])
+}
+
+/** Longest wait for the photo and the fonts before the underline draws anyway. */
+const READY_CAP_MS = 1200
+
+/** `hold` = undrawn (static HTML), `draw` = drawing then drawn, `final` = drawn at once (reduced motion). */
+type Underline = 'hold' | 'draw' | 'final'
+
+/**
+ * The gold underline is a gesture, so it plays where the visitor sees it: once the tab is visible,
+ * the hero is in view and the photo and fonts are ready (or 1.2 s have passed). It plays once.
+ */
+function useUnderline(heroRef: RefObject<HTMLElement | null>): Underline {
+  const reduced = useReducedMotion()
+  const inView = useInView(heroRef, { threshold: 0.5, once: true })
+  const [visible, setVisible] = useState(false)
+  const [ready, setReady] = useState(false)
+  const [go, setGo] = useState(false)
+
+  useEffect(() => {
+    const read = () => setVisible(document.visibilityState === 'visible')
+    read()
+    document.addEventListener('visibilitychange', read)
+    return () => document.removeEventListener('visibilitychange', read)
   }, [])
-  // The loop runs only while the hero is on screen, at every width (the recede below is wide-only).
-  const inView = useInView(heroRef, { threshold: 0 })
-  const p = useScrollProgress({ target: sceneRef, reference: heroRef, enabled: wide })
 
-  const set = useCallback((patch: Partial<Frame>) => setFrame((f) => ({ ...f, ...patch })), [])
+  useEffect(() => {
+    let alive = true
+    const done = () => {
+      if (alive) setReady(true)
+    }
+    const cap = window.setTimeout(done, READY_CAP_MS)
+    const img = heroRef.current?.querySelector('img')
+    const photo =
+      !img || (img.complete && img.naturalWidth > 0)
+        ? Promise.resolve()
+        : new Promise<void>((resolve) => {
+            img.addEventListener('load', () => resolve(), { once: true })
+            img.addEventListener('error', () => resolve(), { once: true })
+          })
+    const fonts = document.fonts ? document.fonts.ready : Promise.resolve()
+    Promise.all([photo, fonts]).then(done, done)
+    return () => {
+      alive = false
+      window.clearTimeout(cap)
+    }
+  }, [heroRef])
 
-  // The mockup's heroLoop: one lap per run, the fade-out closes it, the hook repeats it.
-  useTimelineLoop(
-    async ({ wait }) => {
-      const lap = (lapRef.current++ % 2) as 0 | 1
-      setFrame({ ...START_FRAME, lap })
-      await wait(500)
-      set({ s: 1 })
-      for (let sec = 358; sec <= 372; sec++) {
-        set({ sec })
-        await wait(140)
-      }
-      set({ s: 2 })
-      await wait(380)
-      set({ s: 3 })
-      await wait(550)
-      set({ s: 4 })
-      await wait(450)
-      for (let r = 1; r <= 4; r++) {
-        set({ r })
-        await wait(r === 1 ? 900 : 380)
-      }
-      set({ s: 5 })
-      await wait(800)
-      set({ s: 6 })
-      await wait(4000)
-      set({ fade: true })
-      await wait(450)
-      setFrame({ ...START_FRAME, lap, fade: true })
-      await wait(600)
-    },
-    { active: inView && !pause.paused && p < 0.95, final: () => setFrame(FINAL_FRAME) },
+  useEffect(() => {
+    if (visible && ready && inView) setGo(true)
+  }, [visible, ready, inView])
+
+  if (reduced) return 'final'
+  return go ? 'draw' : 'hold'
+}
+
+function CalendarIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M3 10h18M8 3v4M16 3v4" />
+    </svg>
   )
+}
 
-  // Paused by the button: park on the finished scene. Reduced motion: always the finished scene.
-  const shown = reduced || pause.userPaused ? FINAL_FRAME : frame
-  const d = derive(shown)
-  const proof = proofLine()
+/**
+ * Home hero: the promise, two doors in order (the webinar while a session is upcoming, then the
+ * 30-minute call on the formation Calendly) and a real photo of the trainer. The section is sticky on
+ * wide screens and recedes while the night `#offre` panel slides over it.
+ */
+export function Top() {
+  const wide = useWide()
+  const reduced = useReducedMotion()
+  const heroRef = useRef<HTMLElement>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
+  useRecede(heroRef, gridRef, wide && !reduced)
+  useFocusUncover(heroRef, wide)
+  const underline = useUnderline(heroRef)
 
   return (
-    <section id="top" ref={heroRef} className="v2-top">
+    <section id="top" ref={heroRef} className="v2-top" data-underline={underline}>
       <Dune back="#E8CFC8" front="#EAD9BD" edge="bottom" />
       <div className="wrap">
-        <div
-          className="hero-grid"
-          style={{
-            transform: `translate3d(0, ${Math.round(-36 * p)}px, 0) scale(${(1 - 0.08 * p).toFixed(3)})`,
-            opacity: Number((1 - 0.7 * p).toFixed(2)),
-          }}
-        >
+        <div className="hero-grid" ref={gridRef}>
           <div className="copy">
             <div className="pill">
-              <span className="pill-dot" />
-              {PILL}
+              <span className="pill-dot" aria-hidden="true" />
+              {HERO.pill}
             </div>
             <h1 className="h1">
-              <span className={`hx-u${d.u1 ? ' on' : ''}`}>{H1_LINES[0]}</span>{' '}
-              <span className={`hx-u${d.u2 ? ' on' : ''}`}>{H1_LINES[1]}</span>
+              {HERO.h1.lead}
+              <span className="hx-u">{HERO.h1.mark}</span>
+              {HERO.h1.tail}
             </h1>
-            <p className="claim">{CLAIM_LINES[0]}</p>
-            <div className="cta-row">
-              <Cta size="lg" arrow />
-              <span className="free">{CLAIM_LINES[1]}</span>
+            <p className="claim">{HERO.sub}</p>
+            <div className="cta-row" data-zone="hero">
+              <WhenUpcoming
+                upcoming={
+                  <>
+                    <Cta size="lg" arrow href={PATHS.page}>
+                      {HERO.cta.webinaire}
+                    </Cta>
+                    <BookingButton className="quiet" url={site.formationBookingUrl}>
+                      <CalendarIcon />
+                      <span className="quiet-t">{HERO.cta.book}</span>
+                    </BookingButton>
+                  </>
+                }
+                past={
+                  <>
+                    <Cta size="lg" arrow url={site.formationBookingUrl}>
+                      {HERO.cta.book}
+                    </Cta>
+                    <Link className="quiet" href="/formations">
+                      <span className="quiet-t">{HERO.cta.offre}</span>
+                    </Link>
+                  </>
+                }
+              />
             </div>
-            <p className="hx-proof">
-              {proof.map((t) => (
-                <span key={t}>{t}</span>
-              ))}
-            </p>
+            <p className="free">{HERO.reassure}</p>
           </div>
 
-          <figure className="hs" aria-label={FIGURE_LABEL}>
-            <div className={`hs-stage${d.fade ? ' fade' : ''}`} aria-hidden="true">
-              <div className="hs-laptop">
-                <div className="hs-bar">
-                  <span className="hs-dot" />
-                  <span className="hs-dot" />
-                  <span className="hs-dot" />
-                  {d.who.logo && (
-                    // biome-ignore lint/performance/noImgElement: tiny static svg, decorative
-                    <img className="hs-logo" src={d.who.logo} alt="" />
-                  )}
-                  <span className="hs-tag">{d.who.tag}</span>
-                </div>
-                <div className="hs-who">
-                  <span className="hs-av">{d.who.av}</span>
-                  <div>
-                    <b>{d.who.name}</b>
-                    <small>{d.who.sub}</small>
-                  </div>
-                  <span className={`hs-upd${d.updOn ? ' on' : ''}`}>{d.updText}</span>
-                </div>
-                <div className="hs-body">
-                  <div className="hs-note">
-                    <span className="hx-k">Compte rendu d&apos;appel</span>
-                    {d.who.note.map((line, li) => (
-                      <span
-                        key={line[0][0]}
-                        className={`hs-nt${d.noteFill ? ' fill' : ''}`}
-                        style={li ? { animationDelay: '380ms' } : undefined}
-                      >
-                        {line.map(([t, hit]) =>
-                          hit === null ? (
-                            t
-                          ) : (
-                            <span key={t} className={`hs-w${d.lit[hit] ? ' lit' : ''}`}>
-                              {t}
-                            </span>
-                          ),
-                        )}
-                      </span>
-                    ))}
-                  </div>
-                  {d.who.rows.map(([k, v], i) => (
-                    <div className="hs-row" key={k}>
-                      <span className="hx-k">{k}</span>
-                      {d.rowsOn[i] ? (
-                        <>
-                          <span className="hx-v fill">{v}</span>
-                          <span className="hx-ok pop">
-                            <Check size={10} stroke="#FFFFFF" w={3} />
-                          </span>
-                        </>
-                      ) : (
-                        <span className="hx-ph" />
-                      )}
-                    </div>
-                  ))}
-                  {d.relance && (
-                    <div className="hx-rel pop">
-                      <svg
-                        aria-hidden="true"
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M4 5h16v15H4zM4 9h16M8 3v4M16 3v4" />
-                      </svg>
-                      {d.who.relance}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className={`hs-phone${d.phoneIn ? ' in' : ''}${d.phoneDown ? ' down' : ''}`}>
-                {d.onCall && (
-                  <>
-                    <div className="hs-ps">
-                      <span className={`hx-live${d.live ? ' on' : ''}`} />
-                      Appel en cours
-                    </div>
-                    <span className="hs-pav">{d.who.av}</span>
-                    <b>{d.who.name}</b>
-                    <small>{d.who.sub}</small>
-                    <span className="hs-time">{d.time}</span>
-                    <span className="hx-wave">
-                      {d.bars.map((b) => (
-                        <span
-                          key={b.d}
-                          className={b.on ? 'bar' : ''}
-                          style={{ height: b.h, animationDelay: `${b.d}ms` }}
-                        />
-                      ))}
-                    </span>
-                    <span className={`hs-hang${d.hangPress ? ' press' : ''}`}>
-                      <svg
-                        aria-hidden="true"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#FFFFFF"
-                        strokeWidth="2.2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M3 15c5-5 13-5 18 0l-2.5 2.5-3.5-1.5v-2.5a10 10 0 0 0-6 0V16l-3.5 1.5z" />
-                      </svg>
-                    </span>
-                  </>
-                )}
-                {d.ended && (
-                  <>
-                    <div className="hs-ps hs-ps-end">
-                      <span>Appel terminé</span>
-                      <span>06:12</span>
-                    </div>
-                    <div className="hs-end">
-                      <span className="hs-endok">
-                        <Check size={20} stroke="#FFFFFF" w={3} />
-                      </span>
-                      <b>Rien à saisir.</b>
-                      <small>Claude s&apos;occupe de la fiche.</small>
-                    </div>
-                    {d.next && (
-                      <div className="hs-next">
-                        <div>
-                          <small>Appel suivant</small>
-                          <span className="hs-nm">{d.nextName}</span>
-                        </div>
-                        <span className="hs-call">
-                          <svg
-                            aria-hidden="true"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="#FFFFFF"
-                            strokeWidth="2.2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2" />
-                          </svg>
-                        </span>
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-
-              <div className={`hs-claude${d.claudeIn ? ' in' : ''}${d.claudeDone ? ' done' : ''}`}>
-                {d.working && (
-                  <>
-                    <svg
-                      aria-hidden="true"
-                      className="spin"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#D9A441"
-                      strokeWidth="2.6"
-                      strokeLinecap="round"
-                    >
-                      <path d="M21 12a9 9 0 1 1-6.2-8.6" />
-                    </svg>
-                    Claude écrit le compte rendu…
-                  </>
-                )}
-                {d.claudeDone && (
-                  <>
-                    <Check size={12} stroke="currentColor" w={3} />
-                    Compte rendu écrit, relance créée
-                  </>
-                )}
-              </div>
-            </div>
-            {!reduced && (
-              <button
-                type="button"
-                className="hs-pause"
-                onClick={pause.toggle}
-                aria-label={
-                  pause.userPaused ? "Reprendre l'animation" : "Mettre l'animation en pause"
-                }
-              >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  {pause.userPaused ? (
-                    <path d="M8 5v14l11-7z" />
-                  ) : (
-                    <path d="M7 5h3v14H7zM14 5h3v14h-3z" />
-                  )}
-                </svg>
-              </button>
-            )}
+          <figure className="photo">
+            {/* biome-ignore lint/performance/noImgElement: static export, no image optimizer */}
+            <img
+              src={PHOTO.src}
+              srcSet={PHOTO.srcSet}
+              sizes="(max-width: 900px) calc(100vw - 32px), 560px"
+              width={PHOTO.width}
+              height={PHOTO.height}
+              alt={PHOTO.alt}
+              fetchPriority="high"
+            />
           </figure>
         </div>
       </div>

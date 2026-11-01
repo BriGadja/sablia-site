@@ -179,6 +179,10 @@ export function checkOrganizationJsonLd(html) {
     if (/30 jours/i.test(raw)) problems.push('organization JSON-LD still claims « 30 jours »')
     if (/dashboards intelligents/i.test(raw))
       problems.push('organization JSON-LD still sells « dashboards intelligents »')
+    if (/intégration de Claude dans les CRM|Claude AI × CRM/i.test(raw))
+      problems.push(
+        'organization JSON-LD still says the CRM-integration agency (the site sells the training first)',
+      )
   }
   return problems
 }

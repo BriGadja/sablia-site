@@ -148,6 +148,50 @@ describe('clicks', () => {
     expect(calls()[2][1]).toEqual({ zone: 'main', label: 'Réserver un call' })
   })
 
+  it('adds dest=webinaire to the click on a link to /webinaire, and to nothing else', () => {
+    page(
+      [
+        '/webinaire',
+        '/webinaire/',
+        'https://sablia.io/webinaire',
+        '/webinaire#inscription',
+        '/webinaire?utm_source=x',
+      ]
+        .map(
+          (h, i) => `<section id="hero"><a id="w${i}" href="${h}">Prochain webinaire</a></section>`,
+        )
+        .join(''),
+    )
+    stop = startEventTracking()
+    for (let i = 0; i < 5; i++) {
+      vi.mocked(track).mockReset()
+      document.getElementById(`w${i}`)?.click()
+      expect(calls()[0], `link ${i}`).toEqual([
+        'click',
+        { label: 'Prochain webinaire', zone: 'hero', kind: 'link', dest: 'webinaire' },
+      ])
+    }
+  })
+
+  it('gives no dest to /webinairex, a cross-origin /webinaire, other pages and buttons', () => {
+    page(
+      [
+        '<a id="a" href="/webinairex">x</a>',
+        '<a id="b" href="https://example.com/webinaire">x</a>',
+        '<a id="c" href="/formations">x</a>',
+        '<button id="d">x</button>',
+        '<a id="e" href="/webinaire/merci">x</a>',
+      ].join(''),
+    )
+    stop = startEventTracking()
+    for (const id of ['a', 'b', 'c', 'd', 'e']) {
+      vi.mocked(track).mockReset()
+      document.getElementById(id)?.click()
+      expect(calls()[0][0]).toBe('click')
+      expect(calls()[0][1], id).not.toHaveProperty('dest')
+    }
+  })
+
   it('ignores the consent banner itself', () => {
     page('<section data-consent-banner><button id="b">Tout accepter</button></section>')
     stop = startEventTracking()

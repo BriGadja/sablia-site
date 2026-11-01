@@ -86,6 +86,20 @@ describe('content', () => {
   })
 })
 
+describe('Scene without its offer block (the CRM offer page, US-95)', () => {
+  it('keeps the call animation and drops the priced block and its link to the offer page', () => {
+    mockReducedMotion(false)
+    const { container } = render(<Scene showOffer={false} />)
+    const section = container.querySelector('section#scene.v2-scene')
+    expect(section?.textContent).toContain('Ce qui se passe quand votre commercial raccroche.')
+    expect(section?.querySelector('.pp')).not.toBeNull()
+    expect(section?.querySelector('ul[aria-label="Outils compatibles"]')).not.toBeNull()
+    expect(container.querySelector('#offre')).toBeNull()
+    expect(section?.textContent).not.toMatch(/€/)
+    expect(container.querySelector('a[href="/offres/compte-rendu-appel"]')).toBeNull()
+  })
+})
+
 /** Renders with a controllable IntersectionObserver and puts the pipeline in view. */
 function mountInView() {
   const io = mockIntersectionObserver()

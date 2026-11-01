@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 export interface PausableOptions {
-  /** Pause while the pointer is over the bound element. Default true (false for the Formations configurator). */
+  /** Pause while the pointer is over the bound element. Default true (false for a demo the visitor drives by hand). */
   hover?: boolean
 }
 

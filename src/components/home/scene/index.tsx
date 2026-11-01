@@ -188,7 +188,12 @@ function Runner({ active, d, final }: { active: boolean; d: Deps; final: () => v
   return null
 }
 
-export function Scene() {
+type SceneProps = {
+  /** The priced `#offre` block under the call (home). The CRM offer page has its own `#prix` and passes false. */
+  showOffer?: boolean
+}
+
+export function Scene({ showOffer = true }: SceneProps = {}) {
   const [s, setS] = useState<CallState>(callFinal)
   const [caseIdx, setCaseIdx] = useState(0)
   const [runKey, setRunKey] = useState(0)
@@ -607,53 +612,55 @@ export function Scene() {
           ))}
         </ul>
 
-        <div id="offre" className="sc-offre">
-          <IllHead>
-            <div>
-              <Eyebrow onDark>{OFFER.eyebrow}</Eyebrow>
-              <h2 className="sc-h2">{OFFER.title}</h2>
-            </div>
-            <SandIllustration
-              src="/illus/offre-contour-nuit.webp"
-              height={220}
-              bare
-              position="50% 52%"
-            />
-          </IllHead>
-          <div className="offer-grid">
-            <div className="offer-card">
-              <div className="big">{offer.price}</div>
-              <div className="offer-sub">{OFFER.once}</div>
-            </div>
-            <div className="offer-card">
-              <div className="big">{offer.days}</div>
-              <div className="offer-sub">{OFFER.inPlace}</div>
-            </div>
-            <div className="offer-card">
-              <div className="big is-flex">
-                {OFFER.refunded}
-                <Check size={28} stroke="#8FCB9B" w={2.4} />
+        {showOffer && (
+          <div id="offre" className="sc-offre">
+            <IllHead>
+              <div>
+                <Eyebrow onDark>{OFFER.eyebrow}</Eyebrow>
+                <h2 className="sc-h2">{OFFER.title}</h2>
               </div>
-              <div className="offer-sub">{OFFER.refundedSub}</div>
+              <SandIllustration
+                src="/illus/offre-contour-nuit.webp"
+                height={220}
+                bare
+                position="50% 52%"
+              />
+            </IllHead>
+            <div className="offer-grid">
+              <div className="offer-card">
+                <div className="big">{offer.price}</div>
+                <div className="offer-sub">{OFFER.once}</div>
+              </div>
+              <div className="offer-card">
+                <div className="big">{offer.days}</div>
+                <div className="offer-sub">{OFFER.inPlace}</div>
+              </div>
+              <div className="offer-card">
+                <div className="big is-flex">
+                  {OFFER.refunded}
+                  <Check size={28} stroke="#8FCB9B" w={2.4} />
+                </div>
+                <div className="offer-sub">{OFFER.refundedSub}</div>
+              </div>
             </div>
+            <Link href={OF1_ROUTE} className="offer-link">
+              {OFFER.link}
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </Link>
           </div>
-          <Link href={OF1_ROUTE} className="offer-link">
-            {OFFER.link}
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
-          </Link>
-        </div>
+        )}
       </div>
     </section>
   )

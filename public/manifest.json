@@ -1,7 +1,7 @@
 {
   "name": "Sablia",
   "short_name": "Sablia",
-  "description": "Agence d'intégration Claude AI × CRM",
+  "description": "Formation à l'IA pour votre équipe, sur ses dossiers",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

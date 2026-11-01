@@ -1,11 +1,24 @@
 @layer theme, base, components, utilities;
 
-/* #questions of /formations, ported from the rendered mockup (F:284-298). */
+/* #questions of /formations: the title held on the left, seven questions and answers on the right. */
 @layer components {
-  .v2-questions {
-    padding: 96px 0;
+  .v2-fm-questions {
+    position: relative;
+    background: #f2e3df;
+    padding: 96px 0 176px;
     color: #131620;
 
+    .qu-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+      gap: 64px;
+      align-items: start;
+    }
+    .qu-head {
+      position: sticky;
+      top: 120px;
+      min-width: 0;
+    }
     h2 {
       margin: 14px 0 0;
       font-size: 36px;
@@ -14,37 +27,53 @@
       font-weight: 600;
       text-wrap: balance;
     }
-    .qu-faq {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px 40px;
-      margin-top: 32px;
+    .qu-list {
+      margin: 0;
+      min-width: 0;
     }
     .qu-item {
-      border-top: 1px solid #e4d6c0;
-      padding-top: 16px;
+      padding: 20px 0 22px;
+      border-top: 1px solid #e8cfc8;
 
-      h3 {
-        margin: 0;
-        font-size: 16px;
+      &:first-child {
+        padding-top: 0;
+        border-top: 0;
+      }
+      dt {
+        font-size: 17px;
+        line-height: 1.4;
         font-weight: 600;
       }
-      p {
-        margin: 6px 0 0;
-        font-size: 15px;
-        line-height: 1.55;
+      dd {
+        margin: 8px 0 0;
+        max-width: 58ch;
+        text-wrap: pretty;
+        font-size: 15.5px;
+        line-height: 1.6;
         color: #3a3f4d;
       }
     }
   }
 
   @media (max-width: 900px) {
-    .v2-questions {
+    .v2-fm-questions {
+      padding: 56px 0 144px;
+
+      .qu-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+      }
+      .qu-head {
+        position: static;
+      }
       h2 {
         font-size: 28px;
       }
-      .qu-faq {
-        grid-template-columns: minmax(0, 1fr);
+      .qu-item dt {
+        font-size: 16px;
+      }
+      .qu-item dd {
+        font-size: 15px;
       }
     }
   }
