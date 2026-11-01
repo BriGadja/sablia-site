@@ -57,7 +57,7 @@ describe('/formations static HTML (SSR content rule)', () => {
   })
 
   it('pour qui: teams of 10 to 50 people', () => {
-    expect(text).toContain('Des équipes de 10 à 50 personnes.')
+    expect(text).toContain('Des entreprises de 10 à 50 personnes.')
     expect(text).toContain(
       'Dans les entreprises de services. Un programme réunit jusqu’à 12 participants.'.replace(
         '’',

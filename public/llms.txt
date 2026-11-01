@@ -13,7 +13,7 @@ Trois jours sur vos propres dossiers : chaque participant repart avec ses outils
 - Groupe : jusqu'à 12 personnes par programme
 - Lieu : dans vos locaux
 - Outil : Claude
-- Pour qui : des équipes de 10 à 50 personnes, dans les entreprises de services
+- Pour qui : des entreprises de services de 10 à 50 personnes
 - Demi-journée 1, avec la direction : les cas d'usage, les règles sur les données, l'espace de travail configuré, la mesure « avant »
 - Demi-journées 2 à 5, par métier : chaque équipe travaille sur ses dossiers réels
 - Demi-journée 6, clôture : la mesure « après », le plan de formation documenté, et la suite si vous la voulez
