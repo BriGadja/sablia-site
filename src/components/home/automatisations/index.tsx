@@ -8,8 +8,9 @@ import { usePausable } from '@/lib/hooks/usePausable'
 import { useReducedMotion } from '@/lib/hooks/useReducedMotion'
 import { useTimelineLoop } from '@/lib/hooks/useTimelineLoop'
 import './automatisations.css'
-import { JOBS, SCENE_TEXT, SR_INTRO, SWAP_MS } from './content'
+import { JOBS, SCENE_TEXT, SWAP_MS } from './content'
 import { FlowScene } from './FlowScene'
+import { EYEBROW, LINE, SR_INTRO, TITLE } from './heading'
 import { InterventionScene } from './InterventionScene'
 import { PathIcon } from './icons'
 import { LeadScene } from './LeadScene'
@@ -107,8 +108,9 @@ export function Automatisations() {
       <div className="wrap">
         <IllHead>
           <div>
-            <Eyebrow>Automatisations</Eyebrow>
-            <h2 className="auto-h2">Le même principe, partout où ça se répète.</h2>
+            <Eyebrow>{EYEBROW}</Eyebrow>
+            <h2 className="auto-h2">{TITLE}</h2>
+            <p className="auto-line">{LINE}</p>
           </div>
           <SandIllustration
             src="/illus/automatisations-contour-nuit.webp"

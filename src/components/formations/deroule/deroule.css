@@ -1,11 +1,12 @@
 @layer theme, base, components, utilities;
 
-/* #deroule of /formations, ported from the rendered mockup (F:205-225). */
+/* #deroule of /formations, on the night band: six equal half-days fill with gold, grouped 1 | 2-5 | 6. */
 @layer components {
-  .v2-deroule {
-    background: #f2e3df;
-    padding: 96px 0;
-    color: #131620;
+  .v2-fm-deroule {
+    position: relative;
+    background: #161b29;
+    padding: 88px 0 168px;
+    color: #f4ecdd;
 
     h2 {
       margin: 14px 0 0;
@@ -15,83 +16,163 @@
       font-weight: 600;
       text-wrap: balance;
     }
-    .de-steps {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 16px;
-      margin: 40px 0 0;
+
+    /* The bar: equal half-days, a wider gap after 1 and before 6 shows the three groups. */
+    .dr-bar {
+      display: flex;
+      gap: 8px;
+      margin: 48px 0 0;
       padding: 0;
       list-style: none;
     }
-    .de-step {
-      border-radius: 18px;
-      background: #fff;
-      border: 1px solid #e4d6c0;
-      padding: 20px;
-      position: relative;
-      transform: translateY(12px);
-      transition:
-        transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
-        border-color 0.3s;
+    /* flex-basis 0: the margins come off first, so the six half-days stay exactly equal. */
+    .dr-seg {
+      flex: 1 1 0;
+      min-width: 0;
 
-      /* Veil instead of opacity .35 (same blend over the section ground, text stays full opacity). */
+      &:nth-child(2),
+      &:nth-child(6) {
+        margin-left: 16px;
+      }
+    }
+    .dr-track {
+      display: block;
+      height: 14px;
+      border-radius: 999px;
+      background: #242b40;
+      box-shadow: inset 0 0 0 1px #323a52;
+      overflow: hidden;
+    }
+    .dr-fill {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #b9852a, #d9a441);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .dr-n {
+      display: block;
+      margin-top: 10px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: #a4aabd;
+      transition: color 0.3s;
+    }
+    .dr-seg.is-on {
+      .dr-fill {
+        transform: scaleX(1);
+      }
+      .dr-n {
+        color: #d9a441;
+      }
+    }
+
+    /* The three groups. The veil dims a card until its last half-day is full (text keeps full opacity). */
+    .dr-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 32px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .dr-card {
+      position: relative;
+      min-width: 0;
+      padding: 22px 22px 24px;
+      border-radius: 16px;
+      background: #1e2436;
+      border: 1px solid #323a52;
+      transition: border-color 0.3s;
+
       &::after {
         content: '';
         position: absolute;
         inset: -1px;
         border-radius: inherit;
-        background: #f2e3df;
-        opacity: 0.65;
+        background: #161b29;
+        opacity: 0.4;
         pointer-events: none;
         transition: opacity 0.45s;
       }
-      &.on {
-        transform: none;
-      }
-      &.on::after {
+      &.is-on::after {
         opacity: 0;
       }
-      &.cur {
-        border-color: #161b29;
+      &.is-cur {
+        border-color: #d9a441;
+      }
+      &.is-cur::after {
+        opacity: 0.15;
       }
       h3 {
         margin: 16px 0 0;
         font-size: 18px;
+        line-height: 1.3;
         letter-spacing: -0.015em;
         font-weight: 600;
+        color: #f4ecdd;
       }
       p {
         margin: 8px 0 0;
-        font-size: 14.5px;
-        line-height: 1.5;
-        color: #3a3f4d;
+        text-wrap: pretty;
+        font-size: 15px;
+        line-height: 1.55;
+        color: #a4aabd;
       }
     }
-    .de-head {
+    .dr-pips {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      gap: 4px;
+
+      span {
+        width: 22px;
+        height: 5px;
+        border-radius: 999px;
+        background: #323a52;
+      }
+      .is-mine {
+        background: #d9a441;
+      }
     }
-    .de-n {
-      font-family: var(--font-mono);
-      font-size: 13px;
-      color: #835a0c;
+    .dr-note {
+      margin: 28px 0 0;
+      max-width: 64ch;
+      text-wrap: pretty;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #a4aabd;
     }
   }
 
   @media (max-width: 900px) {
-    .v2-deroule {
+    .v2-fm-deroule {
+      padding: 64px 0 144px;
+
       h2 {
         font-size: 28px;
       }
-      .de-steps {
+      .dr-bar {
+        gap: 5px;
+        margin-top: 32px;
+      }
+      .dr-seg:nth-child(2),
+      .dr-seg:nth-child(6) {
+        margin-left: 10px;
+      }
+      .dr-cards {
         grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+        margin-top: 24px;
       }
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .v2-deroule .de-step,
-    .v2-deroule .de-step::after {
+    .v2-fm-deroule .dr-fill,
+    .v2-fm-deroule .dr-n,
+    .v2-fm-deroule .dr-card,
+    .v2-fm-deroule .dr-card::after {
       transition: none;
     }
   }

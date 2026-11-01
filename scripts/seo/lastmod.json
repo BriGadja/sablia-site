@@ -1,11 +1,11 @@
 {
   "/": {
-    "lastmod": "2026-10-26",
-    "hash": "sha256:050e27bf938a2038fbe2d61680d8a954ca5a2d93dac937b72c357bdfa08413d4"
+    "lastmod": "2026-11-01",
+    "hash": "sha256:93dd1441b44a5d8686e60bb484f1dc4ac5c1bf11733b6aab3d4d5a43d914244d"
   },
   "/mentions-legales": {
-    "lastmod": "2026-10-26",
-    "hash": "sha256:85506803f0a95f3ac27bffbbf08731b5dbcbca5765d3d5895bc8d9e9c6ec4cf0"
+    "lastmod": "2026-11-01",
+    "hash": "sha256:c92d7824aaa4c70dd9563a5d9422c360306f72f4038eda572554b98df5fa0f8b"
   },
   "/politique-confidentialite": {
     "lastmod": "2026-11-01",
@@ -16,12 +16,12 @@
     "hash": "sha256:9c8a68140bbc587365bc9de1d0c5bdc1fd5fb27e08fd169c044eb8965cbeebe4"
   },
   "/guides/integrer-l-ia-dans-votre-entreprise": {
-    "lastmod": "2026-10-26",
-    "hash": "sha256:7815bc761e53e36fdfff5cc48915817bb1bba6e3a86b348dd34fc0c473285b8e"
+    "lastmod": "2026-11-01",
+    "hash": "sha256:6148f7127b312667e88f5fbb908578815a509c86d5127c1fea014c3623821ef6"
   },
   "/offres/compte-rendu-appel": {
-    "lastmod": "2026-10-26",
-    "hash": "sha256:b364c31a6d72dbebf2a551ef9f25b662a5470d067b9b9a68ea3c7c00e87a30eb"
+    "lastmod": "2026-11-01",
+    "hash": "sha256:838a94ef1cd9a039d86856e70c3fbffea7f3252bc35d809a3c83230172c2e4ff"
   },
   "/ressources": {
     "lastmod": "2026-10-26",
@@ -44,12 +44,12 @@
     "hash": "sha256:abea29fa3293ea0a92e07de0943fccd8c9c7986478f87899581abb60a190dfac"
   },
   "/formations": {
-    "lastmod": "2026-10-26",
-    "hash": "sha256:b7e9c49505fa1d0cf35d9a3d0fb4c97b246fef51324383e5fdb610b68e9c6959"
+    "lastmod": "2026-11-01",
+    "hash": "sha256:1ff9eb33777f708516188142d8a717fee364a75aac8ab388018fbdb1eb8368e2"
   },
   "/accompagnement": {
-    "lastmod": "2026-10-26",
-    "hash": "sha256:792ebe45569a7f5d9366f78459a0c884052674757e3eec76d1d2a8cf53e63749"
+    "lastmod": "2026-11-01",
+    "hash": "sha256:66fb12b5640e537b332bac79d7cb90f2a31f23923207afcca4c17e2a5af7bc43"
   },
   "/offres/compte-rendu-appel/google-sheets": {
     "lastmod": "2026-10-26",
@@ -66,5 +66,9 @@
   "/webinaire": {
     "lastmod": "2026-11-01",
     "hash": "sha256:02bc0eb1706f1ef1f9b866b46686494fd1eccc2b6a56605ffd6c28629e63b5a6"
+  },
+  "/realisations": {
+    "lastmod": "2026-11-01",
+    "hash": "sha256:9eef817e56023a34902a87052b0d6e6fa2d58656b2edbef2f1cb3f897c6126ff"
   }
 }

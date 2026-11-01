@@ -10,7 +10,7 @@ import { pageMetadata, SITE_ORIGIN } from '@/lib/seo'
 const PATH = '/guides/integrer-l-ia-dans-votre-entreprise'
 const TITLE = "Comment intégrer l'IA dans votre entreprise : le guide PME 2026"
 const DESCRIPTION =
-  "Méthode concrète pour intégrer l'IA dans une PME : par où commencer, les cas d'usage les plus rentables, budget, délais, sécurité RGPD et erreurs à éviter. Par Sablia, agence d'intégration Claude AI."
+  "Méthode concrète pour intégrer l'IA dans une PME : par où commencer, les cas d'usage les plus rentables, budget, délais, sécurité RGPD et erreurs à éviter. Par Sablia, formation à l'IA pour votre équipe."
 
 export const metadata = pageMetadata({ path: PATH, title: TITLE, description: DESCRIPTION })
 

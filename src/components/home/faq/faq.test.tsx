@@ -1,10 +1,16 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { of1 } from '@/content/of1'
-import { eurHt } from '@/lib/format'
+import { FinBand } from '@/components/shell/FinBand'
+import { SESSION } from '@/content/webinaire'
+import { openBookingUrl } from '@/lib/booking'
 import { mockIntersectionObserver, mockReducedMotion } from '@/lib/hooks/test-utils'
+import { site } from '@/lib/site'
 import { FAQS, FIN_BAND } from './content'
 import { Faq } from './index'
+
+vi.mock('@/lib/booking', () => ({ openBookingUrl: vi.fn() }))
 
 beforeEach(() => {
   vi.useFakeTimers()
@@ -14,37 +20,83 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
+const PRICE = /\d[\d\s\u00a0.,]*\s?(€|euros?)/i
+const byQ = (q: string) => {
+  const f = FAQS.find((x) => x.q === q)
+  if (!f) throw new Error(`missing question: ${q}`)
+  return f
+}
+
+// Plan site-formation-lot1, U9 (US-98): the training FAQ of 01b replaces the nine CRM questions.
 describe('content', () => {
-  it('holds nine questions in the mockup order', () => {
-    expect(FAQS).toHaveLength(9)
-    expect(FAQS[0].q).toBe('Ça marche avec mon CRM ?')
-    expect(FAQS[8].q).toBe('Faites-vous aussi des agents vocaux ?')
+  it('holds the nine training questions in the 01b order', () => {
+    expect(FAQS.map((f) => f.q)).toEqual([
+      'Combien ça coûte ?',
+      'Mon équipe utilise déjà Copilot ou ChatGPT.',
+      'Où se passe la formation ?',
+      'Combien de personnes ?',
+      'Que faut-il préparer ?',
+      'Nos dossiers sont confidentiels.',
+      'Et après les trois jours ?',
+      'Qui anime ?',
+      "Mon équipe n'a jamais utilisé l'IA.",
+    ])
   })
 
-  it('FAQ 5 carries the verified D3 answer', () => {
-    expect(FAQS[4].q).toBe('Où vont nos données ?')
-    expect(FAQS[4].a).toContain("par défaut Anthropic ne s'en sert pas pour entraîner ses modèles")
-    expect(FAQS[4].a).toContain('sous 30 jours')
-    expect(FAQS[4].a).not.toMatch(/conforme RGPD|pas de sous-traitant/i)
+  it('« Combien ça coûte ? » sends the price to the quote after the 30-minute call, with no amount', () => {
+    const { a } = byQ('Combien ça coûte ?')
+    expect(a).toContain('dépend de votre équipe et du format')
+    expect(a).toContain("dans le devis, après l'échange de 30 minutes")
+    expect(a).not.toMatch(PRICE)
   })
 
-  it('FAQ 7 shows the OF-1 price and delay figures from of1.ts', () => {
-    expect(FAQS[6].a).toContain(eurHt(of1.price.oneShotHt))
-    expect(FAQS[6].a).toContain(`${of1.price.monthlyHt} €/mois`)
-    expect(FAQS[5].a).toContain(`${of1.delay.days} jours`)
+  it('the Copilot / ChatGPT answer says Claude today and the call, never another training', () => {
+    const { a } = byQ('Mon équipe utilise déjà Copilot ou ChatGPT.')
+    expect(a).toContain("La formation se fait aujourd'hui sur Claude.")
+    expect(a).toContain("dites-le pendant l'échange")
+    expect(a).not.toMatch(/(form\w*)[^.]*\b(Copilot|ChatGPT)\b/i)
   })
 
-  it('has no em dash, no banned wording, no IAPreneurs', () => {
+  it('the confidentiality answer keeps the verified Anthropic default, nothing more', () => {
+    const { a } = byQ('Nos dossiers sont confidentiels.')
+    expect(a).toContain(
+      'Sur les offres de Claude pour les entreprises, Anthropic ne se sert pas par défaut de vos échanges pour entraîner ses modèles.',
+    )
+    expect(a).not.toMatch(/conforme RGPD|sous-traitant|zéro rétention/i)
+  })
+
+  it('no amount in euros, no em dash, no banned wording anywhere in the FAQ', () => {
     const all = FAQS.map((f) => `${f.q} ${f.a}`).join(' ')
-    expect(all).not.toMatch(/—|conforme RGPD|sous-traitant|IAPreneurs/)
+    expect(all).not.toMatch(PRICE)
+    expect(all).not.toMatch(/—|IAPreneurs|CPF|finançable|certifié|Qualiopi/i)
   })
 
-  it('gives the home closing band its copy and the resources link', () => {
-    expect(FIN_BAND.title).toBe('Trente minutes pour voir si ça tourne chez vous.')
-    expect(FIN_BAND.link).toEqual({
-      href: '/ressources',
-      label: 'Pas encore prêt ? Le guide et les ressources gratuites.',
+  it('no longer reads the CRM offer module', () => {
+    const src = readFileSync(join(__dirname, 'content.ts'), 'utf8')
+    expect(src).not.toMatch(/of1|eurHt/)
+  })
+
+  it('gives the home closing band the training copy, the webinar link and the formation Calendly', () => {
+    expect(FIN_BAND).toEqual({
+      title: 'Trente minutes pour parler de votre équipe.',
+      text: 'Vous nous parlez de vos dossiers, nous vous envoyons un programme et son devis.',
+      link: {
+        href: '/webinaire',
+        label: 'Pas encore prêt ? Le webinaire gratuit du jeudi 19 novembre.',
+      },
+      bookingUrl: site.formationBookingUrl,
     })
+    // The link names the session date: a new SESSION must update this label too.
+    const day = SESSION.date.replace(/\s+\d{4}$/, '').toLowerCase()
+    expect(FIN_BAND.link.label).toContain(day)
+    expect(`${FIN_BAND.title} ${FIN_BAND.text}`).not.toMatch(PRICE)
+  })
+
+  it('the home FinBand built from FIN_BAND books on the formation Calendly', () => {
+    const { container } = render(<FinBand {...FIN_BAND} />)
+    fireEvent.click(container.querySelector('button[data-cta-book]') as HTMLButtonElement)
+    expect(openBookingUrl).toHaveBeenCalledWith(site.formationBookingUrl)
+    expect(container.querySelector('a[href="/webinaire"]')?.textContent).toBe(FIN_BAND.link.label)
   })
 })
 

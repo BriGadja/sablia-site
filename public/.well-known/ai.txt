@@ -1,4 +1,4 @@
-# Sablia — AI agent guidance
+# Sablia: AI agent guidance
 # https://sablia.io/.well-known/ai.txt
 
 # Primary machine-readable summary for LLMs (llms.txt standard):
@@ -7,7 +7,7 @@ llms: https://sablia.io/llms.txt
 # Site metadata
 name: Sablia
 url: https://sablia.io
-description: Agence française d'intégration de Claude (Anthropic) dans les CRM des PME : compte rendu d'appel et tâche de relance écrits dans votre CRM, livrés en 7 jours.
+description: Formation à l'IA pour les équipes des entreprises : trois jours dans leurs locaux, jusqu'à 12 personnes, pour travailler avec Claude (Anthropic) sur leurs propres dossiers. Premier pas : un webinaire gratuit d'une heure. Ensuite, un référent IA, ou Claude intégré sur mesure dans le CRM.
 contact: brice@sablia.io
 language: fr-FR
-last-updated: 2026-10-26
+last-updated: 2026-11-01

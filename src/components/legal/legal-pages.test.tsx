@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import MentionsLegales from '@/app/mentions-legales/page'
 import PolitiqueConfidentialite from '@/app/politique-confidentialite/page'
 import { text } from '@/components/legal/helpers.test-util'
+import { NDA_LINE, PHOTO_CREDIT } from '@/content/declaration'
 
 /**
  * US-65 / US-66 / lot 0 VPS: the legal pages say what the site now does (own server at Hostinger, audience
@@ -104,5 +105,15 @@ describe('mentions légales', () => {
   it('names the editor and says nothing the content gate bans', () => {
     expect(t).toContain('SIRET : 94090112700016')
     expect(t).not.toMatch(/IAPreneurs/i)
+  })
+  // US-96 (plan site-formation-lot1, U5): the declaration only in the L6352-12 form, and the photo credit.
+  it('carries « Formation professionnelle » with the exact L6352-12 sentence, once', () => {
+    expect(t).toContain(`Formation professionnelle ${NDA_LINE}`)
+    expect(t.split('28760834576')).toHaveLength(2)
+    expect(t).not.toMatch(/déclaration d'activité/i)
+  })
+  it('credits the photos and dates the update', () => {
+    expect(t).toContain(`Crédits ${PHOTO_CREDIT}.`)
+    expect(t).toContain('Dernière mise à jour : 01/11/2026.')
   })
 })

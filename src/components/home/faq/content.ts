@@ -1,5 +1,4 @@
-import { of1 } from '@/content/of1'
-import { eurHt } from '@/lib/format'
+import { site } from '@/lib/site'
 
 export const EYEBROW = 'Questions'
 export const TITLE = "Ce qu'on nous demande avant d'appeler."
@@ -11,53 +10,52 @@ export interface Faq {
 }
 
 /**
- * Nine questions, the mockup's order. Figures come from `of1.ts` (price, delay), never typed twice.
+ * The training FAQ, 01b order (plan site-formation-lot1, U9; `/formations` reuses items 1 to 6 and 9).
+ * No amount anywhere: the price is in the quote after the 30-minute call (as `/webinaire/apres-reservation`
+ * says). Answers are impersonal so the « nous » home and the « je » offer page share them.
  *
- * FAQ 5 (data) was rewritten by D3 (units/d3-faq5.md, VERIFIED live 2026-10-26). Sources:
- *  - https://privacy.claude.com/en/articles/7996868-is-my-data-used-for-model-training
- *    « By default, we will not use your inputs or outputs from our commercial products ... to train our models. »
- *  - https://www.anthropic.com/legal/commercial-terms (Section B) « Anthropic may not train models on Customer Content from Services. »
- *  - https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data
- *    « we automatically delete inputs and outputs on our backend within 30 days of receipt or generation »
- *    (exceptions: legal compliance, Usage Policy enforcement, agreed retention).
- * Deliberately not claimed: « conforme RGPD », « pas de sous-traitant », zero data retention, regional hosting.
+ * « Nos dossiers sont confidentiels. » says only what Anthropic does by default on its business offers,
+ * read live on 2026-11-01: https://privacy.claude.com/en/articles/7996868-is-my-data-used-for-model-training
+ * « By default, we will not use your inputs or outputs from our commercial products ... to train our models. »
+ * Silent on Free, Pro and Max (consumer products, another article). Deliberately not claimed: « conforme
+ * RGPD », « pas de sous-traitant », zero data retention, regional hosting.
  */
 export const FAQS: readonly Faq[] = [
   {
-    q: 'Ça marche avec mon CRM ?',
-    a: 'Oui : HubSpot, Pipedrive, Zoho, Salesforce, Airtable, et tout outil ouvert aux intégrations (API, MCP). Et si votre CRM, c’est un Google Sheets ou un Excel, ça marche aussi.',
-  },
-  {
-    q: "Nous n'avons pas de CRM.",
-    a: 'Nous le construisons avec vous : un tableur bien tenu, un CRM du marché configuré pour vous, ou un outil sur mesure. Le prix vous est donné sous 24 heures.',
-  },
-  {
-    q: 'Mes commerciaux appellent depuis leur portable.',
-    a: "C'est le cas de la note vocale : 30 secondes de note vocale en raccrochant, et la fiche est remplie dans la minute.",
-  },
-  {
-    q: 'Vous enregistrez nos appels ?',
-    a: 'Jamais à votre place. Nous lisons le transcript que votre téléphonie produit déjà, ou la note vocale de votre commercial.',
-  },
-  {
-    q: 'Où vont nos données ?',
-    a: "Seul le texte de l'appel est envoyé à Claude pour en tirer le résumé, et par défaut Anthropic ne s'en sert pas pour entraîner ses modèles. Côté Anthropic, ce texte est effacé automatiquement sous 30 jours (sauf obligation légale ou règle d'usage), et le résumé reste dans votre CRM.",
-  },
-  {
-    q: 'Combien de temps avant que ça tourne ?',
-    a: `${of1.delay.days} jours après réception de vos accès, avec un test sur 5 de vos vrais appels avant la mise en service.`,
-  },
-  {
     q: 'Combien ça coûte ?',
-    a: `${eurHt(of1.price.oneShotHt)} une fois, puis ${of1.price.monthlyHt} €/mois de supervision si vous la voulez, premier mois offert. Si ça ne tourne pas sur vos 5 appels de test, vous êtes intégralement remboursé.`,
+    a: "Le prix dépend de votre équipe et du format retenu. Il arrive dans le devis, après l'échange de 30 minutes. Le webinaire et l'échange sont gratuits.",
   },
   {
-    q: 'Qui fait le travail ?',
-    a: "Nous, de l'appel de 30 minutes à la supervision. Votre interlocuteur reste Brice du début à la fin.",
+    q: 'Mon équipe utilise déjà Copilot ou ChatGPT.',
+    a: "La formation se fait aujourd'hui sur Claude. Si votre équipe travaille déjà avec Copilot ou ChatGPT, dites-le pendant l'échange : on en parle avant tout devis.",
   },
   {
-    q: 'Faites-vous aussi des agents vocaux ?',
-    a: "Oui, sur demande : une vingtaine mis en service depuis 2024, dont certains tournent encore aujourd'hui.",
+    q: 'Où se passe la formation ?',
+    a: "Dans vos locaux, avec votre équipe. Les trois jours peuvent se suivre ou s'étaler, selon votre organisation.",
+  },
+  {
+    q: 'Combien de personnes ?',
+    a: "Jusqu'à 12 personnes par programme. Pour une équipe plus grande, on en parle pendant l'échange.",
+  },
+  {
+    q: 'Que faut-il préparer ?',
+    a: "Une salle, un ordinateur par participant et une connexion internet. Avant la première demi-journée, la liste des tâches que votre équipe aimerait confier à l'IA.",
+  },
+  {
+    q: 'Nos dossiers sont confidentiels.',
+    a: "Les règles se posent d'abord : la première demi-journée, avec la direction, fixe ce qui peut passer par l'IA et ce qui ne sort pas du bureau. Sur les offres de Claude pour les entreprises, Anthropic ne se sert pas par défaut de vos échanges pour entraîner ses modèles.",
+  },
+  {
+    q: 'Et après les trois jours ?',
+    a: 'Trente jours de questions par mail sont inclus, avec une réponse sous 48 h. Ensuite, un référent IA peut suivre votre équipe : une séance de 2 h par mois et les questions sous 48 h.',
+  },
+  {
+    q: 'Qui anime ?',
+    a: 'Brice Gachadoat, fondateur de Sablia, du premier échange à la dernière demi-journée.',
+  },
+  {
+    q: "Mon équipe n'a jamais utilisé l'IA.",
+    a: "C'est le cas le plus fréquent. On part des tâches qu'elle fait déjà, sans prérequis technique.",
   },
 ]
 
@@ -73,12 +71,16 @@ export function ask(history: readonly number[], i: number): number[] {
 }
 
 /**
- * Home `#fin` band copy (units/a8.md). The quiet link goes to `/ressources`: the free templates and
- * their form are what « le guide et les ressources gratuites » promises; the long guide page stays
- * reachable from there and from the footer.
+ * Home `#fin` band copy (01b « Final band »). The button books on the formation Calendly (« Échange de
+ * 30 minutes »); the quiet link goes to the webinar. The label names the session day of `SESSION`
+ * (webinaire.ts): the content test fails when the session changes and this label does not.
  */
 export const FIN_BAND = {
-  title: 'Trente minutes pour voir si ça tourne chez vous.',
-  text: "Vous nous montrez votre CRM, nous vous disons ce qui s'automatise, et pour combien.",
-  link: { href: '/ressources', label: 'Pas encore prêt ? Le guide et les ressources gratuites.' },
+  title: 'Trente minutes pour parler de votre équipe.',
+  text: 'Vous nous parlez de vos dossiers, nous vous envoyons un programme et son devis.',
+  link: {
+    href: '/webinaire',
+    label: 'Pas encore prêt ? Le webinaire gratuit du jeudi 19 novembre.',
+  },
+  bookingUrl: site.formationBookingUrl,
 } as const

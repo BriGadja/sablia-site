@@ -9,10 +9,12 @@ type Props = {
   text: ReactNode
   /** Quiet secondary link under the button (home only: the guide and free resources). */
   link?: { href: string; label: string }
+  /** Booking link of the button; the training pages pass `site.formationBookingUrl`. Default: `site.bookingUrl`. */
+  bookingUrl?: string
 }
 
 /** The closing `#fin` band, shared by every page: dune, banner image, copy on the right, booking CTA. */
-export function FinBand({ title, text, link }: Props) {
+export function FinBand({ title, text, link, bookingUrl }: Props) {
   return (
     <section id="fin" className="v2-fin-band">
       <Dune back="#C68A8E" front="#161B29" />
@@ -23,7 +25,7 @@ export function FinBand({ title, text, link }: Props) {
           <h2>{title}</h2>
           <p>{text}</p>
           <div className="v2-fin-actions">
-            <Cta variant="light" size="lg" arrow />
+            <Cta variant="light" size="lg" arrow url={bookingUrl} />
             {link && <Link href={link.href}>{link.label}</Link>}
           </div>
         </div>

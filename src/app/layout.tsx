@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { ConsentBanner } from '@/components/consent/ConsentBanner'
 import { MeasurementBoot } from '@/components/measurement/MeasurementBoot'
 import { OrganizationJsonLd } from '@/components/seo/OrganizationJsonLd'
+import { SessionBar } from '@/components/shell/SessionBar'
 import { SiteFooter } from '@/components/shell/SiteFooter'
 import { SiteHeader } from '@/components/shell/SiteHeader'
 import './globals.css'
@@ -15,6 +16,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <a href="#contenu" className="skip-link">
           Aller au contenu
         </a>
+        <SessionBar />
         <SiteHeader />
         {children}
         <SiteFooter />

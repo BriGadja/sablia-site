@@ -1,4 +1,4 @@
-// OG / Twitter images (1200x630) from the chosen symbol, the site fonts and the offer title, and the
+// OG / Twitter images (1200x630) from the chosen symbol, the site fonts and the home hero h1, and the
 // four lockups of decision 7 (US-12). Same browser recipe as the former prerender script (deleted 2026-10-26)
 // (puppeteer-core + @sparticuz/chromium).
 // Usage: node scripts/og-image.mjs
@@ -17,17 +17,20 @@ const font = (family, file, weight) => {
   return `@font-face { font-family: '${family}'; font-weight: ${weight}; font-style: normal; src: url(data:font/woff2;base64,${data}) format('woff2'); }`
 }
 
-// The home preview carries the home H1 (the mockup's line, never of1.title); the default preview
-// carries the offer title.
-const HOME_LINE = 'Appel terminé, CRM à jour'
-const titleMatch = readFileSync(resolve(ROOT, 'src', 'content', 'of1.ts'), 'utf8').match(
-  /^ {2}title: (?:"([^"]+)"|'([^']+)'),$/m,
-)
-const title = titleMatch?.[1] ?? titleMatch?.[2]
-if (!title) throw new Error('of1.title not found in src/content/of1.ts')
+// Both previews carry the home hero h1, read from its content file so the image follows the page.
+// The default image (og-image.png) is the share preview of EVERY page, the home included (lot 1:
+// the site sells the training « L'IA au travail »); og-image-home.png is the Organization JSON-LD image.
+const TOP = readFileSync(resolve(ROOT, 'src', 'components', 'home', 'top', 'content.ts'), 'utf8')
+const Q = `(?:"([^"]*)"|'([^']*)')`
+const h1 = TOP.match(new RegExp(`^ {2}h1: \\{ lead: ${Q}, mark: ${Q}, tail: ${Q} \\},$`, 'm'))
+if (!h1) throw new Error('h1 { lead, mark, tail } not found in src/components/home/top/content.ts')
+const LINE = [1, 3, 5].map((i) => h1[i] ?? h1[i + 1]).join('')
+if (/[<&]/.test(LINE)) throw new Error(`the h1 needs HTML escaping: ${LINE}`)
 const SLOTS = [
-  { names: ['og-image-home.png', 'twitter-image-home.png'], line: HOME_LINE },
-  { names: ['og-image.png', 'twitter-image.png'], line: title },
+  {
+    names: ['og-image-home.png', 'twitter-image-home.png', 'og-image.png', 'twitter-image.png'],
+    line: LINE,
+  },
 ]
 
 const fonts = [

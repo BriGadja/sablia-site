@@ -54,6 +54,29 @@ describe('offer page', () => {
       expect(container.querySelector(`#${id}`), id).not.toBeNull()
   })
 
+  it('carries the call → CRM record animation between the hero and « Pour qui » (US-95)', () => {
+    const { container } = render(<OfferPage />)
+    const ids = Array.from(container.querySelectorAll('main > section')).map((s) => s.id)
+    expect(ids.slice(0, 3)).toEqual(['top', 'scene', 'pour-qui'])
+    const scene = container.querySelector('#scene')
+    expect(plain(scene?.textContent ?? '')).toContain(
+      'Ce qui se passe quand votre commercial raccroche.',
+    )
+    expect(scene?.querySelector('.pp')).not.toBeNull()
+  })
+
+  it('the animation adds no second priced block and no link to the page itself', () => {
+    const { container } = render(<OfferPage />)
+    expect(container.querySelector('#offre')).toBeNull()
+    expect(container.querySelector('#scene')?.textContent).not.toMatch(/€/)
+    // The price stays where it was before the mount: hero pills, #prix, the guarantee proof, the FAQ.
+    const priced = Array.from(container.querySelectorAll('main > section'))
+      .filter((s) => plain(s.textContent).includes('1 490'))
+      .map((s) => s.id)
+    expect(priced).toEqual(['top', 'prix', 'preuve', 'faq'])
+    expect(container.querySelectorAll(`a[href="${OF1_ROUTE}"]`)).toHaveLength(0)
+  })
+
   it('renders every FAQ entry, the carried ones included, as native disclosure', () => {
     const { container } = render(<OfferPage />)
     expect(container.querySelectorAll('#faq details')).toHaveLength(

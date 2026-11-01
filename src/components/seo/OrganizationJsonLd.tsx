@@ -1,13 +1,19 @@
 import { of1 } from '@/content/of1'
 import { SITE_ORIGIN } from '@/lib/seo'
+import { site } from '@/lib/site'
 import { JsonLd } from './JsonLd'
 
-// Site-wide ProfessionalService (every page, via the root layout). Catalogue v1: OF-1 is priced from
-// of1.ts (the offer file's mirror); voice agents and custom CRM are « sur demande », no price.
+// Site-wide ProfessionalService (every page, via the root layout). The training « L'IA au travail »
+// leads (plan site-formation-lot1, U13a) and has no public price, so no priceSpecification; its texts
+// are the 01b strings. OF-1 (the CRM call report) stays as a follow-on, priced from of1.ts (the offer
+// file's mirror); the référent IA, voice agents and custom CRM are « sur demande », no price. No
+// `Event` for the webinar (PRODUCT.md).
 const onRequest = (name: string, description: string) => ({
   '@type': 'Offer',
   itemOffered: { '@type': 'Service', name, description },
 })
+
+const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1)
 
 export function OrganizationJsonLd() {
   return (
@@ -17,11 +23,12 @@ export function OrganizationJsonLd() {
         '@type': 'ProfessionalService',
         '@id': `${SITE_ORIGIN}/#organization`,
         name: 'Sablia',
-        alternateName: "Sablia, agence d'intégration de Claude dans les CRM",
+        alternateName: `Sablia, ${lowerFirst(site.tagline)}`,
         url: SITE_ORIGIN,
         logo: `${SITE_ORIGIN}/logo.svg`,
         image: `${SITE_ORIGIN}/og-image-home.png`,
-        description: `Agence française d'intégration de Claude (Anthropic) dans les CRM des PME : le compte rendu d'appel et la tâche de relance écrits dans votre CRM, livrés en ${of1.delay.days} jours.`,
+        description:
+          "Formation à l'IA pour les équipes des entreprises : trois jours dans leurs locaux, jusqu'à 12 personnes, pour apprendre à travailler avec Claude (Anthropic) sur leurs propres dossiers. Premier pas : un webinaire gratuit d'une heure, le jeudi midi. Ensuite, un référent IA, ou Claude intégré sur mesure dans le CRM et les outils de l'entreprise.",
         email: 'brice@sablia.io',
         founder: {
           '@type': 'Person',
@@ -36,14 +43,16 @@ export function OrganizationJsonLd() {
           addressCountry: 'FR',
         },
         serviceType: [
+          "Formation à l'IA en entreprise",
+          'Référent IA',
           'Intégration de Claude dans le CRM',
           'Automatisation des processus commerciaux',
-          'Conseil et formation IA',
         ],
         areaServed: { '@type': 'Country', name: 'France' },
         knowsAbout: [
           'Claude',
           'Anthropic',
+          "Formation à l'IA en entreprise",
           "Intégration de l'IA en entreprise",
           'Salesforce',
           'HubSpot',
@@ -56,6 +65,14 @@ export function OrganizationJsonLd() {
           '@type': 'OfferCatalog',
           name: 'Catalogue Sablia',
           itemListElement: [
+            onRequest(
+              "L'IA au travail",
+              "Trois jours dans vos locaux, jusqu'à 12 personnes : votre équipe apprend Claude sur ses propres dossiers, avec ses règles sur les données. Le devis suit un échange gratuit de 30 minutes.",
+            ),
+            onRequest(
+              'Référent IA',
+              'Une séance de 2 h par mois avec votre équipe, et vos questions sous 48 h.',
+            ),
             {
               '@type': 'Offer',
               itemOffered: { '@type': 'Service', name: of1.title, description: of1.promise },

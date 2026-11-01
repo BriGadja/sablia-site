@@ -1,8 +1,13 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { fireEvent, render, screen } from '@testing-library/react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { act, fireEvent, render, screen } from '@testing-library/react'
+import { hydrateRoot } from 'react-dom/client'
+import { renderToString } from 'react-dom/server'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { NDA_LINE } from '@/content/declaration'
+import { openBookingUrl } from '@/lib/booking'
 import { OPEN_EVENT } from '@/lib/consent'
+import { site } from '@/lib/site'
 import { Cta } from './Cta'
 import { Dune } from './Dune'
 import { Eyebrow } from './Eyebrow'
@@ -13,13 +18,28 @@ import { SiteHeader } from './SiteHeader'
 
 let pathname = '/'
 vi.mock('next/navigation', () => ({ usePathname: () => pathname }))
+vi.mock('@/lib/booking', () => ({ openBookingUrl: vi.fn() }))
+
+// Plan site-formation-lot1 (US-92): the header button depends on the clock, so every header case pins it.
+const BEFORE = new Date('2026-11-05T10:00:00+01:00')
+const AFTER = new Date('2026-11-19T12:00:00+01:00')
+const at = (d: Date) => {
+  vi.useFakeTimers({ toFake: ['Date'] })
+  vi.setSystemTime(d)
+}
 
 beforeEach(() => {
   pathname = '/'
+  vi.mocked(openBookingUrl).mockClear()
+})
+afterEach(() => {
+  vi.useRealTimers()
+  vi.unstubAllEnvs()
 })
 
 describe('SiteHeader', () => {
-  it('is a sticky header whose nav carries the four links and the booking button', () => {
+  it('is a sticky header whose nav carries the training menu and, before the session, « Prochain webinaire »', () => {
+    at(BEFORE)
     const { container } = render(<SiteHeader />)
     expect(container.querySelector('header')).not.toBeNull()
     const nav = screen.getByRole('navigation', { name: 'Navigation principale' })
@@ -29,13 +49,69 @@ describe('SiteHeader', () => {
     ])
     expect(hrefs).toEqual([
       ['Sablia', '/'],
-      ["Compte rendu d'appel", '/#offre'],
-      ['Formations', '/formations'],
-      ['Accompagnement', '/accompagnement'],
-      ['Réalisations', '/#construit'],
+      ['Formation', '/formations'],
+      ['Webinaires', '/webinaire'],
+      ['Après la formation', '/accompagnement'],
+      ['Réalisations', '/realisations'],
+      ['Prochain webinaire', '/webinaire'],
     ])
-    const book = nav.querySelector('button[data-cta-book]')
-    expect(book?.textContent).toBe('Réserver 30 min')
+    expect(nav.querySelector('[data-cta-book]')).toBeNull()
+  })
+
+  it('from the session start the header button opens the formation Calendly', () => {
+    at(AFTER)
+    render(<SiteHeader />)
+    const nav = screen.getByRole('navigation', { name: 'Navigation principale' })
+    const book = nav.querySelector('button[data-cta-book]') as HTMLButtonElement
+    expect(book.textContent).toBe('Réserver 30 min')
+    fireEvent.click(book)
+    expect(openBookingUrl).toHaveBeenCalledExactlyOnceWith(site.formationBookingUrl)
+  })
+
+  it('from the session start « Webinaires » leaves the menu (one list for the desktop bar and the phone menu)', () => {
+    at(AFTER)
+    const { container } = render(<SiteHeader />)
+    const links = document.getElementById('nav-links') as HTMLElement
+    expect(Array.from(links.querySelectorAll('a')).map((a) => a.getAttribute('href'))).toEqual([
+      '/formations',
+      '/accompagnement',
+      '/realisations',
+    ])
+    expect(container.querySelector('a[href="/webinaire"]')).toBeNull()
+  })
+
+  it('a page built before the start keeps the entry in its HTML, hydrates without a mismatch, then drops it', async () => {
+    vi.stubEnv('NEXT_PUBLIC_BUILD_AT', BEFORE.toISOString())
+    at(AFTER)
+    const html = renderToString(<SiteHeader />)
+    expect(html).toContain('href="/webinaire"')
+    // parsed the way the browser receives the static HTML, not built by React
+    const container = document.createElement('div')
+    const parsed = new DOMParser().parseFromString(`<body>${html}</body>`, 'text/html')
+    container.append(...Array.from(parsed.body.childNodes))
+    document.body.appendChild(container)
+    const errors = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const recoverable = vi.fn()
+    try {
+      await act(async () => {
+        hydrateRoot(container, <SiteHeader />, { onRecoverableError: recoverable })
+      })
+      expect(recoverable).not.toHaveBeenCalled()
+      expect(errors).not.toHaveBeenCalled()
+      expect(container.querySelector('a[href="/webinaire"]')).toBeNull()
+    } finally {
+      errors.mockRestore()
+      container.remove()
+    }
+  })
+
+  it('on /offres/** the header button keeps the CRM Calendly (default url)', () => {
+    at(BEFORE)
+    pathname = '/offres/compte-rendu-appel/hubspot'
+    render(<SiteHeader />)
+    const nav = screen.getByRole('navigation', { name: 'Navigation principale' })
+    fireEvent.click(nav.querySelector('button[data-cta-book]') as HTMLButtonElement)
+    expect(openBookingUrl).toHaveBeenCalledExactlyOnceWith(undefined)
   })
 
   it('gives each desktop nav link a 44 px hit area that cancels out in layout', () => {
@@ -55,15 +131,17 @@ describe('SiteHeader', () => {
     fireEvent.click(btn)
     expect(btn.getAttribute('aria-expanded')).toBe('true')
     expect(list?.className).toContain('is-open')
-    fireEvent.click(screen.getByText('Formations'))
+    fireEvent.click(screen.getByText('Formation'))
     expect(btn.getAttribute('aria-expanded')).toBe('false')
   })
 
   it.each([
-    ['/', "Compte rendu d'appel"],
-    ['/formations', 'Formations'],
-    ['/accompagnement', 'Accompagnement'],
+    ['/formations', 'Formation'],
+    ['/webinaire', 'Webinaires'],
+    ['/accompagnement', 'Après la formation'],
+    ['/realisations', 'Réalisations'],
   ])('marks the current page on %s', (path, label) => {
+    at(BEFORE)
     pathname = path
     render(<SiteHeader />)
     const current = document.querySelectorAll('[aria-current="page"]')
@@ -71,23 +149,33 @@ describe('SiteHeader', () => {
     expect(current[0].textContent).toBe(label)
   })
 
-  it('marks nothing on a page outside the nav', () => {
-    pathname = '/ressources'
+  it.each([
+    '/',
+    '/ressources',
+    '/webinaire/merci',
+  ])('marks nothing on %s (outside the menu)', (p) => {
+    pathname = p
     render(<SiteHeader />)
     expect(document.querySelectorAll('[aria-current]')).toHaveLength(0)
   })
 })
 
 describe('SiteFooter', () => {
-  it('lists the legal and resource links, Newsletter right after Ressources', () => {
-    render(<SiteFooter />)
-    const nav = screen.getByRole('navigation', { name: 'Pied de page' })
-    const hrefs = Array.from(nav.querySelectorAll('a')).map((a) => [
+  it('lists the training structure first, then the CRM page, resources and legal links (01b § 6 order)', () => {
+    at(BEFORE)
+    const { container } = render(<SiteFooter />)
+    expect(screen.getByRole('navigation', { name: 'Pied de page' })).toBeTruthy()
+    expect(screen.getByRole('navigation', { name: 'Informations légales' })).toBeTruthy()
+    const hrefs = Array.from(container.querySelectorAll('footer nav a')).map((a) => [
       a.textContent,
       a.getAttribute('href'),
     ])
     expect(hrefs).toEqual([
-      ["L'offre", '/#offre'],
+      ['Formation', '/formations'],
+      ['Webinaires', '/webinaire'],
+      ['Après la formation', '/accompagnement'],
+      ['Réalisations', '/realisations'],
+      ["Compte rendu d'appel", '/offres/compte-rendu-appel'],
       ['Ressources', '/ressources'],
       ['Newsletter', '/newsletter'],
       ['Vidéos', '/#videos'],
@@ -97,6 +185,33 @@ describe('SiteFooter', () => {
       ['CGV', '/cgv'],
     ])
     expect(screen.getByText(/© 2026 Sablia/)).toBeTruthy()
+  })
+
+  it('from the session start drops « Webinaires » (the one session page) and keeps every other link', () => {
+    at(AFTER)
+    const { container } = render(<SiteFooter />)
+    const hrefs = Array.from(container.querySelectorAll('footer nav a')).map((a) =>
+      a.getAttribute('href'),
+    )
+    expect(hrefs).not.toContain('/webinaire')
+    expect(hrefs.slice(0, 4)).toEqual([
+      '/formations',
+      '/accompagnement',
+      '/realisations',
+      '/offres/compte-rendu-appel',
+    ])
+    expect(hrefs).toHaveLength(11)
+  })
+
+  it('carries the activity declaration in its exact L6352-12 form, after the links, beside the copyright', () => {
+    const { container } = render(<SiteFooter />)
+    const line = Array.from(container.querySelectorAll('p')).find((p) => p.textContent === NDA_LINE)
+    expect(line).toBeTruthy()
+    expect(line?.closest('nav')).toBeNull()
+    expect(container.textContent?.split(NDA_LINE)).toHaveLength(2)
+    const text = container.textContent ?? ''
+    expect(text.indexOf(NDA_LINE)).toBeGreaterThan(text.indexOf('Gérer mes choix'))
+    expect(text.indexOf(NDA_LINE)).toBeLessThan(text.indexOf('© 2026 Sablia'))
   })
 
   it('« Gérer mes choix » reopens the consent banner', () => {
@@ -135,6 +250,20 @@ describe('FinBand', () => {
   it('omits the link when none is given', () => {
     const { container } = render(<FinBand title="T" text="x" />)
     expect(container.querySelectorAll('a')).toHaveLength(0)
+  })
+
+  it('forwards bookingUrl to its booking button (formation pages pass the formation Calendly)', () => {
+    const { container } = render(
+      <FinBand title="T" text="x" bookingUrl={site.formationBookingUrl} />,
+    )
+    fireEvent.click(container.querySelector('button[data-cta-book]') as HTMLButtonElement)
+    expect(openBookingUrl).toHaveBeenCalledExactlyOnceWith(site.formationBookingUrl)
+  })
+
+  it('keeps the default (CRM) Calendly when no bookingUrl is given', () => {
+    const { container } = render(<FinBand title="T" text="x" />)
+    fireEvent.click(container.querySelector('button[data-cta-book]') as HTMLButtonElement)
+    expect(openBookingUrl).toHaveBeenCalledExactlyOnceWith(undefined)
   })
 })
 

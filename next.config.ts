@@ -6,8 +6,13 @@ const nextConfig: NextConfig = {
   images: { unoptimized: true },
   // The dev overlay badge sits inside every section screenshot units diff against the mockup.
   devIndicators: false,
-  // Keeps /etc/sablia-site/build.env (VITE_ name) untouched on the deploy host.
-  env: { NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.VITE_SUPABASE_ANON_KEY },
+  env: {
+    // Keeps /etc/sablia-site/build.env (VITE_ name) untouched on the deploy host.
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.VITE_SUPABASE_ANON_KEY,
+    // The build-time clock read by useSessionUpcoming (WhenUpcoming.tsx): the static HTML and the
+    // first client render agree on it. Set it in the environment to build the after-session state.
+    NEXT_PUBLIC_BUILD_AT: process.env.NEXT_PUBLIC_BUILD_AT || new Date().toISOString(),
+  },
 }
 
 export default nextConfig

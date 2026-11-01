@@ -1,6 +1,6 @@
 # SEO — Sablia Site (v2)
 
-**Last updated**: 2026-10-26 (v2 build: Next.js static export). The Vite-era `meta-tags.json`, `SEO.tsx` and `react-helmet-async` no longer exist.
+**Last updated**: 2026-11-01 (training lot 1: `/realisations` added, identity and metadata of the training home). Built on the 2026-10-26 v2 build (Next.js static export). The Vite-era `meta-tags.json`, `SEO.tsx` and `react-helmet-async` no longer exist.
 
 ---
 
@@ -32,7 +32,7 @@ On every `dist/public/**/*.html`: the audience tracker and consent banner absent
 
 | Page | Types | Source |
 |------|-------|--------|
-| every page | ProfessionalService (founder Person, PostalAddress, OfferCatalog with the OF-1 price and delay read from `of1.ts`; voice agent and custom CRM « sur demande », no price) | `OrganizationJsonLd`, mounted in `layout.tsx` |
+| every page | ProfessionalService (founder Person, PostalAddress, OfferCatalog with the OF-1 price and delay read from `of1.ts`; voice agent and custom CRM « sur demande », no price). Since lot 1 the alternate name is the training tagline (`site.tagline`) and no text says « dans les CRM » or « × CRM » (a test in `src/components/seo` refuses it) | `OrganizationJsonLd`, mounted in `layout.tsx` |
 | `/offres/compte-rendu-appel` | Service (Offer with UnitPriceSpecification), FAQPage, BreadcrumbList | `of1-schema.ts` + `BreadcrumbJsonLd` |
 | the four CRM pages | Service, FAQPage, BreadcrumbList | `CrmPageView.tsx`, `src/content/crm/schema.ts` |
 | `/guides/integrer-l-ia-dans-votre-entreprise` | Article, FAQPage, BreadcrumbList | the page file |
@@ -42,13 +42,14 @@ On every `dist/public/**/*.html`: the audience tracker and consent banner absent
 
 ## Sitemap
 
-Written to `dist/public/sitemap.xml` by `node scripts/seo/generate-sitemap.mjs` at build time: every indexable route of `routes.mjs` dated from the ledger, plus every published `/ressources/<slug>` (priority 0.6, monthly, dated from its row). A Supabase read failure fails the build. The table below is the indexable part of `PAGE_ROUTES`, generated from the file on 2026-10-26 (regenerate it when `routes.mjs` changes):
+Written to `dist/public/sitemap.xml` by `node scripts/seo/generate-sitemap.mjs` at build time: every indexable route of `routes.mjs` dated from the ledger, plus every published `/ressources/<slug>` (priority 0.6, monthly, dated from its row). A Supabase read failure fails the build. `/realisations` is dated by `src/app/realisations/` + `src/components/realisations/`; the home by the nine section folders under `src/components/home/` (`top offre automatisations formations derriere webinaire apres videos faq`) plus `HomePage.tsx` and `home-metadata.ts`: `scene` (now on the CRM offer page) and `construit` (now under `/realisations`) no longer date the home. The table below is the indexable part of `PAGE_ROUTES`, generated from the file on 2026-11-01 (regenerate it when `routes.mjs` changes):
 
 | Route | Priority | Change Freq |
 |-------|----------|-------------|
 | `/` | 1.0 | weekly |
 | `/formations` | 0.8 | monthly |
 | `/accompagnement` | 0.8 | monthly |
+| `/realisations` | 0.7 | monthly |
 | `/mentions-legales` | 0.3 | yearly |
 | `/politique-confidentialite` | 0.3 | yearly |
 | `/cgv` | 0.3 | yearly |
@@ -61,9 +62,11 @@ Written to `dist/public/sitemap.xml` by `node scripts/seo/generate-sitemap.mjs` 
 | `/offres/compte-rendu-appel/google-sheets` | 0.8 | monthly |
 | `/offres/compte-rendu-appel/excel-365` | 0.8 | monthly |
 | `/ressources` | 0.8 | weekly |
+| `/newsletter` | 0.6 | monthly |
+| `/webinaire` | 0.7 | weekly |
 | `/ressources/<slug>` (one per published resource) | 0.6 | monthly |
 
-Built but kept out of the sitemap: `/thank-you` (noindex). `/roi` and `/about` are 301 in `server/static.ts` (to `/offres/compte-rendu-appel` and `/#derriere`).
+Built but kept out of the sitemap: `/thank-you`, `/webinaire/merci`, `/webinaire/apres-reservation`, `/webinaire/questionnaire` (all noindex). `/roi` and `/about` are 301 in `server/static.ts` (to `/offres/compte-rendu-appel` and `/#derriere`).
 
 ### `lastmod`
 
@@ -76,7 +79,7 @@ The date of a page is the day its own sources last changed, not the build day. `
 ## Robots and AI-search files
 
 - `public/robots.txt`: all user agents allowed, sitemap declared, explicit blocks for GPTBot (`Crawl-delay: 10`), OAI-SearchBot, ClaudeBot, Claude-User, Claude-SearchBot, PerplexityBot and Google-Extended, all `Allow: /`.
-- `public/llms.txt`: markdown summary for LLMs (offer, CRM and spreadsheet pages, pages list); it is a proof surface for `content-gates.sh` (no em dash, no banned figure). `public/.well-known/ai.txt` points to it. Both are served by the static server (`.well-known` is the one dotted folder opened).
+- `public/llms.txt`: markdown summary for LLMs (the training offer with no price, the free webinar, the conference as an option, then the CRM offer, the spreadsheet pages and the pages list); it is a proof surface for `content-gates.sh` (no em dash, no banned figure). `public/.well-known/ai.txt` points to it. Both are served by the static server (`.well-known` is the one dotted folder opened).
 
 ## Manual tasks
 

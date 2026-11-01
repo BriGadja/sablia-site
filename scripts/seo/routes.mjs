@@ -28,13 +28,16 @@ export const PAGE_ROUTES = [
       `${A}/page.tsx`,
       `${A}/home-metadata.ts`,
       `${H}/HomePage.tsx`,
+      // The training home (plan site-formation-lot1). `scene` now lives on the CRM offer page and
+      // `construit` on /realisations, so neither dates the home.
       ...[
         'top',
-        'scene',
+        'offre',
         'automatisations',
-        'construit',
         'formations',
         'derriere',
+        'webinaire',
+        'apres',
         'videos',
         'faq',
       ].map((id) => `${H}/${id}/`),
@@ -43,6 +46,14 @@ export const PAGE_ROUTES = [
     indexable: true,
     changefreq: 'weekly',
     priority: 1.0,
+  },
+  {
+    // The wall of realisations that left the home (#construit, moved under src/components/realisations/).
+    path: '/realisations',
+    sources: [`${A}/realisations/`, 'src/components/realisations/'],
+    indexable: true,
+    changefreq: 'monthly',
+    priority: 0.7,
   },
   {
     path: '/formations',

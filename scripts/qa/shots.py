@@ -2,10 +2,14 @@
 """Reference / build screenshots and per-section pixel diff for the sablia.io v2 port.
 
 Pages and sections (ids are the contract: the build must carry the same `#id` on each section root):
-  home            top scene automatisations construit formations derriere videos faq fin
-  formations      top niveaux outils deroule avis formats questions fin
-  accompagnement  top situations parcours livrables exemples pourquoi questions fin
-Viewports: 1440x900 and 390x844. Routes on a build: / , /formations , /accompagnement.
+  home            top offre automatisations formations derriere webinaire apres videos faq fin
+  formations      top pourqui deroule inclus conference preuve questions fin
+  accompagnement  top referent surmesure fin
+  real            top construit fin                  (/realisations, build only: no mockup board)
+  crm             top scene pour-qui variantes inclus prix objection preuve faq   (/offres/compte-rendu-appel, build only)
+`webinaire` exists on the home only while the 19/11/2026 session is ahead (a missing section is logged, not fatal).
+Viewports: 1440x900 and 390x844. Routes on a build: / , /formations , /accompagnement , /realisations , /offres/compte-rendu-appel.
+The reference boards (--ref) only exist for the CRM-era home, /formations and /accompagnement; `real` and `crm` have none.
 
 Capture kinds (written under <out>/<page>/<vp>/<kind>/):
   final/<section>.png        reduced-motion final state (deterministic), element screenshot.
@@ -59,19 +63,22 @@ BUILD_OUT = HUB / "tmp/s-build"
 
 PAGES = {
     "home": {"board": "Main.dc.html", "route": "/",
-             "sections": ["top", "scene", "automatisations", "construit", "formations", "derriere", "videos", "faq", "fin"]},
+             "sections": ["top", "offre", "automatisations", "formations", "derriere", "webinaire", "apres", "videos", "faq", "fin"]},
     "formations": {"board": "Formations.dc.html", "route": "/formations",
-                   "sections": ["top", "niveaux", "outils", "deroule", "avis", "formats", "questions", "fin"]},
+                   "sections": ["top", "pourqui", "deroule", "inclus", "conference", "preuve", "questions", "fin"]},
     "accompagnement": {"board": "Accompagnement.dc.html", "route": "/accompagnement",
-                       "sections": ["top", "situations", "parcours", "livrables", "exemples", "pourquoi", "questions", "fin"]},
+                       "sections": ["top", "referent", "surmesure", "fin"]},
+    "real": {"board": None, "route": "/realisations", "sections": ["top", "construit", "fin"]},
+    "crm": {"board": None, "route": "/offres/compte-rendu-appel",
+            "sections": ["top", "scene", "pour-qui", "variantes", "inclus", "prix", "objection", "preuve", "faq"]},
 }
 VIEWPORTS = {1440: 900, 390: 844}
 # Default virtual-time samples (seconds after entering view), per (page, section); fallback 2,6.
 AT_DEFAULT = {
-    ("home", "top"): [2, 6, 10], ("home", "scene"): [2, 5, 9], ("home", "automatisations"): [1, 5, 9],
-    ("home", "construit"): [2, 6], ("home", "formations"): [2], ("home", "faq"): [1, 3],
-    ("formations", "top"): [2, 9, 16], ("formations", "niveaux"): [2, 5], ("formations", "deroule"): [2, 5],
-    ("accompagnement", "top"): [2, 6], ("accompagnement", "parcours"): [2, 5, 9],
+    ("home", "top"): [2, 6, 10], ("home", "automatisations"): [1, 5, 9], ("home", "formations"): [2],
+    ("home", "faq"): [1, 3], ("formations", "top"): [2, 9, 16], ("formations", "deroule"): [2, 5],
+    ("accompagnement", "top"): [2, 6], ("accompagnement", "referent"): [2, 6, 10],
+    ("real", "construit"): [2, 6], ("crm", "scene"): [2, 5, 9],
 }
 T0_MS = 1_000_000_000_000  # fixed fake epoch
 
@@ -85,6 +92,8 @@ def start_ref_server():
     scratch = REF_OUT / "_serve"
     scratch.mkdir(parents=True, exist_ok=True)
     for p in PAGES.values():
+        if p["board"] is None:
+            continue
         link = scratch / p["board"]
         if link.is_symlink() or link.exists():
             link.unlink()
@@ -386,6 +395,9 @@ def main() -> int:
     vps = [int(v) for v in args.vp.split(",") if v]
     if any(p not in PAGES for p in pages) or any(v not in VIEWPORTS for v in vps):
         log(f"bad --pages/--vp (pages {list(PAGES)}, vp {list(VIEWPORTS)})")
+        return 2
+    if args.ref and any(PAGES[p]["board"] is None for p in pages):
+        log("--ref has no reference board for 'real' or 'crm' (build only)")
         return 2
     only = [s for s in (args.sections or "").split(",") if s]
     sections = {p: [s for s in PAGES[p]["sections"] if not only or s in only] for p in pages}
