@@ -83,10 +83,32 @@ export function keepUtm(href: string): string {
   }
 }
 
-/** The tracker's `data-before-send` hook: trims the query of `payload.url`, never cancels. */
+/** Our own hosts (the measured two plus `www`). An external referrer is left as the browser gave it. */
+const OWN_HOSTS = new Set(['sablia.io', 'www.sablia.io', 'preview.sablia.io'])
+
+/**
+ * A referrer from our own site: relative (the served tracker strips our origin from a same-origin
+ * referrer, query kept) or absolute on one of `OWN_HOSTS`. Protocol-relative `//host` is external.
+ */
+function ownReferrer(ref: string): boolean {
+  if (ref.startsWith('/')) return !ref.startsWith('//')
+  try {
+    return OWN_HOSTS.has(new URL(ref).hostname)
+  } catch {
+    return false
+  }
+}
+
+/**
+ * The tracker's `data-before-send` hook, never cancels: trims the query of `payload.url`, and of
+ * `payload.referrer` when it is our own page (after a client navigation it is the previous url,
+ * which could still carry `?t=` or `?c=`).
+ */
 export function beforeSend<T>(_type: string, payload: T): T {
-  const p = payload as { url?: unknown } | null
+  const p = payload as { url?: unknown; referrer?: unknown } | null
   if (p && typeof p.url === 'string') p.url = keepUtm(p.url)
+  if (p && typeof p.referrer === 'string' && ownReferrer(p.referrer))
+    p.referrer = keepUtm(p.referrer)
   return payload
 }
 

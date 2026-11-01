@@ -185,7 +185,7 @@ describe('UTM: only utm_source / utm_medium / utm_campaign survive the before-se
     expect(() => keepUtm('http://[bad')).not.toThrow()
   })
 
-  it('rewrites payload.url only and hands the payload back (cancel is never our call)', () => {
+  it('rewrites payload.url and hands the payload back (cancel is never our call)', () => {
     const payload = {
       website: 'w',
       url: `${origin}/webinaire?t=tok&utm_source=newsletter`,
@@ -198,6 +198,31 @@ describe('UTM: only utm_source / utm_medium / utm_campaign survive the before-se
     })
     const noUrl = { website: 'w' }
     expect(beforeSend('identify', noUrl)).toBe(noUrl)
+  })
+
+  it('trims payload.referrer too when it is our own site: relative (as the tracker sends it) or one of our hosts', () => {
+    const rel = { url: `${origin}/`, referrer: '/newsletter?t=tok&utm_source=newsletter' }
+    expect(beforeSend('event', rel).referrer).toBe('/newsletter?utm_source=newsletter')
+    for (const host of [
+      'https://sablia.io',
+      'https://www.sablia.io',
+      'https://preview.sablia.io',
+    ]) {
+      const own = { url: `${origin}/`, referrer: `${host}/webinaire?c=code&utm_medium=bar` }
+      expect(beforeSend('event', own).referrer).toBe(`${host}/webinaire?utm_medium=bar`)
+    }
+  })
+
+  it('leaves an external, look-alike, protocol-relative or empty referrer untouched', () => {
+    for (const ref of [
+      'https://www.linkedin.com/feed/?trk=abc',
+      'https://sablia.io.example.com/?t=x',
+      'https://notsablia.io/?t=x',
+      '//cdn.example.com/?t=x',
+      '',
+    ]) {
+      expect(beforeSend('event', { url: `${origin}/`, referrer: ref }).referrer).toBe(ref)
+    }
   })
 
   it('is registered on window before the tracker script is attached', () => {
