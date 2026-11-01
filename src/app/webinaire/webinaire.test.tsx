@@ -148,6 +148,21 @@ describe('/webinaire: the static HTML (SSR content rule)', () => {
   })
 })
 
+// U3b: the bio follows the validated founder line (hub memory/identity/CAREER.md, site proof.ts
+// FOUNDER_LINE): six years in the LVMH group DSI, five as Product Owner, then two years Consultant
+// senior BI. The school is not named on this page (a partner's name needs Brice).
+describe("/webinaire: the presenter's bio", () => {
+  it('states the validated career, never « sept ans », never the school', () => {
+    const line = INTERVENANT.line
+    expect(line).toMatch(/six ans au sein de la DSI du groupe LVMH, dont cinq comme Product Owner/i)
+    expect(line).toMatch(/deux ans comme Consultant senior BI/)
+    expect(line).not.toMatch(/sept ans|no[eé]sia/i)
+    const t = text(renderToString(<WebinairePage />))
+    expect(t).toContain(line)
+    expect(t).not.toMatch(/no[eé]sia/i)
+  })
+})
+
 describe('/webinaire: the form posts the contract of api/webinaire.ts', () => {
   it('sends exactly the contract fields, the box unticked by default', async () => {
     const spy = stubFetch(200, { state: 'registered' })

@@ -95,7 +95,7 @@ The list below is `PAGE_ROUTES` of `scripts/seo/routes.mjs` (the single manifest
 | `/roi`, `/about` | 301 in `server/static.ts` (old pages Google lists as soft 404s) |
 | any other path | `404.html`, status 404 |
 
-**Shell**: `SiteHeader` (the whole bar is the `<nav>`: logo, links Compte rendu d'appel · Formations · Accompagnement · Réalisations, from `nav-links.ts`, menu button on phones, booking CTA), `SiteFooter` (Ressources, Newsletter and legal links, « Gérer mes choix » reopens the consent banner), `FinBand` (`<section id="fin">`, copy per page). API of the shell components, the hooks and the measurement zones: read the files, they are small and tested (`src/components/shell/shell.test.tsx`, `src/lib/hooks/*.test.tsx`).
+**Shell**: `SiteHeader` (the whole bar is the `<nav>`: logo, links Compte rendu d'appel · Formations · Accompagnement · Réalisations, from `nav-links.ts`, menu button on phones, booking CTA chosen by `headerCtaFor` in `header-cta.ts`: « Je m'inscris » to `#inscription` on `/webinaire`, none on its three after-pages, « Réserver 30 min » everywhere else), `SiteFooter` (Ressources, Newsletter and legal links, « Gérer mes choix » reopens the consent banner), `FinBand` (`<section id="fin">`, copy per page). API of the shell components, the hooks and the measurement zones: read the files, they are small and tested (`src/components/shell/shell.test.tsx`, `src/lib/hooks/*.test.tsx`).
 
 **Brand**: two sources in `public/brand/`, `symbol.svg` (stroked S-hourglass) and `badge.svg` (night rounded square, gold S). Regenerate favicons, app icons, OG and Twitter images and lockups with `python3 scripts/brand-assets.py` then `node scripts/og-image.mjs`; guard `python3 scripts/brand-check.py` (also fails on any coral).
 

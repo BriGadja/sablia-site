@@ -1,12 +1,13 @@
 import Link from 'next/link'
-import { Cta } from './Cta'
+import { HeaderCta } from './HeaderCta'
 import { Logo } from './Logo'
 import { NavToggle } from './NavToggle'
 import './site-header.css'
 
 /**
  * Sticky, opaque on every band. The whole bar is the `<nav>`: the booking button must live inside
- * a nav (analytics-e2e and the zone tagging of events.ts both look for it there).
+ * a nav (analytics-e2e and the zone tagging of events.ts both look for it there). On the webinar
+ * routes the call to action changes or disappears, see `headerCtaFor`.
  */
 export function SiteHeader() {
   return (
@@ -17,7 +18,7 @@ export function SiteHeader() {
           <span>Sablia</span>
         </Link>
         <NavToggle />
-        <Cta />
+        <HeaderCta />
       </nav>
     </header>
   )

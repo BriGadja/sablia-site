@@ -131,7 +131,8 @@ export const INTERVENANT = {
   eyebrow: 'Qui anime',
   name: 'Brice Gachadoat',
   role: 'Fondateur de Sablia',
-  line: "J'ai passé sept ans à la DSI de LVMH, puis j'ai été consultant BI. Aujourd'hui j'installe l'IA dans les outils des entreprises, et je l'enseigne à l'école Noésia.",
+  /** From the site's validated founder line (`proof.ts` FOUNDER_LINE, hub memory/identity/CAREER.md). */
+  line: "J'ai passé six ans au sein de la DSI du groupe LVMH, dont cinq comme Product Owner, puis deux ans comme Consultant senior BI. Depuis janvier 2025, avec Sablia, j'installe l'IA dans les outils des entreprises.",
   photo: '/photos/accueil-meetup-ecran-720.webp',
   photoAlt: 'Brice Gachadoat anime une formation IA devant un public',
 } as const
