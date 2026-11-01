@@ -71,6 +71,8 @@
       text-decoration: underline;
       text-decoration-color: #b9852a;
       text-underline-offset: 4px;
+      /* 44 px hit area: block padding on an inline box enlarges the rect, no text moves */
+      padding-block: 12px;
     }
 
     /* entrance: the two offers converge from the sides (useArmedReveal) */

@@ -79,6 +79,12 @@ describe('SessionBar', () => {
     }
   })
 
+  it('gives the link its own 44 px box that cancels out in layout (the bar stays 40 px)', () => {
+    const css = readFileSync(join(__dirname, 'session-bar.css'), 'utf8')
+    expect(css).toMatch(/\.v2-sbar-cta \{[^}]*min-height:\s*44px;[^}]*margin-block:\s*-2px/)
+    expect(css).toMatch(/\.v2-sbar-in \{[^}]*min-height:\s*40px/)
+  })
+
   it('one CSS scope, .v2-sbar, charte hex only', () => {
     const css = readFileSync(join(__dirname, 'session-bar.css'), 'utf8')
     expect(css.startsWith('@layer theme, base, components, utilities;')).toBe(true)

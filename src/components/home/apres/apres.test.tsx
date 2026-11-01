@@ -58,6 +58,11 @@ describe('#apres motion', () => {
     expect(container.querySelector('#apres')?.getAttribute('data-reveal')).toBe('final')
   })
 
+  it('gives the inline CRM link a 44 px hit area by block padding, which moves no text', () => {
+    const css = readFileSync(join(__dirname, 'apres.css'), 'utf8')
+    expect(css).toMatch(/\.ap-inline \{[^}]*padding-block:\s*12px/)
+  })
+
   it('stages the cards in CSS only for the armed state, with a reduced-motion block', () => {
     const css = readFileSync(join(__dirname, 'apres.css'), 'utf8')
     expect(css).toMatch(/\[data-reveal='armed'\]/)

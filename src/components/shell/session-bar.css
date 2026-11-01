@@ -39,6 +39,9 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      /* its own 44 px box; the negative margin keeps its layout height at the bar's 40 px */
+      min-height: 44px;
+      margin-block: -2px;
       font-weight: 500;
       color: #d9a441;
       text-decoration: underline;

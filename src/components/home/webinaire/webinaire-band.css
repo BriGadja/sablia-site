@@ -15,6 +15,9 @@
       background: #161b29;
       color: #f1f2f5;
       padding: 72px 0 80px;
+      /* the ticket enters from 28 px to the right with its punched hole: below 900 px that box
+         passed the viewport (405 px wide page at 390); clip keeps it inside, no scroll container */
+      overflow: clip;
     }
     .wb-grid {
       display: grid;

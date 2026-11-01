@@ -113,4 +113,8 @@ describe('#webinaire source', () => {
   it('stops its entrance under reduced motion', () => {
     expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\)/)
   })
+
+  it('clips the panel, so the ticket sliding in from the right never widens the page (390 px: 405)', () => {
+    expect(css).toMatch(/\.wb-panel \{[^}]*overflow:\s*clip/)
+  })
 })
