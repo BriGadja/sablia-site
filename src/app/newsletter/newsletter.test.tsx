@@ -154,7 +154,7 @@ describe('/newsletter: the token links', () => {
     expect(spy).toHaveBeenCalledTimes(1)
     expect(sent(spy)).toEqual({ kind: 'confirm', token: TOKEN })
     expect(
-      await screen.findByText("C'est fait, Léa. Premier numéro mardi 3 novembre."),
+      await screen.findByText("C'est fait, Léa. Premier numéro mardi 10 novembre."),
     ).toBeTruthy()
   })
 
@@ -167,7 +167,7 @@ describe('/newsletter: the token links', () => {
     const user = userEvent.setup()
     await user.click(screen.getByRole('button', { name: 'Confirmer mon inscription' }))
     expect(sent(spy)).toEqual({ kind: 'invite', token: TOKEN })
-    expect(await screen.findByText("C'est fait. Premier numéro mardi 3 novembre.")).toBeTruthy()
+    expect(await screen.findByText("C'est fait. Premier numéro mardi 10 novembre.")).toBeTruthy()
   })
 
   it('jeton refusé (404 or 410) : the same neutral message, and the form to start again', async () => {
