@@ -32,7 +32,7 @@ type View =
   | { kind: 'stale' }
   | { kind: 'error' }
 
-const FIRST_ISSUE = 'Premier numéro mardi 10 novembre.'
+const FIRST_ISSUE = 'Premier numéro mardi 17 novembre.'
 
 /** Reads `?c=` / `?t=` once, then removes them from the address bar and the history entry. */
 function takeToken(): { action: TokenAction; token: string } | null {
