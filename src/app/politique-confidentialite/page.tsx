@@ -126,6 +126,38 @@ export default function PolitiqueConfidentialitePage() {
         </p>
       </LegalSection>
 
+      <LegalSection title="Prospection commerciale par e-mail">
+        <p>
+          Responsable : Sablia, représentée par Brice Gachadoat (
+          <a href={`mailto:${site.email}`}>{site.email}</a>).
+        </p>
+        <p>
+          Finalité : proposer une formation à l&apos;IA, dans l&apos;entreprise, à des
+          professionnels dont l&apos;activité s&apos;y rapporte.
+        </p>
+        <p>
+          Données : l&apos;adresse email professionnelle de l&apos;entreprise, son nom, son activité
+          et une phrase tirée de son propre site.
+        </p>
+        <p>
+          Source : l&apos;adresse que l&apos;entreprise publie elle-même sur son site ou sur sa
+          fiche Google Maps. Aucune adresse n&apos;est achetée ni reconstituée.
+        </p>
+        <p>
+          Base légale : l&apos;intérêt légitime (article 6-1-f du RGPD). Le message s&apos;adresse à
+          un professionnel et porte sur un sujet lié à son métier.
+        </p>
+        <p>
+          Opposition : à tout moment, avec effet immédiat. Répondez « stop » au message ou écrivez à{' '}
+          <a href={`mailto:${site.email}`}>{site.email}</a>. Aucun autre message ne suit.
+        </p>
+        <p>
+          Durée : 3 ans au plus après le dernier contact. Après une opposition, nous ne gardons que
+          la ligne nécessaire pour la respecter.
+        </p>
+        <p>Vos autres droits sont décrits dans la section « Vos droits ».</p>
+      </LegalSection>
+
       <LegalSection title="Hébergement et sous-traitants">
         <p>Les données transitent et sont stockées via les prestataires suivants :</p>
         <ul>
