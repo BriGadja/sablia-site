@@ -56,6 +56,13 @@ describe('politique de confidentialité', () => {
     expect(t).toContain('brice@sablia.io')
   })
 
+  it('has a Prospection section: heading, legitimate interest, « stop » opt-out, contact address', () => {
+    expect(t).toContain('Prospection commerciale par e-mail')
+    expect(t).toContain('intérêt légitime')
+    expect(t).toContain('stop')
+    expect(t).toContain('brice@sablia.io')
+  })
+
   it('Newsletter: Resend also sends the Tuesday letter, from the United States under standard contractual clauses', () => {
     expect(t).toContain(
       'envoi des emails de confirmation, des notifications internes et de la lettre du mardi (newsletter)',
