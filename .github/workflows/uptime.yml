@@ -58,6 +58,13 @@ jobs:
             probe "https://sablia.io/"
             probe "https://sablia.io/sitemap.xml"
             probe "https://n8n.sablia.io/healthz"
+            # client endpoints (audit Fable step 5, 2026-11-10): these answer through a redirect to a
+            # login page or the bare domain, so follow it and still require a final 200
+            for u in "https://pluriel.sablia.io/" "https://app.sablia.io/" "https://beautygreeninstitut.com/"; do
+              code=$(curl -sL -o /dev/null -w '%{http_code}' --max-time 15 --retry 2 --retry-delay 3 "$u") || code=000
+              echo "$u -> $code"
+              [ "$code" = 200 ] || fails+=("$u answered $code")
+            done
             if [ "${PROBE_RELEASE:-0}" = 1 ]; then
               body=$(curl -s --max-time 15 https://sablia.io/healthz || true)
               release=$(printf '%s' "$body" | sed -n 's/.*"release":"\([^"]*\)".*/\1/p')
