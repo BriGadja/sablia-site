@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npx biome check src scripts server
+      # of1.parity and crm.doorway read files that only exist in the hub tree (offre/, research/):
+      # they cannot run in a standalone clone. They stay in the VPS/hub runs.
+      - run: npx vitest run --exclude src/content/of1.parity.test.ts --exclude src/content/crm/crm.doorway.test.ts
+      - run: npm run test:seo
+      - name: Delivery gate
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: python3 scripts/delivery-gate.py --repo . --range "origin/${BASE_REF}..HEAD"
+
+  promote:
+    needs: test
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      # Fast-forward only: a non-fast-forward rejection fails the job. Never force.
+      - run: git push origin HEAD:refs/heads/release
