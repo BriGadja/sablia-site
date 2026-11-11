@@ -3,7 +3,7 @@ import { existsSync, mkdtempSync, readFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import test from 'node:test'
-import { fetchPosters, videoRows } from './fetch-posters.mjs'
+import { fetchPosters, videoRows } from '../fetch-posters.mjs'
 
 const bytes = (s) => Buffer.from(s)
 const fakeSharp = () => ({
