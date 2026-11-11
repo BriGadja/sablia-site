@@ -73,13 +73,10 @@
       color: #131620;
       text-wrap: pretty;
     }
+    /* bold only: an underline here read as a link (offer-page review, F6 #6) */
     .tpr-verb {
       white-space: nowrap;
       font-weight: 600;
-      text-decoration: underline;
-      text-decoration-color: #b9852a;
-      text-decoration-thickness: 2px;
-      text-underline-offset: 5px;
     }
     .tpr-place {
       display: flex;

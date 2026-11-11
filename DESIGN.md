@@ -87,7 +87,8 @@ Contrast, computed with the WCAG 2.x relative-luminance formula on the hex value
 Rules:
 - Gold on a light ground is `gold-dark` as text and `gold-mid` as a stroke. `gold` itself only sits on night or violet.
 - One signal colour. Everything else is ink, greys, sand/rose grounds and the night band.
-- A dark band (`.panel`, `#scene`, `#videos`, `#fin`) flips the focus ring from `gold-dark` to `gold`.
+- A dark band (`.panel`, `.v2-sbar`, `#scene`, `#videos`, `.v2-tp-conditions`, `#fin`) flips the focus ring from
+  `gold-dark` to `gold` (the list in `base.css`: a new night band joins it).
 - The contrast gate (`scripts/qa/contrast.py`, run by `score.py`) and `scripts/qa/axe-check.py` are the metric, not this table.
 
 ## Typography

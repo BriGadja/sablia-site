@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { fireEvent, render } from '@testing-library/react'
 import { renderToString } from 'react-dom/server'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -222,5 +224,29 @@ describe('every « Réserver 30 min » of the offer page opens the « Échange d
     for (const u of urls) expect(u).toBe(site.formationBookingUrl)
     expect(urls).not.toContain(site.bookingUrl)
     expect(site.formationBookingUrl).toBe('https://calendly.com/brice-gachadoat/echange-30-minutes')
+  })
+})
+
+// Offer-page review F6 #1 and #6 (US-99), read from the stylesheets: no gate measures focus rings,
+// and none tells a styled word from a link.
+describe('/responsable-ia-temps-partage stylesheets', () => {
+  const css = (rel: string) => readFileSync(join(__dirname, rel), 'utf8')
+
+  it('flips the focus ring to gold on the night band #conditions, as on #fin (DESIGN.md § Colour)', () => {
+    const gold =
+      css('../base.css').match(/([^{}]*)\{\s*outline-color:\s*#D9A441\s*!important;\s*\}/i)?.[1] ??
+      ''
+    for (const band of ['.v2-tp-conditions', '#fin'])
+      expect(gold, band).toContain(`${band} :focus-visible`)
+    expect(css('../../components/temps-partage/conditions/conditions.css')).toMatch(
+      /\.v2-tp-conditions \{[^}]*background: #161b29/,
+    )
+  })
+
+  it('sets the three verbs of #role in bold, without the underline that marks a link', () => {
+    const verb =
+      css('../../components/temps-partage/role/role.css').match(/\.tpr-verb \{([^}]*)\}/)?.[1] ?? ''
+    expect(verb).toMatch(/font-weight:\s*600/)
+    expect(verb).not.toMatch(/text-decoration|text-underline/)
   })
 })
