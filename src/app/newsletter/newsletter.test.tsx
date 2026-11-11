@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { renderToString } from 'react-dom/server'
@@ -263,6 +265,25 @@ describe('/newsletter: the token links', () => {
     expect(document.body.textContent).not.toContain('Premier numéro')
   })
 
+  it('drops the « Premier numéro » line once the build is at or after Tuesday 17/11 09:00 Paris', async () => {
+    const cases = [
+      ['2026-11-17T07:59:59.999Z', "C'est fait, Léa. Premier numéro mardi 17 novembre."], // 08:59:59 Paris
+      ['2026-11-17T08:00:00.000Z', "C'est fait, Léa."], // 09:00 Paris, the send
+      ['2026-12-01T10:00:00.000Z', "C'est fait, Léa."],
+    ] as const
+    for (const [builtAt, message] of cases) {
+      vi.stubEnv('NEXT_PUBLIC_BUILD_AT', builtAt)
+      stubFetch(200, { ok: true, state: 'subscribed', prenom: 'Léa' })
+      const view = await open(`?c=${TOKEN}`)
+      const user = userEvent.setup()
+      await user.click(screen.getByRole('button', { name: 'Confirmer mon inscription' }))
+      const done = await screen.findByText(/^C'est fait, Léa\./)
+      expect(done.textContent, builtAt).toBe(message)
+      view.unmount()
+      vi.unstubAllEnvs()
+    }
+  })
+
   it('jeton refusé (404 or 410) : the same neutral message, and the form to start again', async () => {
     for (const status of [404, 410]) {
       stubFetch(status, { error: 'x', code: status === 404 ? 'unknown_token' : 'opposed' })
@@ -273,5 +294,17 @@ describe('/newsletter: the token links', () => {
       expect(screen.getByLabelText('Email')).toBeTruthy()
       view.unmount()
     }
+  })
+})
+
+describe('/newsletter: motion', () => {
+  const css = readFileSync(join(__dirname, '../../components/newsletter/newsletter.css'), 'utf8')
+
+  it('gives the issue rows no scroll-driven entry animation (axe reads text below the fold in its from state)', () => {
+    expect(css).not.toMatch(/\.nl-issues li[^{}]*\{[^}]*animation/)
+  })
+
+  it('keeps the hover of an issue row', () => {
+    expect(css).toMatch(/\.nl-issue:hover \.nl-issue-title \{[^}]*color: #835a0c/)
   })
 })

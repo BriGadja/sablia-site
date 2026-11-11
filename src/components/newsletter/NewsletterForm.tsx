@@ -51,7 +51,10 @@ function takeToken(): { action: TokenAction; token: string } | null {
   return confirm ? { action: 'confirm', token: confirm } : { action: 'invite', token: invite ?? '' }
 }
 
-/** `announceFirstIssue`: say when the first issue leaves, only while no issue is published. */
+/**
+ * `announceFirstIssue`: say when the first issue leaves, only while no issue is published and the build
+ * is before that morning (`NewsletterView` decides).
+ */
 export default function NewsletterForm({ announceFirstIssue }: { announceFirstIssue: boolean }) {
   const [view, setView] = useState<View>({ kind: 'idle' })
   /** Set at the first client render, so the prerendered HTML never bakes a timestamp. */

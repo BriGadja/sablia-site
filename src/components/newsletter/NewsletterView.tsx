@@ -1,6 +1,7 @@
 import type { Lettre } from '@/components/lettre/data'
 import { Dune } from '@/components/shell/Dune'
 import { Eyebrow } from '@/components/shell/Eyebrow'
+import { buildTime } from '@/content/session-clock'
 import { IssueList } from './IssueList'
 import NewsletterForm from './NewsletterForm'
 import './newsletter.css'
@@ -10,6 +11,21 @@ const PARTS = [
   'Ce que dix minutes ne disent pas',
   'Mon avis',
 ] as const
+
+/** The first issue leaves on Tuesday 17/11/2026 at 09:00 Paris (winter time, UTC+1). */
+const FIRST_ISSUE_AT = '2026-11-17T09:00:00+01:00'
+
+/**
+ * The form's « Premier numéro mardi 17 novembre. » shows while no issue is published AND the build is
+ * before that morning, so a lagging publication never leaves a past date on the page. Without a build
+ * instant (tests, a tool rendering outside Next) the issues alone decide.
+ */
+function announceFirstIssue(lettres: readonly Lettre[]): boolean {
+  const builtAt = buildTime()
+  return (
+    lettres.length === 0 && (builtAt === null || builtAt.getTime() < Date.parse(FIRST_ISSUE_AT))
+  )
+}
 
 /** An envelope sealed with the hourglass, in gold contours on the night (the sand-drawing rule). */
 function Envelope() {
@@ -64,7 +80,7 @@ export default function NewsletterView({ lettres }: { lettres: readonly Lettre[]
               </span>
             </p>
           </div>
-          <NewsletterForm announceFirstIssue={lettres.length === 0} />
+          <NewsletterForm announceFirstIssue={announceFirstIssue(lettres)} />
         </div>
       </section>
 
