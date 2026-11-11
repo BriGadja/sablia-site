@@ -1,7 +1,8 @@
 // Build step: downloads each published video's poster into public/_posters/<id>.webp so a visitor's
 // browser never requests i.ytimg.com (the content gate bans that host from the export). A failed
-// fetch logs and falls back to the facade's generic poster; it never fails the build. A failure to
-// LIST the resources is not this script's to report: `generateStaticParams` throws on it in strict mode.
+// fetch logs and falls back to the facade's generic poster; it never fails the build. The videos are
+// those of the published resources AND of the published issues of the letter (US-101). A failure to
+// LIST either table is not this script's to report: `generateStaticParams` throws on it in strict mode.
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -45,12 +46,27 @@ export async function fetchPosters({
   }
 }
 
+/** The union of the readers' rows, one row per YouTube id; a reader that throws is logged and skipped. */
+export async function videoRows({ readers, log = console.warn }) {
+  const byId = new Map()
+  for (const read of readers) {
+    try {
+      for (const row of await read()) {
+        if (row?.youtube_id && !byId.has(row.youtube_id)) byId.set(row.youtube_id, row)
+      }
+    } catch (error) {
+      log(`[posters] a list was skipped: ${String(error)}`)
+    }
+  }
+  return [...byId.values()]
+}
+
 async function main() {
   const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
   try {
-    const { listPublishedSlugs } = await import('./seo/ressources.mjs')
+    const { listPublishedLettres, listPublishedSlugs } = await import('./seo/ressources.mjs')
     const sharp = (await import('sharp')).default
-    const rows = await listPublishedSlugs()
+    const rows = await videoRows({ readers: [listPublishedSlugs, listPublishedLettres] })
     await fetchPosters({ rows, outDir: join(root, 'public', '_posters'), sharp })
   } catch (error) {
     console.warn(`[posters] skipped: ${String(error)}`)

@@ -8,7 +8,8 @@ import express, { type Express, type NextFunction, type Request, type Response }
  * - a page is `<route>.html` (or `<route>/index.html`) and answers 200 at `/x` AND `/x/`; a file
  *   and a directory of the same name coexist (`ressources.html` beside `ressources/`);
  * - an unknown path is a real 404 carrying 404.html (the Vercel-era index.html fallback is gone);
- *   `/404*`, `/_not-found*` and `/ressources/__none*` (payload files included) are 404 too;
+ *   `/404*`, `/_not-found*`, `/ressources/__none*` and `/lettre/__none*` (payload files included) are
+ *   404 too;
  * - Next's RSC payloads (`*.txt`, `index.txt`, `__next.*.txt`) are plain files: 200 text/plain;
  *   a 404 there would degrade every Link click to a full reload;
  * - `_next/static/*` is immutable, everything else revalidates; `.well-known` is served.
@@ -16,7 +17,7 @@ import express, { type Express, type NextFunction, type Request, type Response }
 
 const REVALIDATE = 'public, max-age=0, must-revalidate'
 const IMMUTABLE = 'public, max-age=31536000, immutable'
-const NEVER_SERVED = /^\/(?:404|_not-found|ressources\/__none)(?:[/.].*)?$/
+const NEVER_SERVED = /^\/(?:404|_not-found|ressources\/__none|lettre\/__none)(?:[/.].*)?$/
 const REDIRECTS: Record<string, string> = {
   '/roi': '/offres/compte-rendu-appel',
   '/about': '/#derriere',

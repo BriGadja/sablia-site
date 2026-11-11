@@ -137,6 +137,24 @@ describe('mountStatic — Next export', () => {
     expect(about.headers.get('location')).toBe('/#derriere')
   })
 
+  it('serves a built issue page, and 404 on the placeholder (lettre/__none*) and an unknown issue', async () => {
+    const issue = await get('/lettre/2026-11-10-exemple-de-numero')
+    expect(issue.status).toBe(200)
+    expect(await issue.text()).toBe(html('lettre/2026-11-10-exemple-de-numero.html'))
+    for (const p of [
+      '/lettre/__none',
+      '/lettre/__none/',
+      '/lettre/__none.html',
+      '/lettre/__none.txt',
+      '/lettre/__none/__next.lettre.__none.txt',
+      '/lettre/inconnu',
+    ]) {
+      const r = await get(p)
+      expect(r.status, p).toBe(404)
+      expect(await r.text(), p).not.toContain('must-not-be-served')
+    }
+  })
+
   it('serves .well-known but never another dotfile', async () => {
     const ai = await get('/.well-known/ai.txt')
     expect(ai.status).toBe(200)

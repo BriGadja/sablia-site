@@ -3,7 +3,7 @@ import { existsSync, mkdtempSync, readFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import test from 'node:test'
-import { fetchPosters } from './fetch-posters.mjs'
+import { fetchPosters, videoRows } from './fetch-posters.mjs'
 
 const bytes = (s) => Buffer.from(s)
 const fakeSharp = () => ({
@@ -84,4 +84,24 @@ test('ignores an id that is not a YouTube id', async () => {
     log() {},
   })
   assert.equal(n, 0)
+})
+
+test('videoRows: the union of both tables, a failed list warns and is skipped', async () => {
+  const log = []
+  const rows = await videoRows({
+    readers: [
+      async () => [{ youtube_id: 'aaaaaaaaaaa' }, { youtube_id: null }],
+      async () => {
+        throw new Error('contenu_lettres down')
+      },
+      async () => [{ youtube_id: 'bbbbbbbbbbb' }, { youtube_id: 'aaaaaaaaaaa' }],
+    ],
+    log: (m) => log.push(m),
+  })
+  assert.deepEqual(
+    rows.map((r) => r.youtube_id),
+    ['aaaaaaaaaaa', 'bbbbbbbbbbb'],
+  )
+  assert.equal(log.length, 1)
+  assert.match(log[0], /contenu_lettres down/)
 })

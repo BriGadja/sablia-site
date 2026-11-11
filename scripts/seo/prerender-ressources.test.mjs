@@ -6,8 +6,10 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, it } from 'node:test'
 import {
+  assertLettreHtml,
   assertRessourceHtml,
   extractFromHtml,
+  listPublishedLettres,
   listPublishedSlugs,
   ressourceRoutes,
   ressourceTitle,
@@ -418,5 +420,327 @@ describe('ressourceTitle', () => {
       () => assertRessourceHtml({ title: 'Ressource — Sablia' }, row),
       /expected "T — Sablia"/,
     )
+  })
+})
+
+// ---------------------------------------------------------------------------------------------
+// The Tuesday letter (US-101): ONE reader for every process of the build chain, and the assertion
+// the export guards run on each built issue page.
+
+const LETTRES = [
+  {
+    slug: '2026-11-03-plus-ancien',
+    titre: 'Plus ancien',
+    resume: 'r1',
+    corps_md: '## A\n\nTexte.',
+    youtube_id: null,
+    published_at: '2026-11-03T07:30:00+00:00',
+    updated_at: '2026-11-03T07:30:00+00:00',
+    published: true,
+  },
+  {
+    slug: '2026-11-10-plus-recent',
+    titre: 'Plus récent',
+    resume: 'r2',
+    corps_md: '## B\n\nTexte.',
+    youtube_id: 'abc123def45',
+    published_at: '2026-11-10T07:30:00+00:00',
+    updated_at: '2026-11-10T07:30:00+00:00',
+    published: true,
+  },
+  {
+    slug: '2026-11-17-brouillon',
+    titre: 'Brouillon',
+    resume: 'r3',
+    corps_md: 'x',
+    youtube_id: null,
+    published_at: null,
+    updated_at: null,
+    published: false,
+  },
+]
+
+describe('listPublishedLettres', () => {
+  it('reads contenu_lettres: published rows only, newest first, every column the page needs', async () => {
+    const calls = []
+    const rows = await listPublishedLettres({
+      env: { VITE_SUPABASE_ANON_KEY: KEY },
+      fetch: fakeSupabase(LETTRES, calls),
+      sleep: noSleep,
+    })
+    assert.deepEqual(
+      rows.map((r) => r.slug),
+      ['2026-11-10-plus-recent', '2026-11-03-plus-ancien'],
+    )
+    assert.equal(calls.length, 1)
+    const q = new URL(calls[0].url)
+    assert.match(q.pathname, /\/rest\/v1\/contenu_lettres$/)
+    assert.equal(
+      q.searchParams.get('select'),
+      'slug,titre,resume,corps_md,youtube_id,published_at,updated_at',
+    )
+    assert.equal(q.searchParams.get('published'), 'eq.true')
+    assert.equal(q.searchParams.get('order'), 'published_at.desc')
+    assert.equal(calls[0].init.headers.apikey, KEY)
+  })
+
+  it('sorts again by published_at descending, whatever order the server answers', async () => {
+    const unsorted = async () => ({
+      ok: true,
+      status: 200,
+      json: async () => [LETTRES[0], LETTRES[1]].map(({ published, ...r }) => r),
+    })
+    const rows = await listPublishedLettres({
+      env: { VITE_SUPABASE_ANON_KEY: KEY },
+      fetch: unsorted,
+      sleep: noSleep,
+    })
+    assert.equal(rows[0].slug, '2026-11-10-plus-recent')
+  })
+
+  it('retries 3 times with a growing backoff; strict then THROWS', async () => {
+    let n = 0
+    const waits = []
+    await assert.rejects(
+      listPublishedLettres({
+        env: { VITE_SUPABASE_ANON_KEY: KEY, PRERENDER_STRICT: '1' },
+        fetch: async () => {
+          n++
+          throw new Error('network down')
+        },
+        sleep: async (ms) => waits.push(ms),
+      }),
+      /network down/,
+    )
+    assert.equal(n, 3)
+    assert.equal(waits.length, 2)
+    assert.ok(waits[1] > waits[0], 'backoff grows')
+  })
+
+  it('outside strict mode an unreadable table warns once and answers []', async () => {
+    const warnings = []
+    let n = 0
+    const rows = await listPublishedLettres({
+      env: { VITE_SUPABASE_ANON_KEY: KEY },
+      fetch: async () => {
+        n++
+        return { ok: false, status: 500, json: async () => ({}) }
+      },
+      sleep: noSleep,
+      warn: (m) => warnings.push(m),
+    })
+    assert.deepEqual(rows, [])
+    assert.equal(n, 3)
+    assert.equal(warnings.length, 1)
+    assert.match(warnings[0], /contenu_lettres.*500/)
+  })
+
+  it('a strict build on Vercel also throws on an unreadable table', async () => {
+    await assert.rejects(
+      listPublishedLettres({
+        env: { VITE_SUPABASE_ANON_KEY: KEY, VERCEL: '1' },
+        fetch: async () => ({ ok: false, status: 503, json: async () => ({}) }),
+        sleep: noSleep,
+      }),
+      /503/,
+    )
+  })
+
+  it('succeeds when a later try works', async () => {
+    let n = 0
+    const rows = await listPublishedLettres({
+      env: { VITE_SUPABASE_ANON_KEY: KEY, PRERENDER_STRICT: '1' },
+      fetch: async (...a) => {
+        n++
+        if (n < 3) throw new Error('flaky')
+        return fakeSupabase(LETTRES)(...a)
+      },
+      sleep: noSleep,
+    })
+    assert.equal(rows.length, 2)
+  })
+
+  it('without the key: throws at once on a strict or Vercel build, warns and answers [] elsewhere', async () => {
+    for (const env of [{ PRERENDER_STRICT: '1' }, { VERCEL: '1' }]) {
+      let called = false
+      await assert.rejects(
+        listPublishedLettres({
+          env,
+          fetch: async () => {
+            called = true
+          },
+          sleep: noSleep,
+        }),
+        /VITE_SUPABASE_ANON_KEY/,
+      )
+      assert.equal(called, false)
+    }
+    const warnings = []
+    const rows = await listPublishedLettres({
+      env: {},
+      fetch: async () => {
+        throw new Error('must not be called')
+      },
+      sleep: noSleep,
+      warn: (m) => warnings.push(m),
+    })
+    assert.deepEqual(rows, [])
+    assert.equal(warnings.length, 1)
+    assert.match(warnings[0], /VITE_SUPABASE_ANON_KEY/)
+  })
+
+  it('treats no published issue as a valid empty list, strict or not', async () => {
+    const rows = await listPublishedLettres({
+      env: { VITE_SUPABASE_ANON_KEY: KEY, PRERENDER_STRICT: '1' },
+      fetch: fakeSupabase([]),
+      sleep: noSleep,
+    })
+    assert.deepEqual(rows, [])
+  })
+
+  it('serves the fixtures first: no network, no key needed, newest first', async () => {
+    const rows = await listPublishedLettres({
+      env: {
+        SABLIA_FIXTURE_LETTRES: '2026-11-03-exemple-ancien,2026-11-10-exemple-de-numero',
+        VITE_SUPABASE_ANON_KEY: KEY,
+      },
+      fetch: async () => {
+        throw new Error('must not be called')
+      },
+      sleep: noSleep,
+    })
+    assert.deepEqual(
+      rows.map((r) => r.slug),
+      ['2026-11-10-exemple-de-numero', '2026-11-03-exemple-ancien'],
+    )
+    assert.ok(rows.every((r) => typeof r.corps_md === 'string' && r.corps_md.length > 0))
+  })
+
+  it('propagates the fixture refusal of a strict build', async () => {
+    await assert.rejects(
+      listPublishedLettres({
+        env: { SABLIA_FIXTURE_LETTRES: '2026-11-10-exemple-de-numero', PRERENDER_STRICT: '1' },
+        fetch: async () => {
+          throw new Error('must not be called')
+        },
+        sleep: noSleep,
+      }),
+      /SABLIA_FIXTURE_LETTRES/,
+    )
+  })
+})
+
+const NBSP = '\u00a0'
+const LROW = {
+  slug: '2026-11-10-exemple',
+  titre: 'Relancer un devis : « sans y penser »',
+  resume: "Ce que l'outil ne fait pas & ce qu'il faut préparer.",
+  corps_md: '## Pourquoi\n\nTexte.',
+  youtube_id: null,
+  published_at: '2026-11-10T07:30:00+00:00',
+  updated_at: '2026-11-10T07:30:00+00:00',
+}
+const ld = (data) => `<script type="application/ld+json">${JSON.stringify(data)}</script>`
+const ARTICLE = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: LROW.titre,
+  datePublished: LROW.published_at,
+  author: { '@type': 'Person', name: 'Brice Gachadoat' },
+}
+const lhtml = ({
+  main = '<main id="contenu" data-ready="true" class="v2-lettre">',
+  blocks = ld(ARTICLE),
+  before = '',
+  body = '<h2>Pourquoi</h2><p>Texte.</p>',
+} = {}) => `${main}${blocks}${before}<div class="lt-body" data-body="lettre">${body}</div></main>`
+const LGOOD = {
+  title: `${LROW.titre} — Sablia`,
+  canonical: 'https://sablia.io/lettre/2026-11-10-exemple',
+  description: LROW.resume,
+  h1: LROW.titre,
+  text: `${LROW.titre} ${LROW.resume} Pourquoi Texte.`,
+  html: lhtml(),
+}
+
+describe('assertLettreHtml', () => {
+  it('accepts the page of its row', () => {
+    assert.doesNotThrow(() => assertLettreHtml(LGOOD, LROW))
+  })
+
+  it('squashes spaces on BOTH sides: a no-break space in the title or the résumé never fails a build', () => {
+    const typo = { ...LROW, titre: `Relancer un devis${NBSP}: « sans y penser »` }
+    assert.doesNotThrow(() => assertLettreHtml(LGOOD, typo))
+    const dom = {
+      ...LGOOD,
+      title: `Relancer un devis${NBSP}:${NBSP}« sans y penser » — Sablia`,
+      h1: `Relancer un devis${NBSP}: « sans  y penser »`,
+      description: `Ce que l'outil ne fait pas${NBSP}& ce qu'il faut préparer.`,
+    }
+    assert.doesNotThrow(() => assertLettreHtml(dom, LROW))
+  })
+
+  it('rejects another title, canonical, description or h1', () => {
+    assert.throws(() => assertLettreHtml({ ...LGOOD, title: 'Sablia' }, LROW), /title/)
+    assert.throws(
+      () => assertLettreHtml({ ...LGOOD, canonical: '/lettre/2026-11-10-exemple' }, LROW),
+      /canonical/,
+    )
+    assert.throws(
+      () => assertLettreHtml({ ...LGOOD, canonical: 'https://sablia.io/newsletter' }, LROW),
+      /canonical/,
+    )
+    assert.throws(() => assertLettreHtml({ ...LGOOD, description: 'autre' }, LROW), /description/)
+    assert.throws(() => assertLettreHtml({ ...LGOOD, h1: 'Autre' }, LROW), /h1/)
+  })
+
+  it('rejects a page whose visible text lacks the résumé', () => {
+    assert.throws(
+      () => assertLettreHtml({ ...LGOOD, text: `${LROW.titre} Pourquoi Texte.` }, LROW),
+      /résumé/,
+    )
+  })
+
+  it('rejects a <main> without data-ready="true"', () => {
+    const html = lhtml({ main: '<main id="contenu" class="v2-lettre">' })
+    assert.throws(() => assertLettreHtml({ ...LGOOD, html }, LROW), /data-ready/)
+  })
+
+  it('wants an Article block with its author name and the row datePublished', () => {
+    assert.throws(
+      () => assertLettreHtml({ ...LGOOD, html: lhtml({ blocks: '' }) }, LROW),
+      /Article/,
+    )
+    const noAuthor = lhtml({ blocks: ld({ ...ARTICLE, author: { '@type': 'Person' } }) })
+    assert.throws(() => assertLettreHtml({ ...LGOOD, html: noAuthor }, LROW), /author/)
+    const noDate = lhtml({ blocks: ld({ ...ARTICLE, datePublished: undefined }) })
+    assert.throws(() => assertLettreHtml({ ...LGOOD, html: noDate }, LROW), /datePublished/)
+    const otherDate = lhtml({ blocks: ld({ ...ARTICLE, datePublished: '2026-01-01' }) })
+    assert.throws(() => assertLettreHtml({ ...LGOOD, html: otherDate }, LROW), /datePublished/)
+    const escaped = lhtml({
+      blocks: `<script type="application/ld+json">${JSON.stringify(ARTICLE).replace(/</g, '\\u003c')}</script>`,
+    })
+    assert.doesNotThrow(() => assertLettreHtml({ ...LGOOD, html: escaped }, LROW))
+  })
+
+  it('rejects an iframe anywhere, a merge tag anywhere, an image in the body', () => {
+    const iframe = lhtml({
+      before: '<iframe src="https://www.youtube-nocookie.com/embed/x"></iframe>',
+    })
+    assert.throws(() => assertLettreHtml({ ...LGOOD, html: iframe }, LROW), /iframe/)
+    const tag = lhtml({ body: '<p>Bonjour {{{contact.first_name|}}},</p>' })
+    assert.throws(() => assertLettreHtml({ ...LGOOD, html: tag }, LROW), /merge tag/)
+    const img = lhtml({ body: '<p><img src="https://example.com/a.png" alt=""/></p>' })
+    assert.throws(() => assertLettreHtml({ ...LGOOD, html: img }, LROW), /img/)
+  })
+
+  it('accepts the own-hosted video poster before the body, and wants the body block itself', () => {
+    const poster = lhtml({
+      before:
+        '<button aria-label="Lire la vidéo : x"><img src="/_posters/abc123def45.webp" alt=""/></button>',
+    })
+    assert.doesNotThrow(() => assertLettreHtml({ ...LGOOD, html: poster }, LROW))
+    const noBody = `<main id="contenu" data-ready="true">${ld(ARTICLE)}<p>Texte.</p></main>`
+    assert.throws(() => assertLettreHtml({ ...LGOOD, html: noBody }, LROW), /body/)
   })
 })

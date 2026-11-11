@@ -17,10 +17,12 @@ rmSync(dist, { recursive: true, force: true })
 mkdirSync(dist)
 renameSync(out, join(dist, 'public'))
 
-// The ressources placeholder (generateStaticParams needs one entry) leaves a directory of RSC
-// payloads as well as the HTML: remove every trace of it.
-const res = join(dist, 'public', 'ressources')
-if (existsSync(res)) {
-  rmSync(join(res, '__none'), { recursive: true, force: true })
-  for (const f of ['__none.html', '__none.txt']) rmSync(join(res, f), { force: true })
+// The placeholder of a dynamic route with nothing published (generateStaticParams needs one entry)
+// leaves a directory of RSC payloads as well as the HTML: remove every trace of it, for the resources
+// and for the issues of the letter.
+for (const route of ['ressources', 'lettre']) {
+  const dir = join(dist, 'public', route)
+  if (!existsSync(dir)) continue
+  rmSync(join(dir, '__none'), { recursive: true, force: true })
+  for (const f of ['__none.html', '__none.txt']) rmSync(join(dir, f), { force: true })
 }

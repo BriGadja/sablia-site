@@ -7,7 +7,8 @@ import type { Express } from 'express'
 /**
  * A dist/public with the SHAPE of the Next `output: 'export'` build (trailingSlash false): one
  * `<route>.html` per page, a directory of the same name beside it for the RSC payloads
- * (`ressources.html` AND `ressources/`), `404.html`, hashed `_next/static` files, a dotfile dir.
+ * (`ressources.html` AND `ressources/`), `404.html`, hashed `_next/static` files, a dotfile dir, and
+ * one issue page of the letter beside the leftovers of its placeholder.
  */
 export const PNG = Buffer.from([
   0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0xff, 0x10, 0x80,
@@ -29,6 +30,13 @@ export function makeDist(): string {
     'ressources/__next.ressources.txt': 'rsc-ressources',
     'ressources/__none.txt': 'must-not-be-served',
     'ressources/__none/__next.ressources.__none.txt': 'must-not-be-served',
+    'newsletter.html': '<!doctype html><title>Newsletter</title>',
+    'lettre/2026-11-10-exemple-de-numero.html': '<!doctype html><title>Exemple de numéro</title>',
+    'lettre/2026-11-10-exemple-de-numero/__next.lettre.2026-11-10-exemple-de-numero.txt':
+      'rsc-lettre',
+    'lettre/__none.html': 'must-not-be-served',
+    'lettre/__none.txt': 'must-not-be-served',
+    'lettre/__none/__next.lettre.__none.txt': 'must-not-be-served',
     'index.txt': 'rsc-index',
     'formations.txt': 'rsc-formations',
     'formations/__next.formations.__PAGE__.txt': 'rsc-formations-page',
