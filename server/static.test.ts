@@ -137,6 +137,14 @@ describe('mountStatic — Next export', () => {
     expect(about.headers.get('location')).toBe('/#derriere')
   })
 
+  it('redirects /lettre and /lettre/ to /newsletter with a 301 (the list of issues lives there)', async () => {
+    for (const p of ['/lettre', '/lettre/']) {
+      const r = await get(p)
+      expect(r.status, p).toBe(301)
+      expect(r.headers.get('location'), p).toBe('/newsletter')
+    }
+  })
+
   it('serves a built issue page, and 404 on the placeholder (lettre/__none*) and an unknown issue', async () => {
     const issue = await get('/lettre/2026-11-10-exemple-de-numero')
     expect(issue.status).toBe(200)

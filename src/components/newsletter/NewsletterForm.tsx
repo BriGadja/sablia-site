@@ -51,7 +51,8 @@ function takeToken(): { action: TokenAction; token: string } | null {
   return confirm ? { action: 'confirm', token: confirm } : { action: 'invite', token: invite ?? '' }
 }
 
-export default function NewsletterForm() {
+/** `announceFirstIssue`: say when the first issue leaves, only while no issue is published. */
+export default function NewsletterForm({ announceFirstIssue }: { announceFirstIssue: boolean }) {
   const [view, setView] = useState<View>({ kind: 'idle' })
   /** Set at the first client render, so the prerendered HTML never bakes a timestamp. */
   const mountedAt = useRef(Date.now())
@@ -148,7 +149,7 @@ export default function NewsletterForm() {
       view.kind === 'pending'
         ? "Si cette adresse n'est pas déjà inscrite, un mail vient de partir : cliquez sur son lien pour confirmer."
         : view.kind === 'subscribed'
-          ? `C'est fait${view.prenom ? `, ${view.prenom}` : ''}. ${FIRST_ISSUE}`
+          ? `C'est fait${view.prenom ? `, ${view.prenom}` : ''}.${announceFirstIssue ? ` ${FIRST_ISSUE}` : ''}`
           : "Trop d'inscriptions aujourd'hui, réessayez demain."
     return (
       <div className="nl-card nl-done" data-state={view.kind} role="status">

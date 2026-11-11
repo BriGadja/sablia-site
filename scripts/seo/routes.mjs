@@ -136,7 +136,13 @@ export const PAGE_ROUTES = [
   },
   {
     path: '/newsletter',
-    sources: [`${A}/newsletter/`, 'src/components/newsletter/'],
+    // The list of issues (#numeros) takes its strings and dates from the letter's module (US-102).
+    sources: [
+      `${A}/newsletter/`,
+      'src/components/newsletter/',
+      'src/components/lettre/content.ts',
+      'src/components/lettre/date.ts',
+    ],
     indexable: true,
     changefreq: 'monthly',
     priority: 0.6,

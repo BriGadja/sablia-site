@@ -1,6 +1,6 @@
 # SEO — Sablia Site (v2)
 
-**Last updated**: 2026-11-01 (training lot 1: `/realisations` added, identity and metadata of the training home). Built on the 2026-10-26 v2 build (Next.js static export). The Vite-era `meta-tags.json`, `SEO.tsx` and `react-helmet-async` no longer exist.
+**Last updated**: 2026-11-11 (the Tuesday letter: one page per issue `/lettre/<slug>` with `Article` data, listed on `/newsletter`, in the sitemap; earlier: training lot 1, `/realisations`). Built on the 2026-10-26 v2 build (Next.js static export). The Vite-era `meta-tags.json`, `SEO.tsx` and `react-helmet-async` no longer exist.
 
 ---
 
@@ -26,7 +26,7 @@
 
 ## What the build refuses (`scripts/seo/export-guards.mjs`, run by `npm run build`)
 
-On every `dist/public/**/*.html`: the audience tracker and consent banner absent from the static HTML, exactly one `h1`, canonical equal to the page's own URL, `noindex` exactly where `routes.mjs` says, every indexable route has its page and no unlisted page exists (`404.html`, `_not-found*` and `escalier-modeles.html` are exempt). Resource pages: title and description, `<main data-ready="true">`, no « Chargement », no `<iframe`; `/ressources` lists every published slug and the home video tiles match the slugs and `youtube_id`. Home: exactly one Organization JSON-LD, no « 30 jours », no « dashboards intelligents ». Then `scripts/qa/content-gates.sh --auto` greps the built HTML (banned figures and names, third-party hosts, em dash on proof surfaces, foreign e-mail, « [À CONFIRMER] » when `SABLIA_SLOT=prod`).
+On every `dist/public/**/*.html`: the audience tracker and consent banner absent from the static HTML, exactly one `h1`, canonical equal to the page's own URL, `noindex` exactly where `routes.mjs` says, every indexable route has its page and no unlisted page exists (`404.html`, `_not-found*` and `escalier-modeles.html` are exempt). Resource pages: title and description, `<main data-ready="true">`, no « Chargement », no `<iframe`; `/ressources` lists every published slug and the home video tiles match the slugs and `youtube_id`. Issue pages of the letter (`assertLettreHtml`, values compared with spaces squashed on both sides): one page per published issue and no other `/lettre/*` page (a leftover `__none` placeholder fails), title `<titre> — Sablia`, canonical, description = résumé, h1 = title, the résumé visible, `<main data-ready="true">`, exactly one `Article` block with `author.name` and `datePublished` equal to the row's `published_at`, no `<iframe` and no merge tag `{{{` in the page, no `<img` in the body block (`data-body="lettre"`); `/newsletter` links every published issue. Home: exactly one Organization JSON-LD, no « 30 jours », no « dashboards intelligents ». Then `scripts/qa/content-gates.sh --auto` greps the built HTML (banned figures and names, third-party hosts, em dash on proof surfaces, foreign e-mail, « [À CONFIRMER] » when `SABLIA_SLOT=prod`).
 
 ## Structured data
 
@@ -37,12 +37,13 @@ On every `dist/public/**/*.html`: the audience tracker and consent banner absent
 | the four CRM pages | Service, FAQPage, BreadcrumbList | `CrmPageView.tsx`, `src/content/crm/schema.ts` |
 | `/guides/integrer-l-ia-dans-votre-entreprise` | Article, FAQPage, BreadcrumbList | the page file |
 | `/ressources/<slug>` | BreadcrumbList, VideoObject (only when the poster is on disk: the thumbnail must be our own file, never `i.ytimg.com`) | `src/app/ressources/[slug]/page.tsx` |
+| `/lettre/<slug>` | Article (author = the founder Person of the organisation block, publisher = its `@id`; `datePublished` = the send instant, the same value the page shows as its Paris date; `dateModified` = `updated_at` only when more than one hour after the send; `image` only when an own-hosted poster exists), BreadcrumbList (Newsletter, then the issue). No VideoObject: a post that embeds a video is not a watch page | `src/components/lettre/article-schema.ts`, `src/app/lettre/[slug]/page.tsx` |
 
 `JsonLd` escapes `<`, U+2028 and U+2029 in the payload.
 
 ## Sitemap
 
-Written to `dist/public/sitemap.xml` by `node scripts/seo/generate-sitemap.mjs` at build time: every indexable route of `routes.mjs` dated from the ledger, plus every published `/ressources/<slug>` (priority 0.6, monthly, dated from its row). A Supabase read failure fails the build. `/realisations` is dated by `src/app/realisations/` + `src/components/realisations/`; the home by the nine section folders under `src/components/home/` (`top offre automatisations formations derriere webinaire apres videos faq`) plus `HomePage.tsx` and `home-metadata.ts`: `scene` (now on the CRM offer page) and `construit` (now under `/realisations`) no longer date the home. The table below is the indexable part of `PAGE_ROUTES`, generated from the file on 2026-11-01 (regenerate it when `routes.mjs` changes):
+Written to `dist/public/sitemap.xml` by `node scripts/seo/generate-sitemap.mjs` at build time: every indexable route of `routes.mjs` dated from the ledger, plus every published `/ressources/<slug>` and `/lettre/<slug>` (priority 0.6, monthly, dated from its row: `updated_at`, else `published_at`). `/ressources` is dated max(ledger, latest resource) and `/newsletter` max(ledger, latest issue), so a new issue moves the list page too; the `/newsletter` sources also include `src/components/lettre/content.ts` and `date.ts` (the strings and dates of its list). A Supabase read failure fails the build (for the issues: on a strict build only). `/realisations` is dated by `src/app/realisations/` + `src/components/realisations/`; the home by the nine section folders under `src/components/home/` (`top offre automatisations formations derriere webinaire apres videos faq`) plus `HomePage.tsx` and `home-metadata.ts`: `scene` (now on the CRM offer page) and `construit` (now under `/realisations`) no longer date the home. The table below is the indexable part of `PAGE_ROUTES`, generated from the file on 2026-11-01 (regenerate it when `routes.mjs` changes):
 
 | Route | Priority | Change Freq |
 |-------|----------|-------------|
@@ -65,8 +66,9 @@ Written to `dist/public/sitemap.xml` by `node scripts/seo/generate-sitemap.mjs` 
 | `/newsletter` | 0.6 | monthly |
 | `/webinaire` | 0.7 | weekly |
 | `/ressources/<slug>` (one per published resource) | 0.6 | monthly |
+| `/lettre/<slug>` (one per published issue of the letter) | 0.6 | monthly |
 
-Built but kept out of the sitemap: `/thank-you`, `/webinaire/merci`, `/webinaire/apres-reservation`, `/webinaire/questionnaire` (all noindex). `/roi` and `/about` are 301 in `server/static.ts` (to `/offres/compte-rendu-appel` and `/#derriere`).
+Built but kept out of the sitemap: `/thank-you`, `/webinaire/merci`, `/webinaire/apres-reservation`, `/webinaire/questionnaire` (all noindex). `/roi`, `/about` and `/lettre` are 301 in `server/static.ts` (to `/offres/compte-rendu-appel`, `/#derriere` and `/newsletter`).
 
 ### `lastmod`
 

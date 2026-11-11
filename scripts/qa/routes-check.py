@@ -5,7 +5,7 @@ Expected, no redirect followed:
   200  every non-draft route of scripts/seo/routes.mjs (resolveRoutes), every <loc> of /sitemap.xml, the v2 pages
        (/formations, /accompagnement) and the static extras (/sitemap.xml /robots.txt /llms.txt, the IndexNow key file,
        /.well-known/ai.txt, /favicon.svg, /brand/symbol.svg, /escalier-modeles, /cgv/, /index.html)
-  301  /roi and /about (with a Location header)
+  301  /roi, /about and /lettre (with a Location header)
   404  /nimporte-quoi, /assets/x.js, /ressources/__none, /lettre/__none, /api/nope
 Usage: routes-check.py [--base URL]   (default: the preview slot http://127.0.0.1:5001)
 Exit 0 when every row matches, 1 otherwise (one line per row, FAIL rows first-class), 2 when the route manifest cannot be read.
@@ -16,7 +16,7 @@ from pathlib import Path
 W = Path(__file__).resolve().parents[2]
 STATIC_200 = ["/sitemap.xml", "/robots.txt", "/llms.txt", "/b726ffc356cf2894abdd81a5a309a181.txt", "/.well-known/ai.txt",
               "/favicon.svg", "/brand/symbol.svg", "/escalier-modeles", "/cgv/", "/index.html", "/formations", "/accompagnement"]
-REDIRECT_301 = ["/roi", "/about"]
+REDIRECT_301 = ["/roi", "/about", "/lettre"]
 NOT_FOUND_404 = ["/nimporte-quoi", "/assets/x.js", "/ressources/__none", "/lettre/__none", "/api/nope"]
 
 
