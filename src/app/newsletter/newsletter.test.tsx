@@ -227,6 +227,17 @@ describe('/newsletter: the public form', () => {
 })
 
 describe('/newsletter: the token links', () => {
+  // The « Premier numéro » line also reads the visitor's clock: pin it before the send (Monday 16/11),
+  // so these rows never depend on the day the suite runs. Only `Date` is faked (frozen, so a boundary
+  // holds to the millisecond); timers stay real.
+  beforeEach(() => {
+    vi.useFakeTimers({ now: new Date('2026-11-16T12:00:00.000Z'), toFake: ['Date'] })
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.unstubAllEnvs()
+  })
+
   it('jeton ?c= : a button, nothing posted on load, the token dropped from the address', async () => {
     const spy = stubFetch(200, { ok: true, state: 'subscribed', prenom: 'Léa' })
     await open(`?c=${TOKEN}`)
@@ -279,6 +290,28 @@ describe('/newsletter: the token links', () => {
       await user.click(screen.getByRole('button', { name: 'Confirmer mon inscription' }))
       const done = await screen.findByText(/^C'est fait, Léa\./)
       expect(done.textContent, builtAt).toBe(message)
+      view.unmount()
+      vi.unstubAllEnvs()
+    }
+  })
+
+  it('drops the « Premier numéro » line when the visitor confirms at or after Tuesday 17/11 09:00 Paris, even on a page built before', async () => {
+    const cases = [
+      ['2026-11-17T07:59:59.999Z', "C'est fait, Léa. Premier numéro mardi 17 novembre."], // 08:59:59 Paris
+      ['2026-11-17T08:00:00.000Z', "C'est fait, Léa."], // 09:00 Paris, the send
+      ['2026-11-18T10:00:00.000Z', "C'est fait, Léa."], // the send's rebuild failed: this release stays live
+    ] as const
+    for (const [confirmedAt, message] of cases) {
+      // Built the evening before the send, opened before it; the clock is read at the click.
+      vi.stubEnv('NEXT_PUBLIC_BUILD_AT', '2026-11-16T20:00:00.000Z')
+      vi.setSystemTime(new Date('2026-11-16T21:00:00.000Z'))
+      stubFetch(200, { ok: true, state: 'subscribed', prenom: 'Léa' })
+      const view = await open(`?c=${TOKEN}`)
+      vi.setSystemTime(new Date(confirmedAt))
+      const user = userEvent.setup()
+      await user.click(screen.getByRole('button', { name: 'Confirmer mon inscription' }))
+      const done = await screen.findByText(/^C'est fait, Léa\./)
+      expect(done.textContent, confirmedAt).toBe(message)
       view.unmount()
       vi.unstubAllEnvs()
     }
