@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
+import { assertLettreHtml, lettreTitle } from '../../../scripts/seo/ressources.mjs'
 import { LettreBody } from './LettreBody'
 
 /** The body of an issue (US-101): the hub's Markdown, rendered as React nodes on the server. */
@@ -110,5 +111,65 @@ describe('LettreBody', () => {
     const source = readFileSync(join(__dirname, 'LettreBody.tsx'), 'utf8')
     expect(source).not.toContain(`'use client'`)
     expect(source).not.toContain(['dangerously', 'SetInnerHTML'].join(''))
+  })
+})
+
+/**
+ * The export guard (`assertLettreHtml`) wants the body to carry the words of the first `##` heading of
+ * corps_md. Checked here on the REAL render: a correct page never fails the build, whatever Markdown
+ * its first heading holds; a page whose body lost that heading still does.
+ */
+describe('LettreBody under the export guard', () => {
+  /** Runs the guard on an issue page whose body is the render of `rendered` (corps_md by default). */
+  const guard = (corps_md: string, rendered = corps_md) => {
+    const row = {
+      slug: '2026-11-17-x',
+      titre: 'Titre',
+      resume: 'Résumé.',
+      corps_md,
+      youtube_id: null,
+      published_at: '2026-11-17T08:00:00+00:00',
+    }
+    const article = {
+      '@type': 'Article',
+      datePublished: row.published_at,
+      author: { '@type': 'Person', name: 'Brice Gachadoat' },
+    }
+    const page = `<main id="contenu" data-ready="true"><script type="application/ld+json">${JSON.stringify(article)}</script>${html(rendered)}</main>`
+    const dom = {
+      title: lettreTitle(row),
+      canonical: `https://sablia.io/lettre/${row.slug}`,
+      description: row.resume,
+      h1: row.titre,
+      text: `${row.titre} ${row.resume}`,
+      html: page,
+    }
+    return () => assertLettreHtml(dom, row)
+  }
+  const issue = (heading: string, rest = '') => `Bonjour,\n\n${heading}\n\nTexte.${rest}\n\nBrice`
+
+  it.each([
+    ['an entity outside the decoded set', issue('## Et ensuite&hellip;')],
+    ['an entity inside a word', issue('## Le r&eacute;sum&eacute; du mois')],
+    [
+      'a heading that is only a bare URL',
+      issue('## https://calendly.com/x/y?utm_source=sablia.io'),
+    ],
+    ['an angle-bracket URL', issue('## Réservez <https://calendly.com/x>')],
+    ['a bare URL inside the text', issue('## Réservez sur https://calendly.com/x/y ce mois')],
+    ['a reference link', issue('## Voir [la page][r]', '\n\n[r]: https://sablia.io/x')],
+    ['a link label with brackets', issue('## Voir [a [b] c](https://a.org/)')],
+  ])('passes a correct page whose first heading holds %s', (_shape, corps) => {
+    expect(guard(corps)).not.toThrow()
+  })
+
+  it('fails a page whose body lacks the words of the first heading, or holds them out of order', () => {
+    const corps = issue('## Pourquoi cette vidéo')
+    expect(guard(corps, issue('## Autre chose'))).toThrow(/first ## heading/)
+    expect(guard(issue('## Partie deux'), issue('## Deux', ' Partie.'))).toThrow(/first ## heading/)
+  })
+
+  it('still fails an empty body when the first heading leaves no word to look for', () => {
+    expect(guard(issue('## https://calendly.com/x'), '')).toThrow(/body block is empty/)
   })
 })

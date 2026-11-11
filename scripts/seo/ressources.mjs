@@ -248,20 +248,37 @@ const JSON_LD = /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/scri
 const LETTRE_BODY = /<div\b[^>]*\bdata-body="lettre"[^>]*>([\s\S]*?)<\/div>/i
 const FIRST_H2 = /^ {0,3}##[ \t]+(.+?)[ \t#]*$/m
 
-/** Letters and digits only, lower case: inline marks, entities, punctuation and spacing never count. */
-const words = (text) =>
-  decode(text)
+/** Letters and digits only, lower case: inline marks, punctuation and spacing never count. */
+const norm = (text) =>
+  text
     .toLowerCase()
     .replace(/[^\p{L}\p{N}]+/gu, ' ')
     .trim()
+const words = (text) => norm(decode(text))
 
-/** The visible words of the first `##` heading of a Markdown body (images dropped, link labels kept). */
+/**
+ * The words of the first `##` heading of a Markdown body that the rendered body must carry. Only what
+ * renders as typed counts: link labels stay; images, URLs (the page shortens a bare one), the ids of
+ * reference links and any entity `decode()` does not know, with its word (`r&eacute;sum&eacute;`), go.
+ */
 function firstHeadingWords(markdown) {
   const heading = FIRST_H2.exec(markdown ?? '')?.[1]
-  if (!heading) return ''
-  return words(
-    heading.replace(/!\[[^\]]*\]\([^)]*\)/g, ' ').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1'),
-  )
+  if (!heading) return []
+  const text = decode(
+    heading
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+      .replace(/\[([^\]]*)\]\[[^\]]*\]/g, '$1')
+      .replace(/<?https?:\/\/\S+>?/gi, ' '),
+  ).replace(/\S*&[a-z][a-z0-9]*;\S*/gi, ' ')
+  return norm(text).split(' ').filter(Boolean)
+}
+
+/** Every word of `want` appears in `have`, in the same order; other words may sit between them. */
+function inOrder(want, have) {
+  let next = 0
+  for (const word of have) if (word === want[next]) next++
+  return next === want.length
 }
 
 /**
@@ -319,11 +336,12 @@ export function assertLettreHtml(dom, row) {
       `${where}: the issue body carries an <img> (an issue is published without images)`,
     )
   }
-  // The body really reached the page: not empty, and it carries the first `##` heading of corps_md.
+  // The body really reached the page: not empty, and it carries the words of the first `##` heading
+  // of corps_md in order (none left to look for: only the non-empty check applies).
   const bodyWords = words(strip(body[1]))
   if (!bodyWords) throw new Error(`${where}: the issue body block is empty`)
   const heading = firstHeadingWords(row.corps_md)
-  if (heading && !` ${bodyWords} `.includes(` ${heading} `)) {
+  if (heading.length > 0 && !inOrder(heading, bodyWords.split(' '))) {
     throw new Error(`${where}: the issue body lacks the first ## heading of corps_md`)
   }
 }
