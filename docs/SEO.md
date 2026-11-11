@@ -36,6 +36,7 @@ On every `dist/public/**/*.html`: the audience tracker and consent banner absent
 | `/offres/compte-rendu-appel` | Service (Offer with UnitPriceSpecification), FAQPage, BreadcrumbList | `of1-schema.ts` + `BreadcrumbJsonLd` |
 | the four CRM pages | Service, FAQPage, BreadcrumbList | `CrmPageView.tsx`, `src/content/crm/schema.ts` |
 | `/guides/integrer-l-ia-dans-votre-entreprise` | Article, FAQPage, BreadcrumbList | the page file |
+| `/responsable-ia-temps-partage` | none at page level: its questions are visible text only (no FAQPage, whose results Google stopped on 2026-05-07), the organisation block is the layout's | — |
 | `/ressources/<slug>` | BreadcrumbList, VideoObject (only when the poster is on disk: the thumbnail must be our own file, never `i.ytimg.com`) | `src/app/ressources/[slug]/page.tsx` |
 | `/lettre/<slug>` | Article (author = the founder Person of the organisation block, publisher = its `@id`; `datePublished` = the send instant, the same value the page shows as its Paris date; `dateModified` = `updated_at` only when more than one hour after the send; `image` = the own-hosted poster when the issue has a video, else the default `/og-image.png`, as absolute URLs), BreadcrumbList (Newsletter, then the issue). No VideoObject: a post that embeds a video is not a watch page | `src/components/lettre/article-schema.ts`, `src/app/lettre/[slug]/page.tsx` |
 
@@ -43,13 +44,14 @@ On every `dist/public/**/*.html`: the audience tracker and consent banner absent
 
 ## Sitemap
 
-Written to `dist/public/sitemap.xml` by `node scripts/seo/generate-sitemap.mjs` at build time: every indexable route of `routes.mjs` dated from the ledger, plus every published `/ressources/<slug>` and `/lettre/<slug>` (priority 0.6, monthly, dated from its row: `updated_at`, else `published_at`). `/ressources` is dated max(ledger, latest resource) and `/newsletter` max(ledger, latest issue), so a new issue moves the list page too; the `/newsletter` sources also include `src/components/lettre/content.ts` and `date.ts` (the strings and dates of its list). A Supabase read failure fails the build (for the issues: on a strict build only). `/realisations` is dated by `src/app/realisations/` + `src/components/realisations/`; the home by the nine section folders under `src/components/home/` (`top offre automatisations formations derriere webinaire apres videos faq`) plus `HomePage.tsx` and `home-metadata.ts`: `scene` (now on the CRM offer page) and `construit` (now under `/realisations`) no longer date the home. The table below is the indexable part of `PAGE_ROUTES`, generated from the file on 2026-11-01 (regenerate it when `routes.mjs` changes):
+Written to `dist/public/sitemap.xml` by `node scripts/seo/generate-sitemap.mjs` at build time: every indexable route of `routes.mjs` dated from the ledger, plus every published `/ressources/<slug>` and `/lettre/<slug>` (priority 0.6, monthly, dated from its row: `updated_at`, else `published_at`). `/ressources` is dated max(ledger, latest resource) and `/newsletter` max(ledger, latest issue), so a new issue moves the list page too; the `/newsletter` sources also include `src/components/lettre/content.ts` and `date.ts` (the strings and dates of its list). A Supabase read failure fails the build (for the issues: on a strict build only). `/realisations` is dated by `src/app/realisations/` + `src/components/realisations/`; the home by the nine section folders under `src/components/home/` (`top offre automatisations formations derriere webinaire apres videos faq`) plus `HomePage.tsx` and `home-metadata.ts`: `scene` (now on the CRM offer page) and `construit` (now under `/realisations`) no longer date the home. The offer page `/responsable-ia-temps-partage` (US-99) is dated by `src/app/responsable-ia-temps-partage/` + `src/components/temps-partage/`. The table below is the indexable part of `PAGE_ROUTES`, generated from the file on 2026-11-11 (regenerate it when `routes.mjs` changes):
 
 | Route | Priority | Change Freq |
 |-------|----------|-------------|
 | `/` | 1.0 | weekly |
 | `/formations` | 0.8 | monthly |
 | `/accompagnement` | 0.8 | monthly |
+| `/responsable-ia-temps-partage` | 0.9 | monthly |
 | `/realisations` | 0.7 | monthly |
 | `/mentions-legales` | 0.3 | yearly |
 | `/politique-confidentialite` | 0.3 | yearly |
@@ -81,7 +83,7 @@ The date of a page is the day its own sources last changed, not the build day. `
 ## Robots and AI-search files
 
 - `public/robots.txt`: all user agents allowed, sitemap declared, explicit blocks for GPTBot (`Crawl-delay: 10`), OAI-SearchBot, ClaudeBot, Claude-User, Claude-SearchBot, PerplexityBot and Google-Extended, all `Allow: /`.
-- `public/llms.txt`: markdown summary for LLMs (the training offer with no price, the free webinar, the conference as an option, then the CRM offer, the spreadsheet pages and the pages list); it is a proof surface for `content-gates.sh` (no em dash, no banned figure). `public/.well-known/ai.txt` points to it. Both are served by the static server (`.well-known` is the one dotted folder opened).
+- `public/llms.txt`: markdown summary for LLMs (the training offer with no price, the free webinar, the conference as an option, then the CRM offer, the monthly offer « responsable IA à temps partagé » with its URL and no amount (its price is on its page), the spreadsheet pages and the pages list); it is a proof surface for `content-gates.sh` (no em dash, no banned figure). `public/.well-known/ai.txt` points to it. Both are served by the static server (`.well-known` is the one dotted folder opened).
 
 ## Manual tasks
 
