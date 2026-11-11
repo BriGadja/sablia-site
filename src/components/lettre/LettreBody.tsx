@@ -43,13 +43,22 @@ export function isExternalHref(href: string | undefined): boolean {
 }
 
 /**
- * The text of an autolinked bare URL (its text is its href) reads as host and path: no scheme, no
- * query string (the hub's UTM), no fragment. A labelled link keeps its label.
+ * The text of an autolinked bare URL (its text is its href) reads without the scheme, the hub's `utm_*`
+ * parameters and the fragment; any other parameter stays (a YouTube link keeps its `?v=` id). A labelled
+ * link keeps its label.
  */
 function linkText(href: string | undefined, children: ReactNode): ReactNode {
   const text = Array.isArray(children) && children.length === 1 ? children[0] : children
   if (!href || text !== href || !/^https?:\/\//i.test(href)) return children
-  return href.replace(/^https?:\/\//i, '').replace(/[?#].*$/, '') || children
+  const bare = href.replace(/^https?:\/\//i, '').replace(/#.*$/, '')
+  const at = bare.indexOf('?')
+  if (at === -1) return bare || children
+  const kept = bare
+    .slice(at + 1)
+    .split('&')
+    .filter((param) => param !== '' && !/^utm_/i.test(param))
+  const path = bare.slice(0, at)
+  return (kept.length > 0 ? `${path}?${kept.join('&')}` : path) || children
 }
 
 /** Keeps the href (absent when the sanitizer dropped it, e.g. `javascript:`). */

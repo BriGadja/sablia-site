@@ -81,15 +81,29 @@ describe('LettreBody', () => {
     expect(out).not.toContain('href="#')
   })
 
-  it('shows an autolinked bare URL without scheme, query and fragment; its href stays whole', () => {
+  it('shows an autolinked bare URL without scheme, utm_* parameters and fragment; its href stays whole', () => {
     const out = html(
       'Réservez : https://calendly.com/x/y?utm_source=sablia.io&utm_medium=lettre#haut et <https://example.org/a/?b=1>',
     )
     expect(out).toContain(
       '<a href="https://calendly.com/x/y?utm_source=sablia.io&amp;utm_medium=lettre#haut" rel="noopener">calendly.com/x/y</a>',
     )
-    expect(out).toContain('<a href="https://example.org/a/?b=1" rel="noopener">example.org/a/</a>')
+    expect(out).toContain(
+      '<a href="https://example.org/a/?b=1" rel="noopener">example.org/a/?b=1</a>',
+    )
     expect(out).not.toMatch(/>https?:\/\//)
+  })
+
+  it('keeps the other parameters of an autolinked bare URL in its text: a YouTube link keeps its video id', () => {
+    const out = html(
+      'La vidéo : https://www.youtube.com/watch?v=d5fo00AFqVM&utm_source=sablia.io&utm_medium=lettre et https://a.org/p?utm_source=x&q=1&utm_campaign=y#f',
+    )
+    expect(out).toContain(
+      '<a href="https://www.youtube.com/watch?v=d5fo00AFqVM&amp;utm_source=sablia.io&amp;utm_medium=lettre" rel="noopener">www.youtube.com/watch?v=d5fo00AFqVM</a>',
+    )
+    expect(out).toContain(
+      '<a href="https://a.org/p?utm_source=x&amp;q=1&amp;utm_campaign=y#f" rel="noopener">a.org/p?q=1</a>',
+    )
   })
 
   it('leaves a labelled Markdown link and a bare email as written', () => {
