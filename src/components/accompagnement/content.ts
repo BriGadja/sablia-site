@@ -34,7 +34,7 @@ export const REFERENT = {
   /** The monthly offer with its own page (US-99): no amount and no school name here (content.test.ts). */
   more: {
     text: "Pour aller plus loin qu'une séance par mois : comme responsable IA à temps partagé, je construis et j'entretiens vos outils, deux jours par mois.",
-    label: 'Le responsable IA à temps partagé',
+    label: 'Voir cette offre',
     href: '/responsable-ia-temps-partage',
   },
   /** The drawn month (aria-hidden): weekday initials, two figures taken from `line`, and Brice's

@@ -48,7 +48,7 @@ Brice Gachadoat, fondateur de Sablia. Six ans au sein de la DSI du groupe LVMH, 
 
 ## Questions fréquentes
 
-- **Combien ça coûte ?** Le prix dépend de votre équipe et du format retenu. Il arrive dans le devis, après l'échange de 30 minutes. Le webinaire et l'échange sont gratuits.
+- **Combien coûte la formation ?** Le prix dépend de votre équipe et du format retenu. Il arrive dans le devis, après l'échange de 30 minutes. Le webinaire et l'échange sont gratuits.
 - **Mon équipe utilise déjà Copilot ou ChatGPT.** La formation se fait aujourd'hui sur Claude. Si votre équipe travaille déjà avec Copilot ou ChatGPT, dites-le pendant l'échange : on en parle avant tout devis.
 - **Où se passe la formation ?** Dans vos locaux, avec votre équipe. Les trois jours peuvent se suivre ou s'étaler, selon votre organisation.
 - **Combien de personnes ?** Jusqu'à 12 personnes par programme. Pour une équipe plus grande, on en parle pendant l'échange.

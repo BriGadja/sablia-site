@@ -115,10 +115,11 @@ export const PREMIER_MOIS: Section = {
 /**
  * The drawing of `#premier-mois` (decorative, aria-hidden): the four steps of the client journey
  * that the diagnostic counts, bars falling from one step to the next without any figure, the step
- * where the count falls most marked as the one that jams, and the next one after it.
+ * where the count falls most marked as the one that jams, and the next one after it. The shape is
+ * an example (the diagnostic finds the real step), so the caption says « Exemple ».
  */
 export const PARCOURS = {
-  caption: 'Votre parcours client',
+  caption: 'Exemple de parcours client',
   steps: [
     { key: 'decouvrent', label: 'Vous découvrent', share: 1 },
     { key: 'contactent', label: 'Vous contactent', share: 0.62 },
@@ -218,7 +219,7 @@ export const QUESTIONS: Section<Question> = {
   items: [
     {
       q: 'Quelle différence avec un consultant IA ?',
-      a: "Je ne m'arrête pas à la recommandation. Le diagnostic du premier mois repère l'étape qui coince, puis je construis l'outil sur cette étape, dans vos propres comptes, et votre équipe s'en sert avant la fin du mois.",
+      a: "Le diagnostic du premier mois repère l'étape qui coince, puis je construis l'outil sur cette étape, dans vos propres comptes, et votre équipe s'en sert avant la fin du mois. Ensuite, je l'entretiens et je passe chaque mois à l'étape suivante.",
     },
     {
       q: 'Combien de temps ça prend à mon équipe ?',
@@ -226,7 +227,7 @@ export const QUESTIONS: Section<Question> = {
     },
     {
       q: "Deux jours par mois, c'est assez ?",
-      a: "Chaque mois, vous avez un outil de plus en service, une équipe qui s'en sert et le suivi de ce qui tourne. Pour une entreprise de 10 à 50 personnes, deux jours suffisent pour ça.",
+      a: "Chaque mois, vous avez un outil de plus en service, une équipe qui s'en sert et le suivi de ce qui tourne. Pour une entreprise de votre taille, deux jours suffisent pour ça.",
     },
     {
       q: 'Et si le premier mois ne me convient pas ?',

@@ -64,6 +64,9 @@ test('llms.txt: the training first, the webinar, the follow-on offers, no price,
   assert.doesNotMatch(llms, RETIRED)
   assert.doesNotMatch(llms, EURO)
   assert.doesNotMatch(llms, /Plus de 20 clients|calendly\.com\/brice-gachadoat\/30min/)
+  // One offer now shows its price: the « sur devis » answer names the training (offer-page review, F6 #5).
+  assert.ok(llms.includes('**Combien coûte la formation ?**'), 'llms.txt FAQ price line not scoped')
+  assert.doesNotMatch(llms, /Combien ça coûte/)
 })
 
 test('ai.txt: the description says the training, never the CRM agency', () => {

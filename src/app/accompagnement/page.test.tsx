@@ -139,7 +139,8 @@ describe('/accompagnement links the « responsable IA à temps partagé » page 
 
   it('links the offer page with a client-side link', () => {
     render(<Page />)
-    const link = screen.getByRole('link', { name: 'Le responsable IA à temps partagé' })
+    // The sentence names the role; the label says what the click gives (offer-page review, F6 #4).
+    const link = screen.getByRole('link', { name: 'Voir cette offre' })
     expect(link.getAttribute('href')).toBe('/responsable-ia-temps-partage')
     expect(link.closest('#referent')).not.toBeNull()
     expect(link.closest('p')?.textContent?.replace(/\s+/g, ' ')).toContain(MORE)

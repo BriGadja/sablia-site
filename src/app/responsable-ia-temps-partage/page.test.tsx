@@ -151,6 +151,13 @@ describe('/responsable-ia-temps-partage static HTML (SSR content rule)', () => {
     for (const s of strings(copy)) expect(text, s).toContain(fold(s))
   })
 
+  it("labels the journey drawing an example, never the reader's own journey", () => {
+    const at = html.indexOf('id="premier-mois"')
+    const block = textOf(html.slice(at, html.indexOf('</section>', at)))
+    expect(block).toContain('Exemple de parcours client')
+    expect(block).not.toContain('Votre parcours client')
+  })
+
   it('links the school named in « Qui je suis », as the home does', () => {
     const at = html.indexOf('id="qui"')
     const block = html.slice(at, html.indexOf('</section>', at))
