@@ -2,6 +2,7 @@ import { act, render } from '@testing-library/react'
 import type { ReactElement } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { mockIntersectionObserver, mockReducedMotion } from '@/lib/hooks/test-utils'
+import { ChaqueMois } from './chaque-mois'
 import { Conditions } from './conditions'
 import { Gardez } from './gardez'
 import { Qui } from './qui'
@@ -85,5 +86,23 @@ describe('#gardez: each statement draws its own rule when it is on screen', () =
     expect(items.map((li) => li.dataset.reveal)).toEqual(['armed', 'armed', 'armed'])
     act(() => io.trigger(items[0], true))
     expect(items.map((li) => li.dataset.reveal)).toEqual(['in', 'armed', 'armed'])
+  })
+})
+
+// AC-23 evaluation 2 #2 then #5: set as a ruled list under its title, the four rows of #chaque-mois
+// sit ~160 px under the section top at 1440 and run ~330 px on a phone, so a section trigger played
+// their rise under the fold; each row now rises when it is on screen.
+describe('#chaque-mois: each row rises when it is on screen', () => {
+  it('raises a row only when that row scrolls in', () => {
+    const { io, section, watching } = mount(<ChaqueMois />, 'chaque-mois')
+    const rows = [...section.querySelectorAll<HTMLElement>('.tpc-item')]
+    expect(rows).toHaveLength(4)
+    for (const li of rows)
+      expect(Number(watching(li)?.options?.threshold)).toBeGreaterThanOrEqual(0.5)
+    expect(rows.map((li) => li.dataset.reveal)).toEqual(['armed', 'armed', 'armed', 'armed'])
+    act(() => io.trigger(section, true))
+    expect(rows.map((li) => li.dataset.reveal)).toEqual(['armed', 'armed', 'armed', 'armed'])
+    act(() => io.trigger(rows[2], true))
+    expect(rows.map((li) => li.dataset.reveal)).toEqual(['armed', 'armed', 'in', 'armed'])
   })
 })

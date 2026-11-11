@@ -1,7 +1,8 @@
 @layer theme, base, components, utilities;
 
-/* #chaque-mois of /responsable-ia-temps-partage: the title held on the left, the four things each month
-   holds as a two-by-two sheet on the right (one column on phones). */
+/* #chaque-mois of /responsable-ia-temps-partage: the title, then the four things each month holds set as
+   the page's ruled list (the items of #premier-mois: an ink rule, then hairlines), two by two on desktop,
+   one column on phones. */
 @layer components {
   .v2-tp-chaque-mois {
     position: relative;
@@ -9,14 +10,8 @@
     padding: 64px 0 144px;
     color: #131620;
 
-    .tpc-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
-      gap: 72px;
-      align-items: start;
-    }
     .tpc-head {
-      min-width: 0;
+      max-width: 760px;
     }
     h2 {
       margin: 14px 0 0;
@@ -29,38 +24,32 @@
     .tpc-list {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0 40px;
-      margin: 0;
+      column-gap: 48px;
+      margin: 28px 0 0;
       padding: 0;
       list-style: none;
     }
     .tpc-item {
       min-width: 0;
-      padding: 22px 0 26px;
+      padding: 18px 0;
       border-top: 1px solid #e4d6c0;
+      font-size: 17px;
+      line-height: 1.6;
+      color: #3a3f4d;
+      text-wrap: pretty;
 
       &:nth-child(-n + 2) {
         border-top: 1.5px solid #131620;
       }
-      p {
-        margin: 14px 0 0;
-        font-size: 17px;
-        line-height: 1.55;
-        color: #3a3f4d;
-        text-wrap: pretty;
-      }
-    }
-    .tpc-icon {
-      display: block;
-      color: #835a0c;
     }
 
-    /* Entrance, armed after hydration only below the fold (useArmedReveal): each row rises in turn. */
-    &[data-reveal='armed'] .tpc-item {
+    /* Entrance, armed after hydration only below the fold (useArmedReveal, one per row): each row
+       rises when it is on screen; on desktop the two rows of a line rise in turn. */
+    .tpc-item[data-reveal='armed'] {
       opacity: 0;
       transform: translateY(14px);
     }
-    &[data-reveal='in'] .tpc-item {
+    .tpc-item[data-reveal='in'] {
       transition:
         opacity 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
         transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -70,22 +59,15 @@
     @media (max-width: 900px) {
       padding: 48px 0 120px;
 
-      .tpc-grid {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 24px;
-      }
       h2 {
         font-size: 28px;
       }
       .tpc-list {
         grid-template-columns: minmax(0, 1fr);
+        margin-top: 24px;
       }
       .tpc-item {
-        display: grid;
-        grid-template-columns: 28px minmax(0, 1fr);
-        column-gap: 16px;
-        align-items: start;
-        padding: 18px 0;
+        font-size: 16px;
 
         &:nth-child(-n + 2) {
           border-top: 1px solid #e4d6c0;
@@ -93,10 +75,10 @@
         &:first-child {
           border-top: 1.5px solid #131620;
         }
-        p {
-          margin: 0;
-          font-size: 16px;
-        }
+      }
+      /* one column: the scroll staggers the rows, each rises as soon as it is seen */
+      .tpc-item[data-reveal='in'] {
+        transition-delay: 0ms;
       }
     }
 

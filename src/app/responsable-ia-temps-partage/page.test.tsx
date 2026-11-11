@@ -366,6 +366,28 @@ describe('/responsable-ia-temps-partage stylesheets', () => {
     }
   })
 
+  // AC-23 evaluation 2 #2: four stroke pictograms over four sentences beside an empty column read as
+  // a template; the page already has its own list language, the ruled items of #premier-mois.
+  it('sets #chaque-mois as the ruled list of #premier-mois, under its title, without pictograms', () => {
+    const html = renderToString(<Page />)
+    const at = html.indexOf('id="chaque-mois"')
+    const block = html.slice(at, html.indexOf('</section>', at))
+    expect(block).not.toMatch(/<svg/)
+    expect(block).toMatch(/<li class="tpc-item"[^>]*>[^<]/)
+    const decl = (body: string | undefined, prop: string) =>
+      body?.match(new RegExp(`(?:^|[;{\\s])${prop}: ([^;]+);`))?.[1]
+    const tpm = css('../../components/temps-partage/premier-mois/premier-mois.css')
+    const tpc = css('../../components/temps-partage/chaque-mois/chaque-mois.css')
+    const tpmLi = tpm.match(/\.tpm-items \{[\s\S]*?\n {6}li \{([^}]*)\}/)?.[1]
+    const tpcLi = tpc.match(/\.tpc-item \{([^}]*?)(?:&|\})/)?.[1]
+    for (const prop of ['padding', 'border-top', 'font-size', 'line-height', 'color'])
+      expect(decl(tpcLi, prop), prop).toBe(decl(tpmLi, prop))
+    expect(tpm).toMatch(/li:first-child \{\s*border-top: 1\.5px solid #131620;/)
+    expect(tpc).toMatch(/&:nth-child\(-n \+ 2\) \{\s*border-top: 1\.5px solid #131620;/)
+    // the title is not a column of its own: the list follows it
+    expect(tpc).not.toMatch(/\.tpc-grid \{[^}]*grid-template-columns/)
+  })
+
   // AC-23 evaluation 2 #3: DESIGN.md « Gold on a light ground is gold-dark as text and gold-mid as a
   // stroke. gold itself only sits on night or violet »; the #role grain was #d9a441 on rose (1.80:1).
   it('keeps the gold of the night off the light grounds, the #role grain a gold-mid stroke', () => {
