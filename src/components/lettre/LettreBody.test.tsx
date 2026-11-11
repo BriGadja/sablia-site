@@ -8,6 +8,12 @@ import { LettreBody } from './LettreBody'
 /** The body of an issue (US-101): the hub's Markdown, rendered as React nodes on the server. */
 const html = (markdown: string) => renderToStaticMarkup(<LettreBody markdown={markdown} />)
 
+// The spaces of French typography, built from code points (an escape typed here can end up an invisible literal).
+const NBSP = String.fromCodePoint(0xa0)
+const NNBSP = String.fromCodePoint(0x202f)
+const THIN = String.fromCodePoint(0x2009)
+const IDEO = String.fromCodePoint(0x3000)
+
 describe('LettreBody', () => {
   it('wraps the body in its marked block, with no inner <div> (the export guard reads up to the first </div>)', () => {
     const out = html('## Un\n\nTexte.\n\n- a\n- b\n\n> cité')
@@ -104,6 +110,60 @@ describe('LettreBody', () => {
     expect(out).toContain(
       '<a href="https://a.org/p?utm_source=x&amp;q=1&amp;utm_campaign=y#f" rel="noopener">a.org/p?q=1</a>',
     )
+  })
+
+  it.each([
+    ['a no-break space (U+00A0)', NBSP],
+    ['a narrow no-break space (U+202F)', NNBSP],
+    ['a thin space (U+2009)', THIN],
+    ['an ideographic space (U+3000)', IDEO],
+    ['a closing guillemet', '»'],
+    ['an ellipsis', '…'],
+  ])('ends a bare URL before %s: exact href, text shortened, the mark outside the link', (_shape, after) => {
+    expect(html(`La vidéo : https://youtu.be/d5fo00AFqVM${after}!`)).toContain(
+      `<a href="https://youtu.be/d5fo00AFqVM" rel="noopener">youtu.be/d5fo00AFqVM</a>${after}!`,
+    )
+  })
+
+  it('ends a bare URL with utm_* parameters before a narrow no-break space, and inside « » with no-break spaces', () => {
+    const out = html(
+      `Un créneau : https://calendly.com/x/y?utm_source=sablia.io&utm_medium=lettre${NNBSP}? Ou «${NBSP}https://x.y/z${NBSP}».`,
+    )
+    expect(out).toContain(
+      `<a href="https://calendly.com/x/y?utm_source=sablia.io&amp;utm_medium=lettre" rel="noopener">calendly.com/x/y</a>${NNBSP}?`,
+    )
+    expect(out).toContain(`«${NBSP}<a href="https://x.y/z" rel="noopener">x.y/z</a>${NBSP}».`)
+  })
+
+  it('leaves outside the link the trailing marks markdown-to-jsx leaves outside, before a no-break space too', () => {
+    const out = html(
+      `« Voir https://x.y/z.${NBSP}» (https://x.y/p)${NBSP}! https://fr.wikipedia.org/wiki/Rouen_(ville)${NBSP}!`,
+    )
+    expect(out).toContain(`<a href="https://x.y/z" rel="noopener">x.y/z</a>.${NBSP}»`)
+    expect(out).toContain(`(<a href="https://x.y/p" rel="noopener">x.y/p</a>)${NBSP}!`)
+    expect(out).toContain('href="https://fr.wikipedia.org/wiki/Rouen_(ville)"')
+  })
+
+  it.each([
+    ['a plain space', ' '],
+    ['a tab', '\t'],
+    ['a line break', '\n'],
+  ])('ends a bare URL before %s as before', (_shape, after) => {
+    expect(html(`La vidéo : https://youtu.be/d5fo00AFqVM${after}!`)).toContain(
+      `<a href="https://youtu.be/d5fo00AFqVM" rel="noopener">youtu.be/d5fo00AFqVM</a>${after}!`,
+    )
+  })
+
+  it('never touches a URL inside a Markdown link, angle brackets or code, a no-break space after it or not', () => {
+    const out = html(
+      `[la page](https://x.y/a)${NBSP}! [voir https://x.y/b${NBSP}!](https://sablia.io/c) <https://x.y/d>${NBSP}! \`https://x.y/e${NBSP}!\``,
+    )
+    expect(out).toContain(`<a href="https://x.y/a" rel="noopener">la page</a>${NBSP}!`)
+    expect(out).toContain(`<a href="https://sablia.io/c">voir https://x.y/b${NBSP}!</a>`)
+    expect(out).toContain(`<a href="https://x.y/d" rel="noopener">x.y/d</a>${NBSP}!`)
+    expect(out).toContain(`<code>https://x.y/e${NBSP}!</code>`)
+    expect(out.match(/<a\b/g)).toHaveLength(3)
+    expect(out).not.toContain('&lt;')
   })
 
   it('leaves a labelled Markdown link and a bare email as written', () => {

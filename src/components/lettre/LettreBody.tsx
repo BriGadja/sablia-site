@@ -61,6 +61,30 @@ function linkText(href: string | undefined, children: ReactNode): ReactNode {
   return (kept.length > 0 ? `${path}?${kept.join('&')}` : path) || children
 }
 
+/**
+ * markdown-to-jsx ends a bare URL at an ASCII space, `<` or `>` only, so a no-break or thin space, « » » or
+ * « … » typed right after it (French typography) joins its href. Such a URL goes in angle brackets before
+ * `compiler`, ending where the library ends one at a space: the same trailing marks stay outside, a `)` the
+ * URL opened stays in. Code spans, Markdown links (label, destination, definition) and `<…>` are skipped.
+ */
+const WIDE_SPACE_URL =
+  /(`+)[\s\S]*?\1|\[[^\]]*\](?:\([^)]*\)|:[ \t]*\S+)?|<[^<>]*>|(?<!<)https?:\/\/[^\s<>»…]+(?=[^\S \t\n\r]|[»…])/g
+const TRAILING_MARKS = '.,:!?*_~;)'
+
+function bracketBareUrls(markdown: string): string {
+  return markdown.replace(WIDE_SPACE_URL, (match) => {
+    if (!match.startsWith('http')) return match
+    const host = match.indexOf('//') + 2
+    let end = match.length
+    while (end > host && TRAILING_MARKS.includes(match[end - 1])) {
+      const url = match.slice(0, end)
+      if (match[end - 1] === ')' && url.split('(').length >= url.split(')').length) break
+      end--
+    }
+    return end > host ? `<${match.slice(0, end)}>${match.slice(end)}` : match
+  })
+}
+
 /** Keeps the href (absent when the sanitizer dropped it, e.g. `javascript:`). */
 function BodyLink({ href, children }: Children & { href?: string }) {
   // An in-page anchor has no target here (headings and notes carry no id): the text stays, unlinked.
@@ -94,7 +118,7 @@ const OPTIONS = {
 export function LettreBody({ markdown }: { markdown: string }) {
   return (
     <div className="lt-body" data-body="lettre">
-      {compiler(markdown, OPTIONS)}
+      {compiler(bracketBareUrls(markdown), OPTIONS)}
     </div>
   )
 }
