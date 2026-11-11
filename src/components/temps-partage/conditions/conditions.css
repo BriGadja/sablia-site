@@ -1,0 +1,132 @@
+@layer theme, base, components, utilities;
+
+/* #conditions of /responsable-ia-temps-partage, on the night band: the title and the button on the left,
+   the four conditions on the right as a plain list (no card, no box), the monthly price set large over a
+   gold rule. */
+@layer components {
+  .v2-tp-conditions {
+    position: relative;
+    background: #161b29;
+    padding: 88px 0 168px;
+    color: #f4ecdd;
+
+    .tpk-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+      grid-template-areas:
+        'head list'
+        'cta list';
+      grid-template-rows: auto 1fr;
+      column-gap: 72px;
+      align-items: start;
+    }
+    .tpk-head {
+      grid-area: head;
+      min-width: 0;
+    }
+    h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .tpk-cta {
+      grid-area: cta;
+      margin-top: 32px;
+    }
+    .tpk-list {
+      grid-area: list;
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .tpk-item {
+      padding: 18px 0;
+      border-top: 1px solid #323a52;
+      max-width: 40em;
+      font-size: 17px;
+      line-height: 1.6;
+      color: #f4ecdd;
+      text-wrap: pretty;
+
+      &.is-mensuel {
+        position: relative;
+        padding: 0 0 26px;
+        border-top: 0;
+        font-size: 48px;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+
+        /* the gold rule under the price */
+        &::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: min(100%, 320px);
+          height: 2px;
+          border-radius: 2px;
+          background: #d9a441;
+          transform-origin: left center;
+        }
+      }
+      &.is-ouverture {
+        margin-top: 8px;
+        border-top: 0;
+      }
+    }
+    .tpk-lead {
+      font-weight: 600;
+      color: #d9a441;
+    }
+
+    /* Entrance, armed after hydration only below the fold (useArmedReveal): the gold rule draws. */
+    &[data-reveal='armed'] .tpk-item.is-mensuel::after {
+      transform: scaleX(0);
+    }
+    &[data-reveal='in'] .tpk-item.is-mensuel::after {
+      transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s;
+    }
+
+    @media (max-width: 900px) {
+      padding: 64px 0 136px;
+
+      .tpk-grid {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+          'head'
+          'list'
+          'cta';
+        grid-template-rows: none;
+      }
+      h2 {
+        font-size: 28px;
+      }
+      .tpk-list {
+        margin-top: 28px;
+      }
+      .tpk-item {
+        font-size: 16px;
+
+        &.is-mensuel {
+          font-size: 38px;
+          padding-bottom: 22px;
+        }
+      }
+      .tpk-cta {
+        margin-top: 24px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tpk-item.is-mensuel::after {
+        transition: none !important;
+      }
+    }
+  }
+}

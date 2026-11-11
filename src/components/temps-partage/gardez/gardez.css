@@ -1,0 +1,96 @@
+@layer theme, base, components, utilities;
+
+/* #gardez of /responsable-ia-temps-partage, on rose: the title, then three statements in columns, each
+   under a gold rule, its first clause set large. */
+@layer components {
+  .v2-tp-gardez {
+    position: relative;
+    background: #f2e3df;
+    padding: 88px 0 168px;
+    color: #131620;
+
+    .tpg-head {
+      max-width: 760px;
+    }
+    h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .tpg-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0 48px;
+      margin: 40px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .tpg-item {
+      min-width: 0;
+
+      p {
+        margin: 20px 0 0;
+        font-size: 16px;
+        line-height: 1.6;
+        color: #3a3f4d;
+        text-wrap: pretty;
+      }
+    }
+    .tpg-rule {
+      display: block;
+      height: 2px;
+      border-radius: 2px;
+      background: #b9852a;
+      transform-origin: left center;
+    }
+    .tpg-lead {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 22px;
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      font-weight: 600;
+      color: #131620;
+      text-wrap: balance;
+    }
+
+    /* Entrance, armed after hydration only below the fold (useArmedReveal): the three rules draw from
+       the left in turn. The text does not move. */
+    &[data-reveal='armed'] .tpg-rule {
+      transform: scaleX(0);
+    }
+    &[data-reveal='in'] .tpg-rule {
+      transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+      transition-delay: calc(var(--i, 0) * 160ms + 100ms);
+    }
+
+    @media (max-width: 900px) {
+      padding: 56px 0 136px;
+
+      h2 {
+        font-size: 28px;
+      }
+      .tpg-list {
+        grid-template-columns: minmax(0, 1fr);
+        row-gap: 28px;
+        margin-top: 28px;
+      }
+      .tpg-item p {
+        margin-top: 14px;
+        font-size: 15.5px;
+      }
+      .tpg-lead {
+        font-size: 19px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tpg-rule {
+        transition: none !important;
+      }
+    }
+  }
+}

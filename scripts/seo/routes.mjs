@@ -70,6 +70,15 @@ export const PAGE_ROUTES = [
     priority: 0.8,
   },
   {
+    // The monthly offer « responsable IA à temps partagé » (US-99), price shown; outside /offres/**
+    // on purpose (header-cta.ts gives every /offres/** route the CRM Calendly).
+    path: '/responsable-ia-temps-partage',
+    sources: [`${A}/responsable-ia-temps-partage/`, 'src/components/temps-partage/'],
+    indexable: true,
+    changefreq: 'monthly',
+    priority: 0.9,
+  },
+  {
     path: '/mentions-legales',
     sources: [`${A}/mentions-legales/`, 'src/components/legal/', 'src/content/legal/'],
     indexable: true,

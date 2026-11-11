@@ -22,9 +22,9 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npx biome check src scripts server
-      # of1.parity and crm.doorway read files that only exist in the hub tree (offre/, research/):
-      # they cannot run in a standalone clone. They stay in the VPS/hub runs.
-      - run: npx vitest run --exclude src/content/of1.parity.test.ts --exclude src/content/crm/crm.doorway.test.ts
+      # of1.parity, crm.doorway and temps-partage content.parity read files that only exist in the hub
+      # tree (offre/, research/): they cannot run in a standalone clone. They stay in the VPS/hub runs.
+      - run: npx vitest run --exclude src/content/of1.parity.test.ts --exclude src/content/crm/crm.doorway.test.ts --exclude src/components/temps-partage/content.parity.test.ts
       - run: npm run test:seo
       - name: Delivery gate
         if: github.event_name == 'pull_request'
