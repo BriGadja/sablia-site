@@ -257,20 +257,21 @@ const norm = (text) =>
 const words = (text) => norm(decode(text))
 
 /**
- * The words of the first `##` heading of a Markdown body that the rendered body must carry. Only what
- * renders as typed counts: link labels stay; images, URLs (the page shortens a bare one), the ids of
- * reference links and any entity `decode()` does not know, with its word (`r&eacute;sum&eacute;`), go.
+ * The words of the first `##` heading of a Markdown body that the rendered body must carry. Only plain
+ * words count: link labels stay; inline code spans, images, URLs (the page shortens a bare one), the ids
+ * of reference links and every word holding a character reference, named or numeric, go (code and a
+ * backslash show `&#233;` as typed, outside them the page decodes it: either way the word is not looked for).
  */
 function firstHeadingWords(markdown) {
   const heading = FIRST_H2.exec(markdown ?? '')?.[1]
   if (!heading) return []
-  const text = decode(
-    heading
-      .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
-      .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-      .replace(/\[([^\]]*)\]\[[^\]]*\]/g, '$1')
-      .replace(/<?https?:\/\/\S+>?/gi, ' '),
-  ).replace(/\S*&[a-z][a-z0-9]*;\S*/gi, ' ')
+  const text = heading
+    .replace(/`[^`]*`/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/\[([^\]]*)\]\[[^\]]*\]/g, '$1')
+    .replace(/<?https?:\/\/\S+>?/gi, ' ')
+    .replace(/\S*\\?&#?[a-z0-9]+;\S*/gi, ' ')
   return norm(text).split(' ').filter(Boolean)
 }
 

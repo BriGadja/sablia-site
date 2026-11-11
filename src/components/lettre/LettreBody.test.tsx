@@ -173,8 +173,17 @@ describe('LettreBody under the export guard', () => {
     ['a bare URL inside the text', issue('## Réservez sur https://calendly.com/x/y ce mois')],
     ['a reference link', issue('## Voir [la page][r]', '\n\n[r]: https://sablia.io/x')],
     ['a link label with brackets', issue('## Voir [a [b] c](https://a.org/)')],
+    ['a numeric reference in inline code', issue('## Le caractère `&#233;` en code')],
+    ['a hexadecimal reference in inline code', issue('## Le code `caf&#xE9;` du menu')],
+    ['a digit reference in inline code', issue('## Le code `&#49;` seul')],
+    ['a backslash-escaped numeric reference', issue('## Le texte \\&#233;t\\&#233; affiché')],
   ])('passes a correct page whose first heading holds %s', (_shape, corps) => {
     expect(guard(corps)).not.toThrow()
+  })
+
+  it('still fails a page whose body lacks the plain words of a heading holding code or a reference', () => {
+    const corps = issue('## Le caractère `&#233;` en code')
+    expect(guard(corps, issue('## Autre chose'))).toThrow(/first ## heading/)
   })
 
   it('fails a page whose body lacks the words of the first heading, or holds them out of order', () => {
