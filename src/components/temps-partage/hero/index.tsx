@@ -3,21 +3,27 @@ import { Dune } from '@/components/shell/Dune'
 import { Eyebrow } from '@/components/shell/Eyebrow'
 import { site } from '@/lib/site'
 import { HERO, PHOTOS } from '../content'
-import { photoSrcSet, typo } from '../text'
+import { Emphasis, photoSrcSet, typo } from '../text'
 import './hero.css'
 
-/** Kept on one line on desktop so the title breaks after the role, never inside it. */
+/** The role, never split across two lines, at any width. */
+const ROLE = 'responsable IA'
+/** Kept on one line so the title breaks after the role, never inside « temps partagé ». */
 const KEEP = 'à temps partagé,'
 
-/** The h1 with `KEEP` wrapped, or the plain title if the copy no longer holds it. */
+/** The h1 with `ROLE` and `KEEP` wrapped, or the plain title if the copy no longer holds them. */
 function Title() {
-  const at = HERO.h1.indexOf(KEEP)
-  if (at < 0) return <h1>{typo(HERO.h1)}</h1>
+  const h1 = HERO.h1
+  const role = h1.indexOf(ROLE)
+  const at = h1.indexOf(KEEP)
+  if (role < 0 || at < role + ROLE.length) return <h1>{typo(h1)}</h1>
   return (
     <h1>
-      {typo(HERO.h1.slice(0, at))}
+      {typo(h1.slice(0, role))}
+      <span className="tph-nowrap">{ROLE}</span>
+      {typo(h1.slice(role + ROLE.length, at))}
       <span className="tph-keep">{typo(KEEP)}</span>
-      {typo(HERO.h1.slice(at + KEEP.length))}
+      {typo(h1.slice(at + KEEP.length))}
     </h1>
   )
 }
@@ -35,6 +41,9 @@ export function TempsPartageHero() {
           <Eyebrow>{HERO.eyebrow}</Eyebrow>
           <Title />
           <p className="tph-lede">{typo(HERO.lede)}</p>
+          <p className="tph-by">
+            <Emphasis text={typo(HERO.byline)} terms={['Brice Gachadoat']} className="tph-name" />
+          </p>
           <p className="tph-for">{typo(HERO.audience)}</p>
           <div className="tph-cta">
             <Cta size="lg" arrow url={site.formationBookingUrl}>

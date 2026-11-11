@@ -110,6 +110,23 @@ describe('/responsable-ia-temps-partage static HTML (SSR content rule)', () => {
       expect(facts, s).toContain(s)
   })
 
+  // AC-23 design evaluation #8 (US-99): a referred owner looks for a named person in Rouen; the
+  // first phone screen named nobody (the name came seven screens down, in #qui).
+  it('names the person in the hero, under the lede and before the booking button', () => {
+    const top = html.slice(html.indexOf('id="top"'), html.indexOf('id="role"'))
+    const by = top.indexOf('class="tph-by"')
+    expect(by, 'byline').toBeGreaterThan(top.indexOf('class="tph-lede"'))
+    expect(by, 'byline').toBeLessThan(top.indexOf('data-cta-book'))
+    expect(textOf(top.slice(by))).toContain('Brice Gachadoat, fondateur de Sablia, à Rouen.')
+    expect(HERO.byline).toBe(QUI.title)
+  })
+
+  // AC-23 #11: « Votre responsable / IA à temps… » split the role at 390 (and 920-1000 px).
+  it('keeps « responsable IA » on one line at every width', () => {
+    const h1 = html.match(/<h1[\s>][\s\S]*?<\/h1>/)?.[0] ?? ''
+    expect(h1).toMatch(/<span class="tph-nowrap">responsable IA<\/span>/)
+  })
+
   it('carries the four conditions in #conditions, the first-month clause word for word', () => {
     const at = html.indexOf('id="conditions"')
     const block = textOf(html.slice(at, html.indexOf('</section>', at)))
@@ -234,6 +251,60 @@ describe('every « Réserver 30 min » of the offer page opens the « Échange d
   })
 })
 
+// AC-23 design evaluation #1 (US-99): DESIGN.md « Sections are separated by dunes, not by hard
+// edges ». Each section's ground is the first `background` of its stylesheet; wherever two
+// neighbours differ, the later one opens on a dune whose near shape is its own ground, or the
+// earlier one ends on a floor dune (`is-bottom`, the hero) in that ground.
+describe('/responsable-ia-temps-partage section edges', () => {
+  const html = renderToString(<Page />)
+  const SHEETS: readonly (readonly [string, string])[] = [
+    ['top', '../../components/temps-partage/hero/hero.css'],
+    ['role', '../../components/temps-partage/role/role.css'],
+    ['premier-mois', '../../components/temps-partage/premier-mois/premier-mois.css'],
+    ['chaque-mois', '../../components/temps-partage/chaque-mois/chaque-mois.css'],
+    ['gardez', '../../components/temps-partage/gardez/gardez.css'],
+    ['conditions', '../../components/temps-partage/conditions/conditions.css'],
+    ['qui', '../../components/temps-partage/qui/qui.css'],
+    ['questions', '../../components/temps-partage/questions/questions.css'],
+    ['fin', '../../components/shell/fin-band.css'],
+  ]
+  const ground = (rel: string) =>
+    readFileSync(join(__dirname, rel), 'utf8')
+      .match(/background:\s*(#[0-9a-f]{6})/i)?.[1]
+      ?.toLowerCase()
+  /** The markup of section `id`, up to the next section of the list. */
+  const block = (id: string, next?: string) => {
+    const at = html.indexOf(`id="${id}"`)
+    return html.slice(at, next ? html.indexOf(`id="${next}"`) : undefined)
+  }
+  /** The near-shape fill of a dune svg, lower-cased. */
+  const front = (svg: string | undefined) =>
+    svg?.match(/class="d-front"[^>]*fill="(#[0-9a-f]{6})"/i)?.[1]?.toLowerCase()
+  /** The dune that is the section's FIRST child (it straddles the section's top edge). */
+  const opening = (markup: string) =>
+    markup.slice(markup.indexOf('>') + 1).match(/^<svg class="dune v2-dune"[\s\S]*?<\/svg>/)?.[0]
+  /** A floor dune (`is-bottom`) anywhere in the section. */
+  const floor = (markup: string) =>
+    markup.match(/<svg class="dune v2-dune is-bottom"[\s\S]*?<\/svg>/)?.[0]
+
+  it('reads a ground for every section', () => {
+    for (const [id, rel] of SHEETS) expect(ground(rel), id).toMatch(/^#[0-9a-f]{6}$/)
+  })
+
+  for (let i = 1; i < SHEETS.length; i++) {
+    const [prev, prevSheet] = SHEETS[i - 1]
+    const [id, sheet] = SHEETS[i]
+    it(`#${prev} → #${id}: a change of ground is a dune, never a straight edge`, () => {
+      const from = ground(prevSheet)
+      const to = ground(sheet)
+      if (from === to) return
+      const opens = front(opening(block(id, SHEETS[i + 1]?.[0])))
+      const floors = front(floor(block(prev, id)))
+      expect(opens === to || floors === to, `${from} → ${to}`).toBe(true)
+    })
+  }
+})
+
 // Offer-page review F6 #1 and #6 (US-99), read from the stylesheets: no gate measures focus rings,
 // and none tells a styled word from a link.
 describe('/responsable-ia-temps-partage stylesheets', () => {
@@ -255,5 +326,43 @@ describe('/responsable-ia-temps-partage stylesheets', () => {
       css('../../components/temps-partage/role/role.css').match(/\.tpr-verb \{([^}]*)\}/)?.[1] ?? ''
     expect(verb).toMatch(/font-weight:\s*600/)
     expect(verb).not.toMatch(/text-decoration|text-underline/)
+  })
+
+  // AC-23 #7: the charte's type scale table is the reference (DESIGN.md: « a value in this file that
+  // disagrees with those files is a bug in this file »); the h1 was 56 and the #qui title 44.
+  it('sets the h1 and the #qui title on the steps of the DESIGN.md scale', () => {
+    const design = css('../../../DESIGN.md')
+    const h1 = design.match(/^\| H1 \| (\d+) \//m)?.[1]
+    const h1Phone = design.match(/^\| H1 \|[^\n]*offer page \([^)\n]*?(\d+) on phone\)/m)?.[1]
+    const h2 = design.match(/^\| H2 \| (\d+) \|/m)?.[1]
+    expect([h1, h1Phone, h2]).toEqual(['52', '36', '36'])
+    const hero = css('../../components/temps-partage/hero/hero.css')
+    const sizes = [...hero.matchAll(/\n {4,6}h1 \{[^}]*?font-size: (\d+)px/g)].map((m) => m[1])
+    expect(sizes[0], 'desktop h1').toBe(h1)
+    expect(sizes.at(-1), 'phone h1').toBe(h1Phone)
+    const qui = css('../../components/temps-partage/qui/qui.css')
+    expect(qui.match(/\n {4}h2 \{[^}]*?font-size: (\d+)px/)?.[1], '#qui h2').toBe(h2)
+  })
+
+  // AC-23 #5: the sans face's word space is 0.2 em, and the negative tracking of the semibold
+  // 17-26 px strings closed it further (« PMEde 10 à 50 personnes », « Riende technique »).
+  it('opens the word spaces of the semibold facts and leads, tracking 0 below 24 px', () => {
+    const rules = [
+      [
+        'hero facts',
+        css('../../components/temps-partage/hero/hero.css').match(/\n {6}dd \{([^}]*)\}/)?.[1],
+      ],
+      [
+        'gardez leads',
+        css('../../components/temps-partage/gardez/gardez.css').match(
+          /\.tpg-lead \{([^}]*)\}/,
+        )?.[1],
+      ],
+    ] as const
+    for (const [name, body] of rules) {
+      expect(body, name).toBeDefined()
+      expect(body, name).toMatch(/word-spacing: 0\.0[5-9]em/)
+      expect(body, name).not.toMatch(/letter-spacing: -/)
+    }
   })
 })

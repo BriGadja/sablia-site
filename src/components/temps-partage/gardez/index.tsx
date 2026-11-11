@@ -2,6 +2,7 @@
 
 // Client component: the gold rules draw once the section scrolls in (useArmedReveal).
 import { type CSSProperties, useRef } from 'react'
+import { Dune } from '@/components/shell/Dune'
 import { Eyebrow } from '@/components/shell/Eyebrow'
 import { useArmedReveal } from '@/lib/hooks/useArmedReveal'
 import { GARDEZ } from '../content'
@@ -15,6 +16,7 @@ export function Gardez() {
 
   return (
     <section id="gardez" ref={ref} className="v2-tp-gardez" data-reveal={reveal}>
+      <Dune back="#C68A8E" front="#F2E3DF" />
       <div className="wrap">
         <div className="tpg-head">
           <Eyebrow>{GARDEZ.eyebrow}</Eyebrow>

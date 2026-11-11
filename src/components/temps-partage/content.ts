@@ -63,10 +63,15 @@ const FACTS: readonly Fact[] = [
   { key: 'pour-qui', label: 'Pour qui', value: 'PME de 10 à 50 personnes' },
 ]
 
+/** The opening words of offre.md § Qui je suis: the hero's byline and the title of `#qui`. */
+const WHO = 'Brice Gachadoat, fondateur de Sablia, à Rouen.'
+
 export const HERO = {
   eyebrow: 'Offre mensuelle',
   h1: 'Votre responsable IA à temps partagé, à Rouen',
   lede: "Chaque mois, un outil de plus en service dans votre entreprise, une équipe qui sait s'en servir, et quelqu'un qui veille à ce que tout continue de tourner.",
+  /** One quiet line under the lede: the first phone screen names the person (AC-23 #8). */
+  byline: WHO,
   audience:
     "Pour les PME de 10 à 50 personnes qui savent que l'IA peut leur faire gagner du temps, et qui n'ont personne en interne pour la mettre en place.",
   cta: 'Réserver 30 min',
@@ -207,7 +212,7 @@ export const PHOTOS = {
 
 export const QUI = {
   eyebrow: 'Qui je suis',
-  title: 'Brice Gachadoat, fondateur de Sablia, à Rouen.',
+  title: WHO,
   text: "Je construis des automatisations et des outils d'IA pour des PME, et je forme des équipes à l'IA, notamment dans l'école Noésia. Références et avis sur demande.",
   /** The part of `text` that links to the school, as on the home (`#derriere`). */
   school: { link: 'école Noésia', href: 'https://noesia.school' },

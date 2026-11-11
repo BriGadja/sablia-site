@@ -48,10 +48,14 @@
     }
     .tpg-lead {
       display: block;
+      /* two lines' height on desktop, so the three statements start their text on one line */
+      min-height: 2.5em;
       margin-bottom: 8px;
       font-size: 22px;
       line-height: 1.25;
-      letter-spacing: -0.015em;
+      letter-spacing: 0;
+      /* the face's word space is 0.2 em: opened so « Rien de technique » reads as three words */
+      word-spacing: 0.06em;
       font-weight: 600;
       color: #131620;
       text-wrap: balance;
@@ -83,6 +87,7 @@
         font-size: 15.5px;
       }
       .tpg-lead {
+        min-height: 0;
         font-size: 19px;
       }
     }

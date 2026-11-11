@@ -6,7 +6,7 @@
   .v2-tp-qui {
     position: relative;
     background: #f4ecdd;
-    padding: 88px 0 104px;
+    padding: 88px 0 160px;
     color: #131620;
 
     .tpq-grid {
@@ -46,7 +46,7 @@
     }
     h2 {
       margin: 14px 0 0;
-      font-size: 44px;
+      font-size: 36px;
       line-height: 1.1;
       letter-spacing: -0.025em;
       font-weight: 600;
@@ -96,7 +96,7 @@
     }
 
     @media (max-width: 900px) {
-      padding: 72px 0 72px;
+      padding: 72px 0 128px;
 
       .tpq-grid {
         grid-template-columns: minmax(0, 1fr);

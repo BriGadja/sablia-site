@@ -421,6 +421,12 @@ describe('offer parity: § Qui je suis', () => {
   it('links the school named in the text', () => {
     expect(QUI.text).toContain(QUI.school.link)
   })
+
+  // AC-23 design evaluation #8: the hero names the person with the opening words of « Qui je suis ».
+  it('opens the hero byline on the first sentence of the paragraph, word for word', () => {
+    const first = paragraphs(section('Qui je suis'))[0].split(/(?<=\.) /)[0]
+    expect(squash(HERO.byline)).toBe(first)
+  })
 })
 
 describe('offer parity: the questions quote the offer', () => {

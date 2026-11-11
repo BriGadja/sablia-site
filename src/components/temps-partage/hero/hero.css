@@ -24,12 +24,13 @@
     }
     h1 {
       margin: 16px 0 0;
-      font-size: 56px;
-      line-height: 1.02;
-      letter-spacing: -0.034em;
+      font-size: 52px;
+      line-height: 1.04;
+      letter-spacing: -0.03em;
       font-weight: 600;
       text-wrap: balance;
     }
+    .tph-nowrap,
     .tph-keep {
       white-space: nowrap;
     }
@@ -41,8 +42,19 @@
       color: #131620;
       text-wrap: pretty;
     }
+    /* The byline: one quiet line that names the person, under the lede. */
+    .tph-by {
+      margin: 12px 0 0;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #61677a;
+    }
+    .tph-name {
+      font-weight: 600;
+      color: #131620;
+    }
     .tph-for {
-      margin: 14px 0 0;
+      margin: 16px 0 0;
       max-width: 34em;
       font-size: 16px;
       line-height: 1.6;
@@ -82,10 +94,18 @@
       grid-area: facts;
       display: grid;
       grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.25fr) minmax(0, 1fr);
+      grid-template-rows: auto auto;
       margin: 56px 0 0;
       border-top: 1.5px solid #131620;
     }
+    /* Each fact spans the two rows of the strip (labels, values) as a subgrid, so the three values
+       share one baseline although the price is set larger. */
     .tph-fact {
+      display: grid;
+      grid-row: span 2;
+      grid-template-rows: subgrid;
+      row-gap: 0;
+      align-items: baseline;
       min-width: 0;
       padding: 18px 28px 0;
       border-left: 1px solid #e4d6c0;
@@ -105,13 +125,15 @@
         margin: 10px 0 0;
         font-size: 20px;
         line-height: 1.3;
-        letter-spacing: -0.012em;
+        letter-spacing: 0;
+        /* the face's word space is 0.2 em: opened so « PME de », « 2 000 € HT » read as words */
+        word-spacing: 0.06em;
         font-weight: 600;
         text-wrap: balance;
       }
       &.is-prix dd {
         font-size: 26px;
-        letter-spacing: -0.02em;
+        letter-spacing: -0.01em;
         font-variant-numeric: tabular-nums;
       }
     }
@@ -120,6 +142,7 @@
       .tph-grid {
         column-gap: 44px;
       }
+      /* at 52 px the title runs to four lines between 901 and 1000 px */
       h1 {
         font-size: 48px;
       }
@@ -136,11 +159,7 @@
           'fig';
       }
       h1 {
-        font-size: 38px;
-        line-height: 1.05;
-      }
-      .tph-keep {
-        white-space: normal;
+        font-size: 36px;
       }
       .tph-lede {
         margin-top: 18px;
@@ -156,10 +175,13 @@
       /* Phone: one fact per row, label on the left, the price first. */
       .tph-facts {
         grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: none;
         margin-top: 32px;
       }
       .tph-fact {
         display: grid;
+        grid-row: auto;
+        grid-template-rows: none;
         grid-template-columns: 96px minmax(0, 1fr);
         align-items: baseline;
         column-gap: 12px;
@@ -176,6 +198,7 @@
         }
         &.is-prix dd {
           font-size: 22px;
+          letter-spacing: 0;
         }
       }
       .tph-fig {

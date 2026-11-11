@@ -1,3 +1,4 @@
+import { Dune } from '@/components/shell/Dune'
 import { Eyebrow } from '@/components/shell/Eyebrow'
 import { QUESTIONS } from '../content'
 import { typo } from '../text'
@@ -7,6 +8,7 @@ import './questions.css'
 export function Questions() {
   return (
     <section id="questions" className="v2-tp-questions">
+      <Dune back="#C68A8E" front="#F2E3DF" />
       <div className="wrap tpf-grid">
         <div className="tpf-head">
           <Eyebrow>{QUESTIONS.eyebrow}</Eyebrow>

@@ -108,7 +108,7 @@ Scale as used (px, desktop first; phone values where the CSS changes them under 
 
 | Step | Size / line-height | Notes |
 |------|--------------------|-------|
-| H1 | 52 / 1.04, weight 600, letter-spacing -0.03em, `text-wrap: balance` | home hero, Accompagnement hero (36 on phone), offer page |
+| H1 | 52 / 1.04, weight 600, letter-spacing -0.03em, `text-wrap: balance` | home hero, Accompagnement hero (36 on phone), offer page (48 from 901 to 1180 px, 36 on phone) |
 | H1 legal, 404 | 44 | legal pages, not-found (32 on phone); thanks page 40 |
 | H2 | 36 | every section title (28 on phone in the shared bands) |
 | Final band H2 | 40 | `FinBand` (28 on phone) |

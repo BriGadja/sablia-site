@@ -6,7 +6,7 @@
   .v2-tp-chaque-mois {
     position: relative;
     background: #f4ecdd;
-    padding: 64px 0 104px;
+    padding: 64px 0 144px;
     color: #131620;
 
     .tpc-grid {
@@ -68,7 +68,7 @@
     }
 
     @media (max-width: 900px) {
-      padding: 48px 0 80px;
+      padding: 48px 0 120px;
 
       .tpc-grid {
         grid-template-columns: minmax(0, 1fr);
