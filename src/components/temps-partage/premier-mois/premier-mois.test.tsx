@@ -77,18 +77,43 @@ describe('#premier-mois drawing colours', () => {
     expect(css.toLowerCase()).not.toContain('#835a0c')
   })
 
-  it('fills every bar with the gold of the night, each stop at 3:1 or more on its track', () => {
+  // AC-23 evaluation 2 #1: solid gradient fills under a drop shadow read as a dashboard card, while
+  // DESIGN.md draws illustrations « in gold sand, CONTOURS ONLY ». Each bar is a gold outline on its
+  // track; its share is its width (a scaleX would squash the stroke of its ends).
+  it('draws every bar as a gold contour on its track, at 3:1 or more, with no fill', () => {
+    expect(css).not.toMatch(/gradient/)
     const track = css.match(/\.tpm-track \{[^}]*background: (#[0-9a-f]{6})/i)?.[1]
     expect(track).toBeDefined()
     const fills = [...css.matchAll(/\.tpm-fill \{([^}]*)\}/g)].map((m) => m[1])
-    expect(fills.length).toBeGreaterThanOrEqual(2)
-    const stops = fills.flatMap((body) => [
-      ...(body.match(/background:[^;]*/)?.[0].matchAll(/#[0-9a-f]{6}/gi) ?? []),
-    ])
-    expect(stops.length).toBeGreaterThanOrEqual(2)
-    for (const [stop] of stops) {
-      expect(['#d9a441', '#b9852a'], stop).toContain(stop.toLowerCase())
-      expect(contrast(stop, track ?? '#ffffff'), stop).toBeGreaterThanOrEqual(3)
-    }
+    expect(fills.length).toBeGreaterThanOrEqual(1)
+    for (const body of fills) expect(body).not.toMatch(/background: (?!transparent)/)
+    const base = fills[0]
+    expect(base).toMatch(/background: transparent/)
+    expect(base).toMatch(/width: calc\(var\(--share, 1\) \* 100%\)/)
+    expect(base).not.toMatch(/scaleX\(var\(--share/)
+    const stroke = base.match(/box-shadow: inset 0 0 0 ([\d.]+)px (#[0-9a-f]{6})/i)
+    expect(Number(stroke?.[1])).toBeGreaterThanOrEqual(1.5)
+    expect(stroke?.[2].toLowerCase()).toBe('#d9a441')
+    expect(contrast(stroke?.[2] ?? '#000000', track ?? '#ffffff')).toBeGreaterThanOrEqual(3)
+  })
+
+  it('sets the drawing on the night without a drop shadow', () => {
+    const card = css.match(/\.tpm-drawing \{([^}]*)\}/)?.[1] ?? ''
+    expect(card).toMatch(/background: #161b29/)
+    expect(card).not.toMatch(/box-shadow/)
+  })
+
+  it('keeps the sequence: bars drawn 150 ms apart, then the ring, then the two tags', () => {
+    const armed = css.match(/&\[data-reveal='armed'\] \{([\s\S]*?)\n {4}\}/)?.[1] ?? ''
+    expect(armed).toMatch(/\.tpm-fill \{\s*clip-path: inset\(0 100% 0 0\);/)
+    const played = css.match(/&\[data-reveal='in'\] \{([\s\S]*?)\n {4}\}/)?.[1] ?? ''
+    expect(played).toMatch(
+      // the played state ends on an inset() too: `none` does not interpolate with inset(), the bars
+      // would snap in whole instead of being drawn
+      /\.tpm-fill \{\s*clip-path: inset\(0 0 0 0\);\s*transition: clip-path 0\.7s [^;]*;\s*transition-delay: calc\(var\(--i, 0\) \* 150ms \+ 120ms\);/,
+    )
+    expect(played).toMatch(/\.tpm-step\.is-stuck \.tpm-node \{\s*transition: box-shadow [^;]* 1s;/)
+    expect(played).toMatch(/\.tpm-step\.is-stuck \.tpm-tag \{\s*transition-delay: 1\.05s;/)
+    expect(played).toMatch(/\.tpm-step\.is-next \.tpm-tag \{\s*transition-delay: 1\.4s;/)
   })
 })
