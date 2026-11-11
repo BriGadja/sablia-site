@@ -15,6 +15,13 @@ const onRequest = (name: string, description: string) => ({
 
 const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1)
 
+// The founder as schema.org `Person`; also the `Article` author of the issue pages.
+export const FOUNDER = {
+  '@type': 'Person',
+  name: 'Brice Gachadoat',
+  url: 'https://www.linkedin.com/in/brice-gachadoat-03942795/',
+}
+
 export function OrganizationJsonLd() {
   return (
     <JsonLd
@@ -30,16 +37,11 @@ export function OrganizationJsonLd() {
         description:
           "Formation à l'IA pour les équipes des entreprises : trois jours dans leurs locaux, jusqu'à 12 personnes, pour apprendre à travailler avec Claude (Anthropic) sur leurs propres dossiers. Premier pas : un webinaire gratuit d'une heure, le jeudi midi. Ensuite, un référent IA, ou Claude intégré sur mesure dans le CRM et les outils de l'entreprise.",
         email: 'brice@sablia.io',
-        founder: {
-          '@type': 'Person',
-          name: 'Brice Gachadoat',
-          url: 'https://www.linkedin.com/in/brice-gachadoat-03942795/',
-        },
+        founder: FOUNDER,
         address: {
           '@type': 'PostalAddress',
-          streetAddress: '60 rue François Ier',
-          postalCode: '75008',
-          addressLocality: 'Paris',
+          addressLocality: site.locality,
+          addressRegion: site.region,
           addressCountry: 'FR',
         },
         serviceType: [
@@ -48,7 +50,10 @@ export function OrganizationJsonLd() {
           'Intégration de Claude dans le CRM',
           'Automatisation des processus commerciaux',
         ],
-        areaServed: { '@type': 'Country', name: 'France' },
+        areaServed: [
+          { '@type': 'AdministrativeArea', name: site.region },
+          { '@type': 'Country', name: 'France' },
+        ],
         knowsAbout: [
           'Claude',
           'Anthropic',

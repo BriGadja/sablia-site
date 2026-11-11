@@ -12,6 +12,14 @@ describe('site booking urls', () => {
   })
 })
 
+/** US-100: Sablia is in Rouen (Normandie); the registered office stays on the legal pages. */
+describe('site locality', () => {
+  it('says Rouen and Normandie', () => {
+    expect(site.locality).toBe('Rouen')
+    expect(site.region).toBe('Normandie')
+  })
+})
+
 /** U13a: the tagline is the home's promise (01b `home.meta.title` without « · Sablia »), never the CRM agency. */
 describe('site tagline', () => {
   it('says the training, not the CRM agency', () => {

@@ -2,7 +2,7 @@
 
 > Sablia forme les équipes des entreprises à l'IA, sur leurs propres dossiers : la formation « L'IA au travail », trois jours dans vos locaux, jusqu'à 12 personnes, avec Claude (le modèle d'IA d'Anthropic). Premier pas : un webinaire gratuit d'une heure, le jeudi midi.
 
-Sablia (https://sablia.io) est basée à Paris et intervient dans toute la France. La formation est animée par son fondateur, Brice Gachadoat, du premier échange à la dernière demi-journée. Le prix n'est pas publié : il dépend de l'équipe et du format retenu, et il arrive dans le devis, après un échange gratuit de 30 minutes.
+Sablia (https://sablia.io) est basée à Rouen (Normandie) et intervient dans toute la France. La formation est animée par son fondateur, Brice Gachadoat, du premier échange à la dernière demi-journée. Le prix n'est pas publié : il dépend de l'équipe et du format retenu, et il arrive dans le devis, après un échange gratuit de 30 minutes.
 
 ## La formation « L'IA au travail »
 
@@ -63,4 +63,4 @@ Brice Gachadoat, fondateur de Sablia. Six ans au sein de la DSI du groupe LVMH, 
 - Email : brice@sablia.io
 - Échange gratuit de 30 minutes : https://calendly.com/brice-gachadoat/echange-30-minutes
 
-Dernière mise à jour : 2026-11-01.
+Dernière mise à jour : 2026-11-11.

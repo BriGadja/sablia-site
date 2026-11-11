@@ -56,8 +56,10 @@ test('llms.txt: the training first, the webinar, the follow-on offers, no price,
     'https://sablia.io/realisations',
     'https://sablia.io/offres/compte-rendu-appel',
     'https://calendly.com/brice-gachadoat/echange-30-minutes',
+    'Rouen',
   ])
     assert.ok(llms.includes(needle), `llms.txt lacks ${needle}`)
+  assert.doesNotMatch(llms, /basée à Paris/)
   assert.doesNotMatch(llms, RETIRED)
   assert.doesNotMatch(llms, EURO)
   assert.doesNotMatch(llms, /Plus de 20 clients|calendly\.com\/brice-gachadoat\/30min/)

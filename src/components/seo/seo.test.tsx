@@ -37,6 +37,17 @@ describe('OrganizationJsonLd', () => {
     expect(org.email).toBe('brice@sablia.io')
   })
 
+  // US-100: Rouen without a street (the registered office stays on the legal pages only).
+  it('the address is Rouen without a street, areaServed names Normandie and France', () => {
+    expect(org.address.addressLocality).toBe('Rouen')
+    expect(org.address.addressRegion).toBe('Normandie')
+    expect(org.address.addressCountry).toBe('FR')
+    expect(org.address).not.toHaveProperty('streetAddress')
+    expect(org.address).not.toHaveProperty('postalCode')
+    const areas = org.areaServed as { name: string }[]
+    expect(areas.map((a) => a.name)).toEqual(['Normandie', 'France'])
+  })
+
   // US-91..98 (plan site-formation-lot1, U13a): every page carries this block, so it must say what
   // the site sells now, the training first; the CRM offer stays as a follow-on service.
   it('says training first: tagline as alternate name, three days, Claude, the free webinar', () => {

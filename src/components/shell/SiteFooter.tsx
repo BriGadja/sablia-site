@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { NDA_LINE } from '@/content/declaration'
 import { WhenUpcoming } from '@/content/session-bar'
+import { site } from '@/lib/site'
 import { ConsentLink } from './ConsentLink'
 import { Logo } from './Logo'
 import './site-footer.css'
@@ -60,6 +61,9 @@ export function SiteFooter() {
           <ConsentLink />
         </nav>
         <div className="v2-footer-mentions">
+          <p className="v2-footer-place">
+            {`Sablia, à ${site.locality}. Interventions en ${site.region} et partout en France.`}
+          </p>
           <p>{NDA_LINE}</p>
           <span>© 2026 Sablia</span>
         </div>

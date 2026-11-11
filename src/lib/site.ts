@@ -21,6 +21,11 @@ export const site = {
   // `/offres/**` keeps `bookingUrl`; the webinar pages keep their own `BOOKING_URL`.
   formationBookingUrl: 'https://calendly.com/brice-gachadoat/echange-30-minutes',
 
+  // Where Sablia works from (structured data, footer, llms.txt). The registered office stays on the
+  // legal pages only (/mentions-legales, /cgv).
+  locality: 'Rouen',
+  region: 'Normandie',
+
   privacyUrl: '/politique-confidentialite',
   legalUrl: '/mentions-legales',
   cgvUrl: '/cgv',

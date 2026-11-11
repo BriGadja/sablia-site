@@ -203,6 +203,18 @@ describe('SiteFooter', () => {
     expect(hrefs).toHaveLength(11)
   })
 
+  // US-100: the structured data says Rouen, so every page says it in visible text too.
+  it('the footer says Rouen in plain text', () => {
+    const { container } = render(<SiteFooter />)
+    const place = Array.from(container.querySelectorAll('p')).find((p) =>
+      p.textContent?.includes('Rouen'),
+    )
+    expect(place?.textContent).toBe(
+      'Sablia, à Rouen. Interventions en Normandie et partout en France.',
+    )
+    expect(place?.closest('nav')).toBeNull()
+  })
+
   it('carries the activity declaration in its exact L6352-12 form, after the links, beside the copyright', () => {
     const { container } = render(<SiteFooter />)
     const line = Array.from(container.querySelectorAll('p')).find((p) => p.textContent === NDA_LINE)

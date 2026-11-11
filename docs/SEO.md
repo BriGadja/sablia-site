@@ -32,7 +32,7 @@ On every `dist/public/**/*.html`: the audience tracker and consent banner absent
 
 | Page | Types | Source |
 |------|-------|--------|
-| every page | ProfessionalService (founder Person, PostalAddress, OfferCatalog with the OF-1 price and delay read from `of1.ts`; voice agent and custom CRM « sur demande », no price). Since lot 1 the alternate name is the training tagline (`site.tagline`) and no text says « dans les CRM » or « × CRM » (a test in `src/components/seo` refuses it) | `OrganizationJsonLd`, mounted in `layout.tsx` |
+| every page | ProfessionalService (founder Person, PostalAddress with locality Rouen and region Normandie, no street and no postal code, `areaServed` Normandie and France, the registered office on the legal pages only (`/mentions-legales`, `/cgv`); the footer says Rouen in visible text, as Google asks for marked-up content; OfferCatalog with the OF-1 price and delay read from `of1.ts`; voice agent and custom CRM « sur demande », no price). Since lot 1 the alternate name is the training tagline (`site.tagline`) and no text says « dans les CRM » or « × CRM » (a test in `src/components/seo` refuses it) | `OrganizationJsonLd`, mounted in `layout.tsx` |
 | `/offres/compte-rendu-appel` | Service (Offer with UnitPriceSpecification), FAQPage, BreadcrumbList | `of1-schema.ts` + `BreadcrumbJsonLd` |
 | the four CRM pages | Service, FAQPage, BreadcrumbList | `CrmPageView.tsx`, `src/content/crm/schema.ts` |
 | `/guides/integrer-l-ia-dans-votre-entreprise` | Article, FAQPage, BreadcrumbList | the page file |
