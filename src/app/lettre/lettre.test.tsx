@@ -20,6 +20,7 @@ vi.mock('next/navigation', () => ({
 }))
 
 import { LETTRE as COPY } from '@/components/lettre/content'
+import { lettreVersion } from '../../../scripts/seo/lettre-version.mjs'
 import LettrePage, { dynamicParams, generateMetadata, generateStaticParams } from './[slug]/page'
 
 /**
@@ -186,5 +187,17 @@ describe('/lettre/[slug]: metadata', () => {
     expect(meta.title).toEqual({ absolute: `${ROW.titre} · Sablia` })
     expect(meta.alternates?.canonical).toBe(`/lettre/${ROW.slug}`)
     expect(meta.description).toBe(ROW.resume)
+  })
+
+  it('stamps the head with the identity of the row it was built from (sablia-lettre-version), read by the hub', async () => {
+    loadLettre.mockResolvedValue(ROW)
+    const meta = await generateMetadata(props(ROW.slug))
+    expect(meta.other).toEqual({ 'sablia-lettre-version': lettreVersion(ROW) })
+    expect(lettreVersion(ROW)).toMatch(/^[0-9a-f]{64}$/)
+    // Another text of the same issue (here the video added) is another stamp.
+    loadLettre.mockResolvedValue(WITH_VIDEO)
+    const video = await generateMetadata(props(ROW.slug))
+    expect(video.other).toEqual({ 'sablia-lettre-version': lettreVersion(WITH_VIDEO) })
+    expect(lettreVersion(WITH_VIDEO)).not.toBe(lettreVersion(ROW))
   })
 })

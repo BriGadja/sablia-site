@@ -2,6 +2,7 @@
 // that can be tested without a browser lives here; `prerender.mjs` launches Chromium at import and must
 // stay free of logic.
 import { fixtureLettres } from './lettre-fixtures.mjs'
+import { lettreVersion } from './lettre-version.mjs'
 
 // Same constant as client/src/lib/contenu.ts — a public project ref, not a secret.
 const SUPABASE_URL = 'https://qlxoitzdxjqhljjoeqoq.supabase.co'
@@ -247,6 +248,10 @@ const JSON_LD = /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/scri
 // so the first </div> closes it.
 const LETTRE_BODY = /<div\b[^>]*\bdata-body="lettre"[^>]*>([\s\S]*?)<\/div>/i
 const FIRST_H2 = /^ {0,3}##[ \t]+(.+?)[ \t#]*$/m
+// The identity stamp of the page (`lettre-version.mjs`): every <meta> named so, and the one shape the
+// hub parses (name, then content, lowercase hex).
+const STAMP_TAGS = /<meta\b[^>]*\bname="sablia-lettre-version"[^>]*>/gi
+const STAMP_SHAPE = /^<meta name="sablia-lettre-version" content="([0-9a-f]{64})"\s*\/?>$/
 
 /** Letters and digits only, lower case: inline marks, punctuation and spacing never count. */
 const norm = (text) =>
@@ -344,5 +349,24 @@ export function assertLettreHtml(dom, row) {
   const heading = firstHeadingWords(row.corps_md)
   if (heading.length > 0 && !inOrder(heading, bodyWords.split(' '))) {
     throw new Error(`${where}: the issue body lacks the first ## heading of corps_md`)
+  }
+
+  // The page was built from THIS row: exactly one stamp, in the shape the hub reads, equal to the
+  // identity of the row (a page built from an older text of the same issue carries another one).
+  const stamps = html.match(STAMP_TAGS) ?? []
+  if (stamps.length === 0) throw new Error(`${where}: the sablia-lettre-version stamp is missing`)
+  if (stamps.length > 1) {
+    throw new Error(
+      `${where}: ${stamps.length} sablia-lettre-version stamps (exactly one expected)`,
+    )
+  }
+  const version = STAMP_SHAPE.exec(stamps[0])?.[1]
+  if (!version) {
+    throw new Error(
+      `${where}: the sablia-lettre-version stamp ${stamps[0]} is not <meta name="sablia-lettre-version" content="<lowercase sha256 hex>"/>`,
+    )
+  }
+  if (version !== lettreVersion(row)) {
+    fail('sablia-lettre-version stamp', version, lettreVersion(row))
   }
 }

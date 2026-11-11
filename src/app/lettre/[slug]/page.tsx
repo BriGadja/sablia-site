@@ -17,6 +17,7 @@ import { Eyebrow } from '@/components/shell/Eyebrow'
 import VideoFacade from '@/components/VideoFacade'
 import { frenchSpacing } from '@/lib/format'
 import { pageMetadata } from '@/lib/seo'
+import { lettreVersion } from '../../../../scripts/seo/lettre-version.mjs'
 
 /** Only the issues published at build time exist; any other slug is a real 404 until the next build. */
 export const dynamicParams = false
@@ -33,11 +34,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const lettre = await loadLettre(slug)
   if (!lettre) return { title: LETTRE.missingTitle }
-  return pageMetadata({
-    path: `/lettre/${lettre.slug}`,
-    title: `${lettre.titre} · Sablia`,
-    description: lettre.resume,
-  })
+  return {
+    ...pageMetadata({
+      path: `/lettre/${lettre.slug}`,
+      title: `${lettre.titre} · Sablia`,
+      description: lettre.resume,
+    }),
+    // The identity of the row this page was built from: the export guard checks it, and the hub's
+    // publish step reads it on the live page to prove the page shows the row it just wrote.
+    other: { 'sablia-lettre-version': lettreVersion(lettre) },
+  }
 }
 
 /**

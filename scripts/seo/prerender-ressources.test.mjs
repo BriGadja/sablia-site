@@ -5,6 +5,7 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, it } from 'node:test'
+import { lettreVersion } from './lettre-version.mjs'
 import {
   assertLettreHtml,
   assertRessourceHtml,
@@ -726,12 +727,16 @@ const ARTICLE = {
   datePublished: LROW.published_at,
   author: { '@type': 'Person', name: 'Brice Gachadoat' },
 }
+/** The identity stamp Next writes into the head from `metadata.other`. */
+const stamp = (row) => `<meta name="sablia-lettre-version" content="${lettreVersion(row)}"/>`
 const lhtml = ({
+  head = stamp(LROW),
   main = '<main id="contenu" data-ready="true" class="v2-lettre">',
   blocks = ld(ARTICLE),
   before = '',
   body = '<h2>Pourquoi</h2><p>Texte.</p>',
-} = {}) => `${main}${blocks}${before}<div class="lt-body" data-body="lettre">${body}</div></main>`
+} = {}) =>
+  `<head>${head}</head>${main}${blocks}${before}<div class="lt-body" data-body="lettre">${body}</div></main>`
 const LGOOD = {
   title: `${LROW.titre} · Sablia`,
   canonical: 'https://sablia.io/lettre/2026-11-10-exemple',
@@ -748,7 +753,10 @@ describe('assertLettreHtml', () => {
 
   it('squashes spaces on BOTH sides: a no-break space in the title or the résumé never fails a build', () => {
     const typo = { ...LROW, titre: `Relancer un devis${NBSP}: « sans y penser »` }
-    assert.doesNotThrow(() => assertLettreHtml(LGOOD, typo))
+    // The page built from `typo` carries the stamp of `typo` (the identity is exact, the texts squashed).
+    assert.doesNotThrow(() =>
+      assertLettreHtml({ ...LGOOD, html: lhtml({ head: stamp(typo) }) }, typo),
+    )
     const dom = {
       ...LGOOD,
       title: `Relancer un devis${NBSP}:${NBSP}« sans y penser » · Sablia`,
@@ -841,7 +849,10 @@ describe('assertLettreHtml', () => {
     const other = lhtml({ body: '<h2>Autre chose</h2><p>Texte.</p>' })
     assert.throws(() => assertLettreHtml({ ...LGOOD, html: other }, LROW), /first ## heading/)
     const plain = { ...LROW, corps_md: 'Bonjour,\n\nTexte sans section.\n\n# Un grand titre' }
-    const html = lhtml({ body: '<p>Bonjour,</p><p>Texte sans section.</p><h2>Un grand titre</h2>' })
+    const html = lhtml({
+      head: stamp(plain),
+      body: '<p>Bonjour,</p><p>Texte sans section.</p><h2>Un grand titre</h2>',
+    })
     assert.doesNotThrow(() => assertLettreHtml({ ...LGOOD, html }, plain))
   })
 
@@ -853,6 +864,49 @@ describe('assertLettreHtml', () => {
     }
     const body =
       '<p>Bonjour,</p><h2>Pourquoi <strong>l&#x27;outil</strong> &amp; <a href="https://sablia.io/x">la page</a> <code>devis.md</code></h2><p>Texte.</p><h2>Deuxième</h2>'
-    assert.doesNotThrow(() => assertLettreHtml({ ...LGOOD, html: lhtml({ body }) }, row))
+    assert.doesNotThrow(() =>
+      assertLettreHtml({ ...LGOOD, html: lhtml({ head: stamp(row), body }) }, row),
+    )
+  })
+
+  // The hub proves « the live page was built from THIS row » by reading this stamp (E10d N2).
+  it('wants exactly one identity stamp, name then content, equal to lettreVersion(row)', () => {
+    const hex = lettreVersion(LROW)
+    const withHead = (head) => ({ ...LGOOD, html: lhtml({ head }) })
+    assert.doesNotThrow(() => assertLettreHtml(withHead(stamp(LROW)), LROW))
+    assert.doesNotThrow(() =>
+      assertLettreHtml(withHead(`<meta name="sablia-lettre-version" content="${hex}">`), LROW),
+    )
+    // Missing.
+    assert.throws(() => assertLettreHtml(withHead(''), LROW), /sablia-lettre-version.*missing/)
+    // Built from another text of the same issue: the résumé before an edit, a video added later.
+    for (const before of [
+      { ...LROW, resume: 'Une version plus ancienne du résumé.' },
+      { ...LROW, youtube_id: 'abc123def45' },
+    ]) {
+      assert.throws(
+        () => assertLettreHtml(withHead(stamp(before)), LROW),
+        new RegExp(`sablia-lettre-version stamp is "${lettreVersion(before)}", expected "${hex}"`),
+      )
+    }
+    // Two stamps, even when one of them is right: the hub could read either.
+    assert.throws(
+      () => assertLettreHtml(withHead(stamp(LROW) + stamp({ ...LROW, titre: 'x' })), LROW),
+      /2 sablia-lettre-version stamps/,
+    )
+    // Another shape than the one the hub parses: upper-case hex, content before name.
+    assert.throws(
+      () =>
+        assertLettreHtml(
+          withHead(`<meta name="sablia-lettre-version" content="${hex.toUpperCase()}"/>`),
+          LROW,
+        ),
+      /sablia-lettre-version/,
+    )
+    assert.throws(
+      () =>
+        assertLettreHtml(withHead(`<meta content="${hex}" name="sablia-lettre-version"/>`), LROW),
+      /sablia-lettre-version/,
+    )
   })
 })

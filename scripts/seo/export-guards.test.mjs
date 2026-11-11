@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { describe, it } from 'node:test'
 import { checkExport, checkOrganizationJsonLd } from './export-guards.mjs'
+import { lettreVersion } from './lettre-version.mjs'
 
 const page = ({
   title = 'T',
@@ -259,9 +260,15 @@ const LETTRE_ROW = {
 const ROUTES_L = [...ROUTES, { path: '/newsletter', indexable: true }]
 const lettrePage = (
   row = LETTRE_ROW,
-  { title = `${row.titre} · Sablia`, body = '<h2>Pourquoi</h2><p>Texte.</p>' } = {},
+  {
+    title = `${row.titre} · Sablia`,
+    body = '<h2>Pourquoi</h2><p>Texte.</p>',
+    version = lettreVersion(row),
+  } = {},
 ) =>
-  `<!DOCTYPE html><html lang="fr"><head><title>${title}</title><link rel="canonical" href="https://sablia.io/lettre/${row.slug}"/><meta name="description" content="${row.resume}"/></head><body><main id="contenu" data-ready="true" class="v2-lettre"><script type="application/ld+json">${JSON.stringify(
+  `<!DOCTYPE html><html lang="fr"><head><title>${title}</title><link rel="canonical" href="https://sablia.io/lettre/${row.slug}"/><meta name="description" content="${row.resume}"/>${
+    version === null ? '' : `<meta name="sablia-lettre-version" content="${version}"/>`
+  }</head><body><main id="contenu" data-ready="true" class="v2-lettre"><script type="application/ld+json">${JSON.stringify(
     {
       '@context': 'https://schema.org',
       '@type': 'Article',
@@ -318,6 +325,24 @@ describe('checkExport: the issue pages of the letter', () => {
       }),
     })
     assert.match(runL(img).join('\n'), /2026-11-10-exemple.*<img>/)
+  })
+
+  it('runs the identity stamp check: a page built from an older text of its row, a page without stamp', () => {
+    const older = { ...LETTRE_ROW, resume: 'Le résumé avant sa correction.' }
+    const stale = lettreFixture({
+      'lettre/2026-11-10-exemple.html': lettrePage(LETTRE_ROW, { version: lettreVersion(older) }),
+    })
+    assert.match(
+      runL(stale).join('\n'),
+      /\/lettre\/2026-11-10-exemple: sablia-lettre-version stamp is "[0-9a-f]{64}", expected/,
+    )
+    const none = lettreFixture({
+      'lettre/2026-11-10-exemple.html': lettrePage(LETTRE_ROW, { version: null }),
+    })
+    assert.match(
+      runL(none).join('\n'),
+      /\/lettre\/2026-11-10-exemple: .*sablia-lettre-version.*missing/,
+    )
   })
 
   it('rejects a /newsletter page that does not link every published issue', () => {

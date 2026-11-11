@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
+import { lettreVersion } from '../../../scripts/seo/lettre-version.mjs'
 import { assertLettreHtml, lettreTitle } from '../../../scripts/seo/ressources.mjs'
 import { LettreBody } from './LettreBody'
 
@@ -219,7 +220,8 @@ describe('LettreBody under the export guard', () => {
       datePublished: row.published_at,
       author: { '@type': 'Person', name: 'Brice Gachadoat' },
     }
-    const page = `<main id="contenu" data-ready="true"><script type="application/ld+json">${JSON.stringify(article)}</script>${html(rendered)}</main>`
+    const head = `<meta name="sablia-lettre-version" content="${lettreVersion(row)}"/>`
+    const page = `${head}<main id="contenu" data-ready="true"><script type="application/ld+json">${JSON.stringify(article)}</script>${html(rendered)}</main>`
     const dom = {
       title: lettreTitle(row),
       canonical: `https://sablia.io/lettre/${row.slug}`,
