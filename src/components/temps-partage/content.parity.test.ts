@@ -6,7 +6,8 @@
  * restate it. A price, the opening count, the engagement, the first-month clause, or a promise of
  * the three monthly sections changing there turns this test RED, and the page copy follows.
  *
- * The FAQ answers that quote the meeting script read `script-rdv.md`, beside `offre.md`.
+ * The FAQ answers that quote the meeting script read `script-rdv.md`, beside `offre.md`. The section
+ * « Responsable IA à temps partagé » of `public/llms.txt` (in this repo) restates the offer too.
  *
  * Outside the VPS working tree (a standalone clone, CI), point TEMPS_PARTAGE_PATH at the offer file
  * (the script must sit beside it). CI excludes this file because it needs the hub tree; it is never
@@ -27,6 +28,7 @@ const HERE = dirname(fileURLToPath(import.meta.url))
 const DEFAULT_PATH = resolve(HERE, '../../../../../offre/temps-partage/offre.md')
 const OFFRE_PATH = process.env.TEMPS_PARTAGE_PATH ?? DEFAULT_PATH
 const SCRIPT_PATH = resolve(dirname(OFFRE_PATH), 'script-rdv.md')
+const LLMS_PATH = resolve(HERE, '../../../public/llms.txt')
 
 for (const path of [OFFRE_PATH, SCRIPT_PATH]) {
   if (!existsSync(path)) {
@@ -40,6 +42,7 @@ for (const path of [OFFRE_PATH, SCRIPT_PATH]) {
 
 const RAW = readFileSync(OFFRE_PATH, 'utf8')
 const SCRIPT = readFileSync(SCRIPT_PATH, 'utf8')
+const LLMS = readFileSync(LLMS_PATH, 'utf8')
 
 /** No-break spaces (U+00A0, U+202F) become plain spaces, runs collapse, bold markers drop. */
 function squash(text: string): string {
@@ -50,13 +53,13 @@ function squash(text: string): string {
     .trim()
 }
 
-/** Body of a `## {heading}` section, up to the next `## ` heading. */
-function section(heading: string): string {
+/** Body of a `## {heading}` section of `source` (offre.md by default), up to the next `## ` heading. */
+function section(heading: string, source: string = RAW, path: string = OFFRE_PATH): string {
   const escaped = heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   // `$` is line-anchored under the `m` flag needed by `^## `, hence the explicit end-of-input.
   const end = '(?=\\n## |(?![\\s\\S]))'
-  const found = RAW.match(new RegExp(`^## ${escaped}[^\\n]*\\n([\\s\\S]*?)${end}`, 'm'))
-  if (found === null) throw new Error(`offre.md section "## ${heading}" not found at ${OFFRE_PATH}`)
+  const found = source.match(new RegExp(`^## ${escaped}[^\\n]*\\n([\\s\\S]*?)${end}`, 'm'))
+  if (found === null) throw new Error(`section "## ${heading}" not found in ${path}`)
   return found[1]
 }
 
@@ -123,11 +126,36 @@ function amounts(text: string): Set<number> {
   )
 }
 
-/** Every « N jours » / « N heures » of a text, as [unit, the word before it]. */
+/** Every « N jours » (« N journées » counts as days) / « N heures » of a text, as [unit, the word before it]. */
 function durations(text: string): [string, string][] {
-  return [...squash(text).matchAll(/([\p{L}\d]+) (jours|heures)\b/giu)].map((hit) => [
-    hit[2].toLowerCase(),
+  return [...squash(text).matchAll(/([\p{L}\d]+) (jours|journées|heures)\b/giu)].map((hit) => [
+    hit[2].toLowerCase() === 'heures' ? 'heures' : 'jours',
     hit[1],
+  ])
+}
+
+/** Every answer delay « sous N heures » / « sous N h », as the word of N (« une heure de séance » is no delay). */
+function delays(text: string): string[] {
+  return [...squash(text).matchAll(/sous ([\p{L}\d]+) (heures|h)\b/giu)].map((hit) => hit[1])
+}
+
+/** Every « N jours|journées [de travail] par <period> », as [the word of N, the period]. */
+function workDays(text: string): [string, string][] {
+  return [
+    ...squash(text).matchAll(/([\p{L}\d]+) (jours|journées) (de travail )?par (\p{L}+)/giu),
+  ].map((hit) => [hit[1], hit[4].toLowerCase()])
+}
+
+/** Every « engagement de N mois », as the word of N. */
+function engagements(text: string): string[] {
+  return [...squash(text).matchAll(/engagement de ([\p{L}\d]+) mois/giu)].map((hit) => hit[1])
+}
+
+/** Every « N à N personnes », as [min, max]. */
+function sizes(text: string): [number, number][] {
+  return [...squash(text).matchAll(/(\d+) à (\d+) personnes/gu)].map((hit) => [
+    Number(hit[1]),
+    Number(hit[2]),
   ])
 }
 
@@ -152,6 +180,15 @@ describe('offer parity: the page opens on the offer', () => {
     const [, min, max] = capture(PREAMBLE[1], /(\d+) à (\d+) personnes/, 'N à N personnes')
     const forWhom = HERO.facts.find((fact) => fact.key === 'pour-qui')
     expect(forWhom?.value).toContain(`${min} à ${max} personnes`)
+  })
+
+  // META (the Google snippet), HERO and FACTS alike: a size typed anywhere in the module is the
+  // offer's (offer-page review F6b N1).
+  it('names no company size in the copy module other than the one of offre.md', () => {
+    const [, min, max] = capture(PREAMBLE[1], /(\d+) à (\d+) personnes/, 'N à N personnes')
+    const found = sizes(JSON.stringify(COPY))
+    expect(found.length).toBeGreaterThan(0)
+    for (const size of found) expect(size).toEqual([Number(min), Number(max)])
   })
 })
 
@@ -229,7 +266,9 @@ describe('offer parity: § Conditions', () => {
 /**
  * § Chaque mois ensuite gives the offer's two durations (« Deux jours de travail », « 48 heures
  * ouvrées »); every « N jours » and « N heures » restated elsewhere (META, ROLE, the questions, the
- * sentence of /accompagnement that links here) must say the same (offer-page review F6 #2).
+ * sentence of /accompagnement that links here, the section of llms.txt) must say the same (offer-page
+ * review F6 #2). The second pass (F6b N1) also reads « journées », the abbreviated delay « sous N h »,
+ * the period of the work days (per month, never per week), the engagement and the company size.
  */
 describe('offer parity: every duration restated is the one of § Chaque mois ensuite', () => {
   const offered = new Map<string, number | undefined>()
@@ -247,6 +286,10 @@ describe('offer parity: every duration restated is the one of § Chaque mois ens
   const restated: readonly (readonly [string, string])[] = [
     ['the copy module', JSON.stringify(COPY)],
     ['REFERENT.more on /accompagnement', REFERENT.more.text],
+    [
+      'llms.txt § Responsable IA à temps partagé',
+      section('Responsable IA à temps partagé', LLMS, LLMS_PATH),
+    ],
   ]
   for (const [where, text] of restated) {
     it(`${where}: every « N jours » and « N heures » is the offer's`, () => {
@@ -255,7 +298,40 @@ describe('offer parity: every duration restated is the one of § Chaque mois ens
       for (const [unit, word] of found)
         expect(count(word), `${where}: « ${word} ${unit} »`).toBe(offered.get(unit))
     })
+
+    it(`${where}: the work days are the offer's number, per month`, () => {
+      const found = workDays(text)
+      expect(found.length).toBeGreaterThan(0)
+      for (const [word, period] of found) {
+        expect(count(word), `${where}: « ${word} jours par ${period} »`).toBe(offered.get('jours'))
+        expect(period, `${where}: « ${word} jours par ${period} »`).toBe('mois')
+      }
+    })
+
+    it(`${where}: every answer delay « sous N heures » or « sous N h » is the offer's`, () => {
+      for (const word of delays(text))
+        expect(count(word), `${where}: « sous ${word} h »`).toBe(offered.get('heures'))
+    })
+
+    it(`${where}: every « engagement de N mois » is the one of § Conditions`, () => {
+      for (const word of engagements(text))
+        expect(count(word), `${where}: « engagement de ${word} mois »`).toBe(
+          CONDITIONS.price.engagementMonths,
+        )
+    })
+
+    it(`${where}: every « N à N personnes » is the one of offre.md`, () => {
+      const [, min, max] = capture(PREAMBLE[1], /(\d+) à (\d+) personnes/, 'N à N personnes')
+      for (const size of sizes(text)) expect(size).toEqual([Number(min), Number(max)])
+    })
   }
+
+  it('the copy module and llms.txt name the engagement', () => {
+    expect(engagements(JSON.stringify(COPY)).length).toBeGreaterThan(0)
+    expect(
+      engagements(section('Responsable IA à temps partagé', LLMS, LLMS_PATH)).length,
+    ).toBeGreaterThan(0)
+  })
 })
 
 /**
@@ -408,6 +484,27 @@ describe('offer parity: the questions quote the meeting script', () => {
     expect(answerTo("Deux jours par mois, c'est assez ?")).toBe(said)
   })
 
+  // Script § 6 « Le temps », then the mail bullet of § Chaque mois ensuite; the only words of the
+  // page's own are the joint « et » and « quand vous en avez » (offer-page review F6b N1).
+  it("answers « Combien de temps ça prend à mon équipe ? » with the script's « Le temps » answer and the mail bullet of the offer", () => {
+    const said = squash(
+      capture(SCRIPT, /^- \*\*Le temps\*\*\s*:\s*«\s*(.+?)\s*»\s*$/m, 'Le temps', SCRIPT_PATH)[1],
+    )
+    const mail = bullets(section('Chaque mois ensuite')).find((bullet) =>
+      bullet.includes('par mail'),
+    )
+    if (mail === undefined) throw new Error('offre.md § Chaque mois ensuite lost its mail bullet')
+    const [, asked, reply] = capture(
+      mail,
+      /^Vos (questions par mail), (.+)$/,
+      'Vos questions par mail, ...',
+    )
+    expect(said.endsWith('.')).toBe(true)
+    expect(answerTo('Combien de temps ça prend à mon équipe ?')).toBe(
+      `${said.slice(0, -1)}, et vos ${asked} quand vous en avez, ${reply}`,
+    )
+  })
+
   it('answers « Quelle différence avec un consultant IA ? » with what I do, from the offer and the script', () => {
     const answer = answerTo('Quelle différence avec un consultant IA ?')
     const sources: readonly (readonly [string, string])[] = [
@@ -423,6 +520,7 @@ describe('offer parity: the questions quote the meeting script', () => {
       expect(source.toLowerCase(), `source of « ${words} »`).toContain(words)
       expect(answer.toLowerCase(), `answer « ${words} »`).toContain(words)
     }
-    expect(answer).not.toMatch(/recommandation|je ne m'arrête/i)
+    // the answer describes what I do, never the consultant (offer-page review F6b N2)
+    expect(answer).not.toMatch(/consultant|cabinet|rapport|recommand|je ne m'arrête/i)
   })
 })
