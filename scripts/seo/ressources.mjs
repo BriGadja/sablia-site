@@ -237,9 +237,9 @@ export async function listPublishedLettres({
   return []
 }
 
-/** The <title> of an issue page. */
+/** The <title> of an issue page: « · Sablia » like the other v2 pages, never an em dash. */
 export function lettreTitle(row) {
-  return `${row.titre} — Sablia`
+  return `${row.titre} · Sablia`
 }
 
 const JSON_LD = /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi

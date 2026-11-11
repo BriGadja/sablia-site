@@ -259,7 +259,7 @@ const LETTRE_ROW = {
 const ROUTES_L = [...ROUTES, { path: '/newsletter', indexable: true }]
 const lettrePage = (
   row = LETTRE_ROW,
-  { title = `${row.titre} — Sablia`, body = '<h2>Pourquoi</h2><p>Texte.</p>' } = {},
+  { title = `${row.titre} · Sablia`, body = '<h2>Pourquoi</h2><p>Texte.</p>' } = {},
 ) =>
   `<!DOCTYPE html><html lang="fr"><head><title>${title}</title><link rel="canonical" href="https://sablia.io/lettre/${row.slug}"/><meta name="description" content="${row.resume}"/></head><body><main id="contenu" data-ready="true" class="v2-lettre"><script type="application/ld+json">${JSON.stringify(
     {
@@ -309,7 +309,7 @@ describe('checkExport: the issue pages of the letter', () => {
 
   it('runs assertLettreHtml on each issue page: another title, an image in the body', () => {
     const title = lettreFixture({
-      'lettre/2026-11-10-exemple.html': lettrePage(LETTRE_ROW, { title: 'Autre — Sablia' }),
+      'lettre/2026-11-10-exemple.html': lettrePage(LETTRE_ROW, { title: 'Autre · Sablia' }),
     })
     assert.match(runL(title).join('\n'), /\/lettre\/2026-11-10-exemple: title/)
     const img = lettreFixture({

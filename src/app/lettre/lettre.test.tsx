@@ -180,10 +180,10 @@ describe('/lettre/[slug]: the page', () => {
 })
 
 describe('/lettre/[slug]: metadata', () => {
-  it('titles the page « {titre} — Sablia » with its own canonical and the résumé as description', async () => {
+  it('titles the page « {titre} · Sablia », never with an em dash, with its own canonical and the résumé as description', async () => {
     loadLettre.mockResolvedValue(ROW)
     const meta = await generateMetadata(props(ROW.slug))
-    expect(meta.title).toEqual({ absolute: `${ROW.titre} — Sablia` })
+    expect(meta.title).toEqual({ absolute: `${ROW.titre} · Sablia` })
     expect(meta.alternates?.canonical).toBe(`/lettre/${ROW.slug}`)
     expect(meta.description).toBe(ROW.resume)
   })

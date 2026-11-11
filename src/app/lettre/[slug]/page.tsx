@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!lettre) return { title: LETTRE.missingTitle }
   return pageMetadata({
     path: `/lettre/${lettre.slug}`,
-    title: `${lettre.titre} — Sablia`,
+    title: `${lettre.titre} · Sablia`,
     description: lettre.resume,
   })
 }

@@ -733,7 +733,7 @@ const lhtml = ({
   body = '<h2>Pourquoi</h2><p>Texte.</p>',
 } = {}) => `${main}${blocks}${before}<div class="lt-body" data-body="lettre">${body}</div></main>`
 const LGOOD = {
-  title: `${LROW.titre} — Sablia`,
+  title: `${LROW.titre} · Sablia`,
   canonical: 'https://sablia.io/lettre/2026-11-10-exemple',
   description: LROW.resume,
   h1: LROW.titre,
@@ -751,7 +751,7 @@ describe('assertLettreHtml', () => {
     assert.doesNotThrow(() => assertLettreHtml(LGOOD, typo))
     const dom = {
       ...LGOOD,
-      title: `Relancer un devis${NBSP}:${NBSP}« sans y penser » — Sablia`,
+      title: `Relancer un devis${NBSP}:${NBSP}« sans y penser » · Sablia`,
       h1: `Relancer un devis${NBSP}: « sans  y penser »`,
       description: `Ce que l'outil ne fait pas${NBSP}& ce qu'il faut préparer.`,
     }
@@ -760,6 +760,11 @@ describe('assertLettreHtml', () => {
 
   it('rejects another title, canonical, description or h1', () => {
     assert.throws(() => assertLettreHtml({ ...LGOOD, title: 'Sablia' }, LROW), /title/)
+    // « · Sablia », like the other v2 pages: the em dash never reaches a visitor (F-build Finding 3)
+    assert.throws(
+      () => assertLettreHtml({ ...LGOOD, title: `${LROW.titre} — Sablia` }, LROW),
+      /title/,
+    )
     assert.throws(
       () => assertLettreHtml({ ...LGOOD, canonical: '/lettre/2026-11-10-exemple' }, LROW),
       /canonical/,
