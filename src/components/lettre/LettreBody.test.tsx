@@ -65,6 +65,43 @@ describe('LettreBody', () => {
     expect(out).not.toContain('javascript:')
   })
 
+  it('renders a footnote with no <div>, no id and no second <footer>: the guard still reads the whole body', () => {
+    const out = html(
+      'Texte[^1] et suite.\n\n[^1]: Note de bas de page\n\nAprès.\n\nFin[^contenu].\n\n[^contenu]: Autre note',
+    )
+    expect(out.match(/<div\b/g)).toHaveLength(1)
+    expect(out.indexOf('</div>')).toBe(out.length - '</div>'.length)
+    expect(out).not.toMatch(/\sid="/)
+    expect(out).not.toMatch(/<footer/)
+    // The note marks and texts stay readable; a mark no longer links to an anchor that is gone.
+    expect(out).toContain('<sup>1</sup>')
+    expect(out).toContain('Note de bas de page')
+    expect(out).toContain('Autre note')
+    expect(out).not.toContain('href="#')
+  })
+
+  it('shows an autolinked bare URL without scheme, query and fragment; its href stays whole', () => {
+    const out = html(
+      'Réservez : https://calendly.com/x/y?utm_source=sablia.io&utm_medium=lettre#haut et <https://example.org/a/?b=1>',
+    )
+    expect(out).toContain(
+      '<a href="https://calendly.com/x/y?utm_source=sablia.io&amp;utm_medium=lettre#haut" rel="noopener">calendly.com/x/y</a>',
+    )
+    expect(out).toContain('<a href="https://example.org/a/?b=1" rel="noopener">example.org/a/</a>')
+    expect(out).not.toMatch(/>https?:\/\//)
+  })
+
+  it('leaves a labelled Markdown link and a bare email as written', () => {
+    const out = html(
+      '[le lien complet](https://calendly.com/x/y?utm_source=a) et brice@sablia.io et [https://a.org/?q=1](https://b.org/)',
+    )
+    expect(out).toContain(
+      '<a href="https://calendly.com/x/y?utm_source=a" rel="noopener">le lien complet</a>',
+    )
+    expect(out).toContain('>brice@sablia.io</a>')
+    expect(out).toContain('<a href="https://b.org/" rel="noopener">https://a.org/?q=1</a>')
+  })
+
   it('renders no <img> for a Markdown image', () => {
     expect(html('![une image](https://example.com/a.png)')).not.toMatch(/<img/)
   })

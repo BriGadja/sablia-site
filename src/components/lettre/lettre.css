@@ -151,6 +151,18 @@
         font-family: var(--font-mono);
         font-size: 0.88em;
       }
+      /* Footnotes, if the hub ever lets one through: small print under a hairline. */
+      .lt-notes {
+        margin: 40px 0 0;
+        padding-top: 16px;
+        border-top: 1px solid #e4d6c0;
+        font-size: 15px;
+        line-height: 1.6;
+
+        p {
+          margin: 0 0 8px;
+        }
+      }
     }
 
     .lt-sub {
