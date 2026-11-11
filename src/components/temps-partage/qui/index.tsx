@@ -25,15 +25,17 @@ function QuiText() {
 
 /** `#qui`: who you work with, the portrait of the home in its gold frame, one paragraph. */
 export function Qui() {
-  const ref = useRef<HTMLElement>(null)
-  const reveal = useArmedReveal(ref)
+  // The portrait, not the section, starts the entrance: on a phone it sits ~310 px down a ~815 px
+  // section, so a trigger on the section uncovered it before it was on screen.
+  const portrait = useRef<HTMLElement>(null)
+  const reveal = useArmedReveal(portrait, { threshold: 0.5 })
   const photo = PHOTOS.portrait
 
   return (
-    <section id="qui" ref={ref} className="v2-tp-qui" data-reveal={reveal}>
+    <section id="qui" className="v2-tp-qui" data-reveal={reveal}>
       <Dune back="#C68A8E" front="#F4ECDD" />
       <div className="wrap tpq-grid">
-        <figure className="tpq-portrait">
+        <figure ref={portrait} className="tpq-portrait">
           {/* biome-ignore lint/performance/noImgElement: static export, no image optimizer */}
           <img
             src={`/photos/formation-${photo.n}-900.webp`}

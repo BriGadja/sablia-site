@@ -16,18 +16,20 @@ import './conditions.css'
  * price set large, the opening price, the commitment, the first-month clause), and the booking button.
  */
 export function Conditions() {
-  const ref = useRef<HTMLElement>(null)
-  const reveal = useArmedReveal(ref)
+  // The list, not the band, starts the rule: the rule hangs under the price, the list's first line,
+  // so half the list on screen shows it; on a phone the band's top is ~150 px above the price.
+  const list = useRef<HTMLUListElement>(null)
+  const reveal = useArmedReveal(list, { threshold: 0.5 })
 
   return (
-    <section id="conditions" ref={ref} className="v2-tp-conditions" data-reveal={reveal}>
+    <section id="conditions" className="v2-tp-conditions" data-reveal={reveal}>
       <Dune back="#C68A8E" front="#161B29" />
       <div className="wrap tpk-grid">
         <div className="tpk-head">
           <Eyebrow onDark>{CONDITIONS.eyebrow}</Eyebrow>
           <h2>{CONDITIONS.title}</h2>
         </div>
-        <ul className="tpk-list">
+        <ul ref={list} className="tpk-list">
           {CONDITIONS.items.map((item) => {
             const [lead, rest] = splitLead(typo(item.text))
             return (
