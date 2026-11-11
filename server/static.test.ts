@@ -5,6 +5,7 @@
  * index.html fallback is gone), and Next's RSC payloads (`*.txt`) answer 200 text/plain.
  */
 import { readFileSync } from 'node:fs'
+import http from 'node:http'
 import { join } from 'node:path'
 import express from 'express'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
@@ -25,6 +26,25 @@ afterAll(() => srv.close())
 const get = (path: string, init?: RequestInit) =>
   fetch(srv.url + path, { redirect: 'manual', ...init })
 const html = (rel: string) => readFileSync(join(dist, rel), 'utf8')
+
+/** A request sent as written: fetch would resolve `.` and `..` segments before sending. */
+function raw(path: string): Promise<{ status: number; body: string; location?: string }> {
+  const { hostname, port } = new URL(srv.url)
+  return new Promise((resolve, reject) => {
+    http
+      .get({ hostname, port, path }, (res) => {
+        let body = ''
+        res.setEncoding('utf8')
+        res.on('data', (chunk: string) => {
+          body += chunk
+        })
+        res.on('end', () =>
+          resolve({ status: res.statusCode ?? 0, body, location: res.headers.location }),
+        )
+      })
+      .on('error', reject)
+  })
+}
 
 const REVALIDATE = 'public, max-age=0, must-revalidate'
 
@@ -161,6 +181,50 @@ describe('mountStatic — Next export', () => {
       expect(r.status, p).toBe(404)
       expect(await r.text(), p).not.toContain('must-not-be-served')
     }
+  })
+
+  it('applies the 404 list to the decoded path, slashes and dot segments resolved', async () => {
+    for (const p of [
+      '/lettre/%5F%5Fnone',
+      '/lettre/__none%2Etxt',
+      '/lettre/__none%2Ehtml',
+      '/lettre/__none%2F__next.lettre.__none.txt',
+      '//lettre/__none',
+      '//lettre//__none.txt',
+      '/lettre/./__none.txt',
+      '/x/../lettre/__none.txt',
+      '//_not-found',
+      '/%5Fnot-found',
+      '/ressources/%5F%5Fnone',
+      '//ressources/__none',
+      '/ressources/__none%2Etxt',
+    ]) {
+      const r = await raw(p)
+      expect(r.status, p).toBe(404)
+      expect(r.body, p).not.toContain('must-not-be-served')
+    }
+  })
+
+  it('applies the redirects to the same decoded path', async () => {
+    for (const [p, to] of [
+      ['//lettre', '/newsletter'],
+      ['/%6Cettre', '/newsletter'],
+      ['//lettre//', '/newsletter'],
+      ['//roi', '/offres/compte-rendu-appel'],
+    ]) {
+      const r = await raw(p)
+      expect(r.status, p).toBe(301)
+      expect(r.location, p).toBe(to)
+    }
+  })
+
+  it('never crashes on a malformed escape: 400 or 404, nothing served', async () => {
+    for (const p of ['/%E0%A4%A', '/lettre/%E0%A4%A', '/%']) {
+      const r = await raw(p)
+      expect([400, 404], p).toContain(r.status)
+      expect(r.body, p).not.toContain('must-not-be-served')
+    }
+    expect((await get('/cgv')).status).toBe(200)
   })
 
   it('serves .well-known but never another dotfile', async () => {

@@ -20,6 +20,8 @@ export function makeDist(): string {
     'index.html':
       '<!doctype html><title>Home</title><script src="/_next/static/chunks/x.js"></script>',
     '404.html': '<!doctype html><title>Introuvable</title>',
+    // Next writes it on every export; production ships it.
+    '_not-found.html': 'must-not-be-served',
     'escalier-modeles.html': '<!doctype html><title>Escalier</title>',
     'cgv.html': '<!doctype html><title>CGV</title>',
     'formations.html': '<!doctype html><title>Formations</title>',
@@ -28,6 +30,7 @@ export function makeDist(): string {
     'ressources/pipedrive-nouveau-lead.html': '<!doctype html><title>Pipedrive</title>',
     'ressources/pipedrive-nouveau-lead/__next.ressources.pipedrive-nouveau-lead.txt': 'rsc-slug',
     'ressources/__next.ressources.txt': 'rsc-ressources',
+    'ressources/__none.html': 'must-not-be-served',
     'ressources/__none.txt': 'must-not-be-served',
     'ressources/__none/__next.ressources.__none.txt': 'must-not-be-served',
     'newsletter.html': '<!doctype html><title>Newsletter</title>',
