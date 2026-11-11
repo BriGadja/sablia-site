@@ -46,7 +46,6 @@
     .tpk-item {
       padding: 18px 0;
       border-top: 1px solid #323a52;
-      max-width: 40em;
       font-size: 17px;
       line-height: 1.6;
       color: #f4ecdd;
@@ -79,6 +78,11 @@
         margin-top: 8px;
         border-top: 0;
       }
+    }
+    /* the measure sits on the text, so the rule between two conditions runs the whole column */
+    .tpk-text {
+      display: block;
+      max-width: 40em;
     }
     .tpk-lead {
       font-weight: 600;
@@ -114,7 +118,7 @@
         font-size: 16px;
 
         &.is-mensuel {
-          font-size: 38px;
+          font-size: 36px;
           padding-bottom: 22px;
         }
       }

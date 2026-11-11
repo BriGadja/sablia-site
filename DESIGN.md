@@ -112,6 +112,7 @@ Scale as used (px, desktop first; phone values where the CSS changes them under 
 | H1 legal, 404 | 44 | legal pages, not-found (32 on phone); thanks page 40 |
 | H2 | 36 | every section title (28 on phone in the shared bands) |
 | Final band H2 | 40 | `FinBand` (28 on phone) |
+| Price figure | 48 / 1.05, weight 600, letter-spacing -0.03em, tabular figures | the monthly price of the offer page, `#conditions` (36 on phone) |
 | Body | 16 / 1.6 | running text; 15 and 14 for cards, notes and proof lines |
 | Eyebrow | mono 12, uppercase, letter-spacing 0.08em | `Eyebrow`; gold-dark on light, gold with `onDark` |
 | Pill, label | mono 12 | |

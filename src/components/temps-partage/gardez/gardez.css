@@ -48,8 +48,9 @@
     }
     .tpg-lead {
       display: block;
-      /* two lines' height on desktop, so the three statements start their text on one line */
-      min-height: 2.5em;
+      /* a measure that wraps each of the three leads onto two balanced lines on desktop (9.5 to 11 em
+         do, measured 920 to 1440 px), so the three texts start on one line with no reserved void */
+      max-width: 10.5em;
       margin-bottom: 8px;
       font-size: 22px;
       line-height: 1.25;
@@ -87,7 +88,7 @@
         font-size: 15.5px;
       }
       .tpg-lead {
-        min-height: 0;
+        max-width: none;
         font-size: 19px;
       }
     }

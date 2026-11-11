@@ -32,14 +32,16 @@ export function Conditions() {
             const [lead, rest] = splitLead(typo(item.text))
             return (
               <li key={item.key} className={`tpk-item is-${item.key}`}>
-                {rest ? (
-                  <>
-                    <strong className="tpk-lead">{lead}</strong>
-                    {rest}
-                  </>
-                ) : (
-                  lead
-                )}
+                <span className="tpk-text">
+                  {rest ? (
+                    <>
+                      <strong className="tpk-lead">{lead}</strong>
+                      {rest}
+                    </>
+                  ) : (
+                    lead
+                  )}
+                </span>
               </li>
             )
           })}

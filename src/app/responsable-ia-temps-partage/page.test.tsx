@@ -365,4 +365,65 @@ describe('/responsable-ia-temps-partage stylesheets', () => {
       expect(body, name).not.toMatch(/letter-spacing: -/)
     }
   })
+
+  // AC-23 evaluation 2 #3: DESIGN.md « Gold on a light ground is gold-dark as text and gold-mid as a
+  // stroke. gold itself only sits on night or violet »; the #role grain was #d9a441 on rose (1.80:1).
+  it('keeps the gold of the night off the light grounds, the #role grain a gold-mid stroke', () => {
+    const light = ['hero/hero.css', 'role/role.css', 'chaque-mois/chaque-mois.css']
+      .concat(['gardez/gardez.css', 'qui/qui.css', 'questions/questions.css'])
+      .map((rel) => [rel, css(`../../components/temps-partage/${rel}`)] as const)
+    for (const [rel, sheet] of light) {
+      expect(sheet, rel).toMatch(/^ {4}background: #f(4ecdd|2e3df);/m)
+      expect(sheet.toLowerCase(), rel).not.toContain('#d9a441')
+    }
+    const grain = css('../../components/temps-partage/role/role.css').match(
+      /&::before \{[^}]*?background: (#[0-9a-f]{6})/,
+    )?.[1]
+    expect(grain).toBe('#b9852a')
+  })
+
+  // AC-23 evaluation 2 #4: a `min-height` of two lines split « Rien de technique à apprendre : »
+  // from « je construis… » by ~40 px at 1440; a measure that wraps every lead onto two lines does not.
+  it('wraps the #gardez leads on their own measure, with no reserved height', () => {
+    const lead =
+      css('../../components/temps-partage/gardez/gardez.css').match(
+        /\.tpg-lead \{([^}]*)\}/,
+      )?.[1] ?? ''
+    expect(lead).not.toMatch(/min-height/)
+    expect(lead).toMatch(/text-wrap: balance/)
+    const measure = Number(lead.match(/max-width: ([\d.]+)em/)?.[1])
+    expect(measure).toBeGreaterThanOrEqual(10)
+    expect(measure).toBeLessThanOrEqual(13)
+  })
+
+  // AC-23 evaluation 2 #7: `.tpk-item { max-width: 40em }` also bounded the rules between the
+  // conditions, which stopped 23 px short of the column at 1440.
+  it('runs the #conditions rules the full column, the measure on the text only', () => {
+    const sheet = css('../../components/temps-partage/conditions/conditions.css')
+    const item = sheet.match(/\.tpk-item \{([^}]*)\}/)?.[1] ?? ''
+    expect(item).toMatch(/border-top: 1px solid #323a52/)
+    expect(item).not.toMatch(/max-width/)
+    expect(sheet).toMatch(/\.tpk-text \{[^}]*max-width: 40em/)
+    const html = renderToString(<Page />)
+    const at = html.indexOf('id="conditions"')
+    const items = [
+      ...html
+        .slice(at, html.indexOf('</section>', at))
+        .matchAll(/<li class="tpk-item[^>]*>(.*?)<\/li>/g),
+    ]
+    expect(items).toHaveLength(CONDITIONS.items.length)
+    for (const [li, inner] of items) expect(inner, li).toMatch(/^<span class="tpk-text">/)
+  })
+
+  // AC-23 evaluation 2 #8: the price was 38 px on phones, a step on no table; the table now has a
+  // « Price figure » row (48, 36 on phone: the H2 step) and the stylesheet sits on it.
+  it('sets the #conditions price on the « Price figure » row of the DESIGN.md scale', () => {
+    const design = css('../../../DESIGN.md')
+    const row = design.match(/^\| Price figure \| (\d+) \/[^\n]*?\((\d+) on phone\)/m)
+    expect(row?.slice(1)).toEqual(['48', '36'])
+    expect(design.match(/^\| H2 \| (\d+) \|/m)?.[1], 'phone price = the H2 step').toBe(row?.[2])
+    const sheet = css('../../components/temps-partage/conditions/conditions.css')
+    const sizes = [...sheet.matchAll(/&\.is-mensuel \{[^}]*?font-size: (\d+)px/g)].map((m) => m[1])
+    expect(sizes).toEqual(['48', '36'])
+  })
 })
