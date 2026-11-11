@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { FOUNDER } from '@/components/seo/OrganizationJsonLd'
+import { pageMetadata } from '@/lib/seo'
 import { articleSchema } from './article-schema'
 import type { Lettre } from './data'
 
@@ -48,11 +49,16 @@ describe('articleSchema: the Article data of an issue page (US-101)', () => {
     ).toBe(LETTRE.published_at)
   })
 
-  it('carries an image only when an own-hosted poster exists, as an absolute URL', () => {
-    expect(articleSchema(LETTRE, null)).not.toHaveProperty('image')
+  it('carries an image as an absolute URL: the own-hosted poster, else the default social image of every page', () => {
     expect(articleSchema(LETTRE, '/_posters/abc123def45.webp').image).toBe(
       'https://sablia.io/_posters/abc123def45.webp',
     )
+    expect(articleSchema({ ...LETTRE, youtube_id: null }, null).image).toBe(
+      'https://sablia.io/og-image.png',
+    )
+    // The same image the page's Open Graph tags carry (pageMetadata's default).
+    const og = pageMetadata({ path: '/lettre/x', title: 't', description: 'd' }).openGraph
+    expect(JSON.stringify(og)).toContain('"url":"https://sablia.io/og-image.png"')
   })
 
   it('never describes the video: no VideoObject, no video property', () => {

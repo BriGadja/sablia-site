@@ -1,5 +1,5 @@
 import { FOUNDER } from '@/components/seo/OrganizationJsonLd'
-import { SITE_ORIGIN } from '@/lib/seo'
+import { DEFAULT_OG_IMAGE, SITE_ORIGIN } from '@/lib/seo'
 import type { Lettre } from './data'
 
 const HOUR_MS = 60 * 60 * 1000
@@ -19,8 +19,9 @@ function modifiedAt({ published_at, updated_at }: Lettre): string {
 /**
  * The `Article` data of an issue page (US-101). Dates come from the send instant (`published_at`, the
  * same value the page shows), the author is the founder Person of the organisation block, the
- * publisher points at that block. `poster` is the own-hosted poster path (`posterPath`), or `null`:
- * never a YouTube host. No `VideoObject` here: a post that embeds a video is not a watch page.
+ * publisher points at that block. `image` is the own-hosted poster (`posterPath`, never a YouTube host)
+ * when the issue has one, else the default social image the page's Open Graph tags already carry. No
+ * `VideoObject` here: a post that embeds a video is not a watch page.
  */
 export function articleSchema(lettre: Lettre, poster: string | null) {
   return {
@@ -34,6 +35,6 @@ export function articleSchema(lettre: Lettre, poster: string | null) {
     author: FOUNDER,
     publisher: { '@id': `${SITE_ORIGIN}/#organization` },
     mainEntityOfPage: `${SITE_ORIGIN}/lettre/${lettre.slug}`,
-    ...(poster ? { image: `${SITE_ORIGIN}${poster}` } : {}),
+    image: `${SITE_ORIGIN}${poster ?? DEFAULT_OG_IMAGE}`,
   }
 }

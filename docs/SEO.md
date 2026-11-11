@@ -37,7 +37,7 @@ On every `dist/public/**/*.html`: the audience tracker and consent banner absent
 | the four CRM pages | Service, FAQPage, BreadcrumbList | `CrmPageView.tsx`, `src/content/crm/schema.ts` |
 | `/guides/integrer-l-ia-dans-votre-entreprise` | Article, FAQPage, BreadcrumbList | the page file |
 | `/ressources/<slug>` | BreadcrumbList, VideoObject (only when the poster is on disk: the thumbnail must be our own file, never `i.ytimg.com`) | `src/app/ressources/[slug]/page.tsx` |
-| `/lettre/<slug>` | Article (author = the founder Person of the organisation block, publisher = its `@id`; `datePublished` = the send instant, the same value the page shows as its Paris date; `dateModified` = `updated_at` only when more than one hour after the send; `image` only when an own-hosted poster exists), BreadcrumbList (Newsletter, then the issue). No VideoObject: a post that embeds a video is not a watch page | `src/components/lettre/article-schema.ts`, `src/app/lettre/[slug]/page.tsx` |
+| `/lettre/<slug>` | Article (author = the founder Person of the organisation block, publisher = its `@id`; `datePublished` = the send instant, the same value the page shows as its Paris date; `dateModified` = `updated_at` only when more than one hour after the send; `image` = the own-hosted poster when the issue has a video, else the default `/og-image.png`, as absolute URLs), BreadcrumbList (Newsletter, then the issue). No VideoObject: a post that embeds a video is not a watch page | `src/components/lettre/article-schema.ts`, `src/app/lettre/[slug]/page.tsx` |
 
 `JsonLd` escapes `<`, U+2028 and U+2029 in the payload.
 

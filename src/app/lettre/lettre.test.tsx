@@ -133,11 +133,13 @@ describe('/lettre/[slug]: the page', () => {
     expect(container.innerHTML).not.toContain('ytimg')
   })
 
-  it('renders no video block without a video', async () => {
+  it('renders no video block without a video; the Article image is then the default social image', async () => {
     loadLettre.mockResolvedValue(ROW)
     const { container } = render(await LettrePage(props(ROW.slug)))
     expect(container.querySelector('button[aria-label^="Lire la vidéo"]')).toBeNull()
-    expect(ld(container).find((d) => d['@type'] === 'Article')).not.toHaveProperty('image')
+    expect(ld(container).find((d) => d['@type'] === 'Article')?.image).toBe(
+      'https://sablia.io/og-image.png',
+    )
   })
 
   it('closes on the subscription block (one sentence, a link to /newsletter), and has no final band', async () => {
