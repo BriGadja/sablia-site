@@ -16,12 +16,14 @@ import './premier-mois.css'
  * The two items carry the text; the drawing is decorative. Server HTML and reduced motion: drawn.
  */
 export function PremierMois() {
-  const ref = useRef<HTMLElement>(null)
-  const reveal = useArmedReveal(ref, { threshold: 0.3 })
+  // The drawing, not the section, starts the sequence: on a phone it sits ~515 px down a ~860 px
+  // section, so a trigger on the section played it before the card was on screen.
+  const drawing = useRef<HTMLDivElement>(null)
+  const reveal = useArmedReveal(drawing, { threshold: 0.6 })
   const { steps, stuck } = PARCOURS
 
   return (
-    <section id="premier-mois" ref={ref} className="v2-tp-premier-mois" data-reveal={reveal}>
+    <section id="premier-mois" className="v2-tp-premier-mois" data-reveal={reveal}>
       <Dune back="#C68A8E" front="#F4ECDD" />
       <div className="wrap tpm-grid">
         <div className="tpm-copy">
@@ -33,7 +35,7 @@ export function PremierMois() {
             ))}
           </ul>
         </div>
-        <div className="tpm-drawing" aria-hidden="true">
+        <div ref={drawing} className="tpm-drawing" aria-hidden="true">
           <div className="tpm-caption">{PARCOURS.caption}</div>
           <ol className="tpm-steps">
             {steps.map((step, i) => {
