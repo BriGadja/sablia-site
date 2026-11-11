@@ -167,22 +167,39 @@ const LETTRE_TIMEOUT_MS = 10_000
 const newestFirst = (rows) =>
   [...rows].sort((a, b) => String(b.published_at ?? '').localeCompare(String(a.published_at ?? '')))
 
+const readableInstant = (value) => typeof value === 'string' && !Number.isNaN(Date.parse(value))
+
 /**
  * Published issues, newest first: the ONE reader of `contenu_lettres`, called once by each process of
  * the build chain (posters, the Next build through `src/components/lettre/data.ts`, the export guards,
  * the sitemap). Fixtures (`SABLIA_FIXTURE_LETTRES`) come first and refuse a strict build. Then three
  * tries with a growing backoff. Strict (`PRERENDER_STRICT` or `VERCEL`): a missing key or an unreadable
  * table THROWS, so the deploy keeps the previous release. Elsewhere both warn and answer []. An empty
- * list is a valid answer in both modes.
+ * list is a valid answer in both modes. A row without a readable `published_at` is dropped with one
+ * warning in both modes (its page would say « 1er janvier 1970 »). Each successful read logs one line
+ * `[lettres] N issue(s) read`, so a build log shows how many reads its processes made.
  */
 export async function listPublishedLettres({
   env = process.env,
   fetch: doFetch = globalThis.fetch,
   sleep = realSleep,
   warn = console.warn,
+  log = console.warn,
 } = {}) {
+  const accept = (rows, source = '') => {
+    const kept = rows.filter((row) => {
+      if (readableInstant(row.published_at)) return true
+      warn(
+        `[lettres] ${row.slug} dropped: its published_at ${JSON.stringify(row.published_at ?? null)} is not a readable instant`,
+      )
+      return false
+    })
+    log(`[lettres] ${kept.length} issue(s) read${source}`)
+    return newestFirst(kept)
+  }
+
   const fixtures = fixtureLettres(env)
-  if (fixtures.length > 0) return newestFirst(fixtures)
+  if (fixtures.length > 0) return accept(fixtures, ' (SABLIA_FIXTURE_LETTRES)')
 
   const strict = Boolean(env.VERCEL || env.PRERENDER_STRICT)
   const key = env.VITE_SUPABASE_ANON_KEY
@@ -207,7 +224,7 @@ export async function listPublishedLettres({
       if (!res.ok) throw new Error(`contenu_lettres read answered HTTP ${res.status}`)
       const rows = await res.json()
       if (!Array.isArray(rows)) throw new Error('contenu_lettres read did not return a list')
-      return newestFirst(rows.filter((r) => r && typeof r.slug === 'string' && r.slug.length > 0))
+      return accept(rows.filter((r) => r && typeof r.slug === 'string' && r.slug.length > 0))
     } catch (err) {
       lastError = err
       if (attempt < TRIES) await sleep(BACKOFF_MS * 2 ** (attempt - 1))
@@ -226,8 +243,26 @@ export function lettreTitle(row) {
 }
 
 const JSON_LD = /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi
-// The body renderer emits no <div> (Markdown with raw HTML disabled), so the first </div> closes it.
+// The body renderer emits no <div> (Markdown with raw HTML disabled, footnotes rendered without one),
+// so the first </div> closes it.
 const LETTRE_BODY = /<div\b[^>]*\bdata-body="lettre"[^>]*>([\s\S]*?)<\/div>/i
+const FIRST_H2 = /^ {0,3}##[ \t]+(.+?)[ \t#]*$/m
+
+/** Letters and digits only, lower case: inline marks, entities, punctuation and spacing never count. */
+const words = (text) =>
+  decode(text)
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim()
+
+/** The visible words of the first `##` heading of a Markdown body (images dropped, link labels kept). */
+function firstHeadingWords(markdown) {
+  const heading = FIRST_H2.exec(markdown ?? '')?.[1]
+  if (!heading) return ''
+  return words(
+    heading.replace(/!\[[^\]]*\]\([^)]*\)/g, ' ').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1'),
+  )
+}
 
 /**
  * Throws when a built issue page is not the page of `row`. `dom` is the decoded shape of
@@ -283,5 +318,12 @@ export function assertLettreHtml(dom, row) {
     throw new Error(
       `${where}: the issue body carries an <img> (an issue is published without images)`,
     )
+  }
+  // The body really reached the page: not empty, and it carries the first `##` heading of corps_md.
+  const bodyWords = words(strip(body[1]))
+  if (!bodyWords) throw new Error(`${where}: the issue body block is empty`)
+  const heading = firstHeadingWords(row.corps_md)
+  if (heading && !` ${bodyWords} `.includes(` ${heading} `)) {
+    throw new Error(`${where}: the issue body lacks the first ## heading of corps_md`)
   }
 }

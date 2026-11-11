@@ -15,4 +15,10 @@ describe('parisDate: the visible date of an issue, the Paris day of its send ins
   it('answers an empty string for an instant it cannot read', () => {
     expect(parisDate('pas une date')).toBe('')
   })
+
+  it('answers an empty string for a missing instant, never « 1er janvier 1970 »', () => {
+    expect(parisDate(null)).toBe('')
+    expect(parisDate(undefined)).toBe('')
+    expect(parisDate('')).toBe('')
+  })
 })

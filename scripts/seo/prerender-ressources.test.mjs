@@ -51,6 +51,7 @@ function fakeSupabase(rows, calls = []) {
 }
 
 const noSleep = async () => {}
+const quiet = () => {}
 
 describe('listPublishedSlugs', () => {
   it('returns only published rows, newest first', async () => {
@@ -467,6 +468,7 @@ describe('listPublishedLettres', () => {
       env: { VITE_SUPABASE_ANON_KEY: KEY },
       fetch: fakeSupabase(LETTRES, calls),
       sleep: noSleep,
+      log: quiet,
     })
     assert.deepEqual(
       rows.map((r) => r.slug),
@@ -494,6 +496,7 @@ describe('listPublishedLettres', () => {
       env: { VITE_SUPABASE_ANON_KEY: KEY },
       fetch: unsorted,
       sleep: noSleep,
+      log: quiet,
     })
     assert.equal(rows[0].slug, '2026-11-10-plus-recent')
   })
@@ -556,6 +559,7 @@ describe('listPublishedLettres', () => {
         return fakeSupabase(LETTRES)(...a)
       },
       sleep: noSleep,
+      log: quiet,
     })
     assert.equal(rows.length, 2)
   })
@@ -594,6 +598,7 @@ describe('listPublishedLettres', () => {
       env: { VITE_SUPABASE_ANON_KEY: KEY, PRERENDER_STRICT: '1' },
       fetch: fakeSupabase([]),
       sleep: noSleep,
+      log: quiet,
     })
     assert.deepEqual(rows, [])
   })
@@ -608,12 +613,84 @@ describe('listPublishedLettres', () => {
         throw new Error('must not be called')
       },
       sleep: noSleep,
+      log: quiet,
     })
     assert.deepEqual(
       rows.map((r) => r.slug),
       ['2026-11-10-exemple-de-numero', '2026-11-03-exemple-ancien'],
     )
     assert.ok(rows.every((r) => typeof r.corps_md === 'string' && r.corps_md.length > 0))
+  })
+
+  it('logs one line « [lettres] N issue(s) read » per successful read, through the injected logger', async () => {
+    const lines = []
+    await listPublishedLettres({
+      env: { VITE_SUPABASE_ANON_KEY: KEY },
+      fetch: fakeSupabase(LETTRES),
+      sleep: noSleep,
+      log: (m) => lines.push(m),
+    })
+    assert.deepEqual(lines, ['[lettres] 2 issue(s) read'])
+
+    const empty = []
+    await listPublishedLettres({
+      env: { VITE_SUPABASE_ANON_KEY: KEY, PRERENDER_STRICT: '1' },
+      fetch: fakeSupabase([]),
+      sleep: noSleep,
+      log: (m) => empty.push(m),
+    })
+    assert.deepEqual(empty, ['[lettres] 0 issue(s) read'])
+
+    const fixtures = []
+    await listPublishedLettres({
+      env: { SABLIA_FIXTURE_LETTRES: '2026-11-10-exemple-de-numero' },
+      fetch: async () => {
+        throw new Error('must not be called')
+      },
+      sleep: noSleep,
+      log: (m) => fixtures.push(m),
+    })
+    assert.deepEqual(fixtures, ['[lettres] 1 issue(s) read (SABLIA_FIXTURE_LETTRES)'])
+
+    const failed = []
+    await listPublishedLettres({
+      env: { VITE_SUPABASE_ANON_KEY: KEY },
+      fetch: async () => ({ ok: false, status: 500, json: async () => ({}) }),
+      sleep: noSleep,
+      warn: quiet,
+      log: (m) => failed.push(m),
+    })
+    assert.deepEqual(failed, [], 'no count line when nothing was read')
+  })
+
+  it('drops a row without a readable published_at, with one warning, strict or not', async () => {
+    const [older, newer] = LETTRES.map(({ published, ...r }) => r)
+    for (const extra of [{}, { PRERENDER_STRICT: '1' }]) {
+      for (const bad of [null, undefined, '', 'pas une date']) {
+        const warnings = []
+        const lines = []
+        const rows = await listPublishedLettres({
+          env: { VITE_SUPABASE_ANON_KEY: KEY, ...extra },
+          fetch: async () => ({
+            ok: true,
+            status: 200,
+            json: async () => [newer, { ...older, published_at: bad }],
+          }),
+          sleep: noSleep,
+          warn: (m) => warnings.push(m),
+          log: (m) => lines.push(m),
+        })
+        const label = `${JSON.stringify(extra)} ${JSON.stringify(bad)}`
+        assert.deepEqual(
+          rows.map((r) => r.slug),
+          ['2026-11-10-plus-recent'],
+          label,
+        )
+        assert.equal(warnings.length, 1, label)
+        assert.match(warnings[0], /2026-11-03-plus-ancien.*published_at/, label)
+        assert.deepEqual(lines, ['[lettres] 1 issue(s) read'], label)
+      }
+    }
   })
 
   it('propagates the fixture refusal of a strict build', async () => {
@@ -742,5 +819,34 @@ describe('assertLettreHtml', () => {
     assert.doesNotThrow(() => assertLettreHtml({ ...LGOOD, html: poster }, LROW))
     const noBody = `<main id="contenu" data-ready="true">${ld(ARTICLE)}<p>Texte.</p></main>`
     assert.throws(() => assertLettreHtml({ ...LGOOD, html: noBody }, LROW), /body/)
+  })
+
+  it('rejects an issue page whose body block is empty', () => {
+    for (const body of ['', '   ', '<p></p>', '<p> </p>\n']) {
+      assert.throws(
+        () => assertLettreHtml({ ...LGOOD, html: lhtml({ body }) }, LROW),
+        /body block is empty/,
+        JSON.stringify(body),
+      )
+    }
+  })
+
+  it('rejects a body without the first ## heading of corps_md, and only when corps_md has one', () => {
+    const other = lhtml({ body: '<h2>Autre chose</h2><p>Texte.</p>' })
+    assert.throws(() => assertLettreHtml({ ...LGOOD, html: other }, LROW), /first ## heading/)
+    const plain = { ...LROW, corps_md: 'Bonjour,\n\nTexte sans section.\n\n# Un grand titre' }
+    const html = lhtml({ body: '<p>Bonjour,</p><p>Texte sans section.</p><h2>Un grand titre</h2>' })
+    assert.doesNotThrow(() => assertLettreHtml({ ...LGOOD, html }, plain))
+  })
+
+  it('reads the first ## heading through inline Markdown, entities and spacing', () => {
+    const row = {
+      ...LROW,
+      corps_md:
+        "Bonjour,\n\n##   Pourquoi **l'outil** &amp; [la page](https://sablia.io/x) `devis.md` ##\n\nTexte.\n\n## Deuxième",
+    }
+    const body =
+      '<p>Bonjour,</p><h2>Pourquoi <strong>l&#x27;outil</strong> &amp; <a href="https://sablia.io/x">la page</a> <code>devis.md</code></h2><p>Texte.</p><h2>Deuxième</h2>'
+    assert.doesNotThrow(() => assertLettreHtml({ ...LGOOD, html: lhtml({ body }) }, row))
   })
 })

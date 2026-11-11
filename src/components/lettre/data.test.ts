@@ -38,6 +38,7 @@ const row = (slug: string, published_at: string): Lettre => ({
 const A = row('2026-11-10-a', '2026-11-10T07:30:00+00:00')
 const B = row('2026-11-03-b', '2026-11-03T07:30:00+00:00')
 const noSleep = async () => {}
+const quiet = () => {}
 
 describe('lettreStore: the generateStaticParams list', () => {
   it('lists every published slug', async () => {
@@ -57,6 +58,7 @@ describe('lettreStore: the generateStaticParams list', () => {
           env: { PRERENDER_STRICT: '1', VITE_SUPABASE_ANON_KEY: 'k' },
           fetch: failing,
           sleep: noSleep,
+          log: quiet,
         }) as Promise<Lettre[]>,
     )
     await expect(store.loadLettreParams()).rejects.toThrow(/HTTP 500/)
@@ -77,6 +79,7 @@ describe('lettreStore: one read per process', () => {
           env: { VITE_SUPABASE_ANON_KEY: 'k' },
           fetch,
           sleep: noSleep,
+          log: quiet,
         }) as Promise<Lettre[]>,
     )
     await store.loadLettreParams()
@@ -108,11 +111,15 @@ describe('lettreStore: one issue', () => {
 })
 
 describe('the module store, wired to the one reader', () => {
-  it('serves the fixture issue without a key (dev server, local build)', async () => {
+  it('serves the fixture issue without a key (dev server, local build), and logs its one read', async () => {
+    const stderr = vi.spyOn(console, 'warn').mockImplementation(() => {})
     process.env.SABLIA_FIXTURE_LETTRES = '2026-11-10-exemple-de-numero'
     expect(await loadLettreParams()).toEqual([{ slug: '2026-11-10-exemple-de-numero' }])
     const issue = await loadLettre('2026-11-10-exemple-de-numero')
     expect(issue?.corps_md).toContain('## ')
     expect(await loadLettres()).toHaveLength(1)
+    // The build log shows how many reads Next's workers made: one line per read.
+    expect(stderr.mock.calls).toEqual([['[lettres] 1 issue(s) read (SABLIA_FIXTURE_LETTRES)']])
+    stderr.mockRestore()
   })
 })
