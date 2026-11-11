@@ -547,3 +547,39 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Test : vitest src/components/home/faq ; src/content/no-training-price.test.ts
 - Statut : À-MARCHER 2026-11-01 @34724c2 (code livré, tests verts : 60 fichiers, 647 tests ; reste la marche navigateur au point de validation 1 puis en production)
 - Source : résumé du grill du 2026-11-01 (Q3, Q10) ; plan U9
+
+## US-99 — `/responsable-ia-temps-partage` présente l'offre mensuelle avec son prix et mène à l'échange de 30 minutes
+- Surface : /responsable-ia-temps-partage (page indexée, dans le plan du site) ; pied de page (lien « Responsable IA ») ; /accompagnement (une phrase et un lien dans `#referent`)
+- Parcours : (cible) chercher « Sablia » ou arriver par le pied de page → lire l'offre → « Réserver 30 min »
+- Oracle : un seul titre h1 qui nomme le rôle et Rouen ; le texte dit ce qui se passe le premier mois, chaque mois ensuite, ce que l'entreprise garde et qui est Brice ; le prix est affiché tel que dans l'offre (2 000 € HT par mois ; 1 500 € HT par mois pour les cinq premières entreprises, en échange d'un bilan à la fin du troisième mois ; engagement de trois mois puis résiliable chaque mois) ; les questions fréquentes sont du texte visible, sans données FAQPage ; chaque bouton « Réserver 30 min » ouvre `https://calendly.com/brice-gachadoat/echange-30-minutes` ; le pied de page et /accompagnement portent chacun un lien vers la page ; /accompagnement n'affiche toujours aucun montant
+- Exemple : Étant donné le HTML construit de /responsable-ia-temps-partage / Quand on lit la section des conditions / Alors on lit « 2 000 € HT par mois » et « 1 500 € HT par mois pour les cinq premières entreprises » ; et quand on clique « Réserver 30 min » / Alors la réservation ouvre l'événement « Échange de 30 minutes »
+- Test : vitest src/app/responsable-ia-temps-partage ; src/components/temps-partage/content.parity.test.ts ; src/components/shell/shell.test.tsx ; src/app/accompagnement ; node --test scripts/seo/prerender-ressources.test.mjs
+- Statut : JAMAIS-PASSÉE
+- Source : étude du 2026-11-11 (https://claude.ai/artifact/WfFiXE5YdKTPRZi3Z7uQ47), quatre oui de Brice le 11/11 ; texte de l'offre du hub (`offre/temps-partage/offre.md`) ; plan `sablia-site-seo-offre-lettres` phases A et B
+
+## US-100 — Les données structurées et le texte visible situent Sablia à Rouen, les pages légales gardent le siège
+- Surface : toutes les pages (bloc `ProfessionalService` du gabarit, pied de page), `llms.txt` ; /mentions-legales et /cgv inchangées
+- Parcours : (cible) un moteur lit n'importe quelle page → il trouve Rouen dans les données structurées et dans le texte visible
+- Oracle : l'adresse du bloc `ProfessionalService` porte la localité Rouen, la région Normandie et le pays FR, sans rue ni code postal ; `areaServed` nomme la Normandie et la France ; le pied de page dit en clair que Sablia est à Rouen et intervient en Normandie et partout en France ; `llms.txt` dit Rouen et plus Paris ; les mentions légales et les CGV gardent l'adresse du siège
+- Exemple : Étant donné le HTML construit de /formations / Quand on lit le bloc `ProfessionalService` / Alors `address.addressLocality` vaut « Rouen », aucune `streetAddress`, et `areaServed` contient « Normandie » et « France » ; et le pied de page contient « Rouen »
+- Test : vitest src/components/seo/seo.test.tsx ; src/components/shell/shell.test.tsx ; node --test scripts/seo/head-hygiene.test.mjs
+- Statut : JAMAIS-PASSÉE
+- Source : étude du 2026-11-11, décision « Tranché sans vous » (adresse de Rouen sans rue, `areaServed` Normandie et France, le siège reste sur les pages légales) ; plan `sablia-site-seo-offre-lettres` phase C
+
+## US-101 — Chaque numéro de la lettre du mardi a sa page `/lettre/<date>-<titre>`, publiée après l'envoi [chemin-critique]
+- Surface : /lettre/:slug (page détail, lue dans le registre de contenu au moment de la construction du site) ; plan du site
+- Parcours : (cible) recevoir la lettre ou la trouver sur Google → ouvrir sablia.io/lettre/<date>-<titre> → lire le numéro, lancer la vidéo, s'abonner
+- Oracle : la page porte le texte du numéro envoyé (titres, paragraphes, listes, liens), sans balise de fusion ni salutation nominative ; un seul h1 (l'objet du numéro), suivi du résumé du numéro en clair ; la signature « Brice Gachadoat », liée à sa présentation, et la date d'envoi en clair ; des données `Article` avec auteur, date de publication (le même instant que la date affichée) et de modification ; la vidéo de la semaine derrière un clic, sans iframe dans le HTML servi ; un lien pour s'abonner à la lettre ; la page est dans le plan du site avec sa date ; une adresse de numéro inconnue répond 404 ; sans numéro publié, aucune page de numéro n'est servie
+- Exemple : Étant donné un numéro publié `2026-11-17-exemple` avec l'objet « Objet du numéro » / Quand on ouvre /lettre/2026-11-17-exemple / Alors le h1 est « Objet du numéro », on lit « Brice Gachadoat » et « 17 novembre 2026 », le bloc `Article` porte `datePublished` et `author.name`, et le HTML ne contient aucun `<iframe` ; et /lettre/inconnu répond 404
+- Test : vitest src/app/lettre ; src/components/lettre ; server/static.test.ts ; node --test scripts/seo/prerender-ressources.test.mjs scripts/seo/export-guards.test.mjs scripts/seo/sitemap.test.mjs
+- Statut : JAMAIS-PASSÉE
+- Source : étude du 2026-11-11 (« La lettre du mardi devient le blog »), oui de Brice le 11/11 ; plan `sablia-site-seo-offre-lettres` phase D ; la publication elle-même est un outil du hub (plan, phase E)
+
+## US-102 — `/newsletter` liste les numéros parus, et `/lettre` y renvoie
+- Surface : /newsletter (section `#numeros`, sous « Dans chaque numéro ») ; /lettre (redirection)
+- Parcours : (cible) ouvrir /newsletter → lire la liste des numéros → ouvrir un numéro ; ou taper sablia.io/lettre
+- Oracle : la liste montre les numéros publiés du plus récent au plus ancien, chacun avec sa date, son objet et un lien vers sa page ; sans numéro publié la section dit que le premier numéro arrive, et l'annonce « Premier numéro mardi 17 novembre. » ne paraît plus dès qu'un numéro est publié ; le formulaire d'inscription et les liens `?c=` et `?t=` se comportent comme avant ; /lettre et /lettre/ redirigent (301) vers /newsletter
+- Exemple : Étant donné deux numéros publiés datés du 17 et du 24 novembre 2026 / Quand on ouvre /newsletter / Alors `#numeros` liste d'abord celui du 24, puis celui du 17, chacun lié à /lettre/<son adresse> ; et `GET /lettre` répond 301 vers /newsletter
+- Test : vitest src/app/newsletter ; server/static.test.ts ; node --test scripts/seo/export-guards.test.mjs scripts/seo/sitemap.test.mjs
+- Statut : JAMAIS-PASSÉE
+- Source : étude du 2026-11-11 ; résumé `research/brainstorm/2026-11-11-seo-sablia-resume.md` (« un index ou une liste sur /newsletter ») ; plan `sablia-site-seo-offre-lettres` phase D
