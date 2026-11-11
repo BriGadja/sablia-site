@@ -122,3 +122,26 @@ describe('/accompagnement booking', () => {
     expect(lead.getAttribute('href')).toBe(CRM)
   })
 })
+
+// US-99: the référent IA (price on quote) points to the monthly offer that has its own page.
+describe('/accompagnement links the « responsable IA à temps partagé » page (US-99)', () => {
+  const MORE =
+    "Pour aller plus loin qu'une séance par mois : comme responsable IA à temps partagé, je construis et j'entretiens vos outils, deux jours par mois."
+
+  it('says one sentence after the référent terms, in #referent, in the static HTML', () => {
+    const html = decode(renderToString(<Page />))
+    const at = html.indexOf('id="referent"')
+    const block = textOf(html.slice(at, html.indexOf('</section>', at)))
+    const terms = block.indexOf('Trois mois au moins, puis résiliable chaque mois.')
+    expect(terms).toBeGreaterThan(0)
+    expect(block.indexOf(MORE)).toBeGreaterThan(terms)
+  })
+
+  it('links the offer page with a client-side link', () => {
+    render(<Page />)
+    const link = screen.getByRole('link', { name: 'Le responsable IA à temps partagé' })
+    expect(link.getAttribute('href')).toBe('/responsable-ia-temps-partage')
+    expect(link.closest('#referent')).not.toBeNull()
+    expect(link.closest('p')?.textContent?.replace(/\s+/g, ' ')).toContain(MORE)
+  })
+})

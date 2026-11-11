@@ -161,7 +161,7 @@ describe('SiteHeader', () => {
 })
 
 describe('SiteFooter', () => {
-  it('lists the training structure first, then the CRM page, resources and legal links (01b § 6 order)', () => {
+  it('lists the training structure first, then the monthly offer, the CRM page, resources and legal links (01b § 6 order, offer link US-99)', () => {
     at(BEFORE)
     const { container } = render(<SiteFooter />)
     expect(screen.getByRole('navigation', { name: 'Pied de page' })).toBeTruthy()
@@ -174,6 +174,7 @@ describe('SiteFooter', () => {
       ['Formation', '/formations'],
       ['Webinaires', '/webinaire'],
       ['Après la formation', '/accompagnement'],
+      ['Responsable IA', '/responsable-ia-temps-partage'],
       ['Réalisations', '/realisations'],
       ["Compte rendu d'appel", '/offres/compte-rendu-appel'],
       ['Ressources', '/ressources'],
@@ -197,10 +198,10 @@ describe('SiteFooter', () => {
     expect(hrefs.slice(0, 4)).toEqual([
       '/formations',
       '/accompagnement',
+      '/responsable-ia-temps-partage',
       '/realisations',
-      '/offres/compte-rendu-appel',
     ])
-    expect(hrefs).toHaveLength(11)
+    expect(hrefs).toHaveLength(12)
   })
 
   // US-100: the structured data says Rouen, so every page says it in visible text too.

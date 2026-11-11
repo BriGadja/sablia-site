@@ -1,6 +1,7 @@
 'use client'
 
 // Client component: the month drawing arms after hydration and plays its steps once in view.
+import Link from 'next/link'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { Eyebrow } from '@/components/shell/Eyebrow'
 import { useTimelineLoop } from '@/lib/hooks/useTimelineLoop'
@@ -106,6 +107,12 @@ export function Referent() {
           <h2 className="ref-h2">{REFERENT.title}</h2>
           <p className="ref-line">{keepUnits(REFERENT.line)}</p>
           <p className="ref-terms">{REFERENT.terms}</p>
+          <p className="ref-more">
+            {REFERENT.more.text}{' '}
+            <Link href={REFERENT.more.href} className="ref-more-link">
+              {REFERENT.more.label}
+            </Link>
+          </p>
         </div>
         <div
           ref={ref}

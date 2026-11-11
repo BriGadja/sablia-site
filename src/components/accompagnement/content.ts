@@ -31,6 +31,12 @@ export const REFERENT = {
   title: 'Un appui chaque mois.',
   line: 'Une séance de 2 h par mois avec votre équipe, et vos questions sous 48 h.',
   terms: 'Trois mois au moins, puis résiliable chaque mois. Le prix est dans le devis.',
+  /** The monthly offer with its own page (US-99): no amount and no school name here (content.test.ts). */
+  more: {
+    text: "Pour aller plus loin qu'une séance par mois : comme responsable IA à temps partagé, je construis et j'entretiens vos outils, deux jours par mois.",
+    label: 'Le responsable IA à temps partagé',
+    href: '/responsable-ia-temps-partage',
+  },
   /** The drawn month (aria-hidden): weekday initials, two figures taken from `line`, and Brice's
    *  face on each answer (photo 2 of 09/10, decorative). */
   month: {
