@@ -112,6 +112,16 @@ describe('LettreBody', () => {
     )
   })
 
+  it('drops utm_* parameters whatever their case, and an empty pair, from the text of a bare URL', () => {
+    const out = html(
+      'Voir https://www.youtube.com/watch?v=d5fo00AFqVM&UTM_SOURCE=x&Utm_Medium=y et https://a.org/p?&utm_source=x ici',
+    )
+    expect(out).toContain(
+      '<a href="https://www.youtube.com/watch?v=d5fo00AFqVM&amp;UTM_SOURCE=x&amp;Utm_Medium=y" rel="noopener">www.youtube.com/watch?v=d5fo00AFqVM</a>',
+    )
+    expect(out).toContain('<a href="https://a.org/p?&amp;utm_source=x" rel="noopener">a.org/p</a>')
+  })
+
   it.each([
     ['a no-break space (U+00A0)', NBSP],
     ['a narrow no-break space (U+202F)', NNBSP],
