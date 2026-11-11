@@ -1,15 +1,47 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { renderToString } from 'react-dom/server'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import type { Lettre } from '@/components/lettre/data'
+
+const loadLettres = vi.fn()
+vi.mock('@/components/lettre/data', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/components/lettre/data')>()),
+  loadLettres: (...a: unknown[]) => loadLettres(...a),
+}))
+
+import { NUMEROS } from '@/components/lettre/content'
+import NewsletterView from '@/components/newsletter/NewsletterView'
 import NewsletterPage, { metadata } from './page'
 
 /**
- * `/newsletter` (US-81, US-83): the static HTML carries the whole promise and the form; the token
- * links of the confirmation mail (`?c=`) and of the invitation (`?t=`) show a button and post NOTHING
- * on load: a mail scanner that opens the link subscribes nobody.
+ * `/newsletter` (US-81, US-83, US-102): the static HTML carries the whole promise, the form and the
+ * list of the issues already published; the token links of the confirmation mail (`?c=`) and of the
+ * invitation (`?t=`) show a button and post NOTHING on load: a mail scanner that opens the link
+ * subscribes nobody. The page is an async wrapper that reads the issues once; the view is synchronous.
  */
 vi.mock('@/lib/analytics', () => ({ track: vi.fn() }))
+
+const issue = (slug: string, titre: string, published_at: string): Lettre => ({
+  slug,
+  titre,
+  resume: 'Résumé.',
+  corps_md: '## A\n\nTexte.',
+  youtube_id: null,
+  published_at,
+  updated_at: published_at,
+})
+const OLDER = issue('2026-11-17-premier', 'Le premier numéro', '2026-11-17T07:30:00+00:00')
+// 23:30 UTC on 23/11 is already Tuesday 24/11 in Paris.
+const NEWER = issue('2026-11-24-deuxieme', 'Le deuxième numéro', '2026-11-23T23:30:00+00:00')
+
+beforeEach(() => {
+  delete process.env.VITE_SUPABASE_ANON_KEY
+  delete process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  loadLettres.mockReset()
+})
 
 const TOKEN = '6f1c2a9e-4b7d-4c1e-9a3f-2d5e8b7c1a40'
 
@@ -37,10 +69,10 @@ function stubFetch(status: number, body: unknown = null) {
 const sent = (spy: ReturnType<typeof stubFetch>) =>
   JSON.parse(String(spy.mock.calls[0]?.[1]?.body)) as Record<string, unknown>
 
-/** Renders the page at a given address and lets the mount effects run. */
-async function open(search = '') {
+/** Renders the page body at a given address and lets the mount effects run. */
+async function open(search = '', lettres: Lettre[] = []) {
   window.history.replaceState(null, '', `/newsletter${search}`)
-  const view = render(<NewsletterPage />)
+  const view = render(<NewsletterView lettres={lettres} />)
   await act(async () => {})
   return view
 }
@@ -51,7 +83,7 @@ afterEach(() => {
 })
 
 describe('/newsletter: the static HTML (SSR content rule)', () => {
-  const t = text(renderToString(<NewsletterPage />))
+  const t = text(renderToString(<NewsletterView lettres={[]} />))
 
   it('carries the title, the promise, the byline, the form and the consent line', () => {
     expect(t).toContain("L'IA au travail")
@@ -65,7 +97,7 @@ describe('/newsletter: the static HTML (SSR content rule)', () => {
     expect(t).toContain(
       'En vous inscrivant, vous acceptez de recevoir la lettre du mardi. Un lien de désinscription dans chaque mail.',
     )
-    const html = renderToString(<NewsletterPage />)
+    const html = renderToString(<NewsletterView lettres={[]} />)
     expect(html).toContain('href="/politique-confidentialite"')
     expect(html).toContain('data-form="newsletter"')
     expect(html).not.toMatch(/opacity:\s*0/)
@@ -76,6 +108,59 @@ describe('/newsletter: the static HTML (SSR content rule)', () => {
     expect(metadata.title).toEqual({
       absolute: "L'IA au travail · la lettre du mardi de Brice Gachadoat",
     })
+  })
+})
+
+describe('/newsletter: the list of issues (#numeros, US-102)', () => {
+  it('sits after #numero and lists the issues newest first: Paris date, title, link to the page', () => {
+    const { container } = render(<NewsletterView lettres={[OLDER, NEWER]} />)
+    const ids = Array.from(container.querySelectorAll('main > section[id]')).map((s) => s.id)
+    expect(ids).toEqual(['top', 'numero', 'numeros'])
+    const section = container.querySelector('section#numeros') as Element
+    expect(section.querySelector('h2')?.textContent).toBe(NUMEROS.title)
+    const items = Array.from(section.querySelectorAll('li'))
+    expect(items).toHaveLength(2)
+    const links = items.map((li) => li.querySelector('a')?.getAttribute('href'))
+    expect(links).toEqual(['/lettre/2026-11-24-deuxieme', '/lettre/2026-11-17-premier'])
+    expect(items[0].textContent).toContain('Le deuxième numéro')
+    const time = items[0].querySelector('time') as HTMLTimeElement
+    expect(time.textContent).toBe('24 novembre 2026')
+    expect(time.getAttribute('datetime')).toBe(NEWER.published_at)
+    expect(section.querySelector('[data-state="empty"]')).toBeNull()
+  })
+
+  it('never lets « : » start a line in a listed title', () => {
+    const { container } = render(
+      <NewsletterView lettres={[{ ...OLDER, titre: 'Relancer : la méthode' }]} />,
+    )
+    expect(container.querySelector('#numeros li')?.textContent).toContain(
+      'Relancer\u00a0: la méthode',
+    )
+  })
+
+  it('says so in one sentence while no issue is published, with no list', () => {
+    const { container } = render(<NewsletterView lettres={[]} />)
+    const section = container.querySelector('section#numeros') as Element
+    expect(section.querySelector('[data-state="empty"]')?.textContent).toBe(NUMEROS.empty)
+    expect(section.querySelectorAll('li')).toHaveLength(0)
+  })
+
+  it('carries the list in the static HTML', () => {
+    const html = renderToString(<NewsletterView lettres={[NEWER]} />)
+    expect(html).toContain('href="/lettre/2026-11-24-deuxieme"')
+    expect(html).toContain('Le deuxième numéro')
+  })
+
+  it('the page reads the published issues once and renders them', async () => {
+    loadLettres.mockResolvedValue([NEWER, OLDER])
+    const { container } = render(await NewsletterPage())
+    expect(loadLettres).toHaveBeenCalledTimes(1)
+    expect(container.querySelector('a[href="/lettre/2026-11-17-premier"]')).not.toBeNull()
+  })
+
+  it('the page propagates a strict read failure (an unreadable register never ships)', async () => {
+    loadLettres.mockRejectedValue(new Error('contenu_lettres read answered HTTP 500'))
+    await expect(NewsletterPage()).rejects.toThrow(/HTTP 500/)
   })
 })
 
@@ -142,6 +227,17 @@ describe('/newsletter: the public form', () => {
 })
 
 describe('/newsletter: the token links', () => {
+  // The « Premier numéro » line also reads the visitor's clock: pin it before the send (Monday 16/11),
+  // so these rows never depend on the day the suite runs. Only `Date` is faked (frozen, so a boundary
+  // holds to the millisecond); timers stay real.
+  beforeEach(() => {
+    vi.useFakeTimers({ now: new Date('2026-11-16T12:00:00.000Z'), toFake: ['Date'] })
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.unstubAllEnvs()
+  })
+
   it('jeton ?c= : a button, nothing posted on load, the token dropped from the address', async () => {
     const spy = stubFetch(200, { ok: true, state: 'subscribed', prenom: 'Léa' })
     await open(`?c=${TOKEN}`)
@@ -170,6 +266,57 @@ describe('/newsletter: the token links', () => {
     expect(await screen.findByText("C'est fait. Premier numéro mardi 17 novembre.")).toBeTruthy()
   })
 
+  it('drops the « Premier numéro » line once an issue is published', async () => {
+    stubFetch(200, { ok: true, state: 'subscribed', prenom: 'Léa' })
+    await open(`?c=${TOKEN}`, [OLDER])
+    const user = userEvent.setup()
+    await user.click(screen.getByRole('button', { name: 'Confirmer mon inscription' }))
+    const done = await screen.findByText("C'est fait, Léa.")
+    expect(done.textContent).toBe("C'est fait, Léa.")
+    expect(document.body.textContent).not.toContain('Premier numéro')
+  })
+
+  it('drops the « Premier numéro » line once the build is at or after Tuesday 17/11 09:00 Paris', async () => {
+    const cases = [
+      ['2026-11-17T07:59:59.999Z', "C'est fait, Léa. Premier numéro mardi 17 novembre."], // 08:59:59 Paris
+      ['2026-11-17T08:00:00.000Z', "C'est fait, Léa."], // 09:00 Paris, the send
+      ['2026-12-01T10:00:00.000Z', "C'est fait, Léa."],
+    ] as const
+    for (const [builtAt, message] of cases) {
+      vi.stubEnv('NEXT_PUBLIC_BUILD_AT', builtAt)
+      stubFetch(200, { ok: true, state: 'subscribed', prenom: 'Léa' })
+      const view = await open(`?c=${TOKEN}`)
+      const user = userEvent.setup()
+      await user.click(screen.getByRole('button', { name: 'Confirmer mon inscription' }))
+      const done = await screen.findByText(/^C'est fait, Léa\./)
+      expect(done.textContent, builtAt).toBe(message)
+      view.unmount()
+      vi.unstubAllEnvs()
+    }
+  })
+
+  it('drops the « Premier numéro » line when the visitor confirms at or after Tuesday 17/11 09:00 Paris, even on a page built before', async () => {
+    const cases = [
+      ['2026-11-17T07:59:59.999Z', "C'est fait, Léa. Premier numéro mardi 17 novembre."], // 08:59:59 Paris
+      ['2026-11-17T08:00:00.000Z', "C'est fait, Léa."], // 09:00 Paris, the send
+      ['2026-11-18T10:00:00.000Z', "C'est fait, Léa."], // the send's rebuild failed: this release stays live
+    ] as const
+    for (const [confirmedAt, message] of cases) {
+      // Built the evening before the send, opened before it; the clock is read at the click.
+      vi.stubEnv('NEXT_PUBLIC_BUILD_AT', '2026-11-16T20:00:00.000Z')
+      vi.setSystemTime(new Date('2026-11-16T21:00:00.000Z'))
+      stubFetch(200, { ok: true, state: 'subscribed', prenom: 'Léa' })
+      const view = await open(`?c=${TOKEN}`)
+      vi.setSystemTime(new Date(confirmedAt))
+      const user = userEvent.setup()
+      await user.click(screen.getByRole('button', { name: 'Confirmer mon inscription' }))
+      const done = await screen.findByText(/^C'est fait, Léa\./)
+      expect(done.textContent, confirmedAt).toBe(message)
+      view.unmount()
+      vi.unstubAllEnvs()
+    }
+  })
+
   it('jeton refusé (404 or 410) : the same neutral message, and the form to start again', async () => {
     for (const status of [404, 410]) {
       stubFetch(status, { error: 'x', code: status === 404 ? 'unknown_token' : 'opposed' })
@@ -180,5 +327,17 @@ describe('/newsletter: the token links', () => {
       expect(screen.getByLabelText('Email')).toBeTruthy()
       view.unmount()
     }
+  })
+})
+
+describe('/newsletter: motion', () => {
+  const css = readFileSync(join(__dirname, '../../components/newsletter/newsletter.css'), 'utf8')
+
+  it('gives the issue rows no scroll-driven entry animation (axe reads text below the fold in its from state)', () => {
+    expect(css).not.toMatch(/\.nl-issues li[^{}]*\{[^}]*animation/)
+  })
+
+  it('keeps the hover of an issue row', () => {
+    expect(css).toMatch(/\.nl-issue:hover \.nl-issue-title \{[^}]*color: #835a0c/)
   })
 })

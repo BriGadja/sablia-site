@@ -2,7 +2,7 @@
 
 > Sablia forme les équipes des entreprises à l'IA, sur leurs propres dossiers : la formation « L'IA au travail », trois jours dans vos locaux, jusqu'à 12 personnes, avec Claude (le modèle d'IA d'Anthropic). Premier pas : un webinaire gratuit d'une heure, le jeudi midi.
 
-Sablia (https://sablia.io) est basée à Paris et intervient dans toute la France. La formation est animée par son fondateur, Brice Gachadoat, du premier échange à la dernière demi-journée. Le prix n'est pas publié : il dépend de l'équipe et du format retenu, et il arrive dans le devis, après un échange gratuit de 30 minutes.
+Sablia (https://sablia.io) est basée à Rouen (Normandie) et intervient dans toute la France. La formation est animée par son fondateur, Brice Gachadoat, du premier échange à la dernière demi-journée. Le prix de la formation n'est pas publié : il dépend de l'équipe et du format retenu, et il arrive dans le devis, après un échange gratuit de 30 minutes.
 
 ## La formation « L'IA au travail »
 
@@ -32,6 +32,12 @@ Une heure en visio sur Google Meet, le jeudi à midi, consacrée à un métier :
 - Sur mesure : l'intégration de Claude dans votre CRM, et des automatisations pour les tâches qui reviennent.
 - Le compte rendu d'appel dans votre CRM : le commercial raccroche, le CRM est déjà à jour (compte rendu et tâche de relance). Page et prix : https://sablia.io/offres/compte-rendu-appel (par outil : /hubspot, /pipedrive, /zoho, /salesforce, /google-sheets, /excel-365)
 
+## Responsable IA à temps partagé
+
+Une offre mensuelle pour les PME de 10 à 50 personnes qui n'ont personne en interne pour mettre l'IA en place : Brice Gachadoat construit les outils, forme l'équipe et entretient ce qui tourne, deux jours de travail par mois. Engagement de trois mois, puis résiliable chaque mois ; le prix est affiché sur la page.
+
+- URL : https://sablia.io/responsable-ia-temps-partage
+
 ## Réalisations
 
 Automatisations, sites, applications et formations, construits pour nos clients depuis 2025, et des agents vocaux sur demande : https://sablia.io/realisations
@@ -42,7 +48,7 @@ Brice Gachadoat, fondateur de Sablia. Six ans au sein de la DSI du groupe LVMH, 
 
 ## Questions fréquentes
 
-- **Combien ça coûte ?** Le prix dépend de votre équipe et du format retenu. Il arrive dans le devis, après l'échange de 30 minutes. Le webinaire et l'échange sont gratuits.
+- **Combien coûte la formation ?** Le prix dépend de votre équipe et du format retenu. Il arrive dans le devis, après l'échange de 30 minutes. Le webinaire et l'échange sont gratuits.
 - **Mon équipe utilise déjà Copilot ou ChatGPT.** La formation se fait aujourd'hui sur Claude. Si votre équipe travaille déjà avec Copilot ou ChatGPT, dites-le pendant l'échange : on en parle avant tout devis.
 - **Où se passe la formation ?** Dans vos locaux, avec votre équipe. Les trois jours peuvent se suivre ou s'étaler, selon votre organisation.
 - **Combien de personnes ?** Jusqu'à 12 personnes par programme. Pour une équipe plus grande, on en parle pendant l'échange.
@@ -63,4 +69,4 @@ Brice Gachadoat, fondateur de Sablia. Six ans au sein de la DSI du groupe LVMH, 
 - Email : brice@sablia.io
 - Échange gratuit de 30 minutes : https://calendly.com/brice-gachadoat/echange-30-minutes
 
-Dernière mise à jour : 2026-11-01.
+Dernière mise à jour : 2026-11-11.

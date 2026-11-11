@@ -87,7 +87,8 @@ Contrast, computed with the WCAG 2.x relative-luminance formula on the hex value
 Rules:
 - Gold on a light ground is `gold-dark` as text and `gold-mid` as a stroke. `gold` itself only sits on night or violet.
 - One signal colour. Everything else is ink, greys, sand/rose grounds and the night band.
-- A dark band (`.panel`, `#scene`, `#videos`, `#fin`) flips the focus ring from `gold-dark` to `gold`.
+- A dark band (`.panel`, `.v2-sbar`, `#scene`, `#videos`, `.v2-tp-conditions`, `#fin`) flips the focus ring from
+  `gold-dark` to `gold` (the list in `base.css`: a new night band joins it).
 - The contrast gate (`scripts/qa/contrast.py`, run by `score.py`) and `scripts/qa/axe-check.py` are the metric, not this table.
 
 ## Typography
@@ -107,10 +108,11 @@ Scale as used (px, desktop first; phone values where the CSS changes them under 
 
 | Step | Size / line-height | Notes |
 |------|--------------------|-------|
-| H1 | 52 / 1.04, weight 600, letter-spacing -0.03em, `text-wrap: balance` | home hero, Accompagnement hero (36 on phone), offer page |
+| H1 | 52 / 1.04, weight 600, letter-spacing -0.03em, `text-wrap: balance` | home hero, Accompagnement hero (36 on phone), offer page (48 from 901 to 1180 px, 36 on phone) |
 | H1 legal, 404 | 44 | legal pages, not-found (32 on phone); thanks page 40 |
 | H2 | 36 | every section title (28 on phone in the shared bands) |
 | Final band H2 | 40 | `FinBand` (28 on phone) |
+| Price figure | 48 / 1.05, weight 600, letter-spacing -0.03em, tabular figures | the monthly price of the offer page, `#conditions` (36 on phone) |
 | Body | 16 / 1.6 | running text; 15 and 14 for cards, notes and proof lines |
 | Eyebrow | mono 12, uppercase, letter-spacing 0.08em | `Eyebrow`; gold-dark on light, gold with `onDark` |
 | Pill, label | mono 12 | |

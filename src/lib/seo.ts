@@ -10,6 +10,8 @@
 import type { Metadata } from 'next'
 
 export const SITE_ORIGIN = 'https://sablia.io'
+/** The default Open Graph image of every page, a path under /public. */
+export const DEFAULT_OG_IMAGE = '/og-image.png'
 const TWITTER_HANDLE = '@sablia_io'
 
 export interface PageSeo {
@@ -31,7 +33,7 @@ export function pageMetadata({
   title,
   description,
   noindex = false,
-  image = '/og-image.png',
+  image = DEFAULT_OG_IMAGE,
   twitterImage = '/twitter-image.png',
 }: PageSeo): Metadata {
   if (!path.startsWith('/')) throw new Error(`seo: path must start with "/", got "${path}"`)

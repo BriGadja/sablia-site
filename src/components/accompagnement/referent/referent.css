@@ -42,6 +42,29 @@
       color: #3a3f4d;
       text-wrap: pretty;
     }
+    /* The monthly offer with its own page (US-99): one sentence, the link closes it. */
+    .ref-more {
+      margin: 18px 0 0;
+      max-width: 30em;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #3a3f4d;
+      text-wrap: pretty;
+    }
+    .ref-more-link {
+      color: #131620;
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-color: #b9852a;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 4px;
+      /* 24 px hit area for a link inside a sentence: block padding enlarges the rect, no text moves */
+      padding-block: 4px;
+
+      &:hover {
+        color: #835a0c;
+      }
+    }
 
     /* The month: 4 weeks x 5 weekdays, a day number in each cell's corner. */
     .month {

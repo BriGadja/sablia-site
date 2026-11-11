@@ -8,8 +8,8 @@
     "hash": "sha256:c92d7824aaa4c70dd9563a5d9422c360306f72f4038eda572554b98df5fa0f8b"
   },
   "/politique-confidentialite": {
-    "lastmod": "2026-11-01",
-    "hash": "sha256:2f23f245ad0325b28ff8ad95c5dd3db6ccdd68ade8053ae29380808469c88381"
+    "lastmod": "2026-11-11",
+    "hash": "sha256:8d407ffd92ef47c079bb2b2e77eb555dfc52632eb2ed1634380cb09ba7488d2b"
   },
   "/cgv": {
     "lastmod": "2026-10-26",
@@ -48,8 +48,8 @@
     "hash": "sha256:1ff9eb33777f708516188142d8a717fee364a75aac8ab388018fbdb1eb8368e2"
   },
   "/accompagnement": {
-    "lastmod": "2026-11-01",
-    "hash": "sha256:66fb12b5640e537b332bac79d7cb90f2a31f23923207afcca4c17e2a5af7bc43"
+    "lastmod": "2026-11-11",
+    "hash": "sha256:d9a9c89ce3d6c422bfb1fd5cb0f179cf3600f50a6fee9c40bc594759ca19a1f8"
   },
   "/offres/compte-rendu-appel/google-sheets": {
     "lastmod": "2026-10-26",
@@ -60,8 +60,8 @@
     "hash": "sha256:a9e1d10f0eee2e41fd0fcfa06efef6af4da26ba87b6edbb8056e75ab9fd1ce2e"
   },
   "/newsletter": {
-    "lastmod": "2026-10-27",
-    "hash": "sha256:c6b45d9acb97a0fd50898157e745c912b23528e18c23b03f22ff03bd23c64893"
+    "lastmod": "2026-11-11",
+    "hash": "sha256:8ae519efd43353f2c680db6af3c74fffcac94012938b72043f8549e90af95243"
   },
   "/webinaire": {
     "lastmod": "2026-11-01",
@@ -70,5 +70,9 @@
   "/realisations": {
     "lastmod": "2026-11-01",
     "hash": "sha256:9eef817e56023a34902a87052b0d6e6fa2d58656b2edbef2f1cb3f897c6126ff"
+  },
+  "/responsable-ia-temps-partage": {
+    "lastmod": "2026-11-11",
+    "hash": "sha256:d9d62e019a6cea6401895496cdca75ce320ca402a28cb6b3ac8a24b5ce48b940"
   }
 }

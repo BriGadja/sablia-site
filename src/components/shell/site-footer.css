@@ -65,5 +65,9 @@
     .v2-footer-mentions p {
       margin: 0;
     }
+    /* The place line is content, not fine print: the same ink as the links. */
+    .v2-footer-mentions .v2-footer-place {
+      color: #3a3f4d;
+    }
   }
 }

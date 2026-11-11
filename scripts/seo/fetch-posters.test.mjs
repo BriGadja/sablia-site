@@ -3,7 +3,8 @@ import { existsSync, mkdtempSync, readFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import test from 'node:test'
-import { fetchPosters } from './fetch-posters.mjs'
+import { fetchPosters, videoRows } from '../fetch-posters.mjs'
+import { listPublishedLettres } from './ressources.mjs'
 
 const bytes = (s) => Buffer.from(s)
 const fakeSharp = () => ({
@@ -84,4 +85,60 @@ test('ignores an id that is not a YouTube id', async () => {
     log() {},
   })
   assert.equal(n, 0)
+})
+
+test('videoRows: the union of both tables, a failed list warns and is skipped', async () => {
+  const log = []
+  const rows = await videoRows({
+    readers: [
+      async () => [{ youtube_id: 'aaaaaaaaaaa' }, { youtube_id: null }],
+      async () => {
+        throw new Error('contenu_lettres down')
+      },
+      async () => [{ youtube_id: 'bbbbbbbbbbb' }, { youtube_id: 'aaaaaaaaaaa' }],
+    ],
+    log: (m) => log.push(m),
+  })
+  assert.deepEqual(
+    rows.map((r) => r.youtube_id),
+    ['aaaaaaaaaaa', 'bbbbbbbbbbb'],
+  )
+  assert.equal(log.length, 1)
+  assert.match(log[0], /contenu_lettres down/)
+})
+
+test('the fixture path: SABLIA_FIXTURE_LETTRES lists the video specimen, whose poster is then fetched', async () => {
+  // What main() does: videoRows over the readers, then fetchPosters on the union. No key, no network.
+  const env = {
+    SABLIA_FIXTURE_LETTRES: '2026-11-10-exemple-de-numero,2026-11-03-numero-avec-video',
+  }
+  const rows = await videoRows({
+    readers: [
+      () =>
+        listPublishedLettres({
+          env,
+          fetch: async () => {
+            throw new Error('must not be called')
+          },
+          log() {},
+        }),
+    ],
+    log() {},
+  })
+  assert.equal(rows.length, 1)
+  const [{ youtube_id: id }] = rows
+  const out = mkdtempSync(join(tmpdir(), 'posters-'))
+  const calls = []
+  await fetchPosters({
+    rows,
+    outDir: out,
+    fetch: async (url) => {
+      calls.push(url)
+      return ok('JPG')
+    },
+    sharp: fakeSharp,
+    log() {},
+  })
+  assert.deepEqual(calls, [`https://i.ytimg.com/vi/${id}/maxresdefault.jpg`])
+  assert.equal(existsSync(join(out, `${id}.webp`)), true)
 })

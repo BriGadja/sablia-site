@@ -1,18 +1,21 @@
 import Link from 'next/link'
 import { NDA_LINE } from '@/content/declaration'
 import { WhenUpcoming } from '@/content/session-bar'
+import { site } from '@/lib/site'
 import { ConsentLink } from './ConsentLink'
 import { Logo } from './Logo'
 import './site-footer.css'
 
 /**
- * Link order of 01b § 6: the training structure, the CRM offer page, resources, then the legal row.
+ * Link order of 01b § 6: the training structure, the monthly offer (US-99), the CRM offer page,
+ * resources, then the legal row.
  * `untilSession`: gone from `SESSION_START`, like the header entry (`/webinaire` is the one session page).
  */
 const LINKS = [
   { href: '/formations', label: 'Formation' },
   { href: '/webinaire', label: 'Webinaires', untilSession: true },
   { href: '/accompagnement', label: 'Après la formation' },
+  { href: '/responsable-ia-temps-partage', label: 'Responsable IA' },
   { href: '/realisations', label: 'Réalisations' },
   { href: '/offres/compte-rendu-appel', label: "Compte rendu d'appel" },
   { href: '/ressources', label: 'Ressources' },
@@ -60,6 +63,9 @@ export function SiteFooter() {
           <ConsentLink />
         </nav>
         <div className="v2-footer-mentions">
+          <p className="v2-footer-place">
+            {`Sablia, à ${site.locality}. Interventions en ${site.region} et partout en France.`}
+          </p>
           <p>{NDA_LINE}</p>
           <span>© 2026 Sablia</span>
         </div>

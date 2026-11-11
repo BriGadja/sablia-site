@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { type FormEvent, useEffect, useRef, useState } from 'react'
 import { formError, formSuccess } from '@/lib/events'
 import { site } from '@/lib/site'
+import { FIRST_ISSUE_AT } from './first-issue'
 
 /**
  * The form of `/newsletter` and the landing of its two token links (plan sablia-newsletter-resend, C3).
@@ -27,7 +28,7 @@ type View =
   | { kind: 'sending' }
   | { kind: 'token'; action: TokenAction; token: string; sending: boolean; failed: boolean }
   | { kind: 'pending' }
-  | { kind: 'subscribed'; prenom: string | null }
+  | { kind: 'subscribed'; prenom: string | null; firstIssue: boolean }
   | { kind: 'busy' }
   | { kind: 'stale' }
   | { kind: 'error' }
@@ -51,7 +52,12 @@ function takeToken(): { action: TokenAction; token: string } | null {
   return confirm ? { action: 'confirm', token: confirm } : { action: 'invite', token: invite ?? '' }
 }
 
-export default function NewsletterForm() {
+/**
+ * `announceFirstIssue`: say when the first issue leaves, only while no issue is published and the build
+ * is before that morning (`NewsletterView` decides), AND the visitor's clock at the confirmation is still
+ * before it: a release built before the send can stay live after it when the send's rebuild fails.
+ */
+export default function NewsletterForm({ announceFirstIssue }: { announceFirstIssue: boolean }) {
   const [view, setView] = useState<View>({ kind: 'idle' })
   /** Set at the first client render, so the prerendered HTML never bakes a timestamp. */
   const mountedAt = useRef(Date.now())
@@ -105,7 +111,11 @@ export default function NewsletterForm() {
       if (response.status === 200) {
         const body = (await response.json().catch(() => null)) as { prenom?: string } | null
         formSuccess(`newsletter_${action}`)
-        setView({ kind: 'subscribed', prenom: body?.prenom ?? null })
+        setView({
+          kind: 'subscribed',
+          prenom: body?.prenom ?? null,
+          firstIssue: announceFirstIssue && Date.now() < FIRST_ISSUE_AT,
+        })
         return
       }
       const body = (await response.json().catch(() => null)) as { code?: string } | null
@@ -148,7 +158,7 @@ export default function NewsletterForm() {
       view.kind === 'pending'
         ? "Si cette adresse n'est pas déjà inscrite, un mail vient de partir : cliquez sur son lien pour confirmer."
         : view.kind === 'subscribed'
-          ? `C'est fait${view.prenom ? `, ${view.prenom}` : ''}. ${FIRST_ISSUE}`
+          ? `C'est fait${view.prenom ? `, ${view.prenom}` : ''}.${view.firstIssue ? ` ${FIRST_ISSUE}` : ''}`
           : "Trop d'inscriptions aujourd'hui, réessayez demain."
     return (
       <div className="nl-card nl-done" data-state={view.kind} role="status">

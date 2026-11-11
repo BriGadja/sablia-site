@@ -1,0 +1,79 @@
+@layer theme, base, components, utilities;
+
+/* #questions of /responsable-ia-temps-partage, on rose: the title held on the left, the six questions
+   and their answers on the right, all visible. */
+@layer components {
+  .v2-tp-questions {
+    position: relative;
+    background: #f2e3df;
+    padding: 96px 0 176px;
+    color: #131620;
+
+    .tpf-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+      gap: 64px;
+      align-items: start;
+    }
+    .tpf-head {
+      position: sticky;
+      top: 120px;
+      min-width: 0;
+    }
+    h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .tpf-list {
+      margin: 0;
+      min-width: 0;
+    }
+    .tpf-item {
+      padding: 20px 0 22px;
+      border-top: 1px solid #e8cfc8;
+
+      &:first-child {
+        padding-top: 0;
+        border-top: 0;
+      }
+      dt {
+        font-size: 17px;
+        line-height: 1.4;
+        font-weight: 600;
+      }
+      dd {
+        margin: 8px 0 0;
+        max-width: 58ch;
+        font-size: 16px;
+        line-height: 1.6;
+        color: #3a3f4d;
+        text-wrap: pretty;
+      }
+    }
+
+    @media (max-width: 900px) {
+      padding: 56px 0 144px;
+
+      .tpf-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+      }
+      .tpf-head {
+        position: static;
+      }
+      h2 {
+        font-size: 28px;
+      }
+      .tpf-item dt {
+        font-size: 16px;
+      }
+      .tpf-item dd {
+        font-size: 15px;
+      }
+    }
+  }
+}

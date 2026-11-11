@@ -1,0 +1,234 @@
+@layer theme, base, components, utilities;
+
+@layer components {
+  /* `/lettre/<slug>`: a calm reading page. One centred column at a reading measure, ink on sand,
+     one gold-sand rule drawn once under the header (the page's single moment of motion). */
+  .v2-lettre {
+    padding: 72px 0 0;
+    color: #131620;
+
+    .lt-col {
+      max-width: 680px;
+      margin: 0 auto;
+      min-width: 0;
+    }
+    h1 {
+      margin: 16px 0 0;
+      font-size: 44px;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .lt-lede {
+      margin: 20px 0 0;
+      font-size: 20px;
+      line-height: 1.5;
+      color: #3a3f4d;
+      text-wrap: pretty;
+    }
+    .lt-byline {
+      margin: 24px 0 0;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #61677a;
+
+      a {
+        color: #131620;
+        font-weight: 500;
+        text-decoration: underline;
+        text-decoration-color: #b9852a;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 4px;
+      }
+      a:hover {
+        color: #835a0c;
+      }
+      time {
+        color: #3a3f4d;
+      }
+    }
+    .lt-rule {
+      display: block;
+      width: 72px;
+      height: 3px;
+      margin: 32px 0 0;
+      border-radius: 2px;
+      background: #b9852a;
+      transform-origin: left center;
+      animation: lettre-rule 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s both;
+    }
+    .lt-video {
+      margin: 40px 0 0;
+    }
+
+    /* The issue text from the hub: Markdown rendered as plain elements (no <div> inside). */
+    .lt-body {
+      margin: 40px 0 0;
+      font-size: 18px;
+      line-height: 1.7;
+      color: #3a3f4d;
+
+      > :first-child {
+        margin-top: 0;
+      }
+      > :last-child {
+        margin-bottom: 0;
+      }
+      p {
+        margin: 0 0 20px;
+        white-space: pre-line;
+      }
+      h2 {
+        margin: 48px 0 14px;
+        font-size: 26px;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+        font-weight: 600;
+        color: #131620;
+        text-wrap: balance;
+      }
+      h3 {
+        margin: 36px 0 12px;
+        font-size: 21px;
+        line-height: 1.3;
+        font-weight: 600;
+        color: #131620;
+      }
+      h4,
+      h5,
+      h6 {
+        margin: 28px 0 10px;
+        font-size: 18px;
+        line-height: 1.4;
+        font-weight: 600;
+        color: #131620;
+      }
+      ul,
+      ol {
+        margin: 0 0 20px;
+        padding-left: 1.4em;
+      }
+      li {
+        margin: 8px 0;
+        padding-left: 4px;
+        white-space: pre-line;
+      }
+      li::marker {
+        color: #b9852a;
+      }
+      a {
+        color: #131620;
+        text-decoration: underline;
+        text-decoration-color: #b9852a;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 3px;
+        overflow-wrap: anywhere;
+      }
+      a:hover {
+        color: #835a0c;
+      }
+      strong {
+        font-weight: 600;
+        color: #131620;
+      }
+      blockquote {
+        margin: 0 0 20px;
+        padding: 2px 0 2px 20px;
+        border-left: 3px solid #b9852a;
+        color: #131620;
+      }
+      hr {
+        margin: 40px 0;
+        border: 0;
+        border-top: 1px solid #e4d6c0;
+      }
+      code {
+        padding: 1px 6px;
+        border: 1px solid #e4d6c0;
+        border-radius: 6px;
+        background: #fbf7f0;
+        font-family: var(--font-mono);
+        font-size: 0.88em;
+      }
+      /* Footnotes, if the hub ever lets one through: small print under a hairline. */
+      .lt-notes {
+        margin: 40px 0 0;
+        padding-top: 16px;
+        border-top: 1px solid #e4d6c0;
+        font-size: 15px;
+        line-height: 1.6;
+
+        p {
+          margin: 0 0 8px;
+        }
+      }
+    }
+
+    .lt-sub {
+      padding: 56px 0 96px;
+    }
+    .lt-sub-card {
+      box-sizing: border-box;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+      border: 1px solid #e4d6c0;
+      border-radius: 16px;
+      background: #fbf7f0;
+
+      p {
+        margin: 0;
+        font-size: 18px;
+        line-height: 1.55;
+        color: #131620;
+        text-wrap: pretty;
+      }
+    }
+  }
+
+  @keyframes lettre-rule {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-lettre {
+      padding-top: 40px;
+    }
+    .v2-lettre h1 {
+      font-size: 32px;
+      line-height: 1.12;
+    }
+    .v2-lettre .lt-lede {
+      font-size: 18px;
+    }
+    .v2-lettre .lt-body {
+      font-size: 17px;
+    }
+    .v2-lettre .lt-body h2 {
+      margin-top: 40px;
+      font-size: 23px;
+    }
+    .v2-lettre .lt-sub {
+      padding: 40px 0 72px;
+    }
+    .v2-lettre .lt-sub-card {
+      padding: 24px 20px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-lettre .lt-rule {
+      animation: none !important;
+    }
+  }
+}

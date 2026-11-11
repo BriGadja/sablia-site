@@ -1,6 +1,6 @@
 # SEO — Sablia Site (v2)
 
-**Last updated**: 2026-11-01 (training lot 1: `/realisations` added, identity and metadata of the training home). Built on the 2026-10-26 v2 build (Next.js static export). The Vite-era `meta-tags.json`, `SEO.tsx` and `react-helmet-async` no longer exist.
+**Last updated**: 2026-11-11 (the Tuesday letter: one page per issue `/lettre/<slug>` with `Article` data, listed on `/newsletter`, in the sitemap; earlier: training lot 1, `/realisations`). Built on the 2026-10-26 v2 build (Next.js static export). The Vite-era `meta-tags.json`, `SEO.tsx` and `react-helmet-async` no longer exist.
 
 ---
 
@@ -26,29 +26,32 @@
 
 ## What the build refuses (`scripts/seo/export-guards.mjs`, run by `npm run build`)
 
-On every `dist/public/**/*.html`: the audience tracker and consent banner absent from the static HTML, exactly one `h1`, canonical equal to the page's own URL, `noindex` exactly where `routes.mjs` says, every indexable route has its page and no unlisted page exists (`404.html`, `_not-found*` and `escalier-modeles.html` are exempt). Resource pages: title and description, `<main data-ready="true">`, no « Chargement », no `<iframe`; `/ressources` lists every published slug and the home video tiles match the slugs and `youtube_id`. Home: exactly one Organization JSON-LD, no « 30 jours », no « dashboards intelligents ». Then `scripts/qa/content-gates.sh --auto` greps the built HTML (banned figures and names, third-party hosts, em dash on proof surfaces, foreign e-mail, « [À CONFIRMER] » when `SABLIA_SLOT=prod`).
+On every `dist/public/**/*.html`: the audience tracker and consent banner absent from the static HTML, exactly one `h1`, canonical equal to the page's own URL, `noindex` exactly where `routes.mjs` says, every indexable route has its page and no unlisted page exists (`404.html`, `_not-found*` and `escalier-modeles.html` are exempt). Resource pages: title and description, `<main data-ready="true">`, no « Chargement », no `<iframe`; `/ressources` lists every published slug and the home video tiles match the slugs and `youtube_id`. Issue pages of the letter (`assertLettreHtml`, values compared with spaces squashed on both sides): one page per published issue and no other `/lettre/*` page (a leftover `__none` placeholder fails), title `<titre> · Sablia`, canonical, description = résumé, h1 = title, the résumé visible, `<main data-ready="true">`, exactly one `Article` block with `author.name` and `datePublished` equal to the row's `published_at`, no `<iframe` and no merge tag `{{{` in the page, no `<img` in the body block (`data-body="lettre"`), and that block not empty and carrying, in order, the words of the first `##` heading of `corps_md` (inline code, URLs, reference-link ids and every word holding a character reference are left out; no heading or nothing left: only the non-empty check), so a body that never rendered fails the build and a correct one never does; `/newsletter` links every published issue. Home: exactly one Organization JSON-LD, no « 30 jours », no « dashboards intelligents ». Then `scripts/qa/content-gates.sh --auto` greps the built HTML (banned figures and names, third-party hosts, em dash on proof surfaces, foreign e-mail, « [À CONFIRMER] » when `SABLIA_SLOT=prod`).
 
 ## Structured data
 
 | Page | Types | Source |
 |------|-------|--------|
-| every page | ProfessionalService (founder Person, PostalAddress, OfferCatalog with the OF-1 price and delay read from `of1.ts`; voice agent and custom CRM « sur demande », no price). Since lot 1 the alternate name is the training tagline (`site.tagline`) and no text says « dans les CRM » or « × CRM » (a test in `src/components/seo` refuses it) | `OrganizationJsonLd`, mounted in `layout.tsx` |
+| every page | ProfessionalService (founder Person, PostalAddress with locality Rouen and region Normandie, no street and no postal code, `areaServed` Normandie and France, the registered office on the legal pages only (`/mentions-legales`, `/cgv`); the footer says Rouen in visible text, as Google asks for marked-up content; OfferCatalog with the OF-1 price and delay read from `of1.ts`; voice agent and custom CRM « sur demande », no price). Since lot 1 the alternate name is the training tagline (`site.tagline`) and no text says « dans les CRM » or « × CRM » (a test in `src/components/seo` refuses it) | `OrganizationJsonLd`, mounted in `layout.tsx` |
 | `/offres/compte-rendu-appel` | Service (Offer with UnitPriceSpecification), FAQPage, BreadcrumbList | `of1-schema.ts` + `BreadcrumbJsonLd` |
 | the four CRM pages | Service, FAQPage, BreadcrumbList | `CrmPageView.tsx`, `src/content/crm/schema.ts` |
 | `/guides/integrer-l-ia-dans-votre-entreprise` | Article, FAQPage, BreadcrumbList | the page file |
+| `/responsable-ia-temps-partage` | none at page level: its questions are visible text only (no FAQPage, whose results Google stopped on 2026-05-07), the organisation block is the layout's | — |
 | `/ressources/<slug>` | BreadcrumbList, VideoObject (only when the poster is on disk: the thumbnail must be our own file, never `i.ytimg.com`) | `src/app/ressources/[slug]/page.tsx` |
+| `/lettre/<slug>` | Article (author = the founder Person of the organisation block, publisher = its `@id`; `datePublished` = the send instant, the same value the page shows as its Paris date; `dateModified` = `updated_at` only when more than one hour after the send; `image` = the own-hosted poster when the issue has a video, else the default `/og-image.png`, as absolute URLs), BreadcrumbList (Newsletter, then the issue). No VideoObject: a post that embeds a video is not a watch page | `src/components/lettre/article-schema.ts`, `src/app/lettre/[slug]/page.tsx` |
 
 `JsonLd` escapes `<`, U+2028 and U+2029 in the payload.
 
 ## Sitemap
 
-Written to `dist/public/sitemap.xml` by `node scripts/seo/generate-sitemap.mjs` at build time: every indexable route of `routes.mjs` dated from the ledger, plus every published `/ressources/<slug>` (priority 0.6, monthly, dated from its row). A Supabase read failure fails the build. `/realisations` is dated by `src/app/realisations/` + `src/components/realisations/`; the home by the nine section folders under `src/components/home/` (`top offre automatisations formations derriere webinaire apres videos faq`) plus `HomePage.tsx` and `home-metadata.ts`: `scene` (now on the CRM offer page) and `construit` (now under `/realisations`) no longer date the home. The table below is the indexable part of `PAGE_ROUTES`, generated from the file on 2026-11-01 (regenerate it when `routes.mjs` changes):
+Written to `dist/public/sitemap.xml` by `node scripts/seo/generate-sitemap.mjs` at build time: every indexable route of `routes.mjs` dated from the ledger, plus every published `/ressources/<slug>` and `/lettre/<slug>` (priority 0.6, monthly, dated from its row: `updated_at`, else `published_at`). `/ressources` is dated max(ledger, latest resource) and `/newsletter` max(ledger, latest issue), so a new issue moves the list page too; the `/newsletter` sources also include `src/components/lettre/content.ts` and `date.ts` (the strings and dates of its list). A Supabase read failure fails the build (for the issues: on a strict build only). `/realisations` is dated by `src/app/realisations/` + `src/components/realisations/`; the home by the nine section folders under `src/components/home/` (`top offre automatisations formations derriere webinaire apres videos faq`) plus `HomePage.tsx` and `home-metadata.ts`: `scene` (now on the CRM offer page) and `construit` (now under `/realisations`) no longer date the home. The offer page `/responsable-ia-temps-partage` (US-99) is dated by `src/app/responsable-ia-temps-partage/` + `src/components/temps-partage/`. The table below is the indexable part of `PAGE_ROUTES`, generated from the file on 2026-11-11 (regenerate it when `routes.mjs` changes):
 
 | Route | Priority | Change Freq |
 |-------|----------|-------------|
 | `/` | 1.0 | weekly |
 | `/formations` | 0.8 | monthly |
 | `/accompagnement` | 0.8 | monthly |
+| `/responsable-ia-temps-partage` | 0.9 | monthly |
 | `/realisations` | 0.7 | monthly |
 | `/mentions-legales` | 0.3 | yearly |
 | `/politique-confidentialite` | 0.3 | yearly |
@@ -65,8 +68,9 @@ Written to `dist/public/sitemap.xml` by `node scripts/seo/generate-sitemap.mjs` 
 | `/newsletter` | 0.6 | monthly |
 | `/webinaire` | 0.7 | weekly |
 | `/ressources/<slug>` (one per published resource) | 0.6 | monthly |
+| `/lettre/<slug>` (one per published issue of the letter) | 0.6 | monthly |
 
-Built but kept out of the sitemap: `/thank-you`, `/webinaire/merci`, `/webinaire/apres-reservation`, `/webinaire/questionnaire` (all noindex). `/roi` and `/about` are 301 in `server/static.ts` (to `/offres/compte-rendu-appel` and `/#derriere`).
+Built but kept out of the sitemap: `/thank-you`, `/webinaire/merci`, `/webinaire/apres-reservation`, `/webinaire/questionnaire` (all noindex). `/roi`, `/about` and `/lettre` are 301 in `server/static.ts` (to `/offres/compte-rendu-appel`, `/#derriere` and `/newsletter`).
 
 ### `lastmod`
 
@@ -79,7 +83,7 @@ The date of a page is the day its own sources last changed, not the build day. `
 ## Robots and AI-search files
 
 - `public/robots.txt`: all user agents allowed, sitemap declared, explicit blocks for GPTBot (`Crawl-delay: 10`), OAI-SearchBot, ClaudeBot, Claude-User, Claude-SearchBot, PerplexityBot and Google-Extended, all `Allow: /`.
-- `public/llms.txt`: markdown summary for LLMs (the training offer with no price, the free webinar, the conference as an option, then the CRM offer, the spreadsheet pages and the pages list); it is a proof surface for `content-gates.sh` (no em dash, no banned figure). `public/.well-known/ai.txt` points to it. Both are served by the static server (`.well-known` is the one dotted folder opened).
+- `public/llms.txt`: markdown summary for LLMs (the training offer with no price, the free webinar, the conference as an option, then the CRM offer, the monthly offer « responsable IA à temps partagé » with its URL and no amount (its price is on its page), the spreadsheet pages and the pages list); it is a proof surface for `content-gates.sh` (no em dash, no banned figure). `public/.well-known/ai.txt` points to it. Both are served by the static server (`.well-known` is the one dotted folder opened).
 
 ## Manual tasks
 
