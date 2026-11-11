@@ -1,5 +1,6 @@
 // Fixture issues for offline builds and dev (US-101). Pure: the environment and the clock are injected.
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
 import { describe, it } from 'node:test'
 import { fixtureLettres } from './lettre-fixtures.mjs'
 
@@ -29,6 +30,27 @@ describe('fixtureLettres', () => {
     )
     assert.equal(blocks.at(-1).trim(), 'Brice', 'the signature line closes the body')
     assert.equal(row.youtube_id, null)
+  })
+
+  it('gives the SECOND specimen a video the site already shows, so a fixture build has both shapes', () => {
+    const [plain, video, third] = fixtureLettres(
+      {
+        SABLIA_FIXTURE_LETTRES:
+          '2026-11-10-exemple-de-numero,2026-11-03-numero-avec-video,2026-10-27-troisieme',
+      },
+      NOW,
+    )
+    assert.equal(plain.youtube_id, null)
+    assert.equal(third.youtube_id, null, 'specimens cycle: the third is the first again')
+    assert.match(video.youtube_id ?? '', /^[A-Za-z0-9_-]{11}$/)
+    // Never an invented id: one of the home's video tiles, whose poster is committed.
+    const home = readFileSync(
+      new URL('../../src/components/home/videos/content.ts', import.meta.url),
+      'utf8',
+    )
+    assert.ok(home.includes(`youtubeId: '${video.youtube_id}'`), video.youtube_id)
+    const poster = new URL(`../../public/video-thumbs/${video.youtube_id}.webp`, import.meta.url)
+    assert.ok(readFileSync(poster).length > 0, 'its own-hosted poster exists')
   })
 
   it('keeps the visitor-text rules: no em or en dash, no merge tag, no image', () => {
