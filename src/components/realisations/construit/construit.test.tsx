@@ -66,6 +66,24 @@ describe('content', () => {
     expect(figureText(cash, 0.5).endsWith('+ relevés')).toBe(false)
   })
 
+  // Adversarial review K6 (dir-4, fai-4) and stage decisions of K7: voice is no longer sold, a figure
+  // needs a counted source, and the 68 bookings are worded as proof line P-8 (sector, period, no name).
+  it('says what the voice card was: tag « Agent vocal », no uncounted figure, the 68 bookings of P-8', () => {
+    const voice = CARDS.find((c) => c.kind === 'voice')
+    if (voice === undefined) throw new Error('the wall lost its voice card')
+    expect(voice.tags).toBe('Agent vocal')
+    expect(voice.text).toBe(
+      "Accueil téléphonique, rappels, prise de rendez-vous. Les 68 rendez-vous : un agent sortant, dans l'investissement locatif clé en main, d'avril à août 2026.",
+    )
+    expect(`${voice.tags} ${voice.text}`).not.toMatch(/sur demande|vingtaine|depuis 2024/i)
+    expect(voice.muted).toBe(true)
+  })
+
+  // The seminar card is the « matinée de sensibilisation » of proof line P-19, shown under « Conférences ».
+  it('tags the seminar card « Séminaire »', () => {
+    expect(CARDS.find((c) => c.kind === 'seminar')?.tags).toBe('Séminaire')
+  })
+
   it('has no em dash, no IAPreneurs and no client name in the visitor copy', () => {
     const all = CARDS.map((c) => `${c.tags} ${c.sector} ${c.text}`).join(' ')
     expect(all).not.toMatch(/—|IAPreneurs|cliente/)

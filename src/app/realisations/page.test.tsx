@@ -40,7 +40,12 @@ const BESOIN = {
   cta: 'Réserver 30 min',
 }
 
-/** 01b § 5 « Moved as is » (the eyebrow excepted: the h1 takes its role). */
+/**
+ * 01b § 5 « Moved as is » (the eyebrow excepted: the h1 takes its role), corrected after the adversarial
+ * review K6 of run 2026-11-12-structure-site-offre: the seminar card's tag is « Séminaire »; the voice
+ * card's tag is « Agent vocal » (voice is no longer sold), its uncounted « une vingtaine » left, and its
+ * 68 bookings are said as proof line P-8 states them (sector and period, no name).
+ */
 const MOVED = [
   'Exemples de réalisations.',
   'Plus de 20 clients accompagnés depuis 2025.',
@@ -60,11 +65,12 @@ const MOVED = [
   'École Noésia',
   'Le module Claude Code, 10 heures en 29 vidéos, et un atelier toutes les deux semaines.',
   'noesia.school',
+  'Séminaire',
   'Un cabinet de conseil en ingénierie',
   "Une matinée pour mettre l'IA générative entre les mains de son équipe.",
-  'Sur demande',
+  'Agent vocal',
   'Agents vocaux',
-  'Une vingtaine mis en service depuis 2024 : accueil téléphonique, rappels, prise de rendez-vous.',
+  "Accueil téléphonique, rappels, prise de rendez-vous. Les 68 rendez-vous : un agent sortant, dans l'investissement locatif clé en main, d'avril à août 2026.",
   '68 rendez-vous pris en cinq mois',
 ]
 

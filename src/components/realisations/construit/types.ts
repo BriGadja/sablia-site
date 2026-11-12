@@ -45,7 +45,7 @@ export interface BlueprintCard {
   icon: string
   sector: string
   text: string
-  /** Greyed tag (the « sur demande » card). */
+  /** Greyed tag (the voice card, a past réalisation no longer sold). */
   muted?: boolean
   Drawing: ComponentType<CardProps>
 }

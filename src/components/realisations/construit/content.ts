@@ -121,7 +121,8 @@ export const CARDS: BlueprintCard[] = [
     types: ['conferences', 'formations'],
     panels: 2,
     lines: 2,
-    tags: 'Formation',
+    /** The « matinée de sensibilisation » of proof line P-19 (adversarial review K6). */
+    tags: 'Séminaire',
     icon: ICON.cap,
     sector: 'Un cabinet de conseil en ingénierie',
     text: "Une matinée pour mettre l'IA générative entre les mains de son équipe.",
@@ -134,10 +135,15 @@ export const CARDS: BlueprintCard[] = [
     lines: 6,
     lineStep: 500,
     fig: { n: 68, unit: ' rendez-vous pris en cinq mois' },
-    tags: 'Sur demande',
+    /**
+     * A past réalisation, no longer sold (« Agent vocal », not « Sur demande »); the uncounted « une
+     * vingtaine » left; the 68 bookings as proof line P-8 states them: sector and period, no name
+     * (adversarial review K6, dir-4 and fai-4).
+     */
+    tags: 'Agent vocal',
     icon: ICON.phone,
     sector: 'Agents vocaux',
-    text: 'Une vingtaine mis en service depuis 2024 : accueil téléphonique, rappels, prise de rendez-vous.',
+    text: "Accueil téléphonique, rappels, prise de rendez-vous. Les 68 rendez-vous : un agent sortant, dans l'investissement locatif clé en main, d'avril à août 2026.",
     muted: true,
     Drawing: VoixCard,
   },
