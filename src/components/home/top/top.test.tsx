@@ -258,7 +258,14 @@ describe('the four doors before the photo, on the first phone screen', () => {
   it('small phones: each door is a 48 px row, its line visually hidden but still read', () => {
     const small = block(css, '@media (max-width: 640px)')
     expect(small).not.toBe('')
-    expect(block(small, '.door {')).toMatch(/min-height:\s*48px/)
+    // the row is the item, 48 px with its rules (border-box, as when the link carried them), and the
+    // link fills it: the first phone screen keeps the exact height US-104 was checked at
+    expect(block(css, '.doors {')).toMatch(/li \{[^}]*box-sizing:\s*border-box/)
+    const row = block(small, '.doors li {')
+    expect(row).toMatch(/min-height:\s*48px/)
+    expect(row).toMatch(/display:\s*flex/)
+    expect(block(small, '.door {')).toMatch(/flex:\s*1/)
+    expect(block(small, '.door {')).not.toMatch(/min-height/)
     const line = block(small, '.door-line {')
     expect(line).toMatch(/position:\s*absolute/)
     expect(line).toMatch(/clip-path:\s*inset\(50%\)/)

@@ -262,14 +262,19 @@
        doors): each door is one 48 px row, label left, arrow right. Its line stays in the HTML as the
        door's description (aria-describedby), visually hidden. */
     @media (max-width: 640px) {
-      .doors li,
-      .doors li:first-child {
+      /* 48 px with its rules (the item is border-box), the link filling it */
+      .doors li {
+        display: flex;
+        min-height: 48px;
         padding: 0;
       }
+      .doors li:first-child {
+        padding-top: 0;
+      }
       .door {
+        flex: 1;
         display: flex;
         align-items: center;
-        min-height: 48px;
       }
       .door-label {
         flex: 1;
