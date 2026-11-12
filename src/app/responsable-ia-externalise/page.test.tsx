@@ -52,7 +52,9 @@ function strings(value: unknown, key = ''): string[] {
 }
 
 // Plan sablia-site-seo-offre-lettres, Phase B, B1 (US-99): the offer page, price shown, FAQ as text.
-describe('/responsable-ia-temps-partage static HTML (SSR content rule)', () => {
+// Plan sablia-site-structure-offre, Phase C (US-105): renamed « Responsable IA externalisé », new
+// address, the h1 is the offer's title as Brice gave it on 12/11.
+describe('/responsable-ia-externalise static HTML (SSR content rule)', () => {
   const html = decode(renderToString(<Page />))
   const text = textOf(html)
 
@@ -76,12 +78,46 @@ describe('/responsable-ia-temps-partage static HTML (SSR content rule)', () => {
     expect([...at].sort((a, b) => a - b)).toEqual(at)
   })
 
-  it('has exactly one h1, naming the role and Rouen', () => {
+  it('has exactly one h1, the title of the offer, without the old name', () => {
     const h1s = html.match(/<h1[\s>][\s\S]*?<\/h1>/g) ?? []
     expect(h1s).toHaveLength(1)
     const h1 = textOf(h1s[0] ?? '')
-    expect(h1).toContain('responsable IA à temps partagé')
-    expect(h1).toContain('Rouen')
+    expect(h1).toBe('Votre responsable IA, sans le recruter')
+    expect(h1).not.toContain('temps partagé')
+  })
+
+  // The 12/11 title leaves Rouen out of the h1: the city stays on the first screen (the byline,
+  // before the booking button) and in the tab title.
+  it('still names Rouen on the first screen, before the booking button, and in the tab title', () => {
+    const top = html.slice(html.indexOf('id="top"'), html.indexOf('id="role"'))
+    expect(textOf(top.slice(0, top.indexOf('data-cta-book')))).toContain('Rouen')
+    expect(META.title).toContain('Rouen')
+  })
+
+  it('names the new offer in the eyebrow, the tab title and the description, never the old one', () => {
+    const top = html.slice(html.indexOf('id="top"'), html.indexOf('id="role"'))
+    const eyebrow = textOf(top.slice(0, top.indexOf('<h1')))
+    for (const [where, s] of [
+      ['eyebrow', eyebrow],
+      ['META.title', META.title],
+      ['META.description', META.description],
+    ] as const) {
+      expect(s, where).toMatch(/responsable IA externalisé/i)
+      expect(s, where).not.toContain('temps partagé')
+    }
+  })
+
+  // Copy deck B3 `offre.crm.*`: one sentence under the two items of #premier-mois (whose second item
+  // already names the call report) links the call-report page, as « Qui je suis » links the school.
+  it('links the call-report page from #premier-mois, under its two items', () => {
+    const at = html.indexOf('id="premier-mois"')
+    const block = html.slice(at, html.indexOf('</section>', at))
+    const link = block.match(/<a[^>]*href="\/offres\/compte-rendu-appel"[^>]*>([^<]+)<\/a>/)
+    expect(link?.[1]).toBe("Le compte rendu d'appel dans votre CRM")
+    expect(block.indexOf(link?.[0] ?? '<none>')).toBeGreaterThan(block.lastIndexOf('</ul>'))
+    expect(textOf(block)).toContain(
+      "Le compte rendu d'appel dans votre CRM se commande aussi seul, sans contrat mensuel, à prix fixe.",
+    )
   })
 
   it('shows both prices, the searched words of the role and the region', () => {
@@ -218,14 +254,14 @@ describe('/responsable-ia-temps-partage static HTML (SSR content rule)', () => {
   })
 })
 
-describe('/responsable-ia-temps-partage metadata', () => {
+describe('/responsable-ia-externalise metadata', () => {
   it('title and description from the copy, canonical on the path (outside /offres/**)', () => {
     expect(metadata.title).toEqual({ absolute: META.title })
     expect(metadata.title).toEqual({
-      absolute: 'Responsable IA à temps partagé pour PME, à Rouen · Sablia',
+      absolute: 'Responsable IA externalisé pour PME, à Rouen · Sablia',
     })
     expect(metadata.description).toBe(META.description)
-    expect(metadata.alternates?.canonical).toBe('/responsable-ia-temps-partage')
+    expect(metadata.alternates?.canonical).toBe('/responsable-ia-externalise')
     expect(metadata.robots).toEqual({ index: true, follow: true })
   })
 })
@@ -255,7 +291,7 @@ describe('every « Réserver 30 min » of the offer page opens the « Échange d
 // edges ». Each section's ground is the first `background` of its stylesheet; wherever two
 // neighbours differ, the later one opens on a dune whose near shape is its own ground, or the
 // earlier one ends on a floor dune (`is-bottom`, the hero) in that ground.
-describe('/responsable-ia-temps-partage section edges', () => {
+describe('/responsable-ia-externalise section edges', () => {
   const html = renderToString(<Page />)
   const SHEETS: readonly (readonly [string, string])[] = [
     ['top', '../../components/temps-partage/hero/hero.css'],
@@ -307,7 +343,7 @@ describe('/responsable-ia-temps-partage section edges', () => {
 
 // Offer-page review F6 #1 and #6 (US-99), read from the stylesheets: no gate measures focus rings,
 // and none tells a styled word from a link.
-describe('/responsable-ia-temps-partage stylesheets', () => {
+describe('/responsable-ia-externalise stylesheets', () => {
   const css = (rel: string) => readFileSync(join(__dirname, rel), 'utf8')
 
   it('flips the focus ring to gold on the night band #conditions, as on #fin (DESIGN.md § Colour)', () => {

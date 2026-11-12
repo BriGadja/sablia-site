@@ -1,6 +1,6 @@
 @layer theme, base, components, utilities;
 
-/* #gardez of /responsable-ia-temps-partage, on rose: the title, then three statements in columns, each
+/* #gardez of /responsable-ia-externalise, on rose: the title, then three statements in columns, each
    under a gold rule, its first clause set large. */
 @layer components {
   .v2-tp-gardez {

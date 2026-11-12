@@ -1,6 +1,6 @@
 @layer theme, base, components, utilities;
 
-/* #top of /responsable-ia-temps-partage: copy and booking on the left, photo 03 on the right, then the
+/* #top of /responsable-ia-externalise: copy and booking on the left, photo 03 on the right, then the
    three facts (price, commitment, size) as a plain sheet strip. Phone: copy, facts, photo. */
 @layer components {
   .v2-tp-hero {

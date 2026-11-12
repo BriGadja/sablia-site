@@ -53,7 +53,7 @@ test('llms.txt: the training first, the webinar, the follow-on offers, no price,
     'https://sablia.io/formations',
     'https://sablia.io/webinaire',
     'https://sablia.io/accompagnement',
-    'https://sablia.io/responsable-ia-temps-partage',
+    'https://sablia.io/responsable-ia-externalise',
     'https://sablia.io/realisations',
     'https://sablia.io/offres/compte-rendu-appel',
     'https://calendly.com/brice-gachadoat/echange-30-minutes',
@@ -61,6 +61,8 @@ test('llms.txt: the training first, the webinar, the follow-on offers, no price,
   ])
     assert.ok(llms.includes(needle), `llms.txt lacks ${needle}`)
   assert.doesNotMatch(llms, /basée à Paris/)
+  // US-105 (12/11): the old offer address answers 301; llms.txt names the new one only.
+  assert.doesNotMatch(llms, /sablia\.io\/responsable-ia-temps-partage\b/)
   assert.doesNotMatch(llms, RETIRED)
   assert.doesNotMatch(llms, EURO)
   assert.doesNotMatch(llms, /Plus de 20 clients|calendly\.com\/brice-gachadoat\/30min/)

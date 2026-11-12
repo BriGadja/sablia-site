@@ -1,6 +1,6 @@
 @layer theme, base, components, utilities;
 
-/* #premier-mois of /responsable-ia-temps-partage: the two items of month one on the left, the client
+/* #premier-mois of /responsable-ia-externalise: the two items of month one on the left, the client
    journey drawn in gold contours on the night on the right (outlined nodes and bars, no figure). */
 @layer components {
   .v2-tp-premier-mois {
@@ -43,6 +43,24 @@
       li:first-child {
         border-top: 1.5px solid #131620;
       }
+    }
+    /* a quiet note line under the items (DESIGN.md: 15 for notes); its link keeps the colours of
+       base.css (ink, gold-dark on hover) and the gold-mid underline of « Qui je suis » */
+    .tpm-crm {
+      margin: 6px 0 0;
+      max-width: 36em;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #61677a;
+      text-wrap: pretty;
+    }
+    .tpm-crm-link {
+      text-decoration: underline;
+      text-decoration-color: #b9852a;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 4px;
+      /* 24 px hit area for a link inside a sentence: block padding enlarges the rect, no text moves */
+      padding-block: 4px;
     }
 
     /* The drawing: the night ground, a thread through four nodes, a bar per step, all in gold contours

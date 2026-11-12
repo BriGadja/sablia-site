@@ -165,6 +165,21 @@ describe('mountStatic — Next export', () => {
     }
   })
 
+  // US-105 (12/11): the monthly offer moved to /responsable-ia-externalise; its first address
+  // answers 301 to the offer page.
+  it('redirects the old offer address to /responsable-ia-externalise with a 301', async () => {
+    for (const p of ['/responsable-ia-temps-partage', '/responsable-ia-temps-partage/']) {
+      const r = await get(p)
+      expect(r.status, p).toBe(301)
+      expect(r.headers.get('location'), p).toBe('/responsable-ia-externalise')
+    }
+    const r = await raw('//responsable-ia-temps-partag%65')
+    expect(r.status).toBe(301)
+    expect(r.location).toBe('/responsable-ia-externalise')
+    // a target is never a key: no loop, no chain
+    expect((await get('/responsable-ia-externalise')).status).not.toBe(301)
+  })
+
   it('serves a built issue page, and 404 on the placeholder (lettre/__none*) and an unknown issue', async () => {
     const issue = await get('/lettre/2026-11-10-exemple-de-numero')
     expect(issue.status).toBe(200)

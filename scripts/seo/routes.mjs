@@ -70,10 +70,11 @@ export const PAGE_ROUTES = [
     priority: 0.8,
   },
   {
-    // The monthly offer « responsable IA à temps partagé » (US-99), price shown; outside /offres/**
-    // on purpose (header-cta.ts gives every /offres/** route the CRM Calendly).
-    path: '/responsable-ia-temps-partage',
-    sources: [`${A}/responsable-ia-temps-partage/`, 'src/components/temps-partage/'],
+    // The monthly offer « Responsable IA externalisé » (US-99, renamed by US-105 on 12/11), price
+    // shown; outside /offres/** on purpose (header-cta.ts gives every /offres/** route the CRM
+    // Calendly). Its old address answers 301 here (server/static.ts).
+    path: '/responsable-ia-externalise',
+    sources: [`${A}/responsable-ia-externalise/`, 'src/components/temps-partage/'],
     indexable: true,
     changefreq: 'monthly',
     priority: 0.9,

@@ -7,7 +7,7 @@
  * the three monthly sections changing there turns this test RED, and the page copy follows.
  *
  * The FAQ answers that quote the meeting script read `script-rdv.md`, beside `offre.md`. The section
- * « Responsable IA à temps partagé » of `public/llms.txt` (in this repo) restates the offer too.
+ * « Responsable IA externalisé » of `public/llms.txt` (in this repo) restates the offer too.
  *
  * Outside the VPS working tree (a standalone clone, CI), point TEMPS_PARTAGE_PATH at the offer file
  * (the script must sit beside it). CI excludes this file because it needs the hub tree; it is never
@@ -165,9 +165,8 @@ const PREAMBLE = paragraphs(capture(RAW, /^# .+\n([\s\S]*?)\n## /m, 'preamble')[
 const CONDITION_BULLETS = bullets(section('Conditions'))
 
 describe('offer parity: the page opens on the offer', () => {
-  it('names the role of the offer title in the h1, with Rouen', () => {
+  it('carries the offer title in the h1', () => {
     expect(squash(HERO.h1)).toContain(TITLE)
-    expect(HERO.h1).toContain('Rouen')
   })
 
   it('renders the promise and the audience sentence word for word', () => {
@@ -287,8 +286,8 @@ describe('offer parity: every duration restated is the one of § Chaque mois ens
     ['the copy module', JSON.stringify(COPY)],
     ['REFERENT.more on /accompagnement', REFERENT.more.text],
     [
-      'llms.txt § Responsable IA à temps partagé',
-      section('Responsable IA à temps partagé', LLMS, LLMS_PATH),
+      'llms.txt § Responsable IA externalisé',
+      section('Responsable IA externalisé', LLMS, LLMS_PATH),
     ],
   ]
   for (const [where, text] of restated) {
@@ -329,7 +328,7 @@ describe('offer parity: every duration restated is the one of § Chaque mois ens
   it('the copy module and llms.txt name the engagement', () => {
     expect(engagements(JSON.stringify(COPY)).length).toBeGreaterThan(0)
     expect(
-      engagements(section('Responsable IA à temps partagé', LLMS, LLMS_PATH)).length,
+      engagements(section('Responsable IA externalisé', LLMS, LLMS_PATH)).length,
     ).toBeGreaterThan(0)
   })
 })

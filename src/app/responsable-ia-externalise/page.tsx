@@ -12,14 +12,15 @@ import { pageMetadata } from '@/lib/seo'
 import { site } from '@/lib/site'
 
 export const metadata = pageMetadata({
-  path: '/responsable-ia-temps-partage',
+  path: '/responsable-ia-externalise',
   title: META.title,
   description: META.description,
 })
 
 /**
- * The monthly offer « responsable IA à temps partagé » (US-99): price shown, FAQ as visible text, every
- * booking button on the « Échange de 30 minutes » Calendly. No page-level structured data.
+ * The monthly offer « Responsable IA externalisé » (US-99, renamed by US-105): price shown, FAQ as
+ * visible text, every booking button on the « Échange de 30 minutes » Calendly. No page-level
+ * structured data.
  */
 export default function TempsPartagePage() {
   return (

@@ -32,11 +32,11 @@ Une heure en visio sur Google Meet, le jeudi à midi, consacrée à un métier :
 - Sur mesure : l'intégration de Claude dans votre CRM, et des automatisations pour les tâches qui reviennent.
 - Le compte rendu d'appel dans votre CRM : le commercial raccroche, le CRM est déjà à jour (compte rendu et tâche de relance). Page et prix : https://sablia.io/offres/compte-rendu-appel (par outil : /hubspot, /pipedrive, /zoho, /salesforce, /google-sheets, /excel-365)
 
-## Responsable IA à temps partagé
+## Responsable IA externalisé
 
-Une offre mensuelle pour les PME de 10 à 50 personnes qui n'ont personne en interne pour mettre l'IA en place : Brice Gachadoat construit les outils, forme l'équipe et entretient ce qui tourne, deux jours de travail par mois. Engagement de trois mois, puis résiliable chaque mois ; le prix est affiché sur la page.
+Votre responsable IA, sans le recruter : une offre mensuelle pour les PME de 10 à 50 personnes qui n'ont personne en interne pour mettre l'IA en place. Brice Gachadoat, à Rouen, construit les outils, forme l'équipe et entretient ce qui tourne, deux jours de travail par mois. Engagement de trois mois, puis résiliable chaque mois ; le prix est affiché sur la page.
 
-- URL : https://sablia.io/responsable-ia-temps-partage
+- URL : https://sablia.io/responsable-ia-externalise
 
 ## Réalisations
 
@@ -69,4 +69,4 @@ Brice Gachadoat, fondateur de Sablia. Six ans au sein de la DSI du groupe LVMH, 
 - Email : brice@sablia.io
 - Échange gratuit de 30 minutes : https://calendly.com/brice-gachadoat/echange-30-minutes
 
-Dernière mise à jour : 2026-11-11.
+Dernière mise à jour : 2026-11-12.
