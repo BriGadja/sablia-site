@@ -83,10 +83,11 @@ describe('static HTML (SSR content rule)', () => {
     expect(html).not.toMatch(/sur devis|garanti|rembours/i)
   })
 
-  it('links to the offer page', () => {
-    expect(html).toMatch(
-      /<a[^>]*href="\/formations"[^>]*>Voir l&#x27;offre en détail|<a[^>]*href="\/formations"[^>]*>Voir l'offre en détail/,
-    )
+  // US-104, adversarial review K6 (pos-2): « l'offre » on the home is the monthly offer
+  // (« Voir l'offre mensuelle » just above), so the training panel's link names the training.
+  it('links to the training page as « Voir la formation en détail », never « l’offre »', () => {
+    expect(html).toMatch(/<a[^>]*href="\/formations"[^>]*>Voir la formation en détail/)
+    expect(html).not.toMatch(/Voir l(&#x27;|')offre en détail/)
   })
 
   it('is the final state: the bar full and the figures in place', () => {

@@ -35,6 +35,7 @@ export const OFFRE = {
     },
   ],
   prix: "Le prix arrive dans le devis, après l'échange de 30\u00a0minutes.",
-  link: "Voir l'offre en détail",
+  /** « l'offre » on the home is the monthly offer (adversarial review K6, pos-2): the link names the training. */
+  link: 'Voir la formation en détail',
   href: '/formations',
 } as const

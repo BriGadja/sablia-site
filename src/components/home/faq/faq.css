@@ -117,6 +117,20 @@
       font-size: 15px;
       line-height: 1.5;
     }
+    /* A link inside an answer (« responsable IA externalisé »): the inline-link look of the offer page's
+       #qui (gold-mid underline on a light ground), with a 24 px hit area that moves no text. */
+    .fq-link {
+      color: #131620;
+      text-decoration: underline;
+      text-decoration-color: #b9852a;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 3px;
+      padding-block: 4px;
+
+      &:hover {
+        color: #835a0c;
+      }
+    }
     .fq-dots {
       align-self: flex-start;
       display: flex;

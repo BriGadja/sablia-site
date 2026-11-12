@@ -17,8 +17,9 @@ describe('heading copy (deck « Ce que je construis »)', () => {
   it('carries the deck wording', () => {
     expect(EYEBROW).toBe('Ce que je construis')
     expect(TITLE).toBe('Les tâches qui reviennent, confiées à Claude.')
+    // Adversarial review K6 (dir-7): « elle » could read as Claude; the team is named again.
     expect(LINE).toBe(
-      "Chaque outil part d'une tâche que votre équipe fait déjà : Claude prépare, elle relit et valide.",
+      "Chaque outil part d'une tâche que votre équipe fait déjà : Claude prépare, et votre équipe relit et valide.",
     )
     expect(SR_INTRO).toBe(
       "Exemples animés d'outils construits sur des tâches qui reviennent. Pour chaque cas, une demande arrive et Claude produit ce que vous validez : un devis, un mail envoyé à la bonne personne, le résumé de la veille du matin, les documents d'une intervention, le compte rendu d'une séance et son mail de suivi.",

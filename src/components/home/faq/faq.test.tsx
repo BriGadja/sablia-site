@@ -29,13 +29,15 @@ const byQ = (q: string) => {
 
 // Plan site-formation-lot1, U9 (US-98): the training FAQ of 01b replaces the nine CRM questions.
 describe('content', () => {
-  it('holds the nine training questions in the 01b order', () => {
+  // US-104, adversarial review K6 (pos-3): on the home, which opens on the monthly offer, the two
+  // questions whose answers hold for the training alone name the training (`/formations` keeps its own).
+  it('holds the nine questions in the 01b order, the two training-only ones naming the training', () => {
     expect(FAQS.map((f) => f.q)).toEqual([
       'Combien ça coûte ?',
       'Mon équipe utilise déjà Copilot ou ChatGPT.',
       'Où se passe la formation ?',
-      'Combien de personnes ?',
-      'Que faut-il préparer ?',
+      'Combien de personnes par formation ?',
+      'Que faut-il préparer pour la formation ?',
       'Nos dossiers sont confidentiels.',
       'Et après les trois jours ?',
       'Qui anime ?',
@@ -55,6 +57,17 @@ describe('content', () => {
     expect(byQ('Combien ça coûte ?').a).toBe(
       "Pour le responsable IA externalisé, le prix est affiché sur sa page. Pour une formation ou une conférence, le prix dépend de votre équipe et du format retenu. Il arrive dans le devis, après l'échange de 30 minutes. Le webinaire et l'échange sont gratuits.",
     )
+  })
+
+  // US-104, adversarial review K6 (tel-6): « sa page » is a link, on the answer's own words.
+  it('« Combien ça coûte ? » links the words « responsable IA externalisé » to the offer page', () => {
+    const f = byQ('Combien ça coûte ?')
+    expect(f.link).toEqual({
+      text: 'responsable IA externalisé',
+      href: '/responsable-ia-externalise',
+    })
+    expect(f.a).toContain(`Pour le ${f.link?.text}, le prix est affiché sur sa page.`)
+    for (const other of FAQS.filter((x) => x !== f)) expect(other.link, other.q).toBeUndefined()
   })
 
   // US-104 (copy deck B2 `home.faq.apres.a`): after the three days, the monthly offer, never the
@@ -141,6 +154,18 @@ describe('Faq', () => {
     expect(section?.querySelectorAll('button.qbtn').length).toBe(9)
     for (const f of FAQS) expect(section?.textContent).toContain(f.a)
     expect(section?.querySelector('[aria-live="polite"]')).not.toBeNull()
+  })
+
+  // tel-6: the link sits inside the first answer, in the server HTML, its text unchanged.
+  it('renders the price answer with its words linked to /responsable-ia-externalise', () => {
+    mockReducedMotion(false)
+    const { container } = render(<Faq />)
+    const answer = container.querySelector('.fq-pair:not([hidden]) .fq-a')
+    expect(answer?.textContent).toBe(FAQS[0].a)
+    const link = answer?.querySelector('a.fq-link')
+    expect(link?.getAttribute('href')).toBe('/responsable-ia-externalise')
+    expect(link?.textContent).toBe('responsable IA externalisé')
+    expect(container.querySelectorAll('.fq-a a')).toHaveLength(1)
   })
 
   it('stages question 1 first, the others stay out of view', () => {

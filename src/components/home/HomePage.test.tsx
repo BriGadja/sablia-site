@@ -171,9 +171,18 @@ function textNodes(node: Node, out: string[] = []): string[] {
 }
 
 const SAYS_PRICE = /\bprix\b|tarif/i
+const PRICE_FAQ = FAQS.find((f) => f.q === 'Combien ça coûte ?')
+/** The price answer's text nodes: its words around the link to the offer page (K6 review, tel-6). */
+const PRICE_FAQ_NODES = (() => {
+  const a = PRICE_FAQ?.a ?? 'missing FAQ answer'
+  const link = PRICE_FAQ?.link?.text
+  const at = link ? a.indexOf(link) : -1
+  if (!link || at < 0) return [a]
+  return [a.slice(0, at), a.slice(at + link.length)].map((t) => t.trim())
+})()
 const WHERE_THE_PRICE_LIVES = new Set<string>([
   OFFRE.prix,
-  FAQS.find((f) => f.q === 'Combien ça coûte ?')?.a ?? 'missing FAQ answer',
+  ...PRICE_FAQ_NODES,
   WEBINAR_HERO.facts.find((f) => f.key === 'prix')?.label ?? 'missing webinar fact',
 ])
 

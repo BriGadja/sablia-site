@@ -7,8 +7,9 @@
 
 export const EYEBROW = 'Ce que je construis'
 export const TITLE = 'Les tâches qui reviennent, confiées à Claude.'
+/** « votre équipe » named twice: « elle » could read as Claude (adversarial review K6, dir-7). */
 export const LINE =
-  "Chaque outil part d'une tâche que votre équipe fait déjà : Claude prépare, elle relit et valide."
+  "Chaque outil part d'une tâche que votre équipe fait déjà : Claude prépare, et votre équipe relit et valide."
 
 /** Screen-reader intro of the animated cases (the scenes' own text follows it in `.auto-sr`). */
 export const SR_INTRO =

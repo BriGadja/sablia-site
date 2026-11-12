@@ -7,14 +7,17 @@ export const CHAT_NAME = 'Sablia'
 export interface Faq {
   q: string
   a: string
+  /** Words of `a` itself (first occurrence) linked to a page of the site; nothing is added to the answer. */
+  link?: { text: string; href: string }
 }
 
 /**
  * The home FAQ, 01b order (plan site-formation-lot1, U9; `/formations` keeps its own copy of items 2 to
- * 6 and 9). Items 1 and 7 and the closing band follow copy deck B2 (US-104): the monthly offer shows its
- * price on its own page; a training or a talk gets it in the quote after the 30-minute call (as
- * `/webinaire/apres-reservation` says). No amount anywhere. Answers are impersonal so the « nous » home
- * and the « je » offer page share them.
+ * 6 and 9: the same answers; since the K7 review the home's questions 4 and 5 name the training, its
+ * own do not). Items 1 and 7 and the closing band follow copy deck B2 (US-104): the monthly offer shows
+ * its price on its own page, linked from item 1; a training or a talk gets it in the quote after the
+ * 30-minute call (as `/webinaire/apres-reservation` says). No amount anywhere. Answers are impersonal so
+ * the « nous » home and the « je » offer page share them.
  *
  * « Nos dossiers sont confidentiels. » says only what Anthropic does by default on its business offers,
  * read live on 2026-11-01: https://privacy.claude.com/en/articles/7996868-is-my-data-used-for-model-training
@@ -26,6 +29,7 @@ export const FAQS: readonly Faq[] = [
   {
     q: 'Combien ça coûte ?',
     a: "Pour le responsable IA externalisé, le prix est affiché sur sa page. Pour une formation ou une conférence, le prix dépend de votre équipe et du format retenu. Il arrive dans le devis, après l'échange de 30 minutes. Le webinaire et l'échange sont gratuits.",
+    link: { text: 'responsable IA externalisé', href: '/responsable-ia-externalise' },
   },
   {
     q: 'Mon équipe utilise déjà Copilot ou ChatGPT.',
@@ -36,11 +40,11 @@ export const FAQS: readonly Faq[] = [
     a: "Dans vos locaux, avec votre équipe. Les trois jours peuvent se suivre ou s'étaler, selon votre organisation.",
   },
   {
-    q: 'Combien de personnes ?',
+    q: 'Combien de personnes par formation ?',
     a: "Jusqu'à 12 personnes par programme. Pour une équipe plus grande, on en parle pendant l'échange.",
   },
   {
-    q: 'Que faut-il préparer ?',
+    q: 'Que faut-il préparer pour la formation ?',
     a: "Une salle, un ordinateur par participant et une connexion internet. Avant la première demi-journée, la liste des tâches que votre équipe aimerait confier à l'IA.",
   },
   {
