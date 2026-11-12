@@ -1,6 +1,6 @@
 # SEO — Sablia Site (v2)
 
-**Last updated**: 2026-11-11 (the Tuesday letter: one page per issue `/lettre/<slug>` with `Article` data, listed on `/newsletter`, in the sitemap; earlier: training lot 1, `/realisations`). Built on the 2026-10-26 v2 build (Next.js static export). The Vite-era `meta-tags.json`, `SEO.tsx` and `react-helmet-async` no longer exist.
+**Last updated**: 2026-11-12 (the site restructured around the monthly offer: `/responsable-ia-externalise`, `/conferences`, `/accompagnement` and the old offer address in 301, the organisation block, `llms.txt` and `ai.txt` rewritten, doors and bookings in the measure; earlier: the Tuesday letter pages, training lot 1, `/realisations`). Built on the 2026-10-26 v2 build (Next.js static export). The Vite-era `meta-tags.json`, `SEO.tsx` and `react-helmet-async` no longer exist.
 
 ---
 
@@ -32,11 +32,12 @@ On every `dist/public/**/*.html`: the audience tracker and consent banner absent
 
 | Page | Types | Source |
 |------|-------|--------|
-| every page | ProfessionalService (founder Person, PostalAddress with locality Rouen and region Normandie, no street and no postal code, `areaServed` Normandie and France, the registered office on the legal pages only (`/mentions-legales`, `/cgv`); the footer says Rouen in visible text, as Google asks for marked-up content; OfferCatalog with the OF-1 price and delay read from `of1.ts`; voice agent and custom CRM « sur demande », no price). Since lot 1 the alternate name is the training tagline (`site.tagline`) and no text says « dans les CRM » or « × CRM » (a test in `src/components/seo` refuses it) | `OrganizationJsonLd`, mounted in `layout.tsx` |
+| every page | ProfessionalService (founder Person, PostalAddress with locality Rouen and region Normandie, no street and no postal code, `areaServed` Normandie and France, the registered office on the legal pages only (`/mentions-legales`, `/cgv`); the footer says Rouen in visible text, as Google asks for marked-up content; description: what Sablia does today, the monthly offer « Responsable IA externalisé » first, then the training « L'IA au travail », the shorter formats and the conferences on request, no webinar (one dated session); `serviceType` led by « Responsable IA externalisé »; OfferCatalog of four: « Responsable IA externalisé », « L'IA au travail », « Conférences et séminaires », and OF-1, the only one priced, from `of1.ts`; no « Référent IA », no voice agent, no custom CRM). The alternate name is the site tagline (`site.tagline`); no text says « dans les CRM » or « × CRM », nor « référent » or « temps partagé » (`src/components/seo/seo.test.tsx` refuses them; copy deck B6 `org.*`) | `OrganizationJsonLd`, mounted in `layout.tsx` |
 | `/offres/compte-rendu-appel` | Service (Offer with UnitPriceSpecification), FAQPage, BreadcrumbList | `of1-schema.ts` + `BreadcrumbJsonLd` |
 | the four CRM pages | Service, FAQPage, BreadcrumbList | `CrmPageView.tsx`, `src/content/crm/schema.ts` |
 | `/guides/integrer-l-ia-dans-votre-entreprise` | Article, FAQPage, BreadcrumbList | the page file |
-| `/responsable-ia-temps-partage` | none at page level: its questions are visible text only (no FAQPage, whose results Google stopped on 2026-05-07), the organisation block is the layout's | — |
+| `/responsable-ia-externalise` | none at page level: its questions are visible text only (no FAQPage, whose results Google stopped on 2026-05-07), the organisation block is the layout's | — |
+| `/conferences` | none at page level (no `Event`: talks are on request, not dated sessions) | — |
 | `/ressources/<slug>` | BreadcrumbList, VideoObject (only when the poster is on disk: the thumbnail must be our own file, never `i.ytimg.com`) | `src/app/ressources/[slug]/page.tsx` |
 | `/lettre/<slug>` | Article (author = the founder Person of the organisation block, publisher = its `@id`; `datePublished` = the send instant, the same value the page shows as its Paris date; `dateModified` = `updated_at` only when more than one hour after the send; `image` = the own-hosted poster when the issue has a video, else the default `/og-image.png`, as absolute URLs), BreadcrumbList (Newsletter, then the issue). No VideoObject: a post that embeds a video is not a watch page | `src/components/lettre/article-schema.ts`, `src/app/lettre/[slug]/page.tsx` |
 
@@ -44,15 +45,15 @@ On every `dist/public/**/*.html`: the audience tracker and consent banner absent
 
 ## Sitemap
 
-Written to `dist/public/sitemap.xml` by `node scripts/seo/generate-sitemap.mjs` at build time: every indexable route of `routes.mjs` dated from the ledger, plus every published `/ressources/<slug>` and `/lettre/<slug>` (priority 0.6, monthly, dated from its row: `updated_at`, else `published_at`). `/ressources` is dated max(ledger, latest resource) and `/newsletter` max(ledger, latest issue), so a new issue moves the list page too; the `/newsletter` sources also include `src/components/lettre/content.ts` and `date.ts` (the strings and dates of its list). A Supabase read failure fails the build (for the issues: on a strict build only). `/realisations` is dated by `src/app/realisations/` + `src/components/realisations/`; the home by the nine section folders under `src/components/home/` (`top offre automatisations formations derriere webinaire apres videos faq`) plus `HomePage.tsx` and `home-metadata.ts`: `scene` (now on the CRM offer page) and `construit` (now under `/realisations`) no longer date the home. The offer page `/responsable-ia-temps-partage` (US-99) is dated by `src/app/responsable-ia-temps-partage/` + `src/components/temps-partage/`. The table below is the indexable part of `PAGE_ROUTES`, generated from the file on 2026-11-11 (regenerate it when `routes.mjs` changes):
+Written to `dist/public/sitemap.xml` by `node scripts/seo/generate-sitemap.mjs` at build time: every indexable route of `routes.mjs` dated from the ledger, plus every published `/ressources/<slug>` and `/lettre/<slug>` (priority 0.6, monthly, dated from its row: `updated_at`, else `published_at`). `/ressources` is dated max(ledger, latest resource) and `/newsletter` max(ledger, latest issue), so a new issue moves the list page too; the `/newsletter` sources also include `src/components/lettre/content.ts` and `date.ts` (the strings and dates of its list). A Supabase read failure fails the build (for the issues: on a strict build only). `/realisations` is dated by `src/app/realisations/` + `src/components/realisations/`; the home by its ten band folders under `src/components/home/`, in page order (`top mensuel automatisations offre formations conferences videos derriere webinaire faq`), plus `HomePage.tsx` and `home-metadata.ts`: `scene` (now on the CRM offer page), `construit` (now under `/realisations`) and `apres` (gone on 12/11) no longer date the home. The offer page `/responsable-ia-externalise` (US-99, US-105) is dated by `src/app/responsable-ia-externalise/` + `src/components/temps-partage/`, `/conferences` (US-107) by `src/app/conferences/` + `src/components/conferences/` (the shell's `WebinarReminder` it mounts is not a source: shell changes date no page). The legal pages and `/thank-you` share `src/components/legal/` as a source, so a change of the thank-you text re-dates the three legal pages too. The table below is the indexable part of `PAGE_ROUTES`, generated from the file on 2026-11-12 (regenerate it when `routes.mjs` changes):
 
 | Route | Priority | Change Freq |
 |-------|----------|-------------|
 | `/` | 1.0 | weekly |
-| `/formations` | 0.8 | monthly |
-| `/accompagnement` | 0.8 | monthly |
-| `/responsable-ia-temps-partage` | 0.9 | monthly |
 | `/realisations` | 0.7 | monthly |
+| `/formations` | 0.8 | monthly |
+| `/conferences` | 0.8 | monthly |
+| `/responsable-ia-externalise` | 0.9 | monthly |
 | `/mentions-legales` | 0.3 | yearly |
 | `/politique-confidentialite` | 0.3 | yearly |
 | `/cgv` | 0.3 | yearly |
@@ -70,7 +71,7 @@ Written to `dist/public/sitemap.xml` by `node scripts/seo/generate-sitemap.mjs` 
 | `/ressources/<slug>` (one per published resource) | 0.6 | monthly |
 | `/lettre/<slug>` (one per published issue of the letter) | 0.6 | monthly |
 
-Built but kept out of the sitemap: `/thank-you`, `/webinaire/merci`, `/webinaire/apres-reservation`, `/webinaire/questionnaire` (all noindex). `/roi`, `/about` and `/lettre` are 301 in `server/static.ts` (to `/offres/compte-rendu-appel`, `/#derriere` and `/newsletter`).
+Built but kept out of the sitemap: `/thank-you`, `/webinaire/merci`, `/webinaire/apres-reservation`, `/webinaire/questionnaire` (all noindex). `/roi`, `/about` and `/lettre` are 301 in `server/static.ts` (to `/offres/compte-rendu-appel`, `/#derriere` and `/newsletter`), and so are `/responsable-ia-temps-partage` and `/accompagnement` (to `/responsable-ia-externalise`, since 12/11): none is in the sitemap.
 
 ### `lastmod`
 
@@ -83,7 +84,7 @@ The date of a page is the day its own sources last changed, not the build day. `
 ## Robots and AI-search files
 
 - `public/robots.txt`: all user agents allowed, sitemap declared, explicit blocks for GPTBot (`Crawl-delay: 10`), OAI-SearchBot, ClaudeBot, Claude-User, Claude-SearchBot, PerplexityBot and Google-Extended, all `Allow: /`.
-- `public/llms.txt`: markdown summary for LLMs (the training offer with no price, the free webinar, the conference as an option, then the CRM offer, the monthly offer « responsable IA à temps partagé » with its URL and no amount (its price is on its page), the spreadsheet pages and the pages list); it is a proof surface for `content-gates.sh` (no em dash, no banned figure). `public/.well-known/ai.txt` points to it. Both are served by the static server (`.well-known` is the one dotted folder opened).
+- `public/llms.txt`: markdown summary for LLMs (copy deck B6 `llms.*`, B3 `llms.offre.*`): a first line saying what Sablia does today, then the monthly offer « Responsable IA externalisé » with its URL and no amount (its price is on its page) and the call report sold without a monthly contract, the training « L'IA au travail » with no price, the conferences and seminars on request with their three topics and URL, the free webinar, the réalisations, the trainer, the questions, the resources and the contact; no « Après la formation » nor « référent IA » any more. It is a proof surface for `content-gates.sh` (no em dash, no banned figure); `scripts/seo/head-hygiene.test.mjs` pins its first line, its URLs, the offer before the training, and no amount. `public/.well-known/ai.txt` points to it; its `description:` line says the same in one sentence. Both are served by the static server (`.well-known` is the one dotted folder opened).
 
 ## Reading the measurement: doors and bookings (US-110)
 

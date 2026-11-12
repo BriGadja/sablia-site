@@ -15,10 +15,15 @@ web
   bureaux d'études. Secondary: people comparing trainers; Google visitors on the old CRM pages.
 
 ## Product Purpose
-sablia.io sells one offer, the training « L'IA au travail »: three days in the client's offices (six half-days),
-up to 12 people, on the team's own files, with Claude. Webinar first, call second, three days third: a free
-one-hour webinar on Thursday at noon, then the 30-minute call (Calendly « Échange de 30 minutes »), then a quote.
-Success = a webinar registration, then a booked call; read on 15/12 as counts, not rates.
+Since 12/11 (run `2026-11-12-structure-site-offre`) sablia.io leads with one monthly offer, « Responsable IA
+externalisé » (`/responsable-ia-externalise`, price shown on that page only): Brice builds the tools, trains the team
+and maintains what runs, two days of work a month, three months then month to month. The menu ranges the rest by
+intent: the training « L'IA au travail » (three days in the client's offices, six half-days, up to 12 people, on the
+team's own files, with Claude; formats from a half-day on request; price in the quote), the conferences and seminars
+on request (`/conferences`, price in the quote), the réalisations (`/realisations`, a precise need built on request).
+The ways in stay the free one-hour webinar on Thursday at noon (while a session is ahead) and the 30-minute call
+(Calendly « Échange de 30 minutes »). Success = a booked call, and a webinar registration while a session is ahead;
+read on 15/12 as counts, not rates (doors and bookings: `docs/SEO.md` § Reading the measurement).
 
 ## Positioning
 On site, on the team's own files, the same trainer from the first call to the last half-day. Half-day 1 sets the
@@ -34,7 +39,8 @@ our bet.
   referred visits in 28 days. 26/10 → 01/11: 36 visitors, 1 booking click. [ASSUMED] phone first, desktop to decide.
 
 ## Capabilities and Constraints
-- No training price anywhere (three days, conference, référent): it comes in the quote after the call (Q3). No
+- No price for the training nor the conferences (three days, shorter formats, talks): it comes in the quote after
+  the call (Q3). The monthly offer shows its price on its own page only (Brice, 11/11), never on the home. No
   guarantee before the lawyer (06/11). The two pilot places are said in the call only.
 - Red lines (hub guard `projects/sablia/offre/formation/ia-au-travail/redlines/`): never « CPF », « finançable »,
   « certifié », « Qualiopi »; no promised figure; no fake scarcity. The activity declaration only in its
@@ -43,14 +49,16 @@ our bet.
   training-partner content, never the school's former name, no client or contract counterpart named. Mister IA: its mechanics only, never its
   titles, pages or visuals. No `Event` structured data.
 - No client company named (sector only; exceptions: Hélène, the Noésia school); never Sablia's headcount. « Nous »
-  on the home, « je » on `/formations` and `/accompagnement`; Brice is the only face.
+  and « je » on the home (copy deck T3), « je » on `/formations`, `/conferences` and the offer page; Brice is the
+  only face. Never « audit » nor « Référent IA », and no hours framing of the monthly contract.
 - A title of 7 words or fewer + at most one line per section; the animation or the photo carries the logic
   (Brice, 19/10). The 8-word hero title is Brice's Q1 choice.
 
 **CRM offer (follow-on).** « Compte rendu d'appel » (the call report written into the CRM) stays on
 `/offres/compte-rendu-appel` and its six variants: unchanged, indexed, prices as before, out of the menu and the
-home, linked from « Après la formation » and the footer; the call → CRM animation joins it.
-« Après la formation » (`/accompagnement`): the référent IA (2 h a month, questions within 48 h) and sur-mesure.
+home, linked from the footer, the offer page (« Le compte rendu d'appel dans votre CRM se commande aussi seul ») and
+the guide; the call → CRM animation joins it. « Après la formation » (`/accompagnement`) and its référent IA left on
+12/11: the address answers 301 to the monthly offer page.
 
 ## Brand Commitments
 - Name « Sablia » (from « sablier »). Logo: an S drawn as an hourglass, from Brice's sketch (29/09); the sand
