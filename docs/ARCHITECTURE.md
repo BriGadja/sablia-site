@@ -74,7 +74,7 @@ Routes are the folders of `src/app/`; the manifest used by the sitemap and the e
 |------|---------|
 | `seo.ts` | `pageMetadata()`, `SITE_ORIGIN` |
 | `analytics.ts` | Umami loader, website id per hostname, consent-gated recorder, keep-UTM hook (`beforeSend`), `?stats=off` device opt-out (`applyStatsParam`) |
-| `events.ts` | tier-1 and tier-2 event capture (delegated listeners, zones from `section[id]`, `dest: 'webinaire'` on the click) |
+| `events.ts` | tier-1 and tier-2 event capture (delegated listeners, zones from `data-zone` then `section[id]`, the door's name as `dest` on a click toward one of the five doors: `responsable-ia`, `formations`, `conferences`, `realisations`, `webinaire`) |
 | `consent.ts` | `sablia_consent` storage, 6 months, silence = refusal |
 | `booking.ts`, `site.ts` | `openBookingUrl`, canonical constants (`bookingUrl` CRM, `formationBookingUrl` training, contact address) |
 | `contenu.ts` | Supabase reads of `contenu_ressources`; `SABLIA_FIXTURE_SLUGS` fixtures |
