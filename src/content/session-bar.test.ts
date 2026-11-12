@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { BAR, barShownOn, SESSION_START, sessionUpcoming } from './session-bar'
 import { NEXT_WEBINAR_BANNER, PATHS, SESSION } from './webinaire'
@@ -75,5 +77,12 @@ describe('BAR', () => {
   it('SESSION_START agrees with the session page (same day, same start hour)', () => {
     expect(SESSION_START.slice(0, 10)).toBe(SESSION.slug)
     expect(SESSION.hours).toMatch(new RegExp(`^de ${Number(SESSION_START.slice(11, 13))} h `))
+  })
+
+  // The API writes its own hard-coded slug to every registration (it does not import SESSION):
+  // a date move that forgets it stores new registrants under a slug the operator script never reads.
+  it('the API writes the same session slug as the page (api/webinaire.ts SESSION_SLUG)', () => {
+    const api = readFileSync(resolve(__dirname, '../../api/webinaire.ts'), 'utf8')
+    expect(api.match(/const SESSION_SLUG = '([^']+)'/)?.[1]).toBe(SESSION.slug)
   })
 })
