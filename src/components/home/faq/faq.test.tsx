@@ -166,6 +166,10 @@ describe('Faq', () => {
     expect(link?.getAttribute('href')).toBe('/responsable-ia-externalise')
     expect(link?.textContent).toBe('responsable IA externalisé')
     expect(container.querySelectorAll('.fq-a a')).toHaveLength(1)
+    // inline in the sentence's own run (score.py and WCAG 2.5.8 read a link in a text run as inline,
+    // 24 px; directly in the bubble's block it would need 44 px)
+    expect(link?.parentElement?.tagName).toBe('SPAN')
+    expect(link?.parentElement?.textContent).toBe(FAQS[0].a)
   })
 
   it('stages question 1 first, the others stay out of view', () => {

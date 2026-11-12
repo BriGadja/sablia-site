@@ -10,18 +10,21 @@ import { useReducedMotion } from '@/lib/hooks/useReducedMotion'
 import { ask, CHAT_NAME, EYEBROW, FAQS, type Faq as FaqItem, TITLE } from './content'
 import './faq.css'
 
-/** An answer as gated, its `link` words (taken from the answer itself) wrapped in a link. */
+/**
+ * An answer as gated, its `link` words (taken from the answer itself) wrapped in a link. The sentence
+ * stays one inline run (a `span`), so the link reads as a link inside text (24 px target), not a block.
+ */
 function Answer({ faq }: { faq: FaqItem }) {
   const at = faq.link ? faq.a.indexOf(faq.link.text) : -1
   if (!faq.link || at < 0) return <>{faq.a}</>
   return (
-    <>
+    <span>
       {faq.a.slice(0, at)}
       <Link href={faq.link.href} className="fq-link">
         {faq.link.text}
       </Link>
       {faq.a.slice(at + faq.link.text.length)}
-    </>
+    </span>
   )
 }
 
