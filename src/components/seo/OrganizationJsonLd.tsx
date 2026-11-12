@@ -3,11 +3,12 @@ import { SITE_ORIGIN } from '@/lib/seo'
 import { site } from '@/lib/site'
 import { JsonLd } from './JsonLd'
 
-// Site-wide ProfessionalService (every page, via the root layout). The training « L'IA au travail »
-// leads (plan site-formation-lot1, U13a) and has no public price, so no priceSpecification; its texts
-// are the 01b strings. OF-1 (the CRM call report) stays as a follow-on, priced from of1.ts (the offer
-// file's mirror); the référent IA, voice agents and custom CRM are « sur demande », no price. No
-// `Event` for the webinar (PRODUCT.md).
+// Site-wide ProfessionalService (every page, via the root layout). Its texts are copy deck B6 `org.*`
+// (plan sablia-site-structure-offre I3, US-111): what Sablia does today, the monthly offer
+// « Responsable IA externalisé » first, then the training « L'IA au travail », the conferences on
+// request and OF-1 (the CRM call report). Only OF-1 is priced here, from of1.ts (the offer file's
+// mirror): the monthly price lives on its page, the training and the conferences are on quote. No
+// `Event` for the webinar (PRODUCT.md), and the webinar, one dated session, is not in the description.
 const onRequest = (name: string, description: string) => ({
   '@type': 'Offer',
   itemOffered: { '@type': 'Service', name, description },
@@ -35,7 +36,7 @@ export function OrganizationJsonLd() {
         logo: `${SITE_ORIGIN}/logo.svg`,
         image: `${SITE_ORIGIN}/og-image-home.png`,
         description:
-          "Formation à l'IA pour les équipes des entreprises : trois jours dans leurs locaux, jusqu'à 12 personnes, pour apprendre à travailler avec Claude (Anthropic) sur leurs propres dossiers. Premier pas : un webinaire gratuit d'une heure, le jeudi midi. Ensuite, un référent IA, ou Claude intégré sur mesure dans le CRM et les outils de l'entreprise.",
+          "Sablia met l'IA en place dans les PME de 10 à 50 personnes : un responsable IA externalisé au mois, qui construit les outils, forme l'équipe et entretient ce qui tourne ; la formation « L'IA au travail », trois jours dans l'entreprise, jusqu'à 12 personnes, avec Claude (Anthropic) ; des formats plus courts et des conférences, sur demande.",
         email: 'brice@sablia.io',
         founder: FOUNDER,
         address: {
@@ -45,8 +46,9 @@ export function OrganizationJsonLd() {
           addressCountry: 'FR',
         },
         serviceType: [
+          'Responsable IA externalisé',
           "Formation à l'IA en entreprise",
-          'Référent IA',
+          "Conférences et séminaires sur l'IA",
           'Intégration de Claude dans le CRM',
           'Automatisation des processus commerciaux',
         ],
@@ -71,12 +73,16 @@ export function OrganizationJsonLd() {
           name: 'Catalogue Sablia',
           itemListElement: [
             onRequest(
+              'Responsable IA externalisé',
+              "Chaque mois, un outil de plus en service, une équipe qui sait s'en servir, et le suivi de ce qui tourne. Engagement de trois mois, puis résiliable chaque mois.",
+            ),
+            onRequest(
               "L'IA au travail",
               "Trois jours dans vos locaux, jusqu'à 12 personnes : votre équipe apprend Claude sur ses propres dossiers, avec ses règles sur les données. Le devis suit un échange gratuit de 30 minutes.",
             ),
             onRequest(
-              'Référent IA',
-              'Une séance de 2 h par mois avec votre équipe, et vos questions sous 48 h.',
+              'Conférences et séminaires',
+              "Une conférence ou une matinée de séminaire sur l'IA, pour toute l'équipe. Sur demande, prix sur devis.",
             ),
             {
               '@type': 'Offer',
@@ -88,8 +94,6 @@ export function OrganizationJsonLd() {
                 valueAddedTaxIncluded: false,
               },
             },
-            onRequest('Agent vocal', 'Sur demande.'),
-            onRequest('CRM sur mesure', 'Sur demande.'),
           ],
         },
       }}

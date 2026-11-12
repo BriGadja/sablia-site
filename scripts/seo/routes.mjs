@@ -28,17 +28,18 @@ export const PAGE_ROUTES = [
       `${A}/page.tsx`,
       `${A}/home-metadata.ts`,
       `${H}/HomePage.tsx`,
-      // The training home (plan site-formation-lot1). `scene` now lives on the CRM offer page and
-      // `construit` on /realisations, so neither dates the home.
+      // The home's bands in page order (US-104, plan sablia-site-structure-offre). `scene` lives on the
+      // CRM offer page, `construit` on /realisations and `apres` gave way to `mensuel`: none dates the home.
       ...[
         'top',
-        'offre',
+        'mensuel',
         'automatisations',
+        'offre',
         'formations',
+        'conferences',
+        'videos',
         'derriere',
         'webinaire',
-        'apres',
-        'videos',
         'faq',
       ].map((id) => `${H}/${id}/`),
       // #fin is the shell's FinBand; its home copy lives in faq/content.ts (FIN_BAND).
@@ -58,6 +59,14 @@ export const PAGE_ROUTES = [
   {
     path: '/formations',
     sources: [`${A}/formations/`, 'src/components/formations/'],
+    indexable: true,
+    changefreq: 'monthly',
+    priority: 0.8,
+  },
+  {
+    // Talks and seminars on request (US-107), price on quote; reached from the menu and the home.
+    path: '/conferences',
+    sources: [`${A}/conferences/`, 'src/components/conferences/'],
     indexable: true,
     changefreq: 'monthly',
     priority: 0.8,

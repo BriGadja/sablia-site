@@ -15,8 +15,8 @@ export function ThanksBody() {
       <div className="v2-thanks-next">
         <h2>Prochaine étape</h2>
         <p>
-          Réservez un call audit gratuit de 30 minutes pour cartographier votre CRM et identifier
-          les automatisations les plus rentables.
+          Réservez un échange gratuit de 30 minutes : vous nous parlez de votre CRM et de ce que
+          vous avez déjà essayé, nous vous disons par où commencer.
         </p>
         <Cta size="lg" arrow />
       </div>

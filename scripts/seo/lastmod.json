@@ -1,23 +1,23 @@
 {
   "/": {
     "lastmod": "2026-11-12",
-    "hash": "sha256:a253cc20003a1884404794dfe53fe8332200c585b4be00fe3568d9cc9e4f4305"
+    "hash": "sha256:96cb448f258d36a6a3c98a9d060b186a55e445f96ff656e2bc117cf6afe230a6"
   },
   "/mentions-legales": {
-    "lastmod": "2026-11-01",
-    "hash": "sha256:c92d7824aaa4c70dd9563a5d9422c360306f72f4038eda572554b98df5fa0f8b"
+    "lastmod": "2026-11-12",
+    "hash": "sha256:bbf1f6c08f1ecccda260fbce579e1c00d8b2521938ebdebc7a94843c5d198986"
   },
   "/politique-confidentialite": {
-    "lastmod": "2026-11-11",
-    "hash": "sha256:8d407ffd92ef47c079bb2b2e77eb555dfc52632eb2ed1634380cb09ba7488d2b"
+    "lastmod": "2026-11-12",
+    "hash": "sha256:3097f9ae737c19b37c568cdb85124f6bd2ab6e40068f6a4b81d56f0e2705b4b8"
   },
   "/cgv": {
-    "lastmod": "2026-10-26",
-    "hash": "sha256:9c8a68140bbc587365bc9de1d0c5bdc1fd5fb27e08fd169c044eb8965cbeebe4"
+    "lastmod": "2026-11-12",
+    "hash": "sha256:a7923263480712723ac0d24f6e463ce51594330204fba28bf32fd8c630fa1e28"
   },
   "/guides/integrer-l-ia-dans-votre-entreprise": {
-    "lastmod": "2026-11-01",
-    "hash": "sha256:6148f7127b312667e88f5fbb908578815a509c86d5127c1fea014c3623821ef6"
+    "lastmod": "2026-11-12",
+    "hash": "sha256:e2e8e5e9140cfba37d27c1b23c9051984033b92b37586ac4aa174183767ff0f7"
   },
   "/offres/compte-rendu-appel": {
     "lastmod": "2026-11-01",
@@ -70,5 +70,9 @@
   "/responsable-ia-externalise": {
     "lastmod": "2026-11-12",
     "hash": "sha256:1086265b1e9de940733f322af461ecd803e1601fd15290d42e7ad16320c740bc"
+  },
+  "/conferences": {
+    "lastmod": "2026-11-12",
+    "hash": "sha256:c12698fc4c613230d9401af8ec414326c630e31a5c525ec104536e2b71182597"
   }
 }
