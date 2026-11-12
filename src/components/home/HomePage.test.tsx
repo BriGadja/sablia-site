@@ -9,8 +9,15 @@
 import { render } from '@testing-library/react'
 import { renderToString } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { SessionBar } from '@/components/shell/SessionBar'
+import { SiteFooter } from '@/components/shell/SiteFooter'
+import { SiteHeader } from '@/components/shell/SiteHeader'
+import { HERO as WEBINAR_HERO } from '@/content/webinaire'
 import { mockIntersectionObserver, mockReducedMotion } from '@/lib/hooks/test-utils'
+import { FACTURE } from './automatisations/content'
+import { FAQS } from './faq/content'
 import { HomePage } from './HomePage'
+import { OFFRE } from './offre/content'
 import { resolveTiles } from './videos/content'
 
 // `Videos` is an async server component (its tiles are read at build time); the home test renders
@@ -19,6 +26,8 @@ vi.mock('./videos', async (importOriginal) => {
   const real = await importOriginal<typeof import('./videos')>()
   return { ...real, Videos: () => <real.VideosView tiles={resolveTiles(null)} /> }
 })
+// The served page wraps the home in the shell (bar, header, footer), which reads the pathname.
+vi.mock('next/navigation', () => ({ usePathname: () => '/' }))
 
 const BEFORE = new Date('2026-11-05T09:00:00+01:00')
 const START = new Date('2026-12-03T12:00:00+01:00')
@@ -125,5 +134,81 @@ describe('home from the session start (03/12 12:00 Paris)', () => {
     expect(fin.querySelector('a[href="/webinaire"]')).toBeNull()
     expect(fin.textContent).not.toContain('3 décembre')
     expect(fin.querySelector('button')?.textContent).toContain('Réserver 30 min')
+  })
+})
+
+/**
+ * US-104 Exemple, « no price on the home » (E-fix): the home as served (shell and page, server
+ * rendered) carries no amount anywhere but in the demo scenes of `#automatisations`, whose figures
+ * are the fictional example invoice of a scene (`FACTURE`), not a Sablia price. A price written into
+ * any other band, the bar, the header or the footer turns this red, whichever file it comes from (the
+ * source guard `no-training-price.test.ts` reads a fixed list of files). The word « prix » is said
+ * only where the page tells where the price lives (the training panel, the FAQ answer) or that the
+ * webinar is free; « tarif » never.
+ */
+const AMOUNT = /\d[\d\s .,]*\s?(€|euros?)/gi // the shape of no-training-price.test.ts
+const amounts = (s: string) => s.match(AMOUNT) ?? []
+
+function servedHome(): HTMLElement {
+  const root = document.createElement('div')
+  root.innerHTML = renderToString(
+    <>
+      <SessionBar />
+      <SiteHeader />
+      <HomePage />
+      <SiteFooter />
+    </>,
+  )
+  return root
+}
+
+function textNodes(node: Node, out: string[] = []): string[] {
+  for (const child of Array.from(node.childNodes)) {
+    if (child.nodeType === Node.TEXT_NODE) out.push(child.nodeValue ?? '')
+    else textNodes(child, out)
+  }
+  return out
+}
+
+const SAYS_PRICE = /\bprix\b|tarif/i
+const WHERE_THE_PRICE_LIVES = new Set<string>([
+  OFFRE.prix,
+  FAQS.find((f) => f.q === 'Combien ça coûte ?')?.a ?? 'missing FAQ answer',
+  WEBINAR_HERO.facts.find((f) => f.key === 'prix')?.label ?? 'missing webinar fact',
+])
+
+describe.each([
+  ['before', BEFORE],
+  ['from', START],
+])('the served home %s the 03/12 session start', (_, now) => {
+  it('carries no amount outside the demo scenes of #automatisations, whose figures are the example invoice', () => {
+    at(now)
+    const root = servedHome()
+    const all = amounts(root.innerHTML)
+    const auto = root.querySelector('section#automatisations') as HTMLElement
+    expect(auto).not.toBeNull()
+    const inScenes = amounts(auto.outerHTML)
+    expect(inScenes.length, 'the scanner sees the scenes’ amounts in this HTML').toBeGreaterThan(0)
+    auto.remove()
+    expect(amounts(root.innerHTML)).toEqual([])
+    expect(all).toEqual(inScenes)
+    const example = new Set(FACTURE.map(([, v]) => v.replace(/\s/g, '')))
+    for (const a of inScenes) expect(example.has(a.replace(/\s/g, '')), a).toBe(true)
+  })
+
+  it('says « prix » only where it tells where the price lives, and never « tarif »', () => {
+    at(now)
+    const root = servedHome()
+    root.querySelector('section#automatisations')?.remove()
+    const said = textNodes(root)
+      .map((t) => t.trim())
+      .filter((t) => SAYS_PRICE.test(t))
+    expect(said.filter((t) => !WHERE_THE_PRICE_LIVES.has(t))).toEqual([])
+    const attrs = Array.from(root.querySelectorAll('*')).flatMap((el) =>
+      ['alt', 'aria-label', 'title', 'content']
+        .map((name) => el.getAttribute(name) ?? '')
+        .filter((v) => SAYS_PRICE.test(v) || amounts(v).length > 0),
+    )
+    expect(attrs).toEqual([])
   })
 })
