@@ -187,6 +187,19 @@ describe('mountStatic — Next export', () => {
     expect((await get('/responsable-ia-externalise')).status).not.toBe(301)
   })
 
+  // Plan decision (12/11, kept after the K4 review): the redirect does not forward the query string,
+  // UTM keys included; the Location is the bare offer path.
+  it('drops the query string of the two old addresses: Location is exactly the offer path', async () => {
+    for (const p of [
+      '/responsable-ia-temps-partage?utm_source=x',
+      '/accompagnement?utm_source=x',
+    ]) {
+      const r = await get(p)
+      expect(r.status, p).toBe(301)
+      expect(r.headers.get('location'), p).toBe('/responsable-ia-externalise')
+    }
+  })
+
   it('serves a built issue page, and 404 on the placeholder (lettre/__none*) and an unknown issue', async () => {
     const issue = await get('/lettre/2026-11-10-exemple-de-numero')
     expect(issue.status).toBe(200)

@@ -30,7 +30,7 @@ describe('barShownOn', () => {
   it.each([
     '/',
     '/formations',
-    '/accompagnement',
+    '/conferences',
     '/realisations',
     '/offres/compte-rendu-appel/hubspot',
     '/webinaires',
