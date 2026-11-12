@@ -46,7 +46,7 @@ describe('SessionBar', () => {
     const html = renderToString(<SessionBar />)
     expect(html).toContain('data-zone="bar"')
     expect(html).toContain('Webinaire gratuit')
-    expect(html).toContain('Jeudi 19 novembre, 12 h')
+    expect(html).toContain('Jeudi 3 décembre, 12 h')
   })
 
   it.each([
@@ -71,7 +71,7 @@ describe('SessionBar', () => {
   })
 
   it('renders nothing at the session start and after', () => {
-    for (const iso of ['2026-11-19T12:00:00+01:00', '2026-12-15T09:00:00+01:00']) {
+    for (const iso of ['2026-12-03T12:00:00+01:00', '2026-12-15T09:00:00+01:00']) {
       at(iso)
       const { unmount } = render(<SessionBar />)
       expect(bar()).toBeNull()

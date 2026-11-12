@@ -4,20 +4,22 @@ import { NEXT_WEBINAR_BANNER, PATHS, SESSION } from './webinaire'
 
 /** US-92: the bar lives until the session starts, never on /webinaire* (Data contract « Session facts »). */
 describe('SESSION_START', () => {
-  it('is 19/11/2026 12:00 Paris', () => {
-    expect(SESSION_START).toBe('2026-11-19T12:00:00+01:00')
+  it('is 03/12/2026 12:00 Paris', () => {
+    expect(SESSION_START).toBe('2026-12-03T12:00:00+01:00')
   })
 })
 
 describe('sessionUpcoming', () => {
   it('is true well before, and one second before, the start', () => {
     expect(sessionUpcoming(new Date('2026-11-01T10:00:00+01:00'))).toBe(true)
-    expect(sessionUpcoming(new Date('2026-11-19T11:59:59+01:00'))).toBe(true)
+    // the first announced start (19/11): the session moved, the shell must not flip there
+    expect(sessionUpcoming(new Date('2026-11-19T12:00:00+01:00'))).toBe(true)
+    expect(sessionUpcoming(new Date('2026-12-03T11:59:59+01:00'))).toBe(true)
   })
 
   it('is false at the start second and after', () => {
-    expect(sessionUpcoming(new Date('2026-11-19T12:00:00+01:00'))).toBe(false)
-    expect(sessionUpcoming(new Date('2026-11-19T12:00:01+01:00'))).toBe(false)
+    expect(sessionUpcoming(new Date('2026-12-03T12:00:00+01:00'))).toBe(false)
+    expect(sessionUpcoming(new Date('2026-12-03T12:00:01+01:00'))).toBe(false)
     expect(sessionUpcoming(new Date('2026-12-15T09:00:00+01:00'))).toBe(false)
   })
 })
@@ -59,9 +61,9 @@ describe('BAR', () => {
     expect(BAR.cta).toBe("Je m'inscris")
     expect(BAR.href).toBe('/webinaire')
     expect(BAR.text).toBe(
-      "Jeudi 19 novembre à 12 h : « Bureaux d'études : votre équipe utilise déjà l'IA. Avec quelles règles ? »",
+      "Jeudi 3 décembre à 12 h : « Bureaux d'études : votre équipe utilise déjà l'IA. Avec quelles règles ? »",
     )
-    expect(BAR.textShort).toBe("Jeudi 19 novembre, 12 h · bureaux d'études")
+    expect(BAR.textShort).toBe("Jeudi 3 décembre, 12 h · bureaux d'études")
   })
 
   it('derives its text from SESSION, so it agrees with the shipped banner constant', () => {

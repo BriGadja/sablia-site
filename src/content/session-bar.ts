@@ -15,7 +15,7 @@ export function barShownOn(pathname: string | null): boolean {
   return path !== PATHS.page && !path.startsWith(`${PATHS.page}/`)
 }
 
-const day = SESSION.date.replace(/\s+\d{4}$/, '') // « Jeudi 19 novembre »
+const day = SESSION.date.replace(/\s+\d{4}$/, '') // « Jeudi 3 décembre »
 const hour = /\d{1,2} h/.exec(SESSION.hours)?.[0] ?? '' // « 12 h »
 const sector = SESSION.title.split(' : ')[0] // « Bureaux d'études »
 

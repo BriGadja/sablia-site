@@ -342,18 +342,18 @@ Source: hub plan `plans/sablia-io-v2.md` (autopilot run `2026-10-26-sablia-io-v2
 
 Source: hub plan `plans/site-formation-lot1-2026-11-01.md` (autopilot run `2026-11-01-site-formation`, branch `autopilot/2026-11-01-site-formation`), after the grill of 2026-11-01. Stories: `specs/REGISTRY.md` US-91 to US-98, status `À-MARCHER` until Brice's validation point 1 and the production walk. US-1, US-2, US-72, US-74 and US-75 are replaced.
 
-**Objective.** The site stops selling the CRM first and sells the training « L'IA au travail » (three days at the client, up to 12 people, with a free weekly-slot webinar as the entry point), before the first newsletter on 10/11 and the webinar of 19/11. The CRM offer stays, on its own pages, unchanged in price and content.
+**Objective.** The site stops selling the CRM first and sells the training « L'IA au travail » (three days at the client, up to 12 people, with a free weekly-slot webinar as the entry point), before the first newsletter on 10/11 and the webinar of 03/12. The CRM offer stays, on its own pages, unchanged in price and content.
 
 **What changed.**
 1. Home: ten sections (`#top` … `#fin`), the CRM scene and the wall of cards leave it; the hero promises the training and the webinar.
 2. `/formations` is the offer page, `/accompagnement` becomes « Après la formation » (monthly referent session, tailor-made work), `/realisations` is new and indexed (the wall of cards), the CRM offer page gains the `#scene` animation.
-3. Shell: menu Formation · Webinaires · Après la formation · Réalisations; a thin webinar bar and the header button « Prochain webinaire » while the session is ahead, then « Réserver 30 min » on the « Échange de 30 minutes » Calendly (`site.formationBookingUrl`); `/offres/**` keeps the CRM Calendly. The switch is `SESSION_START` (19/11/2026 12:00 Paris) read through `session-bar.ts`.
+3. Shell: menu Formation · Webinaires · Après la formation · Réalisations; a thin webinar bar and the header button « Prochain webinaire » while the session is ahead, then « Réserver 30 min » on the « Échange de 30 minutes » Calendly (`site.formationBookingUrl`); `/offres/**` keeps the CRM Calendly. The switch is `SESSION_START` (03/12/2026 12:00 Paris) read through `session-bar.ts`.
 4. Legal: the activity-declaration sentence of article L6352-12 (`declaration.ts`) in the footer and the legal notice, with the photo credit; the hub red-line guard accepts that sentence only whole.
 5. Measurement: UTM source, medium and campaign reach Umami (nothing else), the click to `/webinaire` carries `dest`, `?stats=off` mutes a device.
 6. Identity: tagline, titles, JSON-LD and crawler files speak of the training, not of a CRM agency.
 
-**Hard rules.** No training price on any page (the five training figures never followed by a euro sign; `no-training-price.test.ts`, then a grep on the built HTML); no guarantee; the webinar chain (`api/webinaire*.ts`, `src/content/webinaire.ts`, the four `/webinaire` pages) is frozen until 19/11; no client, partner or counterpart named in the repository.
+**Hard rules.** No training price on any page (the five training figures never followed by a euro sign; `no-training-price.test.ts`, then a grep on the built HTML); no guarantee; the webinar chain (`api/webinaire*.ts`, `src/content/webinaire.ts`, the four `/webinaire` pages) is frozen until 03/12; no client, partner or counterpart named in the repository.
 
-**Open for lot 2.** A list of webinars behind « Webinaires »; a past-session state of `/webinaire` (the page still shows the 19/11 form afterwards: a review is dated 13/11); `NextWebinarBanner` (no mount, flag `NEXT_WEBINAR_BANNER` off); a UTM column in the registration table.
+**Open for lot 2.** A list of webinars behind « Webinaires »; a past-session state of `/webinaire` (the page still shows the 03/12 form afterwards: a review is dated 13/11); `NextWebinarBanner` (no mount, flag `NEXT_WEBINAR_BANNER` off); a UTM column in the registration table.
 
 **Acceptance.** `npx vitest run` green; `npx tsc --noEmit`, Biome and `css-collisions.py` clean; `bash scripts/qa/build.sh` and `seo:stamp-check` (restamped last); the built-HTML greps of the plan (no price, booking URLs, bar present before and absent after the start); both hub text gates on every visitor file; `score.py` 0 defects on `home`, `form`, `acc`, `real`, `crm`; the Rule 15 walk on production.

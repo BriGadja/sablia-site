@@ -3,7 +3,7 @@
  * bands in order inside `main#contenu`, each id once, the hash anchors the footer, `/about` (301 to
  * `/#derriere`) and the closing band rely on, and none of the bands that left the home (`scene` went
  * to the CRM offer page, `construit` to /realisations). `#webinaire` and the closing band's webinar
- * link exist only while the 19/11 session is ahead, so every case fixes the clock, never the real date.
+ * link exist only while the 03/12 session is ahead, so every case fixes the clock, never the real date.
  */
 import { render } from '@testing-library/react'
 import { renderToString } from 'react-dom/server'
@@ -20,7 +20,7 @@ vi.mock('./videos', async (importOriginal) => {
 })
 
 const BEFORE = new Date('2026-11-05T09:00:00+01:00')
-const START = new Date('2026-11-19T12:00:00+01:00')
+const START = new Date('2026-12-03T12:00:00+01:00')
 
 const ORDER = [
   'top',
@@ -35,7 +35,7 @@ const ORDER = [
   'fin',
 ]
 const ANCHORS = ['top', 'offre', 'derriere', 'videos', 'faq', 'fin']
-const WEBINAR_LINK = 'Pas encore prêt ? Le webinaire gratuit du jeudi 19 novembre.'
+const WEBINAR_LINK = 'Pas encore prêt ? Le webinaire gratuit du jeudi 3 décembre.'
 
 function at(now: Date) {
   vi.useFakeTimers({ now, toFake: ['Date'] })
@@ -61,7 +61,7 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 
-describe('home before the 19/11 session', () => {
+describe('home before the 03/12 session', () => {
   it('mounts the ten bands in the contract order inside main#contenu', () => {
     at(BEFORE)
     const { container } = render(<HomePage />)
@@ -101,7 +101,7 @@ describe('home before the 19/11 session', () => {
   })
 })
 
-describe('home from the session start (19/11 12:00 Paris)', () => {
+describe('home from the session start (03/12 12:00 Paris)', () => {
   it('drops #webinaire and keeps every other band in order', () => {
     at(START)
     const { container } = render(<HomePage />)
@@ -115,7 +115,7 @@ describe('home from the session start (19/11 12:00 Paris)', () => {
     render(<HomePage />)
     const fin = document.getElementById('fin') as HTMLElement
     expect(fin.querySelector('a[href="/webinaire"]')).toBeNull()
-    expect(fin.textContent).not.toContain('19 novembre')
+    expect(fin.textContent).not.toContain('3 décembre')
     expect(fin.querySelector('button')?.textContent).toContain('Réserver 30 min')
   })
 })

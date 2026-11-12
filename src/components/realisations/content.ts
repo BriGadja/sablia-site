@@ -19,6 +19,6 @@ export const HEAD = {
 /**
  * Closing band: the home's own copy (01b « Final band », gated in `home/faq/content.ts`), booked on the
  * formation Calendly by the page. 01b gives this page no band of its own, and the home's quiet webinar
- * link is left out: it names the 19/11 session, which the session bar already announces until it starts.
+ * link is left out: it names the 03/12 session, which the session bar already announces until it starts.
  */
 export { FIN_BAND as FIN } from '@/components/home/faq/content'

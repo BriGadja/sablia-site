@@ -99,7 +99,7 @@ describe('/webinaire: the static HTML (SSR content rule)', () => {
   it('carries the title, the date, the place, the presenter and one h1', () => {
     expect(html.match(/<h1[\s>]/g)).toHaveLength(1)
     expect(t).toContain(SESSION.title)
-    expect(t).toContain('Jeudi 19 novembre, de 12 h à 13 h')
+    expect(t).toContain('Jeudi 3 décembre, de 12 h à 13 h')
     expect(t).toContain('En visio, sur Google Meet')
     expect(t).toContain('Gratuit')
     expect(t).toContain('Animé par Brice Gachadoat')
@@ -140,6 +140,14 @@ describe('/webinaire: the static HTML (SSR content rule)', () => {
 
   it('says no forbidden word: funding, state label, the client of October, scarcity, countdown', () => {
     expect(t).not.toMatch(FORBIDDEN)
+  })
+
+  // Literal date pins (US-86, review of 12/11): the dated strings are written by hand in
+  // src/content/webinaire.ts, so a test that re-reads the constants would stay green on a forgotten date.
+  it('dates the form title and the description to Thursday 3 December', () => {
+    expect(t).toContain("S'inscrire à la session du 3 décembre")
+    expect(metadata.description).toContain('le jeudi 3 décembre 2026 de 12 h à 13 h')
+    expect(`${t} ${metadata.description}`).not.toMatch(/19 novembre|19\/11/)
   })
 
   it('is indexable, with its own canonical', () => {
@@ -355,6 +363,14 @@ describe('/webinaire/merci', () => {
     expect(t).toContain(MERCI.spam)
     expect(t).toContain(MERCI.leave)
     expect(t).not.toMatch(FORBIDDEN)
+  })
+
+  it('dates the title and the two reminders to the 03/12 session (eve 02/12 18 h, day-of 11 h 30)', () => {
+    expect(t).toContain('À jeudi 3 décembre, 12 h')
+    expect(t).toContain('Mercredi 2 décembre, 18 h')
+    expect(t).toContain('Jeudi 3 décembre, 11 h 30')
+    expect(merciMeta.description).toContain('jeudi 3 décembre 2026')
+    expect(`${t} ${merciMeta.description}`).not.toMatch(/1[89] novembre|1[89]\/11/)
   })
 
   it('is noindex with its own canonical', () => {

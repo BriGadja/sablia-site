@@ -13,7 +13,7 @@ import { recede, Top } from './index'
  * session is upcoming, then the call first and a quiet link to the offer page once it has started.
  */
 const BEFORE = '2026-11-05T10:00:00+01:00'
-const AFTER = '2026-11-19T12:00:00+01:00'
+const AFTER = '2026-12-03T12:00:00+01:00'
 const at = (iso: string) => {
   vi.useFakeTimers({ toFake: ['Date'] })
   vi.setSystemTime(new Date(iso))
@@ -61,7 +61,7 @@ describe('Top, hero of the training site', () => {
     expect(rest).toHaveLength(0)
     expect(first.tagName).toBe('A')
     expect(first.getAttribute('href')).toBe('/webinaire')
-    expect(first.textContent).toBe('Prochain webinaire : jeudi 19 novembre')
+    expect(first.textContent).toBe('Prochain webinaire : jeudi 3 décembre')
     expect(second.matches('button[data-cta-book]')).toBe(true)
     expect(second.textContent).toBe('Réserver 30 min')
     fireEvent.click(second)

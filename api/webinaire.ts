@@ -36,7 +36,7 @@ import { normalizePhone } from './ressources-request.js'
 const SUPABASE_URL = 'https://qlxoitzdxjqhljjoeqoq.supabase.co'
 const REGISTRATIONS = `${SUPABASE_URL}/rest/v1/site_webinar_registrations`
 const LEADS = `${SUPABASE_URL}/rest/v1/sabcrm_leads`
-const SESSION_SLUG = '2026-11-19'
+const SESSION_SLUG = '2026-12-03'
 const MIN_ELAPSED_MS = 3000
 const PER_IP_DAILY = 3
 const DAILY_CEILING = 60

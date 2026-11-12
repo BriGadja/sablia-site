@@ -25,7 +25,7 @@ Routes are the folders of `src/app/`; the manifest used by the sitemap and the e
 | `/accompagnement` | `src/app/accompagnement/page.tsx` | « Après la formation » |
 | `/realisations` | `src/app/realisations/page.tsx` | the wall of cards (`realisations/construit`), under its own head |
 | `/offres/compte-rendu-appel` | `src/app/offres/compte-rendu-appel/page.tsx` | OF-1 offer; mounts `home/scene` (`showOffer={false}`) |
-| `/webinaire`, `/webinaire/{merci,apres-reservation,questionnaire}` | `src/app/webinaire/` | registration chain, copy in `src/content/webinaire.ts` (frozen until 19/11) |
+| `/webinaire`, `/webinaire/{merci,apres-reservation,questionnaire}` | `src/app/webinaire/` | registration chain, copy in `src/content/webinaire.ts` (frozen until 03/12) |
 | `/newsletter` | `src/app/newsletter/page.tsx` | double opt-in |
 | `/offres/compte-rendu-appel/<crm>` | `.../[crm]/page.tsx` | hubspot, zoho, salesforce, pipedrive from `src/content/crm/*.json`; a draft is not built |
 | `/offres/compte-rendu-appel/google-sheets`, `/excel-365` | own folders | |

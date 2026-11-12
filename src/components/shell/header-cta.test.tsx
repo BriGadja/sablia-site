@@ -24,8 +24,9 @@ beforeEach(() => {
 const paths = PAGE_ROUTES.map((r) => r.path)
 const isWebinar = (p: string) => p === '/webinaire' || p.startsWith('/webinaire/')
 // Plan site-formation-lot1 (US-92): the header depends on the clock; every case passes `now`.
-const BEFORE = new Date('2026-11-05T10:00:00+01:00')
-const AFTER = new Date('2026-11-19T12:00:00+01:00')
+// BEFORE is the last second before the start, AFTER the start second itself.
+const BEFORE = new Date('2026-12-03T11:59:59+01:00')
+const AFTER = new Date('2026-12-03T12:00:00+01:00')
 const NEXT_WEBINAR = { kind: 'link', href: '/webinaire', label: 'Prochain webinaire' }
 
 describe('headerCtaFor: the route map', () => {
@@ -49,9 +50,13 @@ describe('headerCtaFor: the route map', () => {
   })
 
   it('points /webinaire (with or without a trailing slash) to its form', () => {
-    for (const p of ['/webinaire', '/webinaire/']) {
-      expect(headerCtaFor(p)).toEqual({ kind: 'link', href: '#inscription', label: "Je m'inscris" })
-    }
+    for (const p of ['/webinaire', '/webinaire/'])
+      for (const now of [BEFORE, AFTER])
+        expect(headerCtaFor(p, now)).toEqual({
+          kind: 'link',
+          href: '#inscription',
+          label: "Je m'inscris",
+        })
   })
 
   it('hides it on the three after-pages, and the manifest has no other webinar route', () => {
@@ -61,7 +66,9 @@ describe('headerCtaFor: the route map', () => {
       '/webinaire/merci',
       '/webinaire/questionnaire',
     ])
-    for (const p of after) expect([p, headerCtaFor(p)]).toEqual([p, { kind: 'none' }])
+    for (const p of after)
+      for (const now of [BEFORE, AFTER])
+        expect([p, headerCtaFor(p, now)]).toEqual([p, { kind: 'none' }])
   })
 
   it('treats an unknown pathname like any page outside /webinaire and /offres', () => {
@@ -81,6 +88,8 @@ describe('SiteHeader on the webinar routes', () => {
 
   it("/webinaire: « Je m'inscris » to #inscription, no booking button", () => {
     pathname = '/webinaire'
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(BEFORE)
     render(<SiteHeader />)
     expect(nav().querySelector('[data-cta-book]')).toBeNull()
     const link = screen.getByRole('link', { name: "Je m'inscris" })
@@ -94,6 +103,9 @@ describe('SiteHeader on the webinar routes', () => {
     '/webinaire/questionnaire',
   ])('%s: no call to action in the header', (p) => {
     pathname = p
+    // five links while the session is ahead: « Webinaires » leaves the menu at the start
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(BEFORE)
     render(<SiteHeader />)
     expect(nav().querySelector('.v2-cta')).toBeNull()
     expect(nav().querySelectorAll('a')).toHaveLength(5)
