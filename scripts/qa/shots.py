@@ -2,16 +2,17 @@
 """Reference / build screenshots and per-section pixel diff for the sablia.io v2 port.
 
 Pages and sections (ids are the contract: the build must carry the same `#id` on each section root):
-  home            top offre automatisations formations derriere webinaire apres videos faq fin
+  home            top mensuel automatisations offre formations conferences videos derriere webinaire faq fin
   formations      top pourqui deroule inclus conference preuve questions fin
   offre           top role premier-mois chaque-mois gardez conditions qui questions fin
                                                      (/responsable-ia-externalise, build only)
+  conf            top sujets preuve fin              (/conferences, build only)
   real            top construit fin                  (/realisations, build only: no mockup board)
   crm             top scene pour-qui variantes inclus prix objection preuve faq   (/offres/compte-rendu-appel, build only)
 `webinaire` exists on the home only while the 03/12/2026 session is ahead (a missing section is logged, not fatal).
-Viewports: 1440x900 and 390x844. Routes on a build: / , /formations , /responsable-ia-externalise , /realisations ,
-/offres/compte-rendu-appel. The reference boards (--ref) only exist for the CRM-era home and /formations; `offre`, `real`
-and `crm` have none (/accompagnement and its board left with the page on 12/11).
+Viewports: 1440x900 and 390x844. Routes on a build: / , /formations , /responsable-ia-externalise , /conferences ,
+/realisations , /offres/compte-rendu-appel. The reference boards (--ref) only exist for the CRM-era home and /formations;
+`offre`, `conf`, `real` and `crm` have none (/accompagnement and its board left with the page on 12/11).
 
 Capture kinds (written under <out>/<page>/<vp>/<kind>/):
   final/<section>.png        reduced-motion final state (deterministic), element screenshot.
@@ -65,11 +66,12 @@ BUILD_OUT = HUB / "tmp/s-build"
 
 PAGES = {
     "home": {"board": "Main.dc.html", "route": "/",
-             "sections": ["top", "offre", "automatisations", "formations", "derriere", "webinaire", "apres", "videos", "faq", "fin"]},
+             "sections": ["top", "mensuel", "automatisations", "offre", "formations", "conferences", "videos", "derriere", "webinaire", "faq", "fin"]},
     "formations": {"board": "Formations.dc.html", "route": "/formations",
                    "sections": ["top", "pourqui", "deroule", "inclus", "conference", "preuve", "questions", "fin"]},
     "offre": {"board": None, "route": "/responsable-ia-externalise",
               "sections": ["top", "role", "premier-mois", "chaque-mois", "gardez", "conditions", "qui", "questions", "fin"]},
+    "conf": {"board": None, "route": "/conferences", "sections": ["top", "sujets", "preuve", "fin"]},
     "real": {"board": None, "route": "/realisations", "sections": ["top", "construit", "fin"]},
     "crm": {"board": None, "route": "/offres/compte-rendu-appel",
             "sections": ["top", "scene", "pour-qui", "variantes", "inclus", "prix", "objection", "preuve", "faq"]},

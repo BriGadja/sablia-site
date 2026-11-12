@@ -5,16 +5,18 @@ Lower is better. Opens the page in its OWN headless Chromium (never the shared C
 390x844 and counts the reviewers' recurring findings as deterministic checks; contrast runs `contrast.py` in a
 subprocess (1440 only, like the original) and counts each failing pair x3.
 Usage: score.py PAGE [--base URL] [--max N] [--out DIR]
-  PAGE = home (/) | form (/formations) | offre (/responsable-ia-externalise) | real (/realisations) | crm (/offres/compte-rendu-appel); --base defaults to the preview slot http://127.0.0.1:5001.
+  PAGE = home (/) | form (/formations) | offre (/responsable-ia-externalise) | conf (/conferences) | real (/realisations) | crm (/offres/compte-rendu-appel); --base defaults to the preview slot http://127.0.0.1:5001.
 Prints `defects: N` then one `check: value` line per check; writes DIR/score-PAGE.json.
 Exit 1 when defects > --max (default 0); the original always exited 0.
-The first-screen check of `home` looks for the training promise ("trois jours", "12 personnes", "claude") in the first two screens at 1440.
+The first-screen check of `home` looks for what Sablia does today in the first two screens at 1440 (copy deck B2 `home.qa.firstscreens`):
+the name of the monthly offer ("responsable ia externalisé", the first hero door), two words of the h1 ("votre équipe formée") and
+the monthly block ("un outil de plus", `#mensuel`).
 """
 import argparse, asyncio, json, re, subprocess, sys
 from pathlib import Path
 from playwright.async_api import async_playwright
 
-PATHS = {"home": "/", "form": "/formations", "offre": "/responsable-ia-externalise", "real": "/realisations", "crm": "/offres/compte-rendu-appel"}
+PATHS = {"home": "/", "form": "/formations", "offre": "/responsable-ia-externalise", "conf": "/conferences", "real": "/realisations", "crm": "/offres/compte-rendu-appel"}
 HERE = Path(__file__).resolve().parent
 
 JS_COMMON = r"""() => {
@@ -93,7 +95,7 @@ async def run(a):
                             await page.wait_for_timeout(1500)
                             seen += await page.evaluate(JS_SCREEN)
                         norm = seen.replace(" ", " ").replace(" ", " ").lower()
-                        res["first_screens_missing"] = [s for s in ("trois jours", "12 personnes", "claude") if s.lower() not in norm]
+                        res["first_screens_missing"] = [s for s in ("responsable ia externalisé", "votre équipe formée", "un outil de plus") if s.lower() not in norm]
                 finally:
                     await ctx.close()
         finally:
