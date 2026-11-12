@@ -5,7 +5,7 @@ Lower is better. Opens the page in its OWN headless Chromium (never the shared C
 390x844 and counts the reviewers' recurring findings as deterministic checks; contrast runs `contrast.py` in a
 subprocess (1440 only, like the original) and counts each failing pair x3.
 Usage: score.py PAGE [--base URL] [--max N] [--out DIR]
-  PAGE = home (/) | form (/formations) | acc (/accompagnement) | real (/realisations) | crm (/offres/compte-rendu-appel); --base defaults to the preview slot http://127.0.0.1:5001.
+  PAGE = home (/) | form (/formations) | offre (/responsable-ia-externalise) | real (/realisations) | crm (/offres/compte-rendu-appel); --base defaults to the preview slot http://127.0.0.1:5001.
 Prints `defects: N` then one `check: value` line per check; writes DIR/score-PAGE.json.
 Exit 1 when defects > --max (default 0); the original always exited 0.
 The first-screen check of `home` looks for the training promise ("trois jours", "12 personnes", "claude") in the first two screens at 1440.
@@ -14,7 +14,7 @@ import argparse, asyncio, json, re, subprocess, sys
 from pathlib import Path
 from playwright.async_api import async_playwright
 
-PATHS = {"home": "/", "form": "/formations", "acc": "/accompagnement", "real": "/realisations", "crm": "/offres/compte-rendu-appel"}
+PATHS = {"home": "/", "form": "/formations", "offre": "/responsable-ia-externalise", "real": "/realisations", "crm": "/offres/compte-rendu-appel"}
 HERE = Path(__file__).resolve().parent
 
 JS_COMMON = r"""() => {

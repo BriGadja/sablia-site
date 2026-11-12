@@ -16,9 +16,10 @@ export const site = {
   // 2026-09-10 gives this same link, so the home must not book with anyone else.
   bookingUrl: 'https://calendly.com/brice-gachadoat/30min',
 
-  // Training buttons (home, /formations, /accompagnement, /realisations): the « Échange de 30
-  // minutes » event, the same one as the hub webinar config `booking_url` (plan site-formation-lot1).
-  // `/offres/**` keeps `bookingUrl`; the webinar pages keep their own `BOOKING_URL`.
+  // Training buttons (home, /formations, /realisations) and the monthly offer page: the « Échange
+  // de 30 minutes » event, the same one as the hub webinar config `booking_url` (plan
+  // site-formation-lot1). `/offres/**` keeps `bookingUrl`; the webinar pages keep their own
+  // `BOOKING_URL`.
   formationBookingUrl: 'https://calendly.com/brice-gachadoat/echange-30-minutes',
 
   // Where Sablia works from (structured data, footer, llms.txt). The registered office stays on the

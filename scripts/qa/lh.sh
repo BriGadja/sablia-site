@@ -16,7 +16,7 @@ with sync_playwright() as p: print(p.chromium.executable_path)')}"
 export CHROME_PATH
 TMP="${TMPDIR:-/tmp}/lh-$$"; mkdir -p "$TMP"; trap 'rm -rf "$TMP"' EXIT
 i=0
-for route in / /formations /accompagnement /ressources; do
+for route in / /formations /responsable-ia-externalise /ressources; do
   i=$((i+1))
   npx --yes lighthouse@13.5.0 "$BASE$route" --form-factor=mobile --only-categories=performance,accessibility,best-practices,seo \
     ${LH_EXTRA_HEADERS:+--extra-headers="$LH_EXTRA_HEADERS"} \

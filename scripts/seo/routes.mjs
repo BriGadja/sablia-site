@@ -63,16 +63,9 @@ export const PAGE_ROUTES = [
     priority: 0.8,
   },
   {
-    path: '/accompagnement',
-    sources: [`${A}/accompagnement/`, 'src/components/accompagnement/'],
-    indexable: true,
-    changefreq: 'monthly',
-    priority: 0.8,
-  },
-  {
     // The monthly offer « Responsable IA externalisé » (US-99, renamed by US-105 on 12/11), price
     // shown; outside /offres/** on purpose (header-cta.ts gives every /offres/** route the CRM
-    // Calendly). Its old address answers 301 here (server/static.ts).
+    // Calendly). Its old address and /accompagnement answer 301 here (server/static.ts).
     path: '/responsable-ia-externalise',
     sources: [`${A}/responsable-ia-externalise/`, 'src/components/temps-partage/'],
     indexable: true,

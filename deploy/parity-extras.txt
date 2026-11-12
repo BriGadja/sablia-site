@@ -28,12 +28,14 @@ HEAD /api/newsletter
 POST /api/newsletter
 # v2 routes: rows absent from the baseline print SKIP and compare nothing (the route test is scripts/qa/routes-check.py).
 GET /formations
-GET /accompagnement
+GET /responsable-ia-externalise
 GET /offres/compte-rendu-appel/google-sheets
 GET /offres/compte-rendu-appel/excel-365
 GET /mentions-legales
 GET /politique-confidentialite
 GET /roi
 GET /about
+GET /accompagnement
+GET /responsable-ia-temps-partage
 GET /newsletter
 GET /realisations

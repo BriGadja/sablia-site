@@ -165,17 +165,24 @@ describe('mountStatic — Next export', () => {
     }
   })
 
-  // US-105 (12/11): the monthly offer moved to /responsable-ia-externalise; its first address
-  // answers 301 to the offer page.
-  it('redirects the old offer address to /responsable-ia-externalise with a 301', async () => {
-    for (const p of ['/responsable-ia-temps-partage', '/responsable-ia-temps-partage/']) {
+  // US-105, US-106 (12/11): the monthly offer moved to /responsable-ia-externalise and
+  // /accompagnement is gone; both old addresses answer 301 to the offer page.
+  it('redirects the old offer address and /accompagnement to /responsable-ia-externalise with a 301', async () => {
+    for (const p of [
+      '/responsable-ia-temps-partage',
+      '/responsable-ia-temps-partage/',
+      '/accompagnement',
+      '/accompagnement/',
+    ]) {
       const r = await get(p)
       expect(r.status, p).toBe(301)
       expect(r.headers.get('location'), p).toBe('/responsable-ia-externalise')
     }
-    const r = await raw('//responsable-ia-temps-partag%65')
-    expect(r.status).toBe(301)
-    expect(r.location).toBe('/responsable-ia-externalise')
+    for (const p of ['//responsable-ia-temps-partag%65', '/%61ccompagnement']) {
+      const r = await raw(p)
+      expect(r.status, p).toBe(301)
+      expect(r.location, p).toBe('/responsable-ia-externalise')
+    }
     // a target is never a key: no loop, no chain
     expect((await get('/responsable-ia-externalise')).status).not.toBe(301)
   })

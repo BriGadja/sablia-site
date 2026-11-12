@@ -34,11 +34,7 @@ function contentFilesUnder(dir: string): string[] {
   return out
 }
 
-const ALL = [
-  ...FILES,
-  ...contentFilesUnder('components/formations'),
-  ...contentFilesUnder('components/accompagnement'),
-]
+const ALL = [...FILES, ...contentFilesUnder('components/formations')]
 
 describe('no training price in the visitor-text sources', () => {
   it('the oracle regex catches the shapes it is meant to', () => {

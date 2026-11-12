@@ -24,8 +24,9 @@ const REDIRECTS: Record<string, string> = {
   '/roi': '/offres/compte-rendu-appel',
   '/about': '/#derriere',
   '/lettre': '/newsletter',
-  // The monthly offer's first address (11/11, US-105 on 12/11).
+  // The monthly offer's first address (11/11) and the page it replaced (US-105, US-106, 12/11).
   '/responsable-ia-temps-partage': '/responsable-ia-externalise',
+  '/accompagnement': '/responsable-ia-externalise',
 }
 
 /**

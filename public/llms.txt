@@ -25,18 +25,12 @@ Trois jours sur vos propres dossiers : chaque participant repart avec ses outils
 
 Une heure en visio sur Google Meet, le jeudi à midi, consacrée à un métier : l'IA à l'œuvre sur des documents fictifs, et les règles à poser dans votre équipe. Prochaine session et inscription : https://sablia.io/webinaire
 
-## Après la formation
-
-- URL : https://sablia.io/accompagnement
-- Un référent IA : une séance de 2 h par mois avec votre équipe, et vos questions sous 48 h. Trois mois au moins, puis résiliable chaque mois. Le prix est dans le devis.
-- Sur mesure : l'intégration de Claude dans votre CRM, et des automatisations pour les tâches qui reviennent.
-- Le compte rendu d'appel dans votre CRM : le commercial raccroche, le CRM est déjà à jour (compte rendu et tâche de relance). Page et prix : https://sablia.io/offres/compte-rendu-appel (par outil : /hubspot, /pipedrive, /zoho, /salesforce, /google-sheets, /excel-365)
-
 ## Responsable IA externalisé
 
 Votre responsable IA, sans le recruter : une offre mensuelle pour les PME de 10 à 50 personnes qui n'ont personne en interne pour mettre l'IA en place. Brice Gachadoat, à Rouen, construit les outils, forme l'équipe et entretient ce qui tourne, deux jours de travail par mois. Engagement de trois mois, puis résiliable chaque mois ; le prix est affiché sur la page.
 
 - URL : https://sablia.io/responsable-ia-externalise
+- Sans contrat mensuel : le compte rendu d'appel dans votre CRM, à prix fixe. Le commercial raccroche, le CRM est déjà à jour (compte rendu et tâche de relance). Page et prix : https://sablia.io/offres/compte-rendu-appel (par outil : /hubspot, /pipedrive, /zoho, /salesforce, /google-sheets, /excel-365)
 
 ## Réalisations
 

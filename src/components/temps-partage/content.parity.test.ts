@@ -20,7 +20,6 @@ import { existsSync, readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
-import { REFERENT } from '../accompagnement/content'
 import * as COPY from './content'
 import { CHAQUE_MOIS, CONDITIONS, GARDEZ, HERO, PREMIER_MOIS, QUESTIONS, QUI } from './content'
 
@@ -255,19 +254,14 @@ describe('offer parity: § Conditions', () => {
     expect([...offered].sort()).toEqual([1500, 2000])
     expect([...amounts(JSON.stringify(COPY))].sort()).toEqual([...offered].sort())
   })
-
-  it('names no amount on /accompagnement other than the two prices of offre.md', () => {
-    const offered = amounts(CONDITION_BULLETS.join(' '))
-    for (const shown of amounts(REFERENT.more.text)) expect(offered).toContain(shown)
-  })
 })
 
 /**
  * § Chaque mois ensuite gives the offer's two durations (« Deux jours de travail », « 48 heures
  * ouvrées »); every « N jours » and « N heures » restated elsewhere (META, ROLE, the questions, the
- * sentence of /accompagnement that links here, the section of llms.txt) must say the same (offer-page
- * review F6 #2). The second pass (F6b N1) also reads « journées », the abbreviated delay « sous N h »,
- * the period of the work days (per month, never per week), the engagement and the company size.
+ * section of llms.txt) must say the same (offer-page review F6 #2). The second pass (F6b N1) also
+ * reads « journées », the abbreviated delay « sous N h », the period of the work days (per month,
+ * never per week), the engagement and the company size.
  */
 describe('offer parity: every duration restated is the one of § Chaque mois ensuite', () => {
   const offered = new Map<string, number | undefined>()
@@ -284,7 +278,6 @@ describe('offer parity: every duration restated is the one of § Chaque mois ens
 
   const restated: readonly (readonly [string, string])[] = [
     ['the copy module', JSON.stringify(COPY)],
-    ['REFERENT.more on /accompagnement', REFERENT.more.text],
     [
       'llms.txt § Responsable IA externalisé',
       section('Responsable IA externalisé', LLMS, LLMS_PATH),
