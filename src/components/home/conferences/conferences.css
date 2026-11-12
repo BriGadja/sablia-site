@@ -1,0 +1,124 @@
+@layer theme, base, components, utilities;
+
+/* #conferences on the home: talks and seminars on request (US-104). Same sand as the photo strip it
+   follows, set apart by a hairline; its floor leaves room for the #videos dune. */
+@layer components {
+  .v2-home-conferences {
+    position: relative;
+    z-index: 1;
+    background: #f4ecdd;
+    padding: 56px 0 128px;
+    font-family: var(--font-sans);
+
+    .cf-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: 72px;
+      align-items: end;
+    }
+    .cf-grid::before {
+      content: '';
+      grid-column: 1 / -1;
+      height: 1px;
+      margin-bottom: 48px;
+      background: #e4d6c0;
+    }
+    .cf-head,
+    .cf-body {
+      min-width: 0;
+    }
+    .cf-h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      color: #131620;
+      text-wrap: balance;
+    }
+    .cf-line {
+      margin: 0;
+      max-width: 520px;
+      font-size: 17px;
+      line-height: 1.55;
+      color: #3a3f4d;
+      text-wrap: pretty;
+    }
+    .cf-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      margin-top: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #131620;
+      text-decoration: underline;
+      text-decoration-color: #b9852a;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 5px;
+
+      svg {
+        flex: none;
+        color: #835a0c;
+        transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+    }
+    .cf-more:hover svg {
+      transform: translateX(3px);
+    }
+
+    /* entrance: the heading and the line converge from the sides (useArmedReveal) */
+    &[data-reveal='armed'] .cf-head {
+      opacity: 0;
+      transform: translateX(-28px);
+    }
+    &[data-reveal='armed'] .cf-body {
+      opacity: 0;
+      transform: translateX(28px);
+    }
+    &[data-reveal='in'] .cf-head,
+    &[data-reveal='in'] .cf-body {
+      transition:
+        opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+        transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    &[data-reveal='in'] .cf-body {
+      transition-delay: 120ms;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-home-conferences {
+      padding: 40px 0 120px;
+
+      .cf-grid {
+        grid-template-columns: minmax(0, 1fr);
+        row-gap: 16px;
+      }
+      .cf-grid::before {
+        margin-bottom: 24px;
+      }
+      .cf-h2 {
+        font-size: 28px;
+      }
+      /* stacked: a sideways entrance would read as a glitch, both rise instead */
+      &[data-reveal='armed'] .cf-head,
+      &[data-reveal='armed'] .cf-body {
+        transform: translateY(16px);
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-home-conferences .cf-head,
+    .v2-home-conferences .cf-body {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+    .v2-home-conferences .cf-more svg {
+      transition: none !important;
+    }
+  }
+}

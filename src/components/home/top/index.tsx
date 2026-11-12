@@ -1,4 +1,4 @@
-'use client' // the hero recedes under the offer panel (scroll position, viewport width) and draws its underline when seen (tab visibility)
+'use client' // the hero recedes under the monthly offer panel (scroll position, viewport width) and draws its underline when seen (tab visibility)
 
 import Link from 'next/link'
 import { type RefObject, useEffect, useRef, useState, useSyncExternalStore } from 'react'
@@ -10,8 +10,14 @@ import { PATHS } from '@/content/webinaire'
 import { useInView } from '@/lib/hooks/useInView'
 import { useReducedMotion } from '@/lib/hooks/useReducedMotion'
 import { site } from '@/lib/site'
-import { HERO, PHOTO } from './content'
+import { DOORS, HERO, PHOTO } from './content'
 import './top.css'
+
+/**
+ * The band that slides over the sticky hero (US-104, E3): the monthly offer, right after the hero.
+ * The recede, the settle glide and the focus uncover all read this one id.
+ */
+export const PANEL_ID = 'mensuel'
 
 const WIDE = '(min-width: 901px)'
 const subscribeWide = (cb: () => void) => {
@@ -46,8 +52,9 @@ const SETTLE_MS = 160
 /**
  * Writes the recede straight onto the grid's style on each animation frame (no React render, no
  * rounding: the content moves with the scroll and must not step). Wide screens only.
- * When a scroll settles with the panel's top on the doors' row (a half-cut button), the page glides
- * on to the dock if the visitor was going down, or back to the uncovered hero if going up.
+ * When a scroll settles with the panel's top on a row of doors (the buttons or the four doors: a
+ * half-cut door), the page glides on to the dock if the visitor was going down, or back to the
+ * uncovered hero if going up.
  */
 function useRecede(
   heroRef: RefObject<HTMLElement | null>,
@@ -57,7 +64,7 @@ function useRecede(
   useEffect(() => {
     const hero = heroRef.current
     const grid = gridRef.current
-    const panel = document.getElementById('offre')
+    const panel = document.getElementById(PANEL_ID)
     if (!on || !hero || !grid || !panel) return
     const reset = () => {
       grid.style.transform = ''
@@ -82,11 +89,13 @@ function useRecede(
     let dir = 0
     let settle = 0
     const settled = () => {
-      const doors = hero.querySelector('[data-zone="hero"]')
-      if (!doors || dir === 0) return
+      if (dir === 0) return
       const t = panel.getBoundingClientRect().top
-      const d = doors.getBoundingClientRect()
-      if (t <= d.top - 8 || t >= d.bottom + 8) return // doors fully covered or clear
+      const cut = Array.from(hero.querySelectorAll('[data-zone="hero"]')).some((row) => {
+        const d = row.getBoundingClientRect()
+        return t > d.top - 8 && t < d.bottom + 8
+      })
+      if (!cut) return // every row fully covered or clear
       const line = document.querySelector('.v2-header')?.getBoundingClientRect().bottom ?? 0
       const travel = hero.offsetHeight || 800
       window.scrollBy({ top: dir > 0 ? t - Math.max(0, line) : -(travel - t), behavior: 'smooth' })
@@ -120,7 +129,7 @@ function useRecede(
 function useFocusUncover(heroRef: RefObject<HTMLElement | null>, on: boolean) {
   useEffect(() => {
     const hero = heroRef.current
-    const panel = document.getElementById('offre')
+    const panel = document.getElementById(PANEL_ID)
     if (!on || !hero || !panel) return
     const onFocus = () => {
       const travel = hero.offsetHeight || 800
@@ -205,10 +214,32 @@ function CalendarIcon() {
   )
 }
 
+function Arrow() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  )
+}
+
+/** `/responsable-ia-externalise` → `door-responsable-ia-externalise-line`, the id of a door's line. */
+const lineId = (href: string) => `door-${href.slice(1)}-line`
+
 /**
- * Home hero: the promise, two doors in order (the webinar while a session is upcoming, then the
- * 30-minute call on the formation Calendly) and a real photo of the trainer. The section is sticky on
- * wide screens and recedes while the night `#offre` panel slides over it.
+ * Home hero: the promise, the buttons in order (the webinar while a session is upcoming, then the
+ * 30-minute call on the formation Calendly; the call alone once the session has started), a real
+ * photo of the founder, and the four doors of the site under them, the monthly offer first. The
+ * section is sticky on wide screens and recedes while the night `#mensuel` panel slides over it.
  */
 export function Top() {
   const wide = useWide()
@@ -249,14 +280,9 @@ export function Top() {
                   </>
                 }
                 past={
-                  <>
-                    <Cta size="lg" arrow url={site.formationBookingUrl}>
-                      {HERO.cta.book}
-                    </Cta>
-                    <Link className="quiet" href="/formations">
-                      <span className="quiet-t">{HERO.cta.offre}</span>
-                    </Link>
-                  </>
+                  <Cta size="lg" arrow url={site.formationBookingUrl}>
+                    {HERO.cta.book}
+                  </Cta>
                 }
               />
             </div>
@@ -275,6 +301,28 @@ export function Top() {
               fetchPriority="high"
             />
           </figure>
+
+          {/* The label names the link (and the click in the measure); the line describes it. */}
+          <ul className="doors" data-zone="hero">
+            {DOORS.map((d) => (
+              <li key={d.href}>
+                <Link
+                  href={d.href}
+                  className="door"
+                  aria-label={d.label}
+                  aria-describedby={lineId(d.href)}
+                >
+                  <span className="door-label">
+                    {d.label}
+                    <Arrow />
+                  </span>
+                  <span className="door-line" id={lineId(d.href)}>
+                    {d.line}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

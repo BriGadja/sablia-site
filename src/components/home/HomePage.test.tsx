@@ -1,9 +1,10 @@
 /**
- * The assembled training home (plan site-formation-lot1 U13b, Data contract « Home order »): ten
- * bands in order inside `main#contenu`, each id once, the hash anchors the footer, `/about` (301 to
- * `/#derriere`) and the closing band rely on, and none of the bands that left the home (`scene` went
- * to the CRM offer page, `construit` to /realisations). `#webinaire` and the closing band's webinar
- * link exist only while the 03/12 session is ahead, so every case fixes the clock, never the real date.
+ * The assembled home (US-104, plan sablia-site-structure-offre E1): eleven bands in order inside
+ * `main#contenu`, the monthly offer right after the hero, each id once, the hash anchors the footer,
+ * `/about` (301 to `/#derriere`) and the closing band rely on, and none of the bands that left the home
+ * (`scene` went to the CRM offer page, `construit` to /realisations, `apres` gave way to `mensuel`).
+ * `#webinaire` and the closing band's webinar link exist only while the 03/12 session is ahead, so
+ * every case fixes the clock, never the real date.
  */
 import { render } from '@testing-library/react'
 import { renderToString } from 'react-dom/server'
@@ -24,13 +25,14 @@ const START = new Date('2026-12-03T12:00:00+01:00')
 
 const ORDER = [
   'top',
-  'offre',
+  'mensuel',
   'automatisations',
+  'offre',
   'formations',
+  'conferences',
+  'videos',
   'derriere',
   'webinaire',
-  'apres',
-  'videos',
   'faq',
   'fin',
 ]
@@ -62,7 +64,7 @@ afterEach(() => {
 })
 
 describe('home before the 03/12 session', () => {
-  it('mounts the ten bands in the contract order inside main#contenu', () => {
+  it('mounts the eleven bands in the contract order inside main#contenu', () => {
     at(BEFORE)
     const { container } = render(<HomePage />)
     const main = container.querySelector('main#contenu') as HTMLElement
@@ -74,11 +76,18 @@ describe('home before the 03/12 session', () => {
   it('carries each hash anchor exactly once, and no band that left the home', () => {
     at(BEFORE)
     render(<HomePage />)
-    for (const id of [...ANCHORS, 'webinaire', 'apres', 'formations', 'automatisations']) {
+    for (const id of [
+      ...ANCHORS,
+      'mensuel',
+      'conferences',
+      'webinaire',
+      'formations',
+      'automatisations',
+    ]) {
       expect(document.querySelectorAll(`[id="${id}"]`), `#${id}`).toHaveLength(1)
     }
-    expect(document.getElementById('scene')).toBeNull()
-    expect(document.getElementById('construit')).toBeNull()
+    for (const gone of ['scene', 'construit', 'apres'])
+      expect(document.getElementById(gone), `#${gone}`).toBeNull()
   })
 
   it('the static HTML (what crawlers read) has the same bands in the same order', () => {
@@ -87,8 +96,7 @@ describe('home before the 03/12 session', () => {
     const idx = ORDER.map((id) => html.indexOf(`id="${id}"`))
     expect(idx.every((i) => i >= 0)).toBe(true)
     expect([...idx].sort((a, b) => a - b)).toEqual(idx)
-    expect(html).not.toContain('id="scene"')
-    expect(html).not.toContain('id="construit"')
+    for (const gone of ['scene', 'construit', 'apres']) expect(html).not.toContain(`id="${gone}"`)
   })
 
   it('the closing band keeps its quiet link to the webinar and its booking button', () => {

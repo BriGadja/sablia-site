@@ -1,7 +1,7 @@
 {
   "/": {
     "lastmod": "2026-11-12",
-    "hash": "sha256:a7bc9610828366e71cccfe8d26aac39ceab00a5114c7c368d770ec3287d5342a"
+    "hash": "sha256:f77ca1a0811955a3b88a747011fa0b1f22b56920572e68d30c292dfe90f1c86e"
   },
   "/mentions-legales": {
     "lastmod": "2026-11-01",
@@ -44,8 +44,8 @@
     "hash": "sha256:abea29fa3293ea0a92e07de0943fccd8c9c7986478f87899581abb60a190dfac"
   },
   "/formations": {
-    "lastmod": "2026-11-01",
-    "hash": "sha256:1ff9eb33777f708516188142d8a717fee364a75aac8ab388018fbdb1eb8368e2"
+    "lastmod": "2026-11-12",
+    "hash": "sha256:50bc28c6058591dcaac45fdf58f828c111b5501eb4e8dd725ec986968b3013bb"
   },
   "/offres/compte-rendu-appel/google-sheets": {
     "lastmod": "2026-10-26",

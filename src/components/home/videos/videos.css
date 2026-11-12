@@ -24,6 +24,41 @@
       font-weight: 600;
       color: #f1f2f5;
     }
+    /* The custom-build line and the Réalisations door (US-104), under the title. */
+    .vd-besoin {
+      margin: 14px 0 0;
+      max-width: 620px;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #a4aabd;
+      text-wrap: pretty;
+    }
+    .vd-real {
+      /* 44 px hit area: block padding on an inline box enlarges the rect, no text moves */
+      padding-block: 12px;
+      font-weight: 600;
+      color: #f1f2f5;
+      text-decoration: underline;
+      text-decoration-color: #d9a441;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 5px;
+      white-space: nowrap;
+
+      svg {
+        display: inline-block;
+        margin-left: 6px;
+        vertical-align: -2px;
+        color: #d9a441;
+        transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+    }
+    .vd-real:hover svg {
+      transform: translateX(3px);
+    }
+    .vd-real:focus-visible {
+      outline: 2px solid #d9a441;
+      outline-offset: 4px;
+    }
     .vd-channel {
       display: inline-flex;
       align-items: center;
@@ -101,7 +136,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .v2-videos .vid-img {
+    .v2-videos .vid-img,
+    .v2-videos .vd-real svg {
       transition: none;
     }
   }

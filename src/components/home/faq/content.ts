@@ -10,9 +10,11 @@ export interface Faq {
 }
 
 /**
- * The training FAQ, 01b order (plan site-formation-lot1, U9; `/formations` reuses items 1 to 6 and 9).
- * No amount anywhere: the price is in the quote after the 30-minute call (as `/webinaire/apres-reservation`
- * says). Answers are impersonal so the « nous » home and the « je » offer page share them.
+ * The home FAQ, 01b order (plan site-formation-lot1, U9; `/formations` keeps its own copy of items 2 to
+ * 6 and 9). Items 1 and 7 and the closing band follow copy deck B2 (US-104): the monthly offer shows its
+ * price on its own page; a training or a talk gets it in the quote after the 30-minute call (as
+ * `/webinaire/apres-reservation` says). No amount anywhere. Answers are impersonal so the « nous » home
+ * and the « je » offer page share them.
  *
  * « Nos dossiers sont confidentiels. » says only what Anthropic does by default on its business offers,
  * read live on 2026-11-01: https://privacy.claude.com/en/articles/7996868-is-my-data-used-for-model-training
@@ -23,7 +25,7 @@ export interface Faq {
 export const FAQS: readonly Faq[] = [
   {
     q: 'Combien ça coûte ?',
-    a: "Le prix dépend de votre équipe et du format retenu. Il arrive dans le devis, après l'échange de 30 minutes. Le webinaire et l'échange sont gratuits.",
+    a: "Pour le responsable IA externalisé, le prix est affiché sur sa page. Pour une formation ou une conférence, le prix dépend de votre équipe et du format retenu. Il arrive dans le devis, après l'échange de 30 minutes. Le webinaire et l'échange sont gratuits.",
   },
   {
     q: 'Mon équipe utilise déjà Copilot ou ChatGPT.',
@@ -47,7 +49,7 @@ export const FAQS: readonly Faq[] = [
   },
   {
     q: 'Et après les trois jours ?',
-    a: 'Trente jours de questions par mail sont inclus, avec une réponse sous 48 h. Ensuite, un référent IA peut suivre votre équipe : une séance de 2 h par mois et les questions sous 48 h.',
+    a: "Trente jours de questions par mail sont inclus, avec une réponse sous 48 h. Ensuite, si vous voulez que quelqu'un construise et entretienne vos outils chaque mois, c'est le rôle du responsable IA externalisé.",
   },
   {
     q: 'Qui anime ?',
@@ -71,13 +73,15 @@ export function ask(history: readonly number[], i: number): number[] {
 }
 
 /**
- * Home `#fin` band copy (01b « Final band »). The button books on the formation Calendly (« Échange de
- * 30 minutes »); the quiet link goes to the webinar. The label names the session day of `SESSION`
- * (webinaire.ts): the content test fails when the session changes and this label does not.
+ * Home `#fin` band copy (01b « Final band »; text from copy deck B2 `home.fin.text`, US-104: it holds
+ * for the monthly offer, a training or a talk alike, and for `/realisations`, which re-exports it). The
+ * button books on the formation Calendly (« Échange de 30 minutes »); the quiet link goes to the
+ * webinar. The label names the session day of `SESSION` (webinaire.ts): the content test fails when
+ * the session changes and this label does not.
  */
 export const FIN_BAND = {
   title: 'Trente minutes pour parler de votre équipe.',
-  text: 'Vous nous parlez de vos dossiers, nous vous envoyons un programme et son devis.',
+  text: 'Vous me parlez de vos dossiers et de ce que vous avez déjà essayé, je vous dis par où commencer.',
   link: {
     href: '/webinaire',
     label: 'Pas encore prêt ? Le webinaire gratuit du jeudi 3 décembre.',

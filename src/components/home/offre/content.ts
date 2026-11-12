@@ -1,10 +1,12 @@
 /**
- * Visitor text of the home offer band (run site-formation-lot1, copy draft 01b § Home « The offer,
- * 3 days »). No price: the price comes in the quote, after the call (grill 01/11, Q3).
+ * Visitor text of the home training band (run site-formation-lot1, copy draft 01b § Home « The offer,
+ * 3 days »; eyebrow from copy deck B2 `home.offre.eyebrow`, US-104: « L'offre » would read as the
+ * monthly offer that now opens the page). No price: the price comes in the quote, after the call
+ * (grill 01/11, Q3).
  */
 
 export const OFFRE = {
-  eyebrow: "L'offre",
+  eyebrow: 'Formations',
   title: 'Trois jours, six demi-journées.',
   cards: [
     { key: 'jours', big: '3 jours', sub: 'chez vous, en six demi-journées' },

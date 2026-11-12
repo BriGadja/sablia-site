@@ -4,7 +4,7 @@
 @layer components {
   .v2-formations {
     position: relative;
-    /* above #derriere: the drifting photos may cross the section's floor */
+    /* above #conferences: the drifting photos may cross the section's floor */
     z-index: 2;
     background: #f4ecdd;
     padding: 64px 0 16px;

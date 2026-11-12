@@ -7,7 +7,7 @@
     position: relative;
     z-index: 1;
     background: #f2e3df;
-    border-top: 1px solid #e4d6c0;
+    /* opened by its own dune since US-104 (it follows a sand band) */
     padding: 96px 0;
     font-family: var(--font-sans);
     color: #131620;

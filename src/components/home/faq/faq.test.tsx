@@ -50,6 +50,23 @@ describe('content', () => {
     expect(a).not.toMatch(PRICE)
   })
 
+  // US-104 (copy deck B2 `home.faq.prix.a`): the monthly offer's price is public, on its own page.
+  it('« Combien ça coûte ? » says the monthly offer shows its price on its page, still with no amount', () => {
+    expect(byQ('Combien ça coûte ?').a).toBe(
+      "Pour le responsable IA externalisé, le prix est affiché sur sa page. Pour une formation ou une conférence, le prix dépend de votre équipe et du format retenu. Il arrive dans le devis, après l'échange de 30 minutes. Le webinaire et l'échange sont gratuits.",
+    )
+  })
+
+  // US-104 (copy deck B2 `home.faq.apres.a`): after the three days, the monthly offer, never the
+  // retired « référent IA » nor its hours.
+  it('« Et après les trois jours ? » points to the monthly offer, without the référent', () => {
+    const { a } = byQ('Et après les trois jours ?')
+    expect(a).toBe(
+      "Trente jours de questions par mail sont inclus, avec une réponse sous 48 h. Ensuite, si vous voulez que quelqu'un construise et entretienne vos outils chaque mois, c'est le rôle du responsable IA externalisé.",
+    )
+    expect(a).not.toMatch(/référent|2 h par mois|temps partagé/i)
+  })
+
   it('the Copilot / ChatGPT answer says Claude today and the call, never another training', () => {
     const { a } = byQ('Mon équipe utilise déjà Copilot ou ChatGPT.')
     expect(a).toContain("La formation se fait aujourd'hui sur Claude.")
@@ -76,10 +93,12 @@ describe('content', () => {
     expect(src).not.toMatch(/of1|eurHt/)
   })
 
-  it('gives the home closing band the training copy, the webinar link and the formation Calendly', () => {
+  // US-104 (copy deck B2 `home.fin.*`): the closing text holds for the monthly offer, a training or a
+  // talk alike (« un programme et son devis » was true of the training only).
+  it('gives the home closing band the deck copy, the webinar link and the formation Calendly', () => {
     expect(FIN_BAND).toEqual({
       title: 'Trente minutes pour parler de votre équipe.',
-      text: 'Vous nous parlez de vos dossiers, nous vous envoyons un programme et son devis.',
+      text: 'Vous me parlez de vos dossiers et de ce que vous avez déjà essayé, je vous dis par où commencer.',
       link: {
         href: '/webinaire',
         label: 'Pas encore prêt ? Le webinaire gratuit du jeudi 3 décembre.',
@@ -101,6 +120,16 @@ describe('content', () => {
 })
 
 describe('Faq', () => {
+  // US-104: the band now follows a sand band (the webinar band, then `#derriere` from the session
+  // start), no longer the night `#videos`: it opens on its own dune, front = its rose ground.
+  it('opens on its own dune, front = its rose ground', () => {
+    mockReducedMotion(false)
+    const { container } = render(<Faq />)
+    const dune = container.querySelector('#faq > svg.v2-dune')
+    expect(dune?.querySelector('.d-back')?.getAttribute('fill')).toBe('#C68A8E')
+    expect(dune?.querySelector('.d-front')?.getAttribute('fill')).toBe('#F2E3DF')
+  })
+
   it('server-renders every answer, nine buttons and the live stack', () => {
     mockReducedMotion(false)
     const { container } = render(<Faq />)

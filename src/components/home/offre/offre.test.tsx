@@ -32,7 +32,18 @@ describe('static HTML (SSR content rule)', () => {
     expect(html).toContain('v2-offre')
     expect(html).toContain('data-zone="offre"')
     expect(html).toMatch(/<h2[^>]*>Trois jours, six demi-journées\.<\/h2>/)
-    expect(html).toContain("L'offre")
+  })
+
+  // US-104 (plan sablia-site-structure-offre E3, copy deck B2 `home.offre.eyebrow`): once the monthly
+  // block opens the page, « L'offre » over the three days would read as the monthly offer. At its new
+  // rank (4th, after the rose agents band) the panel no longer slides over the hero: it opens on a
+  // dune like every night band that follows a light one.
+  it('names the training by its menu word, and opens on its own dune (front = its night ground)', () => {
+    expect(html).toMatch(/v2-eyebrow[^>]*>Formations</)
+    expect(html).not.toContain("L'offre")
+    const dune = html.match(/<svg[^>]*v2-dune[^>]*>.*?<\/svg>/)?.[0] ?? ''
+    expect(dune).toContain('fill="#C68A8E"')
+    expect(dune).toContain('fill="#161B29"')
   })
 
   it('carries the three figures: 3 jours, 12 people at most, your own files', () => {

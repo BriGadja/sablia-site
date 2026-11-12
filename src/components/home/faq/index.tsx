@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { Dune } from '@/components/shell/Dune'
 import { Eyebrow } from '@/components/shell/Eyebrow'
 import { IllHead, SandIllustration } from '@/components/shell/SandIllustration'
 import { useInView } from '@/lib/hooks/useInView'
@@ -43,6 +44,7 @@ export function Faq() {
 
   return (
     <section id="faq" ref={sectionRef} className="v2-faq">
+      <Dune back="#C68A8E" front="#F2E3DF" />
       <div className="wrap">
         <IllHead>
           <div>

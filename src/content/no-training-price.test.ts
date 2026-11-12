@@ -12,7 +12,18 @@ import { describe, expect, it } from 'vitest'
 const SRC = resolve(__dirname, '..')
 const PRICE = /\d[\d\s .,]*\s?(€|euros?)/i
 
-const HOME = ['top', 'offre', 'formations', 'derriere', 'webinaire', 'apres', 'faq']
+// US-104: `apres` left the home; the monthly block (`mensuel`, its price lives on the offer page only)
+// and the talks (`conferences`, price in the quote) are scanned like every other home band.
+const HOME = [
+  'top',
+  'mensuel',
+  'offre',
+  'formations',
+  'conferences',
+  'derriere',
+  'webinaire',
+  'faq',
+]
 const FILES = [
   ...HOME.map((d) => `components/home/${d}/content.ts`),
   'components/home/automatisations/heading.ts',

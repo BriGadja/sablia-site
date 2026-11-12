@@ -6,25 +6,34 @@ import { EYEBROW, LINE, SR_INTRO, TITLE } from './heading'
 import { Automatisations } from './index'
 
 /**
- * Plan site-formation-lot1, U9: the agents band is reframed as « what the team knows after three
- * days ». Its framing lives in `heading.ts` (the file the red-line guard reads); the five scenes in
- * `content.ts` are unchanged and stay out of the guard (their sample prices are not training prices).
+ * US-104 (plan sablia-site-structure-offre E5, copy deck B2 `home.auto.*`): the agents band now shows
+ * what the offer builds, no longer « after three days ». Its framing lives in `heading.ts` (the file
+ * the red-line guard reads); the five scenes in `content.ts` are unchanged and stay out of the guard
+ * (their sample prices are not training prices).
  */
 const html = renderToString(<Automatisations />).replace(/&#x27;/g, "'")
 
-describe('heading copy (01b « Après trois jours »)', () => {
-  it('carries the 01b wording', () => {
-    expect(EYEBROW).toBe('Après trois jours')
-    expect(TITLE).toBe('Ce que votre équipe sait faire.')
+describe('heading copy (deck « Ce que je construis »)', () => {
+  it('carries the deck wording', () => {
+    expect(EYEBROW).toBe('Ce que je construis')
+    expect(TITLE).toBe('Les tâches qui reviennent, confiées à Claude.')
     expect(LINE).toBe(
-      "Confier à Claude les tâches qui reviennent, avec vos documents et vos règles, puis relire ce qu'il produit.",
+      "Chaque outil part d'une tâche que votre équipe fait déjà : Claude prépare, elle relit et valide.",
     )
-    expect(SR_INTRO).toMatch(/^Exemples animés de tâches qu'une équipe formée confie à Claude\./)
+    expect(SR_INTRO).toBe(
+      "Exemples animés d'outils construits sur des tâches qui reviennent. Pour chaque cas, une demande arrive et Claude produit ce que vous validez : un devis, un mail envoyé à la bonne personne, le résumé de la veille du matin, les documents d'une intervention, le compte rendu d'une séance et son mail de suivi.",
+    )
+  })
+
+  it('no longer frames the band as « after three days » of training', () => {
+    const all = [EYEBROW, TITLE, LINE, SR_INTRO].join(' ')
+    expect(all).not.toMatch(/trois jours|équipe formée/i)
   })
 
   it('has no em dash, no amount, no banned wording', () => {
     const all = [EYEBROW, TITLE, LINE, SR_INTRO].join(' ')
     expect(all).not.toMatch(/—|€|euros?\b|IAPreneurs|CPF|finançable|certifié|Qualiopi/i)
+    expect(all).not.toMatch(/audit|référent|temps partagé/i)
   })
 })
 

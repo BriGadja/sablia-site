@@ -4,9 +4,9 @@ import './formations.css'
 import { STRIP } from './content'
 
 /**
- * `#formations`: three photos of a real session open the trainer band; `#derriere` names him right
- * after. A dune carries the rose of the agents band into the sand. The photos drift a few pixels
- * against each other on scroll (CSS view timeline, final state without support or under reduced motion).
+ * `#formations`: three photos of a real session, right after the night training band (`#offre`) since
+ * US-104; a dune carries that band into the sand. The photos drift a few pixels against each other on
+ * scroll (CSS view timeline, final state without support or under reduced motion).
  */
 export function Formations() {
   return (

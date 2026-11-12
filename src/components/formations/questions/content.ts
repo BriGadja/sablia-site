@@ -1,5 +1,6 @@
 // « Questions » of /formations (01b § 3 Questions): items faq.1 to faq.6 and faq.9 of the home FAQ,
 // same strings (01b § 2). The title is kept from the previous page.
+// Since US-104 the home's item 1 also names the monthly offer: items 2 to 6 and 9 alone stay the same strings.
 
 export const EYEBROW = 'Questions'
 export const TITLE = "Ce qu'on me demande avant."

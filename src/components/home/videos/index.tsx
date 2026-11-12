@@ -4,7 +4,17 @@ import { posterPath } from '@/components/ressources/poster'
 import { Dune } from '@/components/shell/Dune'
 import { Eyebrow } from '@/components/shell/Eyebrow'
 import type { RessourceSummary } from '@/lib/contenu'
-import { CHANNEL_LABEL, CHANNEL_URL, EYEBROW, resolveTiles, TITLE, type Tile } from './content'
+import {
+  BESOIN,
+  CHANNEL_LABEL,
+  CHANNEL_URL,
+  EYEBROW,
+  REALISATIONS_HREF,
+  REALISATIONS_LABEL,
+  resolveTiles,
+  TITLE,
+  type Tile,
+} from './content'
 import './videos.css'
 
 type Env = Record<string, string | undefined>
@@ -48,6 +58,25 @@ export function VideosView({ tiles }: { tiles: readonly Tile[] }) {
           <div>
             <Eyebrow onDark>{EYEBROW}</Eyebrow>
             <h2 className="vd-h2">{TITLE}</h2>
+            <p className="vd-besoin">
+              {BESOIN}{' '}
+              <Link href={REALISATIONS_HREF} className="vd-real">
+                {REALISATIONS_LABEL}
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </Link>
+            </p>
           </div>
           <a className="vd-channel" href={CHANNEL_URL} target="_blank" rel="noopener">
             {CHANNEL_LABEL}

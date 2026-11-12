@@ -4,8 +4,8 @@
 export const site = {
   name: 'Sablia',
   domain: 'sablia.io',
-  // The home's promise (01b `home.meta.title` without « · Sablia »); public/manifest.json repeats it.
-  tagline: "Formation à l'IA pour votre équipe, sur ses dossiers",
+  // The home's title without « · Sablia » (copy deck B2 `home.tagline`); public/manifest.json repeats it.
+  tagline: "Outils d'IA et formation pour les PME, à Rouen",
   founder: 'Brice Gachadoat',
   email: 'brice@sablia.io',
 

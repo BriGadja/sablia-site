@@ -1,0 +1,139 @@
+@layer theme, base, components, utilities;
+
+/* #mensuel on the home: the monthly offer on the night panel that slides over the sticky hero
+   (top/index.tsx PANEL_ID; the look the #offre panel had while it held that rank). */
+@layer components {
+  .v2-home-mensuel {
+    position: relative;
+    z-index: 1;
+    margin: 0 16px;
+    border-radius: 32px;
+    background: #161b29;
+    color: #f1f2f5;
+    padding: 72px 0 80px;
+    box-shadow: 0 -30px 60px -40px rgba(0, 0, 0, 0.5);
+    font-family: var(--font-sans);
+    /* An anchor to #mensuel lands docked under the sticky header (72 px). */
+    scroll-margin-top: 72px;
+
+    .ms-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      grid-template-rows: auto 1fr;
+      grid-template-areas:
+        'head lines'
+        'cta lines';
+      column-gap: 72px;
+      row-gap: 32px;
+    }
+    .ms-head {
+      grid-area: head;
+      min-width: 0;
+    }
+    .ms-h2 {
+      margin: 14px 0 0;
+      font-size: 40px;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      font-weight: 600;
+      color: #f1f2f5;
+      /* « Votre responsable IA, » then « sans le recruter. »: a balanced wrap would split the name of
+         the role (« responsable / IA »); 9.5em sits between the two first-line candidates, measured at
+         40 and 30 px */
+      max-width: 9.5em;
+      text-wrap: pretty;
+    }
+    .ms-cta {
+      grid-area: cta;
+      align-self: end;
+    }
+
+    /* The three lines, ruled like a ledger: a hairline over each, its first 40 px in gold. */
+    .ms-lines {
+      grid-area: lines;
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .ms-line {
+      position: relative;
+      padding: 22px 0 24px;
+      border-top: 1px solid #323a52;
+      font-size: 20px;
+      line-height: 1.45;
+      letter-spacing: -0.005em;
+      color: #f1f2f5;
+      /* two short lines at most: balanced, the first line breaks at the comma */
+      text-wrap: balance;
+    }
+    .ms-line:last-child {
+      border-bottom: 1px solid #323a52;
+    }
+    .ms-line::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: #d9a441;
+      transform-origin: 0 50%;
+    }
+
+    /* entrance (phones mostly: on wide screens the panel is on the first screen and stays final):
+       each gold mark draws, then its line rises */
+    &[data-reveal='armed'] .ms-line {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    &[data-reveal='armed'] .ms-line::before {
+      transform: scaleX(0);
+    }
+    &[data-reveal='in'] .ms-line {
+      transition:
+        opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+        transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+      transition-delay: calc(var(--i, 0) * 120ms + 160ms);
+    }
+    &[data-reveal='in'] .ms-line::before {
+      transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+      transition-delay: calc(var(--i, 0) * 120ms + 60ms);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-home-mensuel {
+      margin: 0 8px;
+      border-radius: 22px;
+      padding: 56px 0 60px;
+      scroll-margin-top: 64px;
+
+      .ms-grid {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto;
+        grid-template-areas:
+          'head'
+          'lines'
+          'cta';
+        row-gap: 28px;
+      }
+      .ms-h2 {
+        font-size: 30px;
+      }
+      .ms-line {
+        padding: 18px 0 20px;
+        font-size: 17px;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-home-mensuel .ms-line,
+    .v2-home-mensuel .ms-line::before {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+}

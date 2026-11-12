@@ -1,19 +1,20 @@
 @layer theme, base, components, utilities;
 
-/* Hero of the home: sticky on wide screens, receding under the night #offre panel. */
+/* Hero of the home: sticky on wide screens, receding under the night #mensuel panel (PANEL_ID). */
 @layer components {
   .v2-top {
     position: sticky;
     top: 0;
     z-index: 0;
-    padding: 64px 0 40px;
+    /* the bottom padding keeps the four doors above the crest of the floor dune */
+    padding: 64px 0 76px;
     background: #f4ecdd;
     font-family: var(--font-sans);
 
     .hero-grid {
       display: grid;
       grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-      gap: 56px;
+      gap: 44px 56px;
       align-items: center;
       transform-origin: 50% 20%;
     }
@@ -115,6 +116,69 @@
       color: #61677a;
     }
 
+    /* The four doors of the site (the menu's four intents), one row under the promise and the photo:
+       a hairline over each, gold over the monthly offer, the one Sablia leads with. Each door is a
+       whole block link (label, then its line), so its hit area is the block. */
+    .doors {
+      grid-column: 1 / -1;
+      /* above the floor dune (an absolute layer) wherever the two meet */
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0 32px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      li {
+        min-width: 0;
+      }
+    }
+    .door {
+      display: block;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 16px 0 6px;
+      border-top: 1px solid #e4d6c0;
+      color: #131620;
+      text-decoration: none;
+    }
+    .doors li:first-child .door {
+      border-top: 2px solid #b9852a;
+      padding-top: 15px;
+    }
+    .door-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 17px;
+      line-height: 1.3;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      transition: color 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+
+      svg {
+        flex: none;
+        color: #835a0c;
+        transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+    }
+    .door-line {
+      display: block;
+      margin-top: 6px;
+      max-width: 34ch;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #3a3f4d;
+      text-wrap: pretty;
+    }
+    .door:hover .door-label {
+      color: #835a0c;
+    }
+    .door:hover .door-label svg {
+      transform: translateX(3px);
+    }
+
     /* The trainer in front of a real audience (09/10): the photo is the hero's object. */
     .photo {
       position: relative;
@@ -136,16 +200,38 @@
       }
     }
 
-    /* Phones: no recede, one column, the text first and the photo under the two doors. */
+    /* Between the phone and the wide screen the four doors go two by two. */
+    @media (min-width: 901px) and (max-width: 1180px) {
+      .doors {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px 32px;
+      }
+    }
+
+    /* Phones: no recede, one column, the text first, the photo under the buttons, then the doors
+       as a list. */
     @media (max-width: 900px) {
       position: relative;
-      padding: 40px 0 48px;
+      padding: 40px 0 72px;
 
       .hero-grid {
         grid-template-columns: minmax(0, 1fr);
         gap: 32px;
         transform: none !important;
         opacity: 1 !important;
+      }
+      .doors {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+      }
+      .door {
+        padding: 14px 0 14px;
+      }
+      .doors li:first-child .door {
+        padding-top: 13px;
+      }
+      .doors li:last-child .door {
+        border-bottom: 1px solid #e4d6c0;
       }
       .h1 {
         font-size: 36px;
@@ -172,7 +258,9 @@
         animation: none !important;
         background-size: 100% 6px !important;
       }
-      .quiet {
+      .quiet,
+      .door-label,
+      .door-label svg {
         transition: none !important;
       }
     }

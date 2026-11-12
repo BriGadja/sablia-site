@@ -1,16 +1,18 @@
 import { act, fireEvent, render } from '@testing-library/react'
 import { renderToString } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { NAV_LINKS } from '@/components/shell/nav-links'
 import { SESSION } from '@/content/webinaire'
 import { mockIntersectionObserver, mockReducedMotion } from '@/lib/hooks/test-utils'
 import { site } from '@/lib/site'
 import * as content from './content'
-import { recede, Top } from './index'
+import { PANEL_ID, recede, Top } from './index'
 
 /**
- * US-91 (home hero, plan site-formation-lot1 U7): the Q1 (b) promise, the sentence that names
- * Claude, two doors in order (the webinar first, the call second on the formation Calendly) while a
- * session is upcoming, then the call first and a quiet link to the offer page once it has started.
+ * US-104 (home hero, plan sablia-site-structure-offre E1/E2, copy deck B2 `home.*`): the promise of
+ * what Sablia does for an SME, the four doors of the site (the monthly offer first) as plain links,
+ * and the first button on today's switch: the webinar link then the call while a session is upcoming,
+ * the call alone once it has started. One image only: the 09/10 photo, loaded eagerly.
  */
 const BEFORE = '2026-11-05T10:00:00+01:00'
 const AFTER = '2026-12-03T12:00:00+01:00'
@@ -29,18 +31,47 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 
-const H1 = "Votre équipe apprend l'IA sur ses propres dossiers."
+const H1 = "L'IA mise en place dans votre PME, et votre équipe formée."
 const SUB =
-  "Trois jours chez vous, jusqu'à 12 personnes, pour se former à Claude. Premier pas : un webinaire gratuit d'une heure, le jeudi midi."
+  "Brice Gachadoat, fondateur de Sablia, à Rouen, pour les PME de 10 à 50 personnes qui n'ont personne en interne pour s'en occuper."
+const PILL = 'Sablia, à Rouen · PME de 10 à 50 personnes'
+const DOORS = [
+  {
+    href: '/responsable-ia-externalise',
+    label: 'Responsable IA externalisé',
+    line: "Quelqu'un qui construit et entretient vos outils, chaque mois.",
+  },
+  {
+    href: '/formations',
+    label: 'Formations',
+    line: "D'une demi-journée à trois jours, pour votre équipe.",
+  },
+  {
+    href: '/conferences',
+    label: 'Conférences',
+    line: 'Une conférence ou un séminaire, sur demande.',
+  },
+  {
+    href: '/realisations',
+    label: 'Réalisations',
+    line: 'Outils, sites et formations construits pour des clients.',
+  },
+]
 
 /** The actionable elements of the hero's button row, in document order. */
 function actions(section: Element | null): HTMLElement[] {
-  const row = section?.querySelector('[data-zone="hero"]')
+  const row = section?.querySelector('.cta-row[data-zone="hero"]')
   return Array.from(row?.querySelectorAll<HTMLElement>('a, button') ?? [])
 }
 
-describe('Top, hero of the training site', () => {
-  it('is the #top section with the Q1 (b) h1 and the sentence that names Claude', () => {
+/** The four door links, in document order. */
+function doors(section: Element | null): HTMLAnchorElement[] {
+  const row = section?.querySelector('.doors[data-zone="hero"]')
+  return Array.from(row?.querySelectorAll<HTMLAnchorElement>('a') ?? [])
+}
+
+describe('Top, hero of the site', () => {
+  it('is the #top section with the deck h1, sub, pill and reassurance', () => {
     at(BEFORE)
     const { container } = render(<Top />)
     const section = container.querySelector('section#top.v2-top')
@@ -48,9 +79,24 @@ describe('Top, hero of the training site', () => {
     const h1s = container.querySelectorAll('h1')
     expect(h1s).toHaveLength(1)
     expect(h1s[0].textContent).toBe(H1)
+    expect(h1s[0].querySelector('.hx-u')?.textContent).toBe('votre équipe formée')
     expect(section?.textContent).toContain(SUB)
-    expect(section?.textContent).toContain("L'IA au travail · formation sur site")
+    expect(section?.textContent).toContain(PILL)
     expect(section?.textContent).toContain('Webinaire et échange gratuits, sans engagement.')
+  })
+
+  it('opens the four doors of the site, the monthly offer first, as plain links in the hero zone', () => {
+    at(BEFORE)
+    const { container } = render(<Top />)
+    const links = doors(container.querySelector('#top'))
+    expect(links.map((a) => a.getAttribute('href'))).toEqual(DOORS.map((d) => d.href))
+    links.forEach((a, i) => {
+      expect(a.textContent).toContain(DOORS[i].label)
+      expect(a.textContent).toContain(DOORS[i].line)
+      expect(a.getAttribute('target')).toBeNull()
+    })
+    // The same four intents as the menu, in the same order and words (US-103).
+    expect(DOORS.map((d) => [d.href, d.label])).toEqual(NAV_LINKS.map((l) => [l.href, l.label]))
   })
 
   it('before the session: the webinar link first, « Réserver 30 min » second on the formation Calendly', () => {
@@ -78,37 +124,40 @@ describe('Top, hero of the training site', () => {
     )
   })
 
-  it('from the session start: « Réserver 30 min » first, the quiet link to /formations second, no webinar link', () => {
+  it('from the session start: « Réserver 30 min » alone in the button row, no webinar link, the four doors stay', () => {
     at(AFTER)
     const open = vi.spyOn(window, 'open').mockReturnValue(null)
     const { container } = render(<Top />)
     const section = container.querySelector('#top')
-    const [first, second, ...rest] = actions(section)
+    const [first, ...rest] = actions(section)
     expect(rest).toHaveLength(0)
     expect(first.matches('button[data-cta-book]')).toBe(true)
     expect(first.textContent).toContain('Réserver 30 min')
     fireEvent.click(first)
     expect(open.mock.calls[0][0]).toBe(site.formationBookingUrl)
-    expect(second.tagName).toBe('A')
-    expect(second.getAttribute('href')).toBe('/formations')
-    expect(second.textContent).toBe("Voir l'offre en détail")
     expect(section?.querySelector('a[href="/webinaire"]')).toBeNull()
+    expect(doors(section).map((a) => a.getAttribute('href'))).toEqual(DOORS.map((d) => d.href))
   })
 
-  it('static HTML built before the session carries the text and the webinar link', () => {
+  it('static HTML built before the session carries the text, the webinar link and the doors', () => {
     vi.stubEnv('NEXT_PUBLIC_BUILD_AT', BEFORE)
     at(AFTER)
     const html = renderToString(<Top />).replace(/&#x27;/g, "'")
     expect(html).toContain('id="top"')
     expect(html).toContain('href="/webinaire"')
     expect(html).toContain('data-zone="hero"')
-    expect(html).toMatch(/<h1[^>]*>.*ses propres dossiers.*<\/h1>/)
-    expect(html).toContain('Premier pas : un webinaire gratuit')
+    expect(html).toMatch(/<h1[^>]*>.*votre équipe formée.*<\/h1>/)
+    expect(html).toContain(SUB)
+    for (const d of DOORS) {
+      expect(html).toContain(`href="${d.href}"`)
+      expect(html).toContain(d.line)
+    }
   })
 
-  it('shows the 09/10 photo with its alt text, sizes and srcset, loaded eagerly', () => {
+  it('shows the 09/10 photo with its alt text, sizes and srcset, loaded eagerly, and no other image', () => {
     at(BEFORE)
     const { container } = render(<Top />)
+    expect(container.querySelectorAll('#top img')).toHaveLength(1)
     const img = container.querySelector('#top img')
     expect(img?.getAttribute('alt')).toBe(
       "Brice Gachadoat parle debout à un pupitre, devant une salle d'une vingtaine de personnes assises.",
@@ -120,18 +169,22 @@ describe('Top, hero of the training site', () => {
     expect(img?.getAttribute('width')).toBe('1200')
     expect(img?.getAttribute('height')).toBe('800')
     expect(img?.getAttribute('loading')).not.toBe('lazy')
+    expect(img?.getAttribute('fetchpriority')).toBe('high')
   })
 
-  it('carries no price, no CRM loop and no em dash', () => {
+  it('carries no price, no retired offer word, no CRM loop and no em dash', () => {
     at(BEFORE)
     const { container } = render(<Top />)
     const text = container.textContent ?? ''
-    expect(text).not.toMatch(/€|euros?\b/i)
+    expect(text).not.toMatch(/€|euros?\b|\bprix\b|tarif/i)
+    expect(text).not.toMatch(/temps partagé|référent|audit/i)
     expect(text).not.toMatch(/CRM|Paul Lemoine|Appel terminé/)
     expect(text).not.toContain('—')
     expect(container.querySelector('button[aria-label*="pause" i]')).toBeNull()
     for (const gone of ['CALLERS', 'proofLine', 'derive', 'FINAL_FRAME', 'H1_LINES'])
       expect(Object.keys(content)).not.toContain(gone)
+    // The quiet « Voir l'offre en détail » door left with the four doors (deck `home.hero.cta`).
+    expect(Object.keys(content.HERO.cta)).not.toContain('offre')
   })
 })
 
@@ -140,7 +193,7 @@ describe('Top, hero of the training site', () => {
  * the static HTML holds it undrawn, and it draws once the tab is visible, the hero is in view and the
  * photo and fonts are ready (at most 1.2 s of waiting for those two). It plays once.
  */
-describe('the gold underline under « ses propres dossiers »', () => {
+describe('the gold underline under « votre équipe formée »', () => {
   const state = (c: Element) => c.querySelector('#top')?.getAttribute('data-underline')
   const photo = (c: Element) => c.querySelector('#top img') as HTMLImageElement
 
@@ -213,9 +266,16 @@ describe('the gold underline under « ses propres dossiers »', () => {
 
 /**
  * U7b: while the night panel slides over the sticky hero, the hero content rises at 0.6 of the scroll
- * speed, so the panel reaches the two doors no sooner than ordinary scrolling would take them under
+ * speed, so the panel reaches the doors no sooner than ordinary scrolling would take them under
  * the header; the fade comes late, the doors stay readable over the first third of the slide.
+ * US-104 (E3): the panel is the monthly offer, the band that now follows the hero, named once.
  */
+describe('the panel that slides over the hero', () => {
+  it('is the monthly offer band (#mensuel)', () => {
+    expect(PANEL_ID).toBe('mensuel')
+  })
+})
+
 describe('recede(p, travel)', () => {
   it('is the identity before the slide', () => {
     expect(recede(0, 560)).toEqual({ y: 0, scale: 1, opacity: 1 })
@@ -235,9 +295,10 @@ describe('recede(p, travel)', () => {
 })
 
 /**
- * U7b, second critic: a visitor who stops while the panel's top lies on the doors' row would rest on
+ * U7b, second critic: a visitor who stops while the panel's top lies on a row of doors would rest on
  * a half-cut button. When the scroll settles there (wide screens, motion allowed), the page glides on
- * to the dock if the visitor was going down, or back to the uncovered hero if going up.
+ * to the dock if the visitor was going down, or back to the uncovered hero if going up. US-104: the
+ * hero has two such rows (the buttons, then the four doors), each one counts.
  */
 describe('never rests on a half-covered door', () => {
   const H = 800 // happy-dom has no layout: the hero's travel falls back to 800
@@ -253,7 +314,8 @@ describe('never rests on a half-covered door', () => {
       removeEventListener: () => {},
     }))
   }
-  function layout(panel: { top: number }, doors = { top: 300, bottom: 348 }) {
+  const ROWS = { cta: { top: 300, bottom: 348 }, doors: { top: 420, bottom: 500 } }
+  function layout(panel: { top: number }, rows = ROWS) {
     vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (
       this: Element,
     ) {
@@ -270,8 +332,11 @@ describe('never rests on a half-covered door', () => {
           toJSON: () => ({}),
         }) as DOMRect
       if (this.classList.contains('v2-header')) return box(0, 72)
-      if (this.id === 'offre') return box(panel.top, panel.top + 900)
-      if (this.getAttribute('data-zone') === 'hero') return box(doors.top, doors.bottom)
+      if (this.id === PANEL_ID) return box(panel.top, panel.top + 900)
+      if (this.getAttribute('data-zone') === 'hero') {
+        const row = this.classList.contains('doors') ? rows.doors : rows.cta
+        return box(row.top, row.bottom)
+      }
       return box(0, 0)
     })
   }
@@ -292,7 +357,7 @@ describe('never rests on a half-covered door', () => {
       <>
         <header className="v2-header" />
         <Top />
-        <section id="offre" />
+        <section id={PANEL_ID} />
       </>,
     )
 
@@ -323,13 +388,24 @@ describe('never rests on a half-covered door', () => {
     expect(by).toHaveBeenCalledWith({ top: -(H - 320), behavior: 'smooth' })
   })
 
-  it('leaves the page alone when the doors are clear or fully covered', async () => {
+  it('a stop on the row of the four doors glides too', async () => {
     const { scroll, by } = setup()
-    const panel = { top: 420 }
+    layout({ top: 460 })
+    page()
+    await scrollTo(scroll, 200, 220)
+    expect(by).toHaveBeenCalledTimes(1)
+    expect(by).toHaveBeenCalledWith({ top: 460 - 72, behavior: 'smooth' })
+  })
+
+  it('leaves the page alone when every row is clear or fully covered', async () => {
+    const { scroll, by } = setup()
+    const panel = { top: 560 } // both rows clear
     layout(panel)
     page()
-    await scrollTo(scroll, 400, 420)
-    panel.top = 200
+    await scrollTo(scroll, 100, 120)
+    panel.top = 380 // the buttons clear, the doors fully covered
+    await scrollTo(scroll, 300, 320)
+    panel.top = 200 // both rows fully covered
     await scrollTo(scroll, 600, 620)
     expect(by).not.toHaveBeenCalled()
   })
