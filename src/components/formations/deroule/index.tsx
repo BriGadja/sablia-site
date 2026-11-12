@@ -5,7 +5,7 @@ import { useRef } from 'react'
 import { Dune } from '@/components/shell/Dune'
 import { Eyebrow } from '@/components/shell/Eyebrow'
 import { useStaged } from '../useStaged'
-import { EYEBROW, HALF_DAY_COUNT, HALF_DAYS, NOTE, TITLE } from './content'
+import { EYEBROW, HALF_DAY_COUNT, HALF_DAYS, NOTE, SHORT_FORMATS, TITLE } from './content'
 import './deroule.css'
 
 const DAYS = Array.from({ length: HALF_DAY_COUNT }, (_, i) => i + 1)
@@ -53,6 +53,7 @@ export function Deroule() {
           })}
         </ol>
         <p className="dr-note">{NOTE}</p>
+        <p className="dr-short">{SHORT_FORMATS}</p>
       </div>
     </section>
   )

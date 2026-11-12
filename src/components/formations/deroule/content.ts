@@ -40,3 +40,9 @@ export const HALF_DAYS: readonly HalfDays[] = [
     what: 'La mesure « après », le plan de formation documenté, et la suite si vous la voulez.',
   },
 ]
+
+/**
+ * US-109 (copy deck B5 `form.short`): shorter formats exist, on request; no price, no programme.
+ * Rendered after NOTE, next to the durations of the bar.
+ */
+export const SHORT_FORMATS = 'Des formats dès une demi-journée, sur demande.'

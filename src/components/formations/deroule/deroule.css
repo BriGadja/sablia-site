@@ -144,6 +144,29 @@
       line-height: 1.6;
       color: #a4aabd;
     }
+    /* US-109: the shorter formats, one brighter line under the note, led by a short gold stroke (the
+       length of one half-day segment, scaled down) */
+    .dr-short {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin: 12px 0 0;
+      max-width: 64ch;
+      font-size: 16px;
+      line-height: 1.5;
+      font-weight: 500;
+      color: #f1f2f5;
+      text-wrap: pretty;
+    }
+    .dr-short::before {
+      content: '';
+      flex: none;
+      width: 20px;
+      height: 3px;
+      border-radius: 2px;
+      background: #d9a441;
+      transform: translateY(-4px);
+    }
   }
 
   @media (max-width: 900px) {

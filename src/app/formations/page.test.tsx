@@ -1,6 +1,7 @@
 import { fireEvent, render } from '@testing-library/react'
 import { renderToString } from 'react-dom/server'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { SHORT_FORMATS } from '@/components/formations/deroule/content'
 import { openBookingUrl } from '@/lib/booking'
 import { site } from '@/lib/site'
 import Page, { metadata } from './page'
@@ -221,5 +222,68 @@ describe('every « Réserver 30 min » of /formations opens the « Échange de 3
       [site.formationBookingUrl],
     ])
     expect(site.formationBookingUrl).toBe('https://calendly.com/brice-gachadoat/echange-30-minutes')
+  })
+})
+
+// US-109 (plan sablia-site-structure-offre F4, copy deck B5 `form.short` and `reminder.*`): two
+// additions only, nothing of the page above is reworded. Each render pins the instant (build stamp
+// and visitor clock), before and from the session start.
+describe('/formations additions (US-109)', () => {
+  const BEFORE = '2026-11-20T10:00:00+01:00'
+  const AFTER = '2026-12-03T12:00:00+01:00'
+  const REMINDER =
+    "Webinaire gratuit, jeudi 3 décembre de 12 h à 13 h : « Bureaux d'études : votre équipe utilise déjà l'IA. Avec quelles règles ? »"
+  const flat = (s: string) =>
+    decode(s)
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/[\s\u00a0\u202f]+/g, ' ')
+
+  /** Renders the page at `iso` (static HTML as built at that instant) and restores the clock. */
+  function at<T>(iso: string, run: () => T): T {
+    vi.stubEnv('NEXT_PUBLIC_BUILD_AT', iso)
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date(iso))
+    try {
+      return run()
+    } finally {
+      vi.useRealTimers()
+      vi.unstubAllEnvs()
+    }
+  }
+
+  it('says formats start at a half-day, on request, in the déroulé right after its note', () => {
+    expect(SHORT_FORMATS).toBe('Des formats dès une demi-journée, sur demande.')
+    const html = at(BEFORE, () => renderToString(<Page />))
+    const start = html.indexOf('id="deroule"')
+    const deroule = flat(html.slice(start, html.indexOf('</section>', start)))
+    const note = deroule.indexOf('Le programme exact est fixé dans la convention de formation.')
+    expect(note).toBeGreaterThan(0)
+    expect(deroule.indexOf(SHORT_FORMATS)).toBeGreaterThan(note)
+  })
+
+  it('while the session is ahead: the webinar reminder between #conference and #preuve, linked to /webinaire', () => {
+    const html = at(BEFORE, () => renderToString(<Page />))
+    const from = html.indexOf('id="conference"')
+    const between = html.slice(html.indexOf('</section>', from), html.indexOf('id="preuve"'))
+    expect(flat(between)).toContain(REMINDER)
+    expect(decode(between)).toMatch(/<a [^>]*href="\/webinaire"[^>]*>[\s\S]*?Je m'inscris/)
+    expect(flat(html).match(/Webinaire gratuit/g)).toHaveLength(1)
+  })
+
+  it('from the session start: the reminder is gone, the half-day sentence stays', () => {
+    const html = at(AFTER, () => renderToString(<Page />))
+    expect(html).not.toContain('href="/webinaire"')
+    expect(flat(html)).not.toContain('Webinaire gratuit')
+    expect(flat(html)).toContain(SHORT_FORMATS)
+  })
+
+  it('the reminder adds no booking button: still exactly two, before and from the session start', () => {
+    for (const iso of [BEFORE, AFTER]) {
+      at(iso, () => {
+        const { container, unmount } = render(<Page />)
+        expect(container.querySelectorAll('button[data-cta-book]')).toHaveLength(2)
+        unmount()
+      })
+    }
   })
 })
