@@ -237,9 +237,10 @@ const lineId = (href: string) => `door-${href.slice(1)}-line`
 
 /**
  * Home hero: the promise, the buttons in order (the webinar while a session is upcoming, then the
- * 30-minute call on the formation Calendly; the call alone once the session has started), a real
- * photo of the founder, and the four doors of the site under them, the monthly offer first. The
- * section is sticky on wide screens and recedes while the night `#mensuel` panel slides over it.
+ * 30-minute call on the formation Calendly; the call alone once the session has started), the four
+ * doors of the site, the monthly offer first, and a real photo of the founder (beside the copy on
+ * wide screens, after the doors on phones). The section is sticky on wide screens and recedes while
+ * the night `#mensuel` panel slides over it.
  */
 export function Top() {
   const wide = useWide()
@@ -289,20 +290,9 @@ export function Top() {
             <p className="free">{HERO.reassure}</p>
           </div>
 
-          <figure className="photo">
-            {/* biome-ignore lint/performance/noImgElement: static export, no image optimizer */}
-            <img
-              src={PHOTO.src}
-              srcSet={PHOTO.srcSet}
-              sizes="(max-width: 900px) calc(100vw - 32px), 560px"
-              width={PHOTO.width}
-              height={PHOTO.height}
-              alt={PHOTO.alt}
-              fetchPriority="high"
-            />
-          </figure>
-
-          {/* The label names the link (and the click in the measure); the line describes it. */}
+          {/* The label names the link (and the click in the measure); the line describes it. Before
+              the photo in the DOM: on phones the hero is one column and the doors belong to the first
+              screen; on wide screens the grid areas put the photo beside the copy (top.css). */}
           <ul className="doors" data-zone="hero">
             {DOORS.map((d) => (
               <li key={d.href}>
@@ -323,6 +313,19 @@ export function Top() {
               </li>
             ))}
           </ul>
+
+          <figure className="photo">
+            {/* biome-ignore lint/performance/noImgElement: static export, no image optimizer */}
+            <img
+              src={PHOTO.src}
+              srcSet={PHOTO.srcSet}
+              sizes="(max-width: 900px) calc(100vw - 32px), 560px"
+              width={PHOTO.width}
+              height={PHOTO.height}
+              alt={PHOTO.alt}
+              fetchPriority="high"
+            />
+          </figure>
         </div>
       </div>
     </section>

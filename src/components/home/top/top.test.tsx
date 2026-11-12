@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { act, fireEvent, render } from '@testing-library/react'
 import { renderToString } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -185,6 +187,60 @@ describe('Top, hero of the site', () => {
       expect(Object.keys(content)).not.toContain(gone)
     // The quiet « Voir l'offre en détail » door left with the four doors (deck `home.hero.cta`).
     expect(Object.keys(content.HERO.cta)).not.toContain('offre')
+  })
+})
+
+/**
+ * US-104 Exemple (E-fix): at 390 px the first screen shows the h1, the four doors and the webinar
+ * button. On phones the hero is one column in reading order, so the doors come before the photo in
+ * the DOM (screen readers and the phone layout agree) and as compact rows (label and arrow, 48 px; the
+ * line stays the door's description, visually hidden); on wide screens the grid areas keep the photo
+ * beside the copy and the doors under both, as before.
+ */
+describe('the four doors before the photo, on the first phone screen', () => {
+  const css = readFileSync(join(__dirname, 'top.css'), 'utf8')
+  /** The rule or at-rule that opens with `head`, braces balanced. */
+  function block(src: string, head: string): string {
+    const i = src.indexOf(head)
+    if (i < 0) return ''
+    let depth = 0
+    for (let j = src.indexOf('{', i); j > 0 && j < src.length; j++) {
+      if (src[j] === '{') depth++
+      else if (src[j] === '}' && --depth === 0) return src.slice(i, j + 1)
+    }
+    return ''
+  }
+
+  it('the hero reads copy, doors, photo, and the photo is still there', () => {
+    at(BEFORE)
+    const { container } = render(<Top />)
+    const grid = container.querySelector('#top .hero-grid') as HTMLElement
+    expect(Array.from(grid.children).map((c) => c.className)).toEqual(['copy', 'doors', 'photo'])
+    expect(grid.querySelector('.photo img')?.getAttribute('fetchpriority')).toBe('high')
+  })
+
+  it('wide screens keep the photo beside the copy and the doors under both (grid areas)', () => {
+    const wide = block(css, '.hero-grid {')
+    expect(wide).toMatch(/grid-template-areas:\s*'copy photo'\s*'doors doors'/)
+    for (const area of ['copy', 'photo', 'doors'])
+      expect(block(css, `.${area} {`), area).toMatch(new RegExp(`grid-area:\\s*${area};`))
+  })
+
+  it('phones stack copy, doors, photo', () => {
+    const phone = block(css, '@media (max-width: 900px)')
+    expect(block(phone, '.hero-grid {')).toMatch(
+      /grid-template-areas:\s*'copy'\s*'doors'\s*'photo'/,
+    )
+  })
+
+  it('small phones: each door is a 48 px row, its line visually hidden but still read', () => {
+    const small = block(css, '@media (max-width: 640px)')
+    expect(small).not.toBe('')
+    expect(block(small, '.door {')).toMatch(/min-height:\s*48px/)
+    const line = block(small, '.door-line {')
+    expect(line).toMatch(/position:\s*absolute/)
+    expect(line).toMatch(/clip-path:\s*inset\(50%\)/)
+    expect(line).not.toMatch(/display:\s*none/)
   })
 })
 
