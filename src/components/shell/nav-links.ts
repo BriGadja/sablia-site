@@ -1,19 +1,19 @@
 /**
- * Header navigation, in display order (01b § 1). `match` is the pathname that marks the link as the
- * current page. `untilSession`: the link leaves the menu at `SESSION_START`, because `/webinaire` is
- * the one session page (frozen) and would sell a past date until lot 2 brings the list.
+ * Header navigation, in display order: the site ranged by intent, the monthly offer first (US-103,
+ * plan sablia-site-structure-offre). `match` is the pathname that marks the link as the current page.
+ * The same four links at any date: the webinar is reached from the header button (`NAV_CTA`) while
+ * its session is ahead, never from a menu entry.
  */
 export const NAV_LINKS = [
-  { href: '/formations', label: 'Formation', match: '/formations' },
-  { href: '/webinaire', label: 'Webinaires', match: '/webinaire', untilSession: true },
-  { href: '/accompagnement', label: 'Après la formation', match: '/accompagnement' },
+  {
+    href: '/responsable-ia-externalise',
+    label: 'Responsable IA externalisé',
+    match: '/responsable-ia-externalise',
+  },
+  { href: '/formations', label: 'Formations', match: '/formations' },
+  { href: '/conferences', label: 'Conférences', match: '/conferences' },
   { href: '/realisations', label: 'Réalisations', match: '/realisations' },
 ] as const
-
-/** The menu for a session state (`useSessionUpcoming()`): all of it while upcoming, then without « Webinaires ». */
-export function navLinksFor(upcoming: boolean) {
-  return upcoming ? NAV_LINKS : NAV_LINKS.filter((l) => !('untilSession' in l))
-}
 
 /** The header button while a webinar is upcoming (01b `nav.cta`). */
 export const NAV_CTA = 'Prochain webinaire'

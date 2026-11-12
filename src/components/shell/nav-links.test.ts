@@ -1,13 +1,17 @@
 import { describe, expect, it } from 'vitest'
-import { NAV_LINKS, navLinksFor } from './nav-links'
+import * as NAV from './nav-links'
+import { NAV_CTA, NAV_LINKS } from './nav-links'
 
-/** US-92: the menu speaks of the training (plan site-formation-lot1, Data contract « Nav »). */
+/**
+ * US-103 (plan sablia-site-structure-offre, Phase D): the menu ranges the site by intent, the monthly
+ * offer first. The same four links at any date: the webinar is reached from the header button.
+ */
 describe('NAV_LINKS', () => {
-  it('lists Formation, Webinaires, Après la formation, Réalisations in that order', () => {
+  it('lists Responsable IA externalisé, Formations, Conférences, Réalisations in that order', () => {
     expect(NAV_LINKS.map((l) => [l.label, l.href, l.match])).toEqual([
-      ['Formation', '/formations', '/formations'],
-      ['Webinaires', '/webinaire', '/webinaire'],
-      ['Après la formation', '/accompagnement', '/accompagnement'],
+      ['Responsable IA externalisé', '/responsable-ia-externalise', '/responsable-ia-externalise'],
+      ['Formations', '/formations', '/formations'],
+      ['Conférences', '/conferences', '/conferences'],
       ['Réalisations', '/realisations', '/realisations'],
     ])
   })
@@ -15,19 +19,13 @@ describe('NAV_LINKS', () => {
   it('has no link left on a home hash anchor', () => {
     for (const l of NAV_LINKS) expect(l.href).not.toContain('#')
   })
-})
 
-/** R1 M1: `/webinaire` is the one session page (frozen); once the session started it sells a past date. */
-describe('navLinksFor', () => {
-  it('keeps the whole menu while the session is upcoming', () => {
-    expect(navLinksFor(true)).toEqual(NAV_LINKS)
+  it('has no entry that depends on the session clock, and no filter for one', () => {
+    for (const l of NAV_LINKS) expect('untilSession' in l, l.label).toBe(false)
+    expect('navLinksFor' in NAV).toBe(false)
   })
 
-  it('drops « Webinaires » from the session start, the other links in order', () => {
-    expect(navLinksFor(false).map((l) => l.href)).toEqual([
-      '/formations',
-      '/accompagnement',
-      '/realisations',
-    ])
+  it('keeps the header button label of the webinar', () => {
+    expect(NAV_CTA).toBe('Prochain webinaire')
   })
 })

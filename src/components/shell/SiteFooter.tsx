@@ -7,16 +7,17 @@ import { Logo } from './Logo'
 import './site-footer.css'
 
 /**
- * Link order of 01b § 6: the training structure, the monthly offer (US-99), the CRM offer page,
- * resources, then the legal row.
- * `untilSession`: gone from `SESSION_START`, like the header entry (`/webinaire` is the one session page).
+ * Link order (US-103): the four entries of the header menu, same labels and hrefs (`nav-links.ts`;
+ * the footer keeps its own list on purpose), the webinar while its session is ahead, the CRM offer
+ * page, resources, then the legal row.
+ * `untilSession`: gone from `SESSION_START` (`/webinaire` is the one session page).
  */
 const LINKS = [
-  { href: '/formations', label: 'Formation' },
-  { href: '/webinaire', label: 'Webinaires', untilSession: true },
-  { href: '/accompagnement', label: 'Après la formation' },
-  { href: '/responsable-ia-temps-partage', label: 'Responsable IA' },
+  { href: '/responsable-ia-externalise', label: 'Responsable IA externalisé' },
+  { href: '/formations', label: 'Formations' },
+  { href: '/conferences', label: 'Conférences' },
   { href: '/realisations', label: 'Réalisations' },
+  { href: '/webinaire', label: 'Webinaires', untilSession: true },
   { href: '/offres/compte-rendu-appel', label: "Compte rendu d'appel" },
   { href: '/ressources', label: 'Ressources' },
   { href: '/newsletter', label: 'Newsletter' },
