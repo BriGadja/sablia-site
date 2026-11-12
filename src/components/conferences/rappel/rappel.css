@@ -1,0 +1,17 @@
+@layer theme, base, components, utilities;
+
+/* The sand under #preuve of /conferences: room for the #fin dune (it straddles the band's top edge by
+   80 px), present whether or not the webinar reminder is shown. */
+@layer components {
+  .v2-conf-rappel {
+    position: relative;
+    background: #f4ecdd;
+    padding-bottom: 136px;
+  }
+
+  @media (max-width: 900px) {
+    .v2-conf-rappel {
+      padding-bottom: 112px;
+    }
+  }
+}
