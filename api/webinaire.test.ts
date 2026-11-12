@@ -152,7 +152,7 @@ describe('rows', () => {
   it('unticked box: consent false, consent_at null, intention ressource_seule', () => {
     const reg = registrationRow(value(), 'hash', now)
     expect(reg).toMatchObject({
-      session_slug: '2026-11-19',
+      session_slug: '2026-12-03',
       status: 'inscrit',
       rappel_consent: false,
       consent_at: null,

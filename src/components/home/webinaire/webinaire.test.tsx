@@ -10,11 +10,11 @@ import { WebinaireBand } from './index'
 
 /**
  * `#webinaire`, the next-session band of the home (plan site-formation-lot1 U8, copy 01b « Next
- * webinar block »). It switches through `WhenUpcoming` only: shown while the 19/11 session is ahead,
+ * webinar block »). It switches through `WhenUpcoming` only: shown while the 03/12 session is ahead,
  * gone from its start (01b: hidden when no session is upcoming; no countdown, no scarcity).
  */
 const BEFORE = new Date('2026-11-05T09:00:00+01:00')
-const START = new Date('2026-11-19T12:00:00+01:00')
+const START = new Date('2026-12-03T12:00:00+01:00')
 
 afterEach(() => {
   vi.useRealTimers()
@@ -45,7 +45,7 @@ describe('#webinaire before the session', () => {
     )
     expect(html).toContain(`>${SESSION.title}<`)
     for (const [label, value] of [
-      ['Quand', 'Jeudi 19 novembre, de 12 h à 13 h'],
+      ['Quand', 'Jeudi 3 décembre, de 12 h à 13 h'],
       ['Où', 'En visio, sur Google Meet'],
       ['Prix', 'Gratuit'],
     ]) {
@@ -87,12 +87,12 @@ describe('#webinaire before the session', () => {
 })
 
 describe('#webinaire from the session start', () => {
-  it('renders nothing at 19/11 12:00:00 Paris (the boundary second)', () => {
+  it('renders nothing at 03/12 12:00:00 Paris (the boundary second)', () => {
     expect(ssrAt(START)).toBe('')
   })
 
   it('a page built before the start hides the band once the visitor clock is past it', () => {
-    vi.useFakeTimers({ now: new Date('2026-11-20T08:00:00+01:00'), toFake: ['Date'] })
+    vi.useFakeTimers({ now: new Date('2026-12-04T08:00:00+01:00'), toFake: ['Date'] })
     vi.stubEnv('NEXT_PUBLIC_BUILD_AT', BEFORE.toISOString())
     mockReducedMotion(true)
     mockIntersectionObserver()
@@ -106,7 +106,7 @@ describe('#webinaire source', () => {
   const css = readFileSync(join(__dirname, 'webinaire-band.css'), 'utf8')
 
   it('never types the date or the title twice: both come from webinaire.ts', () => {
-    expect(src).not.toMatch(/19 novembre|Bureaux d'études/)
+    expect(src).not.toMatch(/3 décembre|Bureaux d'études/)
     expect(src).toMatch(/from '@\/content\/webinaire'/)
   })
 

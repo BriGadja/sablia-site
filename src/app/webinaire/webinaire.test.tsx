@@ -99,7 +99,7 @@ describe('/webinaire: the static HTML (SSR content rule)', () => {
   it('carries the title, the date, the place, the presenter and one h1', () => {
     expect(html.match(/<h1[\s>]/g)).toHaveLength(1)
     expect(t).toContain(SESSION.title)
-    expect(t).toContain('Jeudi 19 novembre, de 12 h à 13 h')
+    expect(t).toContain('Jeudi 3 décembre, de 12 h à 13 h')
     expect(t).toContain('En visio, sur Google Meet')
     expect(t).toContain('Gratuit')
     expect(t).toContain('Animé par Brice Gachadoat')

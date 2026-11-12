@@ -28,7 +28,7 @@ our bet.
 
 ## Operating Context
 - The webinar: one hour on Google Meet, Thursday 12:00, the trade in its title, fictional documents.
-  First session 19/11 « Bureaux d'études : votre équipe utilise déjà l'IA. Avec quelles règles ? »; `/webinaire`
+  First session 03/12 « Bureaux d'études : votre équipe utilise déjà l'IA. Avec quelles règles ? »; `/webinaire`
   is frozen until then; lot 2 adds the list of upcoming sessions (no near-identical trade pages).
 - Few visitors, mostly sent (LinkedIn, newsletter n°1 on 10/11, relays, personal referrals, YouTube); Google: 29 of 34
   referred visits in 28 days. 26/10 → 01/11: 36 visitors, 1 booking click. [ASSUMED] phone first, desktop to decide.

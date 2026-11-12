@@ -7,7 +7,7 @@ Pages and sections (ids are the contract: the build must carry the same `#id` on
   accompagnement  top referent surmesure fin
   real            top construit fin                  (/realisations, build only: no mockup board)
   crm             top scene pour-qui variantes inclus prix objection preuve faq   (/offres/compte-rendu-appel, build only)
-`webinaire` exists on the home only while the 19/11/2026 session is ahead (a missing section is logged, not fatal).
+`webinaire` exists on the home only while the 03/12/2026 session is ahead (a missing section is logged, not fatal).
 Viewports: 1440x900 and 390x844. Routes on a build: / , /formations , /accompagnement , /realisations , /offres/compte-rendu-appel.
 The reference boards (--ref) only exist for the CRM-era home, /formations and /accompagnement; `real` and `crm` have none.
 

@@ -11,9 +11,9 @@
 
 /** The session the form registers for. `slug` is the one `api/webinaire.ts` writes. */
 export const SESSION = {
-  slug: '2026-11-19',
+  slug: '2026-12-03',
   title: "Bureaux d'études : votre équipe utilise déjà l'IA. Avec quelles règles ?",
-  date: 'Jeudi 19 novembre 2026',
+  date: 'Jeudi 3 décembre 2026',
   hours: 'de 12 h à 13 h',
   place: 'En visio, sur Google Meet',
 } as const
@@ -41,14 +41,14 @@ export const PAGE_META = {
   title:
     "Bureaux d'études : votre équipe utilise déjà l'IA. Avec quelles règles ? · Webinaire Sablia",
   description:
-    "Webinaire gratuit le jeudi 19 novembre 2026 de 12 h à 13 h, sur Google Meet : l'IA à l'œuvre sur des documents fictifs de bureau d'études, et les règles à poser dans votre équipe. Animé par Brice Gachadoat.",
+    "Webinaire gratuit le jeudi 3 décembre 2026 de 12 h à 13 h, sur Google Meet : l'IA à l'œuvre sur des documents fictifs de bureau d'études, et les règles à poser dans votre équipe. Animé par Brice Gachadoat.",
 } as const
 
 export const HERO = {
   eyebrow: 'Webinaire gratuit · en ligne',
   lede: "Une heure en visio pour voir l'IA travailler sur des documents fictifs de bureau d'études, et repartir avec les règles à poser dans votre équipe.",
   facts: [
-    { key: 'quand', label: 'Quand', value: 'Jeudi 19 novembre, de 12 h à 13 h' },
+    { key: 'quand', label: 'Quand', value: 'Jeudi 3 décembre, de 12 h à 13 h' },
     { key: 'ou', label: 'Où', value: 'En visio, sur Google Meet' },
     { key: 'prix', label: 'Prix', value: 'Gratuit' },
   ],
@@ -139,7 +139,7 @@ export const INTERVENANT = {
 
 export const INSCRIPTION = {
   eyebrow: 'Gratuit',
-  title: "S'inscrire à la session du 19 novembre",
+  title: "S'inscrire à la session du 3 décembre",
   next: [
     "L'invitation Google Agenda arrive dans les minutes qui suivent, avec le lien Meet.",
     'Un rappel par mail la veille à 18 h, un autre 30 minutes avant le début.',
@@ -204,10 +204,10 @@ export const FORM = {
 export const MERCI = {
   meta: {
     title: 'Inscription enregistrée · Webinaire Sablia',
-    description: 'Votre inscription au webinaire du jeudi 19 novembre 2026 est enregistrée.',
+    description: 'Votre inscription au webinaire du jeudi 3 décembre 2026 est enregistrée.',
   },
   eyebrow: 'Inscription enregistrée',
-  title: 'À jeudi 19 novembre, 12 h',
+  title: 'À jeudi 3 décembre, 12 h',
   lede: "Voici ce qui arrive d'ici là.",
   steps: [
     {
@@ -215,8 +215,8 @@ export const MERCI = {
       when: 'Dans les minutes qui suivent',
       what: "L'invitation Google Agenda, avec le lien Meet.",
     },
-    { key: 'veille', when: 'Mercredi 18 novembre, 18 h', what: 'Un rappel par mail.' },
-    { key: 'h0', when: 'Jeudi 19 novembre, 11 h 30', what: 'Le dernier rappel, avec le lien.' },
+    { key: 'veille', when: 'Mercredi 2 décembre, 18 h', what: 'Un rappel par mail.' },
+    { key: 'h0', when: 'Jeudi 3 décembre, 11 h 30', what: 'Le dernier rappel, avec le lien.' },
     { key: 'debut', when: '12 h', what: 'La session commence.' },
   ],
   spam: 'Rien reçu dans dix minutes ? Regardez dans les courriers indésirables, puis écrivez-moi à brice@sablia.io.',
@@ -404,7 +404,7 @@ export const QUESTIONNAIRE = {
 export const NEXT_WEBINAR_BANNER = {
   enabled: false as boolean,
   label: 'Prochain webinaire',
-  text: "Jeudi 19 novembre à 12 h : « Bureaux d'études : votre équipe utilise déjà l'IA. Avec quelles règles ? »",
+  text: "Jeudi 3 décembre à 12 h : « Bureaux d'études : votre équipe utilise déjà l'IA. Avec quelles règles ? »",
   cta: "S'inscrire",
   href: '/webinaire',
 }

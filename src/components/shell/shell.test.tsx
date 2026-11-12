@@ -21,8 +21,9 @@ vi.mock('next/navigation', () => ({ usePathname: () => pathname }))
 vi.mock('@/lib/booking', () => ({ openBookingUrl: vi.fn() }))
 
 // Plan site-formation-lot1 (US-92): the header button depends on the clock, so every header case pins it.
-const BEFORE = new Date('2026-11-05T10:00:00+01:00')
-const AFTER = new Date('2026-11-19T12:00:00+01:00')
+// BEFORE is the last second before the start, AFTER the start second itself.
+const BEFORE = new Date('2026-12-03T11:59:59+01:00')
+const AFTER = new Date('2026-12-03T12:00:00+01:00')
 const at = (d: Date) => {
   vi.useFakeTimers({ toFake: ['Date'] })
   vi.setSystemTime(d)
@@ -30,6 +31,7 @@ const at = (d: Date) => {
 
 beforeEach(() => {
   pathname = '/'
+  at(BEFORE) // no case reads the real clock; a case that needs the start moves it
   vi.mocked(openBookingUrl).mockClear()
 })
 afterEach(() => {

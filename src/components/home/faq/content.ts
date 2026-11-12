@@ -80,7 +80,7 @@ export const FIN_BAND = {
   text: 'Vous nous parlez de vos dossiers, nous vous envoyons un programme et son devis.',
   link: {
     href: '/webinaire',
-    label: 'Pas encore prêt ? Le webinaire gratuit du jeudi 19 novembre.',
+    label: 'Pas encore prêt ? Le webinaire gratuit du jeudi 3 décembre.',
   },
   bookingUrl: site.formationBookingUrl,
 } as const

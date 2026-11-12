@@ -26,7 +26,7 @@ export const metadata = pageMetadata({
 })
 
 /**
- * `/webinaire`: registration to the « Bureaux d'études » session of 19/11 (US-86). Every readable
+ * `/webinaire`: registration to the « Bureaux d'études » session of 03/12 (US-86). Every readable
  * line is in the static HTML (SSR content rule) and comes from `src/content/webinaire.ts`; the
  * motion only stages it (the plan sheet draws itself, the branch figures count up, the hour fills
  * with sand). One action on the page: the form at `#inscription`.

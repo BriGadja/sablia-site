@@ -4,7 +4,7 @@
  */
 import { SESSION } from '@/content/webinaire'
 
-const day = SESSION.date.replace(/\s+\d{4}$/, '') // « Jeudi 19 novembre »
+const day = SESSION.date.replace(/\s+\d{4}$/, '') // « Jeudi 3 décembre »
 
 export const HERO = {
   pill: "L'IA au travail · formation sur site",

@@ -3,8 +3,8 @@
  * client hook and the tests all read it. Re-exported by `session-bar.ts`, the contract's entry point.
  */
 
-/** 19/11/2026 12:00 Paris (winter time, UTC+1). `session-bar.test.ts` pins it against `SESSION`. */
-export const SESSION_START = '2026-11-19T12:00:00+01:00'
+/** 03/12/2026 12:00 Paris (winter time, UTC+1). `session-bar.test.ts` pins it against `SESSION`. */
+export const SESSION_START = '2026-12-03T12:00:00+01:00'
 
 /** True while `now` is strictly before the start; false from the start second on. */
 export function sessionUpcoming(now: Date): boolean {

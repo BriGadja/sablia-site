@@ -10,7 +10,7 @@ import { useSessionUpcoming, WhenUpcoming } from '@/content/session-bar'
  * mismatch), then an effect re-evaluates with the visitor's clock.
  */
 const BEFORE = '2026-11-05T10:00:00+01:00'
-const AFTER = '2026-11-19T12:00:00+01:00'
+const AFTER = '2026-12-03T12:00:00+01:00'
 const at = (iso: string) => {
   vi.useFakeTimers({ toFake: ['Date'] })
   vi.setSystemTime(new Date(iso))
@@ -80,7 +80,7 @@ describe('useSessionUpcoming', () => {
   }
   it('is true one second before the start and false at the start (visitor clock)', () => {
     vi.stubEnv('NEXT_PUBLIC_BUILD_AT', BEFORE)
-    at('2026-11-19T11:59:59+01:00')
+    at('2026-12-03T11:59:59+01:00')
     const { unmount } = render(<Probe />)
     expect(screen.getByText('oui')).toBeTruthy()
     unmount()
