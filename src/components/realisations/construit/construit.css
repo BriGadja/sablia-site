@@ -66,9 +66,76 @@
       color: #131620;
     }
     .pausebtn:focus-visible,
-    .caserow:focus-visible {
+    .caserow:focus-visible,
+    .cn-chip:focus-visible {
       outline: 2px solid #d9a441;
       outline-offset: 4px;
+    }
+
+    /* US-108: the filter row, the count and the pause, one bar above the wall. The chip row is the home's
+       agents chip row (same shape, pressed = night fill); its labels never change. */
+    .cn-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 20px;
+      margin-top: 28px;
+    }
+    .cn-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-width: 0;
+    }
+    .cn-chip {
+      all: unset;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 16px;
+      border-radius: 12px;
+      border: 1px solid #e4d6c0;
+      background: #ffffff;
+      font-size: 15px;
+      font-weight: 500;
+      color: #131620;
+      transition:
+        background-color 0.2s cubic-bezier(0.2, 0.7, 0.2, 1),
+        color 0.2s cubic-bezier(0.2, 0.7, 0.2, 1),
+        border-color 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+
+      &.is-on {
+        background: #161b29;
+        color: #ffffff;
+        border-color: #161b29;
+      }
+    }
+    @media (hover: hover) {
+      .cn-chip:not(.is-on):hover {
+        border-color: #131620;
+      }
+    }
+    .cn-count {
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: #61677a;
+      font-variant-numeric: tabular-nums;
+    }
+    .cn-bar .pausebtn {
+      margin-left: auto;
+    }
+    /* A card outside the set: `hidden` must win over the card's own display. */
+    .deck-card[hidden] {
+      display: none;
+    }
+    /* After a chip press only (never on the first paint): the rows of the new set rise into place. */
+    .cn-list.is-picked .caserow {
+      animation: construit-row-in 0.32s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: calc(var(--i, 0) * 40ms);
     }
 
     .wall-grid {
@@ -828,10 +895,12 @@
   @media (prefers-reduced-motion: reduce) {
     .v2-construit {
       .bar,
-      .grow {
+      .grow,
+      .cn-list.is-picked .caserow {
         animation: none;
       }
-      .deck-card {
+      .deck-card,
+      .cn-chip {
         transition: none;
       }
       .bp-s,
@@ -872,6 +941,12 @@
     }
     to {
       transform: scaleX(1);
+    }
+  }
+  @keyframes construit-row-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
     }
   }
   @keyframes construit-wave {

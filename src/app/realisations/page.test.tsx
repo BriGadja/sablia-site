@@ -23,14 +23,21 @@ const decode = (s: string) =>
     .replace(/&quot;/g, '"')
 const textOf = (html: string) => html.replace(/<[^>]*>/g, ' ').replace(/[\s ]+/g, ' ')
 
-/** 01b § 5 « New strings ». */
+/** Copy deck B5 of run 2026-11-12-structure-site-offre: `real.meta.title`, `real.meta.description`, `real.head.intro` (US-108). */
 const NEW = {
-  title: 'Réalisations : automatisations, sites et formations · Sablia',
+  title: 'Réalisations : automatisations, sites, formations et conférences · Sablia',
   description:
-    'Ce que Sablia a construit depuis 2025 : automatisations, sites, applications et formations, et des agents vocaux sur demande.',
+    'Ce que Sablia a construit depuis 2025 : automatisations, sites, applications, formations et conférences.',
   h1: 'Réalisations',
   intro:
-    'Automatisations, sites, applications et formations, construits pour nos clients depuis 2025.',
+    'Automatisations, sites, applications, formations et conférences, réalisés pour des clients depuis 2025.',
+}
+
+/** Copy deck B5 `real.besoin.title`, `real.besoin.text`, `real.besoin.cta` (US-108). */
+const BESOIN = {
+  title: 'Un besoin précis ? Je construis aussi à la demande.',
+  text: 'Un outil seul, sans contrat mensuel : on en parle trente minutes, puis vous recevez un devis écrit.',
+  cta: 'Réserver 30 min',
 }
 
 /** 01b § 5 « Moved as is » (the eyebrow excepted: the h1 takes its role). */
@@ -99,6 +106,28 @@ describe('/realisations (US-95, server HTML)', () => {
     for (const s of MOVED) expect(text, s).toContain(s)
   })
 
+  it('says in #top, under the intro and above the wall, that a precise need is built on request (US-108)', () => {
+    const top = html.slice(html.indexOf('id="top"'), html.indexOf('id="construit"'))
+    const h2 = top.match(/<h2[^>]*>([\s\S]*?)<\/h2>/)?.[1] ?? ''
+    expect(textOf(h2).trim()).toBe(BESOIN.title)
+    expect(textOf(top)).toContain(BESOIN.text)
+    expect(top.indexOf('<h2')).toBeGreaterThan(top.indexOf(NEW.intro))
+    expect(top).toContain('data-zone="besoin"')
+    const zone = top.slice(top.indexOf('data-zone="besoin"'))
+    expect(zone).toMatch(new RegExp(`<button[^>]*data-cta-book[^>]*>${BESOIN.cta}`))
+    expect(textOf(zone)).toContain(BESOIN.title)
+    expect(textOf(zone)).toContain(BESOIN.text)
+  })
+
+  it('carries the filter row and the count in the band, all seven shown (US-108)', () => {
+    const band = html.slice(html.indexOf('id="construit"'), html.indexOf('id="fin"'))
+    expect(band).toContain('role="group"')
+    expect(band).toContain('aria-label="Filtrer les réalisations"')
+    expect(textOf(band)).toContain('7 réalisations sur 7')
+    expect(band.match(/<article[^>]*class="deck-card"/g)).toHaveLength(7)
+    expect(band).not.toMatch(/<article[^>]*\shidden[=\s>]/)
+  })
+
   it('shows no price and no banned word', () => {
     expect(text).not.toMatch(/\d[\d\s .,]*\s?(€|euros?)/i)
     for (const w of ['IAPreneurs', 'CPF', 'finançable', 'certifié', 'Qualiopi', '—'])
@@ -128,11 +157,15 @@ describe('/realisations in the browser', () => {
     expect(screen.getByRole('button', { name: /Reprendre le défilement/ })).toBeTruthy()
   })
 
-  it('every « Réserver 30 min » opens the formation Calendly', () => {
+  it('every « Réserver 30 min » opens the formation Calendly: the « besoin » block and the closing band', () => {
     mockIntersectionObserver()
-    render(<Page />)
+    const { container } = render(<Page />)
     const buttons = screen.getAllByRole('button', { name: /Réserver 30 min/ })
-    expect(buttons.length).toBeGreaterThanOrEqual(1)
+    expect(buttons).toHaveLength(2)
+    expect(buttons[0].closest('[data-zone]')?.getAttribute('data-zone')).toBe('besoin')
+    expect(buttons[0].closest('section')?.id).toBe('top')
+    expect(buttons[1].closest('section')?.id).toBe('fin')
+    expect(container.querySelectorAll('[data-zone="besoin"]')).toHaveLength(1)
     for (const b of buttons) fireEvent.click(b)
     expect(openBookingUrl).toHaveBeenCalledTimes(buttons.length)
     for (const call of vi.mocked(openBookingUrl).mock.calls)

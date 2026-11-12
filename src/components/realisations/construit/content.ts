@@ -5,7 +5,7 @@ import { MaintenanceCard } from './cards/maintenance'
 import { NoesiaCard } from './cards/noesia'
 import { SeminaireCard } from './cards/seminaire'
 import { VoixCard } from './cards/voix'
-import type { BlueprintCard, CardKind, CardStage } from './types'
+import type { BlueprintCard, CardKind, CardStage, RealisationType } from './types'
 
 export const EYEBROW = 'Réalisations'
 export const TITLE = 'Exemples de réalisations.'
@@ -13,6 +13,26 @@ export const SUBTITLE = 'Plus de 20 clients accompagnés depuis 2025.'
 export const LIST_LABEL = 'Toutes les réalisations'
 export const PAUSE_LABEL = 'Mettre en pause'
 export const RESUME_LABEL = 'Reprendre le défilement'
+
+/** A chip of the filter row: every type, or one of them. */
+export type RealisationFilter = 'toutes' | RealisationType
+
+/**
+ * Copy deck B5 (US-108): `real.filter.group` names the row; `real.filter.1` to `.5` are the chip labels, which
+ * never change with the pressed state (WAI-ARIA button pattern); `real.list.label` names the list per chip.
+ */
+export const FILTER_GROUP_LABEL = 'Filtrer les réalisations'
+export const FILTERS: readonly { key: RealisationFilter; label: string; listLabel: string }[] = [
+  { key: 'toutes', label: 'Toutes', listLabel: LIST_LABEL },
+  { key: 'outils', label: 'Outils', listLabel: 'Réalisations : outils' },
+  { key: 'formations', label: 'Formations', listLabel: 'Réalisations : formations' },
+  { key: 'conferences', label: 'Conférences', listLabel: 'Réalisations : conférences' },
+  { key: 'sites', label: 'Sites', listLabel: 'Réalisations : sites' },
+]
+
+/** Copy deck B5 `real.status`: « {n} réalisations sur {total} », singular for one. */
+export const statusText = (n: number, total: number) =>
+  `${n} ${n === 1 ? 'réalisation' : 'réalisations'} sur ${total}`
 /** The band's sand drawing (charte « Sablier »); `/realisations` shows it in its page head instead. */
 export const ILLUSTRATION = '/illus/realisations-contour-nuit.webp'
 
@@ -38,6 +58,7 @@ export const CARD_LINKS: Partial<Record<CardKind, { href: string; label: string 
 export const CARDS: BlueprintCard[] = [
   {
     kind: 'helene',
+    types: ['outils', 'sites'],
     panels: 2,
     lines: 5,
     lineStep: 550,
@@ -49,6 +70,7 @@ export const CARDS: BlueprintCard[] = [
   },
   {
     kind: 'site',
+    types: ['sites'],
     panels: 4,
     lines: 3,
     tags: 'Site',
@@ -59,6 +81,7 @@ export const CARDS: BlueprintCard[] = [
   },
   {
     kind: 'cash',
+    types: ['outils'],
     panels: 5,
     lines: 3,
     fig: { n: 699000, plus: true, unit: ' relevés' },
@@ -70,6 +93,7 @@ export const CARDS: BlueprintCard[] = [
   },
   {
     kind: 'maint',
+    types: ['outils'],
     panels: 2,
     lines: 7,
     lineStep: 420,
@@ -81,6 +105,7 @@ export const CARDS: BlueprintCard[] = [
   },
   {
     kind: 'noesia',
+    types: ['formations'],
     panels: 3,
     lines: 1,
     lineStep: 1000,
@@ -93,6 +118,7 @@ export const CARDS: BlueprintCard[] = [
   },
   {
     kind: 'seminar',
+    types: ['conferences', 'formations'],
     panels: 2,
     lines: 2,
     tags: 'Formation',
@@ -103,6 +129,7 @@ export const CARDS: BlueprintCard[] = [
   },
   {
     kind: 'voice',
+    types: ['outils'],
     panels: 2,
     lines: 6,
     lineStep: 500,
@@ -129,10 +156,18 @@ export function figureText(card: BlueprintCard, f: number): string {
   return `${fmt(card.fig.n * e)}${card.fig.plus && e >= 1 ? '+' : ''}${card.fig.unit}`
 }
 
-/** Stack position of a card behind the front one: transform, opacity and z-order (mockup `cards`). */
+/** The cards a chip keeps, in the wall's order (`toutes` = the whole wall). */
+export const cardsFor = (filter: RealisationFilter): readonly BlueprintCard[] =>
+  filter === 'toutes' ? CARDS : CARDS.filter((c) => c.types.includes(filter))
+
+/**
+ * Stack position of a card behind the front one: transform, opacity and z-order (mockup `cards`), in a set of
+ * `n` cards. The last card of the stack is the one leaving (below, faded out) only when the stack has a third
+ * card: in a set of two the card behind is the next one, in a set of one the front card is alone.
+ */
 export function deckSlot(i: number, deck: number, n: number) {
   const o = (i - deck + n) % n
-  const out = o === n - 1
+  const out = n > 2 && o === n - 1
   return {
     active: o === 0,
     second: o === 1,

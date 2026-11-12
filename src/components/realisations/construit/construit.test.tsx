@@ -1,9 +1,11 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen, within } from '@testing-library/react'
+import { hydrateRoot } from 'react-dom/client'
+import { renderToString } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mockIntersectionObserver, mockReducedMotion } from '@/lib/hooks/test-utils'
-import { CARDS, FINAL_STAGE, figureText, fmt, IDLE_STAGE } from './content'
+import { CARDS, deckSlot, FINAL_STAGE, figureText, fmt, IDLE_STAGE } from './content'
 import { Construit } from './index'
 import { lit, panel } from './types'
 
@@ -15,6 +17,11 @@ vi.mock('./cards/helene', () => ({
       data-l={lit(stage, 5)}
       data-plan={String(stage.plan)}
     />
+  ),
+}))
+vi.mock('./cards/noesia', () => ({
+  NoesiaCard: ({ stage }: { stage: import('./types').CardStage }) => (
+    <div data-testid="noesia" data-b={String(stage.b)} data-plan={String(stage.plan)} />
   ),
 }))
 
@@ -176,6 +183,277 @@ describe('card footers', () => {
     expect(`${seminar.sector} ${seminar.text}`).not.toMatch(
       /\d+\s*(personnes|participants|collaborateurs)/i,
     )
+  })
+})
+
+/**
+ * US-108: the wall filters by type. Strings typed from copy deck B5 (`real.filter.*`, `real.list.label`,
+ * `real.status`), never read back from the source. Types: plan Phase G table.
+ */
+const CHIPS = ['Toutes', 'Outils', 'Formations', 'Conférences', 'Sites']
+const SECTORS = {
+  helene: 'Hélène, psychopraticienne et conseillère en nutrition',
+  site: 'Un institut de beauté à Rouen',
+  cash: 'Une plateforme de cashback',
+  maint: 'Une entreprise de maintenance du bâtiment',
+  noesia: 'École Noésia',
+  seminar: 'Un cabinet de conseil en ingénierie',
+  voice: 'Agents vocaux',
+}
+const SETS: Record<string, { list: string; status: string; sectors: string[] }> = {
+  Toutes: {
+    list: 'Toutes les réalisations',
+    status: '7 réalisations sur 7',
+    sectors: Object.values(SECTORS),
+  },
+  Outils: {
+    list: 'Réalisations : outils',
+    status: '4 réalisations sur 7',
+    sectors: [SECTORS.helene, SECTORS.cash, SECTORS.maint, SECTORS.voice],
+  },
+  Formations: {
+    list: 'Réalisations : formations',
+    status: '2 réalisations sur 7',
+    sectors: [SECTORS.noesia, SECTORS.seminar],
+  },
+  Conférences: {
+    list: 'Réalisations : conférences',
+    status: '1 réalisation sur 7',
+    sectors: [SECTORS.seminar],
+  },
+  Sites: {
+    list: 'Réalisations : sites',
+    status: '2 réalisations sur 7',
+    sectors: [SECTORS.helene, SECTORS.site],
+  },
+}
+
+const group = () => screen.getByRole('group', { name: 'Filtrer les réalisations' })
+const chip = (label: string) => within(group()).getByRole('button', { name: label })
+const press = (label: string) => fireEvent.click(chip(label))
+const rows = (c: HTMLElement) => Array.from(c.querySelectorAll<HTMLButtonElement>('button.caserow'))
+const rowSectors = (c: HTMLElement) =>
+  Array.from(c.querySelectorAll('ol.cn-list .cn-row-sector')).map((s) => s.textContent)
+const currentSector = (c: HTMLElement) =>
+  c.querySelector('button.caserow[aria-current="true"] .cn-row-sector')?.textContent
+/** The card shown to assistive tech: the one front card of the deck. */
+const frontSector = (c: HTMLElement) =>
+  c.querySelector('article.deck-card[aria-hidden="false"] .cn-sector')?.textContent
+const shownCards = (c: HTMLElement) => c.querySelectorAll('article.deck-card:not([hidden])')
+const pauseButton = () =>
+  screen.queryByRole('button', { name: /Mettre en pause|Reprendre le défilement/ })
+
+describe('filter by type (US-108)', () => {
+  it('gives every card at least one type, as the plan table says', () => {
+    const allowed = ['outils', 'formations', 'conferences', 'sites']
+    for (const c of CARDS) {
+      expect(c.types.length, c.kind).toBeGreaterThan(0)
+      for (const t of c.types) expect(allowed, c.kind).toContain(t)
+    }
+    expect(Object.fromEntries(CARDS.map((c) => [c.kind, [...c.types].sort()]))).toEqual({
+      helene: ['outils', 'sites'],
+      site: ['sites'],
+      cash: ['outils'],
+      maint: ['outils'],
+      noesia: ['formations'],
+      seminar: ['conferences', 'formations'],
+      voice: ['outils'],
+    })
+  })
+
+  it('offers a group of five toggle buttons whose labels never change, « Toutes » pressed first', () => {
+    mockReducedMotion(false)
+    render(<Construit />)
+    const buttons = within(group()).getAllByRole('button')
+    expect(buttons.map((b) => b.textContent)).toEqual(CHIPS)
+    expect(buttons.map((b) => b.getAttribute('aria-pressed'))).toEqual([
+      'true',
+      'false',
+      'false',
+      'false',
+      'false',
+    ])
+    for (const label of [...CHIPS.slice(1), 'Toutes']) {
+      press(label)
+      const now = within(group()).getAllByRole('button')
+      expect(now.map((b) => b.textContent)).toEqual(CHIPS)
+      expect(
+        now.filter((b) => b.getAttribute('aria-pressed') === 'true').map((b) => b.textContent),
+      ).toEqual([label])
+    }
+  })
+
+  it('keeps only the cards of the pressed type, in the list and in the deck, and names the list after it', () => {
+    mockReducedMotion(false)
+    const { container } = render(<Construit />)
+    for (const label of ['Sites', 'Conférences', 'Formations', 'Outils', 'Toutes']) {
+      press(label)
+      const set = SETS[label]
+      expect(rowSectors(container), label).toEqual(set.sectors)
+      expect(container.querySelector('ol.cn-list')?.getAttribute('aria-label'), label).toBe(
+        set.list,
+      )
+      expect(shownCards(container).length, label).toBe(set.sectors.length)
+      expect(container.querySelectorAll('article.deck-card').length, label).toBe(7)
+      for (const a of container.querySelectorAll('article.deck-card[hidden]'))
+        expect(a.getAttribute('aria-hidden'), label).toBe('true')
+    }
+  })
+
+  it('says the count in a status line outside the deck, present in the server HTML', () => {
+    mockReducedMotion(false)
+    const html = renderToString(<Construit />)
+    expect(html).toMatch(/role="status"[^>]*>7 réalisations sur 7</)
+    const { container } = render(<Construit />)
+    const status = screen.getByRole('status')
+    expect(status.closest('.deck-wrap')).toBeNull()
+    expect(status.closest('ol')).toBeNull()
+    expect(status.closest('article')).toBeNull()
+    for (const label of ['Sites', 'Conférences', 'Outils', 'Formations', 'Toutes']) {
+      press(label)
+      expect(screen.getByRole('status').textContent, label).toBe(SETS[label].status)
+    }
+    expect(container.querySelectorAll('[role="status"]').length).toBe(1)
+  })
+
+  it('advances and wraps inside the filtered set', () => {
+    mockReducedMotion(false)
+    const { container } = render(<Construit />)
+    press('Sites')
+    expect(currentSector(container)).toBe(SECTORS.helene)
+    fireEvent.animationEnd(container.querySelector('.grow') as HTMLElement)
+    expect(currentSector(container)).toBe(SECTORS.site)
+    expect(frontSector(container)).toBe(SECTORS.site)
+    fireEvent.animationEnd(container.querySelector('.grow') as HTMLElement)
+    expect(currentSector(container)).toBe(SECTORS.helene)
+    expect(frontSector(container)).toBe(SECTORS.helene)
+    press('Formations')
+    fireEvent.animationEnd(container.querySelector('.grow') as HTMLElement)
+    fireEvent.animationEnd(container.querySelector('.grow') as HTMLElement)
+    expect(currentSector(container)).toBe(SECTORS.noesia)
+  })
+
+  it('a filter press goes back to the first card of the set', () => {
+    mockReducedMotion(false)
+    const { container } = render(<Construit />)
+    fireEvent.click(rows(container)[5]) // the seminar card, also in « Formations »
+    expect(currentSector(container)).toBe(SECTORS.seminar)
+    press('Formations')
+    expect(currentSector(container)).toBe(SECTORS.noesia)
+    expect(frontSector(container)).toBe(SECTORS.noesia)
+    expect(container.querySelectorAll('.grow').length).toBe(1)
+  })
+
+  it('a filter press leaves no build-up running on the card it hides', async () => {
+    mockReducedMotion(false)
+    const io = mockIntersectionObserver()
+    const { container } = render(<Construit />)
+    act(() => io.trigger(container.querySelector('section') as HTMLElement, true))
+    await tick(510) // the first card is building up: its next panel is due 250 ms later
+    press('Formations')
+    const helene = container.querySelector('[data-testid="helene"]')?.closest('article')
+    expect(helene?.hasAttribute('hidden')).toBe(true)
+    const noesia = () => container.querySelector('[data-testid="noesia"]') as HTMLElement
+    expect(noesia().dataset.plan).toBe('true')
+    expect(noesia().dataset.b).toBe('0')
+    await tick(480) // the hidden card's steps must not land on the new front card
+    expect(noesia().dataset.b).toBe('0')
+    await tick(30) // the new card's own first panel, 500 ms after its plan
+    expect(noesia().dataset.b).toBe('1')
+  })
+
+  it('with one card, the auto-advance stops on purpose and no pause button is offered', async () => {
+    mockReducedMotion(false)
+    const io = mockIntersectionObserver()
+    const { container } = render(<Construit />)
+    act(() => io.trigger(container.querySelector('section') as HTMLElement, true))
+    expect(pauseButton()).not.toBeNull()
+    press('Conférences')
+    expect(rowSectors(container)).toEqual([SECTORS.seminar])
+    expect(frontSector(container)).toBe(SECTORS.seminar)
+    expect(container.querySelector('.grow')).toBeNull()
+    expect(pauseButton()).toBeNull()
+    await tick(20000)
+    expect(frontSector(container)).toBe(SECTORS.seminar)
+    press('Toutes')
+    expect(pauseButton()).not.toBeNull()
+    expect(container.querySelector('.grow')).not.toBeNull()
+  })
+
+  it('with two cards, the card behind is the next one and never the leaving one', () => {
+    // the stack slot of a two-card and a one-card set is the slot of a full deck
+    expect(deckSlot(1, 0, 2)).toEqual(deckSlot(1, 0, 7))
+    expect(deckSlot(0, 1, 2)).toEqual(deckSlot(1, 0, 7))
+    expect(deckSlot(0, 0, 2)).toEqual(deckSlot(0, 0, 7))
+    expect(deckSlot(0, 0, 1)).toEqual(deckSlot(0, 0, 7))
+    // the full deck keeps its leaving slot (behind, faded out)
+    expect(deckSlot(6, 0, 7)).toMatchObject({ active: false, ty: 16, op: 0, z: 1 })
+    mockReducedMotion(false)
+    const { container } = render(<Construit />)
+    press('Sites')
+    const behind = Array.from(shownCards(container)).find(
+      (a) => a.getAttribute('aria-hidden') === 'true',
+    ) as HTMLElement
+    expect(behind.querySelector('.cn-sector')?.textContent).toBe(SECTORS.site)
+    expect(behind.style.opacity).toBe('1')
+    expect(behind.style.zIndex).toBe('9')
+    expect(behind.style.transform).toBe('translate(0px, -14px) scale(0.965)')
+  })
+
+  it('a pause set by the visitor survives a filter press', () => {
+    mockReducedMotion(false)
+    const io = mockIntersectionObserver()
+    const { container } = render(<Construit />)
+    act(() => io.trigger(container.querySelector('section') as HTMLElement, true))
+    fireEvent.click(screen.getByRole('button', { name: /Mettre en pause/ }))
+    press('Sites')
+    expect(screen.getByRole('button', { name: /Reprendre le défilement/ })).toBeTruthy()
+    expect((container.querySelector('.grow') as HTMLElement).style.animationPlayState).toBe(
+      'paused',
+    )
+    press('Conférences')
+    press('Toutes')
+    expect(screen.getByRole('button', { name: /Reprendre le défilement/ })).toBeTruthy()
+    expect((container.querySelector('.grow') as HTMLElement).style.animationPlayState).toBe(
+      'paused',
+    )
+  })
+
+  it('server HTML and reduced motion show all seven and hydrate on « Toutes » without a mismatch', async () => {
+    for (const reduced of [false, true]) {
+      mockReducedMotion(reduced)
+      mockIntersectionObserver()
+      const html = renderToString(<Construit />)
+      const container = document.createElement('div')
+      const parsed = new DOMParser().parseFromString(`<body>${html}</body>`, 'text/html')
+      container.append(...Array.from(parsed.body.childNodes))
+      document.body.appendChild(container)
+      expect(container.querySelectorAll('ol.cn-list li').length).toBe(7)
+      expect(shownCards(container).length).toBe(7)
+      expect(container.querySelector('[role="status"]')?.textContent).toBe('7 réalisations sur 7')
+      expect(
+        container.querySelector('[role="group"] button[aria-pressed="true"]')?.textContent,
+      ).toBe('Toutes')
+      const errors = vi.spyOn(console, 'error').mockImplementation(() => {})
+      const recoverable = vi.fn()
+      try {
+        await act(async () => {
+          hydrateRoot(container, <Construit />, { onRecoverableError: recoverable })
+        })
+        expect(recoverable, `reduced=${reduced}`).not.toHaveBeenCalled()
+        expect(errors, `reduced=${reduced}`).not.toHaveBeenCalled()
+        expect(container.querySelectorAll('ol.cn-list li').length).toBe(7)
+        expect(shownCards(container).length).toBe(7)
+        expect(
+          container.querySelector('[role="group"] button[aria-pressed="true"]')?.textContent,
+        ).toBe('Toutes')
+        await tick(20000)
+        expect(currentSector(container)).toBe(SECTORS.helene)
+      } finally {
+        errors.mockRestore()
+        container.remove()
+      }
+    }
   })
 })
 
