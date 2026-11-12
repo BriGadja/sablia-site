@@ -123,8 +123,9 @@
     }
 
     /* The four doors of the site (the menu's four intents), one row under the promise and the photo:
-       a hairline over each, gold over the monthly offer, the one Sablia leads with. Each door is a
-       whole block link (label, then its line), so its hit area is the block. */
+       a hairline over each, gold over the monthly offer, the one Sablia leads with. Each door is an
+       item (label, then its line): the link holds the label only, so its name is what it shows
+       (WCAG 2.5.3), and stretches over the whole item, so the hit area is still the block. */
     .doors {
       grid-area: doors;
       /* above the floor dune (an absolute layer) wherever the two meet, and above the photo's
@@ -139,21 +140,26 @@
       list-style: none;
 
       li {
+        position: relative;
         min-width: 0;
+        box-sizing: border-box;
+        padding: 16px 0 6px;
+        border-top: 1px solid #e4d6c0;
+      }
+      li:first-child {
+        border-top: 2px solid #b9852a;
+        padding-top: 15px;
       }
     }
     .door {
       display: block;
-      height: 100%;
-      box-sizing: border-box;
-      padding: 16px 0 6px;
-      border-top: 1px solid #e4d6c0;
       color: #131620;
       text-decoration: none;
     }
-    .doors li:first-child .door {
-      border-top: 2px solid #b9852a;
-      padding-top: 15px;
+    .door::after {
+      content: '';
+      position: absolute;
+      inset: 0;
     }
     .door-label {
       display: inline-flex;
@@ -234,13 +240,13 @@
         grid-template-columns: minmax(0, 1fr);
         gap: 0;
       }
-      .door {
+      .doors li {
         padding: 14px 0 14px;
       }
-      .doors li:first-child .door {
+      .doors li:first-child {
         padding-top: 13px;
       }
-      .doors li:last-child .door {
+      .doors li:last-child {
         border-bottom: 1px solid #e4d6c0;
       }
       .h1 {
@@ -256,15 +262,14 @@
        doors): each door is one 48 px row, label left, arrow right. Its line stays in the HTML as the
        door's description (aria-describedby), visually hidden. */
     @media (max-width: 640px) {
+      .doors li,
+      .doors li:first-child {
+        padding: 0;
+      }
       .door {
-        position: relative;
         display: flex;
         align-items: center;
         min-height: 48px;
-        padding: 0;
-      }
-      .doors li:first-child .door {
-        padding-top: 0;
       }
       .door-label {
         flex: 1;

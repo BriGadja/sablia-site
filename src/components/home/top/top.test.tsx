@@ -5,6 +5,7 @@ import { renderToString } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { NAV_LINKS } from '@/components/shell/nav-links'
 import { SESSION } from '@/content/webinaire'
+import { labelOf } from '@/lib/events'
 import { mockIntersectionObserver, mockReducedMotion } from '@/lib/hooks/test-utils'
 import { site } from '@/lib/site'
 import * as content from './content'
@@ -94,11 +95,32 @@ describe('Top, hero of the site', () => {
     expect(links.map((a) => a.getAttribute('href'))).toEqual(DOORS.map((d) => d.href))
     links.forEach((a, i) => {
       expect(a.textContent).toContain(DOORS[i].label)
-      expect(a.textContent).toContain(DOORS[i].line)
       expect(a.getAttribute('target')).toBeNull()
     })
     // The same four intents as the menu, in the same order and words (US-103).
     expect(DOORS.map((d) => [d.href, d.label])).toEqual(NAV_LINKS.map((l) => [l.href, l.label]))
+  })
+
+  // K2 axe `label-content-name-mismatch` (WCAG 2.5.3, 1440): the line is the door's description, not
+  // part of its name. It sits right after the link in the same item, outside it, so the link's
+  // accessible name is its visible text, the label alone, and the click label stays the door label
+  // (US-110, `labelOf`).
+  it('names each door by its visible label alone; the line describes it from outside the link', () => {
+    at(BEFORE)
+    const { container } = render(<Top />)
+    doors(container.querySelector('#top')).forEach((a, i) => {
+      const visible = (a.textContent ?? '').replace(/\s+/g, ' ').trim()
+      expect(visible).toBe(DOORS[i].label)
+      expect(a.getAttribute('aria-label') ?? visible).toBe(visible)
+      expect(labelOf(a)).toBe(DOORS[i].label)
+      expect(a.querySelector('.door-line')).toBeNull()
+      const line = a.nextElementSibling
+      expect(line?.matches('span.door-line')).toBe(true)
+      expect(line?.textContent).toBe(DOORS[i].line)
+      expect(line?.parentElement).toBe(a.parentElement)
+      expect(a.parentElement?.tagName).toBe('LI')
+      expect(a.getAttribute('aria-describedby')).toBe(line?.id)
+    })
   })
 
   it('before the session: the webinar link first, « Réserver 30 min » second on the formation Calendly', () => {
@@ -241,6 +263,17 @@ describe('the four doors before the photo, on the first phone screen', () => {
     expect(line).toMatch(/position:\s*absolute/)
     expect(line).toMatch(/clip-path:\s*inset\(50%\)/)
     expect(line).not.toMatch(/display:\s*none/)
+  })
+
+  it('the whole door stays the hit area: the link stretches over its item, line included', () => {
+    const item = block(block(css, '.doors {'), 'li {')
+    expect(item).toMatch(/position:\s*relative/)
+    const stretch = block(css, '.door::after {')
+    expect(stretch).toMatch(/position:\s*absolute/)
+    expect(stretch).toMatch(/inset:\s*0/)
+    // no positioned link in between, at any width: the stretch is the item's, not the label row's
+    expect(block(css, '.door {')).not.toMatch(/position:/)
+    expect(block(block(css, '@media (max-width: 640px)'), '.door {')).not.toMatch(/position:/)
   })
 })
 

@@ -290,26 +290,23 @@ export function Top() {
             <p className="free">{HERO.reassure}</p>
           </div>
 
-          {/* The label names the link (and the click in the measure); the line describes it. Before
-              the photo in the DOM: on phones the hero is one column and the doors belong to the first
-              screen; on wide screens the grid areas put the photo beside the copy (top.css). */}
+          {/* The label is the link's whole text, so its name (and the click label in the measure) is
+              what the visitor reads (WCAG 2.5.3); the line, right after it and outside it, describes
+              it; the link stretches over the item, so the line is still part of the hit area
+              (top.css). Before the photo in the DOM: on phones the hero is one column and the doors
+              belong to the first screen; on wide screens the grid areas put the photo beside the copy. */}
           <ul className="doors" data-zone="hero">
             {DOORS.map((d) => (
               <li key={d.href}>
-                <Link
-                  href={d.href}
-                  className="door"
-                  aria-label={d.label}
-                  aria-describedby={lineId(d.href)}
-                >
+                <Link href={d.href} className="door" aria-describedby={lineId(d.href)}>
                   <span className="door-label">
                     {d.label}
                     <Arrow />
                   </span>
-                  <span className="door-line" id={lineId(d.href)}>
-                    {d.line}
-                  </span>
                 </Link>
+                <span className="door-line" id={lineId(d.href)}>
+                  {d.line}
+                </span>
               </li>
             ))}
           </ul>

@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { act, render } from '@testing-library/react'
 import { renderToString } from 'react-dom/server'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -324,5 +326,23 @@ describe('bar and captions share one grid', () => {
       '3 / span 4',
       '8 / span 1',
     ])
+  })
+})
+
+/**
+ * K2 `score.py home` (empty_bands, 1440 x 900): the agents band keeps 160 px of its stage under its
+ * last card, then its 96 px floor (where this panel's dune sits) and this panel's top padding: with
+ * 64 px, 325 px without content, over the line (a third of the screen, 300 px). Wide screens open the
+ * panel on 32 px of night (293 px); phones keep 56 px (no empty band at 390).
+ */
+describe('the seam after the agents band', () => {
+  const css = readFileSync(join(__dirname, 'offre.css'), 'utf8')
+  /** The top padding of the first `padding` shorthand after `head`. */
+  const topPadding = (head: string) =>
+    Number(/padding:\s*(\d+)px\s/.exec(css.slice(css.indexOf(head)))?.[1])
+
+  it('opens on 32 px of night on wide screens and keeps 56 px on phones', () => {
+    expect(topPadding('.v2-offre {')).toBe(32)
+    expect(topPadding('@media (max-width: 900px)')).toBe(56)
   })
 })
