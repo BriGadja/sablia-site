@@ -145,10 +145,10 @@ const placeOf = (a: Element) =>
   a.closest('header') ? 'header' : a.closest('footer') ? 'footer' : 'page'
 
 /**
- * Clicks every link; returns « zone:dest » and « place:dest » for each door click. The footer's links
- * sit in a `<nav>`, so its clicks read zone `nav` like the menu's (`zoneOf` is unchanged by US-110):
- * the place, read from the DOM, tells the two apart here; in the measure `dest` counts a door
- * wherever it sits.
+ * Clicks every link; returns « zone:dest », « place:dest » and « place>zone:dest » for each door
+ * click. The place is read from the DOM; the zone is what the measure records: the menu reads `nav`,
+ * the footer `footer` (its `data-zone`, although its links sit in a `<nav>`), so a door taken in the
+ * menu and one taken in the footer are told apart in Umami too.
  */
 function clickLinks(root: HTMLElement): Set<string> {
   const seen = new Set<string>()
@@ -162,6 +162,7 @@ function clickLinks(root: HTMLElement): Set<string> {
     if (click.dest) {
       seen.add(`${click.zone}:${click.dest}`)
       seen.add(`${placeOf(a)}:${click.dest}`)
+      seen.add(`${placeOf(a)}>${click.zone}:${click.dest}`)
     }
   }
   return seen
@@ -178,14 +179,20 @@ describe.each([
       const seen = clickLinks(container)
       for (const dest of MENU) {
         expect(seen.has(`header:${dest}`), `menu ${dest}`).toBe(true)
-        expect(seen.has(`nav:${dest}`), `menu ${dest} zone`).toBe(true)
+        expect(seen.has(`header>nav:${dest}`), `menu ${dest} zone`).toBe(true)
         expect(seen.has(`footer:${dest}`), `footer ${dest}`).toBe(true)
+        expect(seen.has(`footer>footer:${dest}`), `footer ${dest} zone`).toBe(true)
       }
+      // no footer click reads the menu's zone, no menu click the footer's
+      expect(
+        [...seen].filter((s) => s.startsWith('footer>nav:') || s.startsWith('header>footer:')),
+      ).toEqual([])
       const webinar = [...seen].filter((s) => s.endsWith(':webinaire'))
       if (when === 'before') {
         // the header button, the bar and the footer entry, while the session is ahead
         for (const key of ['header', 'bar', 'footer'])
           expect(webinar, `${key}:webinaire`).toContain(`${key}:webinaire`)
+        expect(webinar).toContain('footer>footer:webinaire')
       } else {
         expect(webinar).toEqual([])
       }

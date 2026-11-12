@@ -31,9 +31,13 @@ const LEGAL = [
   { href: '/cgv', label: 'CGV' },
 ] as const
 
+/**
+ * `data-zone="footer"`: its links sit in a `<nav>`, which `zoneOf` would name `nav` like the header
+ * menu's; the zone keeps a door taken in the footer apart from one taken in the menu (US-110).
+ */
 export function SiteFooter() {
   return (
-    <footer className="v2-footer">
+    <footer className="v2-footer" data-zone="footer">
       <div className="wrap v2-footer-row">
         <span className="v2-footer-brand">
           <Logo size={22} />
