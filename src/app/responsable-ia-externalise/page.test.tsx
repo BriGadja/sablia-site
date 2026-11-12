@@ -485,3 +485,49 @@ describe('/responsable-ia-externalise stylesheets', () => {
     expect(sizes).toEqual(['48', '36'])
   })
 })
+
+// Adversarial review K6 (tel-7), US-105: on a phone the price came after the audience sentence and the
+// booking button. In one column (≤ 900 px) the copy block opens (`display: contents`) so the facts
+// follow the lede and its byline, before the audience sentence, the button and the photo; the DOM
+// order and the two-column desktop grid are unchanged.
+describe('/responsable-ia-externalise hero order on phones', () => {
+  const sheet = readFileSync(
+    join(__dirname, '../../components/temps-partage/hero/hero.css'),
+    'utf8',
+  )
+  const at = sheet.indexOf('@media (max-width: 900px)')
+  const desktop = sheet.slice(0, at)
+  const phone = sheet.slice(at, sheet.indexOf('\n    }\n  }\n}', at))
+  /** The `order` of a rule of the phone block, 0 when it sets none. */
+  const order = (selector: string) => {
+    const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    const body = phone.match(new RegExp(`\\n {6}${escaped} \\{([^}]*)\\}`))?.[1] ?? ''
+    return Number(body.match(/order: (\d+)/)?.[1] ?? 0)
+  }
+
+  it('opens the copy block into the one-column grid, desktop untouched', () => {
+    expect(phone).toMatch(/\n {6}\.tph-copy \{[^}]*display: contents;/)
+    expect(phone).toMatch(/\.tph-grid \{[^}]*grid-template-areas: none;/)
+    expect(desktop).not.toMatch(/display: contents|order:/)
+    expect(desktop).toMatch(/grid-template-areas:\s*'copy fig'\s*'facts facts';/)
+  })
+
+  it('puts the facts after the lede and its byline, before the audience, the button and the photo', () => {
+    expect(order('.tph-facts')).toBeGreaterThan(0)
+    expect(order('.tph-for')).toBeGreaterThan(order('.tph-facts'))
+    expect(order('.tph-cta')).toBeGreaterThan(order('.tph-facts'))
+    expect(order('.tph-fig')).toBeGreaterThan(order('.tph-cta'))
+    // the eyebrow, the h1, the lede and the byline keep their place (order 0, DOM order)
+    expect(phone).not.toMatch(/\.tph-(lede|by) \{[^}]*order:/)
+  })
+
+  it('keeps the DOM order: lede, byline, audience, button, photo, facts', () => {
+    const html = renderToString(<Page />)
+    const top = html.slice(html.indexOf('id="top"'), html.indexOf('id="role"'))
+    const seq = ['tph-lede', 'tph-by', 'tph-for', 'data-cta-book', 'tph-fig', 'tph-facts'].map(
+      (s) => top.indexOf(s),
+    )
+    expect(seq.every((i) => i >= 0)).toBe(true)
+    expect([...seq].sort((a, b) => a - b)).toEqual(seq)
+  })
+})
