@@ -5,7 +5,8 @@
   .v2-fm-questions {
     position: relative;
     background: #f2e3df;
-    padding: 96px 0 176px;
+    /* bottom: the room the #fin dune overlaps moved to the line toward the monthly offer (13/11) */
+    padding: 96px 0 48px;
     color: #131620;
 
     .qu-grid {
@@ -57,7 +58,7 @@
 
   @media (max-width: 900px) {
     .v2-fm-questions {
-      padding: 56px 0 144px;
+      padding: 56px 0 24px;
 
       .qu-grid {
         grid-template-columns: minmax(0, 1fr);

@@ -4,6 +4,7 @@ import { ConferencesPreuve } from '@/components/conferences/preuve'
 import { ConferencesRappel } from '@/components/conferences/rappel'
 import { Sujets } from '@/components/conferences/sujets'
 import { FinBand } from '@/components/shell/FinBand'
+import { MonthlyOfferLine } from '@/components/shell/MonthlyOfferLine'
 import { pageMetadata } from '@/lib/seo'
 import { site } from '@/lib/site'
 
@@ -16,7 +17,8 @@ export const metadata = pageMetadata({
 /**
  * Conférences et séminaires (US-107): on request, the price in the quote, three topics with their own
  * format, the published recommendation signed by role and sector, the webinar reminder while a session
- * is ahead, and the call on the « Échange de 30 minutes » Calendly. No price, no structured data.
+ * is ahead, the line toward the monthly offer (Brice, 13/11), and the call on the « Échange de 30
+ * minutes » Calendly. No price, no structured data.
  */
 export default function ConferencesPage() {
   return (
@@ -25,6 +27,7 @@ export default function ConferencesPage() {
       <Sujets />
       <ConferencesPreuve />
       <ConferencesRappel />
+      <MonthlyOfferLine ground="sand" />
       <FinBand title={FIN.title} text={FIN.text} bookingUrl={site.formationBookingUrl} />
     </main>
   )

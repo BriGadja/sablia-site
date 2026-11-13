@@ -142,6 +142,23 @@ describe('/realisations (US-95, server HTML)', () => {
       expect(text, w).not.toContain(w)
   })
 
+  // Brice at VP2 (13/11, question 8): before the closing band, a line leads to the monthly offer (the
+  // home's first door and its monthly link, copy deck B2); a link, not a third booking button.
+  it('leads to the monthly offer after the wall, just before the closing band', () => {
+    const zone = html.indexOf('data-zone="mensuel"')
+    expect(html.match(/data-zone="mensuel"/g)).toHaveLength(1)
+    expect(zone).toBeGreaterThan(html.indexOf('id="construit"'))
+    expect(zone).toBeLessThan(html.indexOf('id="fin"'))
+    const line = html.slice(zone, html.indexOf('id="fin"'))
+    expect(textOf(line)).toContain(
+      "Responsable IA externalisé : quelqu'un qui construit et entretient vos outils, chaque mois.",
+    )
+    expect(line).toMatch(
+      /<a [^>]*href="\/responsable-ia-externalise"[^>]*>[\s\S]*?Voir l'offre mensuelle/,
+    )
+    expect(line).not.toContain('data-cta-book')
+  })
+
   it('sets the 01b title and description on its own indexable path', () => {
     expect(metadata.title).toEqual({ absolute: NEW.title })
     expect(metadata.description).toBe(NEW.description)

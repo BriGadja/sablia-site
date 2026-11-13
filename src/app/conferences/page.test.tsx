@@ -242,3 +242,30 @@ describe('every « Réserver 30 min » of /conferences opens the « Échange de 
     expect(site.formationBookingUrl).toBe('https://calendly.com/brice-gachadoat/echange-30-minutes')
   })
 })
+
+// Brice at VP2 (13/11, question 8): before the closing band, a line leads to the monthly offer (the home's
+// first door and its monthly link, copy deck B2). A link, not a booking button; after the webinar reminder
+// while the session is ahead, alone from its start.
+describe('/conferences line toward the monthly offer (just before #fin)', () => {
+  for (const [when, iso] of [
+    ['before', BEFORE],
+    ['from', AFTER],
+  ] as const) {
+    it(`${when} the session start: one line and one link to the offer page, after #preuve and the reminder`, () => {
+      const html = ssr(iso)
+      const zone = html.indexOf('data-zone="mensuel"')
+      expect(html.match(/data-zone="mensuel"/g)).toHaveLength(1)
+      expect(zone).toBeGreaterThan(html.indexOf('id="preuve"'))
+      expect(zone).toBeLessThan(html.indexOf('id="fin"'))
+      if (when === 'before') expect(zone).toBeGreaterThan(html.indexOf('data-zone="rappel"'))
+      const line = html.slice(zone, html.indexOf('id="fin"'))
+      expect(textOf(line)).toContain(
+        "Responsable IA externalisé : quelqu'un qui construit et entretient vos outils, chaque mois.",
+      )
+      expect(line).toMatch(
+        /<a [^>]*href="\/responsable-ia-externalise"[^>]*>[\s\S]*?Voir l'offre mensuelle/,
+      )
+      expect(line).not.toContain('data-cta-book')
+    })
+  }
+})

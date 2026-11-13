@@ -230,6 +230,19 @@ describe.each([
     expect(seen.has('hero:webinaire')).toBe(when === 'before')
   })
 
+  // Brice at VP2 (13/11, question 8): the line before the closing band of these three pages is a door to
+  // the monthly offer, measured in the zone « mensuel » (the home's monthly block carries the same zone).
+  it.each([
+    '/formations',
+    '/conferences',
+    '/realisations',
+  ])('%s: the line before the closing band is a door to the monthly offer, zone « mensuel »', (path) => {
+    pin(iso)
+    const page = PAGES.find((p) => p.path === path) as Page
+    const seen = clickLinks(served(page).container)
+    expect(seen.has('page>mensuel:responsable-ia')).toBe(true)
+  })
+
   it.each([
     '/formations',
     '/conferences',

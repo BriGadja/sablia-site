@@ -302,3 +302,24 @@ describe('/formations additions (US-109)', () => {
     }
   })
 })
+
+// Brice at VP2 (13/11, question 8): an addition, as the two of US-109. Before the closing band, a line leads
+// to the monthly offer (the home's first door and its monthly link, copy deck B2); a link, not a third
+// booking button.
+describe('/formations line toward the monthly offer (just before #fin)', () => {
+  it('sits after #questions, before #fin, with one link to the offer page', () => {
+    const html = decode(renderToString(<Page />))
+    const zone = html.indexOf('data-zone="mensuel"')
+    expect(html.match(/data-zone="mensuel"/g)).toHaveLength(1)
+    expect(zone).toBeGreaterThan(html.indexOf('id="questions"'))
+    expect(zone).toBeLessThan(html.indexOf('id="fin"'))
+    const line = html.slice(zone, html.indexOf('id="fin"'))
+    expect(line.replace(/<[^>]*>/g, ' ').replace(/[\s\u00a0\u202f]+/g, ' ')).toContain(
+      "Responsable IA externalisé : quelqu'un qui construit et entretient vos outils, chaque mois.",
+    )
+    expect(line).toMatch(
+      /<a [^>]*href="\/responsable-ia-externalise"[^>]*>[\s\S]*?Voir l'offre mensuelle/,
+    )
+    expect(line).not.toContain('data-cta-book')
+  })
+})
