@@ -50,7 +50,7 @@ const BESOIN = {
  */
 const MOVED = [
   'Exemples de réalisations.',
-  'Plus de 20 clients accompagnés depuis 2025.',
+  'Plus de 10 clients accompagnés depuis 2025.',
   'Mettre en pause',
   'Automatisation · Site',
   'Hélène, psychopraticienne et conseillère en nutrition',
