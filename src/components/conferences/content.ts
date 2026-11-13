@@ -2,8 +2,8 @@
  * Every visitor string of `/conferences` (US-107, plan sablia-site-structure-offre F3), verbatim from
  * the copy deck B4 `conf.*` as corrected after its content review. Talks are sold on request, the price
  * in the quote: no amount here. Each topic shows the duration its support actually has (the selling
- * durations are question T5 of validation point 2); the « 1 h 30 à 2 h » conference and its deduction
- * rule stay on `/formations#conference`. The recommendation is signed by a role and a sector only.
+ * durations were question T5 of validation point 2); the deduction rule of the conference option stays on
+ * `/formations#conference`, which no longer announces a duration (Brice, 13/11). The recommendation is signed by a role and a sector only.
  */
 
 export const META = {

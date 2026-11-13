@@ -187,7 +187,7 @@ describe('/conferences static HTML (US-107)', () => {
     const text = textOf(ssr(BEFORE))
     expect(text).not.toMatch(/\d[\d\s.,]*\s?(€|euros?)/i)
     expect(text).not.toContain('€')
-    // the « 1 h 30 à 2 h » conference and its deduction rule stay on /formations#conference (F6)
+    // the deduction rule of the conference option stays on /formations#conference (F6); no « 1 h 30 »
     expect(text).not.toMatch(/1 h 30|déduit/i)
     expect(text).not.toMatch(/\baudits?\b|référent|temps partagé|garanti|rembours/i)
     expect(text).not.toMatch(/\bCPF\b|finançable|certifi|Qualiopi|IAPreneurs?|Noésia/i)

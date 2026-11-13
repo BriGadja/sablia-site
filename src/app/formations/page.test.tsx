@@ -113,13 +113,28 @@ describe('/formations static HTML (SSR content rule)', () => {
     expect(conf).toContain('Une conférence, pour voir avant de décider.')
   })
 
-  it('conference: 1 h 30 to 2 h, deducted from the signed programme, without its price', () => {
+  // Brice at VP2 (13/11, question 5): /conferences gives each talk the duration of what exists, so this
+  // option no longer announces « 1 h 30 à 2 h »; the deduction rule stays.
+  it('conference: deducted from the signed programme, without its price nor a duration', () => {
     expect(text).toContain(
-      'Une conférence de 1 h 30 à 2 h pour votre équipe. Son prix est déduit du programme s’il est signé dans les 30 jours.'.replace(
+      'Une conférence pour votre équipe. Son prix est déduit du programme s’il est signé dans les 30 jours.'.replace(
         '’',
         "'",
       ),
     )
+    expect(text).not.toMatch(/1 h 30|à 2 h\b/)
+  })
+
+  // Brice at VP2 (13/11, question 8): the score comes from a one-morning seminar, not the three days,
+  // so the block is titled for what it is.
+  it('preuve: titled « Retours d’un séminaire », never « Déjà formés »', () => {
+    const at = html.indexOf('id="preuve"')
+    const block = html
+      .slice(at, html.indexOf('</section>', at))
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+    expect(block).toContain("Retours d'un séminaire")
+    expect(text).not.toContain('Déjà formés')
   })
 
   it('preuve: 9,1/10 with its base right next to it (R05), four answers as written', () => {

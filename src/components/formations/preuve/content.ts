@@ -1,9 +1,10 @@
-// « Déjà formés » of /formations (01b § 3, optional proof block, choice 8).
+// The proof block of /formations (01b § 3, optional proof block, choice 8). Titled « Retours d'un
+// séminaire » since Brice's answer at VP2 (13/11, question 8): the score comes from a one-morning seminar.
 // FIGURE and LINE verbatim from webinaire.ts PREUVE and kept side by side: red line R05 wants the base
 // (7 réponses sur 23 participants) within 250 characters of 9,1. Answers and note verbatim from the old
 // /formations avis block.
 
-export const EYEBROW = 'Déjà formés'
+export const EYEBROW = "Retours d'un séminaire"
 export const FIGURE = '9,1/10'
 export const LINE =
   "de note moyenne, donnée par les équipes d'une société d'ingénierie d'environ 110 personnes (7 réponses sur 23 participants)."

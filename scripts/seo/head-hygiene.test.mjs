@@ -81,6 +81,10 @@ test("llms.txt: today's offer first, the training, the conferences, no price, no
   assert.doesNotMatch(llms, GONE)
   assert.doesNotMatch(llms, EURO)
   assert.doesNotMatch(llms, /Plus de 20 clients|calendly\.com\/brice-gachadoat\/30min/)
+  // Brice at VP2 (13/11, question 5): the training's conference option announces no duration (the
+  // conference page gives each talk the length of what exists).
+  assert.doesNotMatch(llms, /1 h 30/)
+  assert.ok(llms.includes('- En option : une conférence pour votre équipe'), 'llms.txt option line')
   // One offer now shows its price: the « sur devis » answer names the training (offer-page review, F6 #5).
   assert.ok(llms.includes('**Combien coûte la formation ?**'), 'llms.txt FAQ price line not scoped')
   assert.doesNotMatch(llms, /Combien ça coûte/)
