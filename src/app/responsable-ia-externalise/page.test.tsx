@@ -125,10 +125,20 @@ describe('/responsable-ia-externalise static HTML (SSR content rule)', () => {
       '2 000 € HT par mois',
       '1 500 € HT par mois',
       'consultant IA',
-      'DSI à temps partagé',
+      'DSI externalisé',
       'Normandie',
     ])
       expect(text, s).toContain(s)
+  })
+
+  // Brice at VP1 (13/11, question 3): « temps partagé » reads badly with clients, so the role section
+  // compares to a « DSI externalisé », in its title and its paragraph; the words leave the whole page.
+  it('compares the role to a « DSI externalisé » in the title and the paragraph, never « temps partagé »', () => {
+    const at = html.indexOf('id="role"')
+    const role = textOf(html.slice(at, html.indexOf('</section>', at)))
+    expect(role).toContain('Entre consultant IA et DSI externalisé')
+    expect(role).toContain("Comme un DSI externalisé le fait pour l'informatique")
+    expect(text).not.toMatch(/temps partagé/i)
   })
 
   it('puts the price, the commitment and the audience in a facts list of the hero', () => {

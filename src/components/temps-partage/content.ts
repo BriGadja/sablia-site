@@ -90,7 +90,8 @@ export const HERO = {
 
 export const ROLE = {
   eyebrow: 'Le rôle',
-  title: 'Entre consultant IA et DSI à temps partagé',
+  /** « DSI externalisé », not « à temps partagé »: Brice at VP1, 13/11 (question 3). */
+  title: 'Entre consultant IA et DSI externalisé',
   /** The two neighbours of the role, one sentence each, shown side by side; `term` is emphasised. */
   poles: [
     {
@@ -100,8 +101,8 @@ export const ROLE = {
     },
     {
       key: 'dsi',
-      term: 'DSI à temps partagé',
-      text: "Comme un DSI à temps partagé le fait pour l'informatique, je tiens le rôle dans la durée : deux jours de travail par mois, pour une entreprise qui n'a personne en interne pour s'en occuper.",
+      term: 'DSI externalisé',
+      text: "Comme un DSI externalisé le fait pour l'informatique, je tiens le rôle dans la durée : deux jours de travail par mois, pour une entreprise qui n'a personne en interne pour s'en occuper.",
     },
   ],
   pillars:
