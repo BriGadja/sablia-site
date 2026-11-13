@@ -7,16 +7,17 @@ import { Logo } from './Logo'
 import './site-footer.css'
 
 /**
- * Link order of 01b § 6: the training structure, the monthly offer (US-99), the CRM offer page,
- * resources, then the legal row.
- * `untilSession`: gone from `SESSION_START`, like the header entry (`/webinaire` is the one session page).
+ * Link order (US-103): the four entries of the header menu, same labels and hrefs (`nav-links.ts`;
+ * the footer keeps its own list on purpose), the webinar while its session is ahead, the CRM offer
+ * page, resources, then the legal row.
+ * `untilSession`: gone from `SESSION_START` (`/webinaire` is the one session page).
  */
 const LINKS = [
-  { href: '/formations', label: 'Formation' },
-  { href: '/webinaire', label: 'Webinaires', untilSession: true },
-  { href: '/accompagnement', label: 'Après la formation' },
-  { href: '/responsable-ia-temps-partage', label: 'Responsable IA' },
+  { href: '/responsable-ia-externalise', label: 'Responsable IA externalisé' },
+  { href: '/formations', label: 'Formations' },
+  { href: '/conferences', label: 'Conférences' },
   { href: '/realisations', label: 'Réalisations' },
+  { href: '/webinaire', label: 'Webinaires', untilSession: true },
   { href: '/offres/compte-rendu-appel', label: "Compte rendu d'appel" },
   { href: '/ressources', label: 'Ressources' },
   { href: '/newsletter', label: 'Newsletter' },
@@ -30,9 +31,13 @@ const LEGAL = [
   { href: '/cgv', label: 'CGV' },
 ] as const
 
+/**
+ * `data-zone="footer"`: its links sit in a `<nav>`, which `zoneOf` would name `nav` like the header
+ * menu's; the zone keeps a door taken in the footer apart from one taken in the menu (US-110).
+ */
 export function SiteFooter() {
   return (
-    <footer className="v2-footer">
+    <footer className="v2-footer" data-zone="footer">
       <div className="wrap v2-footer-row">
         <span className="v2-footer-brand">
           <Logo size={22} />

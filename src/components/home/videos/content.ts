@@ -5,6 +5,11 @@ export const TITLE = 'Nos vidéos sur YouTube.'
 export const CHANNEL_LABEL = 'Voir la chaîne'
 export const CHANNEL_URL = 'https://www.youtube.com/channel/UCXzIrGckmJcwKSLCPXV7r1w'
 
+/** Copy deck B2 `home.videos.besoin` and `home.videos.link` (US-104): custom builds, the Réalisations door. */
+export const BESOIN = 'Un besoin précis ? Je construis aussi à la demande.'
+export const REALISATIONS_LABEL = 'Voir les réalisations'
+export const REALISATIONS_HREF = '/realisations'
+
 export interface TileSource {
   youtubeId: string
   title: string

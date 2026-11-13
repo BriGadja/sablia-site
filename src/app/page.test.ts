@@ -9,28 +9,29 @@ describe('home page', () => {
     expect(String(homeMetadata.metadataBase)).toBe('https://sablia.io/')
   })
 
-  // The 7-word rule is for section titles; the meta title is the 01b string (U13a, 11 tokens by design),
+  // The 7-word rule is for section titles; the meta title is the copy deck's `home.meta.title` (US-104),
   // pinned with its description in home-metadata.test.ts.
-  it('title is the 01b training title, without an em dash', () => {
+  it('title is the deck title (what Sablia does, for whom, where), without an em dash', () => {
     const title = (homeMetadata.title as { absolute: string }).absolute
-    expect(title).toBe("Formation à l'IA pour votre équipe, sur ses dossiers · Sablia")
+    expect(title).toBe("Outils d'IA et formation pour les PME, à Rouen · Sablia")
     expect(title).not.toContain('—')
   })
 
-  // Data contract « Home order » (plan site-formation-lot1); the rendered ids are pinned in
+  // Home order of plan sablia-site-structure-offre (E1, US-104); the rendered ids are pinned in
   // src/components/home/HomePage.test.tsx.
-  it('mounts the ten training bands in order inside main#contenu', () => {
+  it('mounts the eleven bands in order inside main#contenu, the monthly offer right after the hero', () => {
     const src = readFileSync('src/components/home/HomePage.tsx', 'utf8')
     const body = src.slice(src.indexOf('<main'))
     const order = [
       '<Top',
-      '<Offre',
+      '<Mensuel',
       '<Automatisations',
+      '<Offre',
       '<Formations',
+      '<Conferences',
+      '<Videos',
       '<Derriere',
       '<WebinaireBand',
-      '<Apres',
-      '<Videos',
       '<Faq',
       '<FinBand',
     ]
@@ -40,8 +41,8 @@ describe('home page', () => {
     expect(body).toContain('id="contenu" tabIndex={-1}')
   })
 
-  it('no longer imports the bands that left the home (scene: CRM offer page; construit: /realisations)', () => {
+  it('no longer imports the bands that left the home (scene: CRM offer page; construit: /realisations; apres: replaced by mensuel)', () => {
     const src = readFileSync('src/components/home/HomePage.tsx', 'utf8')
-    expect(src).not.toMatch(/scene|construit/i)
+    expect(src).not.toMatch(/scene|construit|apres/i)
   })
 })

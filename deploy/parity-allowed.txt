@@ -3,7 +3,7 @@
 # Vercel answered an unknown /api path with its own HTML-ish 404 text; ours is plain "Not Found".
 body ^/api/nope$
 # v2 rewrote every page: page HTML bodies are released (statuses, content types and headers stay compared).
-body ^/(index\.html|guides/.*|offres/.*|ressources(/.*)?|cgv/?|thank-you|formations|accompagnement|mentions-legales|politique-confidentialite)?$
+body ^/(index\.html|guides/.*|offres/.*|ressources(/.*)?|cgv/?|thank-you|formations|accompagnement|responsable-ia-temps-partage|responsable-ia-externalise|mentions-legales|politique-confidentialite)?$
 # The two ex-soft-404 probes (unknown path, missing asset) now answer a real 404 with 404.html (t-20261019-24).
 status ^/nimporte-quoi$ 404
 status ^/assets/x\.js$ 404
@@ -12,6 +12,9 @@ body ^/assets/x\.js$
 # The two old pages Google lists as soft 404s redirect to their natural replacements (reversible in static.ts).
 redirect ^/roi$ /offres/compte-rendu-appel
 redirect ^/about$ /#derriere
+# The monthly offer's first address (11/11) and the page it replaced answer 301 to the offer page (12/11).
+redirect ^/responsable-ia-temps-partage$ /responsable-ia-externalise
+redirect ^/accompagnement$ /responsable-ia-externalise
 # Next's hashed _next/static files are served immutable on purpose (same reason as the built-in /assets/ rule).
 header cache-control ^/_next/static/
 # The sitemap's lastmod moved with the rewritten pages (stamp-lastmod --write is honest, plan A5).

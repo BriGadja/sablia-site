@@ -1,6 +1,6 @@
 # Architecture — Sablia Site (v2)
 
-**Last updated**: 2026-11-01 (training lot 1 on the 2026-10-26 v2 build). **Stack**: Next.js 16.4.3 static export / React 19.3.1 / TypeScript 5.9.3 / Tailwind 4.3.3 / Express 4 / Vitest 4.0.4 / Biome 2.4.13 (versions: `package.json`).
+**Last updated**: 2026-11-12 (the restructure around the monthly offer: `/responsable-ia-externalise`, `/conferences`, two more 301; earlier: training lot 1 on the 2026-10-26 v2 build). **Stack**: Next.js 16.4.3 static export / React 19.3.1 / TypeScript 5.9.3 / Tailwind 4.3.3 / Express 4 / Vitest 4.0.4 / Biome 2.4.13 (versions: `package.json`).
 
 The Vite + Wouter + Helmet site this file used to describe is replaced and its tree (`client/`, `vite.config.ts`, `tailwind.config.ts`, `theme.json`, `scripts/prerender.mjs`, `server/vite.ts`) was deleted on 2026-10-26; git history keeps it.
 
@@ -20,13 +20,15 @@ Routes are the folders of `src/app/`; the manifest used by the sitemap and the e
 
 | Route | File | Notes |
 |-------|------|-------|
-| `/` | `src/app/page.tsx` → `HomePage` | the training home, see below |
+| `/` | `src/app/page.tsx` → `HomePage` | what Sablia does, four doors, the monthly offer first, see below |
 | `/formations` | `src/app/formations/page.tsx` | the « L'IA au travail » offer, no price |
-| `/accompagnement` | `src/app/accompagnement/page.tsx` | « Après la formation » |
-| `/realisations` | `src/app/realisations/page.tsx` | the wall of cards (`realisations/construit`), under its own head |
+| `/conferences` | `src/app/conferences/page.tsx` | talks and seminars on request, three topics (`src/components/conferences/`) |
+| `/responsable-ia-externalise` | `src/app/responsable-ia-externalise/page.tsx` | the monthly offer « Responsable IA externalisé », price shown (`src/components/temps-partage/`) |
+| `/realisations` | `src/app/realisations/page.tsx` | the wall of cards (`realisations/construit`), filtered by type, under its own head and its « Un besoin précis ? » block |
 | `/offres/compte-rendu-appel` | `src/app/offres/compte-rendu-appel/page.tsx` | OF-1 offer; mounts `home/scene` (`showOffer={false}`) |
 | `/webinaire`, `/webinaire/{merci,apres-reservation,questionnaire}` | `src/app/webinaire/` | registration chain, copy in `src/content/webinaire.ts` (frozen until 03/12) |
-| `/newsletter` | `src/app/newsletter/page.tsx` | double opt-in |
+| `/newsletter` | `src/app/newsletter/page.tsx` | double opt-in, then the list of published issues |
+| `/lettre/<slug>` | `src/app/lettre/[slug]/page.tsx` | one issue of the Tuesday letter, built from `contenu_lettres`; one page per published row |
 | `/offres/compte-rendu-appel/<crm>` | `.../[crm]/page.tsx` | hubspot, zoho, salesforce, pipedrive from `src/content/crm/*.json`; a draft is not built |
 | `/offres/compte-rendu-appel/google-sheets`, `/excel-365` | own folders | |
 | `/ressources` | `src/app/ressources/page.tsx` | built from Supabase |
@@ -36,7 +38,7 @@ Routes are the folders of `src/app/`; the manifest used by the sitemap and the e
 | `/thank-you` | `src/app/thank-you/page.tsx` | noindex |
 | unknown path | `src/app/not-found.tsx` → `404.html` | status 404 from `server/static.ts` |
 
-`/roi` and `/about` are 301 redirects in `server/static.ts`, not pages. `src/app/error.tsx` is the error boundary.
+`/roi`, `/about`, `/lettre`, `/responsable-ia-temps-partage` and `/accompagnement` are 301 redirects in `server/static.ts` (to `/offres/compte-rendu-appel`, `/#derriere`, `/newsletter`, and the last two to `/responsable-ia-externalise`), not pages. `src/app/error.tsx` is the error boundary.
 
 ---
 
@@ -46,10 +48,10 @@ Routes are the folders of `src/app/`; the manifest used by the sitemap and the e
 `SessionBar` (client; thin webinar bar, route and clock aware), `SiteHeader` (the whole bar is the `<nav>`; `NavToggle` is a client component; links in `nav-links.ts`; `HeaderCta` picks its button with `headerCtaWhen` in `header-cta.ts`), `WhenUpcoming` / `useSessionUpcoming` (client; the one switch for what changes at the session start; build-time state first, effect after), `SiteFooter` (+ `ConsentLink`, client), `Cta` (dark or light, md or lg; without `href` it is a `BookingButton`), `BookingButton` (client; the only way to book), `Eyebrow`, `Dune`, `SandIllustration` + `IllHead`, `FinBand` (`<section id="fin">`, `bookingUrl` prop), `Logo`. One CSS file per component, one `.v2-<scope>` each.
 
 ### Home (`src/components/home/`)
-`HomePage.tsx` mounts, in `<main id="contenu">`: `top` (hero), `offre` (the training panel), `automatisations` (the agents band), `formations` (photo strip), `derriere` (trainer and counters), `webinaire` (only while the session is ahead), `apres`, `videos` (async server component reading Supabase), `faq`, then `FinBand`. `scene` stays in `home/scene/` and is mounted by the CRM offer page; `construit` lives in `src/components/realisations/construit/`. Each folder holds `index.tsx`, `<section>.css`, `content.ts` and its test; the section root is `<section id="<id>" className="v2-<id>">`.
+`HomePage.tsx` mounts, in `<main id="contenu">`: `top` (hero and the four doors), `mensuel` (the monthly offer), `automatisations` (the agents band), `offre` (the training panel), `formations` (photo strip), `conferences` (talks on request), `videos` (async server component reading Supabase), `derriere` (founder and counters), `webinaire` (only while the session is ahead), `faq`, then `FinBand`. `scene` stays in `home/scene/` and is mounted by the CRM offer page; `construit` lives in `src/components/realisations/construit/`. Each folder holds `index.tsx`, `<section>.css`, `content.ts` and its test; the section root is `<section id="<id>" className="v2-<id>">`.
 
 ### Inner pages
-`src/components/formations/` (hero, pourqui, deroule, inclus, conference, preuve, questions), `src/components/accompagnement/` (hero, referent, surmesure), `src/components/realisations/` (head, construit, content.ts), `src/components/offre/` (hero, pricing, variants, included/excluded, objections, FAQ, CRM page view, flow diagram), `src/components/ressources/` (card, form, data, poster), `src/components/legal/` (legal pages, CGV view, thanks, not-found and error views).
+`src/components/formations/` (hero, pourqui, deroule, inclus, conference, preuve, questions), `src/components/conferences/` (hero, sujets, preuve, rappel), `src/components/temps-partage/` (the monthly offer page: hero, role, premier-mois, chaque-mois, gardez, conditions, qui, questions), `src/components/realisations/` (head, construit, content.ts), `src/components/offre/` (hero, pricing, variants, included/excluded, objections, FAQ, CRM page view, flow diagram), `src/components/ressources/` (card, form, data, poster), `src/components/legal/` (legal pages, CGV view, thanks, not-found and error views).
 
 ### Cross-cutting
 `VideoFacade` (click-to-play, thumbnail only, no iframe before the click, `youtube-nocookie` after), `consent/ConsentBanner`, `measurement/MeasurementBoot`, `seo/*` JSON-LD components.
@@ -74,7 +76,7 @@ Routes are the folders of `src/app/`; the manifest used by the sitemap and the e
 |------|---------|
 | `seo.ts` | `pageMetadata()`, `SITE_ORIGIN` |
 | `analytics.ts` | Umami loader, website id per hostname, consent-gated recorder, keep-UTM hook (`beforeSend`), `?stats=off` device opt-out (`applyStatsParam`) |
-| `events.ts` | tier-1 and tier-2 event capture (delegated listeners, zones from `section[id]`, `dest: 'webinaire'` on the click) |
+| `events.ts` | tier-1 and tier-2 event capture (delegated listeners, zones from `data-zone` then `section[id]`, the door's name as `dest` on a click toward one of the five doors: `responsable-ia`, `formations`, `conferences`, `realisations`, `webinaire`) |
 | `consent.ts` | `sablia_consent` storage, 6 months, silence = refusal |
 | `booking.ts`, `site.ts` | `openBookingUrl`, canonical constants (`bookingUrl` CRM, `formationBookingUrl` training, contact address) |
 | `contenu.ts` | Supabase reads of `contenu_ressources`; `SABLIA_FIXTURE_SLUGS` fixtures |

@@ -19,8 +19,21 @@ test('/realisations sources = its page and its components', () => {
   assert.deepEqual(r?.sources, ['src/app/realisations/', 'src/components/realisations/'])
 })
 
-// U13a: the home's lastmod follows the training sections; the bands that left it (scene, construit) do not.
-test('home sources = the training sections, without scene and construit', () => {
+// US-107 (plan sablia-site-structure-offre I2): the conferences page is indexed, dated by its page and
+// its own components.
+test('/conferences is an indexable page route dated by its page and its components', () => {
+  const r = PAGE_ROUTES.find((x) => x.path === '/conferences')
+  assert.ok(r, '/conferences missing from PAGE_ROUTES')
+  assert.equal(r.indexable, true)
+  assert.notEqual(r.draft, true)
+  assert.equal(r.changefreq, 'monthly')
+  assert.equal(r.priority, 0.8)
+  assert.deepEqual(r.sources, ['src/app/conferences/', 'src/components/conferences/'])
+})
+
+// US-104: the home's lastmod follows its bands in page order (#mensuel and #conferences in, #apres out);
+// the bands that left it (scene, construit, apres) do not date it.
+test('home sources = its bands in page order, without scene, construit and apres', () => {
   const home = PAGE_ROUTES.find((x) => x.path === '/')
   const H = 'src/components/home'
   assert.deepEqual(home?.sources, [
@@ -29,13 +42,14 @@ test('home sources = the training sections, without scene and construit', () => 
     `${H}/HomePage.tsx`,
     ...[
       'top',
-      'offre',
+      'mensuel',
       'automatisations',
+      'offre',
       'formations',
+      'conferences',
+      'videos',
       'derriere',
       'webinaire',
-      'apres',
-      'videos',
       'faq',
     ].map((id) => `${H}/${id}/`),
   ])

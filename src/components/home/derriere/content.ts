@@ -5,7 +5,8 @@
  * moved here from `#formations`. Noésia appears in ONE proof line, under the counters.
  */
 
-export const EYEBROW = 'Qui forme votre équipe'
+/** Copy deck B2 `home.derriere.eyebrow` (US-104): he builds, trains and speaks, not only trains. */
+export const EYEBROW = 'Derrière Sablia'
 
 export const HEADING = 'Brice Gachadoat, fondateur de Sablia.'
 

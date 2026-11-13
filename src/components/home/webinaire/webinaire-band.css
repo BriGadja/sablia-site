@@ -193,7 +193,7 @@
 
   @media (max-width: 900px) {
     .v2-home-webinaire {
-      /* the #apres dune (80 px) straddles this band's floor */
+      /* the #faq dune (80 px) straddles this band's floor */
       padding-bottom: 88px;
 
       .wb-panel {

@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { act, render } from '@testing-library/react'
 import { renderToString } from 'react-dom/server'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -32,7 +34,18 @@ describe('static HTML (SSR content rule)', () => {
     expect(html).toContain('v2-offre')
     expect(html).toContain('data-zone="offre"')
     expect(html).toMatch(/<h2[^>]*>Trois jours, six demi-journées\.<\/h2>/)
-    expect(html).toContain("L'offre")
+  })
+
+  // US-104 (plan sablia-site-structure-offre E3, copy deck B2 `home.offre.eyebrow`): once the monthly
+  // block opens the page, « L'offre » over the three days would read as the monthly offer. At its new
+  // rank (4th, after the rose agents band) the panel no longer slides over the hero: it opens on a
+  // dune like every night band that follows a light one.
+  it('names the training by its menu word, and opens on its own dune (front = its night ground)', () => {
+    expect(html).toMatch(/v2-eyebrow[^>]*>Formations</)
+    expect(html).not.toContain("L'offre")
+    const dune = html.match(/<svg[^>]*v2-dune[^>]*>.*?<\/svg>/)?.[0] ?? ''
+    expect(dune).toContain('fill="#C68A8E"')
+    expect(dune).toContain('fill="#161B29"')
   })
 
   it('carries the three figures: 3 jours, 12 people at most, your own files', () => {
@@ -70,10 +83,11 @@ describe('static HTML (SSR content rule)', () => {
     expect(html).not.toMatch(/sur devis|garanti|rembours/i)
   })
 
-  it('links to the offer page', () => {
-    expect(html).toMatch(
-      /<a[^>]*href="\/formations"[^>]*>Voir l&#x27;offre en détail|<a[^>]*href="\/formations"[^>]*>Voir l'offre en détail/,
-    )
+  // US-104, adversarial review K6 (pos-2): « l'offre » on the home is the monthly offer
+  // (« Voir l'offre mensuelle » just above), so the training panel's link names the training.
+  it('links to the training page as « Voir la formation en détail », never « l’offre »', () => {
+    expect(html).toMatch(/<a[^>]*href="\/formations"[^>]*>Voir la formation en détail/)
+    expect(html).not.toMatch(/Voir l(&#x27;|')offre en détail/)
   })
 
   it('is the final state: the bar full and the figures in place', () => {
@@ -313,5 +327,23 @@ describe('bar and captions share one grid', () => {
       '3 / span 4',
       '8 / span 1',
     ])
+  })
+})
+
+/**
+ * K2 `score.py home` (empty_bands, 1440 x 900): the agents band keeps 160 px of its stage under its
+ * last card, then its 96 px floor (where this panel's dune sits) and this panel's top padding: with
+ * 64 px, 325 px without content, over the line (a third of the screen, 300 px). Wide screens open the
+ * panel on 32 px of night (293 px); phones keep 56 px (no empty band at 390).
+ */
+describe('the seam after the agents band', () => {
+  const css = readFileSync(join(__dirname, 'offre.css'), 'utf8')
+  /** The top padding of the first `padding` shorthand after `head`. */
+  const topPadding = (head: string) =>
+    Number(/padding:\s*(\d+)px\s/.exec(css.slice(css.indexOf(head)))?.[1])
+
+  it('opens on 32 px of night on wide screens and keeps 56 px on phones', () => {
+    expect(topPadding('.v2-offre {')).toBe(32)
+    expect(topPadding('@media (max-width: 900px)')).toBe(56)
   })
 })

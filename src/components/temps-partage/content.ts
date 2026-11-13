@@ -1,6 +1,7 @@
 /**
- * Every visitor string of `/responsable-ia-temps-partage` (plan sablia-site-seo-offre-lettres,
- * Phase A, US-99), « je » voice, « vous » to the reader.
+ * Every visitor string of `/responsable-ia-externalise` (plan sablia-site-seo-offre-lettres,
+ * Phase A, US-99; renamed « Responsable IA externalisé » by plan sablia-site-structure-offre, US-105,
+ * strings from its copy deck B3), « je » voice, « vous » to the reader.
  *
  * Source of every claim: the hub offer text `projects/sablia/offre/temps-partage/offre.md` and the
  * meeting script beside it. `content.parity.test.ts` pins this module to `offre.md`; the sentence
@@ -52,9 +53,16 @@ export interface Section<T = Item> {
   readonly items: readonly T[]
 }
 
+/** A sentence whose part `link` (taken from `text` itself) links to `href`. */
+export interface InlineLink {
+  readonly text: string
+  readonly link: string
+  readonly href: string
+}
+
 export const META = {
-  title: 'Responsable IA à temps partagé pour PME, à Rouen · Sablia',
-  description: `Je construis vos outils d'IA, je forme votre équipe et j'entretiens ce qui tourne, deux jours par mois. ${MONTHLY}, PME de 10 à 50 personnes.`,
+  title: 'Responsable IA externalisé pour PME, à Rouen · Sablia',
+  description: `Responsable IA externalisé à Rouen : je construis vos outils d'IA, je forme votre équipe, j'entretiens ce qui tourne. ${MONTHLY}.`,
 } as const
 
 const FACTS: readonly Fact[] = [
@@ -67,8 +75,9 @@ const FACTS: readonly Fact[] = [
 const WHO = 'Brice Gachadoat, fondateur de Sablia, à Rouen.'
 
 export const HERO = {
-  eyebrow: 'Offre mensuelle',
-  h1: 'Votre responsable IA à temps partagé, à Rouen',
+  eyebrow: 'Responsable IA externalisé · offre mensuelle',
+  /** The offer's title (line 1 of offre.md); Rouen is in the byline and the tab title. */
+  h1: 'Votre responsable IA, sans le recruter',
   lede: "Chaque mois, un outil de plus en service dans votre entreprise, une équipe qui sait s'en servir, et quelqu'un qui veille à ce que tout continue de tourner.",
   /** One quiet line under the lede: the first phone screen names the person (AC-23 #8). */
   byline: WHO,
@@ -81,7 +90,8 @@ export const HERO = {
 
 export const ROLE = {
   eyebrow: 'Le rôle',
-  title: 'Entre consultant IA et DSI à temps partagé',
+  /** « DSI externalisé », not « à temps partagé »: Brice at VP1, 13/11 (question 3). */
+  title: 'Entre consultant IA et DSI externalisé',
   /** The two neighbours of the role, one sentence each, shown side by side; `term` is emphasised. */
   poles: [
     {
@@ -91,8 +101,8 @@ export const ROLE = {
     },
     {
       key: 'dsi',
-      term: 'DSI à temps partagé',
-      text: "Comme un DSI à temps partagé le fait pour l'informatique, je tiens le rôle dans la durée : deux jours de travail par mois, pour une entreprise qui n'a personne en interne pour s'en occuper.",
+      term: 'DSI externalisé',
+      text: "Comme un DSI externalisé le fait pour l'informatique, je tiens le rôle dans la durée : deux jours de travail par mois, pour une entreprise qui n'a personne en interne pour s'en occuper.",
     },
   ],
   pillars:
@@ -102,7 +112,7 @@ export const ROLE = {
   place: "Je suis basé à Rouen, en Normandie, et j'interviens dans toute la France.",
 } as const
 
-export const PREMIER_MOIS: Section = {
+export const PREMIER_MOIS: Section & { readonly crm: InlineLink } = {
   eyebrow: 'Le premier mois',
   title: "On commence par l'étape qui coince.",
   items: [
@@ -115,6 +125,12 @@ export const PREMIER_MOIS: Section = {
       text: "Un premier outil construit sur cette étape, et utilisé par votre équipe avant la fin du mois. Par exemple : répondre aux demandes entrantes dans l'heure, ranger le compte rendu de chaque appel dans votre CRM, préparer les relances.",
     },
   ],
+  /** One line under the two items: the call-report tool of the example also sells on its own page. */
+  crm: {
+    text: "Le compte rendu d'appel dans votre CRM se commande aussi seul, sans contrat mensuel, à prix fixe.",
+    link: "Le compte rendu d'appel dans votre CRM",
+    href: '/offres/compte-rendu-appel',
+  },
 }
 
 /**

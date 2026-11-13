@@ -1,6 +1,6 @@
 @layer theme, base, components, utilities;
 
-/* #role of /responsable-ia-temps-partage, on rose: the title, the two neighbours of the role side by side
+/* #role of /responsable-ia-externalise, on rose: the title, the two neighbours of the role side by side
    (a hairline between them, the role sits on it), then the three verbs and the place line. */
 @layer components {
   .v2-tp-role {

@@ -482,7 +482,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Oracle : le titre est « Votre équipe apprend l'IA sur ses propres dossiers » suivi de la ligne « Trois jours chez vous, jusqu'à 12 personnes » et du webinaire gratuit du jeudi midi ; une phrase nomme Claude comme l'outil enseigné ; le premier bouton mène à `/webinaire`, le second ouvre le Calendly « Échange de 30 minutes » ; la section offre décrit les six demi-journées sans aucun montant en euros ; les ancres `#top #offre #derriere #videos #faq #fin` existent ; l'ancienne promesse « Appel terminé, CRM à jour » et l'offre à 1 490 € ont quitté la page ; une fois la session passée, le premier bouton devient « Réserver 30 min »
 - Exemple : Étant donné la page `/` rendue avant le 03/12/2026 à 12 h / Quand on lit le haut de page / Alors on lit le titre de la promesse, le bouton « Je m'inscris » vers `/webinaire` puis « Réserver 30 min » ; et quand on cherche un montant en euros dans toute la page / Alors il n'y en a aucun
 - Test : vitest src/app/page.test.ts ; src/components/home/top/top.test.tsx ; src/components/home/offre/offre.test.tsx ; src/content/no-training-price.test.ts
-- Statut : À-MARCHER 2026-11-01 @34724c2 (code livré, tests verts : 60 fichiers, 647 tests ; reste la marche navigateur au point de validation 1 puis en production)
+- Statut : À-MARCHER 2026-11-01 @34724c2 (code livré, tests verts : 60 fichiers, 647 tests ; reste la marche navigateur au point de validation 1 puis en production) — REMPLACÉE par US-104 le 2026-11-12 (l'accueil est refait autour de l'offre mensuelle : plus rien à marcher ici)
 - Source : résumé du grill du 2026-11-01 (Q1 b, Q2, Q3 retournée : aucun prix de la formation) ; plan `site-formation-lot1-2026-11-01` U7, U8, U13
 
 ## US-92 — Le menu parle de la formation et une barre fine annonce le prochain webinaire sur chaque page
@@ -492,16 +492,16 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Exemple : Étant donné la page `/formations` le 05/11/2026 / Quand on lit l'en-tête / Alors la barre annonce le webinaire du 3 décembre et le bouton est « Prochain webinaire » ; et le même jour sur `/webinaire/merci` / Alors il n'y a pas de barre ; et le 03/12/2026 à 12 h 00 / Alors la barre est absente
 - Test : vitest src/components/shell/nav-links.test.ts ; src/content/session-bar.test.ts ; src/components/shell/header-cta.test.tsx
 - Statut : À-MARCHER 2026-11-01 @34724c2 (code livré, tests verts : 60 fichiers, 647 tests ; reste la marche navigateur au point de validation 1 puis en production)
-- Source : résumé du grill du 2026-11-01 (« Tranché sans vous », première puce, et tableau Avant / après) ; plan U5
+- Source : résumé du grill du 2026-11-01 (« Tranché sans vous », première puce, et tableau Avant / après) ; plan U5 ; amendée par US-103 le 2026-11-12 (la partie « menu » est remplacée par US-103 ; la barre du webinaire et le bouton de l'en-tête restent décrits ici)
 
 ## US-93 — `/formations` est la page de l'offre « L'IA au travail », sans prix, qui mène à l'échange de 30 minutes
 - Surface : /formations
 - Parcours : (cible) ouvrir /formations → lire le déroulé des trois jours → « Réserver 30 min »
-- Oracle : la page présente trois jours, jusqu'à 12 personnes, le déroulé en six demi-journées, la conférence d'1 h 30 déduite du programme signé et les questions ; aucun montant en euros ; aucune garantie ; chaque bouton « Réserver 30 min » ouvre `https://calendly.com/brice-gachadoat/echange-30-minutes` ; les pages `/offres/**` ouvrent toujours `https://calendly.com/brice-gachadoat/30min`
+- Oracle : la page présente trois jours, jusqu'à 12 personnes, le déroulé en six demi-journées, la conférence en option, dont le prix est déduit du programme signé (sans durée depuis le 13/11, US-109), et les questions ; aucun montant en euros ; aucune garantie ; chaque bouton « Réserver 30 min » ouvre `https://calendly.com/brice-gachadoat/echange-30-minutes` ; les pages `/offres/**` ouvrent toujours `https://calendly.com/brice-gachadoat/30min`
 - Exemple : Étant donné /formations / Quand on clique « Réserver 30 min » / Alors la fenêtre de réservation ouvre l'événement « Échange de 30 minutes » ; et le HTML de la page ne contient aucun « € »
 - Test : vitest src/app/formations ; src/lib/site.test.ts ; src/content/no-training-price.test.ts
 - Statut : À-MARCHER 2026-11-01 @34724c2 (code livré, tests verts : 60 fichiers, 647 tests ; reste la marche navigateur au point de validation 1 puis en production)
-- Source : résumé du grill du 2026-11-01 (Q3, « Les boutons Réserver 30 min des pages formation ») ; plan U10
+- Source : résumé du grill du 2026-11-01 (Q3, « Les boutons Réserver 30 min des pages formation ») ; plan U10 ; amendée par US-109 le 2026-11-12
 
 ## US-94 — `/accompagnement` devient « Après la formation »
 - Surface : /accompagnement
@@ -509,7 +509,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Oracle : la page décrit le référent IA (une séance de 2 h par mois, questions sous 48 h) et le sur-mesure (Claude dans le CRM, automatisations), renvoie vers l'offre CRM et ses six déclinaisons, ne montre aucun prix, et son bouton ouvre le Calendly « Échange de 30 minutes »
 - Exemple : Étant donné /accompagnement / Quand on cherche « 600 » ou un « € » / Alors rien ; et quand on clique « Compte rendu d'appel dans votre CRM » / Alors on arrive sur `/offres/compte-rendu-appel`
 - Test : vitest src/app/accompagnement ; src/components/accompagnement
-- Statut : À-MARCHER 2026-11-01 @34724c2 (code livré, tests verts : 60 fichiers, 647 tests ; reste la marche navigateur au point de validation 1 puis en production)
+- Statut : À-MARCHER 2026-11-01 @34724c2 (code livré, tests verts : 60 fichiers, 647 tests ; reste la marche navigateur au point de validation 1 puis en production) — REMPLACÉE par US-106 le 2026-11-12 (`/accompagnement` renvoie vers l'offre mensuelle : plus rien à marcher ici)
 - Source : résumé du grill du 2026-11-01 (« Tranché sans vous », `/accompagnement`) ; plan U11
 
 ## US-95 — `/realisations` existe, indexée, avec la même bande et la même animation qu'avant
@@ -519,7 +519,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Exemple : Étant donné /realisations / Quand on lit le HTML serveur / Alors les cartes sont dans le texte sans JavaScript ; et /sitemap.xml liste `/realisations`
 - Test : vitest src/app/realisations ; src/app/offres ; node --test scripts/seo/routes.test.mjs scripts/seo/sitemap.test.mjs
 - Statut : À-MARCHER 2026-11-01 @34724c2 (code livré, tests verts : 60 fichiers, 647 tests ; reste la marche navigateur au point de validation 1 puis en production)
-- Source : résumé du grill du 2026-11-01 (« Tranché sans vous », réalisations et animations) ; plan U12, U13
+- Source : résumé du grill du 2026-11-01 (« Tranché sans vous », réalisations et animations) ; plan U12, U13 ; amendée par US-108 le 2026-11-12
 
 ## US-96 — Le numéro de déclaration d'activité paraît sous la seule forme de l'article L6352-12, et le garde l'accepte
 - Surface : pied de page de chaque page ; /mentions-legales ; `redlines/check-redlines.py` règle R07
@@ -555,7 +555,7 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Exemple : Étant donné le HTML construit de /responsable-ia-temps-partage / Quand on lit la section des conditions / Alors on lit « 2 000 € HT par mois » et « 1 500 € HT par mois pour les cinq premières entreprises » ; et quand on clique « Réserver 30 min » / Alors la réservation ouvre l'événement « Échange de 30 minutes »
 - Test : vitest src/app/responsable-ia-temps-partage ; src/components/temps-partage/content.parity.test.ts ; src/components/shell/shell.test.tsx ; src/app/accompagnement ; node --test scripts/seo/prerender-ressources.test.mjs
 - Statut : À-MARCHER 2026-11-11 @67eba79 (code livré, tests verts : 88 fichiers, 1122 tests ; reste VP1 puis la marche en production)
-- Source : étude du 2026-11-11 (https://claude.ai/artifact/WfFiXE5YdKTPRZi3Z7uQ47), quatre oui de Brice le 11/11 ; texte de l'offre du hub (`offre/temps-partage/offre.md`) ; plan `sablia-site-seo-offre-lettres` phases A et B
+- Source : étude du 2026-11-11 (https://claude.ai/artifact/WfFiXE5YdKTPRZi3Z7uQ47), quatre oui de Brice le 11/11 ; texte de l'offre du hub (`offre/temps-partage/offre.md`) ; plan `sablia-site-seo-offre-lettres` phases A et B ; amendée par US-105 le 2026-11-12
 
 ## US-100 — Les données structurées et le texte visible situent Sablia à Rouen, les pages légales gardent le siège
 - Surface : toutes les pages (bloc `ProfessionalService` du gabarit, pied de page), `llms.txt` ; /mentions-legales et /cgv inchangées
@@ -583,3 +583,84 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 - Test : vitest src/app/newsletter ; server/static.test.ts ; node --test scripts/seo/export-guards.test.mjs scripts/seo/sitemap.test.mjs
 - Statut : À-MARCHER 2026-11-11 @67eba79 (code livré, tests verts : 88 fichiers, 1122 tests ; reste VP1 puis la marche en production)
 - Source : étude du 2026-11-11 ; résumé `research/brainstorm/2026-11-11-seo-sablia-resume.md` (« un index ou une liste sur /newsletter ») ; plan `sablia-site-seo-offre-lettres` phase D
+
+## US-103 — Le menu range le site par intention : l'offre mensuelle, les formations, les conférences, les réalisations
+- Surface : toutes les pages (en-tête `SiteHeader`, menu téléphone `NavToggle`), pied de page `SiteFooter`
+- Parcours : (cible) ouvrir une page quelconque → lire le menu ; à 390 px ouvrir le menu
+- Oracle : exactement quatre entrées, dans l'ordre « Responsable IA externalisé » (`/responsable-ia-externalise`) · Formations (`/formations`) · Conférences (`/conferences`) · Réalisations (`/realisations`), les mêmes dans le menu téléphone ; l'entrée de la page courante porte `aria-current="page"` ; ni « Webinaires » ni « Après la formation » dans le menu ; le bouton de droite reste « Prochain webinaire » vers `/webinaire` tant qu'une séance est à venir, puis devient « Réserver 30 min » vers l'« Échange de 30 minutes » ; sur `/offres/**` il reste « Réserver 30 min » vers le Calendly du CRM ; le pied de page porte les quatre mêmes entrées en tête, garde « Compte rendu d'appel », et n'a plus « Après la formation »
+- Exemple : Étant donné `/formations` le 20/11/2026 (séance du 03/12 à venir) / Quand on lit l'en-tête / Alors on lit « Responsable IA externalisé · Formations · Conférences · Réalisations », « Formations » est la page courante, et le bouton est « Prochain webinaire » ; puis le 03/12/2026 à 12 h 00 / Alors les quatre entrées sont inchangées et le bouton est « Réserver 30 min »
+- Test : vitest src/components/shell/nav-links.test.ts ; src/components/shell/shell.test.tsx ; src/components/shell/header-cta.test.tsx
+- Statut : JAMAIS-PASSÉE
+- Source : résumé du grill du 2026-11-12 (hub, `research/brainstorm/2026-11-12-structure-site-offre-resume.md`, « Tranché sans vous », deux premières puces) ; nom de l'offre validé par Brice le 12/11 ; remplace la partie « menu » de US-92 (la barre du webinaire reste décrite par US-92)
+
+## US-104 — L'accueil dit ce que fait Sablia, montre les portes, et place l'offre mensuelle en premier [chemin-critique]
+- Surface : `/` (`#top #mensuel #automatisations #offre #formations #conferences #videos #derriere #webinaire #faq #fin`)
+- Parcours : (cible) ouvrir sablia.io sur un téléphone → lire le premier écran → suivre une porte
+- Oracle : un seul h1, qui dit ce que fait Sablia en une phrase ; sous lui, quatre portes liées à `/responsable-ia-externalise`, `/formations`, `/conferences` et `/realisations` ; le premier bouton mène à `/webinaire` tant qu'une séance est à venir, puis ouvre l'« Échange de 30 minutes » ; les sections se suivent dans l'ordre top, mensuel, automatisations, offre, formations, conferences, videos, derriere, webinaire (seulement tant qu'une séance est à venir), faq, fin ; `#mensuel` nomme l'offre « Responsable IA externalisé » et mène à sa page ; `#conferences` mène à `/conferences` ; `#videos` porte un lien vers `/realisations` et la ligne « Un besoin précis ? » ; `#derriere` garde son identifiant (`/about` y renvoie) ; aucun prix, ni le mot « audit », ni « Référent IA », ni « temps partagé » sur la page
+- Exemple : Étant donné l'accueil construit le 20/11/2026, à 390 px / Quand on lit le premier écran / Alors on lit le h1, les quatre portes et le bouton « Prochain webinaire : jeudi 3 décembre » ; quand on touche la porte « Responsable IA externalisé » / Alors on arrive sur `/responsable-ia-externalise` ; et le HTML de l'accueil ne contient aucun montant en euros hors des scènes de démonstration de `#automatisations`, dont les chiffres sont des données d'exemple fictives (la facture d'une scène, pas un prix de Sablia)
+- Test : vitest src/components/home/HomePage.test.tsx ; src/app/page.test.ts ; src/app/home-metadata.test.ts ; src/components/home/top/top.test.tsx ; src/components/home/mensuel/mensuel.test.tsx ; src/components/home/conferences/conferences.test.tsx ; src/components/home/videos/videos.test.tsx ; src/content/no-training-price.test.ts
+- Statut : JAMAIS-PASSÉE
+- Source : résumé du grill du 2026-11-12 (« Tranché sans vous », ordre de l'accueil ; « Ce qui reste », sort des dix sections) ; « oui à tout » de Brice le 12/11 (l'accueil est refait maintenant) ; remplace US-91
+
+## US-105 — L'offre mensuelle s'appelle « Responsable IA externalisé », à `/responsable-ia-externalise`, et l'ancienne adresse y renvoie
+- Surface : `/responsable-ia-externalise` (page indexée, dans le plan du site) ; `/responsable-ia-temps-partage` (redirection) ; `llms.txt`
+- Parcours : (cible) ouvrir l'ancienne adresse → arriver sur la nouvelle → lire le titre et les conditions
+- Oracle : `GET /responsable-ia-temps-partage`, avec ou sans barre finale, répond 301 vers `/responsable-ia-externalise` ; la page porte un seul h1, « Votre responsable IA, sans le recruter », nomme l'offre « Responsable IA externalisé », et garde Rouen sur le premier écran et dans le titre de l'onglet ; le prix, l'engagement et les deux jours de travail par mois sont ceux de l'offre du hub (test de parité) ; les mots « responsable IA à temps partagé » ne paraissent plus sur le site ; la section du rôle compare à un « DSI externalisé », dans son titre et son paragraphe, et « temps partagé » ne paraît nulle part sur la page ; la page porte un lien vers `/offres/compte-rendu-appel` ; le plan du site liste la nouvelle adresse et plus l'ancienne
+- Exemple : Étant donné le site servi / Quand on demande `/responsable-ia-temps-partage/` / Alors la réponse est 301 avec `Location: /responsable-ia-externalise` ; et sur la page / Alors le h1 est « Votre responsable IA, sans le recruter » et la section des conditions dit « 2 000 € HT par mois »
+- Test : vitest src/app/responsable-ia-externalise ; src/components/temps-partage/content.parity.test.ts ; server/static.test.ts ; node --test scripts/seo/prerender-ressources.test.mjs scripts/seo/head-hygiene.test.mjs
+- Statut : JAMAIS-PASSÉE
+- Source : décisions de Brice du 12/11 (le nom ; le titre de page ; le site ne présente pas le contrat en heures) ; résumé du grill du 2026-11-12 (« L'adresse de la page change avec le nom, avec une redirection permanente ») ; réponse de Brice au point de validation du 13/11 (question 3 : « DSI externalisé » aux deux endroits) ; amende US-99
+
+## US-106 — `/accompagnement` renvoie vers l'offre mensuelle, et le « Référent IA » à 2 h par mois n'est plus une offre [script]
+- Surface : `/accompagnement` (redirection) ; accueil ; données structurées ; `llms.txt` ; `ai.txt` ; plan du site
+- Parcours : [script] `GET /accompagnement` sur le site servi ; recherche de « référent IA » dans le site construit
+- Oracle : `GET /accompagnement` répond 301 vers `/responsable-ia-externalise` ; aucune page construite, ni `llms.txt`, ni `ai.txt`, ni le bloc de données structurées ne contient « référent IA » ou « 2 h par mois » ; le plan du site ne liste plus `/accompagnement` ; les pages « Compte rendu d'appel » répondent 200, restent dans le plan du site et restent liées depuis le pied de page
+- Exemple : Étant donné le site construit et servi / Quand on demande `/accompagnement` / Alors 301 vers `/responsable-ia-externalise` ; et `grep -ril "référent ia" dist/public` ne renvoie aucun fichier ; et `/offres/compte-rendu-appel` répond 200
+- Test : vitest server/static.test.ts ; src/components/seo/seo.test.tsx ; node --test scripts/seo/prerender-ressources.test.mjs scripts/seo/head-hygiene.test.mjs scripts/seo/sitemap.test.mjs
+- Statut : JAMAIS-PASSÉE
+- Source : résumé du grill du 2026-11-12 (« Après la formation » disparaît du menu ; le bloc « Référent IA » est retiré, y compris des données structurées, de `llms.txt` et de `ai.txt`) ; réponse de Brice du 12/11 (le petit « Référent IA » cesse d'être une offre nommée) ; remplace US-94
+
+## US-107 — `/conferences` présente les conférences et séminaires, sur demande
+- Surface : `/conferences` (page indexée, dans le plan du site) ; accueil `#conferences` ; menu
+- Parcours : (cible) menu « Conférences » → lire les sujets → « Réserver 30 min »
+- Oracle : un seul h1 ; trois sujets, chacun avec son titre et le public auquel il s'adresse ; la page dit « sur demande » et que le prix est donné sur devis, sans aucun montant ; elle cite la recommandation publiée d'un client pour une matinée de sensibilisation, signée d'un rôle et d'un secteur, sans nom de société ; tant qu'une séance est à venir, un rappel mène à `/webinaire` ; juste avant la bande finale, une ligne mène à l'offre mensuelle (un lien, pas un bouton de réservation) ; chaque bouton « Réserver 30 min » ouvre l'« Échange de 30 minutes »
+- Exemple : Étant donné le HTML construit de /conferences / Quand on lit la page / Alors on compte trois sujets, on lit « sur demande » et « Responsable d'activités, cabinet de conseil en ingénierie », et aucun « € » ; et un clic sur « Réserver 30 min » ouvre `https://calendly.com/brice-gachadoat/echange-30-minutes`
+- Test : vitest src/app/conferences ; src/components/conferences ; src/components/shell/MonthlyOfferLine.test.tsx ; node --test scripts/seo/prerender-ressources.test.mjs
+- Statut : JAMAIS-PASSÉE
+- Source : réponse de Brice du 12/11 (« séminaires et conférences sur demande ») ; résumé du grill du 2026-11-12 (page courte, prix au devis, trois sujets que Brice corrige au point de validation 2) ; la signature suit la règle du dossier de preuve (un rôle et un secteur tant que le nom n'est pas validé) ; réponses de Brice au point de validation du 13/11 (questions 4 et 6 : les trois sujets et la signature tels quels ; question 8 : la ligne vers l'offre mensuelle avant le bouton final)
+
+## US-108 — `/realisations` se filtre par type, et dit qu'un besoin précis est possible
+- Surface : `/realisations` (`#top`, `#construit`)
+- Parcours : (cible) menu « Réalisations » → toucher « Sites » → lire les réalisations → toucher « Toutes »
+- Oracle : en haut de la page, un bloc « Un besoin précis ? Je construis aussi à la demande », avec un bouton vers l'« Échange de 30 minutes » ; une rangée de filtres Toutes · Outils · Formations · Conférences · Sites, en boutons `aria-pressed` au libellé fixe ; un filtre ne garde que les réalisations de ce type, dans la liste comme dans le paquet de cartes, et le défilement ne passe que par elles ; le bouton de pause marche toujours ; sans JavaScript et en « réduire les animations » toutes les réalisations restent lisibles ; chaque réalisation porte au moins un type ; aucun nom de société n'est ajouté ; la réalisation de veille s'intitule « Plateforme de veille concurrentielle » et se dit au passé ; juste avant la bande finale, une ligne mène à l'offre mensuelle
+- Exemple : Étant donné /realisations et ses six réalisations / Quand on touche « Sites » / Alors la liste en montre deux (« Un institut de beauté à Rouen » et « Hélène, psychopraticienne et conseillère en nutrition ») et « Sites » porte `aria-pressed="true"` ; quand on touche « Conférences » / Alors la liste en montre une (« Un cabinet de conseil en ingénierie ») ; quand on touche « Toutes » / Alors la liste en montre six, dont « Plateforme de veille concurrentielle »
+- Test : vitest src/app/realisations ; src/components/realisations/construit/construit.test.tsx ; src/components/shell/MonthlyOfferLine.test.tsx
+- Statut : JAMAIS-PASSÉE
+- Source : résumé du grill du 2026-11-12 (« Réalisations devient filtrable » ; « un bloc en haut de Réalisations ») ; réponse de Brice du 12/11 (une solution seule reste possible, le site le dit sans la mettre en avant) ; réponses de Brice au point de validation du 13/11 (question 7 : « Plus de 20 clients » reste, la carte maintenance sort, la carte cashback devient « Plateforme de veille concurrentielle », au passé, le service étant arrêté depuis le 07/11 ; « laisse vingtaine » sur la carte des agents vocaux ; question 8 : la ligne vers l'offre mensuelle) ; amende US-95
+
+## US-109 — `/formations` dit que des formats courts existent, et rappelle le webinaire tant qu'il est à venir
+- Surface : `/formations`
+- Parcours : (cible) menu « Formations » → lire la page
+- Oracle : la page porte une phrase qui dit que des formats existent dès une demi-journée, sur demande, sans prix ni programme ; tant qu'une séance est à venir, un rappel du webinaire mène à `/webinaire`, et il disparaît ensuite ; juste avant la bande finale, une ligne mène à l'offre mensuelle ; le reste du texte de la page est inchangé, sauf deux retouches demandées par Brice le 13/11 : l'option conférence n'annonce plus de durée (« de 1 h 30 à 2 h » retiré) et le bloc de preuve s'intitule « Retours d'un séminaire » ; la page garde exactement deux boutons de réservation
+- Exemple : Étant donné /formations le 20/11/2026 / Quand on lit la page / Alors on lit « dès une demi-journée » et un rappel du webinaire du jeudi 3 décembre lié à `/webinaire` ; puis le 03/12/2026 à 12 h 00 / Alors le rappel a disparu et la phrase reste
+- Test : vitest src/app/formations ; src/components/shell/WebinarReminder.test.tsx ; src/components/shell/MonthlyOfferLine.test.tsx ; node --test scripts/seo/head-hygiene.test.mjs
+- Statut : JAMAIS-PASSÉE
+- Source : résumé du grill du 2026-11-12 (« Deux ajouts seulement sont permis sur cette page ») ; réponse de Brice du 12/11 (« d'une demi-journée à trois jours ») ; réponses de Brice au point de validation du 13/11 (question 5 : « 1 h 30 à 2 h » retiré pour ne pas contredire `/conferences` ; question 8 : « Déjà formés » devient « Retours d'un séminaire », et la ligne vers l'offre mensuelle) ; amende US-93
+
+## US-110 — Chaque porte a son propre libellé de clic dans la mesure [script]
+- Surface : `src/lib/events.ts` (règle `destOf`) ; les liens et boutons des portes : menu, pied de page, accueil (`#top`, `#mensuel`, `#offre`, `#conferences`, `#videos`, `#fin`), `/responsable-ia-externalise`, `/formations`, `/conferences`, `/realisations`
+- Parcours : [script] `npx vitest run src/lib/events.test.ts src/lib/doors.test.tsx`
+- Oracle : un clic sur un lien qui mène à une porte porte le nom de cette porte (`dest` = `responsable-ia`, `formations`, `conferences`, `realisations`, et toujours `webinaire` pour `/webinaire` ; `offre` reste le nom de zone du panneau de formation de l'accueil), quel que soit l'endroit du clic (menu, accueil, pied de page) ; un lien vers une autre page ne porte pas de `dest` ; sur une même page, deux boutons de réservation n'émettent jamais le même couple (zone, libellé), et chacun émet un seul `cta_book` ; les sections nouvelles ont une zone à leur nom (`mensuel`, `conferences`, `besoin`) ; la ligne vers l'offre mensuelle, avant la bande finale de `/formations`, `/conferences` et `/realisations` (13/11), lit aussi la zone `mensuel` et porte `dest` = `responsable-ia` ; les noms d'événements et les zones existantes (`nav`, `hero`, `offre`, `fin`, `top`, `conditions`) ne changent pas ; les pages « Compte rendu d'appel » gardent leur Calendly et leurs zones
+- Exemple : Étant donné l'accueil / Quand on clique la porte « Responsable IA externalisé » du premier écran / Alors l'événement `click` porte `{zone: 'hero', label: 'Responsable IA externalisé', kind: 'link', dest: 'responsable-ia'}` ; quand on clique « Formations » dans le menu / Alors `dest` vaut `formations` et `zone` vaut `nav` ; et sur /conferences, un clic sur le bouton de la bande finale émet un seul `cta_book` `{zone: 'fin', label: 'Réserver 30 min'}`
+- Test : [script] npx vitest run src/lib/events.test.ts src/lib/doors.test.tsx ; vitest src/lib/event-map.test.ts
+- Statut : JAMAIS-PASSÉE
+- Source : résumé du grill du 2026-11-12 (« Hypothèses et points d'arrêt » : chaque porte reçoit son propre libellé de clic dans Umami, aucun seuil de décision n'est fixé) ; prolonge US-97 (la règle `dest` du webinaire, étendue aux quatre portes)
+
+## US-111 — Les données structurées, `llms.txt` et `ai.txt` décrivent l'offre actuelle, et le mot « audit » ne paraît nulle part [script]
+- Surface : bloc `ProfessionalService` du gabarit (toutes les pages), `public/llms.txt`, `public/.well-known/ai.txt`, le guide et la page de remerciement
+- Parcours : [script] `npx vitest run src/components/seo/seo.test.tsx src/content/no-audit.test.ts` puis `node --test scripts/seo/head-hygiene.test.mjs`
+- Oracle : la description de l'organisation et celle de `ai.txt` disent ce que fait Sablia aujourd'hui (construire les outils, former l'équipe, entretenir) ; le catalogue liste « Responsable IA externalisé », « L'IA au travail », les conférences sur demande et le compte rendu d'appel, sans « Référent IA », et seul le compte rendu d'appel y porte un prix ; `llms.txt` a une section « Responsable IA externalisé » avec la nouvelle adresse et une section Conférences, et n'a plus de section « Après la formation » ; aucun fichier de texte visiteur du site ne contient le mot « audit »
+- Exemple : Étant donné le HTML construit de l'accueil / Quand on lit le bloc `ProfessionalService` / Alors le catalogue contient « Responsable IA externalisé » et ne contient pas « Référent IA » ; et le test `no-audit` ne trouve aucun « audit » dans les fichiers de texte visiteur
+- Test : [script] npx vitest run src/components/seo/seo.test.tsx src/content/no-audit.test.ts ; node --test scripts/seo/head-hygiene.test.mjs
+- Statut : JAMAIS-PASSÉE
+- Source : résumé du grill du 2026-11-12 (« Le mot "audit" n'apparaît nulle part » ; le renommage passe par les données structurées, `llms.txt` et `ai.txt`) ; réponse de Brice du 12/11 (pas de mention « audit » sur le site) ; amende US-56

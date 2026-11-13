@@ -1,23 +1,27 @@
 import { describe, expect, it } from 'vitest'
 import { homeMetadata } from './home-metadata'
 
-/** U13a: the home's title and description, transcribed from 01b (`home.meta.*`): training first, no price. */
+/**
+ * US-104 (plan sablia-site-structure-offre E1): the home's title and description are the copy deck's
+ * `home.meta.*`: what Sablia does (the monthly offer, trainings, talks), for SMEs, in Rouen; no price.
+ */
 describe('home metadata', () => {
   const title = (homeMetadata.title as { absolute: string }).absolute
   const description = String(homeMetadata.description)
 
-  it('title and description are the 01b strings', () => {
-    expect(title).toBe("Formation à l'IA pour votre équipe, sur ses dossiers · Sablia")
+  it('title and description are the deck strings', () => {
+    expect(title).toBe("Outils d'IA et formation pour les PME, à Rouen · Sablia")
     expect(description).toBe(
-      "Trois jours dans vos locaux, jusqu'à 12 personnes : votre équipe apprend à travailler avec Claude sur ses propres dossiers. Premier pas : un webinaire gratuit d'une heure, le jeudi midi.",
+      "Sablia, à Rouen, met l'IA en place dans les PME : un responsable IA externalisé au mois, des formations et des conférences sur demande.",
     )
   })
 
-  it('no em dash, no CRM sentence, no euro amount', () => {
+  it('no em dash, no CRM sentence, no euro amount, no retired offer name', () => {
     for (const s of [title, description]) {
       expect(s).not.toContain('—')
       expect(s).not.toMatch(/CRM/)
-      expect(s).not.toMatch(/\d[\d\s .,]*\s?(€|euros?)/i)
+      expect(s).not.toMatch(/\d[\d\s .,]*\s?(€|euros?)/i)
+      expect(s).not.toMatch(/temps partagé|référent|audit/i)
     }
   })
 })

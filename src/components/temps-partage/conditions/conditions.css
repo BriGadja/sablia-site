@@ -1,6 +1,6 @@
 @layer theme, base, components, utilities;
 
-/* #conditions of /responsable-ia-temps-partage, on the night band: the title and the button on the left,
+/* #conditions of /responsable-ia-externalise, on the night band: the title and the button on the left,
    the four conditions on the right as a plain list (no card, no box), the monthly price set large over a
    gold rule. */
 @layer components {

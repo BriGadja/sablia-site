@@ -3,8 +3,10 @@
 
 export const EYEBROW = 'En option'
 export const TITLE = 'Une conférence, pour voir avant de décider.'
+// No duration since Brice's answer at VP2 (13/11, question 5): `/conferences` gives each talk the length
+// of what exists, and « 1 h 30 à 2 h » would contradict it.
 export const LINE =
-  "Une conférence de 1 h 30 à 2 h pour votre équipe. Son prix est déduit du programme s'il est signé dans les 30 jours."
+  "Une conférence pour votre équipe. Son prix est déduit du programme s'il est signé dans les 30 jours."
 
 // Alt text of photo 01, from the photo unit's report (02-U6.md).
 export const PHOTO_ALT =

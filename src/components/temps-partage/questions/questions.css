@@ -1,6 +1,6 @@
 @layer theme, base, components, utilities;
 
-/* #questions of /responsable-ia-temps-partage, on rose: the title held on the left, the six questions
+/* #questions of /responsable-ia-externalise, on rose: the title held on the left, the six questions
    and their answers on the right, all visible. */
 @layer components {
   .v2-tp-questions {

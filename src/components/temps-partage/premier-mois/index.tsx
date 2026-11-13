@@ -9,11 +9,27 @@ import { PARCOURS, PREMIER_MOIS } from '../content'
 import { typo } from '../text'
 import './premier-mois.css'
 
+/** The line under the two items, its opening words linking the call-report page (as `QUI.school`). */
+function CrmLine() {
+  const { text, link, href } = PREMIER_MOIS.crm
+  const [before, after] = typo(text).split(link)
+  return (
+    <p className="tpm-crm">
+      {before}
+      <a href={href} className="tpm-crm-link">
+        {link}
+      </a>
+      {after}
+    </p>
+  )
+}
+
 /**
  * `#premier-mois`, the page's signature moment: the client journey drawn in gold on the night, the
  * four steps' bars settle one after the other (no figure: the diagnostic finds the real ones), then
  * the step where the count falls most is ringed as the one that jams, and the next one is marked.
- * The two items carry the text; the drawing is decorative. Server HTML and reduced motion: drawn.
+ * The two items carry the text, one line under them links the call-report page; the drawing is
+ * decorative. Server HTML and reduced motion: drawn.
  */
 export function PremierMois() {
   // The drawing, not the section, starts the sequence: on a phone it sits ~515 px down a ~860 px
@@ -34,6 +50,7 @@ export function PremierMois() {
               <li key={item.key}>{typo(item.text)}</li>
             ))}
           </ul>
+          <CrmLine />
         </div>
         <div ref={drawing} className="tpm-drawing" aria-hidden="true">
           <div className="tpm-caption">{PARCOURS.caption}</div>

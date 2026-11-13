@@ -24,7 +24,7 @@ const Pin = () => (
 
 /**
  * `#role`: the role placed between its two neighbours (the searched words « consultant IA » and
- * « DSI à temps partagé »), side by side, then the three verbs of the offer and where I work from.
+ * « DSI externalisé »), side by side, then the three verbs of the offer and where I work from.
  */
 export function Role() {
   return (

@@ -1,6 +1,6 @@
 @layer theme, base, components, utilities;
 
-/* #qui of /responsable-ia-temps-partage: the home's portrait in its offset gold frame on the left, the
+/* #qui of /responsable-ia-externalise: the home's portrait in its offset gold frame on the left, the
    name and one paragraph on the right; on phones the portrait sits under the name. */
 @layer components {
   .v2-tp-qui {

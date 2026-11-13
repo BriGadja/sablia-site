@@ -7,7 +7,7 @@
  * the three monthly sections changing there turns this test RED, and the page copy follows.
  *
  * The FAQ answers that quote the meeting script read `script-rdv.md`, beside `offre.md`. The section
- * « Responsable IA à temps partagé » of `public/llms.txt` (in this repo) restates the offer too.
+ * « Responsable IA externalisé » of `public/llms.txt` (in this repo) restates the offer too.
  *
  * Outside the VPS working tree (a standalone clone, CI), point TEMPS_PARTAGE_PATH at the offer file
  * (the script must sit beside it). CI excludes this file because it needs the hub tree; it is never
@@ -20,7 +20,6 @@ import { existsSync, readFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
-import { REFERENT } from '../accompagnement/content'
 import * as COPY from './content'
 import { CHAQUE_MOIS, CONDITIONS, GARDEZ, HERO, PREMIER_MOIS, QUESTIONS, QUI } from './content'
 
@@ -165,9 +164,8 @@ const PREAMBLE = paragraphs(capture(RAW, /^# .+\n([\s\S]*?)\n## /m, 'preamble')[
 const CONDITION_BULLETS = bullets(section('Conditions'))
 
 describe('offer parity: the page opens on the offer', () => {
-  it('names the role of the offer title in the h1, with Rouen', () => {
+  it('carries the offer title in the h1', () => {
     expect(squash(HERO.h1)).toContain(TITLE)
-    expect(HERO.h1).toContain('Rouen')
   })
 
   it('renders the promise and the audience sentence word for word', () => {
@@ -256,19 +254,14 @@ describe('offer parity: § Conditions', () => {
     expect([...offered].sort()).toEqual([1500, 2000])
     expect([...amounts(JSON.stringify(COPY))].sort()).toEqual([...offered].sort())
   })
-
-  it('names no amount on /accompagnement other than the two prices of offre.md', () => {
-    const offered = amounts(CONDITION_BULLETS.join(' '))
-    for (const shown of amounts(REFERENT.more.text)) expect(offered).toContain(shown)
-  })
 })
 
 /**
  * § Chaque mois ensuite gives the offer's two durations (« Deux jours de travail », « 48 heures
  * ouvrées »); every « N jours » and « N heures » restated elsewhere (META, ROLE, the questions, the
- * sentence of /accompagnement that links here, the section of llms.txt) must say the same (offer-page
- * review F6 #2). The second pass (F6b N1) also reads « journées », the abbreviated delay « sous N h »,
- * the period of the work days (per month, never per week), the engagement and the company size.
+ * section of llms.txt) must say the same (offer-page review F6 #2). The second pass (F6b N1) also
+ * reads « journées », the abbreviated delay « sous N h », the period of the work days (per month,
+ * never per week), the engagement and the company size.
  */
 describe('offer parity: every duration restated is the one of § Chaque mois ensuite', () => {
   const offered = new Map<string, number | undefined>()
@@ -285,10 +278,9 @@ describe('offer parity: every duration restated is the one of § Chaque mois ens
 
   const restated: readonly (readonly [string, string])[] = [
     ['the copy module', JSON.stringify(COPY)],
-    ['REFERENT.more on /accompagnement', REFERENT.more.text],
     [
-      'llms.txt § Responsable IA à temps partagé',
-      section('Responsable IA à temps partagé', LLMS, LLMS_PATH),
+      'llms.txt § Responsable IA externalisé',
+      section('Responsable IA externalisé', LLMS, LLMS_PATH),
     ],
   ]
   for (const [where, text] of restated) {
@@ -329,7 +321,7 @@ describe('offer parity: every duration restated is the one of § Chaque mois ens
   it('the copy module and llms.txt name the engagement', () => {
     expect(engagements(JSON.stringify(COPY)).length).toBeGreaterThan(0)
     expect(
-      engagements(section('Responsable IA à temps partagé', LLMS, LLMS_PATH)).length,
+      engagements(section('Responsable IA externalisé', LLMS, LLMS_PATH)).length,
     ).toBeGreaterThan(0)
   })
 })

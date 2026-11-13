@@ -12,6 +12,7 @@ import { Cta } from './Cta'
 import { Dune } from './Dune'
 import { Eyebrow } from './Eyebrow'
 import { FinBand } from './FinBand'
+import { NAV_LINKS } from './nav-links'
 import { SandIllustration } from './SandIllustration'
 import { SiteFooter } from './SiteFooter'
 import { SiteHeader } from './SiteHeader'
@@ -40,7 +41,9 @@ afterEach(() => {
 })
 
 describe('SiteHeader', () => {
-  it('is a sticky header whose nav carries the training menu and, before the session, « Prochain webinaire »', () => {
+  // US-103: the menu ranges the site by intent, the monthly offer first; « Prochain webinaire » is
+  // the header button while the session is ahead, never a menu entry.
+  it('is a sticky header whose nav carries the menu by intent and, before the session, « Prochain webinaire »', () => {
     at(BEFORE)
     const { container } = render(<SiteHeader />)
     expect(container.querySelector('header')).not.toBeNull()
@@ -51,9 +54,9 @@ describe('SiteHeader', () => {
     ])
     expect(hrefs).toEqual([
       ['Sablia', '/'],
-      ['Formation', '/formations'],
-      ['Webinaires', '/webinaire'],
-      ['Après la formation', '/accompagnement'],
+      ['Responsable IA externalisé', '/responsable-ia-externalise'],
+      ['Formations', '/formations'],
+      ['Conférences', '/conferences'],
       ['Réalisations', '/realisations'],
       ['Prochain webinaire', '/webinaire'],
     ])
@@ -70,23 +73,28 @@ describe('SiteHeader', () => {
     expect(openBookingUrl).toHaveBeenCalledExactlyOnceWith(site.formationBookingUrl)
   })
 
-  it('from the session start « Webinaires » leaves the menu (one list for the desktop bar and the phone menu)', () => {
+  it('from the session start the menu is the same four links and nothing in the header goes to /webinaire', () => {
     at(AFTER)
     const { container } = render(<SiteHeader />)
     const links = document.getElementById('nav-links') as HTMLElement
     expect(Array.from(links.querySelectorAll('a')).map((a) => a.getAttribute('href'))).toEqual([
+      '/responsable-ia-externalise',
       '/formations',
-      '/accompagnement',
+      '/conferences',
       '/realisations',
     ])
     expect(container.querySelector('a[href="/webinaire"]')).toBeNull()
   })
 
-  it('a page built before the start keeps the entry in its HTML, hydrates without a mismatch, then drops it', async () => {
+  // The menu no longer depends on the clock: the one `/webinaire` href of a page built before the
+  // start is the header button's, which turns into « Réserver 30 min » once hydrated after it.
+  it('a page built before the start carries « Prochain webinaire » in its HTML, hydrates without a mismatch, then drops it; the menu is unchanged', async () => {
     vi.stubEnv('NEXT_PUBLIC_BUILD_AT', BEFORE.toISOString())
     at(AFTER)
     const html = renderToString(<SiteHeader />)
-    expect(html).toContain('href="/webinaire"')
+    expect(html.match(/href="\/webinaire"/g)).toHaveLength(1)
+    const menu = html.slice(html.indexOf('id="nav-links"'))
+    expect(menu.slice(0, menu.indexOf('</div>'))).not.toContain('href="/webinaire"')
     // parsed the way the browser receives the static HTML, not built by React
     const container = document.createElement('div')
     const parsed = new DOMParser().parseFromString(`<body>${html}</body>`, 'text/html')
@@ -101,6 +109,10 @@ describe('SiteHeader', () => {
       expect(recoverable).not.toHaveBeenCalled()
       expect(errors).not.toHaveBeenCalled()
       expect(container.querySelector('a[href="/webinaire"]')).toBeNull()
+      expect(container.querySelector('button[data-cta-book]')?.textContent).toBe('Réserver 30 min')
+      expect(
+        Array.from(container.querySelectorAll('#nav-links a')).map((a) => a.getAttribute('href')),
+      ).toEqual(NAV_LINKS.map((l) => l.href))
     } finally {
       errors.mockRestore()
       container.remove()
@@ -123,6 +135,15 @@ describe('SiteHeader', () => {
     )
   })
 
+  // US-103 D4 sweep: at 320 px (a 1280 px screen at 400 % zoom) « Responsable IA externalisé » ran into
+  // « Formations » in two equal columns; each phone-menu column now takes at least its longest label.
+  it('sizes each phone-menu column to at least its longest label, without shrinking the type', () => {
+    const css = readFileSync(join(__dirname, 'site-header.css'), 'utf8')
+    const open = css.match(/\.v2-header \.v2-header-links\.is-open \{([^}]*)\}/)?.[1] ?? ''
+    expect(open).toMatch(/grid-template-columns:\s*repeat\(2, minmax\(max-content, 1fr\)\)/)
+    expect(css).toMatch(/\.v2-header-links \{[^}]*font-size:\s*14px/)
+  })
+
   it('opens and closes the phone menu with aria-expanded wired to the links list', () => {
     render(<SiteHeader />)
     const btn = screen.getByRole('button', { name: 'Menu' })
@@ -133,14 +154,14 @@ describe('SiteHeader', () => {
     fireEvent.click(btn)
     expect(btn.getAttribute('aria-expanded')).toBe('true')
     expect(list?.className).toContain('is-open')
-    fireEvent.click(screen.getByText('Formation'))
+    fireEvent.click(screen.getByText('Formations'))
     expect(btn.getAttribute('aria-expanded')).toBe('false')
   })
 
   it.each([
-    ['/formations', 'Formation'],
-    ['/webinaire', 'Webinaires'],
-    ['/accompagnement', 'Après la formation'],
+    ['/responsable-ia-externalise', 'Responsable IA externalisé'],
+    ['/formations', 'Formations'],
+    ['/conferences', 'Conférences'],
     ['/realisations', 'Réalisations'],
   ])('marks the current page on %s', (path, label) => {
     at(BEFORE)
@@ -154,7 +175,9 @@ describe('SiteHeader', () => {
   it.each([
     '/',
     '/ressources',
+    '/webinaire',
     '/webinaire/merci',
+    '/offres/compte-rendu-appel',
   ])('marks nothing on %s (outside the menu)', (p) => {
     pathname = p
     render(<SiteHeader />)
@@ -163,7 +186,9 @@ describe('SiteHeader', () => {
 })
 
 describe('SiteFooter', () => {
-  it('lists the training structure first, then the monthly offer, the CRM page, resources and legal links (01b § 6 order, offer link US-99)', () => {
+  // US-103: the four menu entries first (same labels and hrefs), then the webinar while it is ahead,
+  // the CRM page, resources and the legal row. The footer keeps its own list on purpose.
+  it('lists the four menu entries first, then the webinar, the CRM page, resources and legal links', () => {
     at(BEFORE)
     const { container } = render(<SiteFooter />)
     expect(screen.getByRole('navigation', { name: 'Pied de page' })).toBeTruthy()
@@ -173,11 +198,11 @@ describe('SiteFooter', () => {
       a.getAttribute('href'),
     ])
     expect(hrefs).toEqual([
-      ['Formation', '/formations'],
-      ['Webinaires', '/webinaire'],
-      ['Après la formation', '/accompagnement'],
-      ['Responsable IA', '/responsable-ia-temps-partage'],
+      ['Responsable IA externalisé', '/responsable-ia-externalise'],
+      ['Formations', '/formations'],
+      ['Conférences', '/conferences'],
       ['Réalisations', '/realisations'],
+      ['Webinaires', '/webinaire'],
       ["Compte rendu d'appel", '/offres/compte-rendu-appel'],
       ['Ressources', '/ressources'],
       ['Newsletter', '/newsletter'],
@@ -187,6 +212,7 @@ describe('SiteFooter', () => {
       ['Confidentialité', '/politique-confidentialite'],
       ['CGV', '/cgv'],
     ])
+    expect(hrefs.slice(0, 4)).toEqual(NAV_LINKS.map((l) => [l.label, l.href]))
     expect(screen.getByText(/© 2026 Sablia/)).toBeTruthy()
   })
 
@@ -197,11 +223,12 @@ describe('SiteFooter', () => {
       a.getAttribute('href'),
     )
     expect(hrefs).not.toContain('/webinaire')
-    expect(hrefs.slice(0, 4)).toEqual([
+    expect(hrefs.slice(0, 5)).toEqual([
+      '/responsable-ia-externalise',
       '/formations',
-      '/accompagnement',
-      '/responsable-ia-temps-partage',
+      '/conferences',
       '/realisations',
+      '/offres/compte-rendu-appel',
     ])
     expect(hrefs).toHaveLength(12)
   })

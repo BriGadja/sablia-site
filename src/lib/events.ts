@@ -64,13 +64,29 @@ export function outboundHost(href: string, ownHost: string): string | null {
   return 'other'
 }
 
-/** `'webinaire'` when `href` points at our own `/webinaire` page (one trailing slash tolerated). */
-export function destOf(href: string, ownHost: string): 'webinaire' | null {
+/**
+ * The doors of the site (US-110, extending the `/webinaire` rule of US-97): a click on a link to one
+ * of these own pages carries its name as `dest`, wherever the link sits (menu, home, footer, a page).
+ * The monthly offer's door is `responsable-ia`: `offre` is already the zone of the home's training panel.
+ */
+const DOORS = {
+  '/responsable-ia-externalise': 'responsable-ia',
+  '/formations': 'formations',
+  '/conferences': 'conferences',
+  '/realisations': 'realisations',
+  '/webinaire': 'webinaire',
+} as const
+
+export type Door = (typeof DOORS)[keyof typeof DOORS]
+
+/** The door `href` points at on our own site (one trailing slash tolerated), else `null`. */
+export function destOf(href: string, ownHost: string): Door | null {
   try {
     const url = new URL(href, `https://${ownHost}/`)
     if (url.protocol !== 'http:' && url.protocol !== 'https:') return null
     if (url.hostname !== ownHost && !OWN_HOSTS.has(url.hostname)) return null
-    return url.pathname.replace(/\/$/, '') === '/webinaire' ? 'webinaire' : null
+    const path = url.pathname.replace(/\/$/, '')
+    return Object.hasOwn(DOORS, path) ? DOORS[path as keyof typeof DOORS] : null
   } catch {
     return null
   }

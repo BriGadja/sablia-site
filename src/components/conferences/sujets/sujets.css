@@ -1,0 +1,193 @@
+@layer theme, base, components, utilities;
+
+/* #sujets of /conferences: three topics as a ruled programme on the rose ground. Title, text and
+   history on the left; audience, format and the format's gauge on the right. Phone: title, facts,
+   text, history. Entrance (armed below the fold only): the rows rise one after the other; each gauge
+   fills with gold sand to its share of a 4 h morning when it scrolls in. */
+@layer components {
+  .v2-conf-sujets {
+    position: relative;
+    background: #f2e3df;
+    padding: 24px 0 136px;
+    color: #131620;
+
+    h2 {
+      margin: 14px 0 0;
+      max-width: 18em;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .cs-list {
+      margin: 44px 0 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1.5px solid #131620;
+    }
+    .cs-topic {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      grid-template-areas:
+        'title facts'
+        'text facts'
+        'hist facts';
+      grid-template-rows: auto auto 1fr;
+      column-gap: 80px;
+      padding: 36px 0 40px;
+      border-top: 1px solid #e8cfc8;
+
+      &:first-child {
+        border-top: 0;
+      }
+    }
+    .cs-title {
+      grid-area: title;
+      margin: 0;
+      max-width: 20em;
+      font-size: 28px;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .cs-s {
+      display: inline-block;
+    }
+    .cs-text {
+      grid-area: text;
+      margin: 14px 0 0;
+      max-width: 36em;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #3a3f4d;
+      text-wrap: pretty;
+    }
+    .cs-history {
+      grid-area: hist;
+      margin: 16px 0 0;
+      max-width: 40em;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #61677a;
+      text-wrap: pretty;
+    }
+    .cs-facts {
+      grid-area: facts;
+      display: grid;
+      align-content: start;
+      row-gap: 22px;
+      margin: 6px 0 0;
+    }
+    .cs-fact {
+      min-width: 0;
+
+      dt {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #835a0c;
+      }
+      dd {
+        margin: 6px 0 0;
+        font-size: 17px;
+        line-height: 1.4;
+        font-weight: 600;
+        text-wrap: pretty;
+      }
+    }
+    .cs-format {
+      display: block;
+    }
+    /* The gauge: a 4 h morning, a tick at each hour, the format's share filled with gold sand. */
+    .cs-gauge {
+      position: relative;
+      display: block;
+      height: 8px;
+      margin-top: 14px;
+      border-radius: 999px;
+      overflow: hidden;
+      background-color: #e8cfc8;
+      background-image: repeating-linear-gradient(
+        to right,
+        transparent 0 calc(25% - 1px),
+        #c68a8e calc(25% - 1px) 25%
+      );
+    }
+    .cs-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: calc(var(--share, 1) * 100%);
+      min-width: 10px;
+      border-radius: 999px;
+      background: #b9852a;
+      transform-origin: left center;
+    }
+
+    /* entrance (useArmedReveal): staged only when armed below the fold */
+    &[data-reveal='armed'] .cs-topic {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    &[data-reveal='in'] .cs-topic {
+      transition:
+        opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--i, 0) * 140ms),
+        transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--i, 0) * 140ms);
+    }
+    /* each gauge arms on its own position (see index.tsx) */
+    .cs-gauge[data-reveal='armed'] .cs-fill {
+      transform: scaleX(0);
+    }
+    .cs-gauge[data-reveal='in'] .cs-fill {
+      transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-conf-sujets {
+      padding: 16px 0 120px;
+
+      h2 {
+        font-size: 28px;
+      }
+      .cs-list {
+        margin-top: 32px;
+      }
+      .cs-topic {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+          'title'
+          'facts'
+          'text'
+          'hist';
+        grid-template-rows: none;
+        padding: 28px 0 32px;
+      }
+      .cs-title {
+        font-size: 23px;
+      }
+      .cs-facts {
+        margin-top: 18px;
+        row-gap: 16px;
+      }
+      .cs-fact dd {
+        font-size: 16px;
+      }
+      .cs-text {
+        margin-top: 18px;
+        font-size: 15px;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-conf-sujets .cs-topic,
+    .v2-conf-sujets .cs-fill {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+}

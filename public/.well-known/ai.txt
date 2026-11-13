@@ -7,7 +7,7 @@ llms: https://sablia.io/llms.txt
 # Site metadata
 name: Sablia
 url: https://sablia.io
-description: Formation à l'IA pour les équipes des entreprises : trois jours dans leurs locaux, jusqu'à 12 personnes, pour travailler avec Claude (Anthropic) sur leurs propres dossiers. Premier pas : un webinaire gratuit d'une heure. Ensuite, un référent IA, ou Claude intégré sur mesure dans le CRM.
+description: Sablia met l'IA en place dans les PME de 10 à 50 personnes : un responsable IA externalisé au mois, la formation « L'IA au travail » (trois jours dans l'entreprise, avec Claude d'Anthropic), des formats plus courts et des conférences sur demande.
 contact: brice@sablia.io
 language: fr-FR
-last-updated: 2026-11-01
+last-updated: 2026-11-12

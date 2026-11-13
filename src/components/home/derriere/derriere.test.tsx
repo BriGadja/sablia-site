@@ -25,8 +25,20 @@ describe('#derriere static HTML', () => {
     expect(html).toContain('v2-derriere')
   })
 
+  // US-104 (E8): the band now follows the night `#videos` band, so it opens on its own dune (back the
+  // charte's dune rose, front its own sand ground), as every band after a dark one does.
+  it('opens on its own dune, front = its sand ground', () => {
+    const dune = html.match(/<svg[^>]*v2-dune[^>]*>.*?<\/svg>/)?.[0] ?? ''
+    expect(dune).toContain('fill="#C68A8E"')
+    expect(dune).toContain('fill="#F4ECDD"')
+    expect(html.indexOf('v2-dune')).toBeLessThan(html.indexOf('dr-grid'))
+  })
+
+  // US-104 (plan sablia-site-structure-offre E8, copy deck B2 `home.derriere.eyebrow`): he builds,
+  // trains and speaks now, so the eyebrow names who is behind Sablia, not only the trainer.
   it('eyebrow, heading (h2) and the career line of 01b', () => {
-    expect(html).toContain('Qui forme votre équipe')
+    expect(html).toContain('>Derrière Sablia<')
+    expect(html).not.toContain('Qui forme votre équipe')
     expect(html).toMatch(/<h2[^>]*>Brice Gachadoat, fondateur de Sablia\.<\/h2>/)
     expect(html).toContain(
       "Six ans au sein de la DSI du groupe LVMH, dont cinq comme Product Owner, puis deux ans Consultant senior BI. Depuis janvier 2025, avec Sablia, il installe l'IA dans les outils des entreprises et forme les équipes qui s'en servent.",

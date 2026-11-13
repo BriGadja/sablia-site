@@ -2,6 +2,7 @@
 
 // Client component: the counters count up and the timeline stages in once scrolled into view.
 import { type CSSProperties, useRef } from 'react'
+import { Dune } from '@/components/shell/Dune'
 import { Eyebrow } from '@/components/shell/Eyebrow'
 import { useArmedReveal } from '@/lib/hooks/useArmedReveal'
 import { useCountUp } from '@/lib/hooks/useCountUp'
@@ -45,7 +46,10 @@ function NoesiaLine() {
   )
 }
 
-/** `#derriere`: who trains the team. Keeps its id: `/about` 301s to `/#derriere`. */
+/**
+ * `#derriere`: who is behind Sablia. Keeps its id: `/about` 301s to `/#derriere`. It follows the night
+ * `#videos` band (US-104), so it opens on its own dune, front = its sand ground.
+ */
 export function Derriere() {
   const sectionRef = useRef<HTMLElement>(null)
   const statsRef = useRef<HTMLDivElement>(null)
@@ -54,6 +58,7 @@ export function Derriere() {
 
   return (
     <section id="derriere" ref={sectionRef} className="v2-derriere" data-reveal={reveal}>
+      <Dune back="#C68A8E" front="#F4ECDD" />
       <div className="wrap dr-grid">
         <div className="dr-head">
           <Eyebrow>{EYEBROW}</Eyebrow>

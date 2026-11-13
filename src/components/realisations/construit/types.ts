@@ -15,16 +15,21 @@ export interface CardStage {
   f: number
 }
 
-/** Props of the seven drawing components under `./cards/` (they render the inside of `.bp-stage`). */
+/** Props of the six drawing components under `./cards/` (they render the inside of `.bp-stage`). */
 export interface CardProps {
   stage: CardStage
 }
 
-export type CardKind = 'helene' | 'site' | 'cash' | 'maint' | 'noesia' | 'seminar' | 'voice'
+export type CardKind = 'helene' | 'site' | 'cash' | 'noesia' | 'seminar' | 'voice'
+
+/** What a card is, for the filter row (US-108). `kind` stays the card's identity, `tags` its display text. */
+export type RealisationType = 'outils' | 'formations' | 'conferences' | 'sites'
 
 /** One wall entry: its timing, the footer under the drawing, and the drawing itself. */
 export interface BlueprintCard {
   kind: CardKind
+  /** At least one; a card shows under every chip it carries (plan Phase G table). */
+  types: readonly RealisationType[]
   /** Number of panels filled one after the other (mockup `P`). */
   panels: number
   /** Number of detail steps (mockup `L`). */
@@ -40,7 +45,7 @@ export interface BlueprintCard {
   icon: string
   sector: string
   text: string
-  /** Greyed tag (the « sur demande » card). */
+  /** Greyed tag (the voice card, a past réalisation no longer sold). */
   muted?: boolean
   Drawing: ComponentType<CardProps>
 }

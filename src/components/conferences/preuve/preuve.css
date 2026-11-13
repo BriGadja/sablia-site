@@ -1,0 +1,107 @@
+@layer theme, base, components, utilities;
+
+/* #preuve of /conferences: the recommendation set large on the sand, its label in the left column,
+   the signature under a short gold stroke. Entrance (armed below the fold only): the quote rises, then
+   the stroke draws and the signature appears. */
+@layer components {
+  .v2-conf-preuve {
+    position: relative;
+    background: #f4ecdd;
+    padding: 88px 0 24px;
+    color: #131620;
+
+    .cp-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+      column-gap: 48px;
+      align-items: start;
+    }
+    .cp-head {
+      min-width: 0;
+      padding-top: 12px;
+    }
+    .cp-figure {
+      min-width: 0;
+      margin: 0;
+    }
+    .cp-quote {
+      margin: 0;
+      max-width: 31em;
+      font-size: 30px;
+      line-height: 1.36;
+      letter-spacing: -0.015em;
+      font-weight: 500;
+      text-wrap: pretty;
+    }
+    .cp-sign {
+      margin-top: 28px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      color: #61677a;
+    }
+    .cp-sign::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 2px;
+      margin-bottom: 16px;
+      border-radius: 2px;
+      background: #b9852a;
+      transform-origin: left center;
+    }
+
+    &[data-reveal='armed'] .cp-quote {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    &[data-reveal='armed'] .cp-sign {
+      opacity: 0;
+    }
+    &[data-reveal='armed'] .cp-sign::before {
+      transform: scaleX(0);
+    }
+    &[data-reveal='in'] .cp-quote {
+      transition:
+        opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+        transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    &[data-reveal='in'] .cp-sign {
+      transition: opacity 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) 0.55s;
+    }
+    &[data-reveal='in'] .cp-sign::before {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-conf-preuve {
+      padding: 72px 0 16px;
+
+      .cp-grid {
+        grid-template-columns: minmax(0, 1fr);
+        row-gap: 18px;
+      }
+      .cp-head {
+        padding-top: 0;
+      }
+      .cp-quote {
+        font-size: 21px;
+        line-height: 1.42;
+      }
+      .cp-sign {
+        margin-top: 22px;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-conf-preuve .cp-quote,
+    .v2-conf-preuve .cp-sign,
+    .v2-conf-preuve .cp-sign::before {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+}

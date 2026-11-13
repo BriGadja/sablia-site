@@ -1,31 +1,38 @@
 @layer theme, base, components, utilities;
 
-/* Hero of the home: sticky on wide screens, receding under the night #offre panel. */
+/* Hero of the home: sticky on wide screens, receding under the night #mensuel panel (PANEL_ID). */
 @layer components {
   .v2-top {
     position: sticky;
     top: 0;
     z-index: 0;
-    padding: 64px 0 40px;
+    /* the bottom padding keeps the four doors above the crest of the floor dune */
+    padding: 64px 0 76px;
     background: #f4ecdd;
     font-family: var(--font-sans);
 
+    /* Areas, not source order: the DOM reads copy, doors, photo (the phone order); here the photo
+       sits beside the copy and the doors run under both. */
     .hero-grid {
       display: grid;
       grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-      gap: 56px;
+      grid-template-areas: 'copy photo' 'doors doors';
+      gap: 44px 56px;
       align-items: center;
       transform-origin: 50% 20%;
     }
     .copy {
+      grid-area: copy;
       min-width: 0;
     }
+    /* min-height, not height: under about 360 px the text takes two lines and stays inside */
     .pill {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      height: 30px;
-      padding: 0 12px;
+      box-sizing: border-box;
+      min-height: 32px;
+      padding: 4px 12px;
       border: 1px solid #e4d6c0;
       border-radius: 999px;
       background: #ffffff;
@@ -115,8 +122,80 @@
       color: #61677a;
     }
 
+    /* The four doors of the site (the menu's four intents), one row under the promise and the photo:
+       a hairline over each, gold over the monthly offer, the one Sablia leads with. Each door is an
+       item (label, then its line): the link holds the label only, so its name is what it shows
+       (WCAG 2.5.3), and stretches over the whole item, so the hit area is still the block. */
+    .doors {
+      grid-area: doors;
+      /* above the floor dune (an absolute layer) wherever the two meet, and above the photo's
+         shadow now that the photo comes later in the DOM */
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0 32px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      li {
+        position: relative;
+        min-width: 0;
+        box-sizing: border-box;
+        padding: 16px 0 6px;
+        border-top: 1px solid #e4d6c0;
+      }
+      li:first-child {
+        border-top: 2px solid #b9852a;
+        padding-top: 15px;
+      }
+    }
+    .door {
+      display: block;
+      color: #131620;
+      text-decoration: none;
+    }
+    .door::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+    }
+    .door-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 17px;
+      line-height: 1.3;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      transition: color 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+
+      svg {
+        flex: none;
+        color: #835a0c;
+        transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+    }
+    .door-line {
+      display: block;
+      margin-top: 6px;
+      max-width: 34ch;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #3a3f4d;
+      text-wrap: pretty;
+    }
+    .door:hover .door-label {
+      color: #835a0c;
+    }
+    .door:hover .door-label svg {
+      transform: translateX(3px);
+    }
+
     /* The trainer in front of a real audience (09/10): the photo is the hero's object. */
     .photo {
+      grid-area: photo;
       position: relative;
       margin: 0;
       min-width: 0;
@@ -136,16 +215,39 @@
       }
     }
 
-    /* Phones: no recede, one column, the text first and the photo under the two doors. */
+    /* Between the phone and the wide screen the four doors go two by two. */
+    @media (min-width: 901px) and (max-width: 1180px) {
+      .doors {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px 32px;
+      }
+    }
+
+    /* Phones: no recede, one column, the text first, then the doors as a ruled list, then the
+       photo. */
     @media (max-width: 900px) {
       position: relative;
-      padding: 40px 0 48px;
+      padding: 40px 0 72px;
 
       .hero-grid {
         grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: 'copy' 'doors' 'photo';
         gap: 32px;
         transform: none !important;
         opacity: 1 !important;
+      }
+      .doors {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+      }
+      .doors li {
+        padding: 14px 0 14px;
+      }
+      .doors li:first-child {
+        padding-top: 13px;
+      }
+      .doors li:last-child {
+        border-bottom: 1px solid #e4d6c0;
       }
       .h1 {
         font-size: 36px;
@@ -153,6 +255,39 @@
       .photo {
         aspect-ratio: 3 / 2;
         border-radius: 20px;
+      }
+    }
+
+    /* Small phones (US-104: at 390 px the first screen holds the h1, the webinar button and the four
+       doors): each door is one 48 px row, label left, arrow right. Its line stays in the HTML as the
+       door's description (aria-describedby), visually hidden. */
+    @media (max-width: 640px) {
+      /* 48 px with its rules (the item is border-box), the link filling it */
+      .doors li {
+        display: flex;
+        min-height: 48px;
+        padding: 0;
+      }
+      .doors li:first-child {
+        padding-top: 0;
+      }
+      .door {
+        flex: 1;
+        display: flex;
+        align-items: center;
+      }
+      .door-label {
+        flex: 1;
+        justify-content: space-between;
+      }
+      .door-line {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: 0;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
       }
     }
   }
@@ -172,7 +307,9 @@
         animation: none !important;
         background-size: 100% 6px !important;
       }
-      .quiet {
+      .quiet,
+      .door-label,
+      .door-label svg {
         transition: none !important;
       }
     }

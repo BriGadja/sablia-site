@@ -23,17 +23,31 @@ const decode = (s: string) =>
     .replace(/&quot;/g, '"')
 const textOf = (html: string) => html.replace(/<[^>]*>/g, ' ').replace(/[\s ]+/g, ' ')
 
-/** 01b § 5 « New strings ». */
+/** Copy deck B5 of run 2026-11-12-structure-site-offre: `real.meta.title`, `real.meta.description`, `real.head.intro` (US-108). */
 const NEW = {
-  title: 'Réalisations : automatisations, sites et formations · Sablia',
+  title: 'Réalisations : automatisations, sites, formations et conférences · Sablia',
   description:
-    'Ce que Sablia a construit depuis 2025 : automatisations, sites, applications et formations, et des agents vocaux sur demande.',
+    'Ce que Sablia a construit depuis 2025 : automatisations, sites, applications, formations et conférences.',
   h1: 'Réalisations',
   intro:
-    'Automatisations, sites, applications et formations, construits pour nos clients depuis 2025.',
+    'Automatisations, sites, applications, formations et conférences, réalisés pour des clients depuis 2025.',
 }
 
-/** 01b § 5 « Moved as is » (the eyebrow excepted: the h1 takes its role). */
+/** Copy deck B5 `real.besoin.title`, `real.besoin.text`, `real.besoin.cta` (US-108). */
+const BESOIN = {
+  title: 'Un besoin précis ? Je construis aussi à la demande.',
+  text: 'Un outil seul, sans contrat mensuel : on en parle trente minutes, puis vous recevez un devis écrit.',
+  cta: 'Réserver 30 min',
+}
+
+/**
+ * 01b § 5 « Moved as is » (the eyebrow excepted: the h1 takes its role), corrected after the adversarial
+ * review K6 of run 2026-11-12-structure-site-offre: the seminar card's tag is « Séminaire »; the voice
+ * card's tag is « Agent vocal » (voice is no longer sold) and its 68 bookings are said as proof line P-8
+ * states them (sector and period, no name). Then Brice's answers at VP2 (13/11): the maintenance card
+ * leaves, the cashback card is « Plateforme de veille concurrentielle » in the past, and the voice card
+ * keeps « une vingtaine ».
+ */
 const MOVED = [
   'Exemples de réalisations.',
   'Plus de 20 clients accompagnés depuis 2025.',
@@ -44,20 +58,19 @@ const MOVED = [
   'Un institut de beauté à Rouen',
   'Son site a quitté Wix pour son propre domaine, hébergé à son nom.',
   'Application',
-  'Une plateforme de cashback',
-  'Les taux de ses concurrents, relevés chaque jour dans une application.',
+  'Plateforme de veille concurrentielle',
+  'Pour une plateforme de cashback : les taux de ses concurrents, relevés chaque jour pendant huit mois dans une application.',
   '699 000+ relevés',
-  'Une entreprise de maintenance du bâtiment',
-  "Les demandes d'intervention reçues par mail deviennent fiches, bons et factures, sans ressaisie.",
   'Formation',
   'École Noésia',
   'Le module Claude Code, 10 heures en 29 vidéos, et un atelier toutes les deux semaines.',
   'noesia.school',
+  'Séminaire',
   'Un cabinet de conseil en ingénierie',
   "Une matinée pour mettre l'IA générative entre les mains de son équipe.",
-  'Sur demande',
+  'Agent vocal',
   'Agents vocaux',
-  'Une vingtaine mis en service depuis 2024 : accueil téléphonique, rappels, prise de rendez-vous.',
+  "Une vingtaine mis en service depuis 2024 : accueil téléphonique, rappels, prise de rendez-vous. Les 68 rendez-vous : un agent sortant, dans l'investissement locatif clé en main, d'avril à août 2026.",
   '68 rendez-vous pris en cinq mois',
 ]
 
@@ -70,13 +83,15 @@ describe('/realisations (US-95, server HTML)', () => {
     expect(html).toMatch(new RegExp(`<h1[^>]*>${NEW.h1}</h1>`))
   })
 
-  it('keeps the band whole: its id, its h2 and its seven cards, between the page top and the closing band', () => {
+  it('keeps the band whole: its id, its h2 and its six cards, between the page top and the closing band', () => {
     const ids = ['top', 'construit', 'fin']
     const at = ids.map((id) => html.indexOf(`id="${id}"`))
     expect(at.every((i) => i >= 0)).toBe(true)
     expect([...at].sort((a, b) => a - b)).toEqual(at)
     expect(html).toMatch(/<h2[^>]*>Exemples de réalisations\.<\/h2>/)
-    expect(html.match(/<article[^>]*class="deck-card"/g)).toHaveLength(7)
+    expect(html.match(/<article[^>]*class="deck-card"/g)).toHaveLength(6)
+    expect(text).not.toContain('maintenance du bâtiment')
+    expect(text).not.toContain('Une plateforme de cashback') // the old title; the body says « une »
   })
 
   it('does not render the moved eyebrow a second time', () => {
@@ -99,10 +114,49 @@ describe('/realisations (US-95, server HTML)', () => {
     for (const s of MOVED) expect(text, s).toContain(s)
   })
 
+  it('says in #top, under the intro and above the wall, that a precise need is built on request (US-108)', () => {
+    const top = html.slice(html.indexOf('id="top"'), html.indexOf('id="construit"'))
+    const h2 = top.match(/<h2[^>]*>([\s\S]*?)<\/h2>/)?.[1] ?? ''
+    expect(textOf(h2).trim()).toBe(BESOIN.title)
+    expect(textOf(top)).toContain(BESOIN.text)
+    expect(top.indexOf('<h2')).toBeGreaterThan(top.indexOf(NEW.intro))
+    expect(top).toContain('data-zone="besoin"')
+    const zone = top.slice(top.indexOf('data-zone="besoin"'))
+    expect(zone).toMatch(new RegExp(`<button[^>]*data-cta-book[^>]*>${BESOIN.cta}`))
+    expect(textOf(zone)).toContain(BESOIN.title)
+    expect(textOf(zone)).toContain(BESOIN.text)
+  })
+
+  it('carries the filter row and the count in the band, all six shown (US-108)', () => {
+    const band = html.slice(html.indexOf('id="construit"'), html.indexOf('id="fin"'))
+    expect(band).toContain('role="group"')
+    expect(band).toContain('aria-label="Filtrer les réalisations"')
+    expect(textOf(band)).toContain('6 réalisations sur 6')
+    expect(band.match(/<article[^>]*class="deck-card"/g)).toHaveLength(6)
+    expect(band).not.toMatch(/<article[^>]*\shidden[=\s>]/)
+  })
+
   it('shows no price and no banned word', () => {
     expect(text).not.toMatch(/\d[\d\s .,]*\s?(€|euros?)/i)
     for (const w of ['IAPreneurs', 'CPF', 'finançable', 'certifié', 'Qualiopi', '—'])
       expect(text, w).not.toContain(w)
+  })
+
+  // Brice at VP2 (13/11, question 8): before the closing band, a line leads to the monthly offer (the
+  // home's first door and its monthly link, copy deck B2); a link, not a third booking button.
+  it('leads to the monthly offer after the wall, just before the closing band', () => {
+    const zone = html.indexOf('data-zone="mensuel"')
+    expect(html.match(/data-zone="mensuel"/g)).toHaveLength(1)
+    expect(zone).toBeGreaterThan(html.indexOf('id="construit"'))
+    expect(zone).toBeLessThan(html.indexOf('id="fin"'))
+    const line = html.slice(zone, html.indexOf('id="fin"'))
+    expect(textOf(line)).toContain(
+      "Responsable IA externalisé : quelqu'un qui construit et entretient vos outils, chaque mois.",
+    )
+    expect(line).toMatch(
+      /<a [^>]*href="\/responsable-ia-externalise"[^>]*>[\s\S]*?Voir l'offre mensuelle/,
+    )
+    expect(line).not.toContain('data-cta-book')
   })
 
   it('sets the 01b title and description on its own indexable path', () => {
@@ -114,13 +168,13 @@ describe('/realisations (US-95, server HTML)', () => {
 })
 
 describe('/realisations in the browser', () => {
-  it('keeps the same animation: seven rows, the pause control', () => {
+  it('keeps the same animation: six rows, the pause control', () => {
     mockReducedMotion(false)
     const io = mockIntersectionObserver()
     const { container } = render(<Page />)
     const band = container.querySelector('section#construit') as HTMLElement
     act(() => io.trigger(band, true))
-    expect(band.querySelectorAll('ol[aria-label="Toutes les réalisations"] li')).toHaveLength(7)
+    expect(band.querySelectorAll('ol[aria-label="Toutes les réalisations"] li')).toHaveLength(6)
     const grow = () => band.querySelector('.grow') as HTMLElement
     expect(grow().style.animationPlayState).toBe('running')
     fireEvent.click(screen.getByRole('button', { name: /Mettre en pause/ }))
@@ -128,11 +182,15 @@ describe('/realisations in the browser', () => {
     expect(screen.getByRole('button', { name: /Reprendre le défilement/ })).toBeTruthy()
   })
 
-  it('every « Réserver 30 min » opens the formation Calendly', () => {
+  it('every « Réserver 30 min » opens the formation Calendly: the « besoin » block and the closing band', () => {
     mockIntersectionObserver()
-    render(<Page />)
+    const { container } = render(<Page />)
     const buttons = screen.getAllByRole('button', { name: /Réserver 30 min/ })
-    expect(buttons.length).toBeGreaterThanOrEqual(1)
+    expect(buttons).toHaveLength(2)
+    expect(buttons[0].closest('[data-zone]')?.getAttribute('data-zone')).toBe('besoin')
+    expect(buttons[0].closest('section')?.id).toBe('top')
+    expect(buttons[1].closest('section')?.id).toBe('fin')
+    expect(container.querySelectorAll('[data-zone="besoin"]')).toHaveLength(1)
     for (const b of buttons) fireEvent.click(b)
     expect(openBookingUrl).toHaveBeenCalledTimes(buttons.length)
     for (const call of vi.mocked(openBookingUrl).mock.calls)

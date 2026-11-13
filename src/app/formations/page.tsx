@@ -7,6 +7,8 @@ import { PourQui } from '@/components/formations/pourqui'
 import { Preuve } from '@/components/formations/preuve'
 import { Questions } from '@/components/formations/questions'
 import { FinBand } from '@/components/shell/FinBand'
+import { MonthlyOfferLine } from '@/components/shell/MonthlyOfferLine'
+import { WebinarReminder } from '@/components/shell/WebinarReminder'
 import { pageMetadata } from '@/lib/seo'
 import { site } from '@/lib/site'
 
@@ -25,8 +27,10 @@ export default function FormationsPage() {
       <Deroule />
       <Inclus />
       <Conference />
+      <WebinarReminder />
       <Preuve />
       <Questions />
+      <MonthlyOfferLine ground="rose" />
       <FinBand title={FIN.title} text={FIN.text} bookingUrl={site.formationBookingUrl} />
     </main>
   )

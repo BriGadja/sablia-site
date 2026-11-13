@@ -1,6 +1,6 @@
 @layer theme, base, components, utilities;
 
-/* #top of /responsable-ia-temps-partage: copy and booking on the left, photo 03 on the right, then the
+/* #top of /responsable-ia-externalise: copy and booking on the left, photo 03 on the right, then the
    three facts (price, commitment, size) as a plain sheet strip. Phone: copy, facts, photo. */
 @layer components {
   .v2-tp-hero {
@@ -151,12 +151,29 @@
     @media (max-width: 900px) {
       padding: 28px 0 112px;
 
+      /* One column: the copy block opens so its children join the grid, and the facts (price,
+         commitment, size) come right after the lede and its byline, before the audience sentence,
+         the button and the photo (adversarial review K6, tel-7). The DOM order is unchanged. */
       .tph-grid {
         grid-template-columns: minmax(0, 1fr);
-        grid-template-areas:
-          'copy'
-          'facts'
-          'fig';
+        grid-template-areas: none;
+      }
+      .tph-copy {
+        display: contents;
+      }
+      .tph-facts {
+        grid-area: auto;
+        order: 1;
+      }
+      .tph-for {
+        order: 2;
+      }
+      .tph-cta {
+        order: 2;
+      }
+      .tph-fig {
+        grid-area: auto;
+        order: 3;
       }
       h1 {
         font-size: 36px;

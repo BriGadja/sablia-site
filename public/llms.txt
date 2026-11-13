@@ -1,8 +1,15 @@
 # Sablia
 
-> Sablia forme les équipes des entreprises à l'IA, sur leurs propres dossiers : la formation « L'IA au travail », trois jours dans vos locaux, jusqu'à 12 personnes, avec Claude (le modèle d'IA d'Anthropic). Premier pas : un webinaire gratuit d'une heure, le jeudi midi.
+> Sablia met l'IA en place dans les PME de 10 à 50 personnes : un responsable IA externalisé au mois, qui construit les outils, forme l'équipe et entretient ce qui tourne, la formation « L'IA au travail » (trois jours dans vos locaux, jusqu'à 12 personnes, avec Claude, le modèle d'IA d'Anthropic), et des conférences sur demande.
 
 Sablia (https://sablia.io) est basée à Rouen (Normandie) et intervient dans toute la France. La formation est animée par son fondateur, Brice Gachadoat, du premier échange à la dernière demi-journée. Le prix de la formation n'est pas publié : il dépend de l'équipe et du format retenu, et il arrive dans le devis, après un échange gratuit de 30 minutes.
+
+## Responsable IA externalisé
+
+Votre responsable IA, sans le recruter : une offre mensuelle pour les PME de 10 à 50 personnes qui n'ont personne en interne pour mettre l'IA en place. Brice Gachadoat, à Rouen, construit les outils, forme l'équipe et entretient ce qui tourne, deux jours de travail par mois. Engagement de trois mois, puis résiliable chaque mois ; le prix est affiché sur la page.
+
+- URL : https://sablia.io/responsable-ia-externalise
+- Sans contrat mensuel : le compte rendu d'appel dans votre CRM, à prix fixe. Après chaque appel, un compte rendu structuré et une tâche de relance sont créés dans le CRM. Page et prix : https://sablia.io/offres/compte-rendu-appel (par outil : /hubspot, /pipedrive, /zoho, /salesforce, /google-sheets, /excel-365)
 
 ## La formation « L'IA au travail »
 
@@ -18,29 +25,22 @@ Trois jours sur vos propres dossiers : chaque participant repart avec ses outils
 - Demi-journées 2 à 5, par métier : chaque équipe travaille sur ses dossiers réels
 - Demi-journée 6, clôture : la mesure « après », le plan de formation documenté, et la suite si vous la voulez
 - Inclus : la charte IA de l'entreprise, le plan de formation documenté, 30 jours de questions par mail (réponse sous 48 h), la bibliothèque des consignes et assistants créés en séance, par métier. Une attestation de fin de formation est remise à chaque participant.
-- En option : une conférence de 1 h 30 à 2 h pour votre équipe, pour voir avant de décider. Son prix est déduit du programme s'il est signé dans les 30 jours.
+- En option : une conférence pour votre équipe, pour voir avant de décider. Son prix est déduit du programme s'il est signé dans les 30 jours.
 - Prix : dans le devis, après l'échange de 30 minutes
+
+## Conférences et séminaires
+
+Sur demande, prix sur devis, après un échange gratuit de 30 minutes : une conférence ou une matinée de séminaire, pour toute l'équipe. Trois sujets : « Comprendre et utiliser l'IA générative » (une matinée, toute une équipe, sans prérequis) ; « Votre équipe utilise déjà l'IA. Avec quelles règles ? » (une heure, pour une équipe qui s'en sert déjà et sa direction) ; « IA et coûts : le bon modèle pour la bonne tâche » (une intervention d'environ 20 minutes, pour la direction ou une équipe technique).
+
+- URL : https://sablia.io/conferences
 
 ## Le webinaire gratuit
 
 Une heure en visio sur Google Meet, le jeudi à midi, consacrée à un métier : l'IA à l'œuvre sur des documents fictifs, et les règles à poser dans votre équipe. Prochaine session et inscription : https://sablia.io/webinaire
 
-## Après la formation
-
-- URL : https://sablia.io/accompagnement
-- Un référent IA : une séance de 2 h par mois avec votre équipe, et vos questions sous 48 h. Trois mois au moins, puis résiliable chaque mois. Le prix est dans le devis.
-- Sur mesure : l'intégration de Claude dans votre CRM, et des automatisations pour les tâches qui reviennent.
-- Le compte rendu d'appel dans votre CRM : le commercial raccroche, le CRM est déjà à jour (compte rendu et tâche de relance). Page et prix : https://sablia.io/offres/compte-rendu-appel (par outil : /hubspot, /pipedrive, /zoho, /salesforce, /google-sheets, /excel-365)
-
-## Responsable IA à temps partagé
-
-Une offre mensuelle pour les PME de 10 à 50 personnes qui n'ont personne en interne pour mettre l'IA en place : Brice Gachadoat construit les outils, forme l'équipe et entretient ce qui tourne, deux jours de travail par mois. Engagement de trois mois, puis résiliable chaque mois ; le prix est affiché sur la page.
-
-- URL : https://sablia.io/responsable-ia-temps-partage
-
 ## Réalisations
 
-Automatisations, sites, applications et formations, construits pour nos clients depuis 2025, et des agents vocaux sur demande : https://sablia.io/realisations
+Automatisations, sites, applications, formations et conférences, réalisés pour des clients depuis 2025. Pour un besoin précis, Brice Gachadoat construit aussi à la demande, sur devis : https://sablia.io/realisations
 
 ## Le formateur
 
@@ -54,7 +54,7 @@ Brice Gachadoat, fondateur de Sablia. Six ans au sein de la DSI du groupe LVMH, 
 - **Combien de personnes ?** Jusqu'à 12 personnes par programme. Pour une équipe plus grande, on en parle pendant l'échange.
 - **Que faut-il préparer ?** Une salle, un ordinateur par participant et une connexion internet. Avant la première demi-journée, la liste des tâches que votre équipe aimerait confier à l'IA.
 - **Nos dossiers sont confidentiels.** Les règles se posent d'abord : la première demi-journée, avec la direction, fixe ce qui peut passer par l'IA et ce qui ne sort pas du bureau. Sur les offres de Claude pour les entreprises, Anthropic ne se sert pas par défaut de vos échanges pour entraîner ses modèles.
-- **Et après les trois jours ?** Trente jours de questions par mail sont inclus, avec une réponse sous 48 h. Ensuite, un référent IA peut suivre votre équipe : une séance de 2 h par mois et les questions sous 48 h.
+- **Et après les trois jours ?** Trente jours de questions par mail sont inclus, avec une réponse sous 48 h. Ensuite, si vous voulez que quelqu'un construise et entretienne vos outils chaque mois, c'est le rôle du responsable IA externalisé : https://sablia.io/responsable-ia-externalise
 - **Qui anime ?** Brice Gachadoat, fondateur de Sablia, du premier échange à la dernière demi-journée.
 - **Mon équipe n'a jamais utilisé l'IA.** C'est le cas le plus fréquent. On part des tâches qu'elle fait déjà, sans prérequis technique.
 
@@ -69,4 +69,4 @@ Brice Gachadoat, fondateur de Sablia. Six ans au sein de la DSI du groupe LVMH, 
 - Email : brice@sablia.io
 - Échange gratuit de 30 minutes : https://calendly.com/brice-gachadoat/echange-30-minutes
 
-Dernière mise à jour : 2026-11-11.
+Dernière mise à jour : 2026-11-13.

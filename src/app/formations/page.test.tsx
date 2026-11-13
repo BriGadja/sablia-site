@@ -1,6 +1,7 @@
 import { fireEvent, render } from '@testing-library/react'
 import { renderToString } from 'react-dom/server'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { SHORT_FORMATS } from '@/components/formations/deroule/content'
 import { openBookingUrl } from '@/lib/booking'
 import { site } from '@/lib/site'
 import Page, { metadata } from './page'
@@ -112,13 +113,28 @@ describe('/formations static HTML (SSR content rule)', () => {
     expect(conf).toContain('Une conférence, pour voir avant de décider.')
   })
 
-  it('conference: 1 h 30 to 2 h, deducted from the signed programme, without its price', () => {
+  // Brice at VP2 (13/11, question 5): /conferences gives each talk the duration of what exists, so this
+  // option no longer announces « 1 h 30 à 2 h »; the deduction rule stays.
+  it('conference: deducted from the signed programme, without its price nor a duration', () => {
     expect(text).toContain(
-      'Une conférence de 1 h 30 à 2 h pour votre équipe. Son prix est déduit du programme s’il est signé dans les 30 jours.'.replace(
+      'Une conférence pour votre équipe. Son prix est déduit du programme s’il est signé dans les 30 jours.'.replace(
         '’',
         "'",
       ),
     )
+    expect(text).not.toMatch(/1 h 30|à 2 h\b/)
+  })
+
+  // Brice at VP2 (13/11, question 8): the score comes from a one-morning seminar, not the three days,
+  // so the block is titled for what it is.
+  it('preuve: titled « Retours d’un séminaire », never « Déjà formés »', () => {
+    const at = html.indexOf('id="preuve"')
+    const block = html
+      .slice(at, html.indexOf('</section>', at))
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+    expect(block).toContain("Retours d'un séminaire")
+    expect(text).not.toContain('Déjà formés')
   })
 
   it('preuve: 9,1/10 with its base right next to it (R05), four answers as written', () => {
@@ -221,5 +237,89 @@ describe('every « Réserver 30 min » of /formations opens the « Échange de 3
       [site.formationBookingUrl],
     ])
     expect(site.formationBookingUrl).toBe('https://calendly.com/brice-gachadoat/echange-30-minutes')
+  })
+})
+
+// US-109 (plan sablia-site-structure-offre F4, copy deck B5 `form.short` and `reminder.*`): two
+// additions only, nothing of the page above is reworded. Each render pins the instant (build stamp
+// and visitor clock), before and from the session start.
+describe('/formations additions (US-109)', () => {
+  const BEFORE = '2026-11-20T10:00:00+01:00'
+  const AFTER = '2026-12-03T12:00:00+01:00'
+  const REMINDER =
+    "Webinaire gratuit, jeudi 3 décembre de 12 h à 13 h : « Bureaux d'études : votre équipe utilise déjà l'IA. Avec quelles règles ? »"
+  const flat = (s: string) =>
+    decode(s)
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/[\s\u00a0\u202f]+/g, ' ')
+
+  /** Renders the page at `iso` (static HTML as built at that instant) and restores the clock. */
+  function at<T>(iso: string, run: () => T): T {
+    vi.stubEnv('NEXT_PUBLIC_BUILD_AT', iso)
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date(iso))
+    try {
+      return run()
+    } finally {
+      vi.useRealTimers()
+      vi.unstubAllEnvs()
+    }
+  }
+
+  it('says formats start at a half-day, on request, in the déroulé right after its note', () => {
+    expect(SHORT_FORMATS).toBe('Des formats dès une demi-journée, sur demande.')
+    const html = at(BEFORE, () => renderToString(<Page />))
+    const start = html.indexOf('id="deroule"')
+    const deroule = flat(html.slice(start, html.indexOf('</section>', start)))
+    const note = deroule.indexOf('Le programme exact est fixé dans la convention de formation.')
+    expect(note).toBeGreaterThan(0)
+    expect(deroule.indexOf(SHORT_FORMATS)).toBeGreaterThan(note)
+  })
+
+  it('while the session is ahead: the webinar reminder between #conference and #preuve, linked to /webinaire', () => {
+    const html = at(BEFORE, () => renderToString(<Page />))
+    const from = html.indexOf('id="conference"')
+    const between = html.slice(html.indexOf('</section>', from), html.indexOf('id="preuve"'))
+    expect(flat(between)).toContain(REMINDER)
+    expect(decode(between)).toMatch(/<a [^>]*href="\/webinaire"[^>]*>[\s\S]*?Je m'inscris/)
+    expect(flat(html).match(/Webinaire gratuit/g)).toHaveLength(1)
+  })
+
+  it('from the session start: the reminder is gone, the half-day sentence stays', () => {
+    const html = at(AFTER, () => renderToString(<Page />))
+    expect(html).not.toContain('href="/webinaire"')
+    expect(flat(html)).not.toContain('Webinaire gratuit')
+    expect(flat(html)).toContain(SHORT_FORMATS)
+  })
+
+  it('the reminder adds no booking button: still exactly two, before and from the session start', () => {
+    for (const iso of [BEFORE, AFTER]) {
+      at(iso, () => {
+        const { container, unmount } = render(<Page />)
+        expect(container.querySelectorAll('button[data-cta-book]')).toHaveLength(2)
+        unmount()
+      })
+    }
+  })
+})
+
+// Brice at VP2 (13/11, question 8): an addition, as the two of US-109. Before the closing band, a line leads
+// to the monthly offer (the home's first door and its monthly link, copy deck B2); a link, not a third
+// booking button.
+describe('/formations line toward the monthly offer (just before #fin)', () => {
+  it('sits after #questions, before #fin, with one link to the offer page', () => {
+    const html = decode(renderToString(<Page />))
+    const zone = html.indexOf('data-zone="mensuel"')
+    expect(html.match(/data-zone="mensuel"/g)).toHaveLength(1)
+    expect(zone).toBeGreaterThan(html.indexOf('id="questions"'))
+    expect(zone).toBeLessThan(html.indexOf('id="fin"'))
+    const line = html.slice(zone, html.indexOf('id="fin"'))
+    expect(line.replace(/<[^>]*>/g, ' ').replace(/[\s\u00a0\u202f]+/g, ' ')).toContain(
+      "Responsable IA externalisé : quelqu'un qui construit et entretient vos outils, chaque mois.",
+    )
+    expect(line).toMatch(
+      /<a [^>]*href="\/responsable-ia-externalise"[^>]*>[\s\S]*?Voir l'offre mensuelle/,
+    )
+    expect(line).not.toContain('data-cta-book')
   })
 })

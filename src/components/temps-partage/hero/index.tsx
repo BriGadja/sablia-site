@@ -8,8 +8,8 @@ import './hero.css'
 
 /** The role, never split across two lines, at any width. */
 const ROLE = 'responsable IA'
-/** Kept on one line so the title breaks after the role, never inside « temps partagé ». */
-const KEEP = 'à temps partagé,'
+/** Kept on one line so the title breaks after the comma, never inside « sans le recruter ». */
+const KEEP = 'sans le recruter'
 
 /** The h1 with `ROLE` and `KEEP` wrapped, or the plain title if the copy no longer holds them. */
 function Title() {

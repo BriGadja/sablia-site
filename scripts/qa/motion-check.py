@@ -17,7 +17,7 @@ Per route and viewport, in the page's OWN headless Chromium (never the shared Ch
  3. ARIA-PRESSED. A `button[aria-pressed]` whose accessible name (text, aria-label, title) changes when clicked is a FAIL:
     a toggle either keeps its label and uses aria-pressed, or changes its label and does not.
 Usage: motion-check.py [--base URL] [--routes /,/formations] [--vp 1440,390]   (default: the preview slot http://127.0.0.1:5001,
-  every route of routes.mjs + sitemap + /formations /accompagnement, both viewports)
+  every route of routes.mjs + sitemap + /formations, both viewports)
 Exit 1 when any finding is printed (FAIL lines), 0 otherwise, 2 when the route manifest cannot be read.
 """
 import argparse, json, re, subprocess, sys, urllib.parse, urllib.request
@@ -89,7 +89,7 @@ def routes(base):
             out.setdefault(urllib.parse.urlparse(loc).path or "/")
     except Exception as e:
         print(f"warning: sitemap unreadable ({e}); manifest routes only", file=sys.stderr)
-    for p in ("/formations", "/accompagnement"):
+    for p in ("/formations",):
         out.setdefault(p)
     return list(out)
 

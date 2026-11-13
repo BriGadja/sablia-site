@@ -1,6 +1,6 @@
 @layer theme, base, components, utilities;
 
-/* #chaque-mois of /responsable-ia-temps-partage: the title, then the four things each month holds set as
+/* #chaque-mois of /responsable-ia-externalise: the title, then the four things each month holds set as
    the page's ruled list (the items of #premier-mois: an ink rule, then hairlines), two by two on desktop,
    one column on phones. */
 @layer components {

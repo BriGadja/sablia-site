@@ -1,7 +1,7 @@
 @layer theme, base, components, utilities;
 
 /* #construit — ported from the v143 mockup's RENDERED result (append-only patches merged: later rules won).
-   The `bp-*` rules style the seven blueprint drawings under ./cards/ (class names are the mockup's). */
+   The `bp-*` rules style the six blueprint drawings under ./cards/ (class names are the mockup's). */
 @layer components {
   .v2-construit {
     position: relative;
@@ -12,10 +12,13 @@
     padding: 96px 0;
     font-family: var(--font-sans);
 
-    /* Under the /realisations page head: its dune opens the band, so no hairline and no second gap. */
+    /* Under the /realisations page head: its dune opens the band, so no hairline and no second gap; the
+       line toward the monthly offer closes it on the same paper (13/11), so no hairline under it either. */
     &.is-under-head {
       border-top: 0;
       padding-top: 8px;
+      border-bottom: 0;
+      padding-bottom: 24px;
     }
 
     .cn-head {
@@ -66,9 +69,76 @@
       color: #131620;
     }
     .pausebtn:focus-visible,
-    .caserow:focus-visible {
+    .caserow:focus-visible,
+    .cn-chip:focus-visible {
       outline: 2px solid #d9a441;
       outline-offset: 4px;
+    }
+
+    /* US-108: the filter row, the count and the pause, one bar above the wall. The chip row is the home's
+       agents chip row (same shape, pressed = night fill); its labels never change. */
+    .cn-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 20px;
+      margin-top: 28px;
+    }
+    .cn-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-width: 0;
+    }
+    .cn-chip {
+      all: unset;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 16px;
+      border-radius: 12px;
+      border: 1px solid #e4d6c0;
+      background: #ffffff;
+      font-size: 15px;
+      font-weight: 500;
+      color: #131620;
+      transition:
+        background-color 0.2s cubic-bezier(0.2, 0.7, 0.2, 1),
+        color 0.2s cubic-bezier(0.2, 0.7, 0.2, 1),
+        border-color 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+
+      &.is-on {
+        background: #161b29;
+        color: #ffffff;
+        border-color: #161b29;
+      }
+    }
+    @media (hover: hover) {
+      .cn-chip:not(.is-on):hover {
+        border-color: #131620;
+      }
+    }
+    .cn-count {
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: #61677a;
+      font-variant-numeric: tabular-nums;
+    }
+    .cn-bar .pausebtn {
+      margin-left: auto;
+    }
+    /* A card outside the set: `hidden` must win over the card's own display. */
+    .deck-card[hidden] {
+      display: none;
+    }
+    /* After a chip press only (never on the first paint): the rows of the new set rise into place. */
+    .cn-list.is-picked .caserow {
+      animation: construit-row-in 0.32s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: calc(var(--i, 0) * 40ms);
     }
 
     .wall-grid {
@@ -118,7 +188,9 @@
     .cn-link {
       padding-block: 12px;
     }
+    /* never shrinks: wrapped on two lines on phones, a squeezed row slid under the title (13/11) */
     .cn-meta {
+      flex-shrink: 0;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -654,65 +726,6 @@
     .bp-quotes .bp-quote.on {
       transition-delay: 0.16s;
     }
-    .bp-tr {
-      display: grid;
-      grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 0.6fr));
-      align-items: center;
-      gap: 8px;
-      height: 40px;
-      padding: 0 14px;
-      border-top: 1px solid #edeff4;
-      font-size: 13px;
-    }
-    .bp-tr.hd {
-      border-top: 0;
-      height: 34px;
-      font-family: var(--font-mono);
-      font-size: 10.5px;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: #61677a;
-    }
-    .bp-tr > span:not(:first-child) {
-      justify-self: center;
-    }
-    .bp-tr .ad {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-weight: 600;
-      opacity: 0;
-      transform: translateX(-8px);
-      transition:
-        opacity 0.3s,
-        transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
-    }
-    .bp-tr.in .ad {
-      opacity: 1;
-      transform: none;
-    }
-    .bp-mr {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      height: 40px;
-      padding: 0 12px;
-      border-top: 1px solid #edeff4;
-      font-size: 12.5px;
-      transition: background 0.3s;
-    }
-    .bp-mr.on {
-      background: #f8eed9;
-    }
-    .bp-mr .pdf {
-      margin-left: auto;
-      font-family: var(--font-mono);
-      font-size: 10.5px;
-      padding: 2px 6px;
-      border-radius: 5px;
-      background: #edeff4;
-      color: #61677a;
-    }
     .bp-sr {
       display: flex;
       align-items: center;
@@ -811,11 +824,12 @@
       .wall-grid {
         grid-template-columns: minmax(0, 1fr);
       }
+      /* room for the longest card text with its tag row on two lines, down to 320 px (13/11) */
       .deck-wrap {
-        height: 430px;
+        height: 478px;
       }
       .deck-card {
-        height: 400px;
+        height: 448px;
       }
       .bp-area {
         height: 176px;
@@ -828,10 +842,12 @@
   @media (prefers-reduced-motion: reduce) {
     .v2-construit {
       .bar,
-      .grow {
+      .grow,
+      .cn-list.is-picked .caserow {
         animation: none;
       }
-      .deck-card {
+      .deck-card,
+      .cn-chip {
         transition: none;
       }
       .bp-s,
@@ -841,8 +857,6 @@
       .bp-seat,
       .bp-seat path,
       .bp-seat circle,
-      .bp-tr .ad,
-      .bp-mr,
       .bp-sr,
       .bp-sr .st,
       .bp-c.mv,
@@ -872,6 +886,12 @@
     }
     to {
       transform: scaleX(1);
+    }
+  }
+  @keyframes construit-row-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
     }
   }
   @keyframes construit-wave {

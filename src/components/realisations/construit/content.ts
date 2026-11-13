@@ -1,11 +1,10 @@
 import { CashbackCard } from './cards/cashback'
 import { HeleneCard } from './cards/helene'
 import { InstitutCard } from './cards/institut'
-import { MaintenanceCard } from './cards/maintenance'
 import { NoesiaCard } from './cards/noesia'
 import { SeminaireCard } from './cards/seminaire'
 import { VoixCard } from './cards/voix'
-import type { BlueprintCard, CardKind, CardStage } from './types'
+import type { BlueprintCard, CardKind, CardStage, RealisationType } from './types'
 
 export const EYEBROW = 'Réalisations'
 export const TITLE = 'Exemples de réalisations.'
@@ -13,6 +12,26 @@ export const SUBTITLE = 'Plus de 20 clients accompagnés depuis 2025.'
 export const LIST_LABEL = 'Toutes les réalisations'
 export const PAUSE_LABEL = 'Mettre en pause'
 export const RESUME_LABEL = 'Reprendre le défilement'
+
+/** A chip of the filter row: every type, or one of them. */
+export type RealisationFilter = 'toutes' | RealisationType
+
+/**
+ * Copy deck B5 (US-108): `real.filter.group` names the row; `real.filter.1` to `.5` are the chip labels, which
+ * never change with the pressed state (WAI-ARIA button pattern); `real.list.label` names the list per chip.
+ */
+export const FILTER_GROUP_LABEL = 'Filtrer les réalisations'
+export const FILTERS: readonly { key: RealisationFilter; label: string; listLabel: string }[] = [
+  { key: 'toutes', label: 'Toutes', listLabel: LIST_LABEL },
+  { key: 'outils', label: 'Outils', listLabel: 'Réalisations : outils' },
+  { key: 'formations', label: 'Formations', listLabel: 'Réalisations : formations' },
+  { key: 'conferences', label: 'Conférences', listLabel: 'Réalisations : conférences' },
+  { key: 'sites', label: 'Sites', listLabel: 'Réalisations : sites' },
+]
+
+/** Copy deck B5 `real.status`: « {n} réalisations sur {total} », singular for one. */
+export const statusText = (n: number, total: number) =>
+  `${n} ${n === 1 ? 'réalisation' : 'réalisations'} sur ${total}`
 /** The band's sand drawing (charte « Sablier »); `/realisations` shows it in its page head instead. */
 export const ILLUSTRATION = '/illus/realisations-contour-nuit.webp'
 
@@ -34,10 +53,15 @@ export const CARD_LINKS: Partial<Record<CardKind, { href: string; label: string 
   noesia: { href: 'https://noesia.school', label: 'noesia.school' },
 }
 
-/** The wall, in the decided order: voice agents last, one card stays off. Figures: units/d4-cashback.md. */
+/**
+ * The wall, in the decided order: voice agents last. Figures: units/d4-cashback.md (recount of 26/10).
+ * Brice at VP2 (13/11): the maintenance card left; the cashback card is named for what was built and said
+ * in the past (the service stopped on 07/11); the voice card keeps « une vingtaine ».
+ */
 export const CARDS: BlueprintCard[] = [
   {
     kind: 'helene',
+    types: ['outils', 'sites'],
     panels: 2,
     lines: 5,
     lineStep: 550,
@@ -49,6 +73,7 @@ export const CARDS: BlueprintCard[] = [
   },
   {
     kind: 'site',
+    types: ['sites'],
     panels: 4,
     lines: 3,
     tags: 'Site',
@@ -59,28 +84,19 @@ export const CARDS: BlueprintCard[] = [
   },
   {
     kind: 'cash',
+    types: ['outils'],
     panels: 5,
     lines: 3,
     fig: { n: 699000, plus: true, unit: ' relevés' },
     tags: 'Application',
     icon: ICON.app,
-    sector: 'Une plateforme de cashback',
-    text: 'Les taux de ses concurrents, relevés chaque jour dans une application.',
+    sector: 'Plateforme de veille concurrentielle',
+    text: 'Pour une plateforme de cashback : les taux de ses concurrents, relevés chaque jour pendant huit mois dans une application.',
     Drawing: CashbackCard,
   },
   {
-    kind: 'maint',
-    panels: 2,
-    lines: 7,
-    lineStep: 420,
-    tags: 'Automatisation',
-    icon: ICON.zap,
-    sector: 'Une entreprise de maintenance du bâtiment',
-    text: "Les demandes d'intervention reçues par mail deviennent fiches, bons et factures, sans ressaisie.",
-    Drawing: MaintenanceCard,
-  },
-  {
     kind: 'noesia',
+    types: ['formations'],
     panels: 3,
     lines: 1,
     lineStep: 1000,
@@ -93,9 +109,11 @@ export const CARDS: BlueprintCard[] = [
   },
   {
     kind: 'seminar',
+    types: ['conferences', 'formations'],
     panels: 2,
     lines: 2,
-    tags: 'Formation',
+    /** The « matinée de sensibilisation » of proof line P-19 (adversarial review K6). */
+    tags: 'Séminaire',
     icon: ICON.cap,
     sector: 'Un cabinet de conseil en ingénierie',
     text: "Une matinée pour mettre l'IA générative entre les mains de son équipe.",
@@ -103,14 +121,20 @@ export const CARDS: BlueprintCard[] = [
   },
   {
     kind: 'voice',
+    types: ['outils'],
     panels: 2,
     lines: 6,
     lineStep: 500,
     fig: { n: 68, unit: ' rendez-vous pris en cinq mois' },
-    tags: 'Sur demande',
+    /**
+     * A past réalisation, no longer sold (« Agent vocal », not « Sur demande »); the 68 bookings as proof
+     * line P-8 states them: sector and period, no name (adversarial review K6, dir-4 and fai-4). « Une
+     * vingtaine … depuis 2024 » is Brice's own count (19/10, CAREER.md), kept at his word at VP2 (13/11).
+     */
+    tags: 'Agent vocal',
     icon: ICON.phone,
     sector: 'Agents vocaux',
-    text: 'Une vingtaine mis en service depuis 2024 : accueil téléphonique, rappels, prise de rendez-vous.',
+    text: "Une vingtaine mis en service depuis 2024 : accueil téléphonique, rappels, prise de rendez-vous. Les 68 rendez-vous : un agent sortant, dans l'investissement locatif clé en main, d'avril à août 2026.",
     muted: true,
     Drawing: VoixCard,
   },
@@ -129,10 +153,18 @@ export function figureText(card: BlueprintCard, f: number): string {
   return `${fmt(card.fig.n * e)}${card.fig.plus && e >= 1 ? '+' : ''}${card.fig.unit}`
 }
 
-/** Stack position of a card behind the front one: transform, opacity and z-order (mockup `cards`). */
+/** The cards a chip keeps, in the wall's order (`toutes` = the whole wall). */
+export const cardsFor = (filter: RealisationFilter): readonly BlueprintCard[] =>
+  filter === 'toutes' ? CARDS : CARDS.filter((c) => c.types.includes(filter))
+
+/**
+ * Stack position of a card behind the front one: transform, opacity and z-order (mockup `cards`), in a set of
+ * `n` cards. The last card of the stack is the one leaving (below, faded out) only when the stack has a third
+ * card: in a set of two the card behind is the next one, in a set of one the front card is alone.
+ */
 export function deckSlot(i: number, deck: number, n: number) {
   const o = (i - deck + n) % n
-  const out = o === n - 1
+  const out = n > 2 && o === n - 1
   return {
     active: o === 0,
     second: o === 1,

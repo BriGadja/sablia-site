@@ -1,7 +1,8 @@
-'use client' // the figures rise and the sand pours across the six half-days once, when they scroll in and the panel's slide is over
+'use client' // the figures rise and the sand pours across the six half-days once, when they scroll in and the band has settled
 
 import Link from 'next/link'
 import { type CSSProperties, type RefObject, useEffect, useRef, useState } from 'react'
+import { Dune } from '@/components/shell/Dune'
 import { Eyebrow } from '@/components/shell/Eyebrow'
 import { IllHead, SandIllustration } from '@/components/shell/SandIllustration'
 import { useInView } from '@/lib/hooks/useInView'
@@ -48,13 +49,14 @@ const WIDE = '(min-width: 901px)'
 
 const vars = (v: Record<string, string | number>) => v as CSSProperties
 
-/** How long the page must stay still before a stopped slide counts as finished. */
+/** How long the page must stay still before a stopped scroll counts as settled. */
 const STILL_MS = 400
 
 /**
- * True when the night panel's slide over the sticky hero is over: for good once its top has reached
- * the bottom of the sticky header (docked), or for now while the page has not scrolled for 400 ms (a
- * visitor who stops mid-slide). Phones have no slide (the hero is not sticky there): true at once.
+ * True when the band's arrival is over: for good once its top has reached the bottom of the sticky
+ * header (docked), or for now while the page has not scrolled for 400 ms (a visitor who stops on the
+ * way). It was written for the slide over the hero (the band's rank until US-104) and keeps the pour
+ * for a still page at any rank. Phones: true at once.
  */
 function useSlideOver(ref: RefObject<HTMLElement | null>): boolean {
   const [docked, setDocked] = useState(false)
@@ -157,9 +159,10 @@ function Arrow() {
 }
 
 /**
- * The offer, three days on site, on the night panel that slides over the hero: three figures, then
- * the six half-days as a bar the gold sand fills from the management's half-day to the closing one
- * (an hourglass laid flat, like the hour of `/webinaire`), once the panel's slide is over. Each caption sits
+ * The training, three days on site, on a night band (4th on the home since US-104, opened by its own
+ * dune): three figures, then the six half-days as a bar the gold sand fills from the management's
+ * half-day to the closing one (an hourglass laid flat, like the hour of `/webinaire`), once the band
+ * has docked under the header or the visitor has stopped scrolling. Each caption sits
  * under its own half-days and its label lights as the sand reaches them; on phones, where captions
  * stack, a six-cell locator says which half-days each covers. No price: the quote carries it.
  */
@@ -179,6 +182,7 @@ export function Offre() {
       data-zone="offre"
       aria-labelledby="offre-h2"
     >
+      <Dune back="#C68A8E" front="#161B29" />
       <div className="wrap">
         <IllHead>
           <div>

@@ -20,9 +20,13 @@ describe('site locality', () => {
   })
 })
 
-/** U13a: the tagline is the home's promise (01b `home.meta.title` without « · Sablia »), never the CRM agency. */
+/**
+ * US-104: the tagline is the home's title without « · Sablia » (copy deck B2 `home.tagline`): what
+ * Sablia does, for whom, where; never the CRM agency. `public/manifest.json` repeats it (its own test
+ * in scripts/seo/head-hygiene.test.mjs).
+ */
 describe('site tagline', () => {
-  it('says the training, not the CRM agency', () => {
-    expect(site.tagline).toBe("Formation à l'IA pour votre équipe, sur ses dossiers")
+  it('is the home title without « · Sablia »', () => {
+    expect(site.tagline).toBe("Outils d'IA et formation pour les PME, à Rouen")
   })
 })
