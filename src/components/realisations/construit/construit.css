@@ -185,7 +185,9 @@
     .cn-link {
       padding-block: 12px;
     }
+    /* never shrinks: wrapped on two lines on phones, a squeezed row slid under the title (13/11) */
     .cn-meta {
+      flex-shrink: 0;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -819,11 +821,12 @@
       .wall-grid {
         grid-template-columns: minmax(0, 1fr);
       }
+      /* room for the longest card text with its tag row on two lines, down to 320 px (13/11) */
       .deck-wrap {
-        height: 430px;
+        height: 478px;
       }
       .deck-card {
-        height: 400px;
+        height: 448px;
       }
       .bp-area {
         height: 176px;

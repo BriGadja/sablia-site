@@ -489,6 +489,22 @@ describe('filter by type (US-108)', () => {
   })
 })
 
+// V2 of 13/11: the voice card's text grew (« une vingtaine … depuis 2024 », Brice) and, on phones, the
+// tag row (tag + figure pill, wrapped on two lines) was the one flex item allowed to shrink: it slid under
+// the title. Measured in Chromium: the row needs 58 px and got 29; the voice text needs 38 px more at 320.
+describe('card layout on phones', () => {
+  const css = readFileSync(join(__dirname, 'construit.css'), 'utf8')
+  it('never squeezes the tag row under the title', () => {
+    expect(css.match(/\.cn-meta \{([^}]*)\}/)?.[1] ?? '').toMatch(/flex-shrink:\s*0/)
+  })
+  it('gives phone cards the room of the longest text, the deck following', () => {
+    const card = Number(css.match(/\.deck-card \{\s*height:\s*(\d+)px;\s*\}/)?.[1])
+    const wrap = Number(css.match(/\.deck-wrap \{\s*height:\s*(\d+)px;\s*\}/)?.[1])
+    expect(card).toBeGreaterThanOrEqual(448)
+    expect(wrap - card).toBe(30) // the room above the stack, unchanged (it was 430 / 400)
+  })
+})
+
 describe('touch target', () => {
   it('the noesia.school link carries cn-link, rel kept, with a 44 px hit area', () => {
     const { container } = render(<Construit />)
