@@ -95,6 +95,14 @@ test('ai.txt: the description says what Sablia does today, never the CRM agency 
     .split('\n')
     .find((l) => l.startsWith('description: '))
   assert.match(desc ?? '', /^description: Sablia met l'IA en place/)
+  // US-111: same validated wording as llms.txt and the structured data (build, train, maintain).
+  assert.ok(
+    (desc ?? '').includes("construit les outils, forme l'équipe et entretient ce qui tourne"),
+    'ai.txt description says what Sablia does',
+  )
+  assert.ok(
+    PUBLIC('llms.txt').includes("construit les outils, forme l'équipe et entretient ce qui tourne"),
+  )
   assert.doesNotMatch(desc ?? '', RETIRED)
   assert.doesNotMatch(desc ?? '', GONE)
 })
