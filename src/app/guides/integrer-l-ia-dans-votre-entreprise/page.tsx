@@ -10,7 +10,7 @@ import { pageMetadata, SITE_ORIGIN } from '@/lib/seo'
 const PATH = '/guides/integrer-l-ia-dans-votre-entreprise'
 const TITLE = "Comment intégrer l'IA dans votre entreprise : le guide PME 2026"
 const DESCRIPTION =
-  "Méthode concrète pour intégrer l'IA dans une PME : par où commencer, les cas d'usage les plus rentables, budget, délais, sécurité RGPD et erreurs à éviter. Par Sablia, agence d'intégration Claude AI."
+  "Méthode concrète pour intégrer l'IA dans une PME : par où commencer, les cas d'usage les plus rentables, budget, délais, sécurité RGPD et erreurs à éviter. Par Sablia, formation à l'IA pour votre équipe."
 
 export const metadata = pageMetadata({ path: PATH, title: TITLE, description: DESCRIPTION })
 
@@ -19,11 +19,11 @@ const budget = `Une offre cadrée est affichée à ${eurHt(of1.price.oneShotHt)}
 const FAQ = [
   {
     q: "Par où commencer pour intégrer l'IA dans une PME ?",
-    a: "Par un audit, pas par un outil. On cartographie d'abord les tâches répétitives qui pèsent sur vos équipes, puis on automatise les deux ou trois qui ont le meilleur retour. Acheter un logiciel avant d'avoir identifié le problème est la première cause d'échec.",
+    a: "Par un état des lieux, pas par un outil. On cartographie d'abord les tâches répétitives qui pèsent sur vos équipes, puis on automatise les deux ou trois qui ont le meilleur retour.",
   },
   {
     q: "Faut-il changer de CRM ou de logiciels pour utiliser l'IA ?",
-    a: "Non. L'IA se branche sur votre outil existant — Salesforce, HubSpot, Pipedrive, Zoho. Vous conservez votre stack et vos habitudes ; c'est la couche d'automatisation qui s'ajoute par-dessus.",
+    a: "Non. L'IA se branche sur votre outil existant : Salesforce, HubSpot, Pipedrive, Zoho. Vous conservez votre stack et vos habitudes ; c'est la couche d'automatisation qui s'ajoute par-dessus.",
   },
   {
     q: 'Combien de temps avant un premier résultat ?',
@@ -44,7 +44,7 @@ const articleSchema = {
     "Méthode concrète pour intégrer l'intelligence artificielle dans une PME : par où commencer, les cas d'usage les plus rentables, budget, délais, sécurité RGPD et erreurs à éviter.",
   inLanguage: 'fr-FR',
   datePublished: '2026-06-18',
-  dateModified: '2026-06-18',
+  dateModified: '2026-11-12',
   author: { '@type': 'Organization', name: 'Sablia', url: SITE_ORIGIN },
   publisher: { '@type': 'Organization', name: 'Sablia', '@id': `${SITE_ORIGIN}/#organization` },
   mainEntityOfPage: `${SITE_ORIGIN}${PATH}`,
@@ -73,11 +73,11 @@ export default function GuidePage() {
         folio="Guide · Intégration IA"
         title="Comment intégrer l'IA dans votre entreprise"
         intro="Intégrer l'intelligence artificielle dans une PME, ce n'est pas empiler un outil de plus. C'est repérer les tâches qui freinent vos équipes, puis automatiser les bonnes — sans casser ce qui fonctionne déjà. Voici la méthode que nous appliquons chez Sablia."
-        updated="Dernière mise à jour : 18/06/2026."
+        updated="Dernière mise à jour : 12/11/2026."
       >
         <LegalSection title="En bref">
           <ul>
-            <li>Commencez par un audit des tâches, pas par l'achat d'un outil.</li>
+            <li>Commencez par un état des lieux des tâches, pas par l'achat d'un outil.</li>
             <li>
               Ciblez d'abord les cas d'usage à fort retour : reporting commercial, relances
               automatisées, analyse des appels.
@@ -91,17 +91,15 @@ export default function GuidePage() {
           </ul>
         </LegalSection>
 
-        <LegalSection title="1. Commencez par un audit, pas par un outil">
+        <LegalSection title="1. Commencez par un état des lieux, pas par un outil">
           <p>
-            La majorité des projets IA échouent parce qu'ils démarrent par la question « quel outil
-            acheter ? » au lieu de « quel problème résoudre ? ». L'intelligence artificielle n'a de
-            valeur que branchée sur une tâche précise, mesurable et répétée.
+            L'intelligence artificielle n'a de valeur que branchée sur une tâche précise, mesurable
+            et répétée.
           </p>
           <p>
             La première étape est donc une cartographie : lister les tâches chronophages de vos
             équipes, estimer le temps qu'elles consomment, et repérer celles qui suivent des règles
-            claires. Ce sont les meilleures candidates à l'automatisation. Un audit d'une
-            demi-journée suffit souvent à dégager deux ou trois chantiers à fort retour.
+            claires. Ce sont les meilleures candidates à l'automatisation.
           </p>
         </LegalSection>
 
@@ -179,10 +177,9 @@ export default function GuidePage() {
         <LegalSection title="Par où commencer concrètement">
           <p>
             La façon la plus rapide de savoir si l'IA peut vous faire gagner du temps est d'en
-            parler à quelqu'un qui en intègre au quotidien. Sablia propose un call audit gratuit de
-            30 minutes : on regarde vos processus, on identifie les deux ou trois automatisations
-            les plus rentables pour vous, et vous repartez avec une vision claire — engagement ou
-            pas.
+            parler à quelqu'un qui en intègre au quotidien. Sablia propose un échange gratuit de 30
+            minutes, sans engagement : vous parlez de vos processus et de ce que vous avez déjà
+            essayé, on vous dit par où commencer.
           </p>
           <p className="v2-legal-cta">
             <Cta size="lg" arrow />

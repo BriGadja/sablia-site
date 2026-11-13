@@ -5,17 +5,18 @@ Lower is better. Opens the page in its OWN headless Chromium (never the shared C
 390x844 and counts the reviewers' recurring findings as deterministic checks; contrast runs `contrast.py` in a
 subprocess (1440 only, like the original) and counts each failing pair x3.
 Usage: score.py PAGE [--base URL] [--max N] [--out DIR]
-  PAGE = home (/) | form (/formations) | acc (/accompagnement); --base defaults to the preview slot http://127.0.0.1:5001.
+  PAGE = home (/) | form (/formations) | offre (/responsable-ia-externalise) | conf (/conferences) | real (/realisations) | crm (/offres/compte-rendu-appel); --base defaults to the preview slot http://127.0.0.1:5001.
 Prints `defects: N` then one `check: value` line per check; writes DIR/score-PAGE.json.
 Exit 1 when defects > --max (default 0); the original always exited 0.
-`cause_before_effect` and `offscreen_payoff` read the Accompagnement timeline (`#parcours .tl-line i`, `.tl-step`,
-`.tl-dot`, `.on` class): on `acc`, a page without any `.tl-step` counts 1 defect (`timeline_missing`) instead of a silent 0.
+The first-screen check of `home` looks for what Sablia does today in the first two screens at 1440 (copy deck B2 `home.qa.firstscreens`):
+the name of the monthly offer ("responsable ia externalisé", the first hero door), two words of the h1 ("votre équipe formée") and
+the monthly block ("un outil de plus", `#mensuel`).
 """
 import argparse, asyncio, json, re, subprocess, sys
 from pathlib import Path
 from playwright.async_api import async_playwright
 
-PATHS = {"home": "/", "form": "/formations", "acc": "/accompagnement"}
+PATHS = {"home": "/", "form": "/formations", "offre": "/responsable-ia-externalise", "conf": "/conferences", "real": "/realisations", "crm": "/offres/compte-rendu-appel"}
 HERE = Path(__file__).resolve().parent
 
 JS_COMMON = r"""() => {
@@ -74,12 +75,6 @@ JS_SCREEN = r"""() => {
   return t.join(' ');
 }"""
 
-JS_TL = r"""() => {
-  const line = document.querySelector('#parcours .tl-line i'); const L = line ? line.getBoundingClientRect() : null;
-  return [...document.querySelectorAll('#parcours .tl-step')].map(s => { const d = s.querySelector('.tl-dot'); const r = (d || s).getBoundingClientRect();
-    return { on: s.classList.contains('on'), cy: r.top + r.height / 2, top: r.top, bottom: r.bottom, lineBottom: L ? L.bottom : null, vh: innerHeight }; });
-}"""
-
 async def run(a):
     res = {}
     url = a.base.rstrip("/") + PATHS[a.page]
@@ -100,24 +95,7 @@ async def run(a):
                             await page.wait_for_timeout(1500)
                             seen += await page.evaluate(JS_SCREEN)
                         norm = seen.replace(" ", " ").replace(" ", " ").lower()
-                        res["first_screens_missing"] = [s for s in ("1 490", "rembours", "Brice") if s.lower() not in norm]
-                    if a.page == "acc" and w == 1440:
-                        if not await page.locator("#parcours .tl-step").count():
-                            res["timeline_missing"] = 1
-                        else:
-                            await page.locator("#parcours").first.evaluate("e => e.scrollIntoView({block: 'start'})")
-                            early, offscreen, was_on = set(), set(), set()
-                            for _ in range(80):
-                                await page.wait_for_timeout(100)
-                                for i, s in enumerate(await page.evaluate(JS_TL)):
-                                    if s["on"] and i not in was_on:
-                                        was_on.add(i)
-                                        if s["bottom"] < 0 or s["top"] > s["vh"]:
-                                            offscreen.add(i)
-                                    if s["on"] and s["lineBottom"] is not None and s["cy"] > s["lineBottom"] + 6:
-                                        early.add(i)
-                            res["cause_before_effect"] = sorted(early)
-                            res["offscreen_payoff"] = sorted(offscreen)
+                        res["first_screens_missing"] = [s for s in ("responsable ia externalisé", "votre équipe formée", "un outil de plus") if s.lower() not in norm]
                 finally:
                     await ctx.close()
         finally:
@@ -130,9 +108,6 @@ async def run(a):
     d, W = res["w1440"], res["w390"]
     checks = {
         "first_screens": len(res.get("first_screens_missing", [])),
-        "cause_before_effect": len(res.get("cause_before_effect", [])),
-        "offscreen_payoff": len(res.get("offscreen_payoff", [])),
-        "timeline_missing": res.get("timeline_missing", 0),
         "empty_bands": len(d["bands"]),
         "phone_header": int(W["header_h"] > 0.15 * W["vh"]),
         "truncated": len(d["truncated"]) + len(W["truncated"]) + len(d["orphan_dot"]) + len(W["orphan_dot"]),

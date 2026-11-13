@@ -1,0 +1,142 @@
+@layer theme, base, components, utilities;
+
+/* #qui of /responsable-ia-externalise: the home's portrait in its offset gold frame on the left, the
+   name and one paragraph on the right; on phones the portrait sits under the name. */
+@layer components {
+  .v2-tp-qui {
+    position: relative;
+    background: #f4ecdd;
+    padding: 88px 0 160px;
+    color: #131620;
+
+    .tpq-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+      gap: 88px;
+      align-items: center;
+    }
+    .tpq-portrait {
+      position: relative;
+      margin: 0 14px 14px 0;
+      min-width: 0;
+
+      /* the gold passe-partout, offset behind the photo (the home's portrait frame) */
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 14px -14px -14px 14px;
+        border: 1.5px solid #b9852a;
+        border-radius: 26px;
+      }
+      img {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4 / 5;
+        object-fit: cover;
+        border-radius: 24px;
+        background: #efe3cc;
+        clip-path: inset(0 0 0 0 round 24px);
+      }
+    }
+    .tpq-copy {
+      min-width: 0;
+      max-width: 36em;
+    }
+    h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .tpq-text {
+      margin: 24px 0 0;
+      font-size: 20px;
+      line-height: 1.6;
+      color: #3a3f4d;
+      text-wrap: pretty;
+    }
+    .tpq-school {
+      color: #131620;
+      text-decoration: underline;
+      text-decoration-color: #b9852a;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 4px;
+      /* 24 px hit area for a link inside a sentence: block padding enlarges the rect, no text moves */
+      padding-block: 4px;
+
+      &:hover {
+        color: #835a0c;
+      }
+    }
+
+    /* Entrance, armed after hydration only below the fold (useArmedReveal): the photo uncovers from
+       the bottom, then the frame slides into its offset. The text does not move. */
+    &[data-reveal='armed'] .tpq-portrait {
+      img {
+        clip-path: inset(100% 0 0 0 round 24px);
+      }
+      &::before {
+        transform: translate(-14px, -14px);
+        opacity: 0;
+      }
+    }
+    &[data-reveal='in'] .tpq-portrait {
+      img {
+        transition: clip-path 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+      &::before {
+        transition:
+          transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.35s,
+          opacity 0.4s ease 0.35s;
+      }
+    }
+
+    @media (max-width: 900px) {
+      padding: 72px 0 128px;
+
+      .tpq-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+      }
+      .tpq-portrait {
+        order: 2;
+        margin: 0 10px 10px 0;
+        max-width: 420px;
+
+        &::before {
+          inset: 10px -10px -10px 10px;
+          border-radius: 22px;
+        }
+        img {
+          aspect-ratio: 1 / 1.05;
+          object-position: 50% 14%;
+          border-radius: 20px;
+          clip-path: inset(0 0 0 0 round 20px);
+        }
+      }
+      &[data-reveal='armed'] .tpq-portrait img {
+        clip-path: inset(100% 0 0 0 round 20px);
+      }
+      .tpq-copy {
+        order: 1;
+      }
+      h2 {
+        font-size: 28px;
+      }
+      .tpq-text {
+        font-size: 16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tpq-portrait img,
+      .tpq-portrait::before {
+        transition: none !important;
+      }
+    }
+  }
+}

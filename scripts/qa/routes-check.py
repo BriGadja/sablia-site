@@ -3,10 +3,11 @@
 
 Expected, no redirect followed:
   200  every non-draft route of scripts/seo/routes.mjs (resolveRoutes), every <loc> of /sitemap.xml, the v2 pages
-       (/formations, /accompagnement) and the static extras (/sitemap.xml /robots.txt /llms.txt, the IndexNow key file,
+       (/formations) and the static extras (/sitemap.xml /robots.txt /llms.txt, the IndexNow key file,
        /.well-known/ai.txt, /favicon.svg, /brand/symbol.svg, /escalier-modeles, /cgv/, /index.html)
-  301  /roi and /about (with a Location header)
-  404  /nimporte-quoi, /assets/x.js, /ressources/__none, /api/nope
+  301  /roi, /about, /lettre, /responsable-ia-temps-partage and /accompagnement (with a Location header; the last two
+       must point at /responsable-ia-externalise, REDIRECT_TO)
+  404  /nimporte-quoi, /assets/x.js, /ressources/__none, /lettre/__none, /api/nope
 Usage: routes-check.py [--base URL]   (default: the preview slot http://127.0.0.1:5001)
 Exit 0 when every row matches, 1 otherwise (one line per row, FAIL rows first-class), 2 when the route manifest cannot be read.
 """
@@ -15,9 +16,11 @@ from pathlib import Path
 
 W = Path(__file__).resolve().parents[2]
 STATIC_200 = ["/sitemap.xml", "/robots.txt", "/llms.txt", "/b726ffc356cf2894abdd81a5a309a181.txt", "/.well-known/ai.txt",
-              "/favicon.svg", "/brand/symbol.svg", "/escalier-modeles", "/cgv/", "/index.html", "/formations", "/accompagnement"]
-REDIRECT_301 = ["/roi", "/about"]
-NOT_FOUND_404 = ["/nimporte-quoi", "/assets/x.js", "/ressources/__none", "/api/nope"]
+              "/favicon.svg", "/brand/symbol.svg", "/escalier-modeles", "/cgv/", "/index.html", "/formations"]
+REDIRECT_301 = ["/roi", "/about", "/lettre", "/responsable-ia-temps-partage", "/accompagnement"]
+# Rows whose Location is compared, not only required (US-105, US-106: the monthly offer's old addresses).
+REDIRECT_TO = {"/responsable-ia-temps-partage": "/responsable-ia-externalise", "/accompagnement": "/responsable-ia-externalise"}
+NOT_FOUND_404 = ["/nimporte-quoi", "/assets/x.js", "/ressources/__none", "/lettre/__none", "/api/nope"]
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -67,7 +70,7 @@ def main():
     bad = 0
     for path, want in rows.items():
         got, loc, _ = fetch(base + path)
-        ok = got == want and (want != 301 or bool(loc))
+        ok = got == want and (want != 301 or (loc == REDIRECT_TO[path] if path in REDIRECT_TO else bool(loc)))
         bad += not ok
         print(f"{'ok  ' if ok else 'FAIL'} {path} want {want} got {got}" + (f" -> {loc}" if got in (301, 302, 308) or got == 0 else ""))
     print(f"routes-check: {len(rows) - bad}/{len(rows)} rows match")

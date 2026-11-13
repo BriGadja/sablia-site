@@ -2,21 +2,29 @@
 // before the sitemap. Replaces the prerender-time checks of the Vite era: the pages are now real
 // build output, so this walks the HTML files and fails the build on anything a crawler or a visitor
 // would trip over. Pure `checkExport`/`checkOrganizationJsonLd` (tested on fixtures); the CLI only
-// loads the routes, the published resources and the files.
+// loads the routes, the published resources, the published issues of the letter and the files.
 //   node scripts/seo/export-guards.mjs [dir]      (default dist/public)
-// Strict mode: `listPublishedSlugs` throws on a Supabase failure (or a missing key when
-// PRERENDER_STRICT/VERCEL is set), so a deploy never bakes an « unavailable » page.
+// Strict mode: `listPublishedSlugs` and `listPublishedLettres` throw on a Supabase failure (or a
+// missing key when PRERENDER_STRICT/VERCEL is set), so a deploy never bakes an « unavailable » page.
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { assertCleanStaticHtml } from './prerender-guards.mjs'
-import { assertRessourceHtml, extractFromHtml, listPublishedSlugs } from './ressources.mjs'
+import {
+  assertLettreHtml,
+  assertRessourceHtml,
+  extractFromHtml,
+  listPublishedLettres,
+  listPublishedSlugs,
+} from './ressources.mjs'
 import { resolveRoutes } from './routes.mjs'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..')
 const ORIGIN = 'https://sablia.io'
 const ORG_ID = `${ORIGIN}/#organization`
 const RESSOURCES = '/ressources'
+const LETTRE = '/lettre'
+const NEWSLETTER = '/newsletter'
 
 // Pages that are not routes: Next's own 404 (no canonical, no h1 by design) and the standalone
 // file served from public/.
@@ -57,15 +65,17 @@ const hrefs = (html) => [...stripBlocks(html).matchAll(/href="([^"]*)"/gi)].map(
 
 /**
  * Returns the list of problems (empty = the export is clean).
- * `routes` = resolveRoutes() rows, `rows` = the published resources (slug, titre, resume, youtube_id).
+ * `routes` = resolveRoutes() rows, `rows` = the published resources (slug, titre, resume, youtube_id),
+ * `lettres` = the published issues of the letter (the rows of `listPublishedLettres`).
  */
-export function checkExport({ dir, routes, rows }) {
+export function checkExport({ dir, routes, rows, lettres = [] }) {
   const problems = []
   const files = existsSync(dir) ? walk(dir) : []
   if (files.length === 0) return [`no html found under ${dir}`]
 
   const byPath = new Map(routes.map((r) => [r.path, r]))
   const slugs = new Set(rows.map((r) => r.slug))
+  const issues = new Set(lettres.map((l) => l.slug))
   const pageOf = (path) => (path === '/' ? 'index.html' : `${path.slice(1)}.html`)
   const read = (file) => readFileSync(join(dir, file), 'utf8')
 
@@ -80,8 +90,9 @@ export function checkExport({ dir, routes, rows }) {
 
     const path = routeOfFile(file)
     const isSlug = path.startsWith(`${RESSOURCES}/`) && slugs.has(path.slice(RESSOURCES.length + 1))
+    const isIssue = path.startsWith(`${LETTRE}/`) && issues.has(path.slice(LETTRE.length + 1))
     const route = byPath.get(path)
-    if (!route && !isSlug) {
+    if (!route && !isSlug && !isIssue) {
       problems.push(`${path} (${file}): built page that routes.mjs does not list`)
       continue
     }
@@ -143,6 +154,33 @@ export function checkExport({ dir, routes, rows }) {
     }
   }
 
+  for (const lettre of lettres) {
+    const path = `${LETTRE}/${lettre.slug}`
+    const file = pageOf(path)
+    if (!files.includes(file)) {
+      problems.push(`${path}: published issue without its page (${file} missing)`)
+      continue
+    }
+    const html = read(file)
+    const page = stripBlocks(html)
+    const dom = extractFromHtml(page)
+    if (!/<main\b/i.test(page)) dom.text = ''
+    dom.html = html
+    try {
+      assertLettreHtml(dom, lettre)
+    } catch (err) {
+      problems.push(err.message)
+    }
+  }
+
+  if (lettres.length > 0 && files.includes(pageOf(NEWSLETTER))) {
+    const listed = new Set(hrefs(read(pageOf(NEWSLETTER))))
+    for (const lettre of lettres) {
+      if (!listed.has(`${LETTRE}/${lettre.slug}`))
+        problems.push(`${NEWSLETTER}: does not list ${lettre.slug}`)
+    }
+  }
+
   if (files.includes('index.html')) {
     const ids = new Map(rows.filter((r) => r.youtube_id).map((r) => [r.youtube_id, r.slug]))
     for (const href of hrefs(read('index.html'))) {
@@ -179,6 +217,10 @@ export function checkOrganizationJsonLd(html) {
     if (/30 jours/i.test(raw)) problems.push('organization JSON-LD still claims « 30 jours »')
     if (/dashboards intelligents/i.test(raw))
       problems.push('organization JSON-LD still sells « dashboards intelligents »')
+    if (/intégration de Claude dans les CRM|Claude AI × CRM/i.test(raw))
+      problems.push(
+        'organization JSON-LD still says the CRM-integration agency (the site sells the training first)',
+      )
   }
   return problems
 }
@@ -186,13 +228,14 @@ export function checkOrganizationJsonLd(html) {
 async function main(argv) {
   const dir = resolve(argv[0] ?? join(ROOT, 'dist', 'public'))
   const rows = await listPublishedSlugs()
-  const problems = checkExport({ dir, routes: resolveRoutes({ root: ROOT }), rows })
+  const lettres = await listPublishedLettres()
+  const problems = checkExport({ dir, routes: resolveRoutes({ root: ROOT }), rows, lettres })
   const home = join(dir, 'index.html')
   if (existsSync(home))
     problems.push(...checkOrganizationJsonLd(readFileSync(home, 'utf8')).map((p) => `home: ${p}`))
   for (const p of problems) console.error(`[export-guards] ${p}`)
   console.log(
-    `[export-guards] ${problems.length === 0 ? 'ok' : `${problems.length} problem(s)`} (${rows.length} resource page(s) expected) in ${dir}`,
+    `[export-guards] ${problems.length === 0 ? 'ok' : `${problems.length} problem(s)`} (${rows.length} resource page(s), ${lettres.length} issue page(s) expected) in ${dir}`,
   )
   return problems.length === 0 ? 0 : 1
 }

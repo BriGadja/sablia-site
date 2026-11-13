@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import type { RessourceSummary } from '@/lib/contenu'
+import * as content from './content'
 import { resolveTiles, TILES } from './content'
 import { Videos, VideosView } from './index'
 
@@ -89,6 +90,28 @@ describe('VideosView', () => {
   it('carries no em dash', () => {
     const { container } = render(<VideosView tiles={tiles} />)
     expect(container.textContent).not.toMatch(/—/)
+  })
+
+  // US-104 (plan sablia-site-structure-offre E7, copy deck B2 `home.videos.*`): the band also opens
+  // the Réalisations door and says custom builds exist; the YouTube channel link stays on the home
+  // (the analytics end-to-end clicks it).
+  it('opens /realisations from its head, in the same tab, with the line « Un besoin précis ? »', () => {
+    const { container } = render(<VideosView tiles={tiles} />)
+    const head = container.querySelector('#videos .vd-head') as HTMLElement
+    expect(head.textContent).toContain('Un besoin précis ? Je construis aussi à la demande.')
+    const real = head.querySelector('a[href="/realisations"]')
+    expect(real?.textContent).toContain('Voir les réalisations')
+    expect(real?.getAttribute('target')).toBeNull()
+    expect(real?.hasAttribute('data-next-link')).toBe(true)
+    expect(head.querySelector('a[href^="https://www.youtube.com/channel/"]')).not.toBeNull()
+  })
+
+  it('its strings carry no amount (the band is outside the price guard list)', () => {
+    const strings = (Object.values(content) as unknown[]).filter(
+      (v): v is string => typeof v === 'string',
+    )
+    expect(strings).toContain('Un besoin précis ? Je construis aussi à la demande.')
+    for (const s of strings) expect(s).not.toMatch(/\d[\d\s\u00a0.,]*\s?(€|euros?)/i)
   })
 })
 

@@ -28,14 +28,18 @@ export const PAGE_ROUTES = [
       `${A}/page.tsx`,
       `${A}/home-metadata.ts`,
       `${H}/HomePage.tsx`,
+      // The home's bands in page order (US-104, plan sablia-site-structure-offre). `scene` lives on the
+      // CRM offer page, `construit` on /realisations and `apres` gave way to `mensuel`: none dates the home.
       ...[
         'top',
-        'scene',
+        'mensuel',
         'automatisations',
-        'construit',
+        'offre',
         'formations',
-        'derriere',
+        'conferences',
         'videos',
+        'derriere',
+        'webinaire',
         'faq',
       ].map((id) => `${H}/${id}/`),
       // #fin is the shell's FinBand; its home copy lives in faq/content.ts (FIN_BAND).
@@ -45,6 +49,14 @@ export const PAGE_ROUTES = [
     priority: 1.0,
   },
   {
+    // The wall of realisations that left the home (#construit, moved under src/components/realisations/).
+    path: '/realisations',
+    sources: [`${A}/realisations/`, 'src/components/realisations/'],
+    indexable: true,
+    changefreq: 'monthly',
+    priority: 0.7,
+  },
+  {
     path: '/formations',
     sources: [`${A}/formations/`, 'src/components/formations/'],
     indexable: true,
@@ -52,11 +64,22 @@ export const PAGE_ROUTES = [
     priority: 0.8,
   },
   {
-    path: '/accompagnement',
-    sources: [`${A}/accompagnement/`, 'src/components/accompagnement/'],
+    // Talks and seminars on request (US-107), price on quote; reached from the menu and the home.
+    path: '/conferences',
+    sources: [`${A}/conferences/`, 'src/components/conferences/'],
     indexable: true,
     changefreq: 'monthly',
     priority: 0.8,
+  },
+  {
+    // The monthly offer « Responsable IA externalisé » (US-99, renamed by US-105 on 12/11), price
+    // shown; outside /offres/** on purpose (header-cta.ts gives every /offres/** route the CRM
+    // Calendly). Its old address and /accompagnement answer 301 here (server/static.ts).
+    path: '/responsable-ia-externalise',
+    sources: [`${A}/responsable-ia-externalise/`, 'src/components/temps-partage/'],
+    indexable: true,
+    changefreq: 'monthly',
+    priority: 0.9,
   },
   {
     path: '/mentions-legales',
@@ -123,6 +146,35 @@ export const PAGE_ROUTES = [
     changefreq: 'weekly',
     priority: 0.8,
   },
+  {
+    path: '/newsletter',
+    // The list of issues (#numeros) takes its strings and dates from the letter's module (US-102).
+    sources: [
+      `${A}/newsletter/`,
+      'src/components/newsletter/',
+      'src/components/lettre/content.ts',
+      'src/components/lettre/date.ts',
+    ],
+    indexable: true,
+    changefreq: 'monthly',
+    priority: 0.6,
+  },
+  {
+    // Webinar registration (plan webinaire-bureaux-etudes-2026-11-01, US-86); copy in one module.
+    path: '/webinaire',
+    sources: [`${A}/webinaire/page.tsx`, `${C}/webinaire.ts`, 'src/components/webinaire/'],
+    indexable: true,
+    changefreq: 'weekly',
+    priority: 0.7,
+  },
+  ...['merci', 'apres-reservation', 'questionnaire'].map((slug) => ({
+    // Built (each page emits noindex) but kept out of the sitemap (US-86, US-88, US-90).
+    path: `/webinaire/${slug}`,
+    sources: [`${A}/webinaire/${slug}/`, `${C}/webinaire.ts`],
+    indexable: false,
+    changefreq: 'yearly',
+    priority: 0.1,
+  })),
   {
     // Built (the page emits noindex) but kept out of the sitemap.
     path: '/thank-you',

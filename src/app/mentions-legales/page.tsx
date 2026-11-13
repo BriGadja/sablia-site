@@ -1,10 +1,11 @@
 import { LegalPage, LegalSection } from '@/components/legal/LegalPage'
+import { NDA_LINE, PHOTO_CREDIT } from '@/content/declaration'
 import { pageMetadata } from '@/lib/seo'
 import { site } from '@/lib/site'
 
 export const metadata = pageMetadata({
   path: '/mentions-legales',
-  title: 'Mentions légales — Sablia',
+  title: 'Mentions légales · Sablia',
   description:
     'Mentions légales du site Sablia.io. Informations légales, hébergement, propriété intellectuelle.',
 })
@@ -15,7 +16,7 @@ export default function MentionsLegalesPage() {
       folio="Mentions · légales"
       title="Mentions légales"
       intro="Informations exigées par l'article 6-III de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique (LCEN)."
-      updated="Dernière mise à jour : 20/04/2026."
+      updated="Dernière mise à jour : 01/11/2026."
     >
       <LegalSection title="Éditeur du site">
         <p>Le site {site.domain} est édité par :</p>
@@ -26,13 +27,17 @@ export default function MentionsLegalesPage() {
           <li>SIRET : 94090112700016</li>
           <li>Adresse du siège : 60 rue François Ier, 75008 Paris, France</li>
           <li>Date d'immatriculation : 24/02/2025</li>
-          <li>Code APE : 6201Z — Programmation informatique</li>
+          <li>Code APE : 6201Z (Programmation informatique)</li>
           <li>
             Activité : conseil, diagnostic, formation, accompagnement et développement
             d'automatisations et d'agents IA
           </li>
           <li>Nom commercial : Sablia</li>
         </ul>
+      </LegalSection>
+
+      <LegalSection title="Formation professionnelle">
+        <p>{NDA_LINE}</p>
       </LegalSection>
 
       <LegalSection title="Responsable de la publication">
@@ -51,11 +56,15 @@ export default function MentionsLegalesPage() {
 
       <LegalSection title="Propriété intellectuelle">
         <p>
-          L'ensemble du contenu présent sur {site.domain} — textes, illustrations, logo, composition
-          typographique — est la propriété exclusive de GACHADOAT Brice ou de ses partenaires. Toute
+          L'ensemble du contenu présent sur {site.domain} (textes, illustrations, logo, composition
+          typographique) est la propriété exclusive de GACHADOAT Brice ou de ses partenaires. Toute
           reproduction, représentation ou exploitation sans autorisation écrite préalable est
           strictement interdite.
         </p>
+      </LegalSection>
+
+      <LegalSection title="Crédits">
+        <p>{PHOTO_CREDIT}.</p>
       </LegalSection>
 
       <LegalSection title="Liens et marques tierces">

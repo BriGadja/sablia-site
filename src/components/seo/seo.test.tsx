@@ -1,6 +1,7 @@
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import { of1 } from '@/content/of1'
+import { site } from '@/lib/site'
 import { BreadcrumbJsonLd } from './BreadcrumbJsonLd'
 import { JsonLd, serializeJsonLd } from './JsonLd'
 import { OrganizationJsonLd } from './OrganizationJsonLd'
@@ -36,27 +37,73 @@ describe('OrganizationJsonLd', () => {
     expect(org.email).toBe('brice@sablia.io')
   })
 
-  it('states the 7-day promise and none of the retired claims', () => {
-    expect(org.description).toContain('7 jours')
-    expect(html).not.toMatch(/30 jours/i)
-    expect(html).not.toMatch(/dashboards intelligents/i)
+  // US-100: Rouen without a street (the registered office stays on the legal pages only).
+  it('the address is Rouen without a street, areaServed names Normandie and France', () => {
+    expect(org.address.addressLocality).toBe('Rouen')
+    expect(org.address.addressRegion).toBe('Normandie')
+    expect(org.address.addressCountry).toBe('FR')
+    expect(org.address).not.toHaveProperty('streetAddress')
+    expect(org.address).not.toHaveProperty('postalCode')
+    const areas = org.areaServed as { name: string }[]
+    expect(areas.map((a) => a.name)).toEqual(['Normandie', 'France'])
   })
 
-  it('offers the catalogue v1: OF-1 priced from of1.ts, voice agents and custom CRM without a price', () => {
+  // US-111 (plan sablia-site-structure-offre I1, copy deck B6 `org.*`): every page carries this block,
+  // so it says what Sablia does today: the monthly offer first, then the training, then the shorter
+  // formats and the conferences on request. The webinar is one dated session: it has no place here.
+  it('says what Sablia does today: the monthly offer, the training, the conferences on request', () => {
+    expect(org.alternateName).toBe(
+      `Sablia, ${site.tagline.charAt(0).toLowerCase()}${site.tagline.slice(1)}`,
+    )
+    expect(org.description).toMatch(/^Sablia met l'IA en place/)
+    expect(org.description).toContain('un responsable IA externalisé au mois')
+    expect(org.description).toContain(
+      "construit les outils, forme l'équipe et entretient ce qui tourne",
+    )
+    expect(org.description).toContain('trois jours')
+    expect(org.description).toContain('Claude')
+    expect(org.description).toContain('conférences, sur demande')
+    expect(org.description).not.toMatch(/webinaire/i)
+    expect(org.serviceType).toEqual([
+      'Responsable IA externalisé',
+      "Formation à l'IA en entreprise",
+      "Conférences et séminaires sur l'IA",
+      'Intégration de Claude dans le CRM',
+      'Automatisation des processus commerciaux',
+    ])
+  })
+
+  it('is no longer the CRM-integration agency and carries none of the retired claims', () => {
+    expect(html).not.toMatch(/dans les CRM|× CRM|agence/i)
+    expect(html).not.toMatch(/30 jours/i)
+    expect(html).not.toMatch(/dashboards intelligents/i)
+    expect(html).not.toContain('"Event"')
+    // US-106: the « Référent IA » is no longer an offer; US-105: the old name of the monthly offer.
+    expect(html).not.toMatch(/référent|2 h par mois|temps partagé/i)
+  })
+
+  it('catalogue: the monthly offer, the training, the conferences, the CRM offer; only the CRM offer priced', () => {
     const offers = org.hasOfferCatalog.itemListElement as {
-      itemOffered: { name: string }
+      itemOffered: { name: string; description: string }
       priceSpecification?: { price: number; priceCurrency: string; valueAddedTaxIncluded: boolean }
     }[]
-    const of1Offer = offers.find((o) => o.itemOffered.name === of1.title)
-    expect(of1Offer?.priceSpecification).toEqual({
+    expect(offers.map((o) => o.itemOffered.name)).toEqual([
+      'Responsable IA externalisé',
+      "L'IA au travail",
+      'Conférences et séminaires',
+      of1.title,
+    ])
+    expect(offers[0].itemOffered.description).toContain('Engagement de trois mois')
+    expect(offers[1].itemOffered.description).toContain("jusqu'à 12 personnes")
+    expect(offers[2].itemOffered.description).toContain('Sur demande, prix sur devis.')
+    const priced = offers.filter((o) => o.priceSpecification)
+    expect(priced.map((o) => o.itemOffered.name)).toEqual([of1.title])
+    expect(priced[0].priceSpecification).toEqual({
       '@type': 'PriceSpecification',
       price: of1.price.oneShotHt,
       priceCurrency: 'EUR',
       valueAddedTaxIncluded: false,
     })
-    const onRequest = offers.filter((o) => o.itemOffered.name !== of1.title)
-    expect(onRequest.map((o) => o.itemOffered.name)).toEqual(['Agent vocal', 'CRM sur mesure'])
-    for (const o of onRequest) expect(o.priceSpecification).toBeUndefined()
   })
 
   it('names no client and no headcount', () => {

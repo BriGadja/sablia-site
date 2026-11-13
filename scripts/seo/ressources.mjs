@@ -1,5 +1,8 @@
-// Pure helpers for prerendering `/ressources/{slug}` (US-54). Everything that can be tested without
-// a browser lives here; `prerender.mjs` launches Chromium at import and must stay free of logic.
+// Pure helpers for prerendering `/ressources/{slug}` (US-54) and `/lettre/{slug}` (US-101). Everything
+// that can be tested without a browser lives here; `prerender.mjs` launches Chromium at import and must
+// stay free of logic.
+import { fixtureLettres } from './lettre-fixtures.mjs'
+import { lettreVersion } from './lettre-version.mjs'
 
 // Same constant as client/src/lib/contenu.ts — a public project ref, not a secret.
 const SUPABASE_URL = 'https://qlxoitzdxjqhljjoeqoq.supabase.co'
@@ -152,5 +155,218 @@ export function assertRessourceHtml(dom, row) {
     throw new Error(
       `/ressources/${row.slug}: html leaks a public ${FILE_URL_MARK} file URL (decision D8)`,
     )
+  }
+}
+
+// ---------------------------------------------------------------------------------------------
+// The Tuesday letter (US-101). `contenu_lettres` is written by the hub (`scripts/newsletter.py`,
+// the publish step of the send) and only ever read here, with the public anon key.
+
+const LETTRE_SELECT = 'slug,titre,resume,corps_md,youtube_id,published_at,updated_at'
+const LETTRE_TIMEOUT_MS = 10_000
+
+const newestFirst = (rows) =>
+  [...rows].sort((a, b) => String(b.published_at ?? '').localeCompare(String(a.published_at ?? '')))
+
+const readableInstant = (value) => typeof value === 'string' && !Number.isNaN(Date.parse(value))
+
+/**
+ * Published issues, newest first: the ONE reader of `contenu_lettres`, called once by each process of
+ * the build chain (posters, the Next build through `src/components/lettre/data.ts`, the export guards,
+ * the sitemap). Fixtures (`SABLIA_FIXTURE_LETTRES`) come first and refuse a strict build. Then three
+ * tries with a growing backoff. Strict (`PRERENDER_STRICT` or `VERCEL`): a missing key or an unreadable
+ * table THROWS, so the deploy keeps the previous release. Elsewhere both warn and answer []. An empty
+ * list is a valid answer in both modes. A row without a readable `published_at` is dropped with one
+ * warning in both modes (its page would say « 1er janvier 1970 »). Each successful read logs one line
+ * `[lettres] N issue(s) read`, so a build log shows how many reads its processes made.
+ */
+export async function listPublishedLettres({
+  env = process.env,
+  fetch: doFetch = globalThis.fetch,
+  sleep = realSleep,
+  warn = console.warn,
+  log = console.warn,
+} = {}) {
+  const accept = (rows, source = '') => {
+    const kept = rows.filter((row) => {
+      if (readableInstant(row.published_at)) return true
+      warn(
+        `[lettres] ${row.slug} dropped: its published_at ${JSON.stringify(row.published_at ?? null)} is not a readable instant`,
+      )
+      return false
+    })
+    log(`[lettres] ${kept.length} issue(s) read${source}`)
+    return newestFirst(kept)
+  }
+
+  const fixtures = fixtureLettres(env)
+  if (fixtures.length > 0) return accept(fixtures, ' (SABLIA_FIXTURE_LETTRES)')
+
+  const strict = Boolean(env.VERCEL || env.PRERENDER_STRICT)
+  const key = env.VITE_SUPABASE_ANON_KEY
+  if (!key) {
+    if (strict) {
+      throw new Error(
+        'VITE_SUPABASE_ANON_KEY is not set on a production build (VERCEL or PRERENDER_STRICT): cannot list the issues of the letter',
+      )
+    }
+    warn('[lettres] VITE_SUPABASE_ANON_KEY is not set: no /lettre/{slug} page (local build)')
+    return []
+  }
+
+  const url = `${SUPABASE_URL}/rest/v1/contenu_lettres?select=${LETTRE_SELECT}&published=eq.true&order=published_at.desc`
+  let lastError
+  for (let attempt = 1; attempt <= TRIES; attempt++) {
+    try {
+      const res = await doFetch(url, {
+        headers: { apikey: key, authorization: `Bearer ${key}` },
+        signal: AbortSignal.timeout(LETTRE_TIMEOUT_MS),
+      })
+      if (!res.ok) throw new Error(`contenu_lettres read answered HTTP ${res.status}`)
+      const rows = await res.json()
+      if (!Array.isArray(rows)) throw new Error('contenu_lettres read did not return a list')
+      return accept(rows.filter((r) => r && typeof r.slug === 'string' && r.slug.length > 0))
+    } catch (err) {
+      lastError = err
+      if (attempt < TRIES) await sleep(BACKOFF_MS * 2 ** (attempt - 1))
+    }
+  }
+  if (strict) throw lastError
+  warn(
+    `[lettres] could not read contenu_lettres (${lastError?.message ?? String(lastError)}): no /lettre/{slug} page (local build)`,
+  )
+  return []
+}
+
+/** The <title> of an issue page: « · Sablia » like the other v2 pages, never an em dash. */
+export function lettreTitle(row) {
+  return `${row.titre} · Sablia`
+}
+
+const JSON_LD = /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi
+// The body renderer emits no <div> (Markdown with raw HTML disabled, footnotes rendered without one),
+// so the first </div> closes it.
+const LETTRE_BODY = /<div\b[^>]*\bdata-body="lettre"[^>]*>([\s\S]*?)<\/div>/i
+const FIRST_H2 = /^ {0,3}##[ \t]+(.+?)[ \t#]*$/m
+// The identity stamp of the page (`lettre-version.mjs`): every <meta> named so, and the one shape the
+// hub parses (name, then content, lowercase hex).
+const STAMP_TAGS = /<meta\b[^>]*\bname="sablia-lettre-version"[^>]*>/gi
+const STAMP_SHAPE = /^<meta name="sablia-lettre-version" content="([0-9a-f]{64})"\s*\/?>$/
+
+/** Letters and digits only, lower case: inline marks, punctuation and spacing never count. */
+const norm = (text) =>
+  text
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim()
+const words = (text) => norm(decode(text))
+
+/**
+ * The words of the first `##` heading of a Markdown body that the rendered body must carry. Only plain
+ * words count: link labels stay; inline code spans, images, URLs (the page shortens a bare one), the ids
+ * of reference links and every word holding a character reference, named or numeric, go (code and a
+ * backslash show `&#233;` as typed, outside them the page decodes it: either way the word is not looked for).
+ */
+function firstHeadingWords(markdown) {
+  const heading = FIRST_H2.exec(markdown ?? '')?.[1]
+  if (!heading) return []
+  const text = heading
+    .replace(/`[^`]*`/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/\[([^\]]*)\]\[[^\]]*\]/g, '$1')
+    .replace(/<?https?:\/\/\S+>?/gi, ' ')
+    .replace(/\S*\\?&#?[a-z0-9]+;\S*/gi, ' ')
+  return norm(text).split(' ').filter(Boolean)
+}
+
+/** Every word of `want` appears in `have`, in the same order; other words may sit between them. */
+function inOrder(want, have) {
+  let next = 0
+  for (const word of have) if (word === want[next]) next++
+  return next === want.length
+}
+
+/**
+ * Throws when a built issue page is not the page of `row`. `dom` is the decoded shape of
+ * `extractFromHtml` plus `html` (the raw page, scripts included). Titles and texts are compared with
+ * `squash()` on BOTH sides, so a no-break space typed in the hub never fails a build.
+ */
+export function assertLettreHtml(dom, row) {
+  const where = `/lettre/${row.slug}`
+  const fail = (what, got, want) => {
+    throw new Error(`${where}: ${what} is ${JSON.stringify(got)}, expected ${JSON.stringify(want)}`)
+  }
+  const same = (a, b) => squash(String(a ?? '')) === squash(String(b ?? ''))
+
+  if (!same(dom.title, lettreTitle(row))) fail('title', dom.title, lettreTitle(row))
+  const wantCanonical = `https://sablia.io/lettre/${row.slug}`
+  if (dom.canonical !== wantCanonical) fail('canonical', dom.canonical, wantCanonical)
+  if (!same(dom.description, row.resume)) fail('description', dom.description, row.resume)
+  if (!same(dom.h1, row.titre)) fail('h1', dom.h1, row.titre)
+  if (!squash(dom.text ?? '').includes(squash(row.resume ?? ''))) {
+    throw new Error(`${where}: visible text is missing the résumé`)
+  }
+
+  const html = dom.html ?? ''
+  if (!/<main\b[^>]*\bdata-ready="true"/i.test(html)) {
+    throw new Error(`${where}: <main> lacks data-ready="true"`)
+  }
+  const articles = [...html.matchAll(JSON_LD)]
+    .flatMap((m) => {
+      try {
+        return [JSON.parse(m[1])].flat()
+      } catch {
+        return []
+      }
+    })
+    .filter((d) => d?.['@type'] === 'Article')
+  if (articles.length !== 1) {
+    throw new Error(`${where}: expected one Article JSON-LD block, found ${articles.length}`)
+  }
+  const [article] = articles
+  if (!article.author?.name) throw new Error(`${where}: the Article has no author.name`)
+  if (article.datePublished !== row.published_at) {
+    fail('Article datePublished', article.datePublished, row.published_at)
+  }
+  if (html.includes('<iframe')) {
+    throw new Error(
+      `${where}: html mounts an <iframe> before any click (the video must sit behind VideoFacade)`,
+    )
+  }
+  if (html.includes('{{{')) throw new Error(`${where}: html still carries a merge tag {{{…}}}`)
+  const body = LETTRE_BODY.exec(html)
+  if (!body) throw new Error(`${where}: the issue body block (data-body="lettre") is missing`)
+  if (/<img\b/i.test(body[1])) {
+    throw new Error(
+      `${where}: the issue body carries an <img> (an issue is published without images)`,
+    )
+  }
+  // The body really reached the page: not empty, and it carries the words of the first `##` heading
+  // of corps_md in order (none left to look for: only the non-empty check applies).
+  const bodyWords = words(strip(body[1]))
+  if (!bodyWords) throw new Error(`${where}: the issue body block is empty`)
+  const heading = firstHeadingWords(row.corps_md)
+  if (heading.length > 0 && !inOrder(heading, bodyWords.split(' '))) {
+    throw new Error(`${where}: the issue body lacks the first ## heading of corps_md`)
+  }
+
+  // The page was built from THIS row: exactly one stamp, in the shape the hub reads, equal to the
+  // identity of the row (a page built from an older text of the same issue carries another one).
+  const stamps = html.match(STAMP_TAGS) ?? []
+  if (stamps.length === 0) throw new Error(`${where}: the sablia-lettre-version stamp is missing`)
+  if (stamps.length > 1) {
+    throw new Error(
+      `${where}: ${stamps.length} sablia-lettre-version stamps (exactly one expected)`,
+    )
+  }
+  const version = STAMP_SHAPE.exec(stamps[0])?.[1]
+  if (!version) {
+    throw new Error(
+      `${where}: the sablia-lettre-version stamp ${stamps[0]} is not <meta name="sablia-lettre-version" content="<lowercase sha256 hex>"/>`,
+    )
+  }
+  if (version !== lettreVersion(row)) {
+    fail('sablia-lettre-version stamp', version, lettreVersion(row))
   }
 }

@@ -1,0 +1,84 @@
+@layer theme, base, components, utilities;
+
+/* #top of /realisations: the page h1 (it takes the role of the band's eyebrow) and the intro line on the
+   left, the band's sand drawing on the right. The dune opens onto the card ground of the #construit band. */
+@layer components {
+  .v2-real-head {
+    position: relative;
+    padding: 48px 0 92px;
+
+    .rh-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: 64px;
+      align-items: center;
+    }
+    .rh-h1 {
+      margin: 0;
+      font-size: 52px;
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .rh-intro {
+      margin: 20px 0 0;
+      max-width: 30em;
+      font-size: 17px;
+      line-height: 1.6;
+      color: #3a3f4d;
+      text-wrap: pretty;
+    }
+    /* « Un besoin précis ? » (US-108): visible but discreet, under a hairline, one line and the booking button. */
+    .rh-besoin {
+      max-width: 34rem;
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid #e4d6c0;
+    }
+    .rh-besoin-title {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+      font-weight: 600;
+      color: #131620;
+      text-wrap: pretty;
+    }
+    /* The question on its own line (never « précis / ? » nor « … aussi à / la demande » on a phone). */
+    .rh-besoin-q {
+      display: block;
+    }
+    .rh-besoin-text {
+      margin: 8px 0 16px;
+      font-size: 15px;
+      line-height: 1.55;
+      color: #3a3f4d;
+      text-wrap: pretty;
+    }
+
+    @media (max-width: 900px) {
+      padding: 36px 0 88px;
+
+      .rh-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .rh-h1 {
+        font-size: 36px;
+      }
+      .rh-intro {
+        font-size: 16px;
+      }
+      .rh-besoin {
+        margin-top: 22px;
+        padding-top: 18px;
+      }
+      .rh-besoin-title {
+        font-size: 18px;
+      }
+      .rh-ill {
+        display: none;
+      }
+    }
+  }
+}

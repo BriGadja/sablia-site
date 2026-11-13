@@ -113,6 +113,72 @@ test('an indexable route with no ledger entry makes the generator throw', () => 
   assert.throws(() => buildSitemap({ routes: ROUTES, ledger: {}, resources: [] }), /no lastmod/)
 })
 
+// The Tuesday letter (US-101, US-102).
+const ROUTES_NL = [
+  ...ROUTES,
+  {
+    path: '/newsletter',
+    sources: ['g.txt'],
+    indexable: true,
+    changefreq: 'monthly',
+    priority: 0.6,
+  },
+]
+const LEDGER_NL = { ...LEDGER, '/newsletter': { lastmod: '2026-11-11', hash: 'sha256:x' } }
+
+test('lettres: one /lettre/<slug> entry per published issue, dated from updated_at', () => {
+  const xml = buildSitemap({
+    routes: ROUTES_NL,
+    ledger: LEDGER_NL,
+    resources: [],
+    lettres: [
+      {
+        slug: '2026-11-17-premier',
+        published_at: '2026-11-17T07:30:00+00:00',
+        updated_at: '2026-11-17T07:30:00+00:00',
+      },
+      {
+        slug: '2026-11-24-deuxieme',
+        published_at: '2026-11-24T07:30:00+00:00',
+        updated_at: '2026-11-26T09:00:00+00:00',
+      },
+    ],
+  })
+  assert.equal(lastmodOf(xml, 'https://sablia.io/lettre/2026-11-17-premier'), '2026-11-17')
+  assert.equal(lastmodOf(xml, 'https://sablia.io/lettre/2026-11-24-deuxieme'), '2026-11-26')
+  assert.match(
+    xml,
+    /<loc>https:\/\/sablia\.io\/lettre\/2026-11-17-premier<\/loc>\s*<lastmod>2026-11-17<\/lastmod>\s*<changefreq>monthly<\/changefreq>\s*<priority>0\.6<\/priority>/,
+  )
+})
+
+test('lettres: /newsletter lastmod = max(ledger date, latest issue date)', () => {
+  const newer = buildSitemap({
+    routes: ROUTES_NL,
+    ledger: LEDGER_NL,
+    resources: [],
+    lettres: [
+      { slug: '2026-11-17-a', published_at: '2026-11-17T07:30:00+00:00', updated_at: null },
+    ],
+  })
+  assert.equal(lastmodOf(newer, 'https://sablia.io/newsletter'), '2026-11-17')
+  const older = buildSitemap({
+    routes: ROUTES_NL,
+    ledger: LEDGER_NL,
+    resources: [],
+    lettres: [
+      { slug: '2026-10-06-a', published_at: '2026-10-06T07:30:00+00:00', updated_at: null },
+    ],
+  })
+  assert.equal(lastmodOf(older, 'https://sablia.io/newsletter'), '2026-11-11')
+})
+
+test('lettres default to none: the old call lists no /lettre entry and keeps the ledger date', () => {
+  const xml = buildSitemap({ routes: ROUTES_NL, ledger: LEDGER_NL, resources: [] })
+  assert.ok(!locs(xml).some((l) => l.includes('/lettre/')))
+  assert.equal(lastmodOf(xml, 'https://sablia.io/newsletter'), '2026-11-11')
+})
+
 function fixtureRoot() {
   const root = mkdtempSync(join(tmpdir(), 'seo-stamp-'))
   for (const f of 'abcdef') writeFileSync(join(root, `${f}.txt`), `content ${f}`)
@@ -240,4 +306,19 @@ test('generator CLI on Vercel without the key fails the build', () => {
     encoding: 'utf8',
   })
   assert.notEqual(res.status, 0)
+})
+
+test('generator CLI lists the fixture issue (SABLIA_FIXTURE_LETTRES, no key, local build)', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'seo-gen-'))
+  const out = join(dir, 'sitemap.xml')
+  const env = { ...process.env, SABLIA_FIXTURE_LETTRES: '2026-11-10-exemple-de-numero' }
+  for (const name of ['VITE_SUPABASE_ANON_KEY', 'VERCEL', 'PRERENDER_STRICT', 'SABLIA_SLOT'])
+    delete env[name]
+  const res = spawnSync('node', [GENERATOR, '--out', out], { env, encoding: 'utf8' })
+  assert.equal(res.status, 0, res.stderr)
+  const xml = readFileSync(out, 'utf8')
+  assert.equal(
+    lastmodOf(xml, 'https://sablia.io/lettre/2026-11-10-exemple-de-numero'),
+    '2026-11-10',
+  )
 })

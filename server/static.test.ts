@@ -5,6 +5,7 @@
  * index.html fallback is gone), and Next's RSC payloads (`*.txt`) answer 200 text/plain.
  */
 import { readFileSync } from 'node:fs'
+import http from 'node:http'
 import { join } from 'node:path'
 import express from 'express'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
@@ -25,6 +26,25 @@ afterAll(() => srv.close())
 const get = (path: string, init?: RequestInit) =>
   fetch(srv.url + path, { redirect: 'manual', ...init })
 const html = (rel: string) => readFileSync(join(dist, rel), 'utf8')
+
+/** A request sent as written: fetch would resolve `.` and `..` segments before sending. */
+function raw(path: string): Promise<{ status: number; body: string; location?: string }> {
+  const { hostname, port } = new URL(srv.url)
+  return new Promise((resolve, reject) => {
+    http
+      .get({ hostname, port, path }, (res) => {
+        let body = ''
+        res.setEncoding('utf8')
+        res.on('data', (chunk: string) => {
+          body += chunk
+        })
+        res.on('end', () =>
+          resolve({ status: res.statusCode ?? 0, body, location: res.headers.location }),
+        )
+      })
+      .on('error', reject)
+  })
+}
 
 const REVALIDATE = 'public, max-age=0, must-revalidate'
 
@@ -135,6 +155,111 @@ describe('mountStatic — Next export', () => {
     const about = await get('/about/')
     expect(about.status).toBe(301)
     expect(about.headers.get('location')).toBe('/#derriere')
+  })
+
+  it('redirects /lettre and /lettre/ to /newsletter with a 301 (the list of issues lives there)', async () => {
+    for (const p of ['/lettre', '/lettre/']) {
+      const r = await get(p)
+      expect(r.status, p).toBe(301)
+      expect(r.headers.get('location'), p).toBe('/newsletter')
+    }
+  })
+
+  // US-105, US-106 (12/11): the monthly offer moved to /responsable-ia-externalise and
+  // /accompagnement is gone; both old addresses answer 301 to the offer page.
+  it('redirects the old offer address and /accompagnement to /responsable-ia-externalise with a 301', async () => {
+    for (const p of [
+      '/responsable-ia-temps-partage',
+      '/responsable-ia-temps-partage/',
+      '/accompagnement',
+      '/accompagnement/',
+    ]) {
+      const r = await get(p)
+      expect(r.status, p).toBe(301)
+      expect(r.headers.get('location'), p).toBe('/responsable-ia-externalise')
+    }
+    for (const p of ['//responsable-ia-temps-partag%65', '/%61ccompagnement']) {
+      const r = await raw(p)
+      expect(r.status, p).toBe(301)
+      expect(r.location, p).toBe('/responsable-ia-externalise')
+    }
+    // a target is never a key: no loop, no chain
+    expect((await get('/responsable-ia-externalise')).status).not.toBe(301)
+  })
+
+  // Plan decision (12/11, kept after the K4 review): the redirect does not forward the query string,
+  // UTM keys included; the Location is the bare offer path.
+  it('drops the query string of the two old addresses: Location is exactly the offer path', async () => {
+    for (const p of [
+      '/responsable-ia-temps-partage?utm_source=x',
+      '/accompagnement?utm_source=x',
+    ]) {
+      const r = await get(p)
+      expect(r.status, p).toBe(301)
+      expect(r.headers.get('location'), p).toBe('/responsable-ia-externalise')
+    }
+  })
+
+  it('serves a built issue page, and 404 on the placeholder (lettre/__none*) and an unknown issue', async () => {
+    const issue = await get('/lettre/2026-11-10-exemple-de-numero')
+    expect(issue.status).toBe(200)
+    expect(await issue.text()).toBe(html('lettre/2026-11-10-exemple-de-numero.html'))
+    for (const p of [
+      '/lettre/__none',
+      '/lettre/__none/',
+      '/lettre/__none.html',
+      '/lettre/__none.txt',
+      '/lettre/__none/__next.lettre.__none.txt',
+      '/lettre/inconnu',
+    ]) {
+      const r = await get(p)
+      expect(r.status, p).toBe(404)
+      expect(await r.text(), p).not.toContain('must-not-be-served')
+    }
+  })
+
+  it('applies the 404 list to the decoded path, slashes and dot segments resolved', async () => {
+    for (const p of [
+      '/lettre/%5F%5Fnone',
+      '/lettre/__none%2Etxt',
+      '/lettre/__none%2Ehtml',
+      '/lettre/__none%2F__next.lettre.__none.txt',
+      '//lettre/__none',
+      '//lettre//__none.txt',
+      '/lettre/./__none.txt',
+      '/x/../lettre/__none.txt',
+      '//_not-found',
+      '/%5Fnot-found',
+      '/ressources/%5F%5Fnone',
+      '//ressources/__none',
+      '/ressources/__none%2Etxt',
+    ]) {
+      const r = await raw(p)
+      expect(r.status, p).toBe(404)
+      expect(r.body, p).not.toContain('must-not-be-served')
+    }
+  })
+
+  it('applies the redirects to the same decoded path', async () => {
+    for (const [p, to] of [
+      ['//lettre', '/newsletter'],
+      ['/%6Cettre', '/newsletter'],
+      ['//lettre//', '/newsletter'],
+      ['//roi', '/offres/compte-rendu-appel'],
+    ]) {
+      const r = await raw(p)
+      expect(r.status, p).toBe(301)
+      expect(r.location, p).toBe(to)
+    }
+  })
+
+  it('never crashes on a malformed escape: 400 or 404, nothing served', async () => {
+    for (const p of ['/%E0%A4%A', '/lettre/%E0%A4%A', '/%']) {
+      const r = await raw(p)
+      expect([400, 404], p).toContain(r.status)
+      expect(r.body, p).not.toContain('must-not-be-served')
+    }
+    expect((await get('/cgv')).status).toBe(200)
   })
 
   it('serves .well-known but never another dotfile', async () => {

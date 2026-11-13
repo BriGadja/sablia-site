@@ -1,0 +1,11 @@
+@layer theme, base, components, utilities;
+
+/* The sand under #preuve of /conferences that holds the webinar reminder while it is shown. The room for
+   the #fin dune (it straddles the band's top edge by 80 px) is the next block's since 13/11: the line
+   toward the monthly offer, present with or without the reminder. */
+@layer components {
+  .v2-conf-rappel {
+    position: relative;
+    background: #f4ecdd;
+  }
+}

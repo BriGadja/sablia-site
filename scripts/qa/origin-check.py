@@ -4,7 +4,7 @@
 Cold load per route (fresh browser context: no cookie, no storage, so no consent given), 1440x900 then a scroll sweep
 to wake lazy content, then every request and WebSocket the page made is checked: the host must be the origin of --base.
 `data:` and `blob:` URLs are not network requests and are ignored. Own headless Chromium (never the shared Chrome on :9222).
-Routes: scripts/seo/routes.mjs (non-draft) + the sitemap + /formations /accompagnement + an unknown path (the 404 page).
+Routes: scripts/seo/routes.mjs (non-draft) + the sitemap + /formations + an unknown path (the 404 page).
 Usage: origin-check.py [--base URL]   (default: the preview slot http://127.0.0.1:5001)
 Exit 1 when any route made a request to another host (each printed once per route), 0 otherwise.
 """
@@ -13,7 +13,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 W = Path(__file__).resolve().parents[2]
-EXTRA = ["/formations", "/accompagnement", "/nimporte-quoi"]
+EXTRA = ["/formations", "/nimporte-quoi"]
 
 
 def routes(base):

@@ -121,6 +121,19 @@
       padding: 0;
       list-style: none;
     }
+    .letter-line {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #e4d6c0;
+    }
+    .letter {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      color: #835a0c;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
     .files a {
       display: inline-flex;
       align-items: center;

@@ -31,15 +31,9 @@
       "tbt_ms": 144,
       "finalUrl": "https://sablia.io/formations"
     },
-    "/accompagnement": {
-      "performance": 90,
-      "accessibility": 94,
-      "best-practices": 100,
-      "seo": 92,
-      "cls": 0.013,
-      "lcp_s": 3.32,
-      "tbt_ms": 0,
-      "finalUrl": "https://sablia.io/accompagnement"
+    "/responsable-ia-externalise": {
+      "status": "à mesurer",
+      "finalUrl": "https://sablia.io/responsable-ia-externalise"
     },
     "/ressources": {
       "performance": 76,
@@ -56,9 +50,6 @@
     ["/formations", "accessibility", 94],
     ["/formations", "seo", 92],
     ["/formations", "lcp_s", 3.34],
-    ["/accompagnement", "accessibility", 94],
-    ["/accompagnement", "seo", 92],
-    ["/accompagnement", "lcp_s", 3.32],
     ["/ressources", "cls", 0.176],
     ["/ressources", "lcp_s", 3.77]
   ]

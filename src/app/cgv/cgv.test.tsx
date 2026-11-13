@@ -29,6 +29,12 @@ describe('CGV page', () => {
     expect(t).not.toContain('**')
   })
 
+  // US-100 floor: Rouen goes into the structured data and the footer, never into the CGV parties clause.
+  // Green before and after by design: it pins what must NOT move.
+  it('still gives the registered office, 75008 Paris', () => {
+    expect(t).toContain('siège : 60 rue François Ier, 75008 Paris')
+  })
+
   it('states the v2 catalogue and none of the retired offer', () => {
     expect(t).toContain('1 490 € HT')
     expect(t).not.toContain('490€ HT')

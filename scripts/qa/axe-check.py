@@ -4,7 +4,7 @@
 Injects node_modules/axe-core/axe.min.js (the version pinned by package.json) through Python Playwright into the page's OWN
 headless Chromium (never the shared Chrome on :9222). The page is scrolled once end to end before the run so lazily revealed
 sections are in the DOM state a visitor reaches. Moderate and minor findings are printed as `note` and do not fail.
-Routes: scripts/seo/routes.mjs (non-draft) + the sitemap + /formations /accompagnement + an unknown path (the 404 page).
+Routes: scripts/seo/routes.mjs (non-draft) + the sitemap + /formations + an unknown path (the 404 page).
 Usage: axe-check.py [--base URL] [--routes /,/formations] [--vp 1440,390]   (default: the preview slot http://127.0.0.1:5001)
 Exit 1 when any serious/critical violation is found, 0 otherwise, 2 when axe-core or the route manifest cannot be read.
 """
@@ -30,7 +30,7 @@ def routes(base):
             out.setdefault(urllib.parse.urlparse(loc).path or "/")
     except Exception as e:
         print(f"warning: sitemap unreadable ({e}); manifest routes only", file=sys.stderr)
-    for p in ("/formations", "/accompagnement", "/nimporte-quoi"):
+    for p in ("/formations", "/nimporte-quoi"):
         out.setdefault(p)
     return list(out)
 

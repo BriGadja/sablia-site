@@ -1,0 +1,109 @@
+@layer theme, base, components, utilities;
+
+/* #conference of /formations: photo 01 across two thirds, the card overlapping its right edge.
+   Entry: the photo settles from a slight zoom, then the card rises onto it. */
+@layer components {
+  .v2-fm-conf {
+    position: relative;
+    background: #f2e3df;
+    padding: 96px 0;
+    color: #131620;
+
+    .cf-stage {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-items: center;
+    }
+    .cf-fig {
+      grid-column: 1 / 9;
+      grid-row: 1;
+      margin: 0;
+      min-width: 0;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+    .cf-photo {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 3 / 2;
+      object-fit: cover;
+      background: #efe3cc;
+      transition:
+        opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+        transform 1.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    /* the card overlaps the photo's right edge by 36 px only: the trainer's arm and lectern stay clear */
+    .cf-card {
+      grid-column: 9 / 13;
+      grid-row: 1;
+      margin-left: -36px;
+      z-index: 1;
+      min-width: 0;
+      padding: 36px 36px 40px;
+      border-radius: 20px;
+      background: #fbf7f0;
+      border: 1px solid #e4d6c0;
+      box-shadow: 0 30px 60px -40px rgba(22, 27, 41, 0.45);
+      transition:
+        opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.35s,
+        transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.35s;
+    }
+    h2 {
+      margin: 14px 0 0;
+      font-size: 32px;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .cf-line {
+      margin: 14px 0 0;
+      text-wrap: pretty;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #3a3f4d;
+    }
+
+    &[data-reveal='armed'] .cf-photo {
+      opacity: 0;
+      transform: scale(1.12);
+    }
+    &[data-reveal='armed'] .cf-card {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-fm-conf {
+      padding: 56px 0;
+
+      .cf-stage {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .cf-fig {
+        grid-column: 1;
+        border-radius: 20px;
+      }
+      .cf-card {
+        grid-column: 1;
+        grid-row: 2;
+        margin: -40px 12px 0;
+        padding: 24px 22px 28px;
+      }
+      h2 {
+        font-size: 26px;
+      }
+      .cf-line {
+        font-size: 15px;
+      }
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .v2-fm-conf .cf-photo,
+    .v2-fm-conf .cf-card {
+      transition: none;
+    }
+  }
+}

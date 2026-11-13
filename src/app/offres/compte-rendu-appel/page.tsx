@@ -1,3 +1,4 @@
+import { Scene } from '@/components/home/scene'
 import AudienceStrip from '@/components/offre/AudienceStrip'
 import { HashScroll } from '@/components/offre/HashScroll'
 import IncludedExcludedSection from '@/components/offre/IncludedExcludedSection'
@@ -24,6 +25,8 @@ export const metadata = pageMetadata({
 /**
  * Sections keep their ids (#variantes, #inclus, #prix, #preuve, #faq): links point into the page.
  * The wrapper turns scroll anchoring off, so a deep link lands where it was aimed.
+ * `#scene` is the home's call → CRM record animation (moved here by the 01/11 training repositioning),
+ * without its own priced block: the page prices the offer once, in `#prix`.
  */
 export default function OffreCompteRenduAppel() {
   return (
@@ -33,6 +36,7 @@ export default function OffreCompteRenduAppel() {
       <JsonLd data={faqSchema} />
       <BreadcrumbJsonLd items={[{ name: of1.title, path: OF1_ROUTE }]} />
       <OffreHero />
+      <Scene showOffer={false} />
       <AudienceStrip />
       <VariantsSection />
       <IncludedExcludedSection />

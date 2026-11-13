@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { describe, it } from 'node:test'
 import { checkExport, checkOrganizationJsonLd } from './export-guards.mjs'
+import { lettreVersion } from './lettre-version.mjs'
 
 const page = ({
   title = 'T',
@@ -248,6 +249,108 @@ describe('checkExport', () => {
   })
 })
 
+// The Tuesday letter (US-101, US-102): issue pages are built from the published rows, and only those.
+const LETTRE_ROW = {
+  slug: '2026-11-10-exemple',
+  titre: 'Un numéro de la lettre',
+  resume: 'Le résumé du numéro.',
+  published_at: '2026-11-10T07:30:00+00:00',
+  updated_at: '2026-11-10T07:30:00+00:00',
+}
+const ROUTES_L = [...ROUTES, { path: '/newsletter', indexable: true }]
+const lettrePage = (
+  row = LETTRE_ROW,
+  {
+    title = `${row.titre} · Sablia`,
+    body = '<h2>Pourquoi</h2><p>Texte.</p>',
+    version = lettreVersion(row),
+  } = {},
+) =>
+  `<!DOCTYPE html><html lang="fr"><head><title>${title}</title><link rel="canonical" href="https://sablia.io/lettre/${row.slug}"/><meta name="description" content="${row.resume}"/>${
+    version === null ? '' : `<meta name="sablia-lettre-version" content="${version}"/>`
+  }</head><body><main id="contenu" data-ready="true" class="v2-lettre"><script type="application/ld+json">${JSON.stringify(
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      datePublished: row.published_at,
+      author: { '@type': 'Person', name: 'Brice Gachadoat' },
+    },
+  )}</script><h1>${row.titre}</h1><p>${row.resume}</p><div class="lt-body" data-body="lettre">${body}</div></main></body></html>`
+const newsletterPage = (links = '<a href="/lettre/2026-11-10-exemple">Un numéro</a>') =>
+  page({ canonical: 'https://sablia.io/newsletter', body: links })
+const lettreFixture = (overrides = {}) =>
+  fixture({
+    'newsletter.html': newsletterPage(),
+    'lettre/2026-11-10-exemple.html': lettrePage(),
+    ...overrides,
+  })
+const runL = (dir, extra = {}) =>
+  checkExport({ dir, routes: ROUTES_L, rows: [ROW], lettres: [LETTRE_ROW], ...extra })
+
+describe('checkExport: the issue pages of the letter', () => {
+  it('accepts a published issue page listed on /newsletter', () => {
+    assert.deepEqual(runL(lettreFixture()), [])
+  })
+
+  it('keeps the old call shape: without lettres, any built /lettre page is an unlisted page', () => {
+    const dir = lettreFixture()
+    assert.match(
+      checkExport({ dir, routes: ROUTES_L, rows: [ROW] }).join('\n'),
+      /\/lettre\/2026-11-10-exemple.*routes\.mjs/,
+    )
+  })
+
+  it('rejects the page of an issue that is not published, and a leftover placeholder', () => {
+    const other = lettreFixture({
+      'lettre/2026-11-03-retire.html': lettrePage({ ...LETTRE_ROW, slug: '2026-11-03-retire' }),
+    })
+    assert.match(runL(other).join('\n'), /\/lettre\/2026-11-03-retire.*routes\.mjs/)
+    const none = lettreFixture({ 'lettre/__none.html': page({ canonical: 'https://sablia.io' }) })
+    assert.match(runL(none).join('\n'), /\/lettre\/__none.*routes\.mjs/)
+  })
+
+  it('rejects a published issue without its page', () => {
+    const dir = lettreFixture({ 'lettre/2026-11-10-exemple.html': null })
+    assert.match(runL(dir).join('\n'), /2026-11-10-exemple.*without its page/)
+  })
+
+  it('runs assertLettreHtml on each issue page: another title, an image in the body', () => {
+    const title = lettreFixture({
+      'lettre/2026-11-10-exemple.html': lettrePage(LETTRE_ROW, { title: 'Autre · Sablia' }),
+    })
+    assert.match(runL(title).join('\n'), /\/lettre\/2026-11-10-exemple: title/)
+    const img = lettreFixture({
+      'lettre/2026-11-10-exemple.html': lettrePage(LETTRE_ROW, {
+        body: '<p><img src="https://example.com/a.png" alt=""/></p>',
+      }),
+    })
+    assert.match(runL(img).join('\n'), /2026-11-10-exemple.*<img>/)
+  })
+
+  it('runs the identity stamp check: a page built from an older text of its row, a page without stamp', () => {
+    const older = { ...LETTRE_ROW, resume: 'Le résumé avant sa correction.' }
+    const stale = lettreFixture({
+      'lettre/2026-11-10-exemple.html': lettrePage(LETTRE_ROW, { version: lettreVersion(older) }),
+    })
+    assert.match(
+      runL(stale).join('\n'),
+      /\/lettre\/2026-11-10-exemple: sablia-lettre-version stamp is "[0-9a-f]{64}", expected/,
+    )
+    const none = lettreFixture({
+      'lettre/2026-11-10-exemple.html': lettrePage(LETTRE_ROW, { version: null }),
+    })
+    assert.match(
+      runL(none).join('\n'),
+      /\/lettre\/2026-11-10-exemple: .*sablia-lettre-version.*missing/,
+    )
+  })
+
+  it('rejects a /newsletter page that does not link every published issue', () => {
+    const dir = lettreFixture({ 'newsletter.html': newsletterPage('<p>Rien</p>') })
+    assert.match(runL(dir).join('\n'), /\/newsletter: does not list 2026-11-10-exemple/)
+  })
+})
+
 describe('checkOrganizationJsonLd', () => {
   const ld = (o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`
   const ORG = {
@@ -275,6 +378,13 @@ describe('checkOrganizationJsonLd', () => {
     assert.match(
       checkOrganizationJsonLd(ld({ ...ORG, description: 'Dashboards intelligents' })).join(),
       /dashboards intelligents/i,
+    )
+    // U13a (site-formation lot 1): the site trains teams first; the CRM-agency identity is retired.
+    assert.match(
+      checkOrganizationJsonLd(
+        ld({ ...ORG, alternateName: "Sablia, agence d'intégration de Claude dans les CRM" }),
+      ).join(),
+      /CRM/,
     )
   })
 })

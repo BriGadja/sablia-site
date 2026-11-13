@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import MentionsLegales from '@/app/mentions-legales/page'
 import PolitiqueConfidentialite from '@/app/politique-confidentialite/page'
 import { text } from '@/components/legal/helpers.test-util'
+import { NDA_LINE, PHOTO_CREDIT } from '@/content/declaration'
 
 /**
  * US-65 / US-66 / lot 0 VPS: the legal pages say what the site now does (own server at Hostinger, audience
@@ -36,6 +37,67 @@ describe('politique de confidentialité', () => {
   it('names the choice storage key', () => {
     expect(t).toContain('sablia_consent')
   })
+
+  // US-84: the Tuesday letter is a processing of its own, on consent.
+  it('has a Newsletter section: purpose, consent, data, no tracking, retention, unsubscribe, rights', () => {
+    expect(t).toContain('Newsletter')
+    expect(t).toContain("L'IA au travail")
+    expect(t).toMatch(/Base légale : votre consentement/)
+    expect(t).toMatch(/case[^.]*formulaire du site/)
+    expect(t).toMatch(/lien de confirmation/)
+    expect(t).toMatch(/bouton[^.]*invitation/)
+    expect(t).toMatch(
+      /prénom, votre adresse email[^.]*dates de votre inscription et de votre désinscription/,
+    )
+    expect(t).toContain("Aucun suivi d'ouverture ni de clic")
+    expect(t).toMatch(/non confirmée est effacée sous 7 jours/)
+    expect(t).toContain("jusqu'à votre désinscription")
+    expect(t).toContain('un lien dans chaque lettre')
+    expect(t).toContain('brice@sablia.io')
+  })
+
+  it('has a Prospection section: heading, legitimate interest, « stop » opt-out, contact address', () => {
+    expect(t).toContain('Prospection commerciale par e-mail')
+    expect(t).toContain('intérêt légitime')
+    expect(t).toContain('stop')
+    expect(t).toContain('brice@sablia.io')
+  })
+
+  it('Newsletter: Resend also sends the Tuesday letter, from the United States under standard contractual clauses', () => {
+    expect(t).toContain(
+      'envoi des emails de confirmation, des notifications internes et de la lettre du mardi (newsletter)',
+    )
+    expect(t).toContain(
+      'Resend héberge ses données aux États-Unis, sous clauses contractuelles types',
+    )
+  })
+
+  // Webinar plan U3b: the registration of /webinaire is a processing of its own.
+  it('has a Webinaire section: data, purposes, legal basis, recipients, retention, how to withdraw', () => {
+    expect(t).toContain('Webinaire')
+    expect(t).toMatch(
+      /prénom, votre nom, votre adresse email, votre téléphone, votre fonction, la taille de votre entreprise, votre usage de l'IA, votre question si vous en posez une, et votre réponse à la case de rappel/,
+    )
+    expect(t).toMatch(/empreinte de l'adresse IP accompagne l'inscription/)
+    expect(t).toMatch(/si vous y avez assisté/)
+    expect(t).toMatch(/questionnaire de préparation, seulement après la réservation d'un échange/)
+    expect(t).toMatch(/l'invitation à la séance et deux rappels par mail/)
+    expect(t).toMatch(/seulement si vous avez coché la case/)
+    expect(t).toMatch(/pour le rappel, votre consentement/)
+    for (const w of ['Google Agenda', 'Google Meet', 'Resend', 'Supabase', 'Calendly']) {
+      expect(t).toContain(w)
+    }
+    expect(t).toMatch(/liste des invités n'est pas visible des autres participants/)
+    expect(t).toMatch(/3 ans à compter de votre inscription ou du dernier contact venu de vous/)
+    expect(t).toMatch(/déclinez l'invitation ou répondez à l'un de nos mails/)
+    expect(t).toMatch(/retirer votre accord au rappel[^.]*brice@sablia\.io/)
+    expect(t).toMatch(/Dernière mise à jour : 01\/11\/2026\./)
+  })
+
+  it('Webinaire: Google is listed among the processors, Resend sends the reminders', () => {
+    expect(t).toMatch(/Google : invitations et séances en visio des webinaires/)
+    expect(t).toMatch(/ainsi que des rappels et du questionnaire des webinaires/)
+  })
 })
 
 describe('mentions légales', () => {
@@ -50,5 +112,15 @@ describe('mentions légales', () => {
   it('names the editor and says nothing the content gate bans', () => {
     expect(t).toContain('SIRET : 94090112700016')
     expect(t).not.toMatch(/IAPreneurs/i)
+  })
+  // US-96 (plan site-formation-lot1, U5): the declaration only in the L6352-12 form, and the photo credit.
+  it('carries « Formation professionnelle » with the exact L6352-12 sentence, once', () => {
+    expect(t).toContain(`Formation professionnelle ${NDA_LINE}`)
+    expect(t.split('28760834576')).toHaveLength(2)
+    expect(t).not.toMatch(/déclaration d'activité/i)
+  })
+  it('credits the photos and dates the update', () => {
+    expect(t).toContain(`Crédits ${PHOTO_CREDIT}.`)
+    expect(t).toContain('Dernière mise à jour : 01/11/2026.')
   })
 })

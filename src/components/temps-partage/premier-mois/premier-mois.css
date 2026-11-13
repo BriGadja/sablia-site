@@ -1,0 +1,257 @@
+@layer theme, base, components, utilities;
+
+/* #premier-mois of /responsable-ia-externalise: the two items of month one on the left, the client
+   journey drawn in gold contours on the night on the right (outlined nodes and bars, no figure). */
+@layer components {
+  .v2-tp-premier-mois {
+    position: relative;
+    background: #f4ecdd;
+    padding: 88px 0 56px;
+    color: #131620;
+
+    .tpm-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 520px);
+      gap: 72px;
+      align-items: center;
+    }
+    .tpm-copy {
+      min-width: 0;
+    }
+    h2 {
+      margin: 14px 0 0;
+      font-size: 36px;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .tpm-items {
+      margin: 28px 0 0;
+      padding: 0;
+      list-style: none;
+
+      li {
+        padding: 18px 0;
+        border-top: 1px solid #e4d6c0;
+        max-width: 36em;
+        font-size: 17px;
+        line-height: 1.6;
+        color: #3a3f4d;
+        text-wrap: pretty;
+      }
+      li:first-child {
+        border-top: 1.5px solid #131620;
+      }
+    }
+    /* a quiet note line under the items (DESIGN.md: 15 for notes); its link keeps the colours of
+       base.css (ink, gold-dark on hover) and the gold-mid underline of « Qui je suis » */
+    .tpm-crm {
+      margin: 6px 0 0;
+      max-width: 36em;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #61677a;
+      text-wrap: pretty;
+    }
+    .tpm-crm-link {
+      text-decoration: underline;
+      text-decoration-color: #b9852a;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 4px;
+      /* 24 px hit area for a link inside a sentence: block padding enlarges the rect, no text moves */
+      padding-block: 4px;
+    }
+
+    /* The drawing: the night ground, a thread through four nodes, a bar per step, all in gold contours
+       (DESIGN.md § Illustrations: contours only; no drop shadow under the night). */
+    .tpm-drawing {
+      min-width: 0;
+      padding: 26px 28px 30px;
+      border-radius: 20px;
+      background: #161b29;
+      color: #f4ecdd;
+    }
+    .tpm-caption {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #d9a441;
+    }
+    .tpm-steps {
+      position: relative;
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+
+      /* the thread joining the four nodes */
+      &::before {
+        content: '';
+        position: absolute;
+        left: 7px;
+        top: 12px;
+        bottom: 44px;
+        width: 2px;
+        border-radius: 2px;
+        background: #323a52;
+      }
+    }
+    .tpm-step {
+      position: relative;
+      display: grid;
+      grid-template-columns: 16px minmax(0, 1fr) auto;
+      grid-template-areas:
+        'node label tag'
+        '. track track';
+      column-gap: 14px;
+      row-gap: 10px;
+      align-items: center;
+      padding: 0 0 22px;
+
+      &:last-child {
+        padding-bottom: 0;
+      }
+    }
+    .tpm-node {
+      grid-area: node;
+      position: relative;
+      width: 16px;
+      height: 16px;
+      box-sizing: border-box;
+      border-radius: 50%;
+      border: 2px solid #d9a441;
+      background: #161b29;
+    }
+    .tpm-label {
+      grid-area: label;
+      min-width: 0;
+      font-size: 16px;
+      line-height: 1.3;
+      font-weight: 500;
+      color: #f4ecdd;
+    }
+    .tpm-tag {
+      grid-area: tag;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid #d9a441;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 16px;
+      white-space: nowrap;
+      color: #d9a441;
+    }
+    .tpm-track {
+      grid-area: track;
+      display: block;
+      height: 12px;
+      border-radius: 999px;
+      background: #242b40;
+      box-shadow: inset 0 0 0 1px #323a52;
+      overflow: hidden;
+    }
+    /* each bar is a gold outline on its track (6.3:1 on it), its share as its width: a scale would
+       squash the stroke of its ends */
+    .tpm-fill {
+      display: block;
+      width: calc(var(--share, 1) * 100%);
+      height: 100%;
+      box-sizing: border-box;
+      border-radius: inherit;
+      background: transparent;
+      box-shadow: inset 0 0 0 1.5px #d9a441;
+    }
+    .tpm-step.is-stuck {
+      .tpm-node {
+        background: #d9a441;
+        box-shadow: 0 0 0 6px rgba(217, 164, 65, 0.22);
+      }
+      .tpm-label {
+        color: #d9a441;
+        font-weight: 600;
+      }
+      .tpm-tag {
+        background: #d9a441;
+        color: #161b29;
+      }
+    }
+    .tpm-step.is-next {
+      .tpm-node {
+        border-style: dashed;
+      }
+      .tpm-tag {
+        border-style: dashed;
+        border-color: #a4aabd;
+        color: #a4aabd;
+      }
+    }
+
+    /* Entrance, armed after hydration only below the fold (useArmedReveal): the bars are drawn one by
+       one from the left (the outline runs out, its end closes last), then the step that jams is
+       ringed, then the next one is marked. Labels never fade. */
+    &[data-reveal='armed'] {
+      .tpm-fill {
+        clip-path: inset(0 100% 0 0);
+      }
+      .tpm-step.is-stuck .tpm-node {
+        box-shadow: 0 0 0 0 rgba(217, 164, 65, 0);
+      }
+      .tpm-tag {
+        opacity: 0;
+        transform: translateX(-8px);
+      }
+    }
+    &[data-reveal='in'] {
+      /* an inset() end, not `none`: clip-path only interpolates inset() to inset() */
+      .tpm-fill {
+        clip-path: inset(0 0 0 0);
+        transition: clip-path 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+        transition-delay: calc(var(--i, 0) * 150ms + 120ms);
+      }
+      .tpm-step.is-stuck .tpm-node {
+        transition: box-shadow 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) 1s;
+      }
+      .tpm-tag {
+        transition:
+          opacity 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
+          transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+      .tpm-step.is-stuck .tpm-tag {
+        transition-delay: 1.05s;
+      }
+      .tpm-step.is-next .tpm-tag {
+        transition-delay: 1.4s;
+      }
+    }
+
+    @media (max-width: 900px) {
+      padding: 64px 0 40px;
+
+      .tpm-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 28px;
+      }
+      h2 {
+        font-size: 28px;
+      }
+      .tpm-items li {
+        font-size: 16px;
+      }
+      .tpm-drawing {
+        padding: 22px 18px 24px;
+      }
+      .tpm-label {
+        font-size: 15px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tpm-fill,
+      .tpm-node,
+      .tpm-tag {
+        transition: none !important;
+      }
+    }
+  }
+}

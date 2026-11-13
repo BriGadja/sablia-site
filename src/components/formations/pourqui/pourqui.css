@@ -1,0 +1,94 @@
+@layer theme, base, components, utilities;
+
+/* #pourqui of /formations: photo 05 on the left, the audience on the right. Entry: the photo slides in from the left. */
+@layer components {
+  .v2-fm-pourqui {
+    position: relative;
+    background: #f2e3df;
+    padding: 64px 0 152px;
+    /* the sideways entry must never widen the page (clip, not hidden: the dune still straddles the top edge) */
+    overflow-x: clip;
+    color: #131620;
+
+    .pq-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 460px) minmax(0, 1fr);
+      gap: 72px;
+      align-items: center;
+    }
+    .pq-copy {
+      min-width: 0;
+      transition:
+        opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s,
+        transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) 0.15s;
+    }
+    h2 {
+      margin: 14px 0 0;
+      font-size: 44px;
+      line-height: 1.06;
+      letter-spacing: -0.025em;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    .pq-line {
+      margin: 16px 0 0;
+      max-width: 30em;
+      text-wrap: pretty;
+      font-size: 18px;
+      line-height: 1.6;
+      color: #3a3f4d;
+    }
+    .pq-fig {
+      order: -1;
+      margin: 0;
+      min-width: 0;
+      transition:
+        opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+        transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .pq-photo {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 3 / 2;
+      object-fit: cover;
+      border-radius: 20px;
+      background: #efe3cc;
+    }
+
+    &[data-reveal='armed'] .pq-fig {
+      opacity: 0;
+      transform: translateX(-48px);
+    }
+    &[data-reveal='armed'] .pq-copy {
+      opacity: 0;
+      transform: translateX(24px);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-fm-pourqui {
+      padding: 48px 0 136px;
+
+      .pq-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 28px;
+      }
+      .pq-fig {
+        order: 0;
+      }
+      h2 {
+        font-size: 28px;
+      }
+      .pq-line {
+        font-size: 16px;
+      }
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .v2-fm-pourqui .pq-fig,
+    .v2-fm-pourqui .pq-copy {
+      transition: none;
+    }
+  }
+}

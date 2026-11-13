@@ -4,10 +4,11 @@ import { hasReplayConsent } from './consent'
 /**
  * What sablia.io reports to its own Umami (plan sablia-io-lot0-vps, Decision 6, event map).
  *
- * Two tiers. WITHOUT consent only `click`, `cta_book`, `outbound` and `scroll_*` leave the page —
- * feature use, destination and scroll depth, the "au plus trois types d'évènements" of the CNIL
- * audience-measurement self-assessment. `video_*` and `form_*` need « Tout accepter ». No event
- * ever carries a field VALUE, a query string or a visitor identifier: labels are our own button
+ * Two tiers. WITHOUT consent only `click`, `cta_book`, `outbound` and `scroll_*` leave the page
+ * (feature use, destination and scroll depth, the "au plus trois types d'évènements" of the CNIL
+ * audience-measurement self-assessment). `video_*` and `form_*` need « Tout accepter ». No event
+ * ever carries a field VALUE, a visitor identifier or a query string of ours (the page URL itself
+ * keeps only the three UTM keys, see `keepUtm` in analytics.ts): labels are our own button
  * texts, hosts are reduced to a short list, form fields are reported by NAME.
  */
 
@@ -61,6 +62,34 @@ export function outboundHost(href: string, ownHost: string): string | null {
   if (host === 'calendly.com') return 'calendly.com'
   if (host === 'app.sablia.io') return 'app.sablia.io'
   return 'other'
+}
+
+/**
+ * The doors of the site (US-110, extending the `/webinaire` rule of US-97): a click on a link to one
+ * of these own pages carries its name as `dest`, wherever the link sits (menu, home, footer, a page).
+ * The monthly offer's door is `responsable-ia`: `offre` is already the zone of the home's training panel.
+ */
+const DOORS = {
+  '/responsable-ia-externalise': 'responsable-ia',
+  '/formations': 'formations',
+  '/conferences': 'conferences',
+  '/realisations': 'realisations',
+  '/webinaire': 'webinaire',
+} as const
+
+export type Door = (typeof DOORS)[keyof typeof DOORS]
+
+/** The door `href` points at on our own site (one trailing slash tolerated), else `null`. */
+export function destOf(href: string, ownHost: string): Door | null {
+  try {
+    const url = new URL(href, `https://${ownHost}/`)
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') return null
+    if (url.hostname !== ownHost && !OWN_HOSTS.has(url.hostname)) return null
+    const path = url.pathname.replace(/\/$/, '')
+    return Object.hasOwn(DOORS, path) ? DOORS[path as keyof typeof DOORS] : null
+  } catch {
+    return null
+  }
 }
 
 // ── booking ───────────────────────────────────────────────────────────────────
@@ -131,7 +160,7 @@ function withYouTubeApi(run: (api: YouTubeApi) => void): void {
 const VIDEO_STEPS = [25, 50, 75, 100] as const
 
 /**
- * Reports how far a visitor watches, from the player's own clock. Consent only — and without it the
+ * Reports how far a visitor watches, from the player's own clock. Consent only, and without it the
  * YouTube API script is not even requested. Called after the click that mounted the iframe.
  */
 export function watchVideoProgress(iframe: HTMLIFrameElement, id: string): void {
@@ -184,7 +213,8 @@ export function startEventTracking(): () => void {
     lastZone = zone
     lastLabel = label
     const isLink = el.tagName === 'A'
-    emit('click', { label, zone, kind: isLink ? 'link' : 'button' })
+    const dest = isLink ? destOf(el.getAttribute('href') ?? '', window.location.hostname) : null
+    emit('click', { label, zone, kind: isLink ? 'link' : 'button', ...(dest ? { dest } : {}) })
     if (isLink) {
       const host = outboundHost(el.getAttribute('href') ?? '', window.location.hostname)
       if (host) emit('outbound', { host, zone })

@@ -24,6 +24,7 @@
     "drizzle-orm": "^0.38.2",
     "drizzle-zod": "^0.6.0",
     "express": "^4.21.2",
+    "markdown-to-jsx": "9.10.6",
     "next": "16.4.3",
     "react": "19.3.1",
     "react-dom": "19.3.1",

@@ -40,7 +40,7 @@ http.createServer((req, res) => {
     res.setHeader('content-type', 'application/json')
     return res.end(JSON.stringify({ ok: true, release: r }))
   }
-  if (u === '/api/contact' && req.method === 'GET') { res.statusCode = 405; res.setHeader('allow', 'POST'); return res.end() }
+  if ((u === '/api/contact' || u === '/api/newsletter') && req.method === 'GET') { res.statusCode = 405; res.setHeader('allow', 'POST'); return res.end() }
   if (u.startsWith('/api/')) { res.statusCode = 404; return res.end('Not Found') }
   if (u === '/' && flags.includes('smoke=home500')) { res.statusCode = 500; return res.end('boom') }
   // The v2 server: a known page answers 200, anything else is a real 404 (flag unknown=200 restores the old fallback)

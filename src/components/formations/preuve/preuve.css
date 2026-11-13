@@ -1,0 +1,131 @@
+@layer theme, base, components, utilities;
+
+/* #preuve of /formations: the score and its base on the left, four answers on the right.
+   Entry: the answers come in one by one, the score rises first. */
+@layer components {
+  .v2-fm-preuve {
+    position: relative;
+    background: #f4ecdd;
+    padding: 96px 0;
+    color: #131620;
+
+    .pv-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 72px;
+      align-items: start;
+    }
+    .pv-score {
+      min-width: 0;
+      transition:
+        opacity 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+        transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .pv-figure {
+      margin: 18px 0 0;
+      font-size: 104px;
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .pv-line {
+      margin: 18px 0 0;
+      max-width: 26em;
+      text-wrap: pretty;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #3a3f4d;
+    }
+    .pv-survey {
+      min-width: 0;
+      padding-top: 6px;
+    }
+    .pv-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: #61677a;
+    }
+    .pv-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 16px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .pv-item {
+      min-width: 0;
+      transition:
+        opacity 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) calc(0.15s + var(--i, 0) * 220ms),
+        transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) calc(0.15s + var(--i, 0) * 220ms);
+    }
+    .temoignage {
+      height: 100%;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 20px 22px;
+      border-radius: 14px;
+      background: #fbf7f0;
+      border: 1px solid #e4d6c0;
+
+      blockquote {
+        margin: 0;
+        font-size: 19px;
+        line-height: 1.35;
+        letter-spacing: -0.01em;
+        font-weight: 600;
+      }
+      figcaption {
+        margin-top: 10px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        color: #61677a;
+      }
+    }
+    .pv-note {
+      margin: 16px 0 0;
+      max-width: 64ch;
+      text-wrap: pretty;
+      font-size: 14px;
+      line-height: 1.55;
+      color: #61677a;
+    }
+
+    &[data-reveal='armed'] .pv-score {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    &[data-reveal='armed'] .pv-item {
+      opacity: 0;
+      transform: translateY(14px) scale(0.96);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-fm-preuve {
+      padding: 64px 0;
+
+      .pv-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 36px;
+      }
+      .pv-figure {
+        font-size: 80px;
+      }
+      .pv-list {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .temoignage blockquote {
+        font-size: 17px;
+      }
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .v2-fm-preuve .pv-score,
+    .v2-fm-preuve .pv-item {
+      transition: none;
+    }
+  }
+}

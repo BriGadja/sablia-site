@@ -8,7 +8,10 @@ import express, { type Express, type NextFunction, type Request, type Response }
  * - a page is `<route>.html` (or `<route>/index.html`) and answers 200 at `/x` AND `/x/`; a file
  *   and a directory of the same name coexist (`ressources.html` beside `ressources/`);
  * - an unknown path is a real 404 carrying 404.html (the Vercel-era index.html fallback is gone);
- *   `/404*`, `/_not-found*` and `/ressources/__none*` (payload files included) are 404 too;
+ *   `/404*`, `/_not-found*`, `/ressources/__none*` and `/lettre/__none*` (payload files included) are
+ *   404 too; `/lettre` itself answers 301 to `/newsletter`, where the issues are listed; both lists
+ *   are matched on the decoded path with `.`, `..` and repeated slashes resolved (`canonicalPath`), the
+ *   file the lookup below would reach, so `/lettre/%5F%5Fnone` or `//_not-found` is a 404 too;
  * - Next's RSC payloads (`*.txt`, `index.txt`, `__next.*.txt`) are plain files: 200 text/plain;
  *   a 404 there would degrade every Link click to a full reload;
  * - `_next/static/*` is immutable, everything else revalidates; `.well-known` is served.
@@ -16,10 +19,28 @@ import express, { type Express, type NextFunction, type Request, type Response }
 
 const REVALIDATE = 'public, max-age=0, must-revalidate'
 const IMMUTABLE = 'public, max-age=31536000, immutable'
-const NEVER_SERVED = /^\/(?:404|_not-found|ressources\/__none)(?:[/.].*)?$/
+const NEVER_SERVED = /^\/(?:404|_not-found|ressources\/__none|lettre\/__none)(?:[/.].*)?$/
 const REDIRECTS: Record<string, string> = {
   '/roi': '/offres/compte-rendu-appel',
   '/about': '/#derriere',
+  '/lettre': '/newsletter',
+  // The monthly offer's first address (11/11) and the page it replaced (US-105, US-106, 12/11).
+  '/responsable-ia-temps-partage': '/responsable-ia-externalise',
+  '/accompagnement': '/responsable-ia-externalise',
+}
+
+/**
+ * The path the redirects and the 404 list see: decoded, `.`, `..` and repeated slashes resolved, no
+ * trailing slash. `null` for a malformed escape.
+ */
+function canonicalPath(rawPath: string): string | null {
+  let decoded: string
+  try {
+    decoded = decodeURIComponent(rawPath)
+  } catch {
+    return null
+  }
+  return path.posix.normalize(decoded).replace(/\/+$/, '') || '/'
 }
 
 export function mountStatic(app: Express, distPath: string): void {
@@ -47,7 +68,8 @@ export function mountStatic(app: Express, distPath: string): void {
   })
 
   app.use((req, res, next) => {
-    const clean = req.path.replace(/\/+$/, '') || '/'
+    const clean = canonicalPath(req.path)
+    if (clean === null) return notFound(res)
     const target = REDIRECTS[clean]
     if (target) return res.redirect(301, target)
     if (NEVER_SERVED.test(clean)) return notFound(res)

@@ -1,12 +1,32 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import { Dune } from '@/components/shell/Dune'
 import { Eyebrow } from '@/components/shell/Eyebrow'
 import { IllHead, SandIllustration } from '@/components/shell/SandIllustration'
 import { useInView } from '@/lib/hooks/useInView'
 import { useReducedMotion } from '@/lib/hooks/useReducedMotion'
-import { ask, CHAT_NAME, EYEBROW, FAQS, TITLE } from './content'
+import { ask, CHAT_NAME, EYEBROW, FAQS, type Faq as FaqItem, TITLE } from './content'
 import './faq.css'
+
+/**
+ * An answer as gated, its `link` words (taken from the answer itself) wrapped in a link. The sentence
+ * stays one inline run (a `span`), so the link reads as a link inside text (24 px target), not a block.
+ */
+function Answer({ faq }: { faq: FaqItem }) {
+  const at = faq.link ? faq.a.indexOf(faq.link.text) : -1
+  if (!faq.link || at < 0) return <>{faq.a}</>
+  return (
+    <span>
+      {faq.a.slice(0, at)}
+      <Link href={faq.link.href} className="fq-link">
+        {faq.link.text}
+      </Link>
+      {faq.a.slice(at + faq.link.text.length)}
+    </span>
+  )
+}
 
 /**
  * `#faq`: nine question buttons feed a chat stack that keeps the last three. All nine answers are in
@@ -43,6 +63,7 @@ export function Faq() {
 
   return (
     <section id="faq" ref={sectionRef} className="v2-faq">
+      <Dune back="#C68A8E" front="#F2E3DF" />
       <div className="wrap">
         <IllHead>
           <div>
@@ -87,7 +108,9 @@ export function Faq() {
                   return (
                     <div key={f.q} className="fq-pair" hidden>
                       <div className="fq-q">{f.q}</div>
-                      <div className="fq-a">{f.a}</div>
+                      <div className="fq-a">
+                        <Answer faq={f} />
+                      </div>
                     </div>
                   )
                 }
@@ -111,7 +134,7 @@ export function Faq() {
                       className={`fq-a${live ? ' rise' : ''}`}
                       style={live ? { animationDelay: '800ms' } : undefined}
                     >
-                      {f.a}
+                      <Answer faq={f} />
                     </div>
                   </div>
                 )

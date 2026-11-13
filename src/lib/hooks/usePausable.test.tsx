@@ -30,7 +30,7 @@ describe('usePausable', () => {
     expect(result.current.paused).toBe(false)
   })
 
-  it('hover:false ignores hover (Formations configurator)', () => {
+  it('hover:false ignores hover (a demo the visitor drives by hand)', () => {
     const { result } = renderHook(() => usePausable({ hover: false }))
     act(() => result.current.bind.onMouseEnter())
     expect(result.current.paused).toBe(false)

@@ -1,27 +1,27 @@
 {
   "/": {
-    "lastmod": "2026-10-26",
-    "hash": "sha256:050e27bf938a2038fbe2d61680d8a954ca5a2d93dac937b72c357bdfa08413d4"
+    "lastmod": "2026-11-12",
+    "hash": "sha256:13017ccb88a7b13cb1b4f7e87de3e0181bbd7149b54d4a4b1a826d9afe7fc35e"
   },
   "/mentions-legales": {
-    "lastmod": "2026-10-26",
-    "hash": "sha256:85506803f0a95f3ac27bffbbf08731b5dbcbca5765d3d5895bc8d9e9c6ec4cf0"
+    "lastmod": "2026-11-12",
+    "hash": "sha256:bbf1f6c08f1ecccda260fbce579e1c00d8b2521938ebdebc7a94843c5d198986"
   },
   "/politique-confidentialite": {
-    "lastmod": "2026-10-26",
-    "hash": "sha256:6bf5b814f48368fc1184e5d9427d4f31351bbda7464ef7870a91893cd9d7bdb9"
+    "lastmod": "2026-11-12",
+    "hash": "sha256:3097f9ae737c19b37c568cdb85124f6bd2ab6e40068f6a4b81d56f0e2705b4b8"
   },
   "/cgv": {
-    "lastmod": "2026-10-26",
-    "hash": "sha256:9c8a68140bbc587365bc9de1d0c5bdc1fd5fb27e08fd169c044eb8965cbeebe4"
+    "lastmod": "2026-11-12",
+    "hash": "sha256:a7923263480712723ac0d24f6e463ce51594330204fba28bf32fd8c630fa1e28"
   },
   "/guides/integrer-l-ia-dans-votre-entreprise": {
-    "lastmod": "2026-10-26",
-    "hash": "sha256:7815bc761e53e36fdfff5cc48915817bb1bba6e3a86b348dd34fc0c473285b8e"
+    "lastmod": "2026-11-12",
+    "hash": "sha256:e2e8e5e9140cfba37d27c1b23c9051984033b92b37586ac4aa174183767ff0f7"
   },
   "/offres/compte-rendu-appel": {
-    "lastmod": "2026-10-26",
-    "hash": "sha256:b364c31a6d72dbebf2a551ef9f25b662a5470d067b9b9a68ea3c7c00e87a30eb"
+    "lastmod": "2026-11-01",
+    "hash": "sha256:838a94ef1cd9a039d86856e70c3fbffea7f3252bc35d809a3c83230172c2e4ff"
   },
   "/ressources": {
     "lastmod": "2026-10-26",
@@ -44,12 +44,8 @@
     "hash": "sha256:abea29fa3293ea0a92e07de0943fccd8c9c7986478f87899581abb60a190dfac"
   },
   "/formations": {
-    "lastmod": "2026-10-26",
-    "hash": "sha256:b7e9c49505fa1d0cf35d9a3d0fb4c97b246fef51324383e5fdb610b68e9c6959"
-  },
-  "/accompagnement": {
-    "lastmod": "2026-10-26",
-    "hash": "sha256:792ebe45569a7f5d9366f78459a0c884052674757e3eec76d1d2a8cf53e63749"
+    "lastmod": "2026-11-13",
+    "hash": "sha256:249547c93f5c25fa9d1b2b1e2672a2be220cf2b84910e657fd87ba4d484f2702"
   },
   "/offres/compte-rendu-appel/google-sheets": {
     "lastmod": "2026-10-26",
@@ -58,5 +54,25 @@
   "/offres/compte-rendu-appel/excel-365": {
     "lastmod": "2026-10-26",
     "hash": "sha256:a9e1d10f0eee2e41fd0fcfa06efef6af4da26ba87b6edbb8056e75ab9fd1ce2e"
+  },
+  "/newsletter": {
+    "lastmod": "2026-11-11",
+    "hash": "sha256:8ae519efd43353f2c680db6af3c74fffcac94012938b72043f8549e90af95243"
+  },
+  "/webinaire": {
+    "lastmod": "2026-11-12",
+    "hash": "sha256:c91840d1c5dea9dbb6e5ef08537d6a2b451c5f1a15fcccd6c1f95b33d9d4b92b"
+  },
+  "/realisations": {
+    "lastmod": "2026-11-13",
+    "hash": "sha256:3d1a21617e1010535de297c1db1919e8345ade9de2f6887d36a7914b444b2c08"
+  },
+  "/responsable-ia-externalise": {
+    "lastmod": "2026-11-13",
+    "hash": "sha256:339cca1330154937da69509e71f118dfe3c2f8d33f94aa636f5c73cf28e5cfd4"
+  },
+  "/conferences": {
+    "lastmod": "2026-11-13",
+    "hash": "sha256:62830a29f45a1edc2fb9da3b14d356ddd432d93d3cbc21cb067a3d21016d0006"
   }
 }

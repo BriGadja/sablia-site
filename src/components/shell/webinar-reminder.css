@@ -1,0 +1,94 @@
+@layer theme, base, components, utilities;
+
+/* The light webinar reminder of /formations and /conferences (US-109, US-107): a hairline card on the
+   sand between two sections, the date and title on the left, the link on the right; on phones the link
+   drops under the sentence. Not the home's webinar band: no ticket, no booking button. */
+@layer components {
+  .v2-reminder {
+    position: relative;
+    background: #f4ecdd;
+    padding: 48px 0 0;
+    font-family: var(--font-sans);
+
+    .rm-line {
+      display: flex;
+      align-items: center;
+      gap: 12px 18px;
+      margin: 0;
+      padding: 12px 14px 12px 20px;
+      border: 1px solid #e4d6c0;
+      border-radius: 14px;
+      background: #fbf7f0;
+    }
+    .rm-icon {
+      flex: none;
+      color: #835a0c;
+    }
+    .rm-text {
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #3a3f4d;
+      text-wrap: pretty;
+
+      strong {
+        font-weight: 600;
+        color: #131620;
+      }
+    }
+    .rm-cta {
+      flex: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 6px;
+      font-size: 15px;
+      font-weight: 600;
+      white-space: nowrap;
+      color: #131620;
+      text-decoration: underline;
+      text-decoration-color: #b9852a;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 5px;
+
+      svg {
+        flex: none;
+        color: #835a0c;
+        transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+    }
+    .rm-cta:hover svg {
+      transform: translateX(3px);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .v2-reminder {
+      padding-top: 32px;
+
+      .rm-line {
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 4px 12px;
+        padding: 14px 16px 6px;
+      }
+      .rm-icon {
+        margin-top: 2px;
+      }
+      .rm-text {
+        flex-basis: calc(100% - 32px);
+      }
+      .rm-cta {
+        margin-left: 26px;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-reminder .rm-cta svg {
+      transition: none;
+    }
+  }
+}

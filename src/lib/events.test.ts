@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { track } from './analytics'
 import { clearConsent, writeConsent } from './consent'
 import {
+  destOf,
   emit,
   formError,
   formSuccess,
@@ -146,6 +147,109 @@ describe('clicks', () => {
     document.getElementById('c')?.click()
     expect(names()).toEqual(['click', 'outbound', 'cta_book'])
     expect(calls()[2][1]).toEqual({ zone: 'main', label: 'Réserver un call' })
+  })
+
+  it('adds dest=webinaire to the click on a link to /webinaire, and to nothing else', () => {
+    page(
+      [
+        '/webinaire',
+        '/webinaire/',
+        'https://sablia.io/webinaire',
+        '/webinaire#inscription',
+        '/webinaire?utm_source=x',
+      ]
+        .map(
+          (h, i) => `<section id="hero"><a id="w${i}" href="${h}">Prochain webinaire</a></section>`,
+        )
+        .join(''),
+    )
+    stop = startEventTracking()
+    for (let i = 0; i < 5; i++) {
+      vi.mocked(track).mockReset()
+      document.getElementById(`w${i}`)?.click()
+      expect(calls()[0], `link ${i}`).toEqual([
+        'click',
+        { label: 'Prochain webinaire', zone: 'hero', kind: 'link', dest: 'webinaire' },
+      ])
+    }
+  })
+
+  // US-110: the four doors of the menu carry their own name, like the webinar. The offer's door is
+  // `responsable-ia`, never `offre`: that word is the zone of the home's training panel.
+  const DOORS: [string, string][] = [
+    ['/responsable-ia-externalise', 'responsable-ia'],
+    ['/formations', 'formations'],
+    ['/conferences', 'conferences'],
+    ['/realisations', 'realisations'],
+    ['/webinaire', 'webinaire'],
+  ]
+
+  it('adds the door name as dest to a click on a link to one of the five doors, wherever it sits', () => {
+    page(
+      DOORS.flatMap(([path], i) =>
+        [path, `${path}/`, `https://sablia.io${path}`, `${path}#top`].map(
+          (h, j) => `<nav><a id="d${i}-${j}" href="${h}">Porte</a></nav>`,
+        ),
+      ).join(''),
+    )
+    stop = startEventTracking()
+    DOORS.forEach(([path, dest], i) => {
+      for (let j = 0; j < 4; j++) {
+        vi.mocked(track).mockReset()
+        document.getElementById(`d${i}-${j}`)?.click()
+        expect(calls()[0], `${path} link ${j}`).toEqual([
+          'click',
+          { label: 'Porte', zone: 'nav', kind: 'link', dest },
+        ])
+      }
+    })
+  })
+
+  it('destOf: the five door paths, one trailing slash tolerated, our own host only', () => {
+    for (const [path, dest] of DOORS) {
+      expect(destOf(path, 'sablia.io'), path).toBe(dest)
+      expect(destOf(`${path}/`, 'sablia.io'), `${path}/`).toBe(dest)
+      expect(destOf(`https://www.sablia.io${path}`, 'sablia.io'), `www ${path}`).toBe(dest)
+      expect(destOf(`${path}//`, 'sablia.io'), `${path}//`).toBeNull()
+      expect(destOf(`https://example.com${path}`, 'sablia.io'), `cross-origin ${path}`).toBeNull()
+      expect(destOf(`${path}x`, 'sablia.io'), `${path}x`).toBeNull()
+      expect(destOf(`${path}/x`, 'sablia.io'), `${path}/x`).toBeNull()
+    }
+    expect(destOf('/offre', 'sablia.io')).toBeNull()
+    expect(destOf('mailto:brice@sablia.io', 'sablia.io')).toBeNull()
+  })
+
+  it('gives no dest to other pages, a cross-origin or look-alike door, and buttons', () => {
+    page(
+      [
+        '<a id="a" href="/webinairex">x</a>',
+        '<a id="b" href="https://example.com/webinaire">x</a>',
+        '<a id="c" href="https://example.com/formations">x</a>',
+        '<button id="d">x</button>',
+        '<a id="e" href="/webinaire/merci">x</a>',
+        '<a id="f" href="/">x</a>',
+        '<a id="g" href="/offres/compte-rendu-appel">x</a>',
+        '<a id="h" href="/responsable-ia-temps-partage">x</a>',
+        '<a id="i" href="/accompagnement">x</a>',
+        '<a id="j" href="/formationsx">x</a>',
+        '<a id="k" href="/conferences/2026">x</a>',
+        '<a id="l" href="/#videos">x</a>',
+        '<a id="m" href="/ressources">x</a>',
+      ].join(''),
+    )
+    stop = startEventTracking()
+    // A followed link would move the test window to its host (a cross-origin link would make the
+    // next one look « own »): every click stays on https://sablia.io/.
+    const stay = (e: Event) => e.preventDefault()
+    document.addEventListener('click', stay)
+    for (const id of ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm']) {
+      vi.mocked(track).mockReset()
+      document.getElementById(id)?.click()
+      expect(calls()[0][0]).toBe('click')
+      expect(calls()[0][1], id).not.toHaveProperty('dest')
+    }
+    document.removeEventListener('click', stay)
+    expect(window.location.hostname).toBe('sablia.io')
   })
 
   it('ignores the consent banner itself', () => {

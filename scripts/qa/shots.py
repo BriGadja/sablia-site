@@ -2,16 +2,23 @@
 """Reference / build screenshots and per-section pixel diff for the sablia.io v2 port.
 
 Pages and sections (ids are the contract: the build must carry the same `#id` on each section root):
-  home            top scene automatisations construit formations derriere videos faq fin
-  formations      top niveaux outils deroule avis formats questions fin
-  accompagnement  top situations parcours livrables exemples pourquoi questions fin
-Viewports: 1440x900 and 390x844. Routes on a build: / , /formations , /accompagnement.
+  home            top mensuel automatisations offre formations conferences videos derriere webinaire faq fin
+  formations      top pourqui deroule inclus conference preuve questions fin
+  offre           top role premier-mois chaque-mois gardez conditions qui questions fin
+                                                     (/responsable-ia-externalise, build only)
+  conf            top sujets preuve fin              (/conferences, build only)
+  real            top construit fin                  (/realisations, build only: no mockup board)
+  crm             top scene pour-qui variantes inclus prix objection preuve faq   (/offres/compte-rendu-appel, build only)
+`webinaire` exists on the home only while the 03/12/2026 session is ahead (a missing section is logged, not fatal).
+Viewports: 1440x900 and 390x844. Routes on a build: / , /formations , /responsable-ia-externalise , /conferences ,
+/realisations , /offres/compte-rendu-appel. The reference boards (--ref) only exist for the CRM-era home and /formations;
+`offre`, `conf`, `real` and `crm` have none (/accompagnement and its board left with the page on 12/11).
 
 Capture kinds (written under <out>/<page>/<vp>/<kind>/):
   final/<section>.png        reduced-motion final state (deterministic), element screenshot.
   at/<section>@<t>s.png      virtual-time samples: t seconds after the section entered the viewport.
   walk/<n>-<page>/<vp>/...   (--walk, build only) final-state shots after CLIENT navigation
-                             Home -> /formations -> /accompagnement -> Home; proves the navigation did not
+                             Home -> /formations -> /responsable-ia-externalise -> Home; proves the navigation did not
                              reload the document (window marker survives) and diffs each page against the
                              cold-load `final` shots of the same build.
 
@@ -59,19 +66,22 @@ BUILD_OUT = HUB / "tmp/s-build"
 
 PAGES = {
     "home": {"board": "Main.dc.html", "route": "/",
-             "sections": ["top", "scene", "automatisations", "construit", "formations", "derriere", "videos", "faq", "fin"]},
+             "sections": ["top", "mensuel", "automatisations", "offre", "formations", "conferences", "videos", "derriere", "webinaire", "faq", "fin"]},
     "formations": {"board": "Formations.dc.html", "route": "/formations",
-                   "sections": ["top", "niveaux", "outils", "deroule", "avis", "formats", "questions", "fin"]},
-    "accompagnement": {"board": "Accompagnement.dc.html", "route": "/accompagnement",
-                       "sections": ["top", "situations", "parcours", "livrables", "exemples", "pourquoi", "questions", "fin"]},
+                   "sections": ["top", "pourqui", "deroule", "inclus", "conference", "preuve", "questions", "fin"]},
+    "offre": {"board": None, "route": "/responsable-ia-externalise",
+              "sections": ["top", "role", "premier-mois", "chaque-mois", "gardez", "conditions", "qui", "questions", "fin"]},
+    "conf": {"board": None, "route": "/conferences", "sections": ["top", "sujets", "preuve", "fin"]},
+    "real": {"board": None, "route": "/realisations", "sections": ["top", "construit", "fin"]},
+    "crm": {"board": None, "route": "/offres/compte-rendu-appel",
+            "sections": ["top", "scene", "pour-qui", "variantes", "inclus", "prix", "objection", "preuve", "faq"]},
 }
 VIEWPORTS = {1440: 900, 390: 844}
 # Default virtual-time samples (seconds after entering view), per (page, section); fallback 2,6.
 AT_DEFAULT = {
-    ("home", "top"): [2, 6, 10], ("home", "scene"): [2, 5, 9], ("home", "automatisations"): [1, 5, 9],
-    ("home", "construit"): [2, 6], ("home", "formations"): [2], ("home", "faq"): [1, 3],
-    ("formations", "top"): [2, 9, 16], ("formations", "niveaux"): [2, 5], ("formations", "deroule"): [2, 5],
-    ("accompagnement", "top"): [2, 6], ("accompagnement", "parcours"): [2, 5, 9],
+    ("home", "top"): [2, 6, 10], ("home", "automatisations"): [1, 5, 9], ("home", "formations"): [2],
+    ("home", "faq"): [1, 3], ("formations", "top"): [2, 9, 16], ("formations", "deroule"): [2, 5],
+    ("real", "construit"): [2, 6], ("crm", "scene"): [2, 5, 9],
 }
 T0_MS = 1_000_000_000_000  # fixed fake epoch
 
@@ -85,6 +95,8 @@ def start_ref_server():
     scratch = REF_OUT / "_serve"
     scratch.mkdir(parents=True, exist_ok=True)
     for p in PAGES.values():
+        if p["board"] is None:
+            continue
         link = scratch / p["board"]
         if link.is_symlink() or link.exists():
             link.unlink()
@@ -263,14 +275,14 @@ def capture_walk_routes(browser, base, width, routes, out: Path):
 
 
 def capture_walk(browser, base, width, sections_by_page, out: Path):
-    """Client navigation Home -> /formations -> /accompagnement -> Home on one document."""
+    """Client navigation Home -> /formations -> /responsable-ia-externalise -> Home on one document."""
     ctx = new_context(browser, width, True, False)
     page = ctx.new_page()
     goto(page, base + "/")
     page.evaluate("window.__walkMarker = 'alive'")
     page.evaluate(SCROLL_THROUGH_JS)
     report = []
-    for n, key in enumerate(["formations", "accompagnement", "home"], 1):
+    for n, key in enumerate(["formations", "offre", "home"], 1):
         route = PAGES[key]["route"]
         link = page.locator(f"a[href='{route}']").first
         if link.count() == 0:
@@ -365,7 +377,7 @@ def main() -> int:
     ap.add_argument("--ref", action="store_true", help="capture the frozen mockup into tmp/s-ref")
     ap.add_argument("--base", help="capture this server (dev 5111, slot 5001...) into tmp/s-build/<tag>")
     ap.add_argument("--tag", default="build", help="build output sub-folder (one per unit avoids collisions)")
-    ap.add_argument("--pages", default="home,formations,accompagnement")
+    ap.add_argument("--pages", help="comma list of pages (default: home,formations,offre; home,formations with --ref)")
     ap.add_argument("--sections", help="comma list of section ids (default: all of each page)")
     ap.add_argument("--vp", default="1440,390")
     ap.add_argument("--kinds", default="final,at", help="comma list of: final, at")
@@ -376,6 +388,8 @@ def main() -> int:
     ap.add_argument("--diff", action="store_true", help="print per-shot pixel difference reference vs build")
     ap.add_argument("--route", help="build only: capture this path instead of the page's route (one page in --pages), e.g. a throwaway /dev-top preview before the home is assembled")
     args = ap.parse_args()
+    if args.pages is None:  # only home and formations have a reference board
+        args.pages = "home,formations" if args.ref else "home,formations,offre"
     if args.route:
         keys = [k for k in args.pages.split(",") if k]
         if len(keys) != 1 or not args.route.startswith("/"):
@@ -386,6 +400,9 @@ def main() -> int:
     vps = [int(v) for v in args.vp.split(",") if v]
     if any(p not in PAGES for p in pages) or any(v not in VIEWPORTS for v in vps):
         log(f"bad --pages/--vp (pages {list(PAGES)}, vp {list(VIEWPORTS)})")
+        return 2
+    if args.ref and any(PAGES[p]["board"] is None for p in pages):
+        log("--ref has no reference board for 'offre', 'real' or 'crm' (build only)")
         return 2
     only = [s for s in (args.sections or "").split(",") if s]
     sections = {p: [s for s in PAGES[p]["sections"] if not only or s in only] for p in pages}

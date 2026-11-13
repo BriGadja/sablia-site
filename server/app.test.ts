@@ -37,6 +37,36 @@ describe('createApp', () => {
     err.mockRestore()
   })
 
+  it('POST /api/newsletter reaches the handler (handlers are mounted explicitly, never discovered)', async () => {
+    const r = await fetch(`${srv.url}/api/newsletter`, {
+      method: 'POST',
+      body: '{}',
+      headers: { 'content-type': 'application/json' },
+    })
+    // The handler's own refusal, not the adapter's 404 for an unmounted /api path.
+    expect(r.status).toBe(400)
+    expect((await r.json()).code).toBe('invalid_payload')
+    expect((await fetch(`${srv.url}/api/newsletter`)).status).toBe(405)
+  })
+
+  it('POST /api/webinaire reaches the handler (mounted explicitly in DEFAULT_API)', async () => {
+    const r = await fetch(`${srv.url}/api/webinaire`, {
+      method: 'POST',
+      body: '{}',
+      headers: { 'content-type': 'application/json' },
+    })
+    expect(r.status).toBe(400)
+    expect((await r.json()).code).toBe('invalid_payload')
+    expect((await fetch(`${srv.url}/api/webinaire`)).status).toBe(405)
+  })
+
+  it('/api/webinaire-questionnaire is mounted (404 on a malformed token, 405 on PUT)', async () => {
+    const r = await fetch(`${srv.url}/api/webinaire-questionnaire?t=abc`)
+    expect(r.status).toBe(404)
+    const put = await fetch(`${srv.url}/api/webinaire-questionnaire`, { method: 'PUT' })
+    expect(put.status).toBe(405)
+  })
+
   it('never logs an API response body', async () => {
     const log = vi.spyOn(console, 'log').mockImplementation(() => {})
     await fetch(`${srv.url}/api/contact`, {

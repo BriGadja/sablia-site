@@ -145,6 +145,13 @@ stats.sablia.io {
 			window 1m
 		}
 	}
+	# GHSA-3xx8-742v-m4mq (Umami, no upstream fix): a tracker cache token is accepted as
+	# a share token and opens the analytics read API. We have no share link (table
+	# `share` empty on 2026-10-29), so both share headers are refused outright.
+	@share_token header x-umami-share-token *
+	@share_context header x-umami-share-context *
+	respond @share_token 403
+	respond @share_context 403
 	import umami_upstream
 }
 

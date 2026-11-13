@@ -1,5 +1,6 @@
 'use client' // form state, fetch and the mount timestamp
 
+import Link from 'next/link'
 import { type FormEvent, useRef, useState } from 'react'
 import { FOUND_VIA_EMPTY, FOUND_VIA_LABEL, FOUND_VIA_OPTIONS } from '@/content/found-via'
 import { formError, formSuccess } from '@/lib/events'
@@ -14,6 +15,9 @@ import './ressource-form.css'
  * means nobody calls them. Ticking it reveals an optional phone field (Brice, 2026-10-12: a lead
  * asked to be contacted and left nothing to call); the email stays required either way. On success
  * the files appear on screen straight away — the form captures the lead, it does not lock the file.
+ *
+ * A second box, unticked too, subscribes to the Tuesday letter (US-82); the success screen then says
+ * so, or offers `/newsletter` when it stayed unticked (US-84).
  *
  * Anti-spam is the honeypot plus a minimum delay of the contact form: no third-party script.
  */
@@ -31,12 +35,13 @@ interface Fichier {
 type FormState =
   | { kind: 'idle' }
   | { kind: 'pending' }
-  | { kind: 'success'; files: Fichier[]; contact: boolean }
+  | { kind: 'success'; files: Fichier[]; contact: boolean; newsletter: boolean }
   | { kind: 'error'; message: string }
 
 export default function RessourceForm({ slug, titre }: RessourceFormProps) {
   const [state, setState] = useState<FormState>({ kind: 'idle' })
   const [wantsContact, setWantsContact] = useState(false)
+  const [wantsNewsletter, setWantsNewsletter] = useState(false)
   /** Set at the first client render, so the prerendered HTML never bakes a timestamp. */
   const mountedAt = useRef(Date.now())
 
@@ -57,6 +62,7 @@ export default function RessourceForm({ slug, titre }: RessourceFormProps) {
           email: String(data.get('email') ?? ''),
           slug,
           contact: wantsContact,
+          newsletter: wantsNewsletter,
           telephone: wantsContact ? String(data.get('telephone') ?? '') : '',
           foundVia: String(data.get('foundVia') ?? ''),
           website: String(data.get('website') ?? ''),
@@ -67,13 +73,18 @@ export default function RessourceForm({ slug, titre }: RessourceFormProps) {
       // 204 is what a bot gets. It sees the same confirmation as everyone else.
       if (response.status === 204) {
         formSuccess('ressource')
-        setState({ kind: 'success', files: [], contact: wantsContact })
+        setState({ kind: 'success', files: [], contact: wantsContact, newsletter: wantsNewsletter })
         return
       }
       if (response.status === 200) {
         const body = (await response.json().catch(() => null)) as { files?: Fichier[] } | null
         formSuccess('ressource')
-        setState({ kind: 'success', files: body?.files ?? [], contact: wantsContact })
+        setState({
+          kind: 'success',
+          files: body?.files ?? [],
+          contact: wantsContact,
+          newsletter: wantsNewsletter,
+        })
         return
       }
       const body = (await response.json().catch(() => null)) as {
@@ -110,6 +121,15 @@ export default function RessourceForm({ slug, titre }: RessourceFormProps) {
               </li>
             ))}
           </ul>
+        )}
+        {state.newsletter ? (
+          <p className="letter-line">Vous recevrez la lettre du mardi.</p>
+        ) : (
+          <p className="letter-line">
+            <Link href="/newsletter" className="letter">
+              Recevoir la lettre du mardi
+            </Link>
+          </p>
         )}
       </div>
     )
@@ -175,6 +195,17 @@ export default function RessourceForm({ slug, titre }: RessourceFormProps) {
             </p>
           </div>
         )}
+
+        <label htmlFor="ressource-newsletter" className="check">
+          <input
+            id="ressource-newsletter"
+            name="newsletter"
+            type="checkbox"
+            checked={wantsNewsletter}
+            onChange={(event) => setWantsNewsletter(event.target.checked)}
+          />
+          <span>Recevoir aussi la lettre du mardi (L&apos;IA au travail)</span>
+        </label>
 
         <div className="field">
           <label htmlFor="ressource-found-via">{FOUND_VIA_LABEL}</label>

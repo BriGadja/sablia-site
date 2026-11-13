@@ -189,9 +189,6 @@ export const SEANCE_BARS = Array.from(
 )
 export const SEANCE_DAYS = ['Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.']
 
-export const SR_INTRO =
-  "Exemples animés : pour chaque cas, une demande arrive et Claude produit ce que vous validez : un devis, un mail envoyé à la bonne personne, le résumé de la veille du matin, les documents d'une intervention, le compte rendu d'une séance et son mail de suivi."
-
 /** Readable text of the four bespoke scenes, kept in the static HTML for crawlers and screen readers. */
 export const SCENE_TEXT: string[][] = [
   [],

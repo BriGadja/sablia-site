@@ -336,3 +336,42 @@ Source: hub plan `plans/sablia-io-v2.md` (autopilot run `2026-10-26-sablia-io-v2
 **Acceptance (deterministic where possible).** Build chain and guards (`npm run build`); real 404 and `<route>.html` serving (`server/static.test.ts`); the 34 recorded URL behaviours (`scripts/site-parity.py`, `scripts/qa/routes-check.py`); measurement events (`src/lib/event-map.test.ts`, `scripts/analytics-e2e.mjs`); content gates and their bench (`scripts/qa/content-gates.sh`); home at most 2 `score.py` defects, Formations 0, Accompagnement 0; motion, accessibility and origin gates on every route; Lighthouse mobile a11y ≥ 95, SEO ≥ 95, best practices ≥ 90, performance ≥ 75, CLS ≤ 0.1, LCP ≤ 3 s, TBT ≤ 300 ms (or the old-production baseline where the old site missed one); CSS discipline (`scripts/qa/css-collisions.py`); no draft marker in a production build.
 
 **Out of scope.** Retiring Vercel, the newsletter, a contact form UI, a card for a client on the home wall, TypeScript 7 / Vitest 5 / Biome 2.6 / Express 5 migrations.
+
+
+## 10. Training lot 1 (2026-11-01)
+
+Source: hub plan `plans/site-formation-lot1-2026-11-01.md` (autopilot run `2026-11-01-site-formation`, branch `autopilot/2026-11-01-site-formation`), after the grill of 2026-11-01. Stories: `specs/REGISTRY.md` US-91 to US-98, status `À-MARCHER` until Brice's validation point 1 and the production walk. US-1, US-2, US-72, US-74 and US-75 are replaced.
+
+**Objective.** The site stops selling the CRM first and sells the training « L'IA au travail » (three days at the client, up to 12 people, with a free weekly-slot webinar as the entry point), before the first newsletter on 10/11 and the webinar of 03/12. The CRM offer stays, on its own pages, unchanged in price and content.
+
+**What changed.**
+1. Home: ten sections (`#top` … `#fin`), the CRM scene and the wall of cards leave it; the hero promises the training and the webinar.
+2. `/formations` is the offer page, `/accompagnement` becomes « Après la formation » (monthly referent session, tailor-made work), `/realisations` is new and indexed (the wall of cards), the CRM offer page gains the `#scene` animation. (`/accompagnement` replaced on 12/11, § 11.)
+3. Shell: menu Formation · Webinaires · Après la formation · Réalisations (replaced by the menu by intent on 12/11, § 11); a thin webinar bar and the header button « Prochain webinaire » while the session is ahead, then « Réserver 30 min » on the « Échange de 30 minutes » Calendly (`site.formationBookingUrl`); `/offres/**` keeps the CRM Calendly. The switch is `SESSION_START` (03/12/2026 12:00 Paris) read through `session-bar.ts`.
+4. Legal: the activity-declaration sentence of article L6352-12 (`declaration.ts`) in the footer and the legal notice, with the photo credit; the hub red-line guard accepts that sentence only whole.
+5. Measurement: UTM source, medium and campaign reach Umami (nothing else), the click to `/webinaire` carries `dest`, `?stats=off` mutes a device.
+6. Identity: tagline, titles, JSON-LD and crawler files speak of the training, not of a CRM agency.
+
+**Hard rules.** No training price on any page (the five training figures never followed by a euro sign; `no-training-price.test.ts`, then a grep on the built HTML); no guarantee; the webinar chain (`api/webinaire*.ts`, `src/content/webinaire.ts`, the four `/webinaire` pages) is frozen until 03/12; no client, partner or counterpart named in the repository.
+
+**Open for lot 2.** A list of webinars behind « Webinaires »; a past-session state of `/webinaire` (the page still shows the 03/12 form afterwards: a review is dated 13/11); `NextWebinarBanner` (no mount, flag `NEXT_WEBINAR_BANNER` off); a UTM column in the registration table.
+
+**Acceptance.** `npx vitest run` green; `npx tsc --noEmit`, Biome and `css-collisions.py` clean; `bash scripts/qa/build.sh` and `seo:stamp-check` (restamped last); the built-HTML greps of the plan (no price, booking URLs, bar present before and absent after the start); both hub text gates on every visitor file; `score.py` 0 defects on `home`, `form`, `acc`, `real`, `crm`; the Rule 15 walk on production.
+
+## 11. The site around the monthly offer (2026-11-12)
+
+Source: hub plan `plans/sablia-site-structure-offre.md` (autopilot run `2026-11-12-structure-site-offre`, branch `feat/structure-site-offre`), after the grill of 2026-11-12 and Brice's decisions of the same day; visitor strings from the run's copy deck. Stories: `specs/REGISTRY.md` US-103 to US-111, `JAMAIS-PASSÉE` until the walk; US-91 and US-94 are replaced, US-92, US-93, US-95 and US-99 amended.
+
+**Objective.** One monthly offer, « Responsable IA externalisé », leads the site; the training, the conferences and the réalisations are reached by intent. No amount on the home.
+
+**What changed.**
+1. The monthly offer page moves to `/responsable-ia-externalise` (h1 « Votre responsable IA, sans le recruter »); its old address and `/accompagnement` answer 301 there; the « Référent IA » is no longer an offer.
+2. Menu and footer by intent: Responsable IA externalisé · Formations · Conférences · Réalisations; the header button keeps its rule (« Prochain webinaire » while a session is ahead, then « Réserver 30 min »).
+3. Home: one h1 saying what Sablia does and four doors, then `#mensuel` (the monthly offer), the agents, the training panel, the photo strip, `#conferences`, the videos with « Un besoin précis ? », the founder, the webinar while a session is ahead, the questions and the closing band; `#apres` is gone.
+4. `/conferences` is new (three topics, on request, price on quote, a recommendation signed by role and sector); `/formations` gains the short-formats sentence and the webinar reminder; `/realisations` gains a filter by type and the « Un besoin précis ? » block.
+5. Measurement: a click toward one of the five doors carries the door's name as `dest`; booking buttons are told apart by page path and zone (`docs/SEO.md` § Reading the measurement).
+6. Machine texts: the organisation JSON-LD, `llms.txt` and `ai.txt` describe today's offer; the word « audit » leaves every visitor source (`src/content/no-audit.test.ts`).
+
+**Hard rules.** No amount on the home outside the demo scenes of `#automatisations`; never « audit », « Référent IA », an hours framing of the monthly contract, nor a company name; the webinar chain stays frozen; `content.parity.test.ts` pins the offer page to the hub `offre.md`.
+
+**Acceptance.** The plan's acceptance criteria: `npx vitest run` green (with the scratch offer copy until the hub title lands), `npm run test:seo`, `tsc`, Biome, `css-collisions.py`, `seo:stamp-check`; then the build and its gates, the adversarial review of the built pages and Brice's two validation points before any merge.

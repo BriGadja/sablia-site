@@ -1,8 +1,9 @@
 import { pageMetadata } from '@/lib/seo'
 
+// Copy deck B2 `home.meta.*` (US-104): what Sablia does, for SMEs, in Rouen; no price, no CRM sentence.
 export const homeMetadata = pageMetadata({
   path: '/',
-  title: "Sablia, le CRM à jour après l'appel",
+  title: "Outils d'IA et formation pour les PME, à Rouen · Sablia",
   description:
-    'Le commercial raccroche, le compte rendu et la tâche de relance sont déjà dans votre CRM, écrits par Claude. Installé en 7 jours sur HubSpot, Pipedrive, Zoho ou Salesforce. Échange gratuit de 30 minutes.',
+    "Sablia, à Rouen, met l'IA en place dans les PME : un responsable IA externalisé au mois, des formations et des conférences sur demande.",
 })

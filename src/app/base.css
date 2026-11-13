@@ -49,8 +49,10 @@
     outline-offset: 3px;
   }
   .panel :focus-visible,
+  .v2-sbar :focus-visible,
   #scene :focus-visible,
   #videos :focus-visible,
+  .v2-tp-conditions :focus-visible,
   #fin :focus-visible {
     outline-color: #D9A441 !important;
   }
