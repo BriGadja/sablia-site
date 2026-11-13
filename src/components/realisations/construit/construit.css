@@ -1,7 +1,7 @@
 @layer theme, base, components, utilities;
 
 /* #construit — ported from the v143 mockup's RENDERED result (append-only patches merged: later rules won).
-   The `bp-*` rules style the seven blueprint drawings under ./cards/ (class names are the mockup's). */
+   The `bp-*` rules style the six blueprint drawings under ./cards/ (class names are the mockup's). */
 @layer components {
   .v2-construit {
     position: relative;
@@ -721,65 +721,6 @@
     .bp-quotes .bp-quote.on {
       transition-delay: 0.16s;
     }
-    .bp-tr {
-      display: grid;
-      grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 0.6fr));
-      align-items: center;
-      gap: 8px;
-      height: 40px;
-      padding: 0 14px;
-      border-top: 1px solid #edeff4;
-      font-size: 13px;
-    }
-    .bp-tr.hd {
-      border-top: 0;
-      height: 34px;
-      font-family: var(--font-mono);
-      font-size: 10.5px;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: #61677a;
-    }
-    .bp-tr > span:not(:first-child) {
-      justify-self: center;
-    }
-    .bp-tr .ad {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-weight: 600;
-      opacity: 0;
-      transform: translateX(-8px);
-      transition:
-        opacity 0.3s,
-        transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
-    }
-    .bp-tr.in .ad {
-      opacity: 1;
-      transform: none;
-    }
-    .bp-mr {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      height: 40px;
-      padding: 0 12px;
-      border-top: 1px solid #edeff4;
-      font-size: 12.5px;
-      transition: background 0.3s;
-    }
-    .bp-mr.on {
-      background: #f8eed9;
-    }
-    .bp-mr .pdf {
-      margin-left: auto;
-      font-family: var(--font-mono);
-      font-size: 10.5px;
-      padding: 2px 6px;
-      border-radius: 5px;
-      background: #edeff4;
-      color: #61677a;
-    }
     .bp-sr {
       display: flex;
       align-items: center;
@@ -910,8 +851,6 @@
       .bp-seat,
       .bp-seat path,
       .bp-seat circle,
-      .bp-tr .ad,
-      .bp-mr,
       .bp-sr,
       .bp-sr .st,
       .bp-c.mv,

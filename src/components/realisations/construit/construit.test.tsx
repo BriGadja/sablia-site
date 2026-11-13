@@ -39,12 +39,11 @@ const tick = (ms: number) =>
   })
 
 describe('content', () => {
-  it('lists the seven wall cards in the decided order, one card off the wall, voice last', () => {
+  it('lists the six wall cards in the decided order, voice last', () => {
     expect(CARDS.map((c) => c.kind)).toEqual([
       'helene',
       'site',
       'cash',
-      'maint',
       'noesia',
       'seminar',
       'voice',
@@ -66,17 +65,34 @@ describe('content', () => {
     expect(figureText(cash, 0.5).endsWith('+ relevés')).toBe(false)
   })
 
-  // Adversarial review K6 (dir-4, fai-4) and stage decisions of K7: voice is no longer sold, a figure
-  // needs a counted source, and the 68 bookings are worded as proof line P-8 (sector, period, no name).
-  it('says what the voice card was: tag « Agent vocal », no uncounted figure, the 68 bookings of P-8', () => {
+  // Adversarial review K6 (dir-4, fai-4): voice is no longer sold (« Agent vocal », not « Sur demande ») and
+  // the 68 bookings are worded as proof line P-8 (sector, period, no name). Brice at VP2 (13/11, « laisse
+  // vingtaine »): « une vingtaine … depuis 2024 » stays, his own count of 19/10 (CAREER.md « Voice agents »).
+  it('says what the voice card was: tag « Agent vocal », « une vingtaine » since 2024, the 68 bookings of P-8', () => {
     const voice = CARDS.find((c) => c.kind === 'voice')
     if (voice === undefined) throw new Error('the wall lost its voice card')
     expect(voice.tags).toBe('Agent vocal')
     expect(voice.text).toBe(
-      "Accueil téléphonique, rappels, prise de rendez-vous. Les 68 rendez-vous : un agent sortant, dans l'investissement locatif clé en main, d'avril à août 2026.",
+      "Une vingtaine mis en service depuis 2024 : accueil téléphonique, rappels, prise de rendez-vous. Les 68 rendez-vous : un agent sortant, dans l'investissement locatif clé en main, d'avril à août 2026.",
     )
-    expect(`${voice.tags} ${voice.text}`).not.toMatch(/sur demande|vingtaine|depuis 2024/i)
+    expect(`${voice.tags} ${voice.text}`).not.toMatch(/sur demande/i)
     expect(voice.muted).toBe(true)
+  })
+
+  // Brice at VP2 (13/11): the maintenance card leaves (no written proof it served); the cashback card is
+  // named for what was built, « Plateforme de veille concurrentielle », and said in the past (the service
+  // stopped on 07/11; 699 014 rates read from 22/02 to 24/10/2026, recount of 26/10).
+  it('drops the maintenance card and names the cashback card for what was built, in the past', () => {
+    expect(CARDS.some((c) => (c.kind as string) === 'maint')).toBe(false)
+    expect(CARDS.map((c) => `${c.sector} ${c.text}`).join(' ')).not.toMatch(/maintenance/i)
+    const cash = CARDS.find((c) => c.kind === 'cash')
+    if (cash === undefined) throw new Error('the wall lost its cashback card')
+    expect(cash.sector).toBe('Plateforme de veille concurrentielle')
+    expect(cash.text).toBe(
+      'Pour une plateforme de cashback : les taux de ses concurrents, relevés chaque jour pendant huit mois dans une application.',
+    )
+    expect(cash.tags).toBe('Application')
+    expect(cash.types).toEqual(['outils'])
   })
 
   // The seminar card is the « matinée de sensibilisation » of proof line P-19, shown under « Conférences ».
@@ -96,15 +112,15 @@ describe('content', () => {
 })
 
 describe('Construit', () => {
-  it('server-renders the title, the seven rows and the final figures', () => {
+  it('server-renders the title, the six rows and the final figures', () => {
     mockReducedMotion(false)
     const { container } = render(<Construit />)
     const section = container.querySelector('section#construit.v2-construit')
     expect(section).not.toBeNull()
     expect(screen.getByRole('heading', { level: 2 }).textContent).toBe('Exemples de réalisations.')
     expect(screen.getByText('Plus de 20 clients accompagnés depuis 2025.')).toBeTruthy()
-    expect(section?.querySelectorAll('ol[aria-label="Toutes les réalisations"] li').length).toBe(7)
-    expect(section?.querySelectorAll('article.deck-card').length).toBe(7)
+    expect(section?.querySelectorAll('ol[aria-label="Toutes les réalisations"] li').length).toBe(6)
+    expect(section?.querySelectorAll('article.deck-card').length).toBe(6)
     expect(section?.textContent).toContain('699 000+ relevés')
     expect(section?.textContent).toContain('68 rendez-vous pris en cinq mois')
     expect(section?.textContent).not.toMatch(/—/)
@@ -136,7 +152,7 @@ describe('Construit', () => {
     mockReducedMotion(false)
     const { container } = render(<Construit />)
     const rows = () => container.querySelectorAll('button.caserow')
-    fireEvent.click(rows()[6])
+    fireEvent.click(rows()[5])
     const grow = container.querySelector('.grow') as HTMLElement
     fireEvent.animationEnd(grow)
     expect(rows()[0].getAttribute('aria-current')).toBe('true')
@@ -212,8 +228,7 @@ const CHIPS = ['Toutes', 'Outils', 'Formations', 'Conférences', 'Sites']
 const SECTORS = {
   helene: 'Hélène, psychopraticienne et conseillère en nutrition',
   site: 'Un institut de beauté à Rouen',
-  cash: 'Une plateforme de cashback',
-  maint: 'Une entreprise de maintenance du bâtiment',
+  cash: 'Plateforme de veille concurrentielle',
   noesia: 'École Noésia',
   seminar: 'Un cabinet de conseil en ingénierie',
   voice: 'Agents vocaux',
@@ -221,27 +236,27 @@ const SECTORS = {
 const SETS: Record<string, { list: string; status: string; sectors: string[] }> = {
   Toutes: {
     list: 'Toutes les réalisations',
-    status: '7 réalisations sur 7',
+    status: '6 réalisations sur 6',
     sectors: Object.values(SECTORS),
   },
   Outils: {
     list: 'Réalisations : outils',
-    status: '4 réalisations sur 7',
-    sectors: [SECTORS.helene, SECTORS.cash, SECTORS.maint, SECTORS.voice],
+    status: '3 réalisations sur 6',
+    sectors: [SECTORS.helene, SECTORS.cash, SECTORS.voice],
   },
   Formations: {
     list: 'Réalisations : formations',
-    status: '2 réalisations sur 7',
+    status: '2 réalisations sur 6',
     sectors: [SECTORS.noesia, SECTORS.seminar],
   },
   Conférences: {
     list: 'Réalisations : conférences',
-    status: '1 réalisation sur 7',
+    status: '1 réalisation sur 6',
     sectors: [SECTORS.seminar],
   },
   Sites: {
     list: 'Réalisations : sites',
-    status: '2 réalisations sur 7',
+    status: '2 réalisations sur 6',
     sectors: [SECTORS.helene, SECTORS.site],
   },
 }
@@ -272,7 +287,6 @@ describe('filter by type (US-108)', () => {
       helene: ['outils', 'sites'],
       site: ['sites'],
       cash: ['outils'],
-      maint: ['outils'],
       noesia: ['formations'],
       seminar: ['conferences', 'formations'],
       voice: ['outils'],
@@ -312,7 +326,7 @@ describe('filter by type (US-108)', () => {
         set.list,
       )
       expect(shownCards(container).length, label).toBe(set.sectors.length)
-      expect(container.querySelectorAll('article.deck-card').length, label).toBe(7)
+      expect(container.querySelectorAll('article.deck-card').length, label).toBe(6)
       for (const a of container.querySelectorAll('article.deck-card[hidden]'))
         expect(a.getAttribute('aria-hidden'), label).toBe('true')
     }
@@ -321,7 +335,7 @@ describe('filter by type (US-108)', () => {
   it('says the count in a status line outside the deck, present in the server HTML', () => {
     mockReducedMotion(false)
     const html = renderToString(<Construit />)
-    expect(html).toMatch(/role="status"[^>]*>7 réalisations sur 7</)
+    expect(html).toMatch(/role="status"[^>]*>6 réalisations sur 6</)
     const { container } = render(<Construit />)
     const status = screen.getByRole('status')
     expect(status.closest('.deck-wrap')).toBeNull()
@@ -354,7 +368,7 @@ describe('filter by type (US-108)', () => {
   it('a filter press goes back to the first card of the set', () => {
     mockReducedMotion(false)
     const { container } = render(<Construit />)
-    fireEvent.click(rows(container)[5]) // the seminar card, also in « Formations »
+    fireEvent.click(rows(container)[4]) // the seminar card, also in « Formations »
     expect(currentSector(container)).toBe(SECTORS.seminar)
     press('Formations')
     expect(currentSector(container)).toBe(SECTORS.noesia)
@@ -400,12 +414,12 @@ describe('filter by type (US-108)', () => {
 
   it('with two cards, the card behind is the next one and never the leaving one', () => {
     // the stack slot of a two-card and a one-card set is the slot of a full deck
-    expect(deckSlot(1, 0, 2)).toEqual(deckSlot(1, 0, 7))
-    expect(deckSlot(0, 1, 2)).toEqual(deckSlot(1, 0, 7))
-    expect(deckSlot(0, 0, 2)).toEqual(deckSlot(0, 0, 7))
-    expect(deckSlot(0, 0, 1)).toEqual(deckSlot(0, 0, 7))
+    expect(deckSlot(1, 0, 2)).toEqual(deckSlot(1, 0, 6))
+    expect(deckSlot(0, 1, 2)).toEqual(deckSlot(1, 0, 6))
+    expect(deckSlot(0, 0, 2)).toEqual(deckSlot(0, 0, 6))
+    expect(deckSlot(0, 0, 1)).toEqual(deckSlot(0, 0, 6))
     // the full deck keeps its leaving slot (behind, faded out)
-    expect(deckSlot(6, 0, 7)).toMatchObject({ active: false, ty: 16, op: 0, z: 1 })
+    expect(deckSlot(5, 0, 6)).toMatchObject({ active: false, ty: 16, op: 0, z: 1 })
     mockReducedMotion(false)
     const { container } = render(<Construit />)
     press('Sites')
@@ -437,7 +451,7 @@ describe('filter by type (US-108)', () => {
     )
   })
 
-  it('server HTML and reduced motion show all seven and hydrate on « Toutes » without a mismatch', async () => {
+  it('server HTML and reduced motion show all six and hydrate on « Toutes » without a mismatch', async () => {
     for (const reduced of [false, true]) {
       mockReducedMotion(reduced)
       mockIntersectionObserver()
@@ -446,9 +460,9 @@ describe('filter by type (US-108)', () => {
       const parsed = new DOMParser().parseFromString(`<body>${html}</body>`, 'text/html')
       container.append(...Array.from(parsed.body.childNodes))
       document.body.appendChild(container)
-      expect(container.querySelectorAll('ol.cn-list li').length).toBe(7)
-      expect(shownCards(container).length).toBe(7)
-      expect(container.querySelector('[role="status"]')?.textContent).toBe('7 réalisations sur 7')
+      expect(container.querySelectorAll('ol.cn-list li').length).toBe(6)
+      expect(shownCards(container).length).toBe(6)
+      expect(container.querySelector('[role="status"]')?.textContent).toBe('6 réalisations sur 6')
       expect(
         container.querySelector('[role="group"] button[aria-pressed="true"]')?.textContent,
       ).toBe('Toutes')
@@ -460,8 +474,8 @@ describe('filter by type (US-108)', () => {
         })
         expect(recoverable, `reduced=${reduced}`).not.toHaveBeenCalled()
         expect(errors, `reduced=${reduced}`).not.toHaveBeenCalled()
-        expect(container.querySelectorAll('ol.cn-list li').length).toBe(7)
-        expect(shownCards(container).length).toBe(7)
+        expect(container.querySelectorAll('ol.cn-list li').length).toBe(6)
+        expect(shownCards(container).length).toBe(6)
         expect(
           container.querySelector('[role="group"] button[aria-pressed="true"]')?.textContent,
         ).toBe('Toutes')

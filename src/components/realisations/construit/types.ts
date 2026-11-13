@@ -15,12 +15,12 @@ export interface CardStage {
   f: number
 }
 
-/** Props of the seven drawing components under `./cards/` (they render the inside of `.bp-stage`). */
+/** Props of the six drawing components under `./cards/` (they render the inside of `.bp-stage`). */
 export interface CardProps {
   stage: CardStage
 }
 
-export type CardKind = 'helene' | 'site' | 'cash' | 'maint' | 'noesia' | 'seminar' | 'voice'
+export type CardKind = 'helene' | 'site' | 'cash' | 'noesia' | 'seminar' | 'voice'
 
 /** What a card is, for the filter row (US-108). `kind` stays the card's identity, `tags` its display text. */
 export type RealisationType = 'outils' | 'formations' | 'conferences' | 'sites'

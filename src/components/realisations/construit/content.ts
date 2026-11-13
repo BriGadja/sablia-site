@@ -1,7 +1,6 @@
 import { CashbackCard } from './cards/cashback'
 import { HeleneCard } from './cards/helene'
 import { InstitutCard } from './cards/institut'
-import { MaintenanceCard } from './cards/maintenance'
 import { NoesiaCard } from './cards/noesia'
 import { SeminaireCard } from './cards/seminaire'
 import { VoixCard } from './cards/voix'
@@ -54,7 +53,11 @@ export const CARD_LINKS: Partial<Record<CardKind, { href: string; label: string 
   noesia: { href: 'https://noesia.school', label: 'noesia.school' },
 }
 
-/** The wall, in the decided order: voice agents last, one card stays off. Figures: units/d4-cashback.md. */
+/**
+ * The wall, in the decided order: voice agents last. Figures: units/d4-cashback.md (recount of 26/10).
+ * Brice at VP2 (13/11): the maintenance card left; the cashback card is named for what was built and said
+ * in the past (the service stopped on 07/11); the voice card keeps « une vingtaine ».
+ */
 export const CARDS: BlueprintCard[] = [
   {
     kind: 'helene',
@@ -87,21 +90,9 @@ export const CARDS: BlueprintCard[] = [
     fig: { n: 699000, plus: true, unit: ' relevés' },
     tags: 'Application',
     icon: ICON.app,
-    sector: 'Une plateforme de cashback',
-    text: 'Les taux de ses concurrents, relevés chaque jour dans une application.',
+    sector: 'Plateforme de veille concurrentielle',
+    text: 'Pour une plateforme de cashback : les taux de ses concurrents, relevés chaque jour pendant huit mois dans une application.',
     Drawing: CashbackCard,
-  },
-  {
-    kind: 'maint',
-    types: ['outils'],
-    panels: 2,
-    lines: 7,
-    lineStep: 420,
-    tags: 'Automatisation',
-    icon: ICON.zap,
-    sector: 'Une entreprise de maintenance du bâtiment',
-    text: "Les demandes d'intervention reçues par mail deviennent fiches, bons et factures, sans ressaisie.",
-    Drawing: MaintenanceCard,
   },
   {
     kind: 'noesia',
@@ -136,14 +127,14 @@ export const CARDS: BlueprintCard[] = [
     lineStep: 500,
     fig: { n: 68, unit: ' rendez-vous pris en cinq mois' },
     /**
-     * A past réalisation, no longer sold (« Agent vocal », not « Sur demande »); the uncounted « une
-     * vingtaine » left; the 68 bookings as proof line P-8 states them: sector and period, no name
-     * (adversarial review K6, dir-4 and fai-4).
+     * A past réalisation, no longer sold (« Agent vocal », not « Sur demande »); the 68 bookings as proof
+     * line P-8 states them: sector and period, no name (adversarial review K6, dir-4 and fai-4). « Une
+     * vingtaine … depuis 2024 » is Brice's own count (19/10, CAREER.md), kept at his word at VP2 (13/11).
      */
     tags: 'Agent vocal',
     icon: ICON.phone,
     sector: 'Agents vocaux',
-    text: "Accueil téléphonique, rappels, prise de rendez-vous. Les 68 rendez-vous : un agent sortant, dans l'investissement locatif clé en main, d'avril à août 2026.",
+    text: "Une vingtaine mis en service depuis 2024 : accueil téléphonique, rappels, prise de rendez-vous. Les 68 rendez-vous : un agent sortant, dans l'investissement locatif clé en main, d'avril à août 2026.",
     muted: true,
     Drawing: VoixCard,
   },

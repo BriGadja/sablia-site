@@ -2,33 +2,12 @@ import { render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { FINAL_STAGE, IDLE_STAGE } from '../content'
 import type { CardStage } from '../types'
-import { MaintenanceCard } from './maintenance'
 import { NoesiaCard } from './noesia'
 import { SeminaireCard } from './seminaire'
 import { VoixCard } from './voix'
 
 const stage = (over: Partial<CardStage>): CardStage => ({ ...IDLE_STAGE, ...over })
 const on = (c: HTMLElement, sel: string) => c.querySelectorAll(`${sel}.on`).length
-
-describe('MaintenanceCard', () => {
-  it('draws two panels, three mails and three rows, nothing lit while idle', () => {
-    const { container } = render(<MaintenanceCard stage={IDLE_STAGE} />)
-    expect(container.querySelectorAll('.bp-p')).toHaveLength(2)
-    expect(container.querySelectorAll('.bp-mr')).toHaveLength(3)
-    expect(container.querySelectorAll('.bp-tr:not(.hd)')).toHaveLength(3)
-    expect(on(container, '.bp-tick')).toBe(0)
-    expect(on(container, '.bp-ok')).toBe(0)
-  })
-  it('lights rows and ticks step by step, then the closing pill at step 7', () => {
-    const { container } = render(<MaintenanceCard stage={stage({ plan: true, b: 2, l: 4 })} />)
-    expect(container.querySelectorAll('.bp-tr.in')).toHaveLength(2)
-    expect(on(container, '.bp-tick')).toBe(6)
-    expect(on(container, '.bp-ok')).toBe(0)
-    const done = render(<MaintenanceCard stage={FINAL_STAGE} />)
-    expect(on(done.container, '.bp-ok')).toBe(1)
-    expect(done.container.textContent).toContain('Aucune ressaisie')
-  })
-})
 
 describe('NoesiaCard', () => {
   it('has 29 video tiles and 8 weeks with 4 workshops lit at the end', () => {
@@ -75,9 +54,9 @@ describe('VoixCard', () => {
   })
 })
 
-describe('all four cards', () => {
+describe('all three cards', () => {
   it('carry no em dash, no IAPreneurs and no client name', () => {
-    for (const C of [MaintenanceCard, NoesiaCard, SeminaireCard, VoixCard]) {
+    for (const C of [NoesiaCard, SeminaireCard, VoixCard]) {
       const { container } = render(<C stage={FINAL_STAGE} />)
       expect(container.textContent).not.toMatch(/—|IAPreneurs/)
     }

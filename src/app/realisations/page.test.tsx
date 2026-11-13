@@ -43,8 +43,10 @@ const BESOIN = {
 /**
  * 01b § 5 « Moved as is » (the eyebrow excepted: the h1 takes its role), corrected after the adversarial
  * review K6 of run 2026-11-12-structure-site-offre: the seminar card's tag is « Séminaire »; the voice
- * card's tag is « Agent vocal » (voice is no longer sold), its uncounted « une vingtaine » left, and its
- * 68 bookings are said as proof line P-8 states them (sector and period, no name).
+ * card's tag is « Agent vocal » (voice is no longer sold) and its 68 bookings are said as proof line P-8
+ * states them (sector and period, no name). Then Brice's answers at VP2 (13/11): the maintenance card
+ * leaves, the cashback card is « Plateforme de veille concurrentielle » in the past, and the voice card
+ * keeps « une vingtaine ».
  */
 const MOVED = [
   'Exemples de réalisations.',
@@ -56,11 +58,9 @@ const MOVED = [
   'Un institut de beauté à Rouen',
   'Son site a quitté Wix pour son propre domaine, hébergé à son nom.',
   'Application',
-  'Une plateforme de cashback',
-  'Les taux de ses concurrents, relevés chaque jour dans une application.',
+  'Plateforme de veille concurrentielle',
+  'Pour une plateforme de cashback : les taux de ses concurrents, relevés chaque jour pendant huit mois dans une application.',
   '699 000+ relevés',
-  'Une entreprise de maintenance du bâtiment',
-  "Les demandes d'intervention reçues par mail deviennent fiches, bons et factures, sans ressaisie.",
   'Formation',
   'École Noésia',
   'Le module Claude Code, 10 heures en 29 vidéos, et un atelier toutes les deux semaines.',
@@ -70,7 +70,7 @@ const MOVED = [
   "Une matinée pour mettre l'IA générative entre les mains de son équipe.",
   'Agent vocal',
   'Agents vocaux',
-  "Accueil téléphonique, rappels, prise de rendez-vous. Les 68 rendez-vous : un agent sortant, dans l'investissement locatif clé en main, d'avril à août 2026.",
+  "Une vingtaine mis en service depuis 2024 : accueil téléphonique, rappels, prise de rendez-vous. Les 68 rendez-vous : un agent sortant, dans l'investissement locatif clé en main, d'avril à août 2026.",
   '68 rendez-vous pris en cinq mois',
 ]
 
@@ -83,13 +83,15 @@ describe('/realisations (US-95, server HTML)', () => {
     expect(html).toMatch(new RegExp(`<h1[^>]*>${NEW.h1}</h1>`))
   })
 
-  it('keeps the band whole: its id, its h2 and its seven cards, between the page top and the closing band', () => {
+  it('keeps the band whole: its id, its h2 and its six cards, between the page top and the closing band', () => {
     const ids = ['top', 'construit', 'fin']
     const at = ids.map((id) => html.indexOf(`id="${id}"`))
     expect(at.every((i) => i >= 0)).toBe(true)
     expect([...at].sort((a, b) => a - b)).toEqual(at)
     expect(html).toMatch(/<h2[^>]*>Exemples de réalisations\.<\/h2>/)
-    expect(html.match(/<article[^>]*class="deck-card"/g)).toHaveLength(7)
+    expect(html.match(/<article[^>]*class="deck-card"/g)).toHaveLength(6)
+    expect(text).not.toContain('maintenance du bâtiment')
+    expect(text).not.toContain('Une plateforme de cashback') // the old title; the body says « une »
   })
 
   it('does not render the moved eyebrow a second time', () => {
@@ -125,12 +127,12 @@ describe('/realisations (US-95, server HTML)', () => {
     expect(textOf(zone)).toContain(BESOIN.text)
   })
 
-  it('carries the filter row and the count in the band, all seven shown (US-108)', () => {
+  it('carries the filter row and the count in the band, all six shown (US-108)', () => {
     const band = html.slice(html.indexOf('id="construit"'), html.indexOf('id="fin"'))
     expect(band).toContain('role="group"')
     expect(band).toContain('aria-label="Filtrer les réalisations"')
-    expect(textOf(band)).toContain('7 réalisations sur 7')
-    expect(band.match(/<article[^>]*class="deck-card"/g)).toHaveLength(7)
+    expect(textOf(band)).toContain('6 réalisations sur 6')
+    expect(band.match(/<article[^>]*class="deck-card"/g)).toHaveLength(6)
     expect(band).not.toMatch(/<article[^>]*\shidden[=\s>]/)
   })
 
@@ -149,13 +151,13 @@ describe('/realisations (US-95, server HTML)', () => {
 })
 
 describe('/realisations in the browser', () => {
-  it('keeps the same animation: seven rows, the pause control', () => {
+  it('keeps the same animation: six rows, the pause control', () => {
     mockReducedMotion(false)
     const io = mockIntersectionObserver()
     const { container } = render(<Page />)
     const band = container.querySelector('section#construit') as HTMLElement
     act(() => io.trigger(band, true))
-    expect(band.querySelectorAll('ol[aria-label="Toutes les réalisations"] li')).toHaveLength(7)
+    expect(band.querySelectorAll('ol[aria-label="Toutes les réalisations"] li')).toHaveLength(6)
     const grow = () => band.querySelector('.grow') as HTMLElement
     expect(grow().style.animationPlayState).toBe('running')
     fireEvent.click(screen.getByRole('button', { name: /Mettre en pause/ }))

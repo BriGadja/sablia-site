@@ -60,7 +60,7 @@ export function Construit({ underPageHead = false }: ConstruitProps = {}) {
   const stopped = pause.userPaused || reduced
 
   // US-108: the chip row keeps the cards of one type. The server and the first client render show them all
-  // (« Toutes »), so the static HTML, no-JS and reduced motion keep the seven cards and hydration matches.
+  // (« Toutes »), so the static HTML, no-JS and reduced motion keep the six cards and hydration matches.
   const [filter, setFilter] = useState<RealisationFilter>('toutes')
   // A chip has been pressed: from then on the rows of a new set rise into place (never on the first paint).
   const [picked, setPicked] = useState(false)
