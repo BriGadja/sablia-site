@@ -12,10 +12,13 @@
     padding: 96px 0;
     font-family: var(--font-sans);
 
-    /* Under the /realisations page head: its dune opens the band, so no hairline and no second gap. */
+    /* Under the /realisations page head: its dune opens the band, so no hairline and no second gap; the
+       line toward the monthly offer closes it on the same paper (13/11), so no hairline under it either. */
     &.is-under-head {
       border-top: 0;
       padding-top: 8px;
+      border-bottom: 0;
+      padding-bottom: 24px;
     }
 
     .cn-head {
