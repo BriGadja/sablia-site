@@ -80,7 +80,7 @@ test("llms.txt: today's offer first, the training, the conferences, no price, no
   assert.doesNotMatch(llms, RETIRED)
   assert.doesNotMatch(llms, GONE)
   assert.doesNotMatch(llms, EURO)
-  assert.doesNotMatch(llms, /Plus de 20 clients|calendly\.com\/brice-gachadoat\/30min/)
+  assert.doesNotMatch(llms, /Plus de [0-9]+ clients|calendly\.com\/brice-gachadoat\/30min/)
   // Brice at VP2 (13/11, question 5): the training's conference option announces no duration (the
   // conference page gives each talk the length of what exists).
   assert.doesNotMatch(llms, /1 h 30/)
