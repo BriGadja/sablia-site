@@ -7,7 +7,7 @@ llms: https://sablia.io/llms.txt
 # Site metadata
 name: Sablia
 url: https://sablia.io
-description: Sablia met l'IA en place dans les PME de 10 à 50 personnes : un responsable IA externalisé au mois, la formation « L'IA au travail » (trois jours dans l'entreprise, avec Claude d'Anthropic), des formats plus courts et des conférences sur demande.
+description: Sablia met l'IA en place dans les PME de 10 à 50 personnes : un responsable IA externalisé au mois, qui construit les outils, forme l'équipe et entretient ce qui tourne, la formation « L'IA au travail » (trois jours dans l'entreprise, avec Claude d'Anthropic), des formats plus courts et des conférences sur demande.
 contact: brice@sablia.io
 language: fr-FR
 last-updated: 2026-11-12
