@@ -73,7 +73,7 @@ the guide; the call → CRM animation joins it. « Après la formation » (`/acc
   its base (R05), and four anonymous answers copied as written.
 - Five photos of the Noésia event of 09/10 (run `01c-photos.md`): no isolated recognisable person, no logo, no
   readable screen; credit « Photos : école Noésia, 9 octobre 2026 ».
-- Realisations: 40 s (CRM demo, measured), 68 rendez-vous (voice), « plus de 20 clients accompagnés depuis 2025 ».
+- Realisations: 40 s (CRM demo, measured), 68 rendez-vous (voice), « plus de 10 clients accompagnés depuis 2025 » (Brice, 13/11 : le plancher Qonto du dossier P-15).
 - Absent, never to fabricate: a client logo or video, a photo of a training at a client, a price, a guarantee.
 
 ## Product Principles

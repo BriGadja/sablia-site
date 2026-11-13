@@ -8,7 +8,7 @@ import type { BlueprintCard, CardKind, CardStage, RealisationType } from './type
 
 export const EYEBROW = 'Réalisations'
 export const TITLE = 'Exemples de réalisations.'
-export const SUBTITLE = 'Plus de 20 clients accompagnés depuis 2025.'
+export const SUBTITLE = 'Plus de 10 clients accompagnés depuis 2025.'
 export const LIST_LABEL = 'Toutes les réalisations'
 export const PAUSE_LABEL = 'Mettre en pause'
 export const RESUME_LABEL = 'Reprendre le défilement'

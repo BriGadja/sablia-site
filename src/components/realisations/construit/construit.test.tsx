@@ -118,7 +118,7 @@ describe('Construit', () => {
     const section = container.querySelector('section#construit.v2-construit')
     expect(section).not.toBeNull()
     expect(screen.getByRole('heading', { level: 2 }).textContent).toBe('Exemples de réalisations.')
-    expect(screen.getByText('Plus de 20 clients accompagnés depuis 2025.')).toBeTruthy()
+    expect(screen.getByText('Plus de 10 clients accompagnés depuis 2025.')).toBeTruthy()
     expect(section?.querySelectorAll('ol[aria-label="Toutes les réalisations"] li').length).toBe(6)
     expect(section?.querySelectorAll('article.deck-card').length).toBe(6)
     expect(section?.textContent).toContain('699 000+ relevés')
