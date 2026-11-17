@@ -11,8 +11,8 @@ import { MailText } from './MailText'
  * The registration form of `/webinaire` (US-86). Posts the contract of `api/webinaire.ts`:
  * 200 and 204 (a bot answered by the honeypot or the 3 s floor) both mean « registered » and lead to
  * `/webinaire/merci`; 429 says « réessayez demain »; a 400 is shown under the field it names;
- * anything else points to Brice's address. The callback box is unticked and stays so unless the
- * visitor ticks it. Nothing is sent on mount.
+ * anything else points to Brice's address. The callback box and the newsletter box are unticked and
+ * stay so unless the visitor ticks them. Nothing is sent on mount.
  */
 
 type View =
@@ -188,6 +188,10 @@ export default function WebinaireForm({ onRegistered = goToMerci }: Props) {
         <p id="webinaire-rappel-info" className="wbn-info">
           <MailText text={FORM.rappel.info} />
         </p>
+        <label htmlFor="webinaire-newsletter" className="wbn-check is-lettre">
+          <input id="webinaire-newsletter" name="newsletter" type="checkbox" />
+          <span>{FORM.newsletter.label}</span>
+        </label>
       </div>
 
       {/* Honeypot: invisible to a visitor, out of the tab order, irresistible to a bot. */}

@@ -16,7 +16,8 @@ export const metadata = pageMetadata({
 
 /**
  * `/webinaire/merci`: where the form lands (US-86). What happens next, in the order it happens: the
- * Google invitation, the two reminders, the start; then spam and how to leave. The booking line
+ * Google invitation, the two reminders, the start; then spam and how to leave, and one line toward the
+ * Tuesday letter (`/newsletter?via=webinaire-merci`, static, for every registrant). The booking line
  * shows only once the webinar's own booking link is set (`BOOKING_URL`, owner U8).
  */
 export default function MerciPage() {
@@ -59,6 +60,11 @@ export default function MerciPage() {
             </p>
             <p>{MERCI.leave}</p>
           </div>
+
+          <p className="wbn-lettre">
+            {MERCI.lettre.before}
+            <Link href={MERCI.lettre.href}>{MERCI.lettre.link}</Link>
+          </p>
 
           <MerciBooking url={BOOKING_URL} />
 

@@ -74,11 +74,15 @@ export default function PolitiqueConfidentialitePage() {
           Données : votre prénom, votre adresse email et les dates de votre inscription et de votre
           désinscription. Aucun suivi d&apos;ouverture ni de clic n&apos;est fait sur la lettre.
           Pour limiter les abus, une empreinte de l&apos;adresse IP accompagne une demande
-          d&apos;inscription tant qu&apos;elle n&apos;est pas confirmée.
+          d&apos;inscription tant qu&apos;elle n&apos;est pas confirmée. Nous gardons aussi le lien
+          par lequel vous êtes arrivé (par exemple une ressource ou un post), pour savoir quels
+          canaux fonctionnent.
         </p>
         <p>
           Durée : jusqu&apos;à votre désinscription. Une demande d&apos;inscription non confirmée
-          est effacée sous 7 jours.
+          est effacée 7 jours après notre dernier envoi (le mail de confirmation ou son unique
+          rappel) ; si aucun mail n&apos;a pu partir, nous l&apos;envoyons dès que possible, et sans
+          envoi la demande est effacée au plus tard 30 jours après.
         </p>
         <p>
           Désinscription : un lien dans chaque lettre. Vos autres droits s&apos;exercent en écrivant
@@ -99,9 +103,10 @@ export default function PolitiqueConfidentialitePage() {
         <p>
           Finalités : vous envoyer l&apos;invitation à la séance et deux rappels par mail ; vous
           rappeler une fois au sujet de la formation, seulement si vous avez coché la case prévue ;
-          vous envoyer un questionnaire de préparation, seulement après la réservation d&apos;un
-          échange de 30 minutes. Votre inscription figure aussi dans notre fichier de contacts, avec
-          votre réponse à la case : sans la case cochée, personne ne vous appelle.
+          vous envoyer la lettre du mardi, si vous cochez la case ; vous envoyer un questionnaire de
+          préparation, seulement après la réservation d&apos;un échange de 30 minutes. Votre
+          inscription figure aussi dans notre fichier de contacts, avec votre réponse à la case de
+          rappel : sans la case cochée, personne ne vous appelle.
         </p>
         <p>
           Base légale : votre demande d&apos;inscription (article 6-1-b du RGPD) ; pour le rappel,

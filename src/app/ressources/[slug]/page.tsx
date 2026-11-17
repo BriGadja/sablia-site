@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { loadRessource, loadSlugParams } from '@/components/ressources/data'
+import NewsletterCard from '@/components/ressources/NewsletterCard'
 import { posterPath } from '@/components/ressources/poster'
 import { posterFor } from '@/components/ressources/RessourceCard'
 import RessourceForm from '@/components/ressources/RessourceForm'
@@ -48,8 +49,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 /**
  * `/ressources/{slug}`: the video first (click-to-load facade, no iframe in the static HTML), the
- * resource body, then the form. The files sit behind the form, but the form captures the lead, it
- * does not lock the file (decision D8): their URLs never appear in the static HTML.
+ * resource body, then the form, then the Tuesday-letter card (`NewsletterCard`, a link tagged
+ * `via=ressource-<slug>`). The files sit behind the form, but the form captures the lead, it does not
+ * lock the file (decision D8): their URLs never appear in the static HTML.
  */
 export default async function RessourcePage({ params }: Props) {
   const { slug } = await params
@@ -103,6 +105,7 @@ export default async function RessourcePage({ params }: Props) {
             </div>
           )}
           <RessourceForm slug={row.slug} titre={row.titre} />
+          <NewsletterCard slug={row.slug} />
         </div>
       </div>
     </main>

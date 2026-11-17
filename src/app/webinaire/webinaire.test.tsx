@@ -138,6 +138,22 @@ describe('/webinaire: the static HTML (SSR content rule)', () => {
     expect(html).not.toMatch(/opacity:\s*0/)
   })
 
+  it('case newsletter : the letter box sits after the callback box, UNTICKED, with its label', () => {
+    expect(FORM.newsletter.label).toBe(
+      "Recevoir aussi la lettre du mardi (une idée concrète d'IA au travail, chaque mardi matin)",
+    )
+    expect(t).toContain(FORM.newsletter.label)
+    const box = html.match(/<input[^>]*name="newsletter"[^>]*>/)?.[0] ?? ''
+    expect(box).toContain('type="checkbox"')
+    expect(box).toContain('id="webinaire-newsletter"')
+    expect(box).not.toMatch(/\schecked/)
+    expect(html.indexOf('id="webinaire-rappel"')).toBeLessThan(
+      html.indexOf('id="webinaire-newsletter"'),
+    )
+    // Same markup class as the callback box.
+    expect(html).toMatch(/<label[^>]*for="webinaire-newsletter"[^>]*class="wbn-check[ "]/)
+  })
+
   it('says no forbidden word: funding, state label, the client of October, scarcity, countdown', () => {
     expect(t).not.toMatch(FORBIDDEN)
   })
@@ -220,6 +236,7 @@ describe('/webinaire: the form posts the contract of api/webinaire.ts', () => {
         'elapsedMs',
         'email',
         'fonction',
+        'newsletter',
         'nom',
         'pourquoi',
         'prenom',
@@ -240,6 +257,7 @@ describe('/webinaire: the form posts the contract of api/webinaire.ts', () => {
       usage_ia: 'essai',
       pourquoi: '',
       rappel_consent: false,
+      newsletter: false,
       website: '',
     })
     expect(typeof body.elapsedMs).toBe('number')
@@ -254,6 +272,17 @@ describe('/webinaire: the form posts the contract of api/webinaire.ts', () => {
     await user.click(screen.getByLabelText(FORM.rappel.label))
     await user.click(submit())
     expect(sent(spy)).toMatchObject({ rappel_consent: true, pourquoi: 'Poser des règles' })
+  })
+
+  it('case newsletter : unticked by default, sends newsletter true only when ticked, independent of the callback box', async () => {
+    const spy = stubFetch(200, { state: 'registered' })
+    const { user } = await openForm()
+    const box = screen.getByLabelText(FORM.newsletter.label) as HTMLInputElement
+    expect(box.checked).toBe(false)
+    await fillValid(user)
+    await user.click(box)
+    await user.click(submit())
+    expect(sent(spy)).toMatchObject({ newsletter: true, rappel_consent: false })
   })
 
   it('treats 204 (honeypot or too fast) as registered, like 200', async () => {
@@ -363,6 +392,16 @@ describe('/webinaire/merci', () => {
     expect(t).toContain(MERCI.spam)
     expect(t).toContain(MERCI.leave)
     expect(t).not.toMatch(FORBIDDEN)
+  })
+
+  it('ligne lettre : one line toward /newsletter?via=webinaire-merci, shown to every registrant', () => {
+    expect(MERCI.lettre.before).toBe("Une idée concrète d'IA au travail, chaque mardi matin : ")
+    expect(MERCI.lettre.link).toBe('recevoir ma newsletter')
+    expect(t).toContain(
+      "Une idée concrète d'IA au travail, chaque mardi matin : recevoir ma newsletter",
+    )
+    const links = html.match(/href="\/newsletter\?via=webinaire-merci"/g) ?? []
+    expect(links).toHaveLength(1)
   })
 
   it('dates the title and the two reminders to the 03/12 session (eve 02/12 18 h, day-of 11 h 30)', () => {
