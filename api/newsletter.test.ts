@@ -12,8 +12,10 @@
  * behind a stubbed `fetch`; Resend answers whatever the test sets. Zero network.
  */
 import { createHash } from 'node:crypto'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import handler from './newsletter'
+import handler, { expiredOnSite, welcomeMail } from './newsletter'
 
 const REST = 'https://qlxoitzdxjqhljjoeqoq.supabase.co/rest/v1'
 const RESEND_URL = 'https://api.resend.com/emails'
@@ -27,6 +29,18 @@ const TOKEN = '6f1c2a9e-4b7d-4c1e-9a3f-2d5e8b7c1a40'
 const ago = (ms: number) => new Date(NOW.getTime() - ms).toISOString()
 const HOUR = 60 * 60 * 1000
 const DAY = 24 * HOUR
+
+/**
+ * The site's purge filter (plan D2, Q2-A): an unconfirmed row expires 7 days after its anchor
+ * (`reminded_at`, else `created_at`), except a never-mailed row (`mail_failed_at` set, `reminded_at`
+ * null), left to the hub's reminder pass with a 30-day backstop. Timestamps double-quoted (PostgREST
+ * reserves `.` and `:` inside a logic tree).
+ */
+const PURGE_OR = (now: Date) => {
+  const x = new Date(now.getTime() - 7 * DAY).toISOString()
+  const x30 = new Date(now.getTime() - 30 * DAY).toISOString()
+  return `(and(reminded_at.is.null,mail_failed_at.is.null,created_at.lt."${x}"),reminded_at.lt."${x}",and(reminded_at.is.null,created_at.lt."${x30}"))`
+}
 
 interface Call {
   url: string
@@ -51,27 +65,72 @@ function likeRegex(pattern: string): RegExp {
   return new RegExp(`^${source}$`, 'i')
 }
 
+/** Timestamps compare as instants (fixtures write `…00Z`, the handler `…00.000Z`); anything else as text. */
+function compare(cell: string, value: string): number {
+  const a = Date.parse(cell)
+  const b = Date.parse(value)
+  if (!Number.isNaN(a) && !Number.isNaN(b)) return a - b
+  return cell < value ? -1 : cell > value ? 1 : 0
+}
+
+/** One `op.value` filter on one column; a double-quoted value (logic trees) is unquoted. */
+function matchOne(row: Row, key: string, raw: string): boolean {
+  const dot = raw.indexOf('.')
+  const op = raw.slice(0, dot)
+  let value = raw.slice(dot + 1)
+  if (value.length >= 2 && value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1)
+  const cell = row[key]
+  if (op === 'eq') return cell !== null && cell !== undefined && String(cell) === value
+  if (op === 'gte') return typeof cell === 'string' && compare(cell, value) >= 0
+  if (op === 'lt') return typeof cell === 'string' && compare(cell, value) < 0
+  if (op === 'is') {
+    if (value !== 'null') throw new Error(`fake PostgREST: is.${value}`)
+    return cell === null || cell === undefined
+  }
+  if (op === 'ilike') return typeof cell === 'string' && likeRegex(value).test(cell)
+  throw new Error(`fake PostgREST: unsupported operator ${op} on ${key}`)
+}
+
+/** Splits a logic tree's list on its top-level commas (not inside parentheses or quotes). */
+function splitTop(list: string): string[] {
+  const parts: string[] = []
+  let depth = 0
+  let quoted = false
+  let current = ''
+  for (const c of list) {
+    if (c === '"') quoted = !quoted
+    if (!quoted && c === '(') depth++
+    if (!quoted && c === ')') depth--
+    if (!quoted && depth === 0 && c === ',') {
+      parts.push(current)
+      current = ''
+      continue
+    }
+    current += c
+  }
+  parts.push(current)
+  return parts
+}
+
+/** A PostgREST logic tree as `or=(…)` writes it: `and(…)`, `or(…)` and `column.op.value` leaves. */
+function matchTree(row: Row, expression: string): boolean {
+  const group = /^(and|or)\((.*)\)$/.exec(expression)
+  if (group) {
+    const items = splitTop(group[2] as string)
+    return group[1] === 'and'
+      ? items.every((item) => matchTree(row, item))
+      : items.some((item) => matchTree(row, item))
+  }
+  const dot = expression.indexOf('.')
+  return matchOne(row, expression.slice(0, dot), expression.slice(dot + 1))
+}
+
 function matches(row: Row, params: URLSearchParams): boolean {
   for (const [key, raw] of params) {
     if (key === 'select' || key === 'order' || key === 'limit') continue
-    const dot = raw.indexOf('.')
-    const op = raw.slice(0, dot)
-    const value = raw.slice(dot + 1)
-    const cell = row[key]
-    if (op === 'eq') {
-      if (cell === null || cell === undefined || String(cell) !== value) return false
-    } else if (op === 'gte') {
-      if (typeof cell !== 'string' || cell < value) return false
-    } else if (op === 'lt') {
-      if (typeof cell !== 'string' || !(cell < value)) return false
-    } else if (op === 'is') {
-      if (value !== 'null') throw new Error(`fake PostgREST: is.${value}`)
-      if (cell !== null && cell !== undefined) return false
-    } else if (op === 'ilike') {
-      if (typeof cell !== 'string' || !likeRegex(value).test(cell)) return false
-    } else {
-      throw new Error(`fake PostgREST: unsupported operator ${op} on ${key}`)
-    }
+    if (key === 'or' || key === 'and') {
+      if (!matchTree(row, `${key}${raw}`)) return false
+    } else if (!matchOne(row, key, raw)) return false
   }
   return true
 }
@@ -80,19 +139,28 @@ function matches(row: Row, params: URLSearchParams): boolean {
 class Fake {
   pending: Row[] = []
   leads: Row[] = []
+  /** `contenu_lettres`: the published issues the welcome mail links to (newest first by `published_at`). */
+  lettres: Row[] = []
   calls: Call[] = []
-  resend: () => Response = () => json({ id: 're_test_1' })
+  resend: (call: Call) => Response = () => json({ id: 're_test_1' })
+  /** Lets a test refuse the pending INSERT (e.g. the `via` column missing before the migration). */
+  refusePendingInsert: (body: Row) => Response | undefined = () => undefined
   private seq = 0
 
-  table(name: 'site_newsletter_pending' | 'sabcrm_leads'): Row[] {
+  table(name: 'site_newsletter_pending' | 'sabcrm_leads' | 'contenu_lettres'): Row[] {
+    if (name === 'contenu_lettres') return this.lettres
     return name === 'site_newsletter_pending' ? this.pending : this.leads
   }
 
   respond(call: Call): Response {
-    if (call.url === RESEND_URL) return this.resend()
+    if (call.url === RESEND_URL) return this.resend(call)
     const url = new URL(call.url)
     const name = url.pathname.replace('/rest/v1/', '')
-    if (name !== 'site_newsletter_pending' && name !== 'sabcrm_leads') {
+    if (
+      name !== 'site_newsletter_pending' &&
+      name !== 'sabcrm_leads' &&
+      name !== 'contenu_lettres'
+    ) {
       throw new Error(`fake PostgREST: unknown table ${name}`)
     }
     const rows = this.table(name)
@@ -104,12 +172,21 @@ class Fake {
       if (params.get('order') === 'created_at.asc') {
         found = [...found].sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)))
       }
+      if (params.get('order') === 'published_at.desc') {
+        found = [...found].sort((a, b) =>
+          String(b.published_at).localeCompare(String(a.published_at)),
+        )
+      }
       const limit = params.get('limit')
       if (limit) found = found.slice(0, Number(limit))
       return json(found.map((r) => ({ ...r })))
     }
     if (call.method === 'POST') {
       const body = call.body as Row
+      if (name === 'site_newsletter_pending') {
+        const refusal = this.refusePendingInsert(body)
+        if (refusal) return refusal
+      }
       const row: Row =
         name === 'site_newsletter_pending'
           ? {
@@ -118,6 +195,9 @@ class Fake {
               ip_hash: null,
               confirmed_at: null,
               lead_id: null,
+              mail_failed_at: null,
+              reminded_at: null,
+              via: null,
               created_at: new Date().toISOString(),
               ...body,
             }
@@ -219,6 +299,9 @@ function pendingRow(overrides: Row): Row {
     created_at: ago(2 * HOUR),
     confirmed_at: null,
     lead_id: null,
+    mail_failed_at: null,
+    reminded_at: null,
+    via: null,
     ...overrides,
   }
 }
@@ -278,11 +361,13 @@ describe('POST /api/newsletter: request (public form)', () => {
     expect(payload.subject).toBe("Confirmez votre inscription à L'IA au travail")
     for (const part of [payload.text, payload.html]) {
       expect(String(part)).toContain(`https://sablia.io/newsletter?c=${token}`)
-      expect(String(part)).toContain('sous 7 jours')
+      // Q2-A: the request lives 7 days after our LAST mail (the confirmation or its one reminder).
+      expect(String(part)).toContain('7 jours après notre dernier message')
+      expect(String(part)).not.toContain('sous 7 jours')
     }
   })
 
-  it('demande : the purge deletes unconfirmed rows older than 7 days and keeps the confirmed proofs', async () => {
+  it('demande : the purge deletes expired unconfirmed rows (ancre de péremption) and keeps the confirmed proofs', async () => {
     fake.pending.push(
       pendingRow({ token: 'old-unconfirmed', email: 'a@exemple.fr', created_at: ago(8 * DAY) }),
       pendingRow({
@@ -294,13 +379,23 @@ describe('POST /api/newsletter: request (public form)', () => {
         confirmed_at: ago(29 * DAY),
       }),
       pendingRow({ token: 'young', email: 'b@exemple.fr', created_at: ago(6 * DAY) }),
+      pendingRow({
+        token: 'old-reminded-yesterday',
+        email: 'c@exemple.fr',
+        created_at: ago(12 * DAY),
+        reminded_at: ago(DAY),
+      }),
     )
     await post(REQUEST)
     const purge = fake.calls.find((c) => c.method === 'DELETE')
     const params = new URL(String(purge?.url)).searchParams
     expect(params.get('confirmed_at')).toBe('is.null')
-    expect(params.get('created_at')).toBe(`lt.${ago(7 * DAY)}`)
-    expect(fake.pending.map((p) => p.token)).toEqual(expect.arrayContaining(['old-proof', 'young']))
+    // The anchor is reminded_at, else created_at; no bare created_at filter any more.
+    expect(params.get('created_at')).toBeNull()
+    expect(params.get('or')).toBe(PURGE_OR(NOW))
+    expect(fake.pending.map((p) => p.token)).toEqual(
+      expect.arrayContaining(['old-proof', 'young', 'old-reminded-yesterday']),
+    )
     expect(fake.pending.map((p) => p.token)).not.toContain('old-unconfirmed')
   })
 
@@ -452,18 +547,51 @@ describe('POST /api/newsletter: request (public form)', () => {
     expect(fake.calls).toHaveLength(0)
   })
 
-  it('mail failure : 502 mail_failed, and the pending row is removed so a retry can mail again', async () => {
+  // Rewritten (S2, plan sablia-newsletter-circuit-croissance): it was « 502 mail_failed, and the pending
+  // row is removed so a retry can mail again ». A deleted row was a lost sign-up; the hub's reminder
+  // pass now sends the confirmation of a row carrying mail_failed_at.
+  it('échec du mail garde la ligne : 202 queued, the row stays with mail_failed_at, no DELETE of it, and a retry within the hour sends no second mail', async () => {
     fake.resend = () => json({ message: 'boom' }, 500)
     vi.spyOn(console, 'error').mockImplementation(() => {})
     const r = await post(REQUEST)
-    expect(r.status).toBe(502)
-    expect(await r.json()).toEqual({ error: 'Envoi impossible', code: 'mail_failed' })
-    expect(fake.pending).toHaveLength(0)
+    expect(r.status).toBe(202)
+    expect(await r.json()).toEqual({ ok: true, state: 'queued' })
+    expect(fake.pending).toHaveLength(1)
+    const token = String(fake.pending[0]?.token)
+    expect(fake.pending[0]).toMatchObject({
+      email: 'lea@exemple.fr',
+      prenom: 'Léa',
+      mail_failed_at: NOW_ISO,
+      confirmed_at: null,
+    })
+    const deletes = fake.calls.filter((c) => c.method === 'DELETE')
+    expect(deletes.every((c) => !c.url.includes(`token=eq.${token}`))).toBe(true)
+    const mark = fake.calls.find((c) => c.method === 'PATCH')
+    expect(new URL(String(mark?.url)).searchParams.get('token')).toBe(`eq.${token}`)
+    expect(mark?.body).toEqual({ mail_failed_at: NOW_ISO })
 
     fake.resend = () => json({ id: 're_retry' })
     const retry = await post(REQUEST)
     expect(retry.status).toBe(200)
-    expect(fake.mails()).toHaveLength(2)
+    expect(await retry.json()).toEqual({ ok: true, state: 'pending' })
+    expect(fake.mails()).toHaveLength(1)
+    expect(fake.pending).toHaveLength(1)
+  })
+
+  it('échec du mail garde la ligne : a failed mark is logged and the answer is still 202 queued', async () => {
+    fake.resend = () => json({ message: 'boom' }, 500)
+    const respond = fake.respond.bind(fake)
+    fake.respond = (call: Call) =>
+      call.method === 'PATCH' && call.url.startsWith(`${REST}/site_newsletter_pending`)
+        ? json({ message: 'refused' }, 500)
+        : respond(call)
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const r = await post(REQUEST)
+    expect(r.status).toBe(202)
+    expect(await r.json()).toEqual({ ok: true, state: 'queued' })
+    expect(fake.pending).toHaveLength(1)
+    expect(log.mock.calls.some((c) => String(c[0]).includes('mail_failed_at'))).toBe(true)
+    expect(JSON.stringify(log.mock.calls)).not.toContain('lea@exemple.fr')
   })
 
   it('Resend 409 on the idempotency key : already sent, 200 pending', async () => {
@@ -528,7 +656,9 @@ describe('POST /api/newsletter: confirm (?c= link)', () => {
       prenom: null,
       ip_hash: null,
     })
-    expect(fake.mails()).toHaveLength(0)
+    // Rewritten: it expected no Resend call. The first confirmation now sends the welcome mail (D4).
+    expect(fake.mails()).toHaveLength(1)
+    expect(fake.mails()[0]?.headers['Idempotency-Key']).toBe(`newsletter-welcome-${TOKEN}`)
   })
 
   it('confirme : an existing person stored with an uppercase email → PATCH of the oldest row, no INSERT', async () => {
@@ -718,5 +848,293 @@ describe('POST /api/newsletter: invite (?t= link of the invitation)', () => {
     expect(r.status).toBe(404)
     expect((await r.json()).code).toBe('unknown_token')
     expect(fake.calls.filter((c) => c.method !== 'GET')).toHaveLength(0)
+  })
+})
+
+describe('POST /api/newsletter: via (P1, the source tag of a sign-up)', () => {
+  const pendingInserts = () =>
+    fake.writes('site_newsletter_pending').filter((c) => c.method === 'POST')
+
+  it('via : a valid tag is stored on the pending row', async () => {
+    const r = await post({ ...REQUEST, via: 'ressource-veille-du-matin' })
+    expect(r.status).toBe(200)
+    expect(await r.json()).toEqual({ ok: true, state: 'pending' })
+    expect(pendingInserts()[0]?.body).toMatchObject({ via: 'ressource-veille-du-matin' })
+    expect(fake.pending[0]?.via).toBe('ressource-veille-du-matin')
+    expect(fake.mails()).toHaveLength(1)
+  })
+
+  it('via : an invalid tag is dropped, never a refusal; an absent one writes no key', async () => {
+    for (const via of ['Ressource!', '-x', 'a'.repeat(61), 42, '', 'été', undefined]) {
+      fake = new Fake().install()
+      const r = await post({ ...REQUEST, via })
+      expect(r.status).toBe(200)
+      expect(pendingInserts()).toHaveLength(1)
+      expect(pendingInserts()[0]?.body).not.toHaveProperty('via')
+      expect(fake.mails()).toHaveLength(1)
+    }
+  })
+
+  it('via : the tag stays on the proof row after the confirmation', async () => {
+    fake.pending.push(pendingRow({ via: 'webinaire-merci' }))
+    const r = await post({ kind: 'confirm', token: TOKEN })
+    expect(r.status).toBe(200)
+    expect(fake.pending[0]).toMatchObject({ via: 'webinaire-merci', email: null, prenom: null })
+  })
+
+  it('via absent de la base : a refusal naming the column via → ONE retry without it, the visitor gets the mail', async () => {
+    fake.refusePendingInsert = (body) =>
+      'via' in body
+        ? json(
+            {
+              code: 'PGRST204',
+              message:
+                "Could not find the 'via' column of 'site_newsletter_pending' in the schema cache",
+            },
+            400,
+          )
+        : undefined
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    const r = await post({ ...REQUEST, via: 'linkedin-2026-11-24' })
+    expect(r.status).toBe(200)
+    expect(await r.json()).toEqual({ ok: true, state: 'pending' })
+    expect(pendingInserts()).toHaveLength(2)
+    expect(pendingInserts()[1]?.body).not.toHaveProperty('via')
+    expect(pendingInserts()[1]?.body).toMatchObject({ found_via: 'youtube' })
+    expect(fake.pending).toHaveLength(1)
+    expect(fake.mails()).toHaveLength(1)
+  })
+
+  it('via absent de la base : a refusal naming only found_via is not read as via (no retry)', async () => {
+    fake.refusePendingInsert = () =>
+      json({ message: "Could not find the 'found_via' column of 'site_newsletter_pending'" }, 400)
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    const r = await post({ ...REQUEST, via: 'linkedin-2026-11-24' })
+    expect(r.status).toBe(500)
+    expect(pendingInserts()).toHaveLength(1)
+    expect(fake.mails()).toHaveLength(0)
+  })
+})
+
+interface ExpiryVector {
+  name: string
+  created_at: string
+  reminded_at: string | null
+  mail_failed_at: string | null
+  expired_hub: boolean
+  expired_site: boolean
+}
+
+/** Byte-identical to the hub's copy (`newsletter-expiry.parity.test.ts`); this side reads `expired_site`. */
+const VECTORS = JSON.parse(
+  readFileSync(resolve(__dirname, '__fixtures__/newsletter-expiry-vectors.json'), 'utf8'),
+) as { now: string; vectors: ExpiryVector[] }
+
+describe('POST /api/newsletter: ancre de péremption (Q2-A, shared expiry vectors)', () => {
+  const AT = new Date(VECTORS.now)
+
+  it('ancre de péremption : expiredOnSite answers the expired_site column of every vector', () => {
+    expect(VECTORS.vectors.length).toBeGreaterThanOrEqual(10)
+    for (const v of VECTORS.vectors) {
+      expect({ name: v.name, expired: expiredOnSite(v, AT) }).toEqual({
+        name: v.name,
+        expired: v.expired_site,
+      })
+    }
+  })
+
+  it('ancre de péremption : the purge filter is exactly the planned one and deletes exactly the expired_site vectors', async () => {
+    vi.setSystemTime(AT)
+    for (const [i, v] of VECTORS.vectors.entries()) {
+      fake.pending.push(
+        pendingRow({
+          token: `v-${i}`,
+          email: `v${i}@exemple.fr`,
+          ip_hash: `h-${i}`,
+          created_at: v.created_at,
+          reminded_at: v.reminded_at,
+          mail_failed_at: v.mail_failed_at,
+        }),
+      )
+    }
+    await post(REQUEST)
+    const purge = fake.calls.find((c) => c.method === 'DELETE')
+    const params = new URL(String(purge?.url)).searchParams
+    expect([...params.keys()].sort()).toEqual(['confirmed_at', 'or'])
+    expect(params.get('confirmed_at')).toBe('is.null')
+    expect(params.get('or')).toBe(PURGE_OR(AT))
+    const kept = new Set(fake.pending.map((p) => p.token))
+    for (const [i, v] of VECTORS.vectors.entries()) {
+      expect({ name: v.name, purged: !kept.has(`v-${i}`) }).toEqual({
+        name: v.name,
+        purged: v.expired_site,
+      })
+    }
+  })
+
+  it('ancre de péremption : a request reminded yesterday confirms though created 12 days ago', async () => {
+    fake.pending.push(pendingRow({ created_at: ago(12 * DAY), reminded_at: ago(DAY) }))
+    const r = await post({ kind: 'confirm', token: TOKEN })
+    expect(r.status).toBe(200)
+    expect((await r.json()).state).toBe('subscribed')
+    const read = fake.calls.find((c) => c.url.includes('token=eq.') && c.method === 'GET')
+    expect(new URL(String(read?.url)).searchParams.get('select')).toContain('reminded_at')
+  })
+
+  it('ancre de péremption : a request reminded 8 days ago answers 404, no write', async () => {
+    fake.pending.push(pendingRow({ created_at: ago(12 * DAY), reminded_at: ago(8 * DAY) }))
+    const r = await post({ kind: 'confirm', token: TOKEN })
+    expect(r.status).toBe(404)
+    expect((await r.json()).code).toBe('unknown_token')
+    expect(fake.calls.filter((c) => c.method !== 'GET')).toHaveLength(0)
+  })
+})
+
+describe('POST /api/newsletter: bienvenue (D4, the welcome mail at the first confirmation)', () => {
+  const LAST = 'https://sablia.io/lettre/2026-11-17-premier-numero'
+  const issues = () =>
+    fake.lettres.push(
+      { slug: '2026-11-10-ancien', published: true, published_at: '2026-11-10T07:30:00+00:00' },
+      {
+        slug: '2026-11-17-premier-numero',
+        published: true,
+        published_at: '2026-11-17T07:30:00+00:00',
+      },
+      { slug: '2026-11-24-brouillon', published: false, published_at: null },
+    )
+
+  it('bienvenue : the first confirmation sends ONE welcome mail with its own key and the last issue link, after the scrub', async () => {
+    issues()
+    fake.pending.push(pendingRow({}))
+    const r = await post({ kind: 'confirm', token: TOKEN })
+    expect(r.status).toBe(200)
+    expect(await r.json()).toEqual({ ok: true, state: 'subscribed', prenom: 'Léa' })
+
+    const mails = fake.mails()
+    expect(mails).toHaveLength(1)
+    expect(mails[0]?.headers['Idempotency-Key']).toBe(`newsletter-welcome-${TOKEN}`)
+    const payload = mails[0]?.body as Record<string, unknown>
+    expect(payload).toMatchObject({
+      from: 'Brice Gachadoat <brice@send.sablia.io>',
+      reply_to: 'brice@sablia.io',
+      to: ['lea@exemple.fr'],
+      subject: "Bienvenue dans L'IA au travail",
+    })
+    for (const part of [payload.text, payload.html]) expect(String(part)).toContain(LAST)
+
+    const read = fake.calls.find((c) => c.url.startsWith(`${REST}/contenu_lettres`))
+    const params = new URL(String(read?.url)).searchParams
+    expect(params.get('select')).toBe('slug')
+    expect(params.get('published')).toBe('eq.true')
+    expect(params.get('order')).toBe('published_at.desc')
+    expect(params.get('limit')).toBe('1')
+
+    const writes = fake.calls
+      .filter((c) => c.method !== 'GET')
+      .map((c) => `${c.method} ${new URL(c.url).pathname.split('/').pop()}`)
+    expect(writes.slice(-2)).toEqual(['PATCH site_newsletter_pending', 'POST emails'])
+  })
+
+  it('bienvenue : no published issue, or an unreadable register → the link to /newsletter#numeros', async () => {
+    fake.pending.push(pendingRow({}))
+    await post({ kind: 'confirm', token: TOKEN })
+    expect(String((fake.mails()[0]?.body as Record<string, unknown>).text)).toContain(
+      'https://sablia.io/newsletter#numeros',
+    )
+
+    fake = new Fake().install()
+    issues()
+    fake.pending.push(pendingRow({}))
+    const respond = fake.respond.bind(fake)
+    fake.respond = (call: Call) =>
+      call.url.startsWith(`${REST}/contenu_lettres`)
+        ? json({ message: 'down' }, 503)
+        : respond(call)
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    const r = await post({ kind: 'confirm', token: TOKEN })
+    expect(r.status).toBe(200)
+    expect(String((fake.mails()[0]?.body as Record<string, unknown>).text)).toContain(
+      'https://sablia.io/newsletter#numeros',
+    )
+  })
+
+  it('bienvenue : a second click, two concurrent clicks, an opposed person or a refused lead write send none (or one)', async () => {
+    fake.pending.push(pendingRow({ email: null, prenom: null, confirmed_at: ago(HOUR) }))
+    await post({ kind: 'confirm', token: TOKEN })
+    expect(fake.mails()).toHaveLength(0)
+
+    fake = new Fake().install()
+    fake.pending.push(pendingRow({}))
+    await Promise.all([
+      post({ kind: 'confirm', token: TOKEN }),
+      post({ kind: 'confirm', token: TOKEN }),
+    ])
+    expect(fake.mails()).toHaveLength(1)
+
+    fake = new Fake().install()
+    fake.pending.push(pendingRow({}))
+    fake.leads.push(lead({ email: 'lea@exemple.fr', opted_out_at: ago(HOUR) }))
+    expect((await post({ kind: 'confirm', token: TOKEN })).status).toBe(410)
+    expect(fake.mails()).toHaveLength(0)
+
+    fake = new Fake().install()
+    fake.pending.push(pendingRow({}))
+    const respond = fake.respond.bind(fake)
+    fake.respond = (call: Call) =>
+      call.method === 'POST' && call.url.startsWith(`${REST}/sabcrm_leads`)
+        ? json({ message: 'refused' }, 500)
+        : respond(call)
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    expect((await post({ kind: 'confirm', token: TOKEN })).status).toBe(500)
+    expect(fake.mails()).toHaveLength(0)
+  })
+
+  it('bienvenue : a failed welcome mail is logged and the answer stays 200 subscribed', async () => {
+    fake.pending.push(pendingRow({}))
+    fake.resend = () => json({ message: 'boom' }, 500)
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const r = await post({ kind: 'confirm', token: TOKEN })
+    expect(r.status).toBe(200)
+    expect(await r.json()).toEqual({ ok: true, state: 'subscribed', prenom: 'Léa' })
+    expect(fake.leads).toHaveLength(1)
+    expect(log.mock.calls.some((c) => String(c[0]).includes('welcome'))).toBe(true)
+    expect(JSON.stringify(log.mock.calls)).not.toContain('lea@exemple.fr')
+  })
+
+  it('bienvenue : without RESEND_API_KEY the confirmation still subscribes; the welcome is skipped and logged', async () => {
+    vi.stubEnv('RESEND_API_KEY', '')
+    fake.pending.push(pendingRow({}))
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const r = await post({ kind: 'confirm', token: TOKEN })
+    expect(r.status).toBe(200)
+    expect((await r.json()).state).toBe('subscribed')
+    expect(fake.leads).toHaveLength(1)
+    expect(fake.mails()).toHaveLength(0)
+    expect(log.mock.calls.some((c) => String(c[0]).includes('welcome'))).toBe(true)
+  })
+
+  it('bienvenue : welcomeMail() — short subject, Tuesday morning, the last issue, the question, how to leave, escaped prénom', () => {
+    const m = welcomeMail('Léa <b>', 'lea@exemple.fr', LAST)
+    expect(m.subject).toBe("Bienvenue dans L'IA au travail")
+    expect(m.subject.length).toBeLessThanOrEqual(40)
+    expect(m).toMatchObject({
+      from: 'Brice Gachadoat <brice@send.sablia.io>',
+      reply_to: 'brice@sablia.io',
+      to: ['lea@exemple.fr'],
+    })
+    expect(m.text.startsWith('Bonjour Léa <b>,')).toBe(true)
+    for (const part of [m.text, m.html]) {
+      expect(part).toContain('mardi matin')
+      expect(part).toContain(LAST)
+      expect(part).toContain(
+        "Qu'est-ce qui vous fait perdre le plus de temps au bureau en ce moment ?",
+      )
+      expect(part).toMatch(/répondez simplement à ce mail/i)
+      expect(part).toContain('un lien en bas de chaque lettre')
+      expect(part).not.toContain('RESEND_UNSUBSCRIBE_URL')
+    }
+    expect(m.html).toContain('Léa &lt;b&gt;')
+    expect(m.html).not.toContain('<b>')
+    expect(welcomeMail('', 'x@exemple.fr', LAST).text.startsWith('Bonjour,')).toBe(true)
   })
 })

@@ -50,10 +50,21 @@ describe('politique de confidentialité', () => {
       /prénom, votre adresse email[^.]*dates de votre inscription et de votre désinscription/,
     )
     expect(t).toContain("Aucun suivi d'ouverture ni de clic")
-    expect(t).toMatch(/non confirmée est effacée sous 7 jours/)
+    // Rewritten (Q2-A, plan sablia-newsletter-circuit-croissance): it was « effacée sous 7 jours ».
+    expect(t).not.toMatch(/effacée sous 7 jours/)
+    expect(t).toContain(
+      "Une demande d'inscription non confirmée est effacée 7 jours après notre dernier envoi (le mail de confirmation ou son unique rappel) ; si aucun mail n'a pu partir, nous l'envoyons dès que possible, et sans envoi la demande est effacée au plus tard 30 jours après.",
+    )
     expect(t).toContain("jusqu'à votre désinscription")
     expect(t).toContain('un lien dans chaque lettre')
     expect(t).toContain('brice@sablia.io')
+  })
+
+  it('Newsletter : the source link of a sign-up is kept, and why; the webinar box feeds the letter', () => {
+    expect(t).toContain(
+      'Nous gardons aussi le lien par lequel vous êtes arrivé (par exemple une ressource ou un post), pour savoir quels canaux fonctionnent.',
+    )
+    expect(t).toMatch(/Finalités : [^.]*la lettre du mardi, si vous cochez la case/)
   })
 
   it('has a Prospection section: heading, legitimate interest, « stop » opt-out, contact address', () => {

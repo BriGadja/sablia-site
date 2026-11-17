@@ -145,6 +145,68 @@
       line-height: 1.65;
       color: #3a3f4d;
     }
+
+    /* The Tuesday-letter card, last block of a resource page */
+    .v2-ressources-letter {
+      display: flex;
+      align-items: center;
+      gap: 18px 20px;
+      padding: 22px 24px;
+      border: 1px solid #e4d6c0;
+      border-radius: 18px;
+      background: #fbf7f0;
+
+      p {
+        flex: 1;
+        margin: 0;
+        font-size: 18px;
+        line-height: 1.45;
+        font-weight: 500;
+        color: #131620;
+      }
+    }
+    .v2-ressources-letter-mark {
+      flex: none;
+      color: #b9852a;
+    }
+    .v2-ressources-letter-cta {
+      display: inline-flex;
+      flex: none;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      padding: 0 20px;
+      border-radius: 10px;
+      background: #131620;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.2s;
+
+      svg {
+        transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+      }
+    }
+    .v2-ressources-letter-cta:hover {
+      background: #262b38;
+      color: #ffffff;
+
+      svg {
+        transform: translateX(3px);
+      }
+    }
+    .v2-ressources-letter-cta:focus-visible {
+      outline: 2px solid #835a0c;
+      outline-offset: 3px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .v2-ressources .v2-ressources-letter-cta,
+    .v2-ressources .v2-ressources-letter-cta svg {
+      transition: none;
+    }
   }
 
   @media (max-width: 900px) {
@@ -158,6 +220,15 @@
     }
     .v2-ressources .v2-ressources-list {
       margin-top: 32px;
+    }
+    .v2-ressources .v2-ressources-letter {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
+    }
+    .v2-ressources .v2-ressources-letter-cta {
+      align-self: stretch;
+      justify-content: center;
     }
   }
 }

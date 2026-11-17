@@ -1,0 +1,102 @@
+{
+  "_comment": "Shared expiry vectors: hub scripts/__test__/fixtures/newsletter-expiry-vectors.json and site api/__fixtures__/newsletter-expiry-vectors.json are byte-identical (plan sablia-newsletter-circuit-croissance, Q2-A). expired_hub: anchor = reminded_at else created_at, expired when anchor < now - 7 days. expired_site: same, except never-mailed rows (mail_failed_at set, reminded_at null) are left to the hub until created_at < now - 30 days.",
+  "now": "2026-11-20T12:00:00Z",
+  "vectors": [
+    {
+      "name": "frais, jamais relancé",
+      "created_at": "2026-11-18T12:00:00Z",
+      "reminded_at": null,
+      "mail_failed_at": null,
+      "expired_hub": false,
+      "expired_site": false
+    },
+    {
+      "name": "6 jours, pas relancé",
+      "created_at": "2026-11-14T12:00:00Z",
+      "reminded_at": null,
+      "mail_failed_at": null,
+      "expired_hub": false,
+      "expired_site": false
+    },
+    {
+      "name": "7 jours et 1 minute, pas relancé",
+      "created_at": "2026-11-13T11:58:59Z",
+      "reminded_at": null,
+      "mail_failed_at": null,
+      "expired_hub": true,
+      "expired_site": true
+    },
+    {
+      "name": "12 jours, relancé il y a 1 jour",
+      "created_at": "2026-11-08T12:00:00Z",
+      "reminded_at": "2026-11-19T12:00:00Z",
+      "mail_failed_at": null,
+      "expired_hub": false,
+      "expired_site": false
+    },
+    {
+      "name": "12 jours, relancé il y a 8 jours",
+      "created_at": "2026-11-08T12:00:00Z",
+      "reminded_at": "2026-11-12T12:00:00Z",
+      "mail_failed_at": null,
+      "expired_hub": true,
+      "expired_site": true
+    },
+    {
+      "name": "relancé il y a 6 jours 23 h",
+      "created_at": "2026-11-10T12:00:00Z",
+      "reminded_at": "2026-11-13T12:57:36Z",
+      "mail_failed_at": null,
+      "expired_hub": false,
+      "expired_site": false
+    },
+    {
+      "name": "mail en échec, 2 jours, jamais mailé",
+      "created_at": "2026-11-18T12:00:00Z",
+      "reminded_at": null,
+      "mail_failed_at": "2026-11-18T12:00:00Z",
+      "expired_hub": false,
+      "expired_site": false
+    },
+    {
+      "name": "mail en échec, 10 jours, jamais mailé",
+      "created_at": "2026-11-10T12:00:00Z",
+      "reminded_at": null,
+      "mail_failed_at": "2026-11-10T12:00:00Z",
+      "expired_hub": true,
+      "expired_site": false
+    },
+    {
+      "name": "mail en échec, 29 jours, jamais mailé",
+      "created_at": "2026-10-22T12:00:00Z",
+      "reminded_at": null,
+      "mail_failed_at": "2026-10-22T12:00:00Z",
+      "expired_hub": true,
+      "expired_site": false
+    },
+    {
+      "name": "mail en échec, 31 jours, jamais mailé",
+      "created_at": "2026-10-20T12:00:00Z",
+      "reminded_at": null,
+      "mail_failed_at": "2026-10-20T12:00:00Z",
+      "expired_hub": true,
+      "expired_site": true
+    },
+    {
+      "name": "mail en échec puis relancé il y a 2 jours",
+      "created_at": "2026-11-11T12:00:00Z",
+      "reminded_at": "2026-11-18T12:00:00Z",
+      "mail_failed_at": "2026-11-11T12:00:00Z",
+      "expired_hub": false,
+      "expired_site": false
+    },
+    {
+      "name": "mail en échec puis relancé il y a 8 jours",
+      "created_at": "2026-11-05T12:00:00Z",
+      "reminded_at": "2026-11-12T12:00:00Z",
+      "mail_failed_at": "2026-11-05T12:00:00Z",
+      "expired_hub": true,
+      "expired_site": true
+    }
+  ]
+}

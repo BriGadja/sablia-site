@@ -642,6 +642,25 @@
         accent-color: #131620;
       }
     }
+    .wbn-check.is-lettre {
+      margin-top: 12px;
+    }
+    .wbn-lettre {
+      margin: 24px 0 0;
+      font-size: 16px;
+      line-height: 1.55;
+      color: #3a3f4d;
+
+      a {
+        color: #835a0c;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        transition: color 0.2s;
+      }
+      a:hover {
+        color: #131620;
+      }
+    }
     .wbn-card .wbn-info {
       margin-left: 32px;
       font-size: 13px;

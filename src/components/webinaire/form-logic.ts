@@ -21,11 +21,12 @@ export interface RegistrationBody {
   usage_ia: string
   pourquoi: string
   rappel_consent: boolean
+  newsletter: boolean
   website: string
   elapsedMs: number
 }
 
-/** The exact field set of the contract (U2 report); the box is a checkbox: absent = false. */
+/** The exact field set of the contract (U2 report); each box is a checkbox: absent = false. */
 export function registrationBody(data: FormData, elapsedMs: number): RegistrationBody {
   const s = (name: string) => String(data.get(name) ?? '')
   return {
@@ -38,6 +39,7 @@ export function registrationBody(data: FormData, elapsedMs: number): Registratio
     usage_ia: s('usage_ia'),
     pourquoi: s('pourquoi'),
     rappel_consent: data.get('rappel_consent') === 'on',
+    newsletter: data.get('newsletter') === 'on',
     website: s('website'),
     elapsedMs,
   }

@@ -182,6 +182,11 @@ export const FORM = {
     label: "J'accepte d'être rappelé(e) après la session.",
     info: "Case non cochée, personne ne vous appelle. Cochée, quelqu'un de l'équipe Sablia vous appelle une fois au sujet de la formation. Pour retirer cet accord, écrivez à brice@sablia.io.",
   },
+  /** The newsletter box (`newsletter`): UNTICKED by default; ticked = the Tuesday letter, nothing else. */
+  newsletter: {
+    label:
+      "Recevoir aussi la lettre du mardi (une idée concrète d'IA au travail, chaque mardi matin)",
+  },
   /** One sentence whose last words ARE the link (`/politique-confidentialite`): `before` + link + `after`. */
   privacy: {
     before:
@@ -222,6 +227,12 @@ export const MERCI = {
   spam: 'Rien reçu dans dix minutes ? Regardez dans les courriers indésirables, puis écrivez-moi à brice@sablia.io.',
   leave:
     "Un empêchement : déclinez l'invitation. Pour ne plus rien recevoir sur cette session, répondez à un rappel ou écrivez-moi.",
+  /** One line toward the letter, shown to every registrant: `before` + link (`href`). */
+  lettre: {
+    before: "Une idée concrète d'IA au travail, chaque mardi matin : ",
+    link: 'recevoir ma newsletter',
+    href: '/newsletter?via=webinaire-merci',
+  },
   booking: {
     line: 'Vous préférez en parler sans attendre la session ?',
     cta: 'Réserver un échange de 30 minutes',

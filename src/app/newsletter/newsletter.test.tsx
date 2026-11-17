@@ -226,6 +226,50 @@ describe('/newsletter: the public form', () => {
   })
 })
 
+describe('/newsletter: via (the source tag of a sign-up) and the queued answer', () => {
+  const fillAndSend = async () => {
+    const user = userEvent.setup()
+    await user.type(screen.getByLabelText('Prénom'), 'Léa')
+    await user.type(screen.getByLabelText('Email'), 'lea@exemple.fr')
+    await user.click(screen.getByRole('button', { name: 'Recevoir la lettre' }))
+  }
+
+  it('via : read from ?via=, dropped from the address at once, posted with the request', async () => {
+    const spy = stubFetch(200, { ok: true, state: 'pending' })
+    await open('?via=ressource-veille-du-matin&utm_source=linkedin')
+    expect(window.location.search).toBe('?utm_source=linkedin')
+    expect(spy).not.toHaveBeenCalled()
+    await fillAndSend()
+    expect(sent(spy)).toMatchObject({ kind: 'request', via: 'ressource-veille-du-matin' })
+  })
+
+  it('via : no tag in the address → no via key in the request', async () => {
+    const spy = stubFetch(200, { ok: true, state: 'pending' })
+    await open()
+    await fillAndSend()
+    expect(sent(spy)).not.toHaveProperty('via')
+  })
+
+  it('via : a confirmation link carrying a tag drops both from the address', async () => {
+    stubFetch(200, { ok: true, state: 'subscribed' })
+    await open(`?c=${TOKEN}&via=webinaire-merci`)
+    expect(window.location.search).toBe('')
+    expect(screen.getByRole('button', { name: 'Confirmer mon inscription' })).toBeTruthy()
+  })
+
+  it('réponse queued : 202 says the request is recorded and the mail leaves as soon as possible', async () => {
+    stubFetch(202, { ok: true, state: 'queued' })
+    await open('?via=test-local')
+    await fillAndSend()
+    expect(
+      await screen.findByText(
+        'Votre demande est enregistrée. Le mail de confirmation part dès que possible.',
+      ),
+    ).toBeTruthy()
+    expect(screen.queryByRole('alert')).toBeNull()
+  })
+})
+
 describe('/newsletter: the token links', () => {
   // The « Premier numéro » line also reads the visitor's clock: pin it before the send (Monday 16/11),
   // so these rows never depend on the day the suite runs. Only `Date` is faked (frozen, so a boundary

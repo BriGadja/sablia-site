@@ -35,7 +35,14 @@ interface World {
   ipCount?: number
   dayCount?: number
   /** Rows `sabcrm_leads` returns for the person lookup, oldest first. */
-  person?: { id: string; email: string; intention?: string; opted_out_at?: string | null }[]
+  person?: {
+    id: string
+    email: string
+    intention?: string
+    opted_out_at?: string | null
+    newsletter_subscribed_at?: string | null
+    newsletter_unsubscribed_at?: string | null
+  }[]
   duplicate?: boolean
   /** Stored row returned by the duplicate-path lookup. */
   stored?: { id: string; rappel_consent: boolean; lead_id?: string | null }
@@ -512,5 +519,109 @@ describe('M4 consent upgrades a known lead', () => {
     const r = await handler.fetch(post(payload({ rappel_consent: true })))
     expect(r.status).toBe(200)
     expect(await r.json()).toEqual({ state: 'registered' })
+  })
+})
+
+describe('case newsletter (D6: « Recevoir aussi la lettre du mardi », plan sablia-newsletter-circuit-croissance)', () => {
+  const known = (over: Record<string, unknown> = {}) => ({
+    id: 'lead-old',
+    email: 'claire.morel@exemple.fr',
+    intention: 'ressource_seule',
+    opted_out_at: null,
+    newsletter_subscribed_at: null,
+    newsletter_unsubscribed_at: null,
+    ...over,
+  })
+  const newsletterPatches = (calls: Call[]) =>
+    writes(calls, 'sabcrm_leads', 'PATCH').filter(
+      (c) => (c.body as Record<string, unknown>).newsletter_source !== undefined,
+    )
+
+  it('case newsletter : absent or false = unticked; never pre-ticked by the server', () => {
+    const { newsletter: _absent, ...rest } = payload() as Record<string, unknown>
+    const d = decide(rest)
+    expect(d.kind === 'accept' && d.value.newsletter).toBe(false)
+    const ticked = decide(payload({ newsletter: true }))
+    expect(ticked.kind === 'accept' && ticked.value.newsletter).toBe(true)
+    expect(decide(payload({ newsletter: 'oui' })).kind).toBe('invalid')
+  })
+
+  it('case newsletter : ticked, new person → the new lead gets the first subscription, newsletter_source webinaire', async () => {
+    env()
+    const calls = world()
+    const r = await handler.fetch(post(payload({ newsletter: true })))
+    expect(r.status).toBe(200)
+    expect(await r.json()).toEqual({ state: 'registered' })
+    const patches = newsletterPatches(calls)
+    expect(patches).toHaveLength(1)
+    expect(patches[0]?.url).toContain('id=eq.lead-new')
+    expect(Object.keys(patches[0]?.body as object).sort()).toEqual([
+      'newsletter_source',
+      'newsletter_subscribed_at',
+    ])
+    expect(patches[0]?.body).toMatchObject({ newsletter_source: 'webinaire' })
+    // Still no mail from the webinar server (the US-86 contract).
+    expect(calls.some((c) => c.url.includes('resend'))).toBe(false)
+    // The registration row keeps its columns: no newsletter column there.
+    expect(writes(calls, 'site_webinar_registrations')[0]?.body).not.toHaveProperty('newsletter')
+  })
+
+  it('case newsletter : ticked, known person → the OLDEST row gets it, nothing else of the lead', async () => {
+    env()
+    const calls = world({
+      person: [known(), known({ id: 'lead-newer', intention: 'veut_un_echange' })],
+    })
+    await handler.fetch(post(payload({ newsletter: true })))
+    const patches = newsletterPatches(calls)
+    expect(patches).toHaveLength(1)
+    expect(patches[0]?.url).toContain('id=eq.lead-old')
+    expect(writes(calls, 'sabcrm_leads')).toHaveLength(0)
+  })
+
+  it('case newsletter : ticked, a person who left, is opposed or already subscribed → no newsletter write', async () => {
+    env()
+    for (const person of [
+      [
+        known({
+          newsletter_subscribed_at: '2026-10-01T08:00:00Z',
+          newsletter_unsubscribed_at: '2026-10-10T08:00:00Z',
+        }),
+      ],
+      [known(), known({ id: 'lead-b', opted_out_at: '2026-09-02T09:00:00Z' })],
+      [known({ newsletter_subscribed_at: '2026-10-20T08:00:00Z' })],
+    ]) {
+      const calls = world({ person })
+      expect((await handler.fetch(post(payload({ newsletter: true })))).status).toBe(200)
+      expect(newsletterPatches(calls)).toHaveLength(0)
+    }
+  })
+
+  it('case newsletter : unticked → no newsletter write', async () => {
+    env()
+    const calls = world({ person: [known()] })
+    await handler.fetch(post(payload()))
+    expect(newsletterPatches(calls)).toHaveLength(0)
+    const fresh = world()
+    await handler.fetch(post(payload({ newsletter: false })))
+    expect(newsletterPatches(fresh)).toHaveLength(0)
+  })
+
+  it('case newsletter : a failed newsletter write never costs the registration', async () => {
+    env()
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+    const calls = world({ person: [known()] })
+    const inner = globalThis.fetch
+    vi.stubGlobal('fetch', async (url: string, init?: RequestInit) => {
+      if (url.includes('sabcrm_leads') && init?.method === 'PATCH') {
+        return new Response('x', { status: 500 })
+      }
+      return inner(url, init)
+    })
+    const r = await handler.fetch(post(payload({ newsletter: true })))
+    expect(r.status).toBe(200)
+    expect(await r.json()).toEqual({ state: 'registered' })
+    expect(writes(calls, 'site_webinar_registrations', 'PATCH')[0]?.body).toEqual({
+      lead_id: 'lead-old',
+    })
   })
 })

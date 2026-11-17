@@ -1,6 +1,12 @@
 import { createHash, createHmac } from 'node:crypto'
 import { z } from 'zod'
-import { findPerson, likeValue, type PersonRow, patchLead } from './_newsletter-person.js'
+import {
+  findPerson,
+  likeValue,
+  type PersonRow,
+  patchLead,
+  personState,
+} from './_newsletter-person.js'
 import { normalizePhone } from './ressources-request.js'
 
 /**
@@ -14,6 +20,12 @@ import { normalizePhone } from './ressources-request.js'
  * The callback box is the whole business logic, as in `ressources-request.ts`: unticked →
  * `rappel_consent=false`, `consent_at=null`, lead `intention='ressource_seule'` (hidden from the
  * default sales list); ticked → `rappel_consent=true`, `consent_at=now`, `veut_un_echange`.
+ *
+ * The newsletter box (« Recevoir aussi la lettre du mardi », plan sablia-newsletter-circuit-croissance,
+ * D6) is unticked by default: ticked, the person's FIRST subscription is written on their OLDEST row
+ * (`newsletter_subscribed_at`, `newsletter_source = 'webinaire'`), as the resource box does; a person
+ * who left, is opposed or already subscribed gets no write. Still no mail from here: the welcome mail
+ * rides the `/newsletter` confirmation click only. The registration row has no newsletter column.
  *
  * A ticked box also raises a KNOWN lead hidden by its intention (`ressource_seule`,
  * `newsletter_seule`) to `veut_un_echange` (only that column, never a downgrade, never a person with
@@ -59,6 +71,8 @@ const RequestSchema = z
     pourquoi: z.string().trim().max(1000).optional().default(''),
     /** Absent from a client built before the box existed: unticked. */
     rappel_consent: z.boolean().optional().default(false),
+    /** The newsletter box; absent from an older client: unticked. */
+    newsletter: z.boolean().optional().default(false),
     website: z.string().max(200).optional().default(''),
     elapsedMs: z.number().int().min(0),
   })
@@ -232,6 +246,28 @@ async function upgradeDuplicate(value: WebinaireRequest, key: string, now: Date)
   }
 }
 
+/**
+ * Box ticked: a FIRST subscription on the person's oldest row (`leadId` is the row just created when
+ * the person was unknown). Left, opposed or subscribed → no write. Never throws.
+ */
+async function subscribeToLetter(
+  person: PersonRow[],
+  leadId: string,
+  key: string,
+  now: Date,
+): Promise<void> {
+  if (person.length > 0 && personState(person) !== 'none') return
+  try {
+    await patchLead(
+      person[0]?.id ?? leadId,
+      { newsletter_subscribed_at: now.toISOString(), newsletter_source: 'webinaire' },
+      key,
+    )
+  } catch (error) {
+    console.error('[webinaire] newsletter write failed', detail(error))
+  }
+}
+
 /** Never throws: whatever happens here, the registration is already stored. */
 async function reportLead(
   value: WebinaireRequest,
@@ -250,6 +286,8 @@ async function reportLead(
       method: 'PATCH',
       body: { lead_id: leadId },
     })
+    // First: it never throws, so a failed intention upgrade cannot cost the subscription.
+    if (value.newsletter) await subscribeToLetter(person, leadId, key, now)
     if (value.rappel_consent) await upgradeLead(person, key)
   } catch (error) {
     console.error('[webinaire] lead report failed', detail(error))

@@ -126,6 +126,24 @@ describe('/ressources/[slug]', () => {
     expect(container.innerHTML).not.toContain('VideoObject')
   })
 
+  it('carte newsletter : one card after the form, inside main: the sentence and a plain link to /newsletter?via=ressource-<slug>', async () => {
+    loadRessource.mockResolvedValue(ROW)
+    const { container } = render(await RessourcePage(props(ROW.slug)))
+    const cards = container.querySelectorAll('main [data-card="newsletter"]')
+    expect(cards).toHaveLength(1)
+    const card = cards[0] as Element
+    expect(card.textContent).toContain("Une idée concrète d'IA au travail, chaque mardi matin.")
+    const link = card.querySelector('a') as HTMLAnchorElement
+    expect(link.textContent?.trim()).toBe('Recevoir ma newsletter')
+    expect(link.getAttribute('href')).toBe('/newsletter?via=ressource-pipedrive-nouveau-lead')
+    // Static HTML: a link, no button and no form of its own.
+    expect(card.querySelector('button, form')).toBeNull()
+    const form = container.querySelector('form[data-form="ressource"]') as Element
+    expect(Boolean(form.compareDocumentPosition(card) & Node.DOCUMENT_POSITION_FOLLOWING)).toBe(
+      true,
+    )
+  })
+
   it('answers 404 for a slug that is not published', async () => {
     loadRessource.mockResolvedValue(undefined)
     await expect(RessourcePage(props('nope'))).rejects.toThrow('NEXT_NOT_FOUND')
