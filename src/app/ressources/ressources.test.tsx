@@ -115,7 +115,7 @@ describe('/ressources/[slug]', () => {
     )
     const video = ld.find((d) => d['@type'] === 'VideoObject')
     expect(video.thumbnailUrl).toBe('https://sablia.io/_posters/d5fo00AFqVM.webp')
-    expect(video.uploadDate).toBe('2026-10-01')
+    expect(video.uploadDate).toBe('2026-10-01T12:17:28Z') // full ISO 8601 with its zone: Search Console flags a bare date (17/11)
     expect(ld.some((d) => d['@type'] === 'BreadcrumbList')).toBe(true)
   })
 

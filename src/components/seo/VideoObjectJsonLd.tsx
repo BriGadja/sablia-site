@@ -5,7 +5,7 @@ export interface VideoObjectProps {
   name: string
   description: string
   youtubeId: string
-  /** ISO date (YYYY-MM-DD) the video was published. */
+  /** ISO 8601 date-time WITH timezone the video was published (Search Console flags a bare date). */
   uploadDate: string
   /** Own-hosted thumbnail under /public (never a third-party image host: the content gate refuses them). */
   thumbnailPath: string
