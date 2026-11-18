@@ -97,7 +97,7 @@ describe('SiteHeader on the webinar routes', () => {
     expect(link.className).toBe('v2-cta is-dark is-md')
   })
 
-  // US-103: the logo and the four menu links, the same at any date (the menu has no clock entry).
+  // US-103, US-112: the logo and the five menu links, the same at any date (the menu has no clock entry).
   it.each(
     ['/webinaire/merci', '/webinaire/apres-reservation', '/webinaire/questionnaire'].flatMap(
       (p) => [
@@ -105,13 +105,13 @@ describe('SiteHeader on the webinar routes', () => {
         [p, 'from the session start', AFTER] as const,
       ],
     ),
-  )('%s, %s: no call to action in the header, the logo and the four menu links', (p, _, now) => {
+  )('%s, %s: no call to action in the header, the logo and the five menu links', (p, _, now) => {
     pathname = p
     vi.useFakeTimers({ toFake: ['Date'] })
     vi.setSystemTime(now)
     render(<SiteHeader />)
     expect(nav().querySelector('.v2-cta')).toBeNull()
-    expect(nav().querySelectorAll('a')).toHaveLength(5)
+    expect(nav().querySelectorAll('a')).toHaveLength(6)
   })
 
   it('/ before the session: « Prochain webinaire » to /webinaire, no booking button', () => {
