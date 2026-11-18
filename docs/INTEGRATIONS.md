@@ -13,7 +13,7 @@
 | Service | Method | Files | Env Var | Status |
 |---------|--------|-------|---------|--------|
 | Calendly | Popup window (window.open) | `BookingModal.tsx` (used by HeroSection, TopNav, CalloutSection) | Hardcoded URL | Working |
-| Supabase | Drizzle ORM + PostgreSQL | `db/schema.ts`, `db/index.ts` | `DATABASE_URL` | Connected but unused at runtime |
+| Supabase | `fetch` from `api/*.ts` (service role), build-time reads (anon key) | `api/*.ts`, `src/lib/contenu.ts` | `SUPABASE_SERVICE_ROLE_KEY`, `VITE_SUPABASE_ANON_KEY` | Drizzle layer removed 2026-11-18 |
 | GA4 | — | — | `VITE_GA4_MEASUREMENT_ID` | ⚠️ Env var only, no code |
 | Google Ads | — | — | `VITE_GADS_CONVERSION_ID`, `VITE_GADS_LABEL_CONTACT` | ⚠️ Env vars only, no code |
 | Resend | REST `POST /emails` from the Vercel Function | `api/contact.ts` | `RESEND_API_KEY` | **Live since 2026-09-18** — runtime |
@@ -42,8 +42,7 @@ Lead capture has **four** paths: a Calendly booking, the contact form at `sablia
 
 - **Project**: `qlxoitzdxjqhljjoeqoq`
 - **Table prefix**: `site_` (shared instance with n8n-intelligence)
-- **ORM**: Drizzle (schema in `db/schema.ts`)
-- **Status**: Schema and connection configured via `DATABASE_URL` but **zero runtime queries**. The `db/` layer is present for future use.
+- **Access**: no ORM; `api/*.ts` writes through `fetch` with the service-role key, the build reads with the anon key. The unused Drizzle layer was removed on 2026-11-18.
 
 ---
 

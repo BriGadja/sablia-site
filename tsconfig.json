@@ -2,7 +2,6 @@
   "include": [
     "next-env.d.ts",
     "src/**/*",
-    "db/**/*",
     "server/**/*",
     "docs/*.json",
     "api/**/*",
@@ -50,12 +49,6 @@
       }
     ],
     "paths": {
-      "@db": [
-        "./db/index.ts"
-      ],
-      "@db/*": [
-        "./db/*"
-      ],
       "@docs/*": [
         "./docs/*"
       ],
