@@ -362,11 +362,11 @@ Full-pass: 2026-09-18 @88fd143 (les 5 stories marchées sur la PRODUCTION par le
 ## US-77 — Une ressource se lit vidéo d'abord, avec ses données VideoObject, sans charger YouTube avant un clic [script]
 - Surface : `/ressources`, `/ressources/:slug` (une page par vidéo), bande « vidéos » de l'accueil
 - Parcours : (cible) ouvrir `/ressources`, ouvrir une ressource, lire le HTML sans JavaScript
-- Oracle : la liste et chaque page sont dans le HTML construit (pas de lecture Supabase par le navigateur) ; la vidéo est au-dessus de la ressource ; JSON-LD `VideoObject` ; l'affiche vient de notre origine ; `youtube.com` ne se charge qu'après le clic sur la façade ; les quatre vignettes de l'accueil mènent à nos pages vidéo ; un slug inconnu répond 404
+- Oracle : la liste et chaque page sont dans le HTML construit (pas de lecture Supabase par le navigateur) ; la vidéo est au-dessus de la ressource ; JSON-LD `VideoObject` dont `uploadDate` est la date-heure ISO 8601 complète avec fuseau (depuis le 2026-11-17) ; l'affiche vient de notre origine ; `youtube.com` ne se charge qu'après le clic sur la façade ; les quatre vignettes de l'accueil mènent à nos pages vidéo ; un slug inconnu répond 404
 - Exemple : Étant donné `/ressources/skill-devis` sans JavaScript / Quand on lit le HTML / Alors le `<h1>`, le `VideoObject`, la façade et le formulaire sont présents et aucune requête ne part vers `i.ytimg.com`
 - Test : vitest src/components/ressources/ src/lib/contenu.test.ts + [script] node --test scripts/seo/*.test.mjs + python3 scripts/site-check.py --base https://preview.sablia.io --preview
 - Statut : VALIDÉE 2026-10-26 @3e17dc9 (prod sablia.io, PR #23, `/ressources` → `/ressources/veille-du-matin` en navigation client, visuel chargé, 0 iframe avant clic ; e2e « no iframe before the click » PASS)
-- Source : décisions D13, D12 ; accord de Brice du 2026-10-18 (affiches rapatriées au lot 3) ; prolonge US-6, US-7, US-54, US-67
+- Source : décisions D13, D12 ; accord de Brice du 2026-10-18 (affiches rapatriées au lot 3) ; prolonge US-6, US-7, US-54, US-67 ; amendée le 2026-11-17 : Search Console a signalé sur sablia.io « Valeur de date et heure incorrecte » et « fuseau horaire manquant » pour `uploadDate` (date seule envoyée), test `ressources.test.tsx` passé ROUGE puis VERT
 
 ## US-78 — Les pages légales, le guide, le remerciement et la page 404 sont dans la charte, et les CGV ne partent qu'avec l'accord de Brice
 - Surface : `/mentions-legales`, `/politique-confidentialite`, `/cgv`, `/guides/integrer-l-ia-dans-votre-entreprise`, `/thank-you`, page 404

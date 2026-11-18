@@ -72,7 +72,7 @@ export default async function RessourcePage({ params }: Props) {
           name={row.titre}
           description={row.resume ?? row.titre}
           youtubeId={row.youtube_id}
-          uploadDate={row.published_at.slice(0, 10)}
+          uploadDate={row.published_at}
           thumbnailPath={poster}
         />
       )}
