@@ -6,7 +6,7 @@
 | Key | Value |
 |-----|-------|
 | Domain | sablia.io |
-| Stack | Next.js 16.4.3 (App Router, `output: 'export'`) / React 19.3.1 / TypeScript 5.9.3 strict / Tailwind 4.3.3 (CSS-first, no preflight) / Express 4 serving the export + `api/*.ts` / Drizzle (unused at runtime) / Biome 2.4.13 / Vitest 4.0.4 |
+| Stack | Next.js 16.4.6 (App Router, `output: 'export'`) / React 19.3.1 / TypeScript 5.9.3 strict / Tailwind 4.3.3 (CSS-first, no preflight) / Express 4 serving the export + `api/*.ts` / Biome 2.4.13 / Vitest 4.0.4 |
 | Charte | « Sablier »: sand and rose grounds, night `#161B29`, ink `#131620`, one signal gold `#D9A441` (`#835A0C` as text on light), Familjen Grotesk + Fragment Mono self-hosted. Full spec: `DESIGN.md` |
 | Animations | CSS plus the hooks in `src/lib/hooks/` (see `DESIGN.md` § Motion); `motion` 14.6.0 is in `package.json` but nothing under `src/` imports it yet |
 | Dev | `npm run dev` (`next dev`, port 3000 unless `-p`); pages only, there is no `/api/*` in dev (see Dev story) |
@@ -32,7 +32,6 @@
 
 ### Path Aliases
 - `@/` → `src/`
-- `@db` → `db/`
 - `@docs` → `docs/`
 
 ### Project Structure
@@ -52,7 +51,6 @@ api/                  # Fetch handlers (contact, ressources-request, newsletter)
 server/               # Express production server: index.ts, app.ts, static.ts, api-adapter.ts, healthz.ts
 scripts/              # build chain (fetch-posters, finalize-export, build-server), seo/, qa/, brand and og-image scripts
 deploy/               # host chain: deploy.sh, systemd units, Caddy blocks, parity baseline (see deploy/*.md)
-db/                   # Drizzle schema (connected but unused at runtime)
 docs/                 # ARCHITECTURE.md, SEO.md, INTEGRATIONS.md, frozen v1 specs
 specs/REGISTRY.md     # functional stories (US-*), PRD.md the narrative
 ```
@@ -138,11 +136,8 @@ When modifying site content, update the corresponding doc.
 
 
 ## Database
-- Drizzle ORM + PostgreSQL (Supabase)
-- Schema: `db/schema.ts`
-- Migrations: `npm run db:push`
+- No ORM: the server writes Supabase through `fetch` in `api/*.ts` (service role) and the build reads it with the anon key. The unused Drizzle layer (`db/`, `drizzle.config.ts`, drizzle-orm, drizzle-zod, drizzle-kit, ws) was removed on 2026-11-18; git history keeps it.
 - Table prefix: `site_`
-- **Status**: DB layer exists (schema, drizzle config) but zero runtime usage. Connected but unused.
 - **`contenu_*` is an exception to the `site_` prefix rule**: the register lives in the HUB (Sablia workspace's "machine de contenu"), not in this project. `src/lib/contenu.ts` and `api/ressources-request.ts` read `contenu_ressources` (and the `contenu-ressources` storage bucket) — **read-only** for the site, anon key client-side, service-role key from the server (`api/ressources-request.ts`). This project never migrates or writes that table's schema. Same for **`contenu_lettres`** (the published issues of the Tuesday letter: `slug, titre, resume, corps_md, youtube_id, published_at, updated_at`): written only by the hub (`scripts/newsletter.py`, the publish step of `send`), read here at build time by ONE reader, `listPublishedLettres` in `scripts/seo/ressources.mjs` (anon key, `published = true` only by RLS; three tries; strict build: unreadable = the build fails; a row without a readable `published_at` is dropped with a warning; each successful read logs `[lettres] N issue(s) read` on stderr, so a build log shows how many reads it made).
 
 
@@ -154,7 +149,6 @@ When modifying site content, update the corresponding doc.
 ## Environment Variables
 | Variable | Description | Status |
 |----------|-------------|--------|
-| `DATABASE_URL` | PostgreSQL connection string | Active (server) |
 | `NODE_ENV` | Environment (development/production) | Active |
 | `HOST` / `PORT` | Where the server listens (default `127.0.0.1` / `5000`) | Active (set per slot: prod 5000, preview 5001) |
 | `RELEASE_FILE` | File holding the release id reported by `/healthz` (default `<dist>/../RELEASE`) | Active |

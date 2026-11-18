@@ -4,7 +4,7 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
   esbuild: { jsx: 'automatic' },
   test: {
-    include: ['{src,server,db,api}/**/*.test.{ts,tsx}'],
+    include: ['{src,server,api}/**/*.test.{ts,tsx}'],
     exclude: ['node_modules/**'],
     globals: true,
     environment: 'happy-dom',
@@ -18,7 +18,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
-      '@db': path.resolve(__dirname, 'db'),
       '@docs': path.resolve(__dirname, 'docs'),
     },
   },
