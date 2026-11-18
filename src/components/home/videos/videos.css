@@ -59,6 +59,11 @@
       outline: 2px solid #d9a441;
       outline-offset: 4px;
     }
+    .vd-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
     .vd-channel {
       display: inline-flex;
       align-items: center;

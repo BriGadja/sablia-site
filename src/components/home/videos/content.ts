@@ -4,6 +4,10 @@ export const EYEBROW = 'Vidéos'
 export const TITLE = 'Nos vidéos sur YouTube.'
 export const CHANNEL_LABEL = 'Voir la chaîne'
 export const CHANNEL_URL = 'https://www.youtube.com/channel/UCXzIrGckmJcwKSLCPXV7r1w'
+/** US-112: the whole library, every video with its files. */
+export const ALL_LABEL = 'Toutes les ressources'
+export const ALL_HREF = '/ressources'
+const MAX_TILES = 4
 
 /** Copy deck B2 `home.videos.besoin` and `home.videos.link` (US-104): custom builds, the Réalisations door. */
 export const BESOIN = 'Un besoin précis ? Je construis aussi à la demande.'
@@ -16,7 +20,7 @@ export interface TileSource {
   alt: string
 }
 
-/** The four videos of the mockup, in its order. The OF-1 demo (`d5fo00AFqVM`) opens the row. */
+/** Fallback when the resource list is empty or unreadable outside strict mode: the mockup's four. */
 export const TILES: readonly TileSource[] = [
   {
     youtubeId: 'd5fo00AFqVM',
@@ -46,12 +50,36 @@ export interface Tile extends TileSource {
   external: boolean
 }
 
-/** A tile goes to our resource page when `contenu_ressources` has a published row for its video. */
+/** The tile's short name: the resource title before « : ». */
+function shortTitle(titre: string): string {
+  return titre.split(' : ')[0].trim()
+}
+
+/**
+ * US-112: the four newest published resources with a video, newest first, each opening our own
+ * page, so a new video reaches the home without a code change. No such row: the hand-picked four,
+ * to YouTube.
+ */
 export function resolveTiles(rows: readonly RessourceSummary[] | null): Tile[] {
-  return TILES.map((tile) => {
-    const own = rows?.find((r) => r.youtube_id === tile.youtubeId)
-    return own
-      ? { ...tile, href: `/ressources/${own.slug}`, external: false }
-      : { ...tile, href: `https://youtu.be/${tile.youtubeId}`, external: true }
+  const videos = [...(rows ?? [])]
+    .filter((r): r is RessourceSummary & { youtube_id: string } => Boolean(r.youtube_id))
+    .sort((a, b) => (b.published_at ?? '').localeCompare(a.published_at ?? ''))
+    .slice(0, MAX_TILES)
+  if (videos.length === 0) {
+    return TILES.map((tile) => ({
+      ...tile,
+      href: `https://youtu.be/${tile.youtubeId}`,
+      external: true,
+    }))
+  }
+  return videos.map((r) => {
+    const title = shortTitle(r.titre)
+    return {
+      youtubeId: r.youtube_id,
+      title,
+      alt: `Miniature : ${title}`,
+      href: `/ressources/${r.slug}`,
+      external: false,
+    }
   })
 }

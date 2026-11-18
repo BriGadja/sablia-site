@@ -97,8 +97,11 @@ describe('Top, hero of the site', () => {
       expect(a.textContent).toContain(DOORS[i].label)
       expect(a.getAttribute('target')).toBeNull()
     })
-    // The same four intents as the menu, in the same order and words (US-103).
-    expect(DOORS.map((d) => [d.href, d.label])).toEqual(NAV_LINKS.map((l) => [l.href, l.label]))
+    // The same four intents as the menu, in the same order and words (US-103); the menu's fifth
+    // entry, Ressources (US-112), is a library, not a door.
+    expect(DOORS.map((d) => [d.href, d.label])).toEqual(
+      NAV_LINKS.slice(0, 4).map((l) => [l.href, l.label]),
+    )
   })
 
   // K2 axe `label-content-name-mismatch` (WCAG 2.5.3, 1440): the line is the door's description, not

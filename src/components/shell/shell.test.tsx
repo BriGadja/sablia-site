@@ -58,6 +58,7 @@ describe('SiteHeader', () => {
       ['Formations', '/formations'],
       ['Conférences', '/conferences'],
       ['Réalisations', '/realisations'],
+      ['Ressources', '/ressources'],
       ['Prochain webinaire', '/webinaire'],
     ])
     expect(nav.querySelector('[data-cta-book]')).toBeNull()
@@ -73,7 +74,7 @@ describe('SiteHeader', () => {
     expect(openBookingUrl).toHaveBeenCalledExactlyOnceWith(site.formationBookingUrl)
   })
 
-  it('from the session start the menu is the same four links and nothing in the header goes to /webinaire', () => {
+  it('from the session start the menu is the same five links and nothing in the header goes to /webinaire', () => {
     at(AFTER)
     const { container } = render(<SiteHeader />)
     const links = document.getElementById('nav-links') as HTMLElement
@@ -82,6 +83,7 @@ describe('SiteHeader', () => {
       '/formations',
       '/conferences',
       '/realisations',
+      '/ressources',
     ])
     expect(container.querySelector('a[href="/webinaire"]')).toBeNull()
   })
@@ -163,6 +165,7 @@ describe('SiteHeader', () => {
     ['/formations', 'Formations'],
     ['/conferences', 'Conférences'],
     ['/realisations', 'Réalisations'],
+    ['/ressources', 'Ressources'],
   ])('marks the current page on %s', (path, label) => {
     at(BEFORE)
     pathname = path
@@ -174,7 +177,6 @@ describe('SiteHeader', () => {
 
   it.each([
     '/',
-    '/ressources',
     '/webinaire',
     '/webinaire/merci',
     '/offres/compte-rendu-appel',
@@ -212,7 +214,7 @@ describe('SiteFooter', () => {
       ['Confidentialité', '/politique-confidentialite'],
       ['CGV', '/cgv'],
     ])
-    expect(hrefs.slice(0, 4)).toEqual(NAV_LINKS.map((l) => [l.label, l.href]))
+    expect(hrefs.slice(0, 4)).toEqual(NAV_LINKS.slice(0, 4).map((l) => [l.label, l.href]))
     expect(screen.getByText(/© 2026 Sablia/)).toBeTruthy()
   })
 

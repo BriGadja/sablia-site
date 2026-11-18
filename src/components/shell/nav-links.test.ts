@@ -7,12 +7,13 @@ import { NAV_CTA, NAV_LINKS } from './nav-links'
  * offer first. The same four links at any date: the webinar is reached from the header button.
  */
 describe('NAV_LINKS', () => {
-  it('lists Responsable IA externalisé, Formations, Conférences, Réalisations in that order', () => {
+  it('lists Responsable IA externalisé, Formations, Conférences, Réalisations, then Ressources (US-112)', () => {
     expect(NAV_LINKS.map((l) => [l.label, l.href, l.match])).toEqual([
       ['Responsable IA externalisé', '/responsable-ia-externalise', '/responsable-ia-externalise'],
       ['Formations', '/formations', '/formations'],
       ['Conférences', '/conferences', '/conferences'],
       ['Réalisations', '/realisations', '/realisations'],
+      ['Ressources', '/ressources', '/ressources'],
     ])
   })
 

@@ -14,13 +14,12 @@ vi.mock('next/link', () => ({
   ),
 }))
 
-const row = (youtube_id: string, slug: string): RessourceSummary => ({
-  slug,
-  titre: slug,
-  resume: null,
-  youtube_id,
-  published_at: null,
-})
+const row = (
+  youtube_id: string | null,
+  slug: string,
+  titre = slug,
+  published_at: string | null = null,
+): RessourceSummary => ({ slug, titre, resume: null, youtube_id, published_at })
 
 describe('content', () => {
   it('lists the four mockup videos in order, the OF-1 demo first', () => {
@@ -32,20 +31,77 @@ describe('content', () => {
     ])
   })
 
-  it('links a tile to our page when it has a resource row, else to YouTube', () => {
-    const tiles = resolveTiles([row('Op67YSG7T84', 'pipedrive-n8n')])
-    expect(tiles[1]).toMatchObject({ href: '/ressources/pipedrive-n8n', external: false })
-    expect(tiles[0]).toMatchObject({ href: 'https://youtu.be/d5fo00AFqVM', external: true })
+  // US-112: the band follows the resource list, so each new video reaches the home without a code
+  // change (« Claude dans Excel » was missing on 18/11 because the four tiles were written by hand).
+  it('shows the four newest resources with a video, newest first, each opening our own page', () => {
+    const tiles = resolveTiles([
+      row(
+        'Op67YSG7T84',
+        'pipedrive',
+        "Brancher Pipedrive à n'importe quelle appli : le workflow",
+        '2026-10-01T09:00:00Z',
+      ),
+      row(null, 'guide-sans-video', 'Un guide sans vidéo', '2026-11-20T09:00:00Z'),
+      row(
+        'NEWEST00001',
+        'claude-dans-excel',
+        'Claude dans Excel : les fichiers de la vidéo',
+        '2026-11-16T15:06:57Z',
+      ),
+      row(
+        'V2VLG4alRxI',
+        'skill-devis',
+        'Le skill de devis pour Claude : vos prix',
+        '2026-10-10T09:00:00Z',
+      ),
+      row(
+        'wbQ6yCKLy3I',
+        'veille',
+        'Créer ses routines dans Claude : le guide',
+        '2026-10-20T09:00:00Z',
+      ),
+      row('OLDEST00001', 'oldest', 'La plus ancienne', '2026-09-01T09:00:00Z'),
+    ])
+    expect(tiles.map((t) => t.href)).toEqual([
+      '/ressources/claude-dans-excel',
+      '/ressources/veille',
+      '/ressources/skill-devis',
+      '/ressources/pipedrive',
+    ])
+    expect(tiles.every((t) => !t.external)).toBe(true)
+    // The tile keeps the short name, the part of the title before « : ».
+    expect(tiles[0]).toMatchObject({
+      youtubeId: 'NEWEST00001',
+      title: 'Claude dans Excel',
+      alt: 'Miniature : Claude dans Excel',
+    })
   })
 
-  it('treats an empty or null list as "no row" for every tile', () => {
-    expect(resolveTiles([]).every((t) => t.external)).toBe(true)
-    expect(resolveTiles(null).every((t) => t.external)).toBe(true)
+  it('falls back to the four hand-picked YouTube videos when the list is empty or null', () => {
+    for (const rows of [null, [], [row(null, 'guide-sans-video')]]) {
+      const tiles = resolveTiles(rows)
+      expect(tiles.map((t) => t.youtubeId)).toEqual(TILES.map((t) => t.youtubeId))
+      expect(tiles.every((t) => t.external)).toBe(true)
+    }
   })
 })
 
 describe('VideosView', () => {
-  const tiles = resolveTiles([row('V2VLG4alRxI', 'skill-devis')])
+  const fallback = resolveTiles(null)
+  const tiles = [
+    fallback[0],
+    fallback[1],
+    resolveTiles([row('V2VLG4alRxI', 'skill-devis')])[0],
+    fallback[3],
+  ]
+
+  it('opens the whole library from its head: « Toutes les ressources » to /ressources, same tab (US-112)', () => {
+    const { container } = render(<VideosView tiles={tiles} />)
+    const all = container.querySelector('#videos .vd-head a[href="/ressources"]')
+    expect(all?.textContent).toContain('Toutes les ressources')
+    expect(all?.getAttribute('target')).toBeNull()
+    expect(all?.hasAttribute('data-next-link')).toBe(true)
+  })
 
   it('server-renders the title, the channel link and four tiles', () => {
     const { container } = render(<VideosView tiles={tiles} />)
@@ -132,6 +188,7 @@ describe('Videos (server)', () => {
   it('falls back to YouTube links when unreadable outside strict mode', async () => {
     const { loadTiles } = await import('./index')
     const tiles = await loadTiles({ env: {}, fetchList: async () => null })
+    expect(tiles).toHaveLength(4)
     expect(tiles.every((t) => t.external)).toBe(true)
   })
 })

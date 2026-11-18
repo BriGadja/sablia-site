@@ -5,6 +5,8 @@ import { Dune } from '@/components/shell/Dune'
 import { Eyebrow } from '@/components/shell/Eyebrow'
 import type { RessourceSummary } from '@/lib/contenu'
 import {
+  ALL_HREF,
+  ALL_LABEL,
   BESOIN,
   CHANNEL_LABEL,
   CHANNEL_URL,
@@ -78,10 +80,16 @@ export function VideosView({ tiles }: { tiles: readonly Tile[] }) {
               </Link>
             </p>
           </div>
-          <a className="vd-channel" href={CHANNEL_URL} target="_blank" rel="noopener">
-            {CHANNEL_LABEL}
-            <ArrowIcon />
-          </a>
+          <div className="vd-links">
+            <Link className="vd-channel" href={ALL_HREF}>
+              {ALL_LABEL}
+              <ArrowIcon />
+            </Link>
+            <a className="vd-channel" href={CHANNEL_URL} target="_blank" rel="noopener">
+              {CHANNEL_LABEL}
+              <ArrowIcon />
+            </a>
+          </div>
         </div>
         <div className="vid-row">
           {tiles.map((tile) => {
@@ -139,7 +147,7 @@ export function VideosView({ tiles }: { tiles: readonly Tile[] }) {
   )
 }
 
-/** `#videos`: four tiles, each an own-hosted poster (no `i.ytimg.com`, no iframe before a click). */
+/** `#videos`: up to four tiles, the newest resources (US-112), each an own-hosted poster (no `i.ytimg.com`, no iframe before a click). */
 export async function Videos({ load = loadTiles }: { load?: () => Promise<Tile[]> } = {}) {
   return <VideosView tiles={await load()} />
 }
