@@ -83,7 +83,7 @@ export const crmPageSchema = z
   .superRefine((page, ctx) => {
     if (page.path !== crmPath(page.slug)) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['path'],
         message: `path must be ${crmPath(page.slug)}`,
       })

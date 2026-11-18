@@ -87,7 +87,7 @@ const RequestSchema = z
   })
   .superRefine((value, ctx) => {
     if (value.contact && value.telephone !== '' && normalizePhone(value.telephone) === null) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['telephone'], message: PHONE_ERROR })
+      ctx.addIssue({ code: 'custom', path: ['telephone'], message: PHONE_ERROR })
     }
   })
   .transform((value) => ({
