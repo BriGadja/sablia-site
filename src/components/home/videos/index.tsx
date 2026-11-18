@@ -83,7 +83,19 @@ export function VideosView({ tiles }: { tiles: readonly Tile[] }) {
           <div className="vd-links">
             <Link className="vd-channel" href={ALL_HREF}>
               {ALL_LABEL}
-              <ArrowIcon />
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
             </Link>
             <a className="vd-channel" href={CHANNEL_URL} target="_blank" rel="noopener">
               {CHANNEL_LABEL}
