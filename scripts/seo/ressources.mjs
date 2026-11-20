@@ -9,6 +9,7 @@ const SUPABASE_URL = 'https://qlxoitzdxjqhljjoeqoq.supabase.co'
 const SELECT = 'slug,titre,resume,youtube_id,published_at,updated_at'
 const TRIES = 3
 const BACKOFF_MS = 1000
+const READ_TIMEOUT_MS = 10_000
 const FILE_URL_MARK = 'storage/v1/object/public/contenu-ressources'
 
 const realSleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -40,7 +41,10 @@ export async function listPublishedSlugs({
   let lastError
   for (let attempt = 1; attempt <= TRIES; attempt++) {
     try {
-      const res = await doFetch(url, { headers: { apikey: key, authorization: `Bearer ${key}` } })
+      const res = await doFetch(url, {
+        headers: { apikey: key, authorization: `Bearer ${key}` },
+        signal: AbortSignal.timeout(READ_TIMEOUT_MS),
+      })
       if (!res.ok) throw new Error(`contenu_ressources read answered HTTP ${res.status}`)
       const rows = await res.json()
       if (!Array.isArray(rows)) throw new Error('contenu_ressources read did not return a list')
