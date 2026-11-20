@@ -7,7 +7,7 @@ import '@/components/legal/thanks.css'
 
 export const metadata = pageMetadata({
   path: '/thank-you',
-  title: 'Merci — Sablia',
+  title: 'Merci · Sablia',
   description: 'Votre demande a bien été prise en compte.',
   noindex: true,
 })

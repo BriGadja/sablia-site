@@ -4,7 +4,7 @@ import { site } from '@/lib/site'
 
 export const metadata = pageMetadata({
   path: '/politique-confidentialite',
-  title: 'Politique de confidentialité — Sablia',
+  title: 'Politique de confidentialité · Sablia',
   description:
     'Politique de confidentialité et gestion des données personnelles de Sablia.io. Conformité RGPD.',
 })
