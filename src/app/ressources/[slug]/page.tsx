@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!row) return { title: 'Ressource introuvable' }
   return pageMetadata({
     path: `/ressources/${row.slug}`,
-    title: `${row.titre} — Sablia`,
+    title: `${row.titre} · Sablia`,
     description: row.resume ?? row.titre,
   })
 }

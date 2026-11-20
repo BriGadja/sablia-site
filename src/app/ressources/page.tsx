@@ -8,7 +8,7 @@ import { pageMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = pageMetadata({
   path: '/ressources',
-  title: 'Ressources : les templates de nos vidéos — Sablia',
+  title: 'Ressources : les templates de nos vidéos · Sablia',
   description:
     "Chaque vidéo Sablia montre une automatisation en direct et laisse le workflow, le schéma et le mode d'emploi pour la refaire chez vous.",
 })

@@ -149,10 +149,10 @@ describe('/ressources/[slug]', () => {
     await expect(RessourcePage(props('nope'))).rejects.toThrow('NEXT_NOT_FOUND')
   })
 
-  it('titles the page « {titre} — Sablia » with its own canonical and the résumé as description', async () => {
+  it('titles the page « {titre} · Sablia » with its own canonical and the résumé as description', async () => {
     loadRessource.mockResolvedValue(ROW)
     const meta = await generateMetadata(props(ROW.slug))
-    expect(meta.title).toEqual({ absolute: `${ROW.titre} — Sablia` })
+    expect(meta.title).toEqual({ absolute: `${ROW.titre} · Sablia` })
     expect(meta.alternates?.canonical).toBe(`/ressources/${ROW.slug}`)
     expect(meta.description).toBe(ROW.resume)
   })

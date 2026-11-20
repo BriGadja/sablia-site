@@ -4,7 +4,7 @@ import { pageMetadata } from '@/lib/seo'
 
 export const metadata = pageMetadata({
   path: '/cgv',
-  title: 'Conditions générales de vente — Sablia',
+  title: 'Conditions générales de vente · Sablia',
   description:
     "Conditions générales de vente de Sablia : compte rendu d'appel, supervision, paiement, recette et remboursement.",
 })
