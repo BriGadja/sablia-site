@@ -94,6 +94,20 @@ describe('listPublishedSlugs', () => {
     assert.ok(waits[1] > waits[0], 'backoff grows')
   })
 
+  it('passes a 10 s abort signal to every read, so a hung connection cannot stall the build', async () => {
+    const signals = []
+    await listPublishedSlugs({
+      env: { VITE_SUPABASE_ANON_KEY: KEY },
+      fetch: async (url, init) => {
+        signals.push(init.signal)
+        return fakeSupabase(ROWS)(url, init)
+      },
+      sleep: noSleep,
+    })
+    assert.equal(signals.length, 1)
+    assert.ok(signals[0] instanceof AbortSignal)
+  })
+
   it('succeeds when a later try works', async () => {
     let n = 0
     const rows = await listPublishedSlugs({
