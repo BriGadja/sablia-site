@@ -58,7 +58,8 @@
       "!**/deploy/parity-baseline.json",
       "!**/next-env.d.ts",
       "!**/tsconfig.json",
-      "!**/scripts/qa/fixtures"
+      "!**/scripts/qa/fixtures",
+      "!**/.impeccable"
     ]
   }
 }
