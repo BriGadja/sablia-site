@@ -223,7 +223,7 @@ const ROW = {
 }
 
 const GOOD = {
-  title: `${ROW.titre} — Sablia`,
+  title: `${ROW.titre} · Sablia`,
   canonical: 'https://sablia.io/ressources/claude-pipedrive',
   description: ROW.resume,
   h1: ROW.titre,
@@ -290,12 +290,12 @@ describe('assertRessourceHtml', () => {
 
 describe('extractFromHtml', () => {
   it('decodes entities so serialized html passes the same check', () => {
-    const html = `<html><head><title>Claude &amp; Pipedrive « test » — Sablia</title>
+    const html = `<html><head><title>Claude &amp; Pipedrive « test » · Sablia</title>
 <link rel="canonical" href="https://sablia.io/ressources/claude-pipedrive" data-rh="true">
 <meta name="description" content="Un &quot;résumé&quot; d'une &lt;ressource&gt; &amp; plus"></head>
 <body><main><h1>Claude &amp; Pipedrive &laquo; test &raquo;</h1><p>Le corps &amp; la suite de la ressource.</p></main></body></html>`
     const dom = extractFromHtml(html)
-    assert.equal(dom.title, 'Claude & Pipedrive « test » — Sablia')
+    assert.equal(dom.title, 'Claude & Pipedrive « test » · Sablia')
     assert.equal(dom.description, 'Un "résumé" d\'une <ressource> & plus')
     assert.equal(dom.h1, 'Claude & Pipedrive « test »')
     assert.doesNotThrow(() =>
@@ -427,7 +427,7 @@ describe('resolveRoutes', () => {
 describe('ressourceTitle', () => {
   it('is the title the page renders once its row is read, never the loading title', () => {
     const row = { slug: 'pipedrive-nouveau-lead', titre: 'Brancher Pipedrive' }
-    assert.equal(ressourceTitle(row), 'Brancher Pipedrive — Sablia')
+    assert.equal(ressourceTitle(row), 'Brancher Pipedrive · Sablia')
     assert.notEqual(ressourceTitle(row), 'Ressource — Sablia')
   })
 
@@ -435,7 +435,7 @@ describe('ressourceTitle', () => {
     const row = { slug: 's', titre: 'T', resume: null }
     assert.throws(
       () => assertRessourceHtml({ title: 'Ressource — Sablia' }, row),
-      /expected "T — Sablia"/,
+      /expected "T · Sablia"/,
     )
   })
 })
