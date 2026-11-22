@@ -44,7 +44,7 @@ function fixture(overrides = {}) {
       body: '<a href="/ressources/ma-video">Ma vidéo</a>',
     }),
     'ressources/ma-video.html': page({
-      title: 'Ma vidéo — Sablia',
+      title: 'Ma vidéo · Sablia',
       h1: '<h1>Ma vidéo</h1>',
       canonical: 'https://sablia.io/ressources/ma-video',
       body: '<script></script>',
@@ -148,7 +148,7 @@ describe('checkExport', () => {
     assert.match(run(fixture({ 'ressources/ma-video.html': null })).join('\n'), /ma-video.*missing/)
     const wrongTitle = fixture({
       'ressources/ma-video.html': page({
-        title: 'Autre — Sablia',
+        title: 'Autre · Sablia',
         h1: '<h1>Ma vidéo</h1>',
         canonical: 'https://sablia.io/ressources/ma-video',
       }).replace('<main>', '<main data-ready="true">'),
@@ -156,7 +156,7 @@ describe('checkExport', () => {
     assert.match(run(wrongTitle).join('\n'), /ma-video.*title/)
     const notReady = fixture({
       'ressources/ma-video.html': page({
-        title: 'Ma vidéo — Sablia',
+        title: 'Ma vidéo · Sablia',
         h1: '<h1>Ma vidéo</h1>',
         canonical: 'https://sablia.io/ressources/ma-video',
       }),
@@ -175,7 +175,7 @@ describe('checkExport', () => {
     const build = (resume) =>
       fixture({
         'ressources/ma-video.html': page({
-          title: 'Brancher l&#x27;appli — Sablia',
+          title: 'Brancher l&#x27;appli · Sablia',
           h1: '<h1>Brancher l&#x27;appli</h1>',
           canonical: 'https://sablia.io/ressources/ma-video',
           body: body(resume),
@@ -195,7 +195,7 @@ describe('checkExport', () => {
   it('rejects a resource page that bakes the unavailable state', () => {
     const dir = fixture({
       'ressources/ma-video.html': page({
-        title: 'Ma vidéo — Sablia',
+        title: 'Ma vidéo · Sablia',
         h1: '<h1>Ma vidéo</h1>',
         canonical: 'https://sablia.io/ressources/ma-video',
         body: 'Chargement…',

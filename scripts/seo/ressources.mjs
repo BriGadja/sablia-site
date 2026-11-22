@@ -109,9 +109,9 @@ export function extractFromHtml(html) {
   }
 }
 
-/** The <title> a resource page renders once its row is read (`client/src/pages/Ressource.tsx`). */
+/** The <title> a resource page renders (`src/app/ressources/[slug]/page.tsx`): « · Sablia », never an em dash. */
 export function ressourceTitle(row) {
-  return `${row.titre} — Sablia`
+  return `${row.titre} · Sablia`
 }
 
 /**
